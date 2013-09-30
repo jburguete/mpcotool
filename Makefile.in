@@ -1,0 +1,10 @@
+CC = @CC@ @ARCH@ @LTO@ @MPIDEFINE@
+CFLAGS = -g -Wall -O3 @GSL_CFLAGS@ @XML_CFLAGS@ @GTHREAD_CFLAGS@ @GLIB_CFLAGS@
+LDFLAGS = @LDFLAGS@ @LIBS@ @GSL_LIBS@ @XML_LIBS@ @GTHREAD_LIBS@ @GLIB_LIBS@
+
+calibrator: calibrator.c config.h Makefile
+	$(CC) $(CFLAGS) $(LDFLAGS) calibrator.c -o calibrator
+
+doc: calibrator.c config.h Makefile
+	doxygen
+	cd latex; make
