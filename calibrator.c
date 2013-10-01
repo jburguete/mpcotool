@@ -957,22 +957,40 @@ calibrate->nend);
 		xmlFree(calibrate->experiment[i]);
 		xmlFree(calibrate->template1[i]);
 		g_mapped_file_unref(calibrate->file1[i]);
-		xmlFree(calibrate->template2[i]);
-		g_mapped_file_unref(calibrate->file2[i]);
-		xmlFree(calibrate->template3[i]);
-		g_mapped_file_unref(calibrate->file3[i]);
-		xmlFree(calibrate->template4[i]);
-		g_mapped_file_unref(calibrate->file4[i]);
+		if (calibrate->ninputs > 1)
+		{
+			xmlFree(calibrate->template2[i]);
+			g_mapped_file_unref(calibrate->file2[i]);
+			if (calibrate->ninputs > 2)
+			{
+				xmlFree(calibrate->template3[i]);
+				g_mapped_file_unref(calibrate->file3[i]);
+				if (calibrate->ninputs > 3)
+				{
+					xmlFree(calibrate->template4[i]);
+					g_mapped_file_unref(calibrate->file4[i]);
+				}
+			}
+		}
 	}
 	free(calibrate->experiment);
 	free(calibrate->template1);
-	free(calibrate->file2);
-	free(calibrate->template2);
-	free(calibrate->file3);
-	free(calibrate->template3);
-	free(calibrate->file4);
-	free(calibrate->template4);
 	free(calibrate->file1);
+	if (calibrate->ninputs > 1)
+	{
+		free(calibrate->template2);
+		free(calibrate->file2);
+		if (calibrate->ninputs > 2)
+		{
+			free(calibrate->template3);
+			free(calibrate->file3);
+			if (calibrate->ninputs > 3)
+			{
+				free(calibrate->template4);
+				free(calibrate->file4);
+			}
+		}
+	}
 	for (i = 0; i < calibrate->nvariables; ++i)
 	{
 		xmlFree(calibrate->label[i]);
