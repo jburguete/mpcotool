@@ -74,14 +74,8 @@ typedef struct
  * \brief Name of the simulator program.
  * \var evaluator
  * \brief Name of the program to evaluate the objective function.
- * \var template1
- * \brief Array of 1st template names of input files.
- * \var template2
- * \brief Array of 2nd template names of input files.
- * \var template3
- * \brief Array of 3th template names of input files.
- * \var template4
- * \brief Array of 4th template names of input files.
+ * \var template
+ * \brief Matrix of template names of input files.
  * \var experiment
  * \brief Array experimental data file names.
  * \var label
@@ -122,27 +116,20 @@ typedef struct
  * \brief Pseudo-random numbers generator struct.
  * \var mutex
  * \brief Mutex struct.
- * \var file1
- * \brief Array of 1st input template files.
- * \var file2
- * \brief Array of 2nd input template files.
- * \var file3
- * \brief Array of 3th input template files.
- * \var file4
- * \brief Array of 4th input template files.
+ * \var file
+ * \brief Matrix of input template files.
  * \var mpi_rank
  * \brief Number of MPI task.
  * \var mpi_tasks
  * \brief Total number of MPI tasks.
  */
-	char *simulator, *evaluator, **experiment, **template1, **template2,
-		**template3, **template4, **label, **format;
+	char *simulator, *evaluator, **experiment, **template[4], **label, **format;
 	unsigned int simulation_best, nvariables, nexperiments, ninputs,
 		nsimulations, algorithm, *nsweeps, nstart, nend, nthreads, *thread;
 	double error_best, *value, *rangemin, *rangemax;
 	gsl_rng *rng;
 	GMutex mutex[1];
-	GMappedFile **file1, **file2, **file3, **file4;
+	GMappedFile **file[4];
 #ifdef HAVE_MPI
 	int mpi_rank, mpi_tasks;
 #endif
@@ -256,25 +243,12 @@ double calibrate_parse(Calibrate *calibrate, unsigned int simulation,
 	double e;
 	char buffer[512], input[4][32], output[32], result[32];
 	FILE *file_result;
-	GMappedFile *file[4];
 
 #if DEBUG
 printf("calibrate_parse: start\n");
 printf("calibrate_parse: simulation=%u experiment=%u\n", simulation,
 experiment);
 #endif
-
-	file[0] = calibrate->file1[experiment];
-	if (calibrate->ninputs > 1)
-	{
-		file[1] = calibrate->file2[experiment];
-		if (calibrate->ninputs > 2)
-		{
-			file[2] = calibrate->file3[experiment];
-			if (calibrate->ninputs > 3)
-				file[3] = calibrate->file4[experiment];
-		}
-	}
 
 	// Opening input files
 	for (i = 0; i < calibrate->ninputs; ++i)
@@ -283,7 +257,8 @@ experiment);
 #if DEBUG
 printf("calibrate_parse: i=%u input=%s\n", i, &input[i][0]);
 #endif
-		calibrate_template(calibrate, simulation, &input[i][0], file[i]);
+		calibrate_template(calibrate, simulation, &input[i][0],
+			calibrate->file[i][experiment]);
 	}
 	for (; i < 4; ++i) snprintf(&input[i][0], 32, "");
 #if DEBUG
@@ -505,7 +480,7 @@ void calibrate_genetic(Calibrate *calibrate)
  */
 int calibrate_new(Calibrate *calibrate, char *filename)
 {
-	unsigned int i;
+	unsigned int i, j;
 	char buffer2[512];
 	xmlChar *buffer;
 	xmlNode *node, *child;
@@ -514,6 +489,8 @@ int calibrate_new(Calibrate *calibrate, char *filename)
 	double e;
 	MPI_Status mpi_stat;
 #endif
+	static const xmlChar *template[4]=
+		{XML_TEMPLATE1, XML_TEMPLATE2, XML_TEMPLATE3, XML_TEMPLATE4};
 
 #if DEBUG
 printf("calibrate_new: start\n");
@@ -597,10 +574,11 @@ printf("calibrate_new: start\n");
 	// Reading the experimental data file names
 	calibrate->nexperiments = 0;
 	calibrate->experiment = NULL;
-	calibrate->template1 = calibrate->template2 = calibrate->template3
-		= calibrate->template4 = NULL;
-	calibrate->file1 = calibrate->file2 = calibrate->file3
-		= calibrate->file4 = NULL;
+	for (i = 0; i < 4; ++i)
+	{
+		calibrate->template[i] = NULL;
+		calibrate->file[i] = NULL;
+	}
 	for (child = node->children; child; child = child->next)
 	{
 		if (xmlStrcmp(child->name, XML_EXPERIMENT)) break;
@@ -621,23 +599,23 @@ printf("calibrate_new: nexperiments=%u\n", calibrate->nexperiments);
 		}
 		if (!calibrate->nexperiments) calibrate->ninputs = 0;
 #if DEBUG
-printf("calibrate_new: template1\n");
+printf("calibrate_new: template[0]\n");
 #endif
 		if (xmlHasProp(child, XML_TEMPLATE1))
 		{
-			calibrate->template1 = realloc(calibrate->template1,
+			calibrate->template[0] = realloc(calibrate->template[0],
 				(1 + calibrate->nexperiments) * sizeof(char*));
-			calibrate->template1[calibrate->nexperiments] =
-				(char*)xmlGetProp(child, XML_TEMPLATE1);
-			calibrate->file1 = realloc(calibrate->file1,
+			calibrate->template[0][calibrate->nexperiments] =
+				(char*)xmlGetProp(child, template[0]);
+			calibrate->file[0] = realloc(calibrate->file[0],
 				(1 + calibrate->nexperiments) * sizeof(GMappedFile*));
 #if DEBUG
 printf("calibrate_new: experiment=%u template1=%s\n", calibrate->nexperiments,
-calibrate->template1[calibrate->nexperiments]);
+calibrate->template[0][calibrate->nexperiments]);
 #endif
-			calibrate->file1[calibrate->nexperiments] =
+			calibrate->file[0][calibrate->nexperiments] =
 				g_mapped_file_new
-					(calibrate->template1[calibrate->nexperiments], 0, NULL);
+					(calibrate->template[0][calibrate->nexperiments], 0, NULL);
 			if (!calibrate->nexperiments) ++calibrate->ninputs;
 #if DEBUG
 printf("calibrate_new: ninputs=%u\n", calibrate->ninputs);
@@ -648,107 +626,45 @@ printf("calibrate_new: ninputs=%u\n", calibrate->ninputs);
 			printf("No experiment %u template1\n", calibrate->nexperiments + 1);
 			return 0;
 		}
-#if DEBUG
-printf("calibrate_new: template2\n");
-#endif
-		if (xmlHasProp(child, XML_TEMPLATE2))
+		for (j = 1; j < 4; ++j)
 		{
-			if (calibrate->nexperiments && calibrate->ninputs < 2)
-			{
-				printf("Experiment %u: bad templates number\n",
-					calibrate->nexperiments + 1);
-				return 0;
-			}
-			calibrate->template2 = realloc(calibrate->template2,
-				(1 + calibrate->nexperiments) * sizeof(char*));
-			calibrate->template2[calibrate->nexperiments] =
-				(char*)xmlGetProp(child, XML_TEMPLATE2);
-			calibrate->file2 = realloc(calibrate->file2,
-				(1 + calibrate->nexperiments) * sizeof(GMappedFile*));
 #if DEBUG
-printf("calibrate_new: experiment=%u template2=%s\n", calibrate->nexperiments,
-calibrate->template2[calibrate->nexperiments]);
+printf("calibrate_new: template%j\n", j + 1);
 #endif
-			calibrate->file2[calibrate->nexperiments] =
-				g_mapped_file_new
-					(calibrate->template2[calibrate->nexperiments], 0, NULL);
-			if (!calibrate->nexperiments) ++calibrate->ninputs;
+			if (xmlHasProp(child, template[j]))
+			{
+				if (calibrate->nexperiments && calibrate->ninputs < 2)
+				{
+					printf("Experiment %u: bad templates number\n",
+						calibrate->nexperiments + 1);
+					return 0;
+				}
+				calibrate->template[j] = realloc(calibrate->template[j],
+					(1 + calibrate->nexperiments) * sizeof(char*));
+				calibrate->template[j][calibrate->nexperiments] =
+					(char*)xmlGetProp(child, template[j]);
+				calibrate->file[j] = realloc(calibrate->file[j],
+					(1 + calibrate->nexperiments) * sizeof(GMappedFile*));
+#if DEBUG
+printf("calibrate_new: experiment=%u template%u=%s\n", calibrate->nexperiments,
+j + 1, calibrate->template[j][calibrate->nexperiments]);
+#endif
+				calibrate->file[j][calibrate->nexperiments] =
+					g_mapped_file_new
+						(calibrate->template[j][calibrate->nexperiments], 0,
+						 	NULL);
+				if (!calibrate->nexperiments) ++calibrate->ninputs;
 #if DEBUG
 printf("calibrate_new: ninputs=%u\n", calibrate->ninputs);
 #endif
-		}
-		else if (calibrate->nexperiments && calibrate->ninputs > 1)
-		{
-			printf("No experiment %u template2\n", calibrate->nexperiments + 1);
-			return 0;
-		}
-#if DEBUG
-printf("calibrate_new: template3\n");
-#endif
-		if (xmlHasProp(child, XML_TEMPLATE3))
-		{
-			if (calibrate->nexperiments && calibrate->ninputs < 3)
+			}
+			else if (calibrate->nexperiments && calibrate->ninputs > 1)
 			{
-				printf("Experiment %u: bad templates number\n",
-					calibrate->nexperiments + 1);
+				printf("No experiment %u template%u\n",
+					calibrate->nexperiments + 1, j + 1);
 				return 0;
 			}
-			calibrate->template3 = realloc(calibrate->template3,
-				(1 + calibrate->nexperiments) * sizeof(char*));
-			calibrate->template3[calibrate->nexperiments] =
-				(char*)xmlGetProp(child, XML_TEMPLATE3);
-			calibrate->file3 = realloc(calibrate->file3,
-				(1 + calibrate->nexperiments) * sizeof(GMappedFile*));
-#if DEBUG
-printf("calibrate_new: experiment=%u template3=%s\n", calibrate->nexperiments,
-calibrate->template3[calibrate->nexperiments]);
-#endif
-			calibrate->file3[calibrate->nexperiments] =
-				g_mapped_file_new
-					(calibrate->template3[calibrate->nexperiments], 0, NULL);
-			if (!calibrate->nexperiments) ++calibrate->ninputs;
-#if DEBUG
-printf("calibrate_new: ninputs=%u\n", calibrate->ninputs);
-#endif
-		}
-		else if (calibrate->nexperiments && calibrate->ninputs > 2)
-		{
-			printf("No experiment %u template3\n", calibrate->nexperiments + 1);
-			return 0;
-		}
-#if DEBUG
-printf("calibrate_new: template3\n");
-#endif
-		if (xmlHasProp(child, XML_TEMPLATE4))
-		{
-			if (calibrate->nexperiments && calibrate->ninputs < 4)
-			{
-				printf("Experiment %u: bad templates number\n",
-					calibrate->nexperiments + 1);
-				return 0;
-			}
-			calibrate->template4 = realloc(calibrate->template4,
-				(1 + calibrate->nexperiments) * sizeof(char*));
-			calibrate->template4[calibrate->nexperiments] =
-				(char*)xmlGetProp(child, XML_TEMPLATE4);
-			calibrate->file4 = realloc(calibrate->file4,
-				(1 + calibrate->nexperiments) * sizeof(GMappedFile*));
-#if DEBUG
-printf("calibrate_new: experiment=%u template4=%s\n", calibrate->nexperiments,
-calibrate->template4[calibrate->nexperiments]);
-#endif
-			calibrate->file4[calibrate->nexperiments] =
-				g_mapped_file_new
-					(calibrate->template4[calibrate->nexperiments], 0, NULL);
-			if (!calibrate->nexperiments) ++calibrate->ninputs;
-#if DEBUG
-printf("calibrate_new: ninputs=%u\n", calibrate->ninputs);
-#endif
-		}
-		else if (calibrate->nexperiments && calibrate->ninputs > 3)
-		{
-			printf("No experiment %u template4\n", calibrate->nexperiments + 1);
-			return 0;
+			else break;
 		}
 		++calibrate->nexperiments;
 #if DEBUG
@@ -955,41 +871,17 @@ calibrate->nend);
 	for (i = 0; i < calibrate->nexperiments; ++i)
 	{
 		xmlFree(calibrate->experiment[i]);
-		xmlFree(calibrate->template1[i]);
-		g_mapped_file_unref(calibrate->file1[i]);
-		if (calibrate->ninputs > 1)
+		for (j = 0; j < calibrate->ninputs; ++j)
 		{
-			xmlFree(calibrate->template2[i]);
-			g_mapped_file_unref(calibrate->file2[i]);
-			if (calibrate->ninputs > 2)
-			{
-				xmlFree(calibrate->template3[i]);
-				g_mapped_file_unref(calibrate->file3[i]);
-				if (calibrate->ninputs > 3)
-				{
-					xmlFree(calibrate->template4[i]);
-					g_mapped_file_unref(calibrate->file4[i]);
-				}
-			}
+			xmlFree(calibrate->template[j][i]);
+			g_mapped_file_unref(calibrate->file[j][i]);
 		}
 	}
 	free(calibrate->experiment);
-	free(calibrate->template1);
-	free(calibrate->file1);
-	if (calibrate->ninputs > 1)
+	for (i = 0; i < calibrate->ninputs; ++i)
 	{
-		free(calibrate->template2);
-		free(calibrate->file2);
-		if (calibrate->ninputs > 2)
-		{
-			free(calibrate->template3);
-			free(calibrate->file3);
-			if (calibrate->ninputs > 3)
-			{
-				free(calibrate->template4);
-				free(calibrate->file4);
-			}
-		}
+		free(calibrate->template[i]);
+		free(calibrate->file[i]);
 	}
 	for (i = 0; i < calibrate->nvariables; ++i)
 	{

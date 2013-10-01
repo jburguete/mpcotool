@@ -20,9 +20,9 @@ REQUIRED
 * gthreads (to use multicores in shared memory machines)
 * glib (extended utilities of C to work with data, lists, mapped files, regular
 expressions, ...)
+* openmpi or mpich (optional: to run in parallelized tasks)
 * doxygen (optional: standard comments format to generate documentation)
 * latex (optional: to build the PDF manuals)
-* openmpi or mpich (optional: to run in parallelized tasks)
 
 FILES
 -----
@@ -32,6 +32,7 @@ FILES
 * config.h.in: config header generator.
 * calibrator.c: source code.
 * Doxyfile: configuration file to generate doxygen documentation.
+* TODO: tasks to do.
 
 BUILDING INSTRUCTIONS
 ---------------------
@@ -84,9 +85,21 @@ INPUT FILE FORMAT
     </calibrate>
 
 Implemented algorithms are:
-> *"sweep"*: Sweep brutal force algorithm
+
+* *"sweep"*: Sweep brutal force algorithm. Requires:
+> nsweeps: number of sweeps to generate on each variable in every experiment.
 >
-> *"MonteCarlo"*: Monte-Carlo brutal force algorithm
+> The total number of simulations to run is:
+>
+>> (number of experiments) x (variable 1 number of sweeps) x ... x
+>> (variable n number of sweeps)
+
+* *"MonteCarlo"*: Monte-Carlo brutal force algorithm. Requires:
+> nsimulations: number of simulations to run in every experiment.
+>
+> The total number of simulations to run is:
+>
+>> (number of experiments) x (number of simulations)
 
 SOME EXAMPLES OF INPUT FILES
 ----------------------------
@@ -123,13 +136,15 @@ _________
 > template4.js
 
 * The variables to calibrate, ranges, c-string format and sweeps number to perform are:
-> alpha1, [179.70, 180.20], %.2lf, 4
+> alpha1, [179.70, 180.20], %.2lf, 5
 >
-> alpha2, [179.30, 179.60], %.2lf, 4
+> alpha2, [179.30, 179.60], %.2lf, 5
 >
-> random, [0.00, 0.20], %.2lf, 4
+> random, [0.00, 0.20], %.2lf, 5
 >
-> boot-time, [0.0, 3.0], %.1lf, 4
+> boot-time, [0.0, 3.0], %.1lf, 5
+
+* Then, the number of simulations to run is: 4x5x5x5x5=2500.
 
 * The input file is:
 
