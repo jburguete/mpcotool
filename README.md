@@ -93,23 +93,19 @@ _________
 * The calibration is performed with a sweep brutal force algorithm.
 * The experimental data files are:
 > 27-48.txt
-
 > 42.txt
-
 > 52.txt
-
 > 100.txt
 
 * The variables to calibrate, ranges, c-string format and sweeps number to perform are:
 > alpha1, [179.70, 180.20], %.2lf, 4
-
 > alpha2, [179.30, 179.60], %.2lf, 4
-
 > random, [0.00, 0.20], %.2lf, 4
-
 > boot-time, [0.0, 3.0], %.1lf, 4
 
 * Then, the input file is:
+
+________________
 
     <?xml version="1.0"/>
     <calibrate simulator="simulator_name" evaluator="evaluator_name" algorithm="algorithm_type" simulations="simulations_number">
