@@ -191,7 +191,8 @@ __
       "active-percent" : 27.48
     }
 
-* Produce simulator input files as:
+* Produce simulator input files to reproduce the experimental data file
+*27-48.txt* as:
 
 __
 
