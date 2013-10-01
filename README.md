@@ -7,18 +7,18 @@ AUTHORS
 -------
 
 * Javier Burguete Tolosa (jburguete@eead.csic.es)
-* Asier Lacasta Soto (asierlacasta@gmail.com)
+* Borja Latorre Pérez
 
 REQUIRED
 --------
 
 * mpicc, gcc or clang (to compile the surce code)
-* autoconf (to generate the Makefile in different systems)
+* autoconf (to generate the Makefile in different operative systems)
 * pkg-config (to find the libraries to compile)
 * gthreads (to use multicores in shared memory machines)
 * glib (extended utilities of C to work with data, lists, random numbers, ...)
-* doxygen (standard comments format to generate documentation)
-* latex (to build the PDF manuals)
+* doxygen (optional: standard comments format to generate documentation)
+* latex (optional: to build the PDF manuals)
 * openmpi or mpich (optional: to run in parallelized tasks)
 
 FILES
@@ -84,10 +84,10 @@ _________
 
 * The simulator program name is: pivot
 * The sintaxis is:
-> $./pivot input_file output_file
+> $ ./pivot input_file output_file
 * The program to evaluate the objective function is: compare
 * The sintaxis is:
-> $./compare simulated_file data_file result_file
+> $ ./compare simulated_file data_file result_file
 * The calibration is performed with a sweep brutal force algorithm.
 * The experimental data files are:
 > 27-48.txt
