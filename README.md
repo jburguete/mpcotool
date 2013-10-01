@@ -15,8 +15,11 @@ REQUIRED
 * mpicc, gcc or clang (to compile the surce code)
 * autoconf (to generate the Makefile in different operative systems)
 * pkg-config (to find the libraries to compile)
+* gsl (to generate random numbers)
+* libxml (to deal with XML files)
 * gthreads (to use multicores in shared memory machines)
-* glib (extended utilities of C to work with data, lists, random numbers, ...)
+* glib (extended utilities of C to work with data, lists, mapped files, regular
+expressions, ...)
 * doxygen (optional: standard comments format to generate documentation)
 * latex (optional: to build the PDF manuals)
 * openmpi or mpich (optional: to run in parallelized tasks)
