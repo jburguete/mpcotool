@@ -43,7 +43,7 @@ MAKING REFERENCE MANUAL INSTRUCTIONS
 ------------------------------------
 
 * doxygen
-* cd doc/latex
+* cd latex
 * make
 
 USER INSTRUCTIONS
@@ -56,12 +56,12 @@ USER INSTRUCTIONS
 every node):
 > $ mpirun [MPI options] ./calibrator [-nthreads X] input_file.xml
 
-* The sintaxis of the simulator has to be (where in the results file the first
-data has to be the objective function value):
+* The sintaxis of the simulator has to be:
 > $ ./simulator_name input_file_1 [input_file_2] [input_file_3] [input_file_4] output_file
 
-* The sintaxis of the program to evaluate the objetive function has to be:
-> $ ./evaluator_name simulated_file data_file results file
+* The sintaxis of the program to evaluate the objetive function has to be (where
+the first data in the results file has to be the objective function value):
+> $ ./evaluator_name simulated_file data_file results_file
 
 INPUT FILE FORMAT
 -----------------
@@ -94,20 +94,29 @@ _________
 
 * The experimental data files are:
 > 27-48.txt
+>
 > 42.txt
+>
 > 52.txt
+>
 > 100.txt
 
 * Templates to get input files to simulator for each experiment are:
 > template1.js
+>
 > template2.js
+>
 > template3.js
+>
 > template4.js
 
 * The variables to calibrate, ranges, c-string format and sweeps number to perform are:
 > alpha1, [179.70, 180.20], %.2lf, 4
+>
 > alpha2, [179.30, 179.60], %.2lf, 4
+>
 > random, [0.00, 0.20], %.2lf, 4
+>
 > boot-time, [0.0, 3.0], %.1lf, 4
 
 * The input file is:
