@@ -77,8 +77,9 @@ INPUT FILE FORMAT
     </calibrate>
 
 Implemented algorithms are:
-[sweep]: Sweep brutal force algorithm
-[MonteCarlo]: Monte-Carlo brutal force algorithm
+> *"sweep"*: Sweep brutal force algorithm
+>
+> *"MonteCarlo"*: Monte-Carlo brutal force algorithm
 
 SOME EXAMPLES OF INPUT FILES
 ----------------------------
@@ -86,15 +87,15 @@ SOME EXAMPLES OF INPUT FILES
 Example 1
 _________
 
-* The simulator program name is: pivot
+* The simulator program name is: *pivot*
 * The sintaxis is:
 > $ ./pivot input_file output_file
 
-* The program to evaluate the objective function is: compare
+* The program to evaluate the objective function is: *compare*
 * The sintaxis is:
 > $ ./compare simulated_file data_file result_file
 
-* The calibration is performed with a sweep brutal force algorithm.
+* The calibration is performed with a *sweep brutal force algorithm*.
 
 * The experimental data files are:
 > 27-48.txt
@@ -140,7 +141,7 @@ __
     </calibrate>
 
 
-* A template file as template1.js:
+* A template file as *template1.js*:
 
 __
 
