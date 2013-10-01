@@ -76,6 +76,10 @@ INPUT FILE FORMAT
         <variable name="variable_M" minimum="min_value" maximum="max_value" format="c_string_format" sweeps="sweeps_number"/>
     </calibrate>
 
+Implemented algorithms are:
+[sweep]: Sweep brutal force algorithm
+[MonteCarlo]: Monte-Carlo brutal force algorithm
+
 SOME EXAMPLES OF INPUT FILES
 ----------------------------
 
