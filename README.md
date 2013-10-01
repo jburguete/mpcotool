@@ -90,16 +90,17 @@ _________
 > $./compare simulated_file data_file result_file
 * The calibration is performed with a sweep brutal force algorithm.
 * The experimental data files are:
-- 27-48.txt
-- 42.txt
-- 52.txt
-- 100.txt
+** 27-48.txt
+** 42.txt
+** 52.txt
+** 100.txt
 * The variables to calibrate, ranges, c-string format and sweeps number to perform are:
-- alpha1, [179.70, 180.20], %.2lf, 4
-- alpha2, [179.30, 179.60], %.2lf, 4
-- random, [0.00, 0.20], %.2lf, 4
-- boot-time, [0.0, 3.0], %.1lf, 4
+** alpha1, [179.70, 180.20], %.2lf, 4
+** alpha2, [179.30, 179.60], %.2lf, 4
+** random, [0.00, 0.20], %.2lf, 4
+** boot-time, [0.0, 3.0], %.1lf, 4
 * Then, the input file is:
+
     <?xml version="1.0"?>
     <calibrate simulator="pivot" evaluator="compare" algorithm="sweep">
         <experiment name="Velocidad-Frecuencia-27,48.txt" template1="template1.js"/>
