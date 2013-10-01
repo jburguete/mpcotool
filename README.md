@@ -91,11 +91,18 @@ _________
 > $ ./compare simulated_file data_file result_file
 
 * The calibration is performed with a sweep brutal force algorithm.
+
 * The experimental data files are:
 > 27-48.txt
 > 42.txt
 > 52.txt
 > 100.txt
+
+* Templates to get input files to simulator for each experiment are:
+> template1.js
+> template2.js
+> template3.js
+> template4.js
 
 * The variables to calibrate, ranges, c-string format and sweeps number to perform are:
 > alpha1, [179.70, 180.20], %.2lf, 4
@@ -103,29 +110,111 @@ _________
 > random, [0.00, 0.20], %.2lf, 4
 > boot-time, [0.0, 3.0], %.1lf, 4
 
-* Then, the input file is:
+* The input file is:
 
-________________
-
-    <?xml version="1.0"/>
-    <calibrate simulator="simulator_name" evaluator="evaluator_name" algorithm="algorithm_type" simulations="simulations_number">
-        <experiment name="data_file_1" template1="template_1_1" template2="template_1_2" template3="template_1_3" template4="template_1_4"/>
-        ...
-        <experiment name="data_file_N" template1="template_N_1" template2="template_N_2" template3="template_N_3" template4="template_N_4"/>
-        <variable name="variable_1" minimum="min_value" maximum="max_value" format="c_string_format" sweeps="sweeps_number"/>
-        ...
-        <variable name="variable_M" minimum="min_value" maximum="max_value" format="c_string_format" sweeps="sweeps_number"/>
-    </calibrate>
+__
 
     <?xml version="1.0"?>
     <calibrate simulator="pivot" evaluator="compare" algorithm="sweep">
-        <experiment name="Velocidad-Frecuencia-27,48.txt" template1="template1.js"/>
-        <experiment name="Velocidad-Frecuencia-42.txt" template1="template2.js"/>
-        <experiment name="Velocidad-Frecuencia-52.txt" template1="template3.js"/>
-        <experiment name="Velocidad-Frecuencia-100.txt" template1="template4.js"/>
+        <experiment name="27-48.txt" template1="template1.js"/>
+        <experiment name="42.txt" template1="template2.js"/>
+        <experiment name="52.txt" template1="template3.js"/>
+        <experiment name="100.txt" template1="template4.js"/>
         <variable name="alpha1" minimum="179.70" maximum="180.20" format="%.2lf" sweeps="4"/>
         <variable name="alpha2" minimum="179.30" maximum="179.60" format="%.2lf" sweeps="4"/>
         <variable name="random" minimum="0.00" maximum="0.20" format="%.2lf" sweeps="4"/>
         <variable name="boot-time" minimum="0.0" maximum="3.0" format="%.1lf" sweeps="4"/>
     </calibrate>
 
+
+* A template file as template1.js:
+
+__
+
+    {
+      "towers" :
+      [
+        {
+          "length"      : 50.11,
+          "velocity"    : 0.02738,
+          "@variable1@" : @value1@,
+          "@variable2@" : @value2@,
+          "@variable3@" : @value3@,
+          "@variable4@" : @value4@
+        },
+        {
+          "length"    : 50.11,
+          "velocity"  : 0.02824,
+          "@variable1@" : @value1@,
+          "@variable2@" : @value2@,
+          "@variable3@" : @value3@,
+          "@variable4@" : @value4@
+        },
+        {
+          "length"    : 50.11,
+          "velocity"  : 0.03008,
+          "@variable1@" : @value1@,
+          "@variable2@" : @value2@,
+          "@variable3@" : @value3@,
+          "@variable4@" : @value4@
+        },
+        {
+          "length"    : 50.11,
+          "velocity"  : 0.03753,
+          "@variable1@" : @value1@,
+          "@variable2@" : @value2@,
+          "@variable3@" : @value3@,
+          "@variable4@" : @value4@
+        }
+      ],
+      "cycle-time"     : 71.0,
+      "plot-time"     : 1.0,
+      "comp-time-step": 0.1,
+      "active-percent" : 27.48
+    }
+
+* Produce simulator input files as:
+
+__
+
+    {
+      "towers" :
+      [
+        {
+          "length"      : 50.11,
+          "velocity"    : 0.02738,
+          "alpha1" : 179.95,
+          "alpha2" : 179.45,
+          "random" : 0.10,
+          "boot-time" : 1.5
+        },
+        {
+          "length"    : 50.11,
+          "velocity"  : 0.02824,
+          "alpha1" : 179.95,
+          "alpha2" : 179.45,
+          "random" : 0.10,
+          "boot-time" : 1.5
+        },
+        {
+          "length"    : 50.11,
+          "velocity"  : 0.03008,
+          "alpha1" : 179.95,
+          "alpha2" : 179.45,
+          "random" : 0.10,
+          "boot-time" : 1.5
+        },
+        {
+          "length"    : 50.11,
+          "velocity"  : 0.03753,
+          "alpha1" : 179.95,
+          "alpha2" : 179.45,
+          "random" : 0.10,
+          "boot-time" : 1.5
+        }
+      ],
+      "cycle-time"     : 71.0,
+      "plot-time"     : 1.0,
+      "comp-time-step": 0.1,
+      "active-percent" : 27.48
+    }
