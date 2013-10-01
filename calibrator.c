@@ -72,12 +72,16 @@ typedef struct
 /**
  * \var simulator
  * \brief Name of the simulator program.
- * \var argument
- * \brief Argument to pass to the simulator program.
- * \var error
- * \brief Name of the program to calculate the error.
- * \var template
- * \brief Array of template names of input files.
+ * \var evaluator
+ * \brief Name of the program to evaluate the objective function.
+ * \var template1
+ * \brief Array of 1st template names of input files.
+ * \var template2
+ * \brief Array of 2nd template names of input files.
+ * \var template3
+ * \brief Array of 3th template names of input files.
+ * \var template4
+ * \brief Array of 4th template names of input files.
  * \var experiment
  * \brief Array experimental data file names.
  * \var label
@@ -90,6 +94,8 @@ typedef struct
  * \brief Variables number.
  * \var nexperiments
  * \brief Experiments number.
+ * \var ninputs
+ * \brief Number of input files to the simulator.
  * \var nsimulations
  * \brief Simulations number per experiment.
  * \var algorithm
@@ -116,21 +122,27 @@ typedef struct
  * \brief Pseudo-random numbers generator struct.
  * \var mutex
  * \brief Mutex struct.
- * \var file
- * \brief Array of input template files.
+ * \var file1
+ * \brief Array of 1st input template files.
+ * \var file2
+ * \brief Array of 2nd input template files.
+ * \var file3
+ * \brief Array of 3th input template files.
+ * \var file4
+ * \brief Array of 4th input template files.
  * \var mpi_rank
  * \brief Number of MPI task.
  * \var mpi_tasks
  * \brief Total number of MPI tasks.
  */
-	char *simulator, *argument, *error, **template, **experiment, **label,
-		**format;
-	unsigned int simulation_best, nvariables, nexperiments, nsimulations,
-		algorithm, *nsweeps, nstart, nend, nthreads, *thread;
+	char *simulator, *evaluator, **experiment, **template1, **template2,
+		**template3, **template4, **label, **format;
+	unsigned int simulation_best, nvariables, nexperiments, ninputs,
+		nsimulations, algorithm, *nsweeps, nstart, nend, nthreads, *thread;
 	double error_best, *value, *rangemin, *rangemax;
 	gsl_rng *rng;
 	GMutex mutex[1];
-	GMappedFile **file;
+	GMappedFile **file1, **file2, **file3, **file4;
 #ifdef HAVE_MPI
 	int mpi_rank, mpi_tasks;
 #endif
@@ -154,43 +166,24 @@ typedef struct
 
 GMutex mutex;
 
-/**
- * \fn double calibrate_parse(Calibrate *calibrate, unsigned int simulation, \
- *   unsigned int experiment)
- * \brief Function to parse input files, simulating and calculating the error.
- * \param calibrate
- * \brief Calibration data.
- * \param simulation
- * \brief Simulation number.
- * \param experiment
- * \brief Experiment number.
- * \return Error value.
- */
-double calibrate_parse(Calibrate *calibrate, unsigned int simulation,
-	unsigned int experiment)
+void calibrate_template(Calibrate *calibrate, unsigned int simulation,
+	char *input, GMappedFile *template)
 {
 	unsigned int i;
-	double e;
-	char buffer[512], input[32], output[32], result[32], value[32], *content,
-		*buffer2, *buffer3;
+	char buffer[32], value[32], *buffer2, *buffer3, *content;
 	FILE *file;
 	gsize length;
 	GRegex *regex;
 
 #if DEBUG
-printf("calibrate_parse: start\n");
-printf("calibrate_parse: simulation=%u experiment=%u\n", simulation,
-experiment);
+printf("calibrate_template: start\n");
 #endif
 
 	// Opening template
-	content = g_mapped_file_get_contents(calibrate->file[experiment]);
-	length = g_mapped_file_get_length(calibrate->file[experiment]);
-
-	// Opening input file
-	snprintf(input, 32, "input-%u-%u", simulation, experiment);
+	content = g_mapped_file_get_contents(template);
+	length = g_mapped_file_get_length(template);
 #if DEBUG
-printf("calibrate_parse: input=%s\n", input);
+printf("calibrate_template: length=%lu\ncontent:\n%s", length, content);
 #endif
 	file = fopen(input, "w");
 
@@ -198,7 +191,7 @@ printf("calibrate_parse: input=%s\n", input);
 	for (i = 0; i < calibrate->nvariables; ++i)
 	{
 #if DEBUG
-printf("calibrate_parse: variable=%u\n", i);
+printf("calibrate_template: variable=%u\n", i);
 #endif
 		snprintf(buffer, 32, "@variable%u@", i + 1);
 		regex = g_regex_new(buffer, 0, 0, NULL);
@@ -206,6 +199,9 @@ printf("calibrate_parse: variable=%u\n", i);
 		{
 			buffer2 = g_regex_replace_literal(regex, content, length, 0,
 				calibrate->label[i], 0, NULL);
+#if DEBUG
+printf("calibrate_template: buffer2\n%s", buffer2);
+#endif
 		}
 		else
 		{
@@ -219,7 +215,8 @@ printf("calibrate_parse: variable=%u\n", i);
 		snprintf(buffer, 32, "@value%u@", i + 1);
 		regex = g_regex_new(buffer, 0, 0, NULL);
 		snprintf(value, 32, calibrate->format[i],
-			calibrate->value[simulation * calibrate->nvariables + i]);
+		calibrate->value[simulation * calibrate->nvariables + i]);
+
 #if DEBUG
 printf("calibrate_parse: value=%s\n", value);
 #endif
@@ -228,12 +225,67 @@ printf("calibrate_parse: value=%s\n", value);
 		g_free(buffer2);
 		g_regex_unref(regex);
 	}
-	--i;
-	fwrite(buffer3, strlen(buffer3), sizeof(char), file);
-	g_free(buffer3);
 
 	// Saving input file
+	fwrite(buffer3, strlen(buffer3), sizeof(char), file);
+	g_free(buffer3);
 	fclose(file);
+
+#if DEBUG
+printf("calibrate_template: end\n");
+#endif
+}
+
+/**
+ * \fn double calibrate_parse(Calibrate *calibrate, unsigned int simulation, \
+ *   unsigned int experiment)
+ * \brief Function to parse input files, simulating and calculating the \
+ *   objective function.
+ * \param calibrate
+ * \brief Calibration data.
+ * \param simulation
+ * \brief Simulation number.
+ * \param experiment
+ * \brief Experiment number.
+ * \return Objective function value.
+ */
+double calibrate_parse(Calibrate *calibrate, unsigned int simulation,
+	unsigned int experiment)
+{
+	unsigned int i;
+	double e;
+	char buffer[512], input[4][32], output[32], result[32];
+	FILE *file_result;
+	GMappedFile *file[4];
+
+#if DEBUG
+printf("calibrate_parse: start\n");
+printf("calibrate_parse: simulation=%u experiment=%u\n", simulation,
+experiment);
+#endif
+
+	file[0] = calibrate->file1[experiment];
+	if (calibrate->ninputs > 1)
+	{
+		file[1] = calibrate->file2[experiment];
+		if (calibrate->ninputs > 2)
+		{
+			file[2] = calibrate->file3[experiment];
+			if (calibrate->ninputs > 3)
+				file[3] = calibrate->file4[experiment];
+		}
+	}
+
+	// Opening input files
+	for (i = 0; i < calibrate->ninputs; ++i)
+	{
+		snprintf(&input[i][0], 32, "input-%u-%u-%u", i, simulation, experiment);
+#if DEBUG
+printf("calibrate_parse: i=%u input=%s\n", i, &input[i][0]);
+#endif
+		calibrate_template(calibrate, simulation, &input[i][0], file[i]);
+	}
+	for (; i < 4; ++i) snprintf(&input[i][0], 32, "");
 #if DEBUG
 printf("calibrate_parse: parsing end\n");
 #endif
@@ -241,27 +293,28 @@ printf("calibrate_parse: parsing end\n");
 	// Performing the simulation
 	snprintf(output, 32, "output-%u-%u", simulation, experiment);
 	snprintf(result, 32, "result-%u-%u", simulation, experiment);
-	snprintf(buffer, 512, "./%s %s %s %s", calibrate->simulator, input,
-		calibrate->argument, output);
+	snprintf(buffer, 512, "./%s %s %s %s %s %s", calibrate->simulator,
+		&input[0][0], &input[1][0], &input[2][0], &input[3][0], output);
 #if DEBUG
 printf("calibrate_parse: %s\n", buffer);
 #endif
 	system(buffer);
 
-	// Checking the error
-	snprintf(buffer, 512, "./%s %s %s %s", calibrate->error, output,
+	// Checking the objective value function
+	snprintf(buffer, 512, "./%s %s %s %s", calibrate->evaluator, output,
 		calibrate->experiment[experiment], result);
 #if DEBUG
 printf("calibrate_parse: %s\n", buffer);
 #endif
 	system(buffer);
-	file = fopen(result, "r");
-	e = atof(fgets(buffer, 512, file));
-	fclose(file);
+	file_result = fopen(result, "r");
+	e = atof(fgets(buffer, 512, file_result));
+	fclose(file_result);
 
 	// Removing files
 #if !DEBUG
-	snprintf(buffer, 512, "rm %s %s %s", input, output, result);
+	snprintf(buffer, 512, "rm %s %s %s %s %s %s", &input[0][0], &input[1][0],
+		&input[2][0], &input[3][0], output, result);
 	system(buffer);
 #endif
 
@@ -269,7 +322,7 @@ printf("calibrate_parse: %s\n", buffer);
 printf("calibrate_parse: end\n");
 #endif
 
-	// Returning the error
+	// Returning the objective function
 	return e;
 }
 
@@ -307,7 +360,7 @@ calibrate->thread[thread], calibrate->thread[thread + 1]);
 			g_mutex_unlock(&mutex);
 		}
 #if DEBUG
-printf("calibrate_thread: i=%u e=%lg\n", i, j, e);
+printf("calibrate_thread: i=%u e=%lg\n", i, e);
 #endif
 	}
 #if DEBUG
@@ -458,7 +511,6 @@ int calibrate_new(Calibrate *calibrate, char *filename)
 	xmlNode *node, *child;
 	xmlDoc *doc;
 #if HAVE_MPI
-	unsigned int j;
 	double e;
 	MPI_Status mpi_stat;
 #endif
@@ -499,16 +551,10 @@ printf("calibrate_new: start\n");
 		return 0;
 	}
 
-	// Obtaining the argument to pass to the simulator
-	if (xmlHasProp(node, XML_ARGUMENT))
-		calibrate->argument = (char*)xmlGetProp(node, XML_ARGUMENT);
-	else
-		calibrate->argument = (char*)xmlStrdup((const xmlChar*)"");
-
-	// Obtaining the error file
-	if (xmlHasProp(node, XML_ERROR))
+	// Obtaining the evaluator file
+	if (xmlHasProp(node, XML_EVALUATOR))
 	{
-		calibrate->error = (char*)xmlGetProp(node, XML_ERROR);
+		calibrate->evaluator = (char*)xmlGetProp(node, XML_EVALUATOR);
 	}
 	else
 	{
@@ -551,11 +597,16 @@ printf("calibrate_new: start\n");
 	// Reading the experimental data file names
 	calibrate->nexperiments = 0;
 	calibrate->experiment = NULL;
-	calibrate->template = NULL;
-	calibrate->file = NULL;
+	calibrate->template1 = calibrate->template2 = calibrate->template3
+		= calibrate->template4 = NULL;
+	calibrate->file1 = calibrate->file2 = calibrate->file3
+		= calibrate->file4 = NULL;
 	for (child = node->children; child; child = child->next)
 	{
 		if (xmlStrcmp(child->name, XML_EXPERIMENT)) break;
+#if DEBUG
+printf("calibrate_new: nexperiments=%u\n", calibrate->nexperiments);
+#endif
 		if (xmlHasProp(child, XML_NAME))
 		{
 			calibrate->experiment = realloc(calibrate->experiment,
@@ -568,37 +619,147 @@ printf("calibrate_new: start\n");
 			printf("No experiment %u file name\n", calibrate->nexperiments + 1);
 			return 0;
 		}
-		if (xmlHasProp(child, XML_TEMPLATE))
+		if (!calibrate->nexperiments) calibrate->ninputs = 0;
+#if DEBUG
+printf("calibrate_new: template1\n");
+#endif
+		if (xmlHasProp(child, XML_TEMPLATE1))
 		{
-			calibrate->template = realloc(calibrate->template,
+			calibrate->template1 = realloc(calibrate->template1,
 				(1 + calibrate->nexperiments) * sizeof(char*));
-			calibrate->template[calibrate->nexperiments] =
-				(char*)xmlGetProp(child, XML_TEMPLATE);
-			calibrate->file = realloc(calibrate->file,
+			calibrate->template1[calibrate->nexperiments] =
+				(char*)xmlGetProp(child, XML_TEMPLATE1);
+			calibrate->file1 = realloc(calibrate->file1,
 				(1 + calibrate->nexperiments) * sizeof(GMappedFile*));
 #if DEBUG
-printf("calibrate_new: experiment=%u template=%s\n", calibrate->nexperiments,
-calibrate->template[calibrate->nexperiments]);
+printf("calibrate_new: experiment=%u template1=%s\n", calibrate->nexperiments,
+calibrate->template1[calibrate->nexperiments]);
 #endif
-			calibrate->file[calibrate->nexperiments] =
-				g_mapped_file_new(calibrate->template[calibrate->nexperiments],
-					0, NULL);
+			calibrate->file1[calibrate->nexperiments] =
+				g_mapped_file_new
+					(calibrate->template1[calibrate->nexperiments], 0, NULL);
+			if (!calibrate->nexperiments) ++calibrate->ninputs;
+#if DEBUG
+printf("calibrate_new: ninputs=%u\n", calibrate->ninputs);
+#endif
 		}
 		else
 		{
-			printf("No experiment %u template\n", calibrate->nexperiments + 1);
+			printf("No experiment %u template1\n", calibrate->nexperiments + 1);
+			return 0;
+		}
+#if DEBUG
+printf("calibrate_new: template2\n");
+#endif
+		if (xmlHasProp(child, XML_TEMPLATE2))
+		{
+			if (calibrate->nexperiments && calibrate->ninputs < 2)
+			{
+				printf("Experiment %u: bad templates number\n",
+					calibrate->nexperiments + 1);
+				return 0;
+			}
+			calibrate->template2 = realloc(calibrate->template2,
+				(1 + calibrate->nexperiments) * sizeof(char*));
+			calibrate->template2[calibrate->nexperiments] =
+				(char*)xmlGetProp(child, XML_TEMPLATE2);
+			calibrate->file2 = realloc(calibrate->file2,
+				(1 + calibrate->nexperiments) * sizeof(GMappedFile*));
+#if DEBUG
+printf("calibrate_new: experiment=%u template2=%s\n", calibrate->nexperiments,
+calibrate->template2[calibrate->nexperiments]);
+#endif
+			calibrate->file2[calibrate->nexperiments] =
+				g_mapped_file_new
+					(calibrate->template2[calibrate->nexperiments], 0, NULL);
+			if (!calibrate->nexperiments) ++calibrate->ninputs;
+#if DEBUG
+printf("calibrate_new: ninputs=%u\n", calibrate->ninputs);
+#endif
+		}
+		else if (calibrate->nexperiments && calibrate->ninputs > 1)
+		{
+			printf("No experiment %u template2\n", calibrate->nexperiments + 1);
+			return 0;
+		}
+#if DEBUG
+printf("calibrate_new: template3\n");
+#endif
+		if (xmlHasProp(child, XML_TEMPLATE3))
+		{
+			if (calibrate->nexperiments && calibrate->ninputs < 3)
+			{
+				printf("Experiment %u: bad templates number\n",
+					calibrate->nexperiments + 1);
+				return 0;
+			}
+			calibrate->template3 = realloc(calibrate->template3,
+				(1 + calibrate->nexperiments) * sizeof(char*));
+			calibrate->template3[calibrate->nexperiments] =
+				(char*)xmlGetProp(child, XML_TEMPLATE3);
+			calibrate->file3 = realloc(calibrate->file3,
+				(1 + calibrate->nexperiments) * sizeof(GMappedFile*));
+#if DEBUG
+printf("calibrate_new: experiment=%u template3=%s\n", calibrate->nexperiments,
+calibrate->template3[calibrate->nexperiments]);
+#endif
+			calibrate->file3[calibrate->nexperiments] =
+				g_mapped_file_new
+					(calibrate->template3[calibrate->nexperiments], 0, NULL);
+			if (!calibrate->nexperiments) ++calibrate->ninputs;
+#if DEBUG
+printf("calibrate_new: ninputs=%u\n", calibrate->ninputs);
+#endif
+		}
+		else if (calibrate->nexperiments && calibrate->ninputs > 2)
+		{
+			printf("No experiment %u template3\n", calibrate->nexperiments + 1);
+			return 0;
+		}
+#if DEBUG
+printf("calibrate_new: template3\n");
+#endif
+		if (xmlHasProp(child, XML_TEMPLATE4))
+		{
+			if (calibrate->nexperiments && calibrate->ninputs < 4)
+			{
+				printf("Experiment %u: bad templates number\n",
+					calibrate->nexperiments + 1);
+				return 0;
+			}
+			calibrate->template4 = realloc(calibrate->template4,
+				(1 + calibrate->nexperiments) * sizeof(char*));
+			calibrate->template4[calibrate->nexperiments] =
+				(char*)xmlGetProp(child, XML_TEMPLATE4);
+			calibrate->file4 = realloc(calibrate->file4,
+				(1 + calibrate->nexperiments) * sizeof(GMappedFile*));
+#if DEBUG
+printf("calibrate_new: experiment=%u template4=%s\n", calibrate->nexperiments,
+calibrate->template4[calibrate->nexperiments]);
+#endif
+			calibrate->file4[calibrate->nexperiments] =
+				g_mapped_file_new
+					(calibrate->template4[calibrate->nexperiments], 0, NULL);
+			if (!calibrate->nexperiments) ++calibrate->ninputs;
+#if DEBUG
+printf("calibrate_new: ninputs=%u\n", calibrate->ninputs);
+#endif
+		}
+		else if (calibrate->nexperiments && calibrate->ninputs > 3)
+		{
+			printf("No experiment %u template4\n", calibrate->nexperiments + 1);
 			return 0;
 		}
 		++calibrate->nexperiments;
+#if DEBUG
+printf("calibrate_new: nexperiments=%u\n", calibrate->nexperiments);
+#endif
 	}
 	if (!calibrate->nexperiments)
 	{
 		printf("No calibration experiments\n");
 		return 0;
 	}
-#if DEBUG
-printf("calibrate_new: nexperiments=%u\n", calibrate->nexperiments);
-#endif
 
 	// Reading the variables data
 	calibrate->nvariables = 0;
@@ -790,17 +951,28 @@ calibrate->nend);
 
 	// Freeing memory
 	xmlFree(calibrate->simulator);
-	xmlFree(calibrate->argument);
-	xmlFree(calibrate->error);
+	xmlFree(calibrate->evaluator);
 	for (i = 0; i < calibrate->nexperiments; ++i)
 	{
 		xmlFree(calibrate->experiment[i]);
-		xmlFree(calibrate->template[i]);
-		g_mapped_file_unref(calibrate->file[i]);
+		xmlFree(calibrate->template1[i]);
+		g_mapped_file_unref(calibrate->file1[i]);
+		xmlFree(calibrate->template2[i]);
+		g_mapped_file_unref(calibrate->file2[i]);
+		xmlFree(calibrate->template3[i]);
+		g_mapped_file_unref(calibrate->file3[i]);
+		xmlFree(calibrate->template4[i]);
+		g_mapped_file_unref(calibrate->file4[i]);
 	}
 	free(calibrate->experiment);
-	free(calibrate->template);
-	free(calibrate->file);
+	free(calibrate->template1);
+	free(calibrate->file2);
+	free(calibrate->template2);
+	free(calibrate->file3);
+	free(calibrate->template3);
+	free(calibrate->file4);
+	free(calibrate->template4);
+	free(calibrate->file1);
 	for (i = 0; i < calibrate->nvariables; ++i)
 	{
 		xmlFree(calibrate->label[i]);

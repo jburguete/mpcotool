@@ -41,9 +41,8 @@ OF SUCH DAMAGE.
 #define RANDOM_SEED 7007
 
 #define XML_ALGORITHM (const xmlChar*)"algorithm"
-#define XML_ARGUMENT (const xmlChar*)"argument"
 #define XML_CALIBRATE (const xmlChar*)"calibrate"
-#define XML_ERROR (const xmlChar*)"error"
+#define XML_EVALUATOR (const xmlChar*)"evaluator"
 #define XML_EXPERIMENT (const xmlChar*)"experiment"
 #define XML_FORMAT (const xmlChar*)"format"
 #define XML_GENETIC (const xmlChar*)"genetic"
@@ -55,7 +54,10 @@ OF SUCH DAMAGE.
 #define XML_SIMULATOR (const xmlChar*)"simulator"
 #define XML_SWEEP (const xmlChar*)"sweep"
 #define XML_SWEEPS (const xmlChar*)"sweeps"
-#define XML_TEMPLATE (const xmlChar*)"template"
+#define XML_TEMPLATE1 (const xmlChar*)"template1"
+#define XML_TEMPLATE2 (const xmlChar*)"template2"
+#define XML_TEMPLATE3 (const xmlChar*)"template3"
+#define XML_TEMPLATE4 (const xmlChar*)"template4"
 #define XML_VARIABLE (const xmlChar*)"variable"
 
 #endif
