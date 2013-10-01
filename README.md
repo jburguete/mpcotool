@@ -33,11 +33,15 @@ FILES
 BUILDING INSTRUCTIONS
 ---------------------
 
-* aclocal
-* autoconf
-* ./configure
-* make
-* strip calibrator (optional: to make a final version)
+> $ aclocal
+>
+> $ autoconf
+>
+> $ ./configure
+>
+> $ make
+>
+> $ strip calibrator *(optional: to make a final version)*
 
 MAKING REFERENCE MANUAL INSTRUCTIONS
 ------------------------------------
