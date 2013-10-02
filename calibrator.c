@@ -155,6 +155,8 @@ typedef struct
 	Calibrate *calibrate;
 } ParallelData;
 
+void (*calibrate_step)(Calibrate*);
+
 /**
  * \var rng
  * \brief Pseudo-random numbers generator struct.
@@ -486,6 +488,68 @@ printf("calibrate_sequential: end\n");
 #endif
 }
 
+void calibrate_refine(Calibrate *calibrate)
+{
+	unsigned int i, j;
+	double d;
+	for (j = 0; j < calibrate->nvariables; ++j)
+		calibrate->rangemin[j] = calibrate->rangemax[j] = calibrate->value
+			[calibrate->simulation_best[0] * calibrate->nvariables + j];
+	for (i = 0; ++i < calibrate->nvariables;)
+	{
+		for (j = 0; j < calibrate->nvariables; ++j)
+		{
+			calibrate->rangemin[j] = fmin(calibrate->rangemin[j],
+				calibrate->value
+					[calibrate->simulation_best[i] * calibrate->nvariables
+						+ j]);
+			calibrate->rangemax[j] = fmax(calibrate->rangemax[j],
+				calibrate->value
+					[calibrate->simulation_best[i] * calibrate->nvariables
+						+ j]);
+		}
+	}
+	for (j = 0; j < calibrate->nvariables; ++j)
+	{
+		d = calibrate->tolerance
+			* (calibrate->rangemax[j] - calibrate->rangemin[j];
+		calibrate->rangemin[j] -= d;
+		calibrate->rangemax[j] += d;
+	}
+}
+
+void calibrate_merge(Calibrate *calibrate, unsigned int nsaveds,
+	unsigned int *simulation_best, double *error_best)
+{
+	unsigned int i, j, k, s[calibrate->nbests];
+	double e[calibrate->nbests];
+	i = j = k = 0;
+	do
+	{
+		if (i > calibrate->nsaveds
+			|| calibrate->error_best[i] > error_best[j])
+		{
+			s[k] = simulation_best[j];
+			e[k] = error_best[j];
+			++j;
+		}
+		else
+		{
+			s[k] = calibrate->simulation_best[i];
+			e[k] = calibrate->error_best[i];
+			++i;
+		}
+		++k;
+	}
+	while (k < calibrate->nbests && (i < calibrate->nsaveds || j < nsaveds));
+	calibrate->nsaveds = k;
+	for (i = 0; i < k; ++i)
+	{
+		calibrate->simulation_best[i] = s[i];
+		calibrate->error_best[i] = e[i];
+	}
+}
+
 /**
  * \fn void calibrate_sweep(Calibrate *calibrate)
  * \brief Function to calibrate with the sweep algorithm.
@@ -527,6 +591,30 @@ printf("calibrate_sweep: start\n");
 		}
 		for (i = 0; i < calibrate->nthreads; ++i) g_thread_join(thread[i]);
 	}
+#ifdef HAVE_MPI
+	// Communicating tasks results
+	if (calibrate->mpi_rank == 0)
+	{
+		for (i = 1; i < calibrate->mpi_tasks; ++i)
+		{
+			MPI_Recv(&nsaveds, 1, MPI_INT, i, 1, MPI_COMM_WORLD, &mpi_stat);
+			MPI_Recv(simulation_best, calibrate->nsaveds, MPI_INT, i, 1,
+				MPI_COMM_WORLD, &mpi_stat);
+			MPI_Recv(error_best, calibrate->nsaveds, MPI_DOUBLE, i, 1,
+				MPI_COMM_WORLD, &mpi_stat);
+			calibrate_merge(calibrate, nsaveds, simulation_best, error_best);
+		}
+	}
+	else
+	{
+		MPI_Send(&nsaveds, 1, MPI_INT, 0, 1, MPI_COMM_WORLD);
+		MPI_Send(calibrate->simulation_best, calibrate->nsaveds, MPI_INT, 0, 1,
+			MPI_COMM_WORLD);
+		MPI_Send(calibrate->error_best, calibrate->nsaveds, MPI_DOUBLE, 0, 1,
+			MPI_COMM_WORLD);
+	}
+#endif
+
 #if DEBUG
 printf("calibrate_sweep: end\n");
 #endif
@@ -563,9 +651,40 @@ printf("calibrate_MonteCarlo: start\n");
 		}
 		for (i = 0; i < calibrate->nthreads; ++i) g_thread_join(thread[i]);
 	}
+#ifdef HAVE_MPI
+	// Communicating tasks results
+	if (calibrate->mpi_rank == 0)
+	{
+		for (i = 1; i < calibrate->mpi_tasks; ++i)
+		{
+			MPI_Recv(&nsaveds, 1, MPI_INT, i, 1, MPI_COMM_WORLD, &mpi_stat);
+			MPI_Recv(simulation_best, calibrate->nsaveds, MPI_INT, i, 1,
+				MPI_COMM_WORLD, &mpi_stat);
+			MPI_Recv(error_best, calibrate->nsaveds, MPI_DOUBLE, i, 1,
+				MPI_COMM_WORLD, &mpi_stat);
+			calibrate_merge(calibrate, nsaveds, simulation_best, error_best);
+		}
+	}
+	else
+	{
+		MPI_Send(&nsaveds, 1, MPI_INT, 0, 1, MPI_COMM_WORLD);
+		MPI_Send(calibrate->simulation_best, calibrate->nsaveds, MPI_INT, 0, 1,
+			MPI_COMM_WORLD);
+		MPI_Send(calibrate->error_best, calibrate->nsaveds, MPI_DOUBLE, 0, 1,
+			MPI_COMM_WORLD);
+	}
+#endif
+
 #if DEBUG
 printf("calibrate_MonteCarlo: end\n");
 #endif
+}
+
+void calibrate_iterate(Calibrate *calibrate)
+{
+	unsigned int i;
+	for (i = 0; i < calibrate->niterations; ++i)
+		calibrate_step(calibrate);
 }
 
 /**
@@ -576,38 +695,6 @@ printf("calibrate_MonteCarlo: end\n");
  */
 void calibrate_genetic(Calibrate *calibrate)
 {
-}
-
-void calibrate_merge(Calibrate *calibrate, unsigned int nsaveds,
-	unsigned int *simulation_best, double *error_best)
-{
-	unsigned int i, j, k, s[calibrate->nbests];
-	double e[calibrate->nbests];
-	i = j = k = 0;
-	do
-	{
-		if (i > calibrate->nsaveds
-			|| calibrate->error_best[i] > error_best[j])
-		{
-			s[k] = simulation_best[j];
-			e[k] = error_best[j];
-			++j;
-		}
-		else
-		{
-			s[k] = calibrate->simulation_best[i];
-			e[k] = calibrate->error_best[i];
-			++i;
-		}
-		++k;
-	}
-	while (k < calibrate->nbests && (i < calibrate->nsaveds || j < nsaveds));
-	calibrate->nsaveds = k;
-	for (i = 0; i < k; ++i)
-	{
-		calibrate->simulation_best[i] = s[i];
-		calibrate->error_best[i] = e[i];
-	}
 }
 
 /**
@@ -688,6 +775,7 @@ printf("calibrate_new: start\n");
 		if (!xmlStrcmp(buffer, XML_SWEEP))
 		{
 			calibrate->algorithm = CALIBRATE_ALGORITHM_SWEEP;
+			calibrate_step = calibrate_sweep;
 		}
 		else
 		{
@@ -698,6 +786,7 @@ printf("calibrate_new: start\n");
 	else
 	{
 		calibrate->algorithm = CALIBRATE_ALGORITHM_MONTE_CARLO;
+		calibrate_step = calibrate_MonteCarlo;
 
 		// Obtaining the simulations number
 		if (xmlHasProp(node, XML_SIMULATIONS))
@@ -986,44 +1075,15 @@ calibrate->nend);
 	// Performing the algorithm
 	switch (calibrate->algorithm)
 	{
-		// Sweep algorithm
-		case CALIBRATE_ALGORITHM_SWEEP:
-			calibrate_sweep(calibrate);
-			break;
-
 		// Genetic algorithm
 		case CALIBRATE_ALGORITHM_GENETIC:
 			calibrate_genetic(calibrate);
 			break;
 
-		// Default Monte-Carlo algorithm
+		// Iterative algorithm
 		default:
-			calibrate_MonteCarlo(calibrate);
+			calibrate_iterate(calibrate);
 	}
-
-#ifdef HAVE_MPI
-	// Communicating tasks results
-	if (calibrate->mpi_rank == 0)
-	{
-		for (i = 1; i < calibrate->mpi_tasks; ++i)
-		{
-			MPI_Recv(&nsaveds, 1, MPI_INT, i, 1, MPI_COMM_WORLD, &mpi_stat);
-			MPI_Recv(simulation_best, calibrate->nsaveds, MPI_INT, i, 1,
-				MPI_COMM_WORLD, &mpi_stat);
-			MPI_Recv(error_best, calibrate->nsaveds, MPI_DOUBLE, i, 1,
-				MPI_COMM_WORLD, &mpi_stat);
-			calibrate_merge(calibrate, nsaveds, simulation_best, error_best);
-		}
-	}
-	else
-	{
-		MPI_Send(&nsaveds, 1, MPI_INT, 0, 1, MPI_COMM_WORLD);
-		MPI_Send(calibrate->simulation_best, calibrate->nsaveds, MPI_INT, 0, 1,
-			MPI_COMM_WORLD);
-		MPI_Send(calibrate->error_best, calibrate->nsaveds, MPI_DOUBLE, 0, 1,
-			MPI_COMM_WORLD);
-	}
-#endif
 
 	// Closing the XML document
 	xmlFreeDoc(doc);
