@@ -471,7 +471,7 @@ void calibrate_sequential(Calibrate *calibrate)
 #if DEBUG
 printf("calibrate_sequential: start\n");
 #endif
-	for (i = 0; i < calibrate->nsimulations; ++i)
+	for (i = calibrate->nstart; i < calibrate->nend; ++i)
 	{
 		e = 0.;
 		for (j = 0; j < calibrate->nexperiments; ++j)
@@ -808,7 +808,7 @@ printf("calibrate_new: ninputs=%u\n", calibrate->ninputs);
 		for (j = 1; j < 4; ++j)
 		{
 #if DEBUG
-printf("calibrate_new: template%j\n", j + 1);
+printf("calibrate_new: template%u\n", j + 1);
 #endif
 			if (xmlHasProp(child, template[j]))
 			{
