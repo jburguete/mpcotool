@@ -41,11 +41,13 @@ OF SUCH DAMAGE.
 #define RANDOM_SEED 7007
 
 #define XML_ALGORITHM (const xmlChar*)"algorithm"
+#define XML_BESTS (const xmlChar*)"bests"
 #define XML_CALIBRATE (const xmlChar*)"calibrate"
 #define XML_EVALUATOR (const xmlChar*)"evaluator"
 #define XML_EXPERIMENT (const xmlChar*)"experiment"
 #define XML_FORMAT (const xmlChar*)"format"
 #define XML_GENETIC (const xmlChar*)"genetic"
+#define XML_ITERATIONS (const xmlChar*)"iterations"
 #define XML_MINIMUM (const xmlChar*)"minimum"
 #define XML_MAXIMUM (const xmlChar*)"maximum"
 #define XML_MONTE_CARLO (const xmlChar*)"Monte-Carlo"

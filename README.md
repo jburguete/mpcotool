@@ -86,16 +86,16 @@ INPUT FILE FORMAT
 
 Implemented algorithms are:
 
-* *"sweep"*: Sweep brutal force algorithm. Requires:
-> nsweeps: number of sweeps to generate on each variable in every experiment.
+* *"sweep"*: Sweep brutal force algorithm. Requires on each variable:
+> sweeps: number of sweeps to generate on each variable in every experiment. 
 >
 > The total number of simulations to run is:
 >
 >> (number of experiments) x (variable 1 number of sweeps) x ... x
 >> (variable n number of sweeps)
 
-* *"MonteCarlo"*: Monte-Carlo brutal force algorithm. Requires:
-> nsimulations: number of simulations to run in every experiment.
+* *"MonteCarlo"*: Monte-Carlo brutal force algorithm. Requires on calibrate:
+> simulations: number of simulations to run in every experiment.
 >
 > The total number of simulations to run is:
 >
@@ -156,10 +156,10 @@ __
         <experiment name="42.txt" template1="template2.js"/>
         <experiment name="52.txt" template1="template3.js"/>
         <experiment name="100.txt" template1="template4.js"/>
-        <variable name="alpha1" minimum="179.70" maximum="180.20" format="%.2lf" sweeps="4"/>
-        <variable name="alpha2" minimum="179.30" maximum="179.60" format="%.2lf" sweeps="4"/>
-        <variable name="random" minimum="0.00" maximum="0.20" format="%.2lf" sweeps="4"/>
-        <variable name="boot-time" minimum="0.0" maximum="3.0" format="%.1lf" sweeps="4"/>
+        <variable name="alpha1" minimum="179.70" maximum="180.20" format="%.2lf" sweeps="5"/>
+        <variable name="alpha2" minimum="179.30" maximum="179.60" format="%.2lf" sweeps="5"/>
+        <variable name="random" minimum="0.00" maximum="0.20" format="%.2lf" sweeps="5"/>
+        <variable name="boot-time" minimum="0.0" maximum="3.0" format="%.1lf" sweeps="5"/>
     </calibrate>
 
 

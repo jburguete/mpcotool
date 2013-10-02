@@ -39,6 +39,7 @@ OF SUCH DAMAGE.
 #include <string.h>
 #include <math.h>
 #include <unistd.h>
+#include <alloca.h>
 #include <gsl/gsl_rng.h>
 #include <libxml/parser.h>
 #include <glib.h>
@@ -82,8 +83,6 @@ typedef struct
  * \brief Array of variable names.
  * \var format
  * \brief Array of variable formats.
- * \var simulation_best
- * \brief Number of the best simulation.
  * \var nvariables
  * \brief Variables number.
  * \var nexperiments
@@ -104,18 +103,24 @@ typedef struct
  * \brief Number of threads.
  * \var thread
  * \brief Array of simulation numbers to calculate on the thread.
- * \var error_best
- * \brief Minimum error.
+ * \var niterations
+ * \brief Number of algorithm iterations
+ * \var nbests
+ * \brief Number of best simulations.
+ * \var nsaveds
+ * \brief Number of saved simulations.
+ * \var simulation_best
+ * \brief Array of best simulation numbers.
  * \var value
  * \brief Array of variable values.
  * \var rangemin
  * \brief Array of minimum variable values.
  * \var rangemax
  * \brief Array of maximum variable values.
- * \var rng
- * \brief Pseudo-random numbers generator struct.
- * \var mutex
- * \brief Mutex struct.
+ * \var error_best
+ * \brief Array of best minimum errors.
+ * \var tolerance
+ * \brief Algorithm tolerance.
  * \var file
  * \brief Matrix of input template files.
  * \var mpi_rank
@@ -124,11 +129,10 @@ typedef struct
  * \brief Total number of MPI tasks.
  */
 	char *simulator, *evaluator, **experiment, **template[4], **label, **format;
-	unsigned int simulation_best, nvariables, nexperiments, ninputs,
-		nsimulations, algorithm, *nsweeps, nstart, nend, nthreads, *thread;
-	double error_best, *value, *rangemin, *rangemax;
-	gsl_rng *rng;
-	GMutex mutex[1];
+	unsigned int nvariables, nexperiments, ninputs, nsimulations, algorithm,
+		*nsweeps, nstart, nend, nthreads, *thread, niterations, nbests, nsaveds,
+		*simulation_best;
+	double *value, *rangemin, *rangemax, *error_best, tolerance;
 	GMappedFile **file[4];
 #ifdef HAVE_MPI
 	int mpi_rank, mpi_tasks;
@@ -151,9 +155,32 @@ typedef struct
 	Calibrate *calibrate;
 } ParallelData;
 
+/**
+ * \var rng
+ * \brief Pseudo-random numbers generator struct.
+ */
+gsl_rng *rng;
+
+/**
+ * \var mutex
+ * \brief Mutex struct.
+ */
 GMutex mutex;
 
-void calibrate_template(Calibrate *calibrate, unsigned int simulation,
+/**
+ * \fn void calibrate_input(Calibrate *calibrate, unsigned int simulation, \
+ *   char *input, GMappedFile *template)
+ * \brief Function to write the simulation input file.
+ * \param calibrate
+ * \brief Calibration data.
+ * \param simulation
+ * \brief Simulation number.
+ * \param input
+ * \brief Input file name.
+ * \param template
+ * \brief Template of the input file name.
+ */
+void calibrate_input(Calibrate *calibrate, unsigned int simulation,
 	char *input, GMappedFile *template)
 {
 	unsigned int i;
@@ -163,14 +190,14 @@ void calibrate_template(Calibrate *calibrate, unsigned int simulation,
 	GRegex *regex;
 
 #if DEBUG
-printf("calibrate_template: start\n");
+printf("calibrate_input: start\n");
 #endif
 
 	// Opening template
 	content = g_mapped_file_get_contents(template);
 	length = g_mapped_file_get_length(template);
 #if DEBUG
-printf("calibrate_template: length=%lu\ncontent:\n%s", length, content);
+printf("calibrate_input: length=%lu\ncontent:\n%s", length, content);
 #endif
 	file = fopen(input, "w");
 
@@ -178,7 +205,7 @@ printf("calibrate_template: length=%lu\ncontent:\n%s", length, content);
 	for (i = 0; i < calibrate->nvariables; ++i)
 	{
 #if DEBUG
-printf("calibrate_template: variable=%u\n", i);
+printf("calibrate_input: variable=%u\n", i);
 #endif
 		snprintf(buffer, 32, "@variable%u@", i + 1);
 		regex = g_regex_new(buffer, 0, 0, NULL);
@@ -187,7 +214,7 @@ printf("calibrate_template: variable=%u\n", i);
 			buffer2 = g_regex_replace_literal(regex, content, length, 0,
 				calibrate->label[i], 0, NULL);
 #if DEBUG
-printf("calibrate_template: buffer2\n%s", buffer2);
+printf("calibrate_input: buffer2\n%s", buffer2);
 #endif
 		}
 		else
@@ -219,7 +246,7 @@ printf("calibrate_parse: value=%s\n", value);
 	fclose(file);
 
 #if DEBUG
-printf("calibrate_template: end\n");
+printf("calibrate_input: end\n");
 #endif
 }
 
@@ -257,7 +284,7 @@ experiment);
 #if DEBUG
 printf("calibrate_parse: i=%u input=%s\n", i, &input[i][0]);
 #endif
-		calibrate_template(calibrate, simulation, &input[i][0],
+		calibrate_input(calibrate, simulation, &input[i][0],
 			calibrate->file[i][experiment]);
 	}
 	for (; i < 4; ++i) snprintf(&input[i][0], 32, "");
@@ -302,6 +329,98 @@ printf("calibrate_parse: end\n");
 }
 
 /**
+ * \fn void calibrate_best_thread(Calibrate *calibrate, \
+ *   unsigned int simulation, double value)
+ * \brief Function to save the bests simulations of a thread.
+ * \param calibrate
+ * \brief Calibration data.
+ * \param simulation
+ * \brief Simulation number.
+ * \param value
+ * \brief Objective function value.
+ */
+void calibrate_best_thread(Calibrate *calibrate, unsigned int simulation,
+	double value)
+{
+	unsigned int i, j;
+	double e;
+#if DEBUG
+printf("calibrate_best_thread: start\n");
+#endif
+	if (calibrate->nsaveds < calibrate->nbests
+		|| value < calibrate->error_best[calibrate->nsaveds - 1])
+	{
+		g_mutex_lock(&mutex);
+		if (calibrate->nsaveds < calibrate->nbests) ++calibrate->nsaveds;
+		calibrate->error_best[calibrate->nsaveds - 1] = value;
+		calibrate->simulation_best[calibrate->nsaveds - 1] = simulation;
+		for (i = calibrate->nsaveds; --i;)
+		{
+			if (calibrate->error_best[i] < calibrate->error_best[i - 1])
+			{
+				j = calibrate->simulation_best[i];
+				e = calibrate->error_best[i];
+				calibrate->simulation_best[i]
+					= calibrate->simulation_best[i - 1];
+				calibrate->error_best[i] = calibrate->error_best[i - 1];
+				calibrate->simulation_best[i - 1] = j;
+				calibrate->error_best[i - 1] = e;
+			}
+			else break;
+		}
+		g_mutex_unlock(&mutex);
+	}
+#if DEBUG
+printf("calibrate_best_thread: end\n");
+#endif
+}
+
+/**
+ * \fn void calibrate_best_sequential(Calibrate *calibrate, \
+ *   unsigned int simulation, double value)
+ * \brief Function to save the bests simulations.
+ * \param calibrate
+ * \brief Calibration data.
+ * \param simulation
+ * \brief Simulation number.
+ * \param value
+ * \brief Objective function value.
+ */
+void calibrate_best_sequential(Calibrate *calibrate, unsigned int simulation,
+	double value)
+{
+	unsigned int i, j;
+	double e;
+#if DEBUG
+printf("calibrate_best_sequential: start\n");
+#endif
+	if (calibrate->nsaveds < calibrate->nbests
+		|| value < calibrate->error_best[calibrate->nsaveds - 1])
+	{
+		if (calibrate->nsaveds < calibrate->nbests) ++calibrate->nsaveds;
+		calibrate->error_best[calibrate->nsaveds - 1] = value;
+		calibrate->simulation_best[calibrate->nsaveds - 1] = simulation;
+		for (i = calibrate->nsaveds; --i;)
+		{
+			if (calibrate->error_best[i] < calibrate->error_best[i - 1])
+			{
+				j = calibrate->simulation_best[i];
+				e = calibrate->error_best[i];
+				calibrate->simulation_best[i]
+					= calibrate->simulation_best[i - 1];
+				calibrate->error_best[i] = calibrate->error_best[i - 1];
+				calibrate->simulation_best[i - 1] = j;
+				calibrate->error_best[i - 1] = e;
+			}
+			else break;
+		}
+	}
+#if DEBUG
+printf("calibrate_best_sequential: end\n");
+#endif
+}
+
+/**
  * \fn void* calibrate_thread(ParallelData *data)
  * \brief Function to calibrate on a thread.
  * \param data
@@ -327,13 +446,7 @@ calibrate->thread[thread], calibrate->thread[thread + 1]);
 		e = 0.;
 		for (j = 0; j < calibrate->nexperiments; ++j)
 			e += calibrate_parse(calibrate, i, j);
-		if (e < calibrate->error_best)
-		{
-			g_mutex_lock(&mutex);
-			calibrate->error_best = e;
-			calibrate->simulation_best = i;
-			g_mutex_unlock(&mutex);
-		}
+		calibrate_best_thread(calibrate, i, e);
 #if DEBUG
 printf("calibrate_thread: i=%u e=%lg\n", i, e);
 #endif
@@ -363,11 +476,7 @@ printf("calibrate_sequential: start\n");
 		e = 0.;
 		for (j = 0; j < calibrate->nexperiments; ++j)
 			e += calibrate_parse(calibrate, i, j);
-		if (e < calibrate->error_best)
-		{
-			calibrate->error_best = e;
-			calibrate->simulation_best = i;
-		}
+		calibrate_best_sequential(calibrate, i, e);
 #if DEBUG
 printf("calibrate_sequential: i=%u e=%lg\n", i, e);
 #endif
@@ -440,7 +549,7 @@ printf("calibrate_MonteCarlo: start\n");
 	for (i = 0; i < calibrate->nsimulations; ++i)
 		for (j = 0; j < calibrate->nvariables; ++j)
 			calibrate->value[i * calibrate->nvariables + j] =
-				calibrate->rangemin[j] + gsl_rng_uniform(calibrate->rng)
+				calibrate->rangemin[j] + gsl_rng_uniform(rng)
 				* (calibrate->rangemax[j] - calibrate->rangemin[j]);
 	if (calibrate->nthreads <= 1)
 		calibrate_sequential(calibrate);
@@ -469,6 +578,38 @@ void calibrate_genetic(Calibrate *calibrate)
 {
 }
 
+void calibrate_merge(Calibrate *calibrate, unsigned int nsaveds,
+	unsigned int *simulation_best, double *error_best)
+{
+	unsigned int i, j, k, s[calibrate->nbests];
+	double e[calibrate->nbests];
+	i = j = k = 0;
+	do
+	{
+		if (i > calibrate->nsaveds
+			|| calibrate->error_best[i] > error_best[j])
+		{
+			s[k] = simulation_best[j];
+			e[k] = error_best[j];
+			++j;
+		}
+		else
+		{
+			s[k] = calibrate->simulation_best[i];
+			e[k] = calibrate->error_best[i];
+			++i;
+		}
+		++k;
+	}
+	while (k < calibrate->nbests && (i < calibrate->nsaveds || j < nsaveds));
+	calibrate->nsaveds = k;
+	for (i = 0; i < k; ++i)
+	{
+		calibrate->simulation_best[i] = s[i];
+		calibrate->error_best[i] = e[i];
+	}
+}
+
 /**
  * \fn int calibrate_new(Calibrate *calibrate, char *filename)
  * \brief Function to open and perform a calibration.
@@ -486,7 +627,8 @@ int calibrate_new(Calibrate *calibrate, char *filename)
 	xmlNode *node, *child;
 	xmlDoc *doc;
 #if HAVE_MPI
-	double e;
+	unsigned int nsaveds, *simulation_best;
+	double *error_best;
 	MPI_Status mpi_stat;
 #endif
 	static const xmlChar *template[4]=
@@ -570,6 +712,43 @@ printf("calibrate_new: start\n");
 			return 0;
 		}
 	}
+
+	// Reading the iterations number
+	if (xmlHasProp(node, XML_ITERATIONS))
+	{
+		buffer = xmlGetProp(node, XML_ITERATIONS);
+		calibrate->niterations = strtoul((char*)buffer, NULL, 0);
+		xmlFree(buffer);
+		if (!calibrate->niterations)
+		{
+			printf("Null iterations number in the data file\n");
+			return 0;
+		}
+	}
+	else calibrate->niterations = 1;
+
+	// Reading the best simulations number
+	if (xmlHasProp(node, XML_BESTS))
+	{
+		buffer = xmlGetProp(node, XML_BESTS);
+		calibrate->nbests = strtoul((char*)buffer, NULL, 0);
+		xmlFree(buffer);
+		if (!calibrate->nbests)
+		{
+			printf("Null bests number in the data file\n");
+			return 0;
+		}
+	}
+	else calibrate->nbests = 1;
+	calibrate->simulation_best
+		= (unsigned int*)alloca(calibrate->nbests * sizeof(unsigned int));
+	calibrate->error_best = (double*)alloca(calibrate->nbests * sizeof(double));
+#if HAVE_MPI
+	simulation_best
+		= (unsigned int*)alloca(calibrate->nbests * sizeof(unsigned int));
+	error_best = (double*)alloca(calibrate->nbests * sizeof(double));
+#endif
+	calibrate->nsaveds = 0;
 
 	// Reading the experimental data file names
 	calibrate->nexperiments = 0;
@@ -779,7 +958,7 @@ printf("calibrate_new: nvariables=%u\n", calibrate->nvariables);
 #endif
 
 	// Allocating values
-	calibrate->value = (double*)malloc(calibrate->nsimulations *
+	calibrate->value = (double*)alloca(calibrate->nsimulations *
 		calibrate->nvariables * sizeof(double));
 
 	// Calculating simulations to perform on each task
@@ -799,13 +978,12 @@ calibrate->nend);
 
 	// Calculating simulations to perform on each thread
 	calibrate->thread =
-		(unsigned int*)malloc((1 + calibrate->nthreads) * sizeof(unsigned int));
+		(unsigned int*)alloca((1 + calibrate->nthreads) * sizeof(unsigned int));
 	for (i = 0; i <= calibrate->nthreads; ++i)
 	   calibrate->thread[i] = calibrate->nstart
 		   + i * (calibrate->nend - calibrate->nstart) / calibrate->nthreads;
 
 	// Performing the algorithm
-	calibrate->error_best = INFINITY;
 	switch (calibrate->algorithm)
 	{
 		// Sweep algorithm
@@ -829,19 +1007,21 @@ calibrate->nend);
 	{
 		for (i = 1; i < calibrate->mpi_tasks; ++i)
 		{
-			MPI_Recv(&e, 1, MPI_DOUBLE, i, 1, MPI_COMM_WORLD, &mpi_stat);
-			MPI_Recv(&j, 1, MPI_INT, i, 1, MPI_COMM_WORLD, &mpi_stat);
-			if (e < calibrate->error_best)
-			{
-				calibrate->error_best = e;
-				calibrate->simulation_best = j;
-			}
+			MPI_Recv(&nsaveds, 1, MPI_INT, i, 1, MPI_COMM_WORLD, &mpi_stat);
+			MPI_Recv(simulation_best, calibrate->nsaveds, MPI_INT, i, 1,
+				MPI_COMM_WORLD, &mpi_stat);
+			MPI_Recv(error_best, calibrate->nsaveds, MPI_DOUBLE, i, 1,
+				MPI_COMM_WORLD, &mpi_stat);
+			calibrate_merge(calibrate, nsaveds, simulation_best, error_best);
 		}
 	}
 	else
 	{
-		MPI_Send(&calibrate->error_best, 1, MPI_DOUBLE, 0, 1, MPI_COMM_WORLD);
-		MPI_Send(&calibrate->simulation_best, 1, MPI_INT, 0, 1, MPI_COMM_WORLD);
+		MPI_Send(&nsaveds, 1, MPI_INT, 0, 1, MPI_COMM_WORLD);
+		MPI_Send(calibrate->simulation_best, calibrate->nsaveds, MPI_INT, 0, 1,
+			MPI_COMM_WORLD);
+		MPI_Send(calibrate->error_best, calibrate->nsaveds, MPI_DOUBLE, 0, 1,
+			MPI_COMM_WORLD);
 	}
 #endif
 
@@ -854,11 +1034,11 @@ calibrate->nend);
 	{
 #endif
 	printf("THE BEST IS\n");
-	printf("error=%le\n", calibrate->error_best);
+	printf("error=%le\n", calibrate->error_best[0]);
 	for (i = 0; i < calibrate->nvariables; ++i)
 	{
 		snprintf(buffer2, 512, "parameter%%u=%s\n", calibrate->format[i]);
-		printf(buffer2, i, calibrate->value[calibrate->simulation_best
+		printf(buffer2, i, calibrate->value[calibrate->simulation_best[0]
 			* calibrate->nvariables + i]);
 	}
 #if HAVE_MPI
@@ -893,8 +1073,6 @@ calibrate->nend);
 	free(calibrate->rangemax);
 	free(calibrate->format);
 	free(calibrate->nsweeps);
-	free(calibrate->value);
-	free(calibrate->thread);
 
 #if DEBUG
 printf("calibrate_new: end\n");
@@ -957,8 +1135,8 @@ int main(int argn, char **argc)
 	printf("nthreads=%u\n", calibrate->nthreads);
 
 	// Starting pseudo-random numbers generator
-	calibrate->rng = gsl_rng_alloc(gsl_rng_taus2);
-	gsl_rng_set(calibrate->rng, RANDOM_SEED);
+	rng = gsl_rng_alloc(gsl_rng_taus2);
+	gsl_rng_set(rng, RANDOM_SEED);
 
 	// Allowing spaces in the XML data file
 	xmlKeepBlanksDefault(0);
@@ -967,7 +1145,7 @@ int main(int argn, char **argc)
 	calibrate_new(calibrate, argc[argn - 1]);
 
 	// Freeing memory
-	gsl_rng_free(calibrate->rng);
+	gsl_rng_free(rng);
 
 #ifdef HAVE_MPI
 	// Closing MPI
