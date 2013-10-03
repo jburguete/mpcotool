@@ -8,7 +8,7 @@ AC_PREREQ([2.69])
 AC_INIT([calibrator], [0.0.15], [BUG-REPORT-ADDRESS])
 
 # Checks for programs.
-AC_PROG_CC(mpicc, egcc, gcc, clang)
+AC_PROG_CC(mpicc.openmpi, mpicc.mpich2, egcc, gcc, clang)
 AC_MSG_NOTICE([Compiler: $CC])
 AC_PROG_MAKE_SET
 AC_LANG([C])
@@ -25,9 +25,13 @@ PKG_CHECK_MODULES([GLIB], [glib-2.0])
 AC_CHECK_HEADERS([stdlib.h string.h unistd.h])
 
 # Checking MPI
-if test $CC == "mpicc"; then
+if test $CC == "mpicc.openmpi"; then
 	AC_SUBST(MPIDEFINE, "-DHAVE_MPI")
-	AC_MSG_NOTICE([Found MPI compiler])
+	AC_MSG_NOTICE([Found MPI compiler: $CC])
+fi
+if test $CC == "mpicc.mpich2"; then
+	AC_SUBST(MPIDEFINE, "-DHAVE_MPI")
+	AC_MSG_NOTICE([Found MPI compiler: $CC])
 fi
 
 # Checking -march=native compiler flag
@@ -60,6 +64,7 @@ fi
 # Checks for library functions.
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
+AC_FUNC_ALLOCA
 AC_CHECK_FUNCS([strtoul])
 
 # Final output

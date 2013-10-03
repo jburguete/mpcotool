@@ -155,6 +155,10 @@ typedef struct
 	Calibrate *calibrate;
 } ParallelData;
 
+/**
+ * \var void (*calibrate_step)(Calibrate*)
+ * \brief Pointer to the function to perform a calibration algorithm step.
+ */
 void (*calibrate_step)(Calibrate*);
 
 /**
@@ -488,41 +492,27 @@ printf("calibrate_sequential: end\n");
 #endif
 }
 
-void calibrate_refine(Calibrate *calibrate)
-{
-	unsigned int i, j;
-	double d;
-	for (j = 0; j < calibrate->nvariables; ++j)
-		calibrate->rangemin[j] = calibrate->rangemax[j] = calibrate->value
-			[calibrate->simulation_best[0] * calibrate->nvariables + j];
-	for (i = 0; ++i < calibrate->nvariables;)
-	{
-		for (j = 0; j < calibrate->nvariables; ++j)
-		{
-			calibrate->rangemin[j] = fmin(calibrate->rangemin[j],
-				calibrate->value
-					[calibrate->simulation_best[i] * calibrate->nvariables
-						+ j]);
-			calibrate->rangemax[j] = fmax(calibrate->rangemax[j],
-				calibrate->value
-					[calibrate->simulation_best[i] * calibrate->nvariables
-						+ j]);
-		}
-	}
-	for (j = 0; j < calibrate->nvariables; ++j)
-	{
-		d = calibrate->tolerance
-			* (calibrate->rangemax[j] - calibrate->rangemin[j];
-		calibrate->rangemin[j] -= d;
-		calibrate->rangemax[j] += d;
-	}
-}
-
+/**
+ * \fn void calibrate_merge(Calibrate *calibrate, unsigned int nsaveds, \
+ *   unsigned int *simulation_best, double *error_best)
+ * \brief Function to merge the 2 calibration results.
+ * \param calibrate
+ * \brief Calibration data.
+ * \param nsaveds
+ * \brief Number of saved results.
+ * \param simulation_best
+ * \brief Array of bests simulation numbers.
+ * \param error_best
+ * \brief Array of bests objective function values.
+ */
 void calibrate_merge(Calibrate *calibrate, unsigned int nsaveds,
 	unsigned int *simulation_best, double *error_best)
 {
 	unsigned int i, j, k, s[calibrate->nbests];
 	double e[calibrate->nbests];
+#if DEBUG
+printf("calibrate_merge: start\n");
+#endif
 	i = j = k = 0;
 	do
 	{
@@ -543,12 +533,53 @@ void calibrate_merge(Calibrate *calibrate, unsigned int nsaveds,
 	}
 	while (k < calibrate->nbests && (i < calibrate->nsaveds || j < nsaveds));
 	calibrate->nsaveds = k;
-	for (i = 0; i < k; ++i)
-	{
-		calibrate->simulation_best[i] = s[i];
-		calibrate->error_best[i] = e[i];
-	}
+	memcpy(simulation_best, s, k * sizeof(unsigned int));
+	memcpy(error_best, e, k * sizeof(unsigned int));
+#if DEBUG
+printf("calibrate_merge: end\n");
+#endif
 }
+
+/**
+ * \fn void calibrate_synchronise(Calibrate *calibrate)
+ * \brief Function to synchronise the calibration results of MPI tasks.
+ * \param calibrate
+ * \brief Calibration data.
+ */
+#ifdef HAVE_MPI
+void calibrate_synchronise(Calibrate *calibrate)
+{
+	unsigned int i, nsaveds, simulation_best[calibrate->nbests];
+	double error_best[calibrate->nbests];
+	MPI_Status mpi_stat;
+#if DEBUG
+printf("calibrate_synchronise: start\n");
+#endif
+	if (calibrate->mpi_rank == 0)
+	{
+		for (i = 1; i < calibrate->mpi_tasks; ++i)
+		{
+			MPI_Recv(&nsaveds, 1, MPI_INT, i, 1, MPI_COMM_WORLD, &mpi_stat);
+			MPI_Recv(simulation_best, calibrate->nsaveds, MPI_INT, i, 1,
+				MPI_COMM_WORLD, &mpi_stat);
+			MPI_Recv(error_best, calibrate->nsaveds, MPI_DOUBLE, i, 1,
+				MPI_COMM_WORLD, &mpi_stat);
+			calibrate_merge(calibrate, nsaveds, simulation_best, error_best);
+		}
+	}
+	else
+	{
+		MPI_Send(&nsaveds, 1, MPI_INT, 0, 1, MPI_COMM_WORLD);
+		MPI_Send(calibrate->simulation_best, calibrate->nsaveds, MPI_INT, 0, 1,
+			MPI_COMM_WORLD);
+		MPI_Send(calibrate->error_best, calibrate->nsaveds, MPI_DOUBLE, 0, 1,
+			MPI_COMM_WORLD);
+	}
+#if DEBUG
+printf("calibrate_synchronise: end\n");
+#endif
+}
+#endif
 
 /**
  * \fn void calibrate_sweep(Calibrate *calibrate)
@@ -593,28 +624,8 @@ printf("calibrate_sweep: start\n");
 	}
 #ifdef HAVE_MPI
 	// Communicating tasks results
-	if (calibrate->mpi_rank == 0)
-	{
-		for (i = 1; i < calibrate->mpi_tasks; ++i)
-		{
-			MPI_Recv(&nsaveds, 1, MPI_INT, i, 1, MPI_COMM_WORLD, &mpi_stat);
-			MPI_Recv(simulation_best, calibrate->nsaveds, MPI_INT, i, 1,
-				MPI_COMM_WORLD, &mpi_stat);
-			MPI_Recv(error_best, calibrate->nsaveds, MPI_DOUBLE, i, 1,
-				MPI_COMM_WORLD, &mpi_stat);
-			calibrate_merge(calibrate, nsaveds, simulation_best, error_best);
-		}
-	}
-	else
-	{
-		MPI_Send(&nsaveds, 1, MPI_INT, 0, 1, MPI_COMM_WORLD);
-		MPI_Send(calibrate->simulation_best, calibrate->nsaveds, MPI_INT, 0, 1,
-			MPI_COMM_WORLD);
-		MPI_Send(calibrate->error_best, calibrate->nsaveds, MPI_DOUBLE, 0, 1,
-			MPI_COMM_WORLD);
-	}
+	calibrate_synchronise(calibrate);
 #endif
-
 #if DEBUG
 printf("calibrate_sweep: end\n");
 #endif
@@ -653,38 +664,102 @@ printf("calibrate_MonteCarlo: start\n");
 	}
 #ifdef HAVE_MPI
 	// Communicating tasks results
-	if (calibrate->mpi_rank == 0)
-	{
-		for (i = 1; i < calibrate->mpi_tasks; ++i)
-		{
-			MPI_Recv(&nsaveds, 1, MPI_INT, i, 1, MPI_COMM_WORLD, &mpi_stat);
-			MPI_Recv(simulation_best, calibrate->nsaveds, MPI_INT, i, 1,
-				MPI_COMM_WORLD, &mpi_stat);
-			MPI_Recv(error_best, calibrate->nsaveds, MPI_DOUBLE, i, 1,
-				MPI_COMM_WORLD, &mpi_stat);
-			calibrate_merge(calibrate, nsaveds, simulation_best, error_best);
-		}
-	}
-	else
-	{
-		MPI_Send(&nsaveds, 1, MPI_INT, 0, 1, MPI_COMM_WORLD);
-		MPI_Send(calibrate->simulation_best, calibrate->nsaveds, MPI_INT, 0, 1,
-			MPI_COMM_WORLD);
-		MPI_Send(calibrate->error_best, calibrate->nsaveds, MPI_DOUBLE, 0, 1,
-			MPI_COMM_WORLD);
-	}
+	calibrate_synchronise(calibrate);
 #endif
-
 #if DEBUG
 printf("calibrate_MonteCarlo: end\n");
 #endif
 }
 
+/**
+ * \fn void calibrate_refine(Calibrate *calibrate)
+ * \brief Function to refine the search ranges of the variables in iterative
+ *   algorithms.
+ * \param calibrate
+ * \brief Calibration data.
+ */
+void calibrate_refine(Calibrate *calibrate)
+{
+	unsigned int i, j;
+	double d;
+#ifdef HAVE_MPI
+	MPI_Status mpi_stat;
+#endif
+#if DEBUG
+printf("calibrate_refine: start\n");
+#endif
+#ifdef HAVE_MPI
+	if (!calibrate->mpi_rank)
+	{
+#endif
+		for (j = 0; j < calibrate->nvariables; ++j)
+			calibrate->rangemin[j] = calibrate->rangemax[j] = calibrate->value
+				[calibrate->simulation_best[0] * calibrate->nvariables + j];
+		for (i = 0; ++i < calibrate->nvariables;)
+		{
+			for (j = 0; j < calibrate->nvariables; ++j)
+			{
+				calibrate->rangemin[j] = fmin(calibrate->rangemin[j],
+					calibrate->value
+						[calibrate->simulation_best[i] * calibrate->nvariables
+							+ j]);
+				calibrate->rangemax[j] = fmax(calibrate->rangemax[j],
+					calibrate->value
+						[calibrate->simulation_best[i] * calibrate->nvariables
+							+ j]);
+			}
+		}
+		for (j = 0; j < calibrate->nvariables; ++j)
+		{
+			d = calibrate->tolerance
+				* (calibrate->rangemax[j] - calibrate->rangemin[j]);
+			calibrate->rangemin[j] -= d;
+			calibrate->rangemax[j] += d;
+			printf("%s min=%lg max=%lg\n", calibrate->label[j],
+				calibrate->rangemin[j], calibrate->rangemax[j]);
+		}
+#ifdef HAVE_MPI
+		for (i = 1; i < calibrate->mpi_tasks; ++i)
+		{
+			MPI_Send(calibrate->rangemin, calibrate->nvariables, MPI_DOUBLE, i,
+				1, MPI_COMM_WORLD);
+			MPI_Send(calibrate->rangemax, calibrate->nvariables, MPI_DOUBLE, i,
+				1, MPI_COMM_WORLD);
+		}
+	}
+	else
+	{
+		MPI_Recv(calibrate->rangemin, calibrate->nvariables, MPI_DOUBLE, 0, 1,
+			MPI_COMM_WORLD, &mpi_stat);
+		MPI_Recv(calibrate->rangemax, calibrate->nvariables, MPI_DOUBLE, 0, 1,
+			MPI_COMM_WORLD, &mpi_stat);
+	}
+#endif
+#if DEBUG
+printf("calibrate_refine: end\n");
+#endif
+}
+
+/**
+ * \fn void calibrate_iterate(Calibrate *calibrate)
+ * \brief Function to iterate the algorithm.
+ * \param calibrate
+ * \brief Calibration data.
+ */
 void calibrate_iterate(Calibrate *calibrate)
 {
 	unsigned int i;
+#if DEBUG
+printf("calibrate_iterate: start\n");
+#endif
 	for (i = 0; i < calibrate->niterations; ++i)
+	{
 		calibrate_step(calibrate);
+		calibrate_refine(calibrate);
+	}
+#if DEBUG
+printf("calibrate_iterate: end\n");
+#endif
 }
 
 /**
@@ -713,11 +788,6 @@ int calibrate_new(Calibrate *calibrate, char *filename)
 	xmlChar *buffer;
 	xmlNode *node, *child;
 	xmlDoc *doc;
-#if HAVE_MPI
-	unsigned int nsaveds, *simulation_best;
-	double *error_best;
-	MPI_Status mpi_stat;
-#endif
 	static const xmlChar *template[4]=
 		{XML_TEMPLATE1, XML_TEMPLATE2, XML_TEMPLATE3, XML_TEMPLATE4};
 
@@ -832,13 +902,21 @@ printf("calibrate_new: start\n");
 	calibrate->simulation_best
 		= (unsigned int*)alloca(calibrate->nbests * sizeof(unsigned int));
 	calibrate->error_best = (double*)alloca(calibrate->nbests * sizeof(double));
-#if HAVE_MPI
-	simulation_best
-		= (unsigned int*)alloca(calibrate->nbests * sizeof(unsigned int));
-	error_best = (double*)alloca(calibrate->nbests * sizeof(double));
-#endif
 	calibrate->nsaveds = 0;
 
+	// Reading the algorithm tolerance
+	if (xmlHasProp(node, XML_TOLERANCE))
+	{
+		buffer = xmlGetProp(node, XML_TOLERANCE);
+		calibrate->tolerance = atof((char*)buffer);
+		xmlFree(buffer);
+		if (calibrate->tolerance < 0.)
+		{
+			printf("Negative tolerance\n");
+			return 0;
+		}
+	}
+	else calibrate->tolerance = 0.;
 	// Reading the experimental data file names
 	calibrate->nexperiments = 0;
 	calibrate->experiment = NULL;
@@ -1069,8 +1147,13 @@ calibrate->nend);
 	calibrate->thread =
 		(unsigned int*)alloca((1 + calibrate->nthreads) * sizeof(unsigned int));
 	for (i = 0; i <= calibrate->nthreads; ++i)
+	{
 	   calibrate->thread[i] = calibrate->nstart
 		   + i * (calibrate->nend - calibrate->nstart) / calibrate->nthreads;
+#if DEBUG
+printf("calibrate_new: i=%u thread=%u\n", i, calibrate->thread[i]);
+#endif
+	}
 
 	// Performing the algorithm
 	switch (calibrate->algorithm)
@@ -1089,19 +1172,20 @@ calibrate->nend);
 	xmlFreeDoc(doc);
 
 	// Best choices
-#if HAVE_MPI
+#ifdef HAVE_MPI
 	if (!calibrate->mpi_rank)
 	{
 #endif
-	printf("THE BEST IS\n");
-	printf("error=%le\n", calibrate->error_best[0]);
-	for (i = 0; i < calibrate->nvariables; ++i)
-	{
-		snprintf(buffer2, 512, "parameter%%u=%s\n", calibrate->format[i]);
-		printf(buffer2, i, calibrate->value[calibrate->simulation_best[0]
-			* calibrate->nvariables + i]);
-	}
-#if HAVE_MPI
+		printf("THE BEST IS\n");
+		printf("error=%le\n", calibrate->error_best[0]);
+		for (i = 0; i < calibrate->nvariables; ++i)
+		{
+			snprintf(buffer2, 512, "%s=%s\n",
+				calibrate->label[i], calibrate->format[i]);
+			printf(buffer2, calibrate->value[calibrate->simulation_best[0]
+				* calibrate->nvariables + i]);
+		}
+#ifdef HAVE_MPI
 	}
 #endif
 

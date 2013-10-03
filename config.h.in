@@ -60,6 +60,7 @@ OF SUCH DAMAGE.
 #define XML_TEMPLATE2 (const xmlChar*)"template2"
 #define XML_TEMPLATE3 (const xmlChar*)"template3"
 #define XML_TEMPLATE4 (const xmlChar*)"template4"
+#define XML_TOLERANCE (const xmlChar*)"tolerance"
 #define XML_VARIABLE (const xmlChar*)"variable"
 
 #endif
