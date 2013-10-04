@@ -740,6 +740,28 @@ printf("calibrate_refine: end\n");
 #endif
 }
 
+void calibrate_print(Calibrate *calibrate)
+{
+	unsigned int i;
+	char buffer[512];
+#ifdef HAVE_MPI
+	if (!calibrate->mpi_rank)
+	{
+#endif
+		printf("THE BEST IS\n");
+		printf("error=%le\n", calibrate->error_best[0]);
+		for (i = 0; i < calibrate->nvariables; ++i)
+		{
+			snprintf(buffer, 512, "%s=%s\n",
+				calibrate->label[i], calibrate->format[i]);
+			printf(buffer, calibrate->value[calibrate->simulation_best[0]
+				* calibrate->nvariables + i]);
+		}
+#ifdef HAVE_MPI
+	}
+#endif
+}
+
 /**
  * \fn void calibrate_iterate(Calibrate *calibrate)
  * \brief Function to iterate the algorithm.
@@ -756,6 +778,7 @@ printf("calibrate_iterate: start\n");
 	{
 		calibrate_step(calibrate);
 		calibrate_refine(calibrate);
+		calibrate_print(calibrate);
 	}
 #if DEBUG
 printf("calibrate_iterate: end\n");
@@ -784,7 +807,6 @@ void calibrate_genetic(Calibrate *calibrate)
 int calibrate_new(Calibrate *calibrate, char *filename)
 {
 	unsigned int i, j;
-	char buffer2[512];
 	xmlChar *buffer;
 	xmlNode *node, *child;
 	xmlDoc *doc;
@@ -1170,24 +1192,6 @@ printf("calibrate_new: i=%u thread=%u\n", i, calibrate->thread[i]);
 
 	// Closing the XML document
 	xmlFreeDoc(doc);
-
-	// Best choices
-#ifdef HAVE_MPI
-	if (!calibrate->mpi_rank)
-	{
-#endif
-		printf("THE BEST IS\n");
-		printf("error=%le\n", calibrate->error_best[0]);
-		for (i = 0; i < calibrate->nvariables; ++i)
-		{
-			snprintf(buffer2, 512, "%s=%s\n",
-				calibrate->label[i], calibrate->format[i]);
-			printf(buffer2, calibrate->value[calibrate->simulation_best[0]
-				* calibrate->nvariables + i]);
-		}
-#ifdef HAVE_MPI
-	}
-#endif
 
 	// Freeing memory
 	xmlFree(calibrate->simulator);
