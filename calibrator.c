@@ -121,6 +121,8 @@ typedef struct
  * \brief Array of best minimum errors.
  * \var tolerance
  * \brief Algorithm tolerance.
+ * \var result
+ * \brief Result file.
  * \var file
  * \brief Matrix of input template files.
  * \var mpi_rank
@@ -133,6 +135,7 @@ typedef struct
 		*nsweeps, nstart, nend, nthreads, *thread, niterations, nbests, nsaveds,
 		*simulation_best;
 	double *value, *rangemin, *rangemax, *error_best, tolerance;
+	FILE *result;
 	GMappedFile **file[4];
 #ifdef HAVE_MPI
 	int mpi_rank, mpi_tasks;
@@ -733,6 +736,9 @@ printf("calibrate_refine: start\n");
 			calibrate->rangemax[j] += d;
 			printf("%s min=%lg max=%lg\n", calibrate->label[j],
 				calibrate->rangemin[j], calibrate->rangemax[j]);
+			fprintf(calibrate->file, "%s min=%lg max=%lg\n",
+				calibrate->label[j], calibrate->rangemin[j],
+				calibrate->rangemax[j]);
 		}
 #ifdef HAVE_MPI
 		for (i = 1; i < calibrate->mpi_tasks; ++i)
@@ -765,13 +771,18 @@ void calibrate_print(Calibrate *calibrate)
 	{
 #endif
 		printf("THE BEST IS\n");
+		fprintf(calibrate->file, "THE BEST IS\n");
 		printf("error=%le\n", calibrate->error_best[0]);
+		fprintf(calibrate->file, "error=%le\n", calibrate->error_best[0]);
 		for (i = 0; i < calibrate->nvariables; ++i)
 		{
 			snprintf(buffer, 512, "%s=%s\n",
 				calibrate->label[i], calibrate->format[i]);
 			printf(buffer, calibrate->value[calibrate->simulation_best[0]
 				* calibrate->nvariables + i]);
+			fprintf(calibrate->file, buffer,
+				calibrate->value[calibrate->simulation_best[0]
+					* calibrate->nvariables + i]);
 		}
 #ifdef HAVE_MPI
 	}
@@ -1193,6 +1204,9 @@ printf("calibrate_new: i=%u thread=%u\n", i, calibrate->thread[i]);
 #endif
 	}
 
+	// Opening result file
+	calibrate->result = fopen("result", "w");
+
 	// Performing the algorithm
 	switch (calibrate->algorithm)
 	{
@@ -1208,6 +1222,9 @@ printf("calibrate_new: i=%u thread=%u\n", i, calibrate->thread[i]);
 
 	// Closing the XML document
 	xmlFreeDoc(doc);
+
+	// Closing result file
+	fclose(calibrate->result);
 
 	// Freeing memory
 	xmlFree(calibrate->simulator);
