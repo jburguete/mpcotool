@@ -736,7 +736,7 @@ printf("calibrate_refine: start\n");
 			calibrate->rangemax[j] += d;
 			printf("%s min=%lg max=%lg\n", calibrate->label[j],
 				calibrate->rangemin[j], calibrate->rangemax[j]);
-			fprintf(calibrate->file, "%s min=%lg max=%lg\n",
+			fprintf(calibrate->result, "%s min=%lg max=%lg\n",
 				calibrate->label[j], calibrate->rangemin[j],
 				calibrate->rangemax[j]);
 		}
@@ -771,16 +771,16 @@ void calibrate_print(Calibrate *calibrate)
 	{
 #endif
 		printf("THE BEST IS\n");
-		fprintf(calibrate->file, "THE BEST IS\n");
+		fprintf(calibrate->result, "THE BEST IS\n");
 		printf("error=%le\n", calibrate->error_best[0]);
-		fprintf(calibrate->file, "error=%le\n", calibrate->error_best[0]);
+		fprintf(calibrate->result, "error=%le\n", calibrate->error_best[0]);
 		for (i = 0; i < calibrate->nvariables; ++i)
 		{
 			snprintf(buffer, 512, "%s=%s\n",
 				calibrate->label[i], calibrate->format[i]);
 			printf(buffer, calibrate->value[calibrate->simulation_best[0]
 				* calibrate->nvariables + i]);
-			fprintf(calibrate->file, buffer,
+			fprintf(calibrate->result, buffer,
 				calibrate->value[calibrate->simulation_best[0]
 					* calibrate->nvariables + i]);
 		}
