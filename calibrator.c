@@ -695,7 +695,7 @@ printf("calibrate_refine: start\n");
 		for (j = 0; j < calibrate->nvariables; ++j)
 			calibrate->rangemin[j] = calibrate->rangemax[j] = calibrate->value
 				[calibrate->simulation_best[0] * calibrate->nvariables + j];
-		for (i = 0; ++i < calibrate->nvariables;)
+		for (i = 0; ++i < calibrate->nsaveds;)
 		{
 			for (j = 0; j < calibrate->nvariables; ++j)
 			{
