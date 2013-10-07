@@ -560,16 +560,16 @@ printf("calibrate_synchronise: start\n");
 		for (i = 1; i < calibrate->mpi_tasks; ++i)
 		{
 			MPI_Recv(&nsaveds, 1, MPI_INT, i, 1, MPI_COMM_WORLD, &mpi_stat);
-			MPI_Recv(simulation_best, calibrate->nsaveds, MPI_INT, i, 1,
+			MPI_Recv(simulation_best, nsaveds, MPI_INT, i, 1,
 				MPI_COMM_WORLD, &mpi_stat);
-			MPI_Recv(error_best, calibrate->nsaveds, MPI_DOUBLE, i, 1,
+			MPI_Recv(error_best, nsaveds, MPI_DOUBLE, i, 1,
 				MPI_COMM_WORLD, &mpi_stat);
 			calibrate_merge(calibrate, nsaveds, simulation_best, error_best);
 		}
 	}
 	else
 	{
-		MPI_Send(&nsaveds, 1, MPI_INT, 0, 1, MPI_COMM_WORLD);
+		MPI_Send(&calibrate->nsaveds, 1, MPI_INT, 0, 1, MPI_COMM_WORLD);
 		MPI_Send(calibrate->simulation_best, calibrate->nsaveds, MPI_INT, 0, 1,
 			MPI_COMM_WORLD);
 		MPI_Send(calibrate->error_best, calibrate->nsaveds, MPI_DOUBLE, 0, 1,
