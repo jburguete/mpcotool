@@ -452,6 +452,7 @@ calibrate->thread[thread], calibrate->thread[thread + 1]);
 		e = 0.;
 		for (j = 0; j < calibrate->nexperiments; ++j)
 			e += calibrate_parse(calibrate, i, j);
+printf("i=%u e=%lg\n", i, e);
 		calibrate_best_thread(calibrate, i, e);
 #if DEBUG
 printf("calibrate_thread: i=%u e=%lg\n", i, e);
@@ -516,8 +517,19 @@ printf("calibrate_merge: start\n");
 	i = j = k = 0;
 	do
 	{
-		if (i > calibrate->nsaveds
-			|| calibrate->error_best[i] > error_best[j])
+		if (i > calibrate->nsaveds)
+		{
+			s[k] = simulation_best[j];
+			e[k] = error_best[j];
+			++j;
+		}
+		else if (j > nsaveds)
+		{
+			s[k] = calibrate->simulation_best[i];
+			e[k] = calibrate->error_best[i];
+			++i;
+		}
+		else if (calibrate->error_best[i] > error_best[j])
 		{
 			s[k] = simulation_best[j];
 			e[k] = error_best[j];
@@ -534,7 +546,7 @@ printf("calibrate_merge: start\n");
 	while (k < calibrate->nbests && (i < calibrate->nsaveds || j < nsaveds));
 	calibrate->nsaveds = k;
 	memcpy(simulation_best, s, k * sizeof(unsigned int));
-	memcpy(error_best, e, k * sizeof(unsigned int));
+	memcpy(error_best, e, k * sizeof(double));
 #if DEBUG
 printf("calibrate_merge: end\n");
 #endif
