@@ -784,6 +784,7 @@ void calibrate_print(Calibrate *calibrate)
 				calibrate->value[calibrate->simulation_best[0]
 					* calibrate->nvariables + i]);
 		}
+		fflush(calibrate->result);
 #ifdef HAVE_MPI
 	}
 #endif
