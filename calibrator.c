@@ -762,6 +762,12 @@ printf("calibrate_refine: end\n");
 #endif
 }
 
+/**
+ * \fn void calibrate_print(Calibrate *calibrate)
+ * \brief Function to print the results.
+ * \param calibrate
+ * \brief Calibration data.
+ */
 void calibrate_print(Calibrate *calibrate)
 {
 	unsigned int i;
@@ -1318,7 +1324,7 @@ int main(int argn, char **argc)
 
 	// Starting pseudo-random numbers generator
 	rng = gsl_rng_alloc(gsl_rng_taus2);
-	gsl_rng_set(rng, RANDOM_SEED);
+	gsl_rng_set(rng, DEFAULT_RANDOM_SEED);
 
 	// Allowing spaces in the XML data file
 	xmlKeepBlanksDefault(0);

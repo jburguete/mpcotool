@@ -36,10 +36,46 @@ OF SUCH DAMAGE.
 #ifndef CONFIG__H
 #define CONFIG__H 1
 
+// Default choices
+
+/**
+ * \def DEFAULT_ALGORITHM
+ * \brief Macro to set the default algorithm.
+ * \def DEFAULT_FORMAT
+ * \brief Macro to set the default floating point numbers printing format.
+ * \def DEFAULT_RANDOM_SEED
+ * \brief Macro to set the default pseudo-random numbers seed.
+ */
 #define DEFAULT_ALGORITHM "Monte-Carlo"
 #define DEFAULT_FORMAT (const xmlChar*)"%le"
-#define RANDOM_SEED 7007
+#define DEFAULT_RANDOM_SEED 7007
 
+// XML labels
+
+/**
+ * \def XML_ALGORITHM algorithm"
+ * \def XML_BESTS bests"
+ * \def XML_CALIBRATE calibrate"
+ * \def XML_EVALUATOR evaluator"
+ * \def XML_EXPERIMENT experiment"
+ * \def XML_FORMAT format"
+ * \def XML_GENETIC genetic"
+ * \def XML_ITERATIONS iterations"
+ * \def XML_MINIMUM minimum"
+ * \def XML_MAXIMUM maximum"
+ * \def XML_MONTE_CARLO Monte-Carlo"
+ * \def XML_NAME name"
+ * \def XML_SIMULATIONS simulations"
+ * \def XML_SIMULATOR simulator"
+ * \def XML_SWEEP sweep"
+ * \def XML_SWEEPS sweeps"
+ * \def XML_TEMPLATE1 template1"
+ * \def XML_TEMPLATE2 template2"
+ * \def XML_TEMPLATE3 template3"
+ * \def XML_TEMPLATE4 template4"
+ * \def XML_TOLERANCE tolerance"
+ * \def XML_VARIABLE variable"
+ */
 #define XML_ALGORITHM (const xmlChar*)"algorithm"
 #define XML_BESTS (const xmlChar*)"bests"
 #define XML_CALIBRATE (const xmlChar*)"calibrate"
