@@ -5,6 +5,6 @@ LDFLAGS = @LDFLAGS@ @LIBS@ @GSL_LIBS@ @XML_LIBS@ @GTHREAD_LIBS@ @GLIB_LIBS@
 calibrator: calibrator.c config.h Makefile
 	$(CC) $(CFLAGS) $(LDFLAGS) calibrator.c -o calibrator
 
-doc: calibrator.c config.h Makefile
+doc: calibrator.c config.h README.md Makefile
 	doxygen
 	cd latex; make

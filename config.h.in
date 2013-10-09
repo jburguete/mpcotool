@@ -53,28 +53,50 @@ OF SUCH DAMAGE.
 // XML labels
 
 /**
- * \def XML_ALGORITHM algorithm"
- * \def XML_BESTS bests"
- * \def XML_CALIBRATE calibrate"
- * \def XML_EVALUATOR evaluator"
- * \def XML_EXPERIMENT experiment"
- * \def XML_FORMAT format"
- * \def XML_GENETIC genetic"
- * \def XML_ITERATIONS iterations"
- * \def XML_MINIMUM minimum"
- * \def XML_MAXIMUM maximum"
- * \def XML_MONTE_CARLO Monte-Carlo"
- * \def XML_NAME name"
- * \def XML_SIMULATIONS simulations"
- * \def XML_SIMULATOR simulator"
- * \def XML_SWEEP sweep"
- * \def XML_SWEEPS sweeps"
- * \def XML_TEMPLATE1 template1"
- * \def XML_TEMPLATE2 template2"
- * \def XML_TEMPLATE3 template3"
- * \def XML_TEMPLATE4 template4"
- * \def XML_TOLERANCE tolerance"
- * \def XML_VARIABLE variable"
+ * \def XML_ALGORITHM
+ * \brief algoritm XML label.
+ * \def XML_BESTS
+ * \brief bests XML label.
+ * \def XML_CALIBRATE
+ * \brief calibrate XML label.
+ * \def XML_EVALUATOR
+ * \brief evaluator XML label.
+ * \def XML_EXPERIMENT
+ * \brief experiment XML label.
+ * \def XML_FORMAT
+ * \brief format XML label.
+ * \def XML_GENETIC
+ * \brief genetic XML label.
+ * \def XML_ITERATIONS
+ * \brief iterations XML label.
+ * \def XML_MINIMUM
+ * \brief minimum XML label.
+ * \def XML_MAXIMUM
+ * \brief maximum XML label.
+ * \def XML_MONTE_CARLO
+ * \brief Monte-Carlo XML label.
+ * \def XML_NAME
+ * \brief name XML label.
+ * \def XML_SIMULATIONS
+ * \brief simulations XML label.
+ * \def XML_SIMULATOR
+ * \brief simulator XML label.
+ * \def XML_SWEEP
+ * \brief sweep XML label.
+ * \def XML_SWEEPS
+ * \brief sweeps XML label.
+ * \def XML_TEMPLATE1
+ * \brief template1 XML label.
+ * \def XML_TEMPLATE2
+ * \brief template2 XML label.
+ * \def XML_TEMPLATE3
+ * \brief template3 XML label.
+ * \def XML_TEMPLATE4
+ * \brief template4 XML label.
+ * \def XML_TOLERANCE
+ * \brief tolerance XML label.
+ * \def XML_VARIABLE
+ * \brief variable XML label.
  */
 #define XML_ALGORITHM (const xmlChar*)"algorithm"
 #define XML_BESTS (const xmlChar*)"bests"

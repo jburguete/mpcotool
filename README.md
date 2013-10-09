@@ -12,7 +12,8 @@ AUTHORS
 REQUIRED
 --------
 
-* mpicc, gcc or clang (to compile the surce code)
+* mpicc, gcc or clang (to compile the source code)
+* make (to build the executable file)
 * autoconf (to generate the Makefile in different operative systems)
 * pkg-config (to find the libraries to compile)
 * gsl (to generate random numbers)
@@ -47,8 +48,8 @@ BUILDING INSTRUCTIONS
 >
 > $ strip calibrator *(optional: to make a final version)*
 
-MAKING REFERENCE MANUAL INSTRUCTIONS
-------------------------------------
+MAKING REFERENCE MANUAL INSTRUCTIONS (file latex/refman.pdf)
+------------------------------------------------------------
 
 * doxygen
 * cd latex
