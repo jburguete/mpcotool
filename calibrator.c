@@ -1181,7 +1181,7 @@ printf("calibrate_new: nvariables=%u\n", calibrate->nvariables);
 #endif
 
 	// Allocating values
-	calibrate->value = (double*)alloca(calibrate->nsimulations *
+	calibrate->value = (double*)malloc(calibrate->nsimulations *
 		calibrate->nvariables * sizeof(double));
 
 	// Calculating simulations to perform on each task
@@ -1261,6 +1261,7 @@ printf("calibrate_new: i=%u thread=%u\n", i, calibrate->thread[i]);
 	free(calibrate->rangemax);
 	free(calibrate->format);
 	free(calibrate->nsweeps);
+	free(calibrate->value);
 
 #if DEBUG
 printf("calibrate_new: end\n");
