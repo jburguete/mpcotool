@@ -46,7 +46,7 @@ BUILDING INSTRUCTIONS
 >
 > $ make
 >
-> $ strip calibrator *(optional: to make a final version)*
+> $ strip calibrator *(optional: to make a final version without debug data)*
 
 MAKING REFERENCE MANUAL INSTRUCTIONS (file latex/refman.pdf)
 ------------------------------------------------------------
