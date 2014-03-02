@@ -1,14 +1,31 @@
 # To compile on UNIX systems:
 # aclocal
 # autoconf
+# automake --add-missing
 # ./configure
 # make
 
 AC_PREREQ([2.69])
-AC_INIT([calibrator], [0.0.15], [BUG-REPORT-ADDRESS])
+AC_INIT([calibrator], [0.0.15], [https://github.com/jburguete/calibrator])
+
+# Checks for operative systems
+AC_CANONICAL_SYSTEM
+AM_INIT_AUTOMAKE
+AC_MSG_NOTICE([System: $build])
+AC_MSG_NOTICE([System: $host])
+if test $host = "x86_64-w64-mingw32"; then
+	AC_MSG_NOTICE([Microsoft Windows 64 bits])
+	CPPFLAGS="$CPPFLAGS -I/mingw/include"
+elif test $host = "i686-pc-mingw32"; then
+	AC_MSG_NOTICE([Microsoft Windows 32 bits])
+	CPPFLAGS="$CPPFLAGS -I/mingw/include"
+elif test `uname -s` = "NetBSD"; then
+	AC_MSG_NOTICE([NetBSD])
+	CPPFLAGS="$CPPFLAGS -DNetBSD"
+fi
 
 # Checks for programs.
-AC_PROG_CC(mpicc.openmpi, mpicc.mpich2, egcc, gcc, clang)
+AC_PROG_CC([mpicc.openmpi mpicc.mpich2 mpicc egcc gcc clang])
 AC_MSG_NOTICE([Compiler: $CC])
 AC_PROG_MAKE_SET
 AC_LANG([C])
@@ -28,8 +45,10 @@ AC_CHECK_HEADERS([stdlib.h string.h unistd.h])
 if test $CC == "mpicc.openmpi"; then
 	AC_SUBST(MPIDEFINE, "-DHAVE_MPI")
 	AC_MSG_NOTICE([Found MPI compiler: $CC])
-fi
-if test $CC == "mpicc.mpich2"; then
+elif test $CC == "mpicc.mpich2"; then
+	AC_SUBST(MPIDEFINE, "-DHAVE_MPI")
+	AC_MSG_NOTICE([Found MPI compiler: $CC])
+elif test $CC == "mpicc"; then
 	AC_SUBST(MPIDEFINE, "-DHAVE_MPI")
 	AC_MSG_NOTICE([Found MPI compiler: $CC])
 fi

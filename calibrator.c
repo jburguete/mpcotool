@@ -3,7 +3,7 @@ Calibrator: a software to make calibrations of empirical parameters.
 
 AUTHORS: Javier Burguete and Borja Latorre.
 
-Copyright 2012-2013, AUTHORS.
+Copyright 2012-2014, AUTHORS.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -31,7 +31,7 @@ OF SUCH DAMAGE.
  * \file calibrator.c
  * \brief Source file of the calibrator.
  * \authors Javier Burguete and Borja Latorre.
- * \copyright Copyright 2013, all rights reserved.
+ * \copyright Copyright 2012-2014, all rights reserved.
  */
 #include "config.h"
 #include <stdio.h>
@@ -39,7 +39,9 @@ OF SUCH DAMAGE.
 #include <string.h>
 #include <math.h>
 #include <unistd.h>
-#include <alloca.h>
+#if (!defined(NetBSD))
+	#include <alloca.h>
+#endif
 #include <gsl/gsl_rng.h>
 #include <libxml/parser.h>
 #include <glib.h>
