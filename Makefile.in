@@ -4,7 +4,7 @@ CFLAGS = -g -Wall -O3 @CPPFLAGS@ @GSL_CFLAGS@ @XML_CFLAGS@ @GTHREAD_CFLAGS@ \
 LDFLAGS = @LDFLAGS@ @LIBS@ @GSL_LIBS@ @XML_LIBS@ @GTHREAD_LIBS@ @GLIB_LIBS@
 
 calibrator: calibrator.c config.h Makefile
-	$(CC) $(CFLAGS) $(LDFLAGS) calibrator.c -o calibrator
+	$(CC) $(CFLAGS) calibrator.c $(LDFLAGS) -o calibrator
 
 doc: calibrator.c config.h README.md Makefile
 	doxygen

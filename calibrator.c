@@ -39,12 +39,14 @@ OF SUCH DAMAGE.
 #include <string.h>
 #include <math.h>
 #include <unistd.h>
-#if (!defined(NetBSD))
-	#include <alloca.h>
-#endif
 #include <gsl/gsl_rng.h>
 #include <libxml/parser.h>
 #include <glib.h>
+#ifdef G_OS_WIN32
+	#include <windows.h>
+#elif (!defined(NetBSD))
+	#include <alloca.h>
+#endif
 #ifdef HAVE_MPI
 	#include <mpi.h>
 #endif
