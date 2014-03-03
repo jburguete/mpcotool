@@ -15,12 +15,13 @@ REQUIRED
 * mpicc, gcc or clang (to compile the source code)
 * make (to build the executable file)
 * autoconf (to generate the Makefile in different operative systems)
+* automake (to check the operative system)
 * pkg-config (to find the libraries to compile)
 * gsl (to generate random numbers)
 * libxml (to deal with XML files)
 * gthreads (to use multicores in shared memory machines)
 * glib (extended utilities of C to work with data, lists, mapped files, regular
-expressions, ...)
+	expressions, ...)
 * openmpi or mpich (optional: to run in parallelized tasks)
 * doxygen (optional: standard comments format to generate documentation)
 * latex (optional: to build the PDF manuals)
@@ -41,6 +42,8 @@ BUILDING INSTRUCTIONS
 > $ aclocal
 >
 > $ autoconf
+>
+> $ automake --add-missing
 >
 > $ ./configure
 >
@@ -95,7 +98,7 @@ Implemented algorithms are:
 >> (number of experiments) x (variable 1 number of sweeps) x ... x
 >> (variable n number of sweeps)
 
-* *"MonteCarlo"*: Monte-Carlo brutal force algorithm. Requires on calibrate:
+* *"Monte-Carlo"*: Monte-Carlo brutal force algorithm. Requires on calibrate:
 > simulations: number of simulations to run in every experiment.
 >
 > The total number of simulations to run is:

@@ -690,12 +690,7 @@ printf("calibrate_synchronise: end\n");
 }
 #endif
 
-#ifndef HAVE_GAUL
-void calibrate_genetic(Calibrate *calibrate)
-{
-}
-#else
-
+#ifdef HAVE_GAUL
 
 /**
  * \fn double ga_calibrate_parse(Calibrate *calibrate, unsigned int simulation, \
@@ -799,14 +794,18 @@ boolean genetic_score(population *pop, entity *entity)
 	return TRUE;
 }
 
+#endif
+
 /**
  * \fn void calibrate_genetic(Calibrate *calibrate)
  * \brief Function to calibrate with the genetic algorithm.
  * \param calibrate
  * \brief Calibration data pointer.
  */
+
 void calibrate_genetic(Calibrate *calibrate)
 {
+#ifdef HAVE_GAUL
 	int i;
 
 	// Store calibrate
@@ -965,9 +964,8 @@ void calibrate_genetic(Calibrate *calibrate)
 			ga_detach_mpi_slaves();
 		}
 	}
-
-}
 #endif
+}
 
 /**
  * \fn void calibrate_sweep(Calibrate *calibrate)
