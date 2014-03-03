@@ -50,6 +50,9 @@ OF SUCH DAMAGE.
 #ifdef HAVE_MPI
 	#include <mpi.h>
 #endif
+#ifdef HAVE_GAUL
+	#include "gaul.h"
+#endif
 
 /**
  * \def DEBUG
@@ -115,6 +118,12 @@ typedef struct
  * \brief Number of saved simulations.
  * \var simulation_best
  * \brief Array of best simulation numbers.
+ * \var population
+ * \brief Number of individuals.
+ * \var generations
+ * \brief Number of generations.
+ * \var bits
+ * \brief Number of bits representing each variable.
  * \var value
  * \brief Array of variable values.
  * \var rangemin
@@ -125,6 +134,10 @@ typedef struct
  * \brief Array of best minimum errors.
  * \var tolerance
  * \brief Algorithm tolerance.
+ * \var crossover
+ * \brief Crossover probability.
+ * \var mutation
+ * \brief Mutation probability.
  * \var result
  * \brief Result file.
  * \var file
@@ -137,8 +150,9 @@ typedef struct
 	char *simulator, *evaluator, **experiment, **template[4], **label, **format;
 	unsigned int nvariables, nexperiments, ninputs, nsimulations, algorithm,
 		*nsweeps, nstart, nend, nthreads, *thread, niterations, nbests, nsaveds,
-		*simulation_best;
-	double *value, *rangemin, *rangemax, *error_best, tolerance;
+		*simulation_best, population, generations, bits;
+	double *value, *rangemin, *rangemax, *error_best, tolerance,
+		crossover, mutation;
 	FILE *result;
 	GMappedFile **file[4];
 #ifdef HAVE_MPI
@@ -179,6 +193,78 @@ gsl_rng *rng;
  * \brief Mutex struct.
  */
 GMutex mutex;
+
+#ifdef HAVE_GAUL
+int ga_variables;			// Number of variables
+int ga_variable_bits;		// Bits representing each variable
+int ga_bits;				// Chromosome bits ( nv * bs )
+double *ga_variable_max;	// Max value for each variable
+double *ga_variable_min;	// Min value for each variable
+Calibrate *ga_calibrate;	// Auxiliary Calibrate struct
+
+// Get variable i from chromosome
+double ga_get_variable( byte *chromosome, int i )
+{
+	int j;
+	boolean bin;
+	double var = 0.0, max = 0.0;
+
+	if( i >= 0 && i < ga_variables )
+	{
+		for( j=0 ; j<ga_variable_bits ; j++ )
+		{
+			bin = ga_bit_get(chromosome, j + i * ga_variable_bits );
+			if( bin )
+			{
+				var = var * 2.0 + 1.0;
+				max = max * 2.0 + 1.0;
+			}
+			else
+			{
+				var *= 2.0; 
+				max = max * 2.0 + 1.0;
+			}
+		}
+		return ga_variable_min[i] +
+			var / max * ( ga_variable_max[i] - ga_variable_min[i] );
+	}
+
+	return 0.0;
+}
+
+// Set lowest and highest values of variable i
+int ga_set_variable_min_max( int i, double min, double max )
+{
+	if( i >= 0 && i < ga_variables )
+	{
+		ga_variable_min[i] = min;
+		ga_variable_max[i] = max;
+		return 0;
+	}
+	return 1;
+}
+
+// Set number of variables and bits representing each one
+int ga_set_variables( int n, int bits )
+{
+	int i;
+	if( n > 0 && bits > 0 )
+	{
+		ga_variables = n;
+		ga_variable_bits = bits;
+		ga_bits = n * bits;
+		ga_variable_min = (double *)malloc(n * sizeof (double));
+		ga_variable_max = (double *)malloc(n * sizeof (double));
+		for( i=0 ; i<n ; i++ )
+		{
+			ga_set_variable_min_max( i, 0.0, 1.0 );
+		}
+		return 0;
+	}
+	return 1;
+}
+#endif
+
 
 /**
  * \fn void calibrate_input(Calibrate *calibrate, unsigned int simulation, \
@@ -604,6 +690,285 @@ printf("calibrate_synchronise: end\n");
 }
 #endif
 
+#ifndef HAVE_GAUL
+void calibrate_genetic(Calibrate *calibrate)
+{
+}
+#else
+
+
+/**
+ * \fn double ga_calibrate_parse(Calibrate *calibrate, unsigned int simulation, \
+ *   unsigned int experiment)
+ * \brief Function to parse input files, simulating and calculating the \
+ *   objective function.
+ * \param calibrate
+ * \brief Calibration data.
+ * \param simulation
+ * \brief Simulation number.
+ * \param experiment
+ * \brief Experiment number.
+ * \return Objective function value.
+ */
+double ga_calibrate_parse(Calibrate *calibrate, unsigned int rank, unsigned int thread,
+	unsigned int experiment)
+{
+	unsigned int i;
+	double e;
+	char buffer[512], input[4][32], output[32], result[32];
+	FILE *file_result;
+
+#if DEBUG
+printf("calibrate_parse: start\n");
+printf("calibrate_parse: simulation=%u-%u experiment=%u\n", rank, thread, experiment);
+#endif
+
+	// Opening input files
+	for (i = 0; i < calibrate->ninputs; ++i)
+	{
+		snprintf(&input[i][0], 32, "input-%u-%u-%u-%u", i, rank, thread, experiment);
+#if DEBUG
+printf("calibrate_parse: i=%u input=%s\n", i, &input[i][0]);
+#endif
+		calibrate_input(calibrate, thread, &input[i][0],
+			calibrate->file[i][experiment]);
+	}
+	for (; i < 4; ++i) snprintf(&input[i][0], 32, "");
+#if DEBUG
+printf("calibrate_parse: parsing end\n");
+#endif
+
+	// Performing the simulation
+	snprintf(output, 32, "output-%u-%u-%u", rank, thread, experiment);
+	snprintf(result, 32, "result-%u-%u-%u", rank, thread, experiment);
+	snprintf(buffer, 512, "./%s %s %s %s %s %s", calibrate->simulator,
+		&input[0][0], &input[1][0], &input[2][0], &input[3][0], output);
+#if DEBUG
+printf("calibrate_parse: %s\n", buffer);
+#endif
+	system(buffer);
+
+	// Checking the objective value function
+	snprintf(buffer, 512, "./%s %s %s %s", calibrate->evaluator, output,
+		calibrate->experiment[experiment], result);
+#if DEBUG
+printf("calibrate_parse: %s\n", buffer);
+#endif
+	system(buffer);
+	file_result = fopen(result, "r");
+	e = atof(fgets(buffer, 512, file_result));
+	fclose(file_result);
+
+	// Removing files
+#if !DEBUG
+	snprintf(buffer, 512, "rm %s %s %s %s %s %s", &input[0][0], &input[1][0],
+		&input[2][0], &input[3][0], output, result);
+	system(buffer);
+#endif
+
+#if DEBUG
+printf("calibrate_parse: end\n");
+#endif
+
+	// Returning the objective function
+	return e;
+}
+
+boolean genetic_score(population *pop, entity *entity)
+{
+	int j, rank, thread;
+	double score = 0.0;
+
+	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+	thread = omp_get_thread_num();
+
+	for (j = 0; j < ga_calibrate->nvariables; ++j)
+	{
+		ga_calibrate->value[thread * ga_calibrate->nvariables + j] = 
+			ga_get_variable(entity->chromosome[0], j);
+	}
+
+	score = 0.0;
+	for (j = 0; j < ga_calibrate->nexperiments; ++j)
+	{
+		score += ga_calibrate_parse(ga_calibrate, rank, thread, j);
+	}
+
+	entity->fitness = -score;
+
+	return TRUE;
+}
+
+/**
+ * \fn void calibrate_genetic(Calibrate *calibrate)
+ * \brief Function to calibrate with the genetic algorithm.
+ * \param calibrate
+ * \brief Calibration data pointer.
+ */
+void calibrate_genetic(Calibrate *calibrate)
+{
+	int i;
+
+	// Store calibrate
+	ga_calibrate = calibrate;
+
+	// Population of solutions
+	population *pop = NULL;
+
+	// Number of variables and bits for each one
+	ga_set_variables( calibrate->nvariables, calibrate->bits );
+
+	// Lowest and highest values
+	for( i=0 ; i<calibrate->nvariables ; i++ )
+	{
+		ga_set_variable_min_max( i, calibrate->rangemin[i], calibrate->rangemax[i] );
+	}
+
+	// Random seed number
+	random_seed(DEFAULT_RANDOM_SEED);
+
+	if( calibrate->mpi_tasks == 1 )
+	{
+		// Genesis configuration
+		pop = ga_genesis_bitstring(
+			calibrate->population,		/* const int              population_size */
+			1,				/* const int              num_chromo */
+			ga_bits,		/* const int              len_chromo */
+			NULL,			/* GAgeneration_hook      generation_hook */
+			NULL,			/* GAiteration_hook       iteration_hook */
+			NULL,			/* GAdata_destructor      data_destructor */
+			NULL,			/* GAdata_ref_incrementor data_ref_incrementor */
+			genetic_score,	/* GAevaluate             evaluate */
+			ga_seed_bitstring_random,	/* GAseed                 seed */
+			NULL,			/* GAadapt                adapt */
+			ga_select_one_bestof2,	/* GAselect_one           select_one */
+			ga_select_two_bestof2,	/* GAselect_two           select_two */
+			ga_mutate_bitstring_singlepoint,	/* GAmutate               mutate */
+			ga_crossover_bitstring_doublepoints,	/* GAcrossover            crossover */
+			NULL,			/* GAreplace              replace */
+			NULL			/* vpointer	User data */
+		);
+
+		// Population configuration
+		ga_population_set_parameters(
+			pop,			/* population      *pop */
+			GA_SCHEME_DARWIN,	/* const ga_scheme_type     scheme */
+			GA_ELITISM_PARENTS_DIE,	/* const ga_elitism_type   elitism */
+			calibrate->crossover,		/* double  crossover */
+			calibrate->mutation,		/* double  mutation */
+			0.0				/* double  migration */
+		);
+
+		// Run evolution
+		ga_evolution(
+			pop,					/* population              *pop */
+			calibrate->generations	/* const int               max_generations */
+		);
+
+		printf("THE BEST IS\n");
+		printf("error=%e\n", -ga_get_entity_from_rank(pop,0)->fitness);
+		for( i=0 ; i<calibrate->nvariables ; i++ )
+		{
+			printf("var%d=%e\n", i+1,
+				ga_get_variable( ga_get_entity_from_rank(pop,0)->chromosome[0], i ));
+		}
+
+		ga_extinction(pop);
+
+		// Allow all slave processes to continue
+		ga_detach_mpi_slaves();
+	}
+	else
+	{
+		if (calibrate->mpi_rank != 0)
+		{
+			/*
+			 * A population is created so that the callbacks are defined.  Evolution doesn't
+			 * occur with this population, so population_size can be zero.  In such a case,
+			 * no entities are ever seeded, so there is no significant overhead.
+			 * Strictly, several of these callbacks are not needed on the slave processes, but
+			 * their definition doesn't have any adverse effects.
+			 */
+			// Genesis configuration
+			pop = ga_genesis_bitstring(
+				0,				/* const int              population_size */
+				1,				/* const int              num_chromo */
+				ga_bits,		/* const int              len_chromo */
+				NULL,			/* GAgeneration_hook      generation_hook */
+				NULL,			/* GAiteration_hook       iteration_hook */
+				NULL,			/* GAdata_destructor      data_destructor */
+				NULL,			/* GAdata_ref_incrementor data_ref_incrementor */
+				genetic_score,	/* GAevaluate             evaluate */
+				ga_seed_bitstring_random,	/* GAseed                 seed */
+				NULL,			/* GAadapt                adapt */
+				ga_select_one_bestof2,	/* GAselect_one           select_one */
+				ga_select_two_bestof2,	/* GAselect_two           select_two */
+				ga_mutate_bitstring_singlepoint,	/* GAmutate               mutate */
+				ga_crossover_bitstring_doublepoints,	/* GAcrossover            crossover */
+				NULL,			/* GAreplace              replace */
+				NULL			/* vpointer	User data */
+			);
+
+			// The slaves halt here until ga_detach_mpi_slaves(), below, is called
+			ga_attach_mpi_slave( pop );
+		}
+		else
+		{
+			// Genesis configuration
+			pop = ga_genesis_bitstring(
+				calibrate->population,		/* const int              population_size */
+				1,				/* const int              num_chromo */
+				ga_bits,		/* const int              len_chromo */
+				NULL,			/* GAgeneration_hook      generation_hook */
+				NULL,			/* GAiteration_hook       iteration_hook */
+				NULL,			/* GAdata_destructor      data_destructor */
+				NULL,			/* GAdata_ref_incrementor data_ref_incrementor */
+				genetic_score,	/* GAevaluate             evaluate */
+				ga_seed_bitstring_random,	/* GAseed                 seed */
+				NULL,			/* GAadapt                adapt */
+				ga_select_one_bestof2,	/* GAselect_one           select_one */
+				ga_select_two_bestof2,	/* GAselect_two           select_two */
+				ga_mutate_bitstring_singlepoint,	/* GAmutate               mutate */
+				ga_crossover_bitstring_doublepoints,	/* GAcrossover            crossover */
+				NULL,			/* GAreplace              replace */
+				NULL			/* vpointer	User data */
+			);
+
+			// Population configuration
+			ga_population_set_parameters(
+				pop,			/* population      *pop */
+				GA_SCHEME_DARWIN,	/* const ga_scheme_type     scheme */
+				GA_ELITISM_PARENTS_DIE,	/* const ga_elitism_type   elitism */
+				calibrate->crossover,		/* double  crossover */
+				calibrate->mutation,		/* double  mutation */
+				0.0				/* double  migration */
+			);
+
+			// Run evolution
+			ga_evolution_mpi(
+				pop,					/* population              *pop */
+				calibrate->generations	/* const int               max_generations */
+			);
+
+			printf("Final solution with seed = %d had score %e\n",
+				DEFAULT_RANDOM_SEED,  ga_get_entity_from_rank(pop,0)->fitness);
+
+			for( i=0 ; i<calibrate->nvariables ; i++ )
+			{
+				printf(" V%d = %e\n", i+1,
+					ga_get_variable( ga_get_entity_from_rank(pop,0)->chromosome[0], i ));
+			}
+
+			ga_extinction(pop);
+
+			// Allow all slave processes to continue
+			ga_detach_mpi_slaves();
+		}
+	}
+
+}
+#endif
+
 /**
  * \fn void calibrate_sweep(Calibrate *calibrate)
  * \brief Function to calibrate with the sweep algorithm.
@@ -824,16 +1189,6 @@ printf("calibrate_iterate: end\n");
 }
 
 /**
- * \fn void calibrate_genetic(Calibrate *calibrate)
- * \brief Function to calibrate with the Monte-Carlo algorithm.
- * \param calibrate
- * \brief Calibration data pointer.
- */
-void calibrate_genetic(Calibrate *calibrate)
-{
-}
-
-/**
  * \fn int calibrate_new(Calibrate *calibrate, char *filename)
  * \brief Function to open and perform a calibration.
  * \param calibrate
@@ -906,12 +1261,135 @@ printf("calibrate_new: start\n");
 		{
 			calibrate->algorithm = CALIBRATE_ALGORITHM_SWEEP;
 			calibrate_step = calibrate_sweep;
+			xmlFree(buffer);
+		}
+		else if (!xmlStrcmp(buffer, XML_GENETIC))
+		{
+			calibrate->algorithm = CALIBRATE_ALGORITHM_GENETIC;
+			calibrate_step = calibrate_genetic;
+			xmlFree(buffer);
+
+			// Check GAUL
+			#ifndef HAVE_GAUL
+				printf("Calibrator was not compiled with GAUL support\n");
+				return 0;
+			#endif
+
+			// Obtaining population
+			if (xmlHasProp(node, XML_POPULATION))
+			{
+				buffer = xmlGetProp(node, XML_POPULATION);
+				calibrate->population = strtoul((char*)buffer, NULL, 0);
+				xmlFree(buffer);
+				if( ! ( calibrate->population > 0 ) )
+				{
+					printf("Invalid population number\n");
+					return 0;
+				}
+			}
+			else
+			{
+				printf("No population number in the data file\n");
+				return 0;
+			}
+
+			// Obtaining generations
+			if (xmlHasProp(node, XML_GENERATIONS))
+			{
+				buffer = xmlGetProp(node, XML_GENERATIONS);
+				calibrate->generations = strtoul((char*)buffer, NULL, 0);
+				calibrate->nsimulations = calibrate->population * calibrate->generations;
+				xmlFree(buffer);
+				if( ! ( calibrate->generations > 0 ) )
+				{
+					printf("Invalid generation number\n");
+					return 0;
+				}
+			}
+			else
+			{
+				printf("No generation number in the data file\n");
+				return 0;
+			}
+
+			// Obtaining bits representing each variable
+			if (xmlHasProp(node, XML_BITS))
+			{
+				buffer = xmlGetProp(node, XML_BITS);
+				calibrate->bits = strtoul((char*)buffer, NULL, 0);
+				xmlFree(buffer);
+				if( ! ( calibrate->bits > 0 ) )
+				{
+					printf("Invalid bit number\n");
+					return 0;
+				}
+			}
+			else
+			{
+				printf("No generation number in the data file\n");
+				return 0;
+			}
+
+			// Obtaining crossover probability
+			if (xmlHasProp(node, XML_CROSSOVER))
+			{
+				buffer = xmlGetProp(node, XML_CROSSOVER);
+				calibrate->crossover = atof((char*)buffer);
+				xmlFree(buffer);
+				if( ! ( calibrate->crossover >= 0.0 && calibrate->crossover <= 1.0 ) )
+				{
+					printf("Invalid crossover probability\n");
+					return 0;
+				}
+			}
+			else
+			{
+				printf("No crossover probability in the data file\n");
+				return 0;
+			}
+
+			// Obtaining mutation probability
+			if (xmlHasProp(node, XML_MUTATION))
+			{
+				buffer = xmlGetProp(node, XML_MUTATION);
+				calibrate->mutation = atof((char*)buffer);
+				xmlFree(buffer);
+				if( ! ( calibrate->mutation >= 0.0 && calibrate->mutation <= 1.0 ) )
+				{
+					printf("Invalid mutation probability\n");
+					return 0;
+				}
+			}
+			else
+			{
+				printf("No mutation probability in the data file\n");
+				return 0;
+			}
+
+		}
+		else if (!xmlStrcmp(buffer, XML_MONTE_CARLO))
+		{
+			calibrate->algorithm = CALIBRATE_ALGORITHM_MONTE_CARLO;
+			calibrate_step = calibrate_MonteCarlo;
+
+			// Obtaining the simulations number
+			if (xmlHasProp(node, XML_SIMULATIONS))
+			{
+				buffer = xmlGetProp(node, XML_SIMULATIONS);
+				calibrate->nsimulations = strtoul((char*)buffer, NULL, 0);
+				xmlFree(buffer);
+			}
+			else
+			{
+				printf("No simulations number in the data file\n");
+				return 0;
+			}
 		}
 		else
 		{
-			calibrate->algorithm = CALIBRATE_ALGORITHM_GENETIC;
+			printf("Unknown algorithm %s\n", buffer);
+			return 0;
 		}
-		xmlFree(buffer);
 	}
 	else
 	{

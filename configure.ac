@@ -42,13 +42,13 @@ PKG_CHECK_MODULES([GLIB], [glib-2.0])
 AC_CHECK_HEADERS([stdlib.h string.h unistd.h])
 
 # Checking MPI
-if test $CC == "mpicc.openmpi"; then
+if test $CC = "mpicc.openmpi"; then
 	AC_SUBST(MPIDEFINE, "-DHAVE_MPI")
 	AC_MSG_NOTICE([Found MPI compiler: $CC])
-elif test $CC == "mpicc.mpich2"; then
+elif test $CC = "mpicc.mpich2"; then
 	AC_SUBST(MPIDEFINE, "-DHAVE_MPI")
 	AC_MSG_NOTICE([Found MPI compiler: $CC])
-elif test $CC == "mpicc"; then
+elif test $CC = "mpicc"; then
 	AC_SUBST(MPIDEFINE, "-DHAVE_MPI")
 	AC_MSG_NOTICE([Found MPI compiler: $CC])
 fi
@@ -59,7 +59,7 @@ CC="$CC -march=native"
 AC_TRY_LINK([],
 	[int main(int argc, char **argv){return 0;}], [arch=1], [arch=0])
 CC=$compiler
-if test $arch == 0; then
+if test $arch = 0; then
 	AC_MSG_NOTICE([checking for -march=native... no])
 	AC_SUBST(ARCH, "")
 else
@@ -72,12 +72,26 @@ compiler=$CC
 CC="$CC -flto"
 AC_TRY_LINK([], [int main(int argc, char **argv){return 0;}], [lto=1], [lto=0])
 CC=$compiler
-if test $lto == 0; then
+if test $lto = 0; then
 	AC_MSG_NOTICE([checking for -flto... no])
 	AC_SUBST(LTO, "")
 else
 	AC_MSG_NOTICE([checking for -flto... yes])
 	AC_SUBST(LTO, "-flto")
+fi
+
+# Checking GAUL library
+compiler=$CC
+CC="$CC -lm -lgaul -lgaul_util -fopenmp"
+AC_TRY_LINK([#include "gaul.h"], [int main(int argc, char **argv){return 0;}],
+	[gaul=1], [gaul=0])
+CC=$compiler
+if test $gaul = 0; then
+	AC_MSG_NOTICE([checking for GAUL... no])
+else
+	AC_MSG_NOTICE([checking for GAUL... yes])
+	AC_SUBST(GAULDEFINE, "-DHAVE_GAUL")
+	AC_SUBST(GAUL_LIBS, "-lm -lgaul -lgaul_util -fopenmp")
 fi
 
 # Checks for library functions.

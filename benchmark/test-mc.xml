@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<calibrate simulator="./simulator" evaluator="./evaluator" simulations="1000">
+	<experiment name="test.exp" template1="test.tmp"/>
+	<variable name="var1" minimum="1.000" maximum="2.000" format="%e"/>
+	<variable name="var2" minimum="1.000" maximum="2.000" format="%e"/>
+</calibrate>

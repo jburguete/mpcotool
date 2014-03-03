@@ -85,6 +85,18 @@ OF SUCH DAMAGE.
  * \brief sweep XML label.
  * \def XML_SWEEPS
  * \brief sweeps XML label.
+ * \def XML_GENETIC
+ * \brief genetic XML label.
+ * \def XML_POPULATION
+ * \brief population XML label.
+ * \def XML_GENERATIONS
+ * \brief generations XML label.
+ * \def XML_BITS
+ * \brief bits XML label.
+ * \def XML_CROSSOVER
+ * \brief crossover XML label.
+ * \def XML_MUTATION
+ * \brief mutation XML label.
  * \def XML_TEMPLATE1
  * \brief template1 XML label.
  * \def XML_TEMPLATE2
@@ -114,6 +126,12 @@ OF SUCH DAMAGE.
 #define XML_SIMULATOR (const xmlChar*)"simulator"
 #define XML_SWEEP (const xmlChar*)"sweep"
 #define XML_SWEEPS (const xmlChar*)"sweeps"
+#define XML_GENETIC (const xmlChar*)"genetic"
+#define XML_POPULATION (const xmlChar*)"population"
+#define XML_GENERATIONS (const xmlChar*)"generations"
+#define XML_BITS (const xmlChar*)"bits"
+#define XML_CROSSOVER (const xmlChar*)"crossover"
+#define XML_MUTATION (const xmlChar*)"mutation"
 #define XML_TEMPLATE1 (const xmlChar*)"template1"
 #define XML_TEMPLATE2 (const xmlChar*)"template2"
 #define XML_TEMPLATE3 (const xmlChar*)"template3"
