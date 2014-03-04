@@ -33,6 +33,7 @@ OF SUCH DAMAGE.
  * \authors Javier Burguete and Borja Latorre.
  * \copyright Copyright 2012-2014, all rights reserved.
  */
+#define _GNU_SOURCE
 #include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -193,6 +194,19 @@ gsl_rng *rng;
  * \brief Mutex struct.
  */
 GMutex mutex;
+
+/**
+ * \fn int omp_thread_count()
+ * \brief Function to get the OpenMP threads.
+ * \return OpenMP threads number.
+ */
+int omp_thread_count()
+{
+    int n = 0;
+    #pragma omp parallel reduction(+:n)
+    n += 1;
+    return n;
+}
 
 #ifdef HAVE_GAUL
 int ga_variables;			// Number of variables
@@ -1760,7 +1774,7 @@ int main(int argn, char **argc)
 	printf("nthreads=%u\n", calibrate->nthreads);
 
 #ifdef HAVE_GAUL
-	printf("ompthreads=%u\n", omp_get_num_threads());
+	printf("ompthreads=%u\n", omp_thread_count());
 #endif
 
 	// Starting pseudo-random numbers generator

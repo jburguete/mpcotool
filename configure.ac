@@ -91,7 +91,8 @@ if test $gaul = 0; then
 else
 	AC_MSG_NOTICE([checking for GAUL... yes])
 	AC_SUBST(GAULDEFINE, "-DHAVE_GAUL")
-	AC_SUBST(GAUL_LIBS, "-lm -lgaul -lgaul_util -fopenmp")
+	AC_SUBST(GAUL_LIBS, "-lm -lgaul -lgaul_util")
+	CPPFLAGS="$CPPFLAGS -fopenmp"
 fi
 
 # Checks for library functions.
