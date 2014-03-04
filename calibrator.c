@@ -826,7 +826,36 @@ void calibrate_genetic(Calibrate *calibrate)
 	// Random seed number
 	random_seed(DEFAULT_RANDOM_SEED);
 
-	if( calibrate->mpi_tasks == 1 )
+	if (calibrate->mpi_rank != 0)
+	{
+		/*
+		 * A population is created so that the callbacks are defined.  Evolution doesn't
+		 * occur with this population, so population_size can be zero.
+		 */
+		// Genesis configuration
+		pop = ga_genesis_bitstring(
+			0,				/* const int              population_size */
+			1,				/* const int              num_chromo */
+			ga_bits,		/* const int              len_chromo */
+			NULL,			/* GAgeneration_hook      generation_hook */
+			NULL,			/* GAiteration_hook       iteration_hook */
+			NULL,			/* GAdata_destructor      data_destructor */
+			NULL,			/* GAdata_ref_incrementor data_ref_incrementor */
+			genetic_score,	/* GAevaluate             evaluate */
+			ga_seed_bitstring_random,	/* GAseed                 seed */
+			NULL,			/* GAadapt                adapt */
+			ga_select_one_bestof2,	/* GAselect_one           select_one */
+			ga_select_two_bestof2,	/* GAselect_two           select_two */
+			ga_mutate_bitstring_singlepoint,	/* GAmutate               mutate */
+			ga_crossover_bitstring_doublepoints,	/* GAcrossover            crossover */
+			NULL,			/* GAreplace              replace */
+			NULL			/* vpointer	User data */
+		);
+
+		// The slaves halt here until ga_detach_mpi_slaves(), below, is called
+		ga_attach_mpi_slave( pop );
+	}
+	else
 	{
 		// Genesis configuration
 		pop = ga_genesis_bitstring(
@@ -858,11 +887,22 @@ void calibrate_genetic(Calibrate *calibrate)
 			0.0				/* double  migration */
 		);
 
-		// Run evolution
-		ga_evolution(
-			pop,					/* population              *pop */
-			calibrate->generations	/* const int               max_generations */
-		);
+		if( calibrate->mpi_tasks > 1 )
+		{
+			// Run evolution
+			ga_evolution_mpi(
+				pop,					/* population              *pop */
+				calibrate->generations	/* const int               max_generations */
+			);
+		}
+		else
+		{
+			// Run evolution
+			ga_evolution(
+				pop,					/* population              *pop */
+				calibrate->generations	/* const int               max_generations */
+			);
+		}
 
 		printf("THE BEST IS\n");
 		printf("error=%e\n", -ga_get_entity_from_rank(pop,0)->fitness);
@@ -874,92 +914,8 @@ void calibrate_genetic(Calibrate *calibrate)
 
 		ga_extinction(pop);
 
-		// Allow all slave processes to continue
-		ga_detach_mpi_slaves();
-	}
-	else
-	{
-		if (calibrate->mpi_rank != 0)
+		if( calibrate->mpi_tasks > 1 )
 		{
-			/*
-			 * A population is created so that the callbacks are defined.  Evolution doesn't
-			 * occur with this population, so population_size can be zero.  In such a case,
-			 * no entities are ever seeded, so there is no significant overhead.
-			 * Strictly, several of these callbacks are not needed on the slave processes, but
-			 * their definition doesn't have any adverse effects.
-			 */
-			// Genesis configuration
-			pop = ga_genesis_bitstring(
-				0,				/* const int              population_size */
-				1,				/* const int              num_chromo */
-				ga_bits,		/* const int              len_chromo */
-				NULL,			/* GAgeneration_hook      generation_hook */
-				NULL,			/* GAiteration_hook       iteration_hook */
-				NULL,			/* GAdata_destructor      data_destructor */
-				NULL,			/* GAdata_ref_incrementor data_ref_incrementor */
-				genetic_score,	/* GAevaluate             evaluate */
-				ga_seed_bitstring_random,	/* GAseed                 seed */
-				NULL,			/* GAadapt                adapt */
-				ga_select_one_bestof2,	/* GAselect_one           select_one */
-				ga_select_two_bestof2,	/* GAselect_two           select_two */
-				ga_mutate_bitstring_singlepoint,	/* GAmutate               mutate */
-				ga_crossover_bitstring_doublepoints,	/* GAcrossover            crossover */
-				NULL,			/* GAreplace              replace */
-				NULL			/* vpointer	User data */
-			);
-
-			// The slaves halt here until ga_detach_mpi_slaves(), below, is called
-			ga_attach_mpi_slave( pop );
-		}
-		else
-		{
-			// Genesis configuration
-			pop = ga_genesis_bitstring(
-				calibrate->population,		/* const int              population_size */
-				1,				/* const int              num_chromo */
-				ga_bits,		/* const int              len_chromo */
-				NULL,			/* GAgeneration_hook      generation_hook */
-				NULL,			/* GAiteration_hook       iteration_hook */
-				NULL,			/* GAdata_destructor      data_destructor */
-				NULL,			/* GAdata_ref_incrementor data_ref_incrementor */
-				genetic_score,	/* GAevaluate             evaluate */
-				ga_seed_bitstring_random,	/* GAseed                 seed */
-				NULL,			/* GAadapt                adapt */
-				ga_select_one_bestof2,	/* GAselect_one           select_one */
-				ga_select_two_bestof2,	/* GAselect_two           select_two */
-				ga_mutate_bitstring_singlepoint,	/* GAmutate               mutate */
-				ga_crossover_bitstring_doublepoints,	/* GAcrossover            crossover */
-				NULL,			/* GAreplace              replace */
-				NULL			/* vpointer	User data */
-			);
-
-			// Population configuration
-			ga_population_set_parameters(
-				pop,			/* population      *pop */
-				GA_SCHEME_DARWIN,	/* const ga_scheme_type     scheme */
-				GA_ELITISM_PARENTS_DIE,	/* const ga_elitism_type   elitism */
-				calibrate->crossover,		/* double  crossover */
-				calibrate->mutation,		/* double  mutation */
-				0.0				/* double  migration */
-			);
-
-			// Run evolution
-			ga_evolution_mpi(
-				pop,					/* population              *pop */
-				calibrate->generations	/* const int               max_generations */
-			);
-
-			printf("Final solution with seed = %d had score %e\n",
-				DEFAULT_RANDOM_SEED,  ga_get_entity_from_rank(pop,0)->fitness);
-
-			for( i=0 ; i<calibrate->nvariables ; i++ )
-			{
-				printf(" V%d = %e\n", i+1,
-					ga_get_variable( ga_get_entity_from_rank(pop,0)->chromosome[0], i ));
-			}
-
-			ga_extinction(pop);
-
 			// Allow all slave processes to continue
 			ga_detach_mpi_slaves();
 		}
@@ -1802,6 +1758,10 @@ int main(int argn, char **argc)
 	if (argn == 2) calibrate->nthreads = cores_number();
 	else calibrate->nthreads = atoi(argc[2]);
 	printf("nthreads=%u\n", calibrate->nthreads);
+
+#ifdef HAVE_GAUL
+	printf("ompthreads=%u\n", omp_get_num_threads());
+#endif
 
 	// Starting pseudo-random numbers generator
 	rng = gsl_rng_alloc(gsl_rng_taus2);
