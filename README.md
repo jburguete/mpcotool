@@ -7,7 +7,7 @@ AUTHORS
 -------
 
 * Javier Burguete Tolosa (jburguete@eead.csic.es)
-* Borja Latorre Pérez (borja.latorre@csic.es)
+* Borja Latorre Garcés (borja.latorre@csic.es)
 
 REQUIRED
 --------
