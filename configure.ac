@@ -19,9 +19,6 @@ if test $host = "x86_64-w64-mingw32"; then
 elif test $host = "i686-pc-mingw32"; then
 	AC_MSG_NOTICE([Microsoft Windows 32 bits])
 	CPPFLAGS="$CPPFLAGS -I/mingw/include"
-elif test `uname -s` = "NetBSD"; then
-	AC_MSG_NOTICE([NetBSD])
-	CPPFLAGS="$CPPFLAGS -DNetBSD"
 fi
 
 # Checks for programs.

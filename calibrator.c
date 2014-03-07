@@ -45,7 +45,7 @@ OF SUCH DAMAGE.
 #include <glib.h>
 #ifdef G_OS_WIN32
 	#include <windows.h>
-#elif (!defined(NetBSD))
+#elif (!__BSD_VISIBLE)
 	#include <alloca.h>
 #endif
 #ifdef HAVE_MPI
