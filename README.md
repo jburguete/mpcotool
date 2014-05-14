@@ -96,8 +96,7 @@ INPUT FILE FORMAT
 
 Implemented algorithms are:
 
-* *"sweep"*: Sweep brutal force algorithm. 
-> Requires on each variable:
+* *"sweep"*: Sweep brutal force algorithm. Requires on each variable:
 > sweeps: number of sweeps to generate on each variable in every experiment. 
 >
 > The total number of simulations to run is:
@@ -121,7 +120,7 @@ the following parameters:
 >
 > iterations: number of iterations (default 1).
 
-* *"genetic"*: Genetic algorithm. Requires installatio of GAUL library and the
+* *"genetic"*: Genetic algorithm. Requires installation of GAUL library and the
 following parameters (consult GAUL documentation):
 > population: number of population.
 >
