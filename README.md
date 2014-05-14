@@ -23,6 +23,7 @@ REQUIRED
 * glib (extended utilities of C to work with data, lists, mapped files, regular
 	expressions, ...)
 * openmpi or mpich (optional: to run in parallelized tasks)
+* gaul (optional: to use genetic algorithm)
 * doxygen (optional: standard comments format to generate documentation)
 * latex (optional: to build the PDF manuals)
 
@@ -33,12 +34,17 @@ FILES
 * Makefile.in: Makefile generator.
 * config.h.in: config header generator.
 * calibrator.c: source code.
+* script-gaul: script to install GAUL library.
 * Doxyfile: configuration file to generate doxygen documentation.
 * TODO: tasks to do.
+* README.md: this file.
+* benchmark/*.*: files to test the program working.
 
 BUILDING INSTRUCTIONS
 ---------------------
 
+> $ sudo ./script-gaul *(optional: to use genetic algorithm of GAUL library)*
+>
 > $ aclocal
 >
 > $ autoconf
@@ -90,20 +96,42 @@ INPUT FILE FORMAT
 
 Implemented algorithms are:
 
-* *"sweep"*: Sweep brutal force algorithm. Requires on each variable:
+* *"sweep"*: Sweep brutal force algorithm. 
+> Requires on each variable:
 > sweeps: number of sweeps to generate on each variable in every experiment. 
 >
 > The total number of simulations to run is:
 >
 >> (number of experiments) x (variable 1 number of sweeps) x ... x
->> (variable n number of sweeps)
+>> (variable n number of sweeps) x (number of iterations)
 
 * *"Monte-Carlo"*: Monte-Carlo brutal force algorithm. Requires on calibrate:
 > simulations: number of simulations to run in every experiment.
 >
 > The total number of simulations to run is:
 >
->> (number of experiments) x (number of simulations)
+>> (number of experiments) x (number of simulations) x (number of iterations)
+
+* Both brutal force algorithms can be iterated to improve convergence by using
+the following parameters:
+> bests: number of bests simulations to calculate convergence interval on next
+> iteration (default 1).
+>
+> tolerance: tolerance parameter to increase convergence interval (default 0).
+>
+> iterations: number of iterations (default 1).
+
+* *"genetic"*: Genetic algorithm. Requires installatio of GAUL library and the
+following parameters (consult GAUL documentation):
+> population: number of population.
+>
+> generations: number of generations.
+>
+> bits: number of bits of every variable.
+>
+> crossover: crossover number.
+>
+> mutation: mutation number.
 
 SOME EXAMPLES OF INPUT FILES
 ----------------------------

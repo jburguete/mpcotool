@@ -5,18 +5,21 @@ wget "http://prdownloads.sourceforge.net/gaul/gaul-devel-0.1849-0.tar.gz?downloa
 tar -xf gaul-devel-0.1849-0.tar.gz
 cd gaul-devel-0.1849-0
 
-# Fix mpi headers
-sed -i 's/<mpi\.h>/<mpi\/mpi\.h>/g' src/gaul/ga_optim.h
-sed -i 's/<mpi\.h>/<mpi\/mpi\.h>/g' util/gaul/log_util.h
+# Configure
 
+# With MPI
+# Fix mpi headers
+#sed -i 's/<mpi\.h>/<mpi\/mpi\.h>/g' src/gaul/ga_optim.h
+#sed -i 's/<mpi\.h>/<mpi\/mpi\.h>/g' util/gaul/log_util.h
+#./configure --prefix=/usr --enable-slang=no --enable-mpi=yes --enable-pthread=no --enable-openmp=no MPILIBS="-lmpi"
+
+# With OpenMP
 # Remove const variables from the shared section of OpenMP directive
 sed -i 's/pops,num_pops/pops/g' src/ga_optim.c
-
-# Configure 
-./configure --prefix=/usr --enable-slang=no --enable-mpi=yes --enable-pthread=no --enable-openmp=yes MPILIBS="-lmpi" CFLAGS="-fopenmp" LDFLAGS="-fopenmp"
+./configure --prefix=/usr --enable-slang=no --enable-mpi=no --enable-pthread=no --enable-openmp=yes CFLAGS="-fopenmp" LDFLAGS="-fopenmp"
 
 # Make
 make
 
 # Install as root
-# make install
+make install
