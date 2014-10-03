@@ -209,14 +209,36 @@ int omp_thread_count()
 }
 
 #ifdef HAVE_GAUL
-int ga_variables;			// Number of variables
-int ga_variable_bits;		// Bits representing each variable
-int ga_bits;				// Chromosome bits ( nv * bs )
-double *ga_variable_max;	// Max value for each variable
-double *ga_variable_min;	// Min value for each variable
-Calibrate *ga_calibrate;	// Auxiliary Calibrate struct
+/**
+ * \var ga_variables
+ * \brief Number of variables
+ * \var ga_variable_bits.
+ * \brief Bits representing each variable.
+ * \var ga_bits
+ * \brief Chromosome bits ( nv * bs ).
+ * \var ga_variable_max
+ * \brief Max value for each variable.
+ * \var ga_variable_min
+ * \brief Min value for each variable.
+ * \var ga_calibrate
+ * \brief Auxiliary Calibrate struct.
+ */
+int ga_variables;
+int ga_variable_bits;
+int ga_bits;
+double *ga_variable_max;
+double *ga_variable_min;
+Calibrate *ga_calibrate;
 
-// Get variable i from chromosome
+/**
+ * \fn double ga_get_variable( byte *chromosome, int i )
+ * \brief Function to get variable i from chromosome.
+ * \param chromosome
+ * \brief Chromosome.
+ * \param i
+ * \brief Variable number.
+ * \return Variable value.
+ */
 double ga_get_variable( byte *chromosome, int i )
 {
 	int j;
@@ -246,7 +268,17 @@ double ga_get_variable( byte *chromosome, int i )
 	return 0.0;
 }
 
-// Set lowest and highest values of variable i
+/**
+ * \fn int ga_set_variable_min_max( int i, double min, double max )
+ * \brief Function to set lowest and highest values of variable i.
+ * \param i
+ * \brief Variable number.
+ * \param min
+ * \brief Lowest value.
+ * \param max
+ * \brief Highest value.
+ * \return 0 on succes, 1 on error.
+ */
 int ga_set_variable_min_max( int i, double min, double max )
 {
 	if( i >= 0 && i < ga_variables )
@@ -258,7 +290,15 @@ int ga_set_variable_min_max( int i, double min, double max )
 	return 1;
 }
 
-// Set number of variables and bits representing each one
+/**
+ * \fn int ga_set_variables( int n, int bits )
+ * \brief Function to set number of variables and bits representing each one.
+ * \param n
+ * \brief Number of variables.
+ * \param bits
+ * \brief Number of bits.
+ * \return 0 on succes, 1 on error.
+ */
 int ga_set_variables( int n, int bits )
 {
 	int i;
@@ -342,7 +382,7 @@ printf("calibrate_input: buffer2\n%s", buffer2);
 		snprintf(buffer, 32, "@value%u@", i + 1);
 		regex = g_regex_new(buffer, 0, 0, NULL);
 		snprintf(value, 32, calibrate->format[i],
-		calibrate->value[simulation * calibrate->nvariables + i]);
+			calibrate->value[simulation * calibrate->nvariables + i]);
 
 #if DEBUG
 printf("calibrate_parse: value=%s\n", value);
@@ -707,20 +747,22 @@ printf("calibrate_synchronise: end\n");
 #ifdef HAVE_GAUL
 
 /**
- * \fn double ga_calibrate_parse(Calibrate *calibrate, unsigned int simulation, \
- *   unsigned int experiment)
+ * \fn double ga_calibrate_parse(Calibrate *calibrate, unsigned int rank,\
+ *   unsigned int thread, unsigned int experiment)
  * \brief Function to parse input files, simulating and calculating the \
  *   objective function.
  * \param calibrate
  * \brief Calibration data.
- * \param simulation
- * \brief Simulation number.
+ * \param rank
+ * \brief Rank number.
+ * \param thread
+ * \brief Thread number.
  * \param experiment
  * \brief Experiment number.
  * \return Objective function value.
  */
-double ga_calibrate_parse(Calibrate *calibrate, unsigned int rank, unsigned int thread,
-	unsigned int experiment)
+double ga_calibrate_parse(Calibrate *calibrate, unsigned int rank,
+	unsigned int thread, unsigned int experiment)
 {
 	unsigned int i;
 	double e;
@@ -1266,7 +1308,8 @@ printf("calibrate_new: start\n");
 			{
 				buffer = xmlGetProp(node, XML_GENERATIONS);
 				calibrate->generations = strtoul((char*)buffer, NULL, 0);
-				calibrate->nsimulations = calibrate->population * calibrate->generations;
+				calibrate->nsimulations
+					= calibrate->population * calibrate->generations;
 				xmlFree(buffer);
 				if( ! ( calibrate->generations > 0 ) )
 				{
