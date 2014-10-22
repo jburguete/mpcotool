@@ -11,8 +11,8 @@ AC_INIT([calibrator], [0.0.15], [https://github.com/jburguete/calibrator])
 # Checks for operative systems
 AC_CANONICAL_SYSTEM
 AM_INIT_AUTOMAKE
-AC_MSG_NOTICE([System: $build])
-AC_MSG_NOTICE([System: $host])
+AC_MSG_NOTICE([Build: $build])
+AC_MSG_NOTICE([Host: $host])
 if test $host = "x86_64-w64-mingw32"; then
 	AC_MSG_NOTICE([Microsoft Windows 64 bits])
 	CPPFLAGS="$CPPFLAGS -I/mingw/include"
