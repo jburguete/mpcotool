@@ -101,7 +101,7 @@ fi
 
 # GAUL library
 AC_SUBST(GAUL_DEFINE, "-DHAVE_GAUL")
-AC_SUBST(GAUL_LIBS, "-lm -lgaul -lgaul_util")
+AC_SUBST(GAUL_LIBS, "-lgaul -lgaul_util")
 
 # Checks for library functions.
 AC_FUNC_MALLOC
