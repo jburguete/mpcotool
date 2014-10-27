@@ -14,7 +14,7 @@ $(GAULTAR):
 		$(GAULTAR)
 	touch $(GAULTAR)
 
-$(GAULDIR): $(GAULTAR)
+$(GAULDIR): $(GAULTAR) Makefile
 	tar -xzf $(GAULTAR)
 	touch $(GAULDIR)
 
@@ -25,8 +25,8 @@ $(GAULMAK): $(GAULDIR) Makefile
 	sed -i 's/<mpi\.h>/<mpi\/mpi\.h>/g' util/gaul/log_util.h; \
 	patch -p0 < ../gaul.patch; \
 	CC="$(CC)" ./configure --prefix=@PREFIX@ --enable-slang=no \
-		--enable-mpi=@MPI@ --enable-pthread=@PTHREAD@ --enable-openmp=@OPENMP@ \
-		CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" MPILIBS="-lmpi"
+		--enable-mpi=@MPI@ CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" \
+		MPILIBS="-lmpi"
 	touch $(GAULMAK)
 
 $(GAULLIB): $(GAULMAK)

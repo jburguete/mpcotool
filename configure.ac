@@ -47,13 +47,13 @@ MPI="yes"
 PTHREAD="no"
 OPENMP="no"
 if test $CC = "mpicc.openmpi"; then
-	AC_SUBST(MPI_DEFINE, "-DHAVE_MPI")
+	AC_SUBST(MPI_DEFINE, "-DHAVE_MPI=1")
 	AC_MSG_NOTICE([Found MPI compiler: $CC])
 elif test $CC = "mpicc.mpich2"; then
-	AC_SUBST(MPI_DEFINE, "-DHAVE_MPI")
+	AC_SUBST(MPI_DEFINE, "-DHAVE_MPI=1")
 	AC_MSG_NOTICE([Found MPI compiler: $CC])
 elif test $CC = "mpicc"; then
-	AC_SUBST(MPI_DEFINE, "-DHAVE_MPI")
+	AC_SUBST(MPI_DEFINE, "-DHAVE_MPI=1")
 	AC_MSG_NOTICE([Found MPI compiler: $CC])
 else
 	MPI="no"
@@ -100,7 +100,7 @@ else
 fi
 
 # GAUL library
-AC_SUBST(GAUL_DEFINE, "-DHAVE_GAUL")
+AC_SUBST(GAUL_DEFINE, "-DHAVE_GAUL=1")
 AC_SUBST(GAUL_LIBS, "-lgaul -lgaul_util")
 
 # Checks for library functions
