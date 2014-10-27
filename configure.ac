@@ -25,21 +25,21 @@ else
 	AC_SUBST(PREFIX, "/usr")
 fi
 
-# Checks for programs.
+# Checks for programs
 AC_PROG_CC([mpicc.openmpi mpicc.mpich2 mpicc egcc gcc clang])
 AC_MSG_NOTICE([Compiler: $CC])
 AC_PROG_MAKE_SET
 AC_LANG([C])
 PKG_PROG_PKG_CONFIG
 
-# Checks for libraries.
+# Checks for libraries
 AC_SEARCH_LIBS([sqrt], [m])
 PKG_CHECK_MODULES([GSL], [gsl])
 PKG_CHECK_MODULES([XML], [libxml-2.0])
 PKG_CHECK_MODULES([GTHREAD], [gthread-2.0])
 PKG_CHECK_MODULES([GLIB], [glib-2.0])
 
-# Checks for header files.
+# Checks for header files
 AC_CHECK_HEADERS([stdlib.h string.h unistd.h pthread.h])
 
 # Checking MPI
@@ -103,7 +103,7 @@ fi
 AC_SUBST(GAUL_DEFINE, "-DHAVE_GAUL")
 AC_SUBST(GAUL_LIBS, "-lgaul -lgaul_util")
 
-# Checks for library functions.
+# Checks for library functions
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
 AC_FUNC_ALLOCA
