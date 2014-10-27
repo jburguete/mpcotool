@@ -43,6 +43,7 @@ OF SUCH DAMAGE.
 #include <gsl/gsl_rng.h>
 #include <libxml/parser.h>
 #include <glib.h>
+#include <omp.h>
 #ifdef G_OS_WIN32
 	#include <windows.h>
 #elif (!__BSD_VISIBLE)
@@ -51,9 +52,7 @@ OF SUCH DAMAGE.
 #ifdef HAVE_MPI
 	#include <mpi.h>
 #endif
-#ifdef HAVE_GAUL
-	#include "gaul.h"
-#endif
+#include <gaul.h>
 
 /**
  * \def DEBUG
@@ -208,7 +207,6 @@ int omp_thread_count()
     return n;
 }
 
-#ifdef HAVE_GAUL
 /**
  * \var ga_variables
  * \brief Number of variables
@@ -317,7 +315,6 @@ int ga_set_variables( int n, int bits )
 	}
 	return 1;
 }
-#endif
 
 
 /**
@@ -744,8 +741,6 @@ printf("calibrate_synchronise: end\n");
 }
 #endif
 
-#ifdef HAVE_GAUL
-
 /**
  * \fn double ga_calibrate_parse(Calibrate *calibrate, unsigned int rank,\
  *   unsigned int thread, unsigned int experiment)
@@ -850,8 +845,6 @@ boolean genetic_score(population *pop, entity *entity)
 	return TRUE;
 }
 
-#endif
-
 /**
  * \fn void calibrate_genetic(Calibrate *calibrate)
  * \brief Function to calibrate with the genetic algorithm.
@@ -861,7 +854,6 @@ boolean genetic_score(population *pop, entity *entity)
 
 void calibrate_genetic(Calibrate *calibrate)
 {
-#ifdef HAVE_GAUL
 	int i;
 
 	// Store calibrate
@@ -976,7 +968,6 @@ void calibrate_genetic(Calibrate *calibrate)
 			ga_detach_mpi_slaves();
 		}
 	}
-#endif
 }
 
 /**
@@ -1278,12 +1269,6 @@ printf("calibrate_new: start\n");
 			calibrate->algorithm = CALIBRATE_ALGORITHM_GENETIC;
 			calibrate_step = calibrate_genetic;
 			xmlFree(buffer);
-
-			// Check GAUL
-			#ifndef HAVE_GAUL
-				printf("Calibrator was not compiled with GAUL support\n");
-				return 0;
-			#endif
 
 			// Obtaining population
 			if (xmlHasProp(node, XML_POPULATION))
@@ -1816,9 +1801,7 @@ int main(int argn, char **argc)
 	else calibrate->nthreads = atoi(argc[2]);
 	printf("nthreads=%u\n", calibrate->nthreads);
 
-#ifdef HAVE_GAUL
 	printf("ompthreads=%u\n", omp_thread_count());
-#endif
 
 	// Starting pseudo-random numbers generator
 	rng = gsl_rng_alloc(gsl_rng_taus2);

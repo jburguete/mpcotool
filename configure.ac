@@ -6,7 +6,7 @@
 # make
 
 AC_PREREQ([2.69])
-AC_INIT([calibrator], [0.0.15], [https://github.com/jburguete/calibrator])
+AC_INIT([calibrator], [0.0.16], [https://github.com/jburguete/calibrator])
 
 # Checks for operative systems
 AC_CANONICAL_SYSTEM
@@ -16,9 +16,13 @@ AC_MSG_NOTICE([Host: $host])
 if test $host = "x86_64-w64-mingw32"; then
 	AC_MSG_NOTICE([Microsoft Windows 64 bits])
 	CPPFLAGS="$CPPFLAGS -I/mingw/include"
+	AC_SUBST(PREFIX, "/mingw")
 elif test $host = "i686-pc-mingw32"; then
 	AC_MSG_NOTICE([Microsoft Windows 32 bits])
 	CPPFLAGS="$CPPFLAGS -I/mingw/include"
+	AC_SUBST(PREFIX, "/mingw")
+else
+	AC_SUBST(PREFIX, "/usr")
 fi
 
 # Checks for programs.
@@ -36,19 +40,37 @@ PKG_CHECK_MODULES([GTHREAD], [gthread-2.0])
 PKG_CHECK_MODULES([GLIB], [glib-2.0])
 
 # Checks for header files.
-AC_CHECK_HEADERS([stdlib.h string.h unistd.h])
+AC_CHECK_HEADERS([stdlib.h string.h unistd.h pthread.h])
 
 # Checking MPI
+MPI="yes"
+PTHREAD="no"
+OPENMP="no"
 if test $CC = "mpicc.openmpi"; then
-	AC_SUBST(MPIDEFINE, "-DHAVE_MPI")
+	AC_SUBST(MPI_DEFINE, "-DHAVE_MPI")
 	AC_MSG_NOTICE([Found MPI compiler: $CC])
 elif test $CC = "mpicc.mpich2"; then
-	AC_SUBST(MPIDEFINE, "-DHAVE_MPI")
+	AC_SUBST(MPI_DEFINE, "-DHAVE_MPI")
 	AC_MSG_NOTICE([Found MPI compiler: $CC])
 elif test $CC = "mpicc"; then
-	AC_SUBST(MPIDEFINE, "-DHAVE_MPI")
+	AC_SUBST(MPI_DEFINE, "-DHAVE_MPI")
 	AC_MSG_NOTICE([Found MPI compiler: $CC])
+else
+	MPI="no"
+	# Checking pthreads
+	AC_SEARCH_LIBS([pthread_create], [pthread], [PTHREAD="yes"], [])
+	if text $PTHREAD = "no"; then
+		#Checking OpenMP
+		compiler=$CC
+		CC="$CC -fopenmp"
+		AC_TRY_LINK([], [int main(int argc, char **argv){return 0;}],
+			[OPENMP="yes"], [CC=$compiler])
+	fi
 fi
+AC_SUBST(MPI, $MPI)
+AC_SUBST(PTHREAD, $PTHREAD)
+AC_SUBST(OPENMP, $OPENMP)
+AC_SUBST(FOPENMP, "-fopenmp")
 
 # Checking -march=native compiler flag
 compiler=$CC
@@ -77,20 +99,9 @@ else
 	AC_SUBST(LTO, "-flto")
 fi
 
-# Checking GAUL library
-compiler=$CC
-CC="$CC -lm -lgaul -lgaul_util -fopenmp"
-AC_TRY_LINK([#include "gaul.h"], [int main(int argc, char **argv){return 0;}],
-	[gaul=1], [gaul=0])
-CC=$compiler
-if test $gaul = 0; then
-	AC_MSG_NOTICE([checking for GAUL... no])
-else
-	AC_MSG_NOTICE([checking for GAUL... yes])
-	AC_SUBST(GAULDEFINE, "-DHAVE_GAUL")
-	AC_SUBST(GAUL_LIBS, "-lm -lgaul -lgaul_util")
-	CPPFLAGS="$CPPFLAGS -fopenmp"
-fi
+# GAUL library
+AC_SUBST(GAUL_DEFINE, "-DHAVE_GAUL")
+AC_SUBST(GAUL_LIBS, "-lm -lgaul -lgaul_util")
 
 # Checks for library functions.
 AC_FUNC_MALLOC

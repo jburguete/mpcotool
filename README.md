@@ -23,7 +23,6 @@ REQUIRED
 * glib (extended utilities of C to work with data, lists, mapped files, regular
 	expressions, ...)
 * openmpi or mpich (optional: to run in parallelized tasks)
-* gaul (optional: to use genetic algorithm)
 * doxygen (optional: standard comments format to generate documentation)
 * latex (optional: to build the PDF manuals)
 
@@ -34,7 +33,7 @@ FILES
 * Makefile.in: Makefile generator.
 * config.h.in: config header generator.
 * calibrator.c: source code.
-* script-gaul: script to install GAUL library.
+* gaul.patch: to patch the GAUL library.
 * Doxyfile: configuration file to generate doxygen documentation.
 * TODO: tasks to do.
 * README.md: this file.
@@ -43,8 +42,6 @@ FILES
 BUILDING INSTRUCTIONS
 ---------------------
 
-> $ sudo ./script-gaul *(optional: to use genetic algorithm of GAUL library)*
->
 > $ aclocal
 >
 > $ autoconf

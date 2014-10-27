@@ -1,0 +1,11 @@
+--- src/ga_optim.c	2014-10-27 20:48:22.337365979 +0100
++++ src/ga_optim.new	2014-10-27 20:48:30.989408758 +0100
+@@ -47,6 +47,8 @@
+ 
+ #include "gaul/ga_optim.h"
+ 
++#define max(a,b) ((a>b)?a:b)
++
+ /*
+  * Here is a kludge.
+  *

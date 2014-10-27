@@ -1,11 +1,41 @@
-CC = @CC@ @ARCH@ @LTO@ @MPIDEFINE@ @GAULDEFINE@
-CFLAGS = -g -Wall -O3 @CPPFLAGS@ @GSL_CFLAGS@ @XML_CFLAGS@ @GTHREAD_CFLAGS@ \
-	@GLIB_CFLAGS@
-LDFLAGS = @LDFLAGS@ @LIBS@ @GSL_LIBS@ @XML_LIBS@ @GTHREAD_LIBS@ @GLIB_LIBS@ \
-	@GAUL_LIBS@
+CC = @CC@ @ARCH@ @LTO@ @MPI_DEFINE@ @FOPENMP@
+CFLAGS = -g -Wall -O3 @CPPFLAGS@ @GSL_CFLAGS@ @XML_CFLAGS@ @GTHREAD_CFLAGS@
+LDFLAGS = @LDFLAGS@ @LIBS@ @GSL_LIBS@ @XML_LIBS@ @GTHREAD_LIBS@
+GAULVER = 0.1849-0
+GAULDIR = gaul-devel-$(GAULVER)
+GAULTAR = $(GAULDIR).tar.gz
+GAULMAK = $(GAULDIR)/Makefile
+GAULLIB = @PREFIX@/lib/libgaul.la
 
-calibrator: calibrator.c config.h Makefile
-	$(CC) $(CFLAGS) calibrator.c $(LDFLAGS) -o calibrator
+all: calibrator
+
+$(GAULTAR):
+	wget "http://prdownloads.sourceforge.net/gaul/$(GAULTAR)?download" -qO \
+		$(GAULTAR)
+	touch $(GAULTAR)
+
+$(GAULDIR): $(GAULTAR)
+	tar -xzf $(GAULTAR)
+	touch $(GAULDIR)
+
+$(GAULMAK): $(GAULDIR) Makefile
+	cd $(GAULDIR); \
+	sed -i 's/pops,num_pops/pops/g' src/ga_optim.c; \
+	sed -i 's/<mpi\.h>/<mpi\/mpi\.h>/g' src/gaul/ga_optim.h; \
+	sed -i 's/<mpi\.h>/<mpi\/mpi\.h>/g' util/gaul/log_util.h; \
+	patch -p0 < ../gaul.patch; \
+	CC="$(CC)" ./configure --prefix=@PREFIX@ --enable-slang=no \
+		--enable-mpi=@MPI@ --enable-pthread=@PTHREAD@ --enable-openmp=@OPENMP@ \
+		CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" MPILIBS="-lmpi"
+	touch $(GAULMAK)
+
+$(GAULLIB): $(GAULMAK)
+	cd $(GAULDIR); make && sudo make install && make clean
+	sudo touch $(GAULLIB)
+
+calibrator: calibrator.c config.h $(GAULLIB) Makefile
+	$(CC) $(CFLAGS) @GAUL_DEFINE@ calibrator.c $(LDFLAGS) \
+		@GAUL_LIBS@ -o calibrator
 
 doc: calibrator.c config.h README.md Makefile
 	doxygen
