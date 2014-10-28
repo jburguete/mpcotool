@@ -25,8 +25,8 @@ $(GAULMAK): $(GAULDIR) Makefile
 	sed -i 's/<mpi\.h>/<mpi\/mpi\.h>/g' util/gaul/log_util.h; \
 	patch -p0 < ../gaul.patch; \
 	CC="$(CC)" ./configure --prefix=@PREFIX@ --enable-slang=no \
-		--enable-mpi=@MPI@ CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" \
-		MPILIBS="-lmpi"
+		--enable-mpi=@MPI@ @PTHREAD@ @OPENMP@ CFLAGS="$(CFLAGS)" \
+		LDFLAGS="$(LDFLAGS)" MPILIBS="@MPI_LIBS@"
 	touch $(GAULMAK)
 
 $(GAULLIB): $(GAULMAK)

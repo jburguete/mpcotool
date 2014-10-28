@@ -44,8 +44,9 @@ AC_CHECK_HEADERS([stdlib.h string.h unistd.h pthread.h])
 
 # Checking MPI
 MPI="yes"
-PTHREAD="no"
-OPENMP="no"
+MPI_LIBS="-lmpi"
+PTHREAD=""
+OPENMP=""
 if test $CC = "mpicc.openmpi"; then
 	AC_SUBST(MPI_DEFINE, "-DHAVE_MPI=1")
 	AC_MSG_NOTICE([Found MPI compiler: $CC])
@@ -57,17 +58,20 @@ elif test $CC = "mpicc"; then
 	AC_MSG_NOTICE([Found MPI compiler: $CC])
 else
 	MPI="no"
+	MPI_LIBS=""
 	# Checking pthreads
-	AC_SEARCH_LIBS([pthread_create], [pthread], [PTHREAD="yes"], [])
-	if text $PTHREAD = "no"; then
+	AC_SEARCH_LIBS([pthread_create], [pthread],
+		[PTHREAD="--enable-pthread=yes"], [])
+	if test $PTHREAD = ""; then
 		#Checking OpenMP
 		compiler=$CC
 		CC="$CC -fopenmp"
 		AC_TRY_LINK([], [int main(int argc, char **argv){return 0;}],
-			[OPENMP="yes"], [CC=$compiler])
+			[OPENMP="enable-openmp=yes"], [CC=$compiler])
 	fi
 fi
 AC_SUBST(MPI, $MPI)
+AC_SUBST(MPI_LIBS, $MPI_LIBS)
 AC_SUBST(PTHREAD, $PTHREAD)
 AC_SUBST(OPENMP, $OPENMP)
 AC_SUBST(FOPENMP, "-fopenmp")

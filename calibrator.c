@@ -49,7 +49,7 @@ OF SUCH DAMAGE.
 #elif (!__BSD_VISIBLE)
 	#include <alloca.h>
 #endif
-#ifdef HAVE_MPI
+#if HAVE_MPI
 	#include <mpi.h>
 #endif
 #include <gaul.h>
@@ -155,7 +155,7 @@ typedef struct
 		crossover, mutation;
 	FILE *result;
 	GMappedFile **file[4];
-#ifdef HAVE_MPI
+#if HAVE_MPI
 	int mpi_rank, mpi_tasks;
 #endif
 } Calibrate;
@@ -706,7 +706,7 @@ printf("calibrate_merge: end\n");
  * \param calibrate
  * \brief Calibration data.
  */
-#ifdef HAVE_MPI
+#if HAVE_MPI
 void calibrate_synchronise(Calibrate *calibrate)
 {
 	unsigned int i, nsaveds, simulation_best[calibrate->nbests];
@@ -825,7 +825,11 @@ boolean genetic_score(population *pop, entity *entity)
 	int j, rank, thread;
 	double score = 0.0;
 
+#if HAVE_MPI
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+#else
+	rank = 0;
+#endif
 	thread = omp_get_thread_num();
 
 	for (j = 0; j < ga_calibrate->nvariables; ++j)
@@ -874,6 +878,7 @@ void calibrate_genetic(Calibrate *calibrate)
 	// Random seed number
 	random_seed(DEFAULT_RANDOM_SEED);
 
+#if HAVE_MPI
 	if (calibrate->mpi_rank != 0)
 	{
 		/*
@@ -905,6 +910,7 @@ void calibrate_genetic(Calibrate *calibrate)
 	}
 	else
 	{
+#endif
 		// Genesis configuration
 		pop = ga_genesis_bitstring(
 			calibrate->population,		/* const int              population_size */
@@ -935,6 +941,7 @@ void calibrate_genetic(Calibrate *calibrate)
 			0.0				/* double  migration */
 		);
 
+#if HAVE_MPI
 		if( calibrate->mpi_tasks > 1 )
 		{
 			// Run evolution
@@ -945,12 +952,15 @@ void calibrate_genetic(Calibrate *calibrate)
 		}
 		else
 		{
+#endif
 			// Run evolution
 			ga_evolution(
 				pop,					/* population              *pop */
 				calibrate->generations	/* const int               max_generations */
 			);
+#if HAVE_MPI
 		}
+#endif
 
 		printf("THE BEST IS\n");
 		printf("error=%e\n", -ga_get_entity_from_rank(pop,0)->fitness);
@@ -962,12 +972,14 @@ void calibrate_genetic(Calibrate *calibrate)
 
 		ga_extinction(pop);
 
+#if HAVE_MPI
 		if( calibrate->mpi_tasks > 1 )
 		{
 			// Allow all slave processes to continue
 			ga_detach_mpi_slaves();
 		}
 	}
+#endif
 }
 
 /**
@@ -1011,7 +1023,7 @@ printf("calibrate_sweep: start\n");
 		}
 		for (i = 0; i < calibrate->nthreads; ++i) g_thread_join(thread[i]);
 	}
-#ifdef HAVE_MPI
+#if HAVE_MPI
 	// Communicating tasks results
 	calibrate_synchronise(calibrate);
 #endif
@@ -1051,7 +1063,7 @@ printf("calibrate_MonteCarlo: start\n");
 		}
 		for (i = 0; i < calibrate->nthreads; ++i) g_thread_join(thread[i]);
 	}
-#ifdef HAVE_MPI
+#if HAVE_MPI
 	// Communicating tasks results
 	calibrate_synchronise(calibrate);
 #endif
@@ -1071,13 +1083,13 @@ void calibrate_refine(Calibrate *calibrate)
 {
 	unsigned int i, j;
 	double d;
-#ifdef HAVE_MPI
+#if HAVE_MPI
 	MPI_Status mpi_stat;
 #endif
 #if DEBUG
 printf("calibrate_refine: start\n");
 #endif
-#ifdef HAVE_MPI
+#if HAVE_MPI
 	if (!calibrate->mpi_rank)
 	{
 #endif
@@ -1110,7 +1122,7 @@ printf("calibrate_refine: start\n");
 				calibrate->label[j], calibrate->rangemin[j],
 				calibrate->rangemax[j]);
 		}
-#ifdef HAVE_MPI
+#if HAVE_MPI
 		for (i = 1; i < calibrate->mpi_tasks; ++i)
 		{
 			MPI_Send(calibrate->rangemin, calibrate->nvariables, MPI_DOUBLE, i,
@@ -1142,7 +1154,7 @@ void calibrate_print(Calibrate *calibrate)
 {
 	unsigned int i;
 	char buffer[512];
-#ifdef HAVE_MPI
+#if HAVE_MPI
 	if (!calibrate->mpi_rank)
 	{
 #endif
@@ -1161,7 +1173,7 @@ void calibrate_print(Calibrate *calibrate)
 					* calibrate->nvariables + i]);
 		}
 		fflush(calibrate->result);
-#ifdef HAVE_MPI
+#if HAVE_MPI
 	}
 #endif
 }
@@ -1663,7 +1675,7 @@ printf("calibrate_new: nvariables=%u\n", calibrate->nvariables);
 		calibrate->nvariables * sizeof(double));
 
 	// Calculating simulations to perform on each task
-#ifdef HAVE_MPI
+#if HAVE_MPI
 	calibrate->nstart = calibrate->mpi_rank * calibrate->nsimulations
 		/ calibrate->mpi_tasks;
 	calibrate->nend = (1 + calibrate->mpi_rank) * calibrate->nsimulations
@@ -1777,7 +1789,7 @@ int main(int argn, char **argc)
 {
 	Calibrate calibrate[1];
 
-#ifdef HAVE_MPI
+#if HAVE_MPI
 	// Starting MPI
 	MPI_Init(&argn, &argc);
 	MPI_Comm_size(MPI_COMM_WORLD, &calibrate->mpi_tasks);
@@ -1789,7 +1801,7 @@ int main(int argn, char **argc)
 	if (!(argn == 2 || (argn == 4 && !strcmp(argc[1], "-nthreads"))))
 	{
 		printf("The sintaxis is:\ncalibrator [-nthreads x] data_file\n");
-#ifdef HAVE_MPI
+#if HAVE_MPI
 		// Closing MPI
 		MPI_Finalize();
 #endif
@@ -1816,7 +1828,7 @@ int main(int argn, char **argc)
 	// Freeing memory
 	gsl_rng_free(rng);
 
-#ifdef HAVE_MPI
+#if HAVE_MPI
 	// Closing MPI
 	MPI_Finalize();
 #endif
