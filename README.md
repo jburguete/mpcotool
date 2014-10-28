@@ -59,9 +59,13 @@ BUILDING INSTRUCTIONS
 MAKING REFERENCE MANUAL INSTRUCTIONS (file latex/refman.pdf)
 ------------------------------------------------------------
 
-* doxygen
-* cd latex
-* make
+> $ cd 0.0.17
+>
+> $ doxygen
+>
+> $ cd latex
+>
+> $ make
 
 USER INSTRUCTIONS
 -----------------
