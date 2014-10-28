@@ -6,7 +6,7 @@
 # make
 
 AC_PREREQ([2.69])
-AC_INIT([calibrator], [0.0.16], [https://github.com/jburguete/calibrator])
+AC_INIT([calibrator], [0.0.17], [https://github.com/jburguete/calibrator])
 
 # Checks for operative systems
 AC_CANONICAL_SYSTEM
