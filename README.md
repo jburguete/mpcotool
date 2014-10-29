@@ -56,7 +56,7 @@ BUILDING INSTRUCTIONS
 >
 > $ strip calibrator *(optional: to make a final version without debug data)*
 
-Known problems
+KNOWN PROBLEMS
 ______________
 
 
