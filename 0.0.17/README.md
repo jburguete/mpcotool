@@ -84,7 +84,7 @@ In this case, you can solve the problem installing GAUL as administrator:
 
 And you can continue building calibrator:
 
-> $ exit
+> \# exit
 >
 > $ make
 
