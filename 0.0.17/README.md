@@ -76,11 +76,11 @@ In this case, you can solve the problem installing GAUL as administrator:
 
 > $ su
 >
-> # cd  gaul-devel-0.1849-0
+> \# cd  gaul-devel-0.1849-0
 >
-> # make install
+> \# make install
 >
-> # make clean
+> \# make clean
 
 And you can continue building calibrator:
 
