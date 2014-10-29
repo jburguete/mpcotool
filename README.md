@@ -56,6 +56,38 @@ BUILDING INSTRUCTIONS
 >
 > $ strip calibrator *(optional: to make a final version without debug data)*
 
+Known problems
+______________
+
+
+Building calibrator requires building and installing GAUL library. In the
+process installing GAUL it does:
+
+> $ sudo make install
+
+This is a problem if *sudo* is not installed or configured in your system. Then,
+the building fails showing an error as:
+
+> Makefile:33: recipe for target '/usr/lib/libgaul.la' failed
+>
+> make: *** [/usr/lib/libgaul.la] Error 127
+
+In this case, you can solve the problem installing GAUL as administrator:
+
+> $ su
+>
+> $ cd  gaul-devel-0.1849-0
+>
+> $ make install
+>
+> $ make clean
+
+And you can continue building calibrator:
+
+> $ exit
+>
+> $ make
+
 MAKING REFERENCE MANUAL INSTRUCTIONS (file latex/refman.pdf)
 ------------------------------------------------------------
 
