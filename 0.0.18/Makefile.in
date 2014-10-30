@@ -20,14 +20,14 @@ $(GAULDIR): $(GAULTAR) Makefile
 
 $(GAULMAK): $(GAULDIR) Makefile
 	cd $(GAULDIR); \
-	sed -i 's/pops,num_pops/pops/g' src/ga_optim.c; \
-	sed -i 's/<mpi\.h>/<mpi\/mpi\.h>/g' src/gaul/ga_optim.h; \
-	sed -i 's/<mpi\.h>/<mpi\/mpi\.h>/g' util/gaul/log_util.h; \
 	patch -p0 < ../gaul.patch; \
 	CC="$(CC)" ./configure --prefix=@PREFIX@ --enable-slang=no \
 		--enable-mpi=@MPI@ @PTHREAD@ @OPENMP@ CFLAGS="$(CFLAGS)" \
 		LDFLAGS="$(LDFLAGS)" MPILIBS="@MPI_LIBS@"
 	touch $(GAULMAK)
+	#sed -i 's/pops,num_pops/pops/g' src/ga_optim.c; \
+	#sed -i 's/<mpi\.h>/<mpi\/mpi\.h>/g' src/gaul/ga_optim.h; \
+	#sed -i 's/<mpi\.h>/<mpi\/mpi\.h>/g' util/gaul/log_util.h; \
 
 $(GAULLIB): $(GAULMAK)
 	cd $(GAULDIR); make && sudo make install && make clean

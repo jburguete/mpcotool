@@ -1,4 +1,4 @@
-CALIBRATOR (0.0.17 version)
+CALIBRATOR (0.0.18 version)
 ===========================
 
 A software to perform calibrations of empirical parameters.
@@ -42,7 +42,21 @@ FILES
 BUILDING INSTRUCTIONS
 ---------------------
 
-> $ cd 0.0.17
+This software has been built and tested in the following operative systems:
+
+Debian Linux 7.7
+________________
+Debian kFreeBSD 7.7
+___________________
+_______________
+DragonFly BSD 3.8.2
+___________________
+FreeBSD 10.0
+____________
+NetBSD 6.1.5
+____________
+
+> $ cd 0.0.18
 >
 > $ aclocal
 >
@@ -55,6 +69,26 @@ BUILDING INSTRUCTIONS
 > $ make
 >
 > $ strip calibrator *(optional: to make a final version without debug data)*
+
+OpenBSD 5.5
+___________
+
+> $ export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.14
+>
+> $ cd 0.0.18
+>
+> $ aclocal
+>
+> $ autoconf
+>
+> $ automake --add-missing
+>
+> $ ./configure
+>
+> $ make
+>
+> $ strip calibrator *(optional: to make a final version without debug data)*
+
 
 KNOWN PROBLEMS
 ______________
@@ -91,7 +125,7 @@ And you can continue building calibrator:
 MAKING REFERENCE MANUAL INSTRUCTIONS (file latex/refman.pdf)
 ------------------------------------------------------------
 
-> $ cd 0.0.17
+> $ cd 0.0.18
 >
 > $ doxygen
 >

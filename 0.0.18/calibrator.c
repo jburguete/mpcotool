@@ -43,7 +43,9 @@ OF SUCH DAMAGE.
 #include <gsl/gsl_rng.h>
 #include <libxml/parser.h>
 #include <glib.h>
-#include <omp.h>
+#if HAVE_OPENMP
+	#include <omp.h>
+#endif
 #ifdef G_OS_WIN32
 	#include <windows.h>
 #elif (!__BSD_VISIBLE)
@@ -830,7 +832,11 @@ boolean genetic_score(population *pop, entity *entity)
 #else
 	rank = 0;
 #endif
+#if HAVE_OPENMP
 	thread = omp_get_thread_num();
+#else
+	thread = 0;
+#endif
 
 	for (j = 0; j < ga_calibrate->nvariables; ++j)
 	{
@@ -1813,7 +1819,9 @@ int main(int argn, char **argc)
 	else calibrate->nthreads = atoi(argc[2]);
 	printf("nthreads=%u\n", calibrate->nthreads);
 
+#if HAVE_OPENMP
 	printf("ompthreads=%u\n", omp_thread_count());
+#endif
 
 	// Starting pseudo-random numbers generator
 	rng = gsl_rng_alloc(gsl_rng_taus2);
