@@ -196,6 +196,7 @@ gsl_rng *rng;
  */
 GMutex mutex;
 
+#if HAVE_OPENMP
 /**
  * \fn int omp_thread_count()
  * \brief Function to get the OpenMP threads.
@@ -208,6 +209,7 @@ int omp_thread_count()
     n += 1;
     return n;
 }
+#endif
 
 /**
  * \var ga_variables
