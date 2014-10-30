@@ -59,9 +59,11 @@ elif test `uname -s` = "DragonFly"; then
 else
 	AC_SUBST(PREFIX, "/usr")
 fi
+AC_MSG_NOTICE([prefix=$PREFIX])
 
 # Checks for programs
 if test $openbsd = 1; then
+	AC_MSG_NOTICE([OpenBSD])
 	# On OpenBSD mpicc uses very old GCC compiler
 	# then is better: egcc `mpicc -showme:compile` `mpicc -showme:link`
 	if test -x "$PREFIX/bin/mpicc"; then
@@ -74,10 +76,11 @@ if test $openbsd = 1; then
 	CC="$CC $OPENBSD_FLAGS"
 	# Wrong error building GAUL with SSE3 instructions on OpenBSD"
 	CC="$CC -mno-sse3"
+	AC_MSG_NOTICE([Compiler: $CC])
 else
 	AC_PROG_CC([mpicc gcc clang])
+	AC_MSG_NOTICE([Compiler: $CC])
 fi
-AC_MSG_NOTICE([Compiler: $CC])
 AC_PROG_MAKE_SET
 AC_LANG([C])
 PKG_PROG_PKG_CONFIG
