@@ -72,7 +72,20 @@ if test $openbsd = 1; then
 		OPENBSD_FLAGS=""
 	fi
 	AC_MSG_NOTICE([MPI flags: $OPENBSD_FLAGS])
-	AC_PROG_CC([egcc gcc clang])
+	# This line produces a wrong error in other systems
+	#	AC_PROG_CC([egcc gcc clang])
+	# Trying to recover
+	if test -x "$PREFIX/bin/egcc"; then
+		CC="egcc"
+	elif test -x "$PREFIX/bin/gcc"; then
+		CC="gcc"
+	elif test -x "$PREFIX/bin/clang"; then
+		CC="clang"
+	elif test -x "/usr/bin/gcc"; then
+		CC="gcc"
+	else
+		AC_MSG_NOTICE([Error: no C compiler])
+	fi
 	CC="$CC $OPENBSD_FLAGS"
 	# Wrong error building GAUL with SSE3 instructions on OpenBSD"
 	CC="$CC -mno-sse3"
