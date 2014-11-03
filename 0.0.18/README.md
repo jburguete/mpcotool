@@ -48,7 +48,6 @@ Debian Linux 7.7
 ________________
 Debian kFreeBSD 7.7
 ___________________
-_______________
 DragonFly BSD 3.8.2
 ___________________
 FreeBSD 10.0
