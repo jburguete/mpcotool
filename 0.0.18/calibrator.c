@@ -386,7 +386,7 @@ printf("calibrate_input: buffer2\n%s", buffer2);
 			calibrate->value[simulation * calibrate->nvariables + i]);
 
 #if DEBUG
-printf("calibrate_parse: value=%s\n", value);
+printf("calibrate_input: value=%s\n", value);
 #endif
 		buffer3 = g_regex_replace_literal(regex, buffer2, length, 0, value,
 			0, NULL);
@@ -791,6 +791,9 @@ printf("calibrate_parse: parsing end\n");
 	// Performing the simulation
 	snprintf(output, 32, "output-%u-%u-%u", rank, thread, experiment);
 	snprintf(result, 32, "result-%u-%u-%u", rank, thread, experiment);
+printf("input0=%s input1=%s input2=%s input3=%s\n",
+&input[0][0], &input[1][0], &input[2][0], &input[3][0]);
+printf("output=%s result=%s\n", output, result);
 	snprintf(buffer, 512, "./%s %s %s %s %s %s", calibrate->simulator,
 		&input[0][0], &input[1][0], &input[2][0], &input[3][0], output);
 #if DEBUG
@@ -809,6 +812,9 @@ printf("calibrate_parse: %s\n", buffer);
 	e = atof(fgets(buffer, 512, file_result));
 	fclose(file_result);
 
+printf("input0=%s input1=%s input2=%s input3=%s\n",
+&input[0][0], &input[1][0], &input[2][0], &input[3][0]);
+printf("output=%s result=%s\n", output, result);
 	// Removing files
 #if !DEBUG
 	snprintf(buffer, 512, "rm %s %s %s %s %s %s", &input[0][0], &input[1][0],
