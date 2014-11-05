@@ -72,8 +72,7 @@ if test $openbsd = 1; then
 		OPENBSD_FLAGS=""
 	fi
 	AC_MSG_NOTICE([MPI flags: $OPENBSD_FLAGS])
-	# This line produces a wrong error in other systems
-	#	AC_PROG_CC([egcc gcc clang])
+	# Unable to use AC_PROG_CC([egcc gcc clang]) on conditional statements
 	# Trying to recover
 	if test -x "$PREFIX/bin/egcc"; then
 		CC="egcc"
@@ -84,16 +83,28 @@ if test $openbsd = 1; then
 	elif test -x "/usr/bin/gcc"; then
 		CC="gcc"
 	else
-		AC_MSG_NOTICE([Error: no C compiler])
+		AC_MSG_ERROR([No C compiler])
 	fi
 	CC="$CC $OPENBSD_FLAGS"
 	# Wrong error building GAUL with SSE3 instructions on OpenBSD"
 	CC="$CC -mno-sse3"
 	AC_MSG_NOTICE([Compiler: $CC])
 else
-	AC_PROG_CC([mpicc gcc clang])
-	AC_MSG_NOTICE([Compiler: $CC])
+	# Unable to use AC_PROG_CC([mpicc gcc clang]) on conditional statements
+	# Trying to recover
+	if test -x "$PREFIX/bin/mpicc"; then
+		CC="mpicc"
+	elif test -x "$PREFIX/bin/gcc"; then
+		CC="gcc"
+	elif test -x "$PREFIX/bin/clang"; then
+		CC="clang"
+	elif test -x "/usr/bin/gcc"; then
+		CC="gcc"
+	else
+		AC_MSG_ERROR([No C compiler])
+	fi
 fi
+AC_MSG_NOTICE([Compiler: $CC])
 AC_PROG_MAKE_SET
 AC_LANG([C])
 PKG_PROG_PKG_CONFIG
@@ -112,8 +123,8 @@ AC_CHECK_HEADERS([stdlib.h string.h unistd.h pthread.h])
 MPI="yes"
 MPI_DEFINE="-DHAVE_MPI=1"
 MPI_LIBS="-lmpi"
-PTHREAD=""
-OPENMP=""
+PTHREAD="--enable-pthread=no"
+OPENMP="--enable-openmp=no"
 if test -x "$PREFIX/bin/mpicc"; then :
 else
 	MPI="no"
