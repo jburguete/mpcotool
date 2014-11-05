@@ -955,10 +955,10 @@ void calibrate_genetic(Calibrate *calibrate)
 			0.0				/* double  migration */
 		);
 
+		// Run evolution
 #if HAVE_MPI
 		if( calibrate->mpi_tasks > 1 )
 		{
-			// Run evolution
 			ga_evolution_mpi(
 				pop,					/* population              *pop */
 				calibrate->generations	/* const int               max_generations */
@@ -967,7 +967,6 @@ void calibrate_genetic(Calibrate *calibrate)
 		else
 		{
 #endif
-			// Run evolution
 			ga_evolution(
 				pop,					/* population              *pop */
 				calibrate->generations	/* const int               max_generations */
