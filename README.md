@@ -34,7 +34,6 @@ FILES
 * Makefile.in: Makefile generator.
 * config.h.in: config header generator.
 * calibrator.c: source code.
-* gaul.patch: to patch the GAUL library.
 * Doxyfile: configuration file to generate doxygen documentation.
 * TODO: tasks to do.
 * README.md: this file.
@@ -58,7 +57,7 @@ ____________
 
 * download the latest [genetic](https://github.com/jburguete/genetic)
 > $ cd 0.2.0
->
+
 * link the latest genetic (i.e. ln -s PATH_TO_THE_GENETIC/0.1.0 genetic)
 > $ aclocal
 >
@@ -74,10 +73,10 @@ OpenBSD 5.6
 ___________
 
 > $ export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.14
->
+
 * download the latest [genetic](https://github.com/jburguete/genetic)
 > $ cd 0.2.0
->
+
 * link the latest genetic (i.e. ln -s PATH_TO_THE_GENETIC/0.1.0 genetic)
 > $ aclocal
 >
