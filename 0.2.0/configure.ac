@@ -20,7 +20,7 @@
 # ./configure --host=x86_64-w64-mingw32
 # make
 
-# To work in OpenBSD 5.5:
+# To work in OpenBSD 5.6:
 #
 # export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.14
 # aclocal
@@ -30,7 +30,7 @@
 # make
 
 AC_PREREQ([2.69])
-AC_INIT([calibrator], [0.0.18], [https://github.com/jburguete/calibrator])
+AC_INIT([calibrator], [0.2.0], [https://github.com/jburguete/calibrator])
 
 # Checks for operative systems
 openbsd=0
@@ -187,10 +187,6 @@ else
 	AC_SUBST(FOPENMP, "-fopenmp")
 	CFLAGS="$CFLAGS -DHAVE_OPENMP=1"
 fi
-
-# GAUL library
-AC_SUBST(GAUL_DEFINE, "-DHAVE_GAUL=1")
-AC_SUBST(GAUL_LIBS, "-lgaul -lgaul_util")
 
 # Checks for library functions
 AC_FUNC_MALLOC

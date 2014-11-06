@@ -57,6 +57,8 @@ OF SUCH DAMAGE.
  * \brief algoritm XML label.
  * \def XML_BESTS
  * \brief bests XML label.
+ * \def XML_BITS
+ * \brief bits XML label.
  * \def XML_CALIBRATE
  * \brief calibrate XML label.
  * \def XML_EVALUATOR
@@ -65,6 +67,8 @@ OF SUCH DAMAGE.
  * \brief experiment XML label.
  * \def XML_FORMAT
  * \brief format XML label.
+ * \def XML_GENERATIONS
+ * \brief generations XML label.
  * \def XML_GENETIC
  * \brief genetic XML label.
  * \def XML_ITERATIONS
@@ -75,8 +79,14 @@ OF SUCH DAMAGE.
  * \brief maximum XML label.
  * \def XML_MONTE_CARLO
  * \brief Monte-Carlo XML label.
+ * \def XML_MUTATION
+ * \brief mutation XML label.
  * \def XML_NAME
  * \brief name XML label.
+ * \def XML_POPULATION
+ * \brief population XML label.
+ * \def XML_REPRODUCTION
+ * \brief reproduction XML label.
  * \def XML_SIMULATIONS
  * \brief simulations XML label.
  * \def XML_SIMULATOR
@@ -85,18 +95,6 @@ OF SUCH DAMAGE.
  * \brief sweep XML label.
  * \def XML_SWEEPS
  * \brief sweeps XML label.
- * \def XML_GENETIC
- * \brief genetic XML label.
- * \def XML_POPULATION
- * \brief population XML label.
- * \def XML_GENERATIONS
- * \brief generations XML label.
- * \def XML_BITS
- * \brief bits XML label.
- * \def XML_CROSSOVER
- * \brief crossover XML label.
- * \def XML_MUTATION
- * \brief mutation XML label.
  * \def XML_TEMPLATE1
  * \brief template1 XML label.
  * \def XML_TEMPLATE2
@@ -112,26 +110,25 @@ OF SUCH DAMAGE.
  */
 #define XML_ALGORITHM (const xmlChar*)"algorithm"
 #define XML_BESTS (const xmlChar*)"bests"
+#define XML_BITS (const xmlChar*)"bits"
 #define XML_CALIBRATE (const xmlChar*)"calibrate"
 #define XML_EVALUATOR (const xmlChar*)"evaluator"
 #define XML_EXPERIMENT (const xmlChar*)"experiment"
 #define XML_FORMAT (const xmlChar*)"format"
+#define XML_GENERATIONS (const xmlChar*)"generations"
 #define XML_GENETIC (const xmlChar*)"genetic"
 #define XML_ITERATIONS (const xmlChar*)"iterations"
 #define XML_MINIMUM (const xmlChar*)"minimum"
 #define XML_MAXIMUM (const xmlChar*)"maximum"
 #define XML_MONTE_CARLO (const xmlChar*)"Monte-Carlo"
+#define XML_MUTATION (const xmlChar*)"mutation"
 #define XML_NAME (const xmlChar*)"name"
+#define XML_POPULATION (const xmlChar*)"population"
+#define XML_REPRODUCTION (const xmlChar*)"reproduction"
 #define XML_SIMULATIONS (const xmlChar*)"simulations"
 #define XML_SIMULATOR (const xmlChar*)"simulator"
 #define XML_SWEEP (const xmlChar*)"sweep"
 #define XML_SWEEPS (const xmlChar*)"sweeps"
-#define XML_GENETIC (const xmlChar*)"genetic"
-#define XML_POPULATION (const xmlChar*)"population"
-#define XML_GENERATIONS (const xmlChar*)"generations"
-#define XML_BITS (const xmlChar*)"bits"
-#define XML_CROSSOVER (const xmlChar*)"crossover"
-#define XML_MUTATION (const xmlChar*)"mutation"
 #define XML_TEMPLATE1 (const xmlChar*)"template1"
 #define XML_TEMPLATE2 (const xmlChar*)"template2"
 #define XML_TEMPLATE3 (const xmlChar*)"template3"

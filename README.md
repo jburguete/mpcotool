@@ -1,4 +1,4 @@
-CALIBRATOR (0.0.18 version)
+CALIBRATOR (0.2.0 version)
 ===========================
 
 A software to perform calibrations of empirical parameters.
@@ -22,6 +22,7 @@ REQUIRED
 * gthreads (to use multicores in shared memory machines)
 * glib (extended utilities of C to work with data, lists, mapped files, regular
 	expressions, ...)
+* [genetic](https://github.com/jburguete/genetic) (genetic algorithm)
 * openmpi or mpich (optional: to run in parallelized tasks)
 * doxygen (optional: standard comments format to generate documentation)
 * latex (optional: to build the PDF manuals)
@@ -55,8 +56,10 @@ ____________
 NetBSD 6.1.5
 ____________
 
-> $ cd 0.0.18
+* download the latest [genetic](https://github.com/jburguete/genetic)
+> $ cd 0.2.0
 >
+* link the latest genetic (i.e. ln -s PATH_TO_THE_GENETIC/0.1.0 genetic)
 > $ aclocal
 >
 > $ autoconf
@@ -66,16 +69,16 @@ ____________
 > $ ./configure
 >
 > $ make
->
-> $ strip calibrator *(optional: to make a final version without debug data)*
 
-OpenBSD 5.5
+OpenBSD 5.6
 ___________
 
 > $ export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.14
 >
-> $ cd 0.0.18
+* download the latest [genetic](https://github.com/jburguete/genetic)
+> $ cd 0.2.0
 >
+* link the latest genetic (i.e. ln -s PATH_TO_THE_GENETIC/0.1.0 genetic)
 > $ aclocal
 >
 > $ autoconf
@@ -83,48 +86,13 @@ ___________
 > $ automake --add-missing
 >
 > $ ./configure
->
-> $ make
->
-> $ strip calibrator *(optional: to make a final version without debug data)*
-
-
-KNOWN PROBLEMS
-______________
-
-
-Building calibrator requires building and installing GAUL library. In the
-process installing GAUL it does:
-
-> $ sudo make install
-
-This is a problem if **sudo** is not installed or configured in your system.
-Then, the building fails showing an error as:
-
-> Makefile:33: recipe for target '/usr/lib/libgaul.la' failed
->
-> make: *** [/usr/lib/libgaul.la] Error 127
-
-In this case, you can solve the problem installing GAUL as administrator:
-
-> $ su
->
-> \# cd  gaul-devel-0.1849-0
->
-> \# make install
->
-> \# make clean
-
-And you can continue building calibrator:
-
-> \# exit
 >
 > $ make
 
 MAKING REFERENCE MANUAL INSTRUCTIONS (file latex/refman.pdf)
 ------------------------------------------------------------
 
-> $ cd 0.0.18
+> $ cd 0.2.0
 >
 > $ doxygen
 >
@@ -157,9 +125,9 @@ INPUT FILE FORMAT
         <experiment name="data_file_1" template1="template_1_1" template2="template_1_2" template3="template_1_3" template4="template_1_4"/>
         ...
         <experiment name="data_file_N" template1="template_N_1" template2="template_N_2" template3="template_N_3" template4="template_N_4"/>
-        <variable name="variable_1" minimum="min_value" maximum="max_value" format="c_string_format" sweeps="sweeps_number"/>
+        <variable name="variable_1" minimum="min_value" maximum="max_value" format="c_string_format" sweeps="sweeps_number" bits="bits_number"/>
         ...
-        <variable name="variable_M" minimum="min_value" maximum="max_value" format="c_string_format" sweeps="sweeps_number"/>
+        <variable name="variable_M" minimum="min_value" maximum="max_value" format="c_string_format" sweeps="sweeps_number" bits="bits_number"/>
     </calibrate>
 
 Implemented algorithms are:
@@ -188,17 +156,18 @@ the following parameters:
 >
 > iterations: number of iterations (default 1).
 
-* *"genetic"*: Genetic algorithm. Requires installation of GAUL library and the
-following parameters (consult GAUL documentation):
+* *"genetic"*: Genetic algorithm. Requires installation of genetic and the
+following parameters:
 > population: number of population.
 >
 > generations: number of generations.
 >
-> bits: number of bits of every variable.
+> mutation: mutation ratio.
 >
-> crossover: crossover number.
+> reproduction: reproduction ratio.
 >
-> mutation: mutation number.
+And on each variable:
+> bits: number of bits to encode each variable.
 
 SOME EXAMPLES OF INPUT FILES
 ----------------------------
