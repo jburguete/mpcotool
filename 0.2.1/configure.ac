@@ -30,7 +30,7 @@
 # make
 
 AC_PREREQ([2.69])
-AC_INIT([calibrator], [0.2.0], [https://github.com/jburguete/calibrator])
+AC_INIT([calibrator], [0.2.1], [https://github.com/jburguete/calibrator])
 
 # Checks for operative systems
 openbsd=0

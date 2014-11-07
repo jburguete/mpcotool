@@ -129,6 +129,8 @@ typedef struct
  * \brief Mutation probability.
  * \var reproduction_ratio
  * \brief Reproduction probability.
+ * \var adaptation_ratio
+ * \brief Adaptation probability.
  * \var result
  * \brief Result file.
  * \var rng
@@ -145,7 +147,7 @@ typedef struct
 		*nsweeps, nstart, nend, *thread, niterations, nbests, nsaveds,
 		*simulation_best;
 	double *value, *rangemin, *rangemax, *error_best, tolerance,
-		mutation_ratio, reproduction_ratio;
+		mutation_ratio, reproduction_ratio, adaptation_ratio;
 	FILE *result;
 	gsl_rng *rng;
 	GMappedFile **file[4];
@@ -183,7 +185,8 @@ typedef struct
  * \var calibrate
  * \brief Calibration data.
  */
-unsigned int ntasks, nthreads;
+int ntasks;
+unsigned int nthreads;
 GMutex mutex;
 void (*calibrate_step)(Calibrate*);
 Calibrate calibrate[1];
@@ -801,19 +804,18 @@ printf("calibrate_genetic: start\n");
 printf("calibrate_genetic: ntasks=%u nthreads=%u\n", ntasks, nthreads);
 printf("calibrate_genetic: nvariables=%u population=%u generations=%u\n",
 calibrate->nvariables, calibrate->nsimulations, calibrate->niterations);
-printf("calibrate_genetic: mutation=%lg reproduction=%lg\n",
-calibrate->mutation_ratio, calibrate->reproduction_ratio);
+printf("calibrate_genetic: mutation=%lg reproduction=%lg adaptation=%lg\n",
+calibrate->mutation_ratio, calibrate->reproduction_ratio,
+calibrate->adaptation_ratio);
 #endif
-	genetic_algorithm(
+	genetic_algorithm_default(
 		calibrate->nvariables,
 		calibrate->genetic_variable,
 		calibrate->nsimulations,
 		calibrate->niterations,
 		calibrate->mutation_ratio,
 		calibrate->reproduction_ratio,
-		0,
-		0,
-		0,
+		calibrate->adaptation_ratio,
 		&calibrate_genetic_objective,
 		&best_genome,
 		&best_variable,
@@ -1052,6 +1054,36 @@ printf("calibrate_new: start\n");
 			else
 			{
 				printf("No reproduction probability in the data file\n");
+				return 0;
+			}
+
+			// Obtaining adaptation probability
+			if (xmlHasProp(node, XML_ADAPTATION))
+			{
+				buffer = xmlGetProp(node, XML_ADAPTATION);
+				calibrate->adaptation_ratio = atof((char*)buffer);
+				xmlFree(buffer);
+				if (calibrate->adaptation_ratio < 0.
+					|| calibrate->adaptation_ratio >= 1.)
+				{
+					printf("Invalid adaptation probability\n");
+					return 0;
+				}
+			}
+			else
+			{
+				printf("No adaptation probability in the data file\n");
+				return 0;
+			}
+
+			// Checking survivals
+			i = calibrate->mutation_ratio * calibrate->nsimulations;
+			i += calibrate->reproduction_ratio * calibrate->nsimulations;
+			i += calibrate->adaptation_ratio * calibrate->nsimulations;
+			if (i > calibrate->nsimulations - 2)
+			{
+				printf("No enough survival entities to reproduce the "
+					"population\n");
 				return 0;
 			}
 		}

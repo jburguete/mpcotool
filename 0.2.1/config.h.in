@@ -53,6 +53,8 @@ OF SUCH DAMAGE.
 // XML labels
 
 /**
+ * \def XML_ADAPTATION
+ * \brief adaption XML label.
  * \def XML_ALGORITHM
  * \brief algoritm XML label.
  * \def XML_BESTS
@@ -108,6 +110,7 @@ OF SUCH DAMAGE.
  * \def XML_VARIABLE
  * \brief variable XML label.
  */
+#define XML_ADAPTATION (const xmlChar*)"adaptation"
 #define XML_ALGORITHM (const xmlChar*)"algorithm"
 #define XML_BESTS (const xmlChar*)"bests"
 #define XML_BITS (const xmlChar*)"bits"

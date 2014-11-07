@@ -1,4 +1,4 @@
-CALIBRATOR (0.2.0 version)
+CALIBRATOR (0.2.1 version)
 ===========================
 
 A software to perform calibrations of empirical parameters.
@@ -56,7 +56,7 @@ NetBSD 6.1.5
 ____________
 
 * download the latest [genetic](https://github.com/jburguete/genetic)
-> $ cd 0.2.0
+> $ cd 0.2.1
 
 * link the latest genetic (i.e. ln -s PATH_TO_THE_GENETIC/0.1.0 genetic)
 > $ aclocal
@@ -75,7 +75,7 @@ ___________
 > $ export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.14
 
 * download the latest [genetic](https://github.com/jburguete/genetic)
-> $ cd 0.2.0
+> $ cd 0.2.1
 
 * link the latest genetic (i.e. ln -s PATH_TO_THE_GENETIC/0.1.0 genetic)
 > $ aclocal
@@ -91,7 +91,7 @@ ___________
 MAKING REFERENCE MANUAL INSTRUCTIONS (file latex/refman.pdf)
 ------------------------------------------------------------
 
-> $ cd 0.2.0
+> $ cd 0.2.1
 >
 > $ doxygen
 >
