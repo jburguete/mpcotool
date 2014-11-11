@@ -1,7 +1,7 @@
 CALIBRATOR (0.2.1 version)
 ===========================
 
-A software to perform calibrations of empirical parameters.
+A software to perform calibrations or optimizations of empirical parameters.
 
 AUTHORS
 -------
@@ -37,7 +37,7 @@ FILES
 * Doxyfile: configuration file to generate doxygen documentation.
 * TODO: tasks to do.
 * README.md: this file.
-* benchmark/*.*: files to test the program working.
+* tests/testX/*: several tests to check the program working.
 
 BUILDING INSTRUCTIONS
 ---------------------
