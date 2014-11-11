@@ -86,8 +86,6 @@ if test $openbsd = 1; then
 		AC_MSG_ERROR([No C compiler])
 	fi
 	CC="$CC $OPENBSD_FLAGS"
-	# Wrong error building GAUL with SSE3 instructions on OpenBSD"
-	CC="$CC -mno-sse3"
 	AC_MSG_NOTICE([Compiler: $CC])
 else
 	# Unable to use AC_PROG_CC([mpicc gcc clang]) on conditional statements
@@ -120,32 +118,12 @@ PKG_CHECK_MODULES([GLIB], [glib-2.0])
 AC_CHECK_HEADERS([stdlib.h string.h unistd.h pthread.h])
 
 # Checking MPI
-MPI="yes"
-MPI_DEFINE="-DHAVE_MPI=1"
-MPI_LIBS="-lmpi"
-PTHREAD="--enable-pthread=no"
-OPENMP="--enable-openmp=no"
-if test -x "$PREFIX/bin/mpicc"; then :
+if test -x "$PREFIX/bin/mpicc"; then
+	MPI_DEFINE="-DHAVE_MPI=1"
 else
-	MPI="no"
 	MPI_DEFINE=""
-	MPI_LIBS=""
-	# Checking pthreads
-	AC_SEARCH_LIBS([pthread_create], [pthread],
-		[PTHREAD="--enable-pthread=yes"], [])
-	if test $PTHREAD = ""; then
-		# Checking OpenMP
-		compiler=$CC
-		CC="$CC -fopenmp"
-		AC_TRY_LINK([], [int main(int argc, char **argv){return 0;}],
-			[OPENMP="enable-openmp=yes"], [CC=$compiler])
-	fi
 fi
-AC_SUBST(MPI, $MPI)
 AC_SUBST(MPI_DEFINE, $MPI_DEFINE)
-AC_SUBST(MPI_LIBS, $MPI_LIBS)
-AC_SUBST(PTHREAD, $PTHREAD)
-AC_SUBST(OPENMP, $OPENMP)
 
 # Checking -march=native compiler flag
 compiler=$CC
@@ -172,20 +150,6 @@ if test $lto = 0; then
 else
 	AC_MSG_NOTICE([checking for -flto... yes])
 	AC_SUBST(LTO, "-flto")
-fi
-
-# Checking -fopenmp compiler flag
-compiler=$CC
-CC="$CC -fopenmp"
-AC_TRY_LINK([], [int main(int argc, char **argv){return 0;}], [omp=1], [omp=0])
-CC=$compiler
-if test $omp = 0; then
-	AC_MSG_NOTICE([checking for -fopenmp... no])
-	AC_SUBST(FOPENMP, "")
-else
-	AC_MSG_NOTICE([checking for -fopenmp... yes])
-	AC_SUBST(FOPENMP, "-fopenmp")
-	CFLAGS="$CFLAGS -DHAVE_OPENMP=1"
 fi
 
 # Checks for library functions

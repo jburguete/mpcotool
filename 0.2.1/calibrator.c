@@ -494,6 +494,8 @@ void calibrate_sequential(Calibrate *calibrate)
 	double e;
 #if DEBUG
 printf("calibrate_sequential: start\n");
+printf("calibrate_sequential: nstart=%u nend=%u\n",
+calibrate->nstart, calibrate->nend);
 #endif
 	for (i = calibrate->nstart; i < calibrate->nend; ++i)
 	{
@@ -780,11 +782,17 @@ double calibrate_genetic_objective(Entity *entity)
 {
 	unsigned int j;
 	double objective;
+#if DEBUG
+fprintf(stderr, "calibrate_genetic_objective: start\n");
+#endif
 	for (j = 0; j < calibrate->nvariables; ++j)
 		calibrate->value[entity->id * calibrate->nvariables + j]
 			= genetic_get_variable(entity, calibrate->genetic_variable + j);
 	for (j = 0, objective = 0.; j < calibrate->nexperiments; ++j)
 		objective += calibrate_parse(calibrate, entity->id, j);
+#if DEBUG
+fprintf(stderr, "calibrate_genetic_objective: end\n");
+#endif
 	return objective;
 }
 
@@ -1558,7 +1566,7 @@ int main(int argn, char **argc)
 		return 1;
 	}
 
-	// Starting GThreads
+	// Getting threads number
 	if (argn == 2) nthreads = cores_number();
 	else nthreads = atoi(argc[2]);
 	printf("nthreads=%u\n", nthreads);

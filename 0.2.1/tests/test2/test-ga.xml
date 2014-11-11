@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<calibrate simulator="simulator" evaluator="evaluator" algorithm="genetic" population="100" generations="10" mutation="0.3" reproduction="0.3" adaptation="0.2">
+	<experiment name="test.exp" template1="test.tmp"/>
+	<variable name="ngenerations" minimum="50" maximum="200" format="%.1e" bits="7"/>
+	<variable name="mutation_ratio" minimum="0.01" maximum="0.32" format="%.14e" bits="11"/>
+	<variable name="reproduction_ratio" minimum="0.01" maximum="0.32" format="%.14e" bits="11"/>
+	<variable name="adaptation_ratio" minimum="0.01" maximum="0.32" format="%.14e" bits="11"/>
+</calibrate>
