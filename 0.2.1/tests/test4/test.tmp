@@ -1,0 +1,4 @@
+ngenerations: @value1@
+mutation_ratio: @value2@
+reproduction_ratio: @value3@
+adaptation_ratio: @value4@
