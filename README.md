@@ -171,8 +171,7 @@ the following parameters:
 >
 > iterations: number of iterations (default 1).
 
-* *"genetic"*: Genetic algorithm. Requires installation of genetic and the
-following parameters:
+* *"genetic"*: Genetic algorithm. Requires the following parameters:
 > population: number of population.
 >
 > generations: number of generations.
