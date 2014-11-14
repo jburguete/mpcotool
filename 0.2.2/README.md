@@ -183,7 +183,7 @@ following parameters:
 >
 > adaptation: adaptation ratio.
 
-and on each variable:
+  and on each variable:
 > bits: number of bits to encode each variable.
 
 SOME EXAMPLES OF INPUT FILES
