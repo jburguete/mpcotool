@@ -263,7 +263,8 @@ CALIBRATOR implementa el método genético GENETIC \cite{genetic} con sus
 algoritmos por defecto. Los algoritmos están inspirados en \cite{gaul}, aunque
 han sido completamente reescritos con muchas simplificaciones y haciendo uso de
 modernas librerías externas. El código de GENETIC es también open source bajo
-licencia de tipo BSD.
+licencia de tipo BSD. En la figura~\ref{FigGeneticFlow} puede verse un diagrama
+de flujo del funcionamiento del método genético implementado en GENETIC.
 
 \psset{xunit=0.5mm,yunit=0.5mm}
 \PSPICTURE{-130}{-200}{125}{20}
@@ -406,12 +407,24 @@ siguiendo la fórmula:
 
 \subsubsection{Supervivencia de los mejores individuos}
 
-En el algortimo genético de GENETIC la tasa de supervivencia $R_{survival}$
-es determinada por los ratios de mutation $R_{mutation}$, reproduction
-$R_{reproduction}$ y adaptation $R_{adaptation}$:
-\EQ{R_{survival}=R_{mutation}+R_{reproduction}+R_{adaptation}.}{EqSurvival}
-Así pues, para una población de $N$ individuos, en la primera generación se
-simulan $N$ casos calculando las variables de entrada e genoma de cada
+
+Para una población de $N$ individuos, en la primera generación se
+simulan $N_{population}$ casos calculando las variables de entrada a partir del
+genoma de cada individuo.
+
+Después, en cada generación, se generarán $N_{population}\times R_{mutation}$
+individuos por mutación, $N_{population}\times R_{reproduction}$ individuos
+por reproducciónción y $N_{population}\times R_{adaptation}$ individuos
+pos adaptación sustituyendo los individuos de la antigua población que
+obtuvieron peores valores en la función de evaluación. Por tanto sobreviven los
+$N_{survival}$ mejores individuos:
+\EQ
+{
+	N_{survival}=N_{population}\times
+	\left(1-R_{mutation}-R_{reproduction}-R_{adaptation}\right),
+}{EqSurvival}
+Los nuevos individuos se generarán por mutación, reproducción y adpatación de
+los genomas de estos mejores individuos.
 
 \subsubsection{Mutation algorithm}
 
