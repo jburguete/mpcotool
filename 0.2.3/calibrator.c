@@ -224,6 +224,9 @@ void calibrate_input(Calibrate *calibrate, unsigned int simulation,
 printf("calibrate_input: start\n");
 #endif
 
+	// Checking the file
+	if (!template) goto calibrate_input_end;
+
 	// Opening template
 	content = g_mapped_file_get_contents(template);
 	length = g_mapped_file_get_length(template);
@@ -276,9 +279,11 @@ printf("calibrate_input: value=%s\n", value);
 	g_free(buffer3);
 	fclose(file);
 
+calibrate_input_end:
 #if DEBUG
 printf("calibrate_input: end\n");
 #endif
+	return;
 }
 
 /**
@@ -325,8 +330,11 @@ printf("calibrate_parse: parsing end\n");
 
 	// Performing the simulation
 	snprintf(output, 32, "output-%u-%u", simulation, experiment);
-	snprintf(buffer, 512, "./%s %s %s %s %s %s", calibrate->simulator,
-		&input[0][0], &input[1][0], &input[2][0], &input[3][0], output);
+	snprintf(buffer, 512, "./%s %s %s %s %s %s %s %s %s %s",
+		calibrate->simulator,
+		&input[0][0], &input[1][0], &input[2][0], &input[3][0], 
+		&input[4][0], &input[5][0], &input[6][0], &input[7][0], 
+		output);
 #if DEBUG
 printf("calibrate_parse: %s\n", buffer);
 #endif
@@ -356,8 +364,15 @@ printf("calibrate_parse: %s\n", buffer);
 
 	// Removing files
 #if !DEBUG
-	snprintf(buffer, 512, "rm %s %s %s %s %s %s", &input[0][0], &input[1][0],
-		&input[2][0], &input[3][0], output, result);
+	for (i = 0; i < calibrate->ninputs; ++i)
+	{
+		if (calibrate->file[i][0])
+		{
+			snprintf(buffer, 512, "rm %s", &input[i][0]);
+			system(buffer);
+		}
+	}
+	snprintf(buffer, 512, "rm %s %s", output, result);
 	system(buffer);
 #endif
 
