@@ -62,7 +62,7 @@ ____________
 3. Link the latest genetic version to genetic doing on a terminal:
 > $ cd PATH_TO_CALIBRATOR/0.2.3
 >
-> $ ln -s PATH_TO_THE_GENETIC/0.4.0 genetic
+> $ ln -s PATH_TO_THE_GENETIC/0.6.0 genetic
 
 4. Build doing on a terminal:
 > $ cd PATH_TO_CALIBRATOR/0.2.3
@@ -87,7 +87,7 @@ ___________
 3. Link the latest genetic version to genetic doing on a terminal:
 > $ cd PATH_TO_CALIBRATOR/0.2.3
 >
-> $ ln -s PATH_TO_THE_GENETIC/0.4.0 genetic
+> $ ln -s PATH_TO_THE_GENETIC/0.6.0 genetic
 
 4. Build doing on a terminal:
 > $ export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.14
