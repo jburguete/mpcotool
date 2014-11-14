@@ -26,8 +26,6 @@ empirical parameters}
 \author{J. Burguete, B. Latorre, S. Ambroj, A. Lacasta, S. Ouazaa,
 P. García-Navarro}
  
-\date{\today}
-
 \bibliographystyle{elsarticle-harv}
 
 \begin{document}
@@ -251,11 +249,13 @@ El algoritmo genético implementado en CALIBRATOR
 Los algoritmos están inspirados en \cite{gaul}, aunque han sido completamente
 reescritos con muchas simplificaciones y haciendo uso de modernas librerías
 externas. El código del algoritmo está publicado de forma independiente en
-\cite{genetic} y también es open source bajo licencia de tipo BSD.
+\cite{genetic} y también es open source bajo licencia de tipo BSD. Dada una
+población 
 
 \subsubsection{Mutation algorithm}
 
 \subsubsection{Reproduction algorithm}
+
 
 \subsubsection{Adaptation algorithm}
 
@@ -299,11 +299,16 @@ $ mpirun [MPI options] ./calibrator [-nthreads X] input_file.xml
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 $ ./simulator_name input_file_1 [input_file_2] [...] output_file
 \end{lstlisting}
+They are two options for the ouput file. It can begin with a number indicating
+the objective function value or it can be a results file that has to be
+evaluated by an external program (the evaluator) comparing with an experimental
+file.
 
-\item The sintaxis of the program to evaluate the objetive function has to be (where
-the first data in the results file has to be the objective function value):
+\item In the last option of the former point, the sintaxis of the program to
+evaluate the objetive function has to be (where the results file has to begin
+with the objective function value):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ ./evaluator_name simulated_file data_file results_file
+$ ./evaluator_name simulated_file experimental_file results_file
 \end{lstlisting}
 
 \end{itemize}

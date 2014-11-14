@@ -7,12 +7,8 @@ objs = ../../genetic/genetic.o ../../genetic/evolution.o \
 cc = mpicc -march=native -mfpmath=sse -Wall #-pg
 
 simulator = simulator
-evaluator = evaluator
 
 all: $(simulator) $(evaluator)
 
 $(simulator): simulator.c makefile
 	$(cc) $(flags) simulator.c $(objs) $(libs) -o $(simulator)
-
-$(evaluator): evaluator.c makefile
-	gcc evaluator.c -o $(evaluator)

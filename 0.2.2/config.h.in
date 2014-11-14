@@ -105,6 +105,14 @@ OF SUCH DAMAGE.
  * \brief template3 XML label.
  * \def XML_TEMPLATE4
  * \brief template4 XML label.
+ * \def XML_TEMPLATE5
+ * \brief template5 XML label.
+ * \def XML_TEMPLATE6
+ * \brief template6 XML label.
+ * \def XML_TEMPLATE7
+ * \brief template7 XML label.
+ * \def XML_TEMPLATE8
+ * \brief template8 XML label.
  * \def XML_TOLERANCE
  * \brief tolerance XML label.
  * \def XML_VARIABLE
@@ -136,6 +144,10 @@ OF SUCH DAMAGE.
 #define XML_TEMPLATE2 (const xmlChar*)"template2"
 #define XML_TEMPLATE3 (const xmlChar*)"template3"
 #define XML_TEMPLATE4 (const xmlChar*)"template4"
+#define XML_TEMPLATE5 (const xmlChar*)"template5"
+#define XML_TEMPLATE6 (const xmlChar*)"template6"
+#define XML_TEMPLATE7 (const xmlChar*)"template7"
+#define XML_TEMPLATE8 (const xmlChar*)"template8"
 #define XML_TOLERANCE (const xmlChar*)"tolerance"
 #define XML_VARIABLE (const xmlChar*)"variable"
 
