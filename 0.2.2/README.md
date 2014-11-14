@@ -182,10 +182,8 @@ following parameters:
 > reproduction: reproduction ratio.
 >
 > adaptation: adaptation ratio.
->
-> And on each variable:
->
->> bits: number of bits to encode each variable.
+And on each variable:
+> bits: number of bits to encode each variable.
 
 SOME EXAMPLES OF INPUT FILES
 ----------------------------
