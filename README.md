@@ -235,7 +235,7 @@ _________
 
 * The input file is:
 
-__
+
 
     <?xml version="1.0"?>
     <calibrate simulator="pivot" evaluator="compare" algorithm="sweep">
