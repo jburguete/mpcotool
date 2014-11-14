@@ -343,11 +343,38 @@ are:
 \item{simulator}: to indicate the simulator program.
 \item{evaluator}: optional. It specify the evaluator program if required.
 \item{algorithm}: to set the optimization algorithm. Three value are available:
-	\begin{itemize}
-	\item{sweep}:
-	\item{Monte-Carlo}:
-	\item{genetic}:
-	\end{itemize}
+	\begin{description}
+	\item{sweep}: sweep brutal force algorithm. Requires on each variable:
+		\begin{description}
+		\item{sweeps}: number of sweeps to generate on each variable in every
+			experiment.
+		\end{description}
+	\item{Monte-Carlo}: Monte-Carlo brutal force algorithm. Requires on the main
+		XML node:
+		\begin{description}
+		\item{simulations}: number of simulations to run on each iteration in
+			every experiment.
+		\end{description}
+	\item{genetic}: genetic algorithm. Requires the following parameters in the
+		main XML node:
+		\begin{description}
+		\item{population}: number of population entities.
+		\item{generations}: number of generations.
+		\item{mutation}: mutation ratio.
+		\item{reproduction}: reproduction ratio.
+		\item{adaptation}: adaptation ratio.
+		\end{description}
+	And on each variable:
+		\begin{description}
+		\item{bits}: number of bits to encode each variable.
+		\end{description}
+	\end{description}
+\item{iterations}: number of iterations (default 1) to perform the iterative
+algorithm. It applies only on sweep and Monte-Carlo methods.
+\item{bests}: number of bests simulations to calculate convergence interval on
+next iteration (default 1). It applies only on iterative algorithm.
+\item{tolerance}: tolerance parameter to increase convergence interval (default
+0). It applies only on iterative algorithm.
 \end{description}
 
 \section{Practical applications}
@@ -363,45 +390,4 @@ are:
 \bibliography{bib}
 
 \end{document}
-Implemented algorithms are:
-
-* *"sweep"*: Sweep brutal force algorithm. Requires on each variable:
-> sweeps: number of sweeps to generate on each variable in every experiment. 
->
-> The total number of simulations to run is:
->
->> (number of experiments) x (variable 1 number of sweeps) x ... x
->> (variable n number of sweeps) x (number of iterations)
-
-* *"Monte-Carlo"*: Monte-Carlo brutal force algorithm. Requires on calibrate:
-> simulations: number of simulations to run in every experiment.
->
-> The total number of simulations to run is:
->
->> (number of experiments) x (number of simulations) x (number of iterations)
-
-* Both brutal force algorithms can be iterated to improve convergence by using
-the following parameters:
-> bests: number of bests simulations to calculate convergence interval on next
-> iteration (default 1).
->
-> tolerance: tolerance parameter to increase convergence interval (default 0).
->
-> iterations: number of iterations (default 1).
-
-* *"genetic"*: Genetic algorithm. Requires installation of genetic and the
-following parameters:
-> population: number of population.
->
-> generations: number of generations.
->
-> mutation: mutation ratio.
->
-> reproduction: reproduction ratio.
->
-> adaptation: adaptation ratio.
->
-> And on each variable:
->
->> bits: number of bits to encode each variable.
 
