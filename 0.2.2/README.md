@@ -149,18 +149,16 @@ Implemented algorithms are:
 
 * *"sweep"*: Sweep brutal force algorithm. Requires on each variable:
 > sweeps: number of sweeps to generate on each variable in every experiment. 
->
-> The total number of simulations to run is:
->
->> (number of experiments) x (variable 1 number of sweeps) x ... x
->> (variable n number of sweeps) x (number of iterations)
+
+  The total number of simulations to run is:
+> (number of experiments) x (variable 1 number of sweeps) x ... x
+> (variable n number of sweeps) x (number of iterations)
 
 * *"Monte-Carlo"*: Monte-Carlo brutal force algorithm. Requires on calibrate:
 > simulations: number of simulations to run in every experiment.
->
-> The total number of simulations to run is:
->
->> (number of experiments) x (number of simulations) x (number of iterations)
+
+  The total number of simulations to run is:
+> (number of experiments) x (number of simulations) x (number of iterations)
 
 * Both brutal force algorithms can be iterated to improve convergence by using
 the following parameters:
@@ -185,6 +183,10 @@ following parameters:
 
   and on each variable:
 > bits: number of bits to encode each variable.
+
+  The total number of simulations to run is:
+> (number of experiments) x (population) x [1 + (generations - 1)
+> x (1 - mutation - reproduction - adaptation)]
 
 SOME EXAMPLES OF INPUT FILES
 ----------------------------
