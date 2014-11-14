@@ -2,6 +2,7 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage{listings}
+\usepackage{pstricks}
 
 \usepackage{lineno}
 \linenumbers
@@ -17,6 +18,17 @@
 			#3
 		\end{picture}
 		\caption{#4.\label{#5}}
+	\end{figure}
+}
+
+\newcommand{\PSPICTURE}[7]
+{
+	\begin{figure}[ht!]
+		\centering
+		\pspicture(#1,#2)(#3,#4)
+			#5
+		\endpspicture
+		\caption{#6.\label{#7}}
 	\end{figure}
 }
 
@@ -135,14 +147,16 @@ El nuevo intervalo en la variable $x$ en el que se simulará la siguiente
 iteración estará comprendido entre:
 \[
 	x_{\max}^{j+1}=\frac{x_{\max}^b+x_{\min}^b
-		+\left(x_{\max}^b-x_{\min}^b\right)(1+tolerance)}{2},
+		+\left(x_{\max}^b-x_{\min}^b\right)(1+tol)}{2},
 \]
 \[
 	x_{\min}^{j+1}=\frac{x_{\max}^b+x_{\min}^b
-		-\left(x_{\max}^b-x_{\min}^b\right)(1+tolerance)}{2},
+		-\left(x_{\max}^b-x_{\min}^b\right)(1+tol)}{2},
 \]
 \EQ{x_i^{j+1}\in\left[x_{\min}^{j+1},\;x_{\max}^{j+1}\right].}
 {EqIterationInterval}
+being $tol$ a tolerance increasing the size of the variable intervals to
+simulate the next iteration.
 En la figura~\ref{FigIterative} se ilustra el procedimiento con el que el
 algoritmo iterativo modifica los intervalos de las variables para incrementar la
 convergencia.
@@ -245,17 +259,163 @@ variables}{FigIterative}
 
 \subsection{Genetic method}
 
-El algoritmo genético implementado en CALIBRATOR 
-Los algoritmos están inspirados en \cite{gaul}, aunque han sido completamente
-reescritos con muchas simplificaciones y haciendo uso de modernas librerías
-externas. El código del algoritmo está publicado de forma independiente en
-\cite{genetic} y también es open source bajo licencia de tipo BSD. Dada una
-población 
+CALIBRATOR implementa el método genético GENETIC \cite{genetic} con sus
+algoritmos por defecto. Los algoritmos están inspirados en \cite{gaul}, aunque
+han sido completamente reescritos con muchas simplificaciones y haciendo uso de
+modernas librerías externas. El código de GENETIC es también open source bajo
+licencia de tipo BSD.
+
+\psset{xunit=0.5mm,yunit=0.5mm}
+\PSPICTURE{-130}{-200}{125}{20}
+{
+	\scriptsize
+	\rput(0,12.5){$generation=1$}
+	\pspolygon(-65,5)(65,5)(65,20)(-65,20)
+	\psline(0,5)(0,0)
+	\rput(0,-5){Generation of $N_{population}$}
+	\rput(0,-10){random genomes}
+	\pspolygon(-65,-15)(65,-15)(65,0)(-65,0)
+	\psline(0,-15)(0,-20)
+	\rput(0,-25){Simulation of the $N_{population}$}
+	\rput(0,-30){entities}
+	\pspolygon(-65,-35)(65,-35)(65,-20)(-65,-20)
+	\psline(0,-35)(0,-40)
+	\rput(0,-45){Sorting the $N_{population}$}
+	\rput(0,-50){entities by objective function value}
+	\pspolygon(-65,-55)(65,-55)(65,-40)(-65,-40)
+	\psline(0,-55)(0,-60)
+	\rput(0,-65){Elliminating the worst}
+	\rput(0,-70){$N_{mutation}+N_{reproduction}+N_{adaptation}$ entities}
+	\pspolygon(-65,-75)(65,-75)(65,-60)(-65,-60)
+	\psline(0,-75)(-90,-80)
+	\rput(-85,-85){Generation of $N_{mutation}$}
+	\rput(-85,-90){new entities by mutation}
+	\pspolygon(-125,-95)(-45,-95)(-45,-80)(-125,-80)
+	\psline(-90,-95)(-90,-100)
+	\rput(-85,-105){Simulation of the $N_{mutation}$}
+	\rput(-85,-110){new mutated entities}
+	\pspolygon(-125,-115)(-45,-115)(-45,-100)(-125,-100)
+	\psline(0,-75)(0,-80)
+	\rput(0,-85){Generation of $N_{reproduction}$}
+	\rput(0,-90){new entities by reproduction}
+	\pspolygon(-40,-95)(40,-95)(40,-80)(-40,-80)
+	\psline(0,-95)(0,-100)
+	\rput(0,-105){Simulation of the $N_{reproduction}$}
+	\rput(0,-110){new reproduced entities}
+	\pspolygon(-40,-115)(40,-115)(40,-100)(-40,-100)
+	\psline(0,-75)(90,-80)
+	\rput(85,-85){Generation of $N_{adaptation}$}
+	\rput(85,-90){new entities by adaptation}
+	\pspolygon(125,-95)(45,-95)(45,-80)(125,-80)
+	\psline(90,-95)(90,-100)
+	\rput(85,-105){Simulation of the $N_{adatation}$}
+	\rput(85,-110){new adaptated entities}
+	\pspolygon(125,-115)(45,-115)(45,-100)(125,-100)
+	\psline(-90,-115)(0,-120)
+	\psline(0,-115)(0,-120)
+	\psline(90,-115)(0,-120)
+	\rput(0,-125){Sorting the old $N_{survival}$ entities and the new}
+	\rput(0,-130){$N_{mutation}+N_{reproduction}+N_{adaptation}$ entities}
+	\rput(0,-135){by objective function values}
+	\pspolygon(-65,-120)(65,-120)(65,-140)(-65,-140)
+	\psline(0,-140)(0,-145)
+	\rput(0,-152.5){Increase $+1$ $generation$}
+	\pspolygon(-65,-145)(65,-145)(65,-160)(-65,-160)
+	\psline(0,-160)(0,-165)
+	\rput(0,-172.5){$generation<N_{generations}$?}
+	\pspolygon(-65,-172.5)(0,-180)(65,-172.5)(0,-165)
+	\psline(-65,-172.5)(-130,-172.5)(-130,-67.5)(-65,-67.5)
+	\rput(-70,-170){Yes}
+	\rput(-5,-182.5){No}
+	\psline(0,-180)(0,-185)
+	\rput(0,-192.5){Select the best entity}
+	\pspolygon(-65,-200)(65,-200)(65,-185)(-65,-185)
+}{Diagrama de flujo del método genético}{FigGeneticFlow}
+
+\subsubsection{The genome}
+
+Las variables a calibrar/optimizar se codifican en GENETIC en una cadena de bits
+(genoma). Cuanto mayor sea el número de bits asignado a una variable mayor es la
+precisión. El número de bits asignado a cada variable, y por tanto también el
+tamaño del genoma, es fijo y es igual para todas las simulaciones. En la
+figura~\ref{FigGenome} puede verse un ejemplo de una codifición de 3 variables,
+la primera y la tercera se han codificado con 14 bits y la segunda con 9 bits.
+El valor asignado a una variable $x$ viene determinado por los valores extremos
+permitidos $x_{\min}$ y $x_{\max}$ por el número binario asignado en el genoma a
+la variable $I_x$ y por el número de bits asignados a la variable $N_x$
+siguiendo la fórmula:
+\EQ{x=x_{\min}+\frac{I_x}{2^{N_x}}\,\left(x_{\max}-x_{\min}\right).}{EqGenome}
+\psset{unit=1mm}
+\PSPICTURE{0}{0}{80}{30}
+{
+	\scriptsize
+	\rput(40,27){Genome}
+	\rput(15,23){Variable 1}
+	\pspolygon(0,15)(30,15)(30,20)(0,20)
+	\rput(40,23){Variable 2}
+	\pspolygon(30,15)(50,15)(50,20)(30,20)
+	\rput(65,23){Variable 3}
+	\pspolygon(50,15)(80,15)(80,20)(50,20)
+	\psline{->}(10,12)(0,12)
+	\rput(5,9){Less}
+	\rput(5,6){significative}
+	\rput(5,3){bit}
+	\psline{->}(20,12)(30,12)
+	\rput(25,9){More}
+	\rput(25,6){significative}
+	\rput(25,3){bit}
+	\rput(2,17.5){1}
+	\rput(4,17.5){0}
+	\rput(6,17.5){0}
+	\rput(8,17.5){1}
+	\rput(10,17.5){0}
+	\rput(12,17.5){0}
+	\rput(14,17.5){1}
+	\rput(16,17.5){1}
+	\rput(18,17.5){1}
+	\rput(20,17.5){1}
+	\rput(22,17.5){1}
+	\rput(24,17.5){1}
+	\rput(26,17.5){0}
+	\rput(28,17.5){1}
+	\rput(32,17.5){1}
+	\rput(34,17.5){0}
+	\rput(36,17.5){0}
+	\rput(38,17.5){0}
+	\rput(40,17.5){0}
+	\rput(42,17.5){0}
+	\rput(44,17.5){0}
+	\rput(46,17.5){0}
+	\rput(48,17.5){0}
+	\rput(52,17.5){1}
+	\rput(54,17.5){1}
+	\rput(56,17.5){1}
+	\rput(58,17.5){1}
+	\rput(60,17.5){0}
+	\rput(62,17.5){1}
+	\rput(64,17.5){0}
+	\rput(66,17.5){0}
+	\rput(68,17.5){0}
+	\rput(70,17.5){0}
+	\rput(72,17.5){1}
+	\rput(74,17.5){1}
+	\rput(76,17.5){1}
+	\rput(78,17.5){1}
+}{Ejemplo de una codificación de tres variables a optimizar en un genoma}
+{FigGenome}
+
+\subsubsection{Supervivencia de los mejores individuos}
+
+En el algortimo genético de GENETIC la tasa de supervivencia $R_{survival}$
+es determinada por los ratios de mutation $R_{mutation}$, reproduction
+$R_{reproduction}$ y adaptation $R_{adaptation}$:
+\EQ{R_{survival}=R_{mutation}+R_{reproduction}+R_{adaptation}.}{EqSurvival}
+Así pues, para una población de $N$ individuos, en la primera generación se
+simulan $N$ casos calculando las variables de entrada e genoma de cada
 
 \subsubsection{Mutation algorithm}
 
 \subsubsection{Reproduction algorithm}
-
 
 \subsubsection{Adaptation algorithm}
 
@@ -278,6 +438,43 @@ CALIBRATOR hace uso de las siguientes librerías externas:
 	el caso de estar alguna de ellas instaladas en el sistema, el programa la
 	utiliza para permitir el uso paralelizado en múltiple máquinas.
 \end{itemize}
+
+\subsection{Building the executable file from the source code}
+
+El código fuente de CALIBRATOR está escrito en lenguaje C. Para poder crear el
+fichero ejecutable a partir del código fuente debe tener instalado en el sistema
+un compilador de C (\cite{gcc} or \cite{clang}), el sistema de configuración
+\cite{automake}, el programa de control de creación de ejecutables
+\cite{gnumake} y las librerías externas descritas en la subsección anterior. En
+sistemas de Microsoft Windows pueden seguirse las instrucciones dadas en
+\cite{mingw-make}.
+
+Una vez instaladas todas las herramientas debe descargarse el código fuente de
+GENETIC y compilarse en una terminal ejecutando:
+\begin{lstlisting}[language=bash,basicstyle=\scriptsize]
+$ cd PATH_TO_GENETIC/0.6.0
+$ aclocal
+$ autoconf
+$ automake --add-missing
+$ ./configure
+$ make
+\end{lstlisting}
+
+Entonces debe descargarse el código fuente de CALIBRATOR, enlazarse con GENETIC
+y compilarse ejecutando en una terminal:
+\begin{lstlisting}[language=bash,basicstyle=\scriptsize]
+$ cd PATH_TO_CALIBRATOR/0.2.3
+$ ln -s PATH_TO_GENETIC/0.6.0 genetic
+$ aclocal
+$ autoconf
+$ automake --add-missing
+$ ./configure
+$ make
+\end{lstlisting}
+
+Algunos sistemas (as Microsoft Windows 64 bits or OpenBSD) pueden requerir
+instrucciones u opciones extras, consultar los README files de ambos
+repositorios.
 
 \subsection{Command line format}
 
@@ -387,6 +584,7 @@ next iteration (default 1). It applies only on iterative algorithm.
 
 \section{Conclusions}
 
+\section*{References}
 \bibliography{bib}
 
 \end{document}

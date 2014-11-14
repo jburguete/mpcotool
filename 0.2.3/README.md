@@ -186,7 +186,7 @@ following parameters:
 
   The total number of simulations to run is:
 > (number of experiments) x (population) x [1 + (generations - 1)
-> x (1 - mutation - reproduction - adaptation)]
+> x (mutation + reproduction + adaptation)]
 
 SOME EXAMPLES OF INPUT FILES
 ----------------------------
