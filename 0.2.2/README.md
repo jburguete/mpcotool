@@ -136,10 +136,10 @@ INPUT FILE FORMAT
 -----------------
 
     <?xml version="1.0"/>
-    <calibrate simulator="simulator_name" evaluator="evaluator_name" algorithm="algorithm_type" simulations="simulations_number">
-        <experiment name="data_file_1" template1="template_1_1" template2="template_1_2" template3="template_1_3" template4="template_1_4"/>
+    <calibrate simulator="simulator_name" evaluator="evaluator_name" algorithm="algorithm_type" simulations="simulations_number" iterations="iterations_number" tolerance="tolerance_value" bests="bests_number" population="population_number" generations="generations_number" mutation="mutation_ratio" reproduction="reproduction_ratio" adaptation="adaptation_ratio">
+        <experiment name="data_file_1" template1="template_1_1" template2="template_1_2" .../>
         ...
-        <experiment name="data_file_N" template1="template_N_1" template2="template_N_2" template3="template_N_3" template4="template_N_4"/>
+        <experiment name="data_file_N" template1="template_N_1" template2="template_N_2" .../>
         <variable name="variable_1" minimum="min_value" maximum="max_value" format="c_string_format" sweeps="sweeps_number" bits="bits_number"/>
         ...
         <variable name="variable_M" minimum="min_value" maximum="max_value" format="c_string_format" sweeps="sweeps_number" bits="bits_number"/>

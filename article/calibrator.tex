@@ -268,7 +268,7 @@ CALIBRATOR hace uso de las siguientes librerías externas:
 \begin{itemize}
 \item\cite{libxml}: librería open source requerida para leer el fichero
 	de entrada que usa el formato XML.
-\item\cite{gsl}: librería científica open source requeridad para generar
+\item\cite{gsl}: librería científica open source requerida para generar
 	los números pseudo-aleatorios que usan los algoritmos genético y de
 	Monte-Carlo.
 \item\cite{glib}: librería open source requerida para implementar algunos
@@ -319,14 +319,14 @@ The format of the input data file is:
 \begin{lstlisting}[language=xml,basicstyle=\scriptsize]
 <?xml version="1.0"/>
 <calibrate simulator="simulator_name" evaluator="evaluator_name"
-	algorithm="algorithm_type" simulations="simulations_number">
+	algorithm="algorithm_type" simulations="simulations_number"
+	iterations="iterations_number" tolerance="tolerance_value"
+	bests="bests_number">
 	<experiment name="data_file_1" template1="template_1_1"
-		template2="template_1_2" template3="template_1_3"
-		template4="template_1_4"/>
+		template2="template_1_2" .../>
 	...
 	<experiment name="data_file_N" template1="template_N_1"
-		template2="template_N_2" template3="template_N_3"
-		template4="template_N_4"/>
+		template2="template_N_2" .../>
 	<variable name="variable_1" minimum="min_value"
 		maximum="max_value" format="c_string_format"
 		sweeps="sweeps_number" bits="bits_number"/>
@@ -336,6 +336,19 @@ The format of the input data file is:
 		sweeps="sweeps_number" bits="bits_number"/>
 </calibrate>
 \end{lstlisting}
+
+The main XML node has to begin with key label "calibrate". The available fields
+are:
+\begin{description}
+\item{simulator}: to indicate the simulator program.
+\item{evaluator}: optional. It specify the evaluator program if required.
+\item{algorithm}: to set the optimization algorithm. Three value are available:
+	\begin{itemize}
+	\item{sweep}:
+	\item{Monte-Carlo}:
+	\item{genetic}:
+	\end{itemize}
+\end{description}
 
 \section{Practical applications}
 
