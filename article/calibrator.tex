@@ -1,0 +1,604 @@
+\documentclass[review,authoryear]{elsarticle}
+
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{pstricks}
+
+\usepackage{lineno}
+\linenumbers
+
+\newcommand{\EQ}[2]
+{\begin{equation}#1\end{equation}\label{#2}}
+
+\newcommand{\PICTURE}[5]
+{
+	\begin{figure}[ht!]
+		\centering
+		\begin{picture}(#1,#2)
+			#3
+		\end{picture}
+		\caption{#4.\label{#5}}
+	\end{figure}
+}
+
+\newcommand{\PSPICTURE}[7]
+{
+	\begin{figure}[ht!]
+		\centering
+		\pspicture(#1,#2)(#3,#4)
+			#5
+		\endpspicture
+		\caption{#6.\label{#7}}
+	\end{figure}
+}
+
+\title{CALIBRATOR: a software to perform calibrations or optimizations of
+empirical parameters}
+
+\author{J. Burguete, B. Latorre, S. Ambroj, A. Lacasta, S. Ouazaa,
+P. García-Navarro}
+ 
+\bibliographystyle{elsarticle-harv}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+CALIBRATOR \cite{CalibratorGit} is an open source software to perform
+calibrations or optimizations of empirical parameters with a BSD (Berkeley
+Software Distribution) type license.
+
+\section{Methods}
+
+\subsection{Sweep brutal force method}
+
+El método de barrido divide el espacio entre los valores extremos de las
+variables en intervalos regulares y realiza una simulación para cada una de las
+combinaciones de variables resultantes. Véase un esquema en la
+figura~\ref{FigSweep}. El número total de simulaciones que realiza es:
+\EQ{N_{simulations}=x_{sweeps}\times y_{sweeps}\times\cdots,}{EqNSweeps}
+siendo $x_{sweeps}$ el número de barridos en la variable $x$.
+
+\PICTURE{210}{200}
+{
+	\put(20,10){\vector(0,1){180}}
+	\put(20,10){\vector(1,0){180}}
+	\put(10,190){$y$}
+	\put(200,0){$x$}
+	\multiput(50,40)(30,0){5}{\qbezier[40](0,0)(0,60)(0,120)}
+	\multiput(50,40)(0,30){5}{\qbezier[40](0,0)(60,0)(120,0)}
+	\multiput(50,40)(30,0){5}{\multiput(0,0)(0,30){5}{\circle*{2}}}
+	\qbezier[10](50,10)(50,25)(50,40)
+	\put(40,0){$x_{\min}$}
+	\qbezier[10](170,10)(170,25)(170,40)
+	\put(160,0){$x_{\max}$}
+	\qbezier[10](20,40)(35,40)(50,40)
+	\put(0,37){$y_{\min}$}
+	\qbezier[10](20,160)(35,160)(50,160)
+	\put(0,157){$y_{\max}$}
+}{Sweep brutal force method with two variables}{FigSweep}
+
+\subsection{Monte-Carlo method}
+
+El método de Monte-Carlo realiza simulaciones de variables obtenidas
+aleatoriamente con probabilidad uniforme en el rango comprendido entre los
+valores extremos. En la figura~\ref{FigMonteCarlo} vemos el esquema de un
+ejemplo con dos variables.
+
+\PICTURE{210}{200}
+{
+	\put(20,10){\vector(0,1){180}}
+	\put(20,10){\vector(1,0){180}}
+	\put(10,190){$y$}
+	\put(200,0){$x$}
+	\put(59,159){\circle*{2}}
+	\put(153,73){\circle*{2}}
+	\put(98,67){\circle*{2}}
+	\put(129,154){\circle*{2}}
+	\put(128,104){\circle*{2}}
+	\put(119,131){\circle*{2}}
+	\put(136,77){\circle*{2}}
+	\put(60,102){\circle*{2}}
+	\put(87,97){\circle*{2}}
+	\put(65,66){\circle*{2}}
+	\put(80,43){\circle*{2}}
+	\put(153,63){\circle*{2}}
+	\put(147,109){\circle*{2}}
+	\put(99,119){\circle*{2}}
+	\put(61,107){\circle*{2}}
+	\put(54,75){\circle*{2}}
+	\put(117,47){\circle*{2}}
+	\put(116,127){\circle*{2}}
+	\put(51,125){\circle*{2}}
+	\put(52,123){\circle*{2}}
+	\put(100,55){\circle*{2}}
+	\put(74,64){\circle*{2}}
+	\put(55,49){\circle*{2}}
+	\put(49,105){\circle*{2}}
+	\put(146,75){\circle*{2}}	
+	\qbezier[50](50,10)(50,85)(50,160)
+	\put(40,0){$x_{\min}$}
+	\qbezier[50](170,10)(170,85)(170,160)
+	\put(160,0){$x_{\max}$}
+	\qbezier[50](20,40)(95,40)(170,40)
+	\put(0,37){$y_{\min}$}
+	\qbezier[50](20,160)(95,160)(170,160)
+	\put(0,157){$y_{\max}$}
+}{Monte-Carlo brutal force method with two variables}{FigMonteCarlo}
+
+\subsection{Iterative algorithm applied to brutal force methods}
+
+CALIBRATOR allows to iterate both brutal force methods (sweep or Monte-Carlo) to
+increase the convergence. In this case, the bests results of the previous
+iteration are used to force new intervals in the variables. Then, para
+$N_{bests}^j$ el subconjunto de las mejores simulaciones de la $j$-ésima
+iteración, definimos las siguientes magnitudes:
+\begin{description}
+\item{$\displaystyle x_{\max}^b=\max_{i\in N_{bests}}x_i^j$}: máximo valor de la
+	variable $x$ en el subconjunto de las mejores simulaciones de la iteración
+	$j$-ésima.
+\item{$\displaystyle x_{\min}^b=\max_{i\in N_{bests}}x_i^j$}: mínimo valor de la
+	variable $x$ en el subconjunto de las mejores simulaciones de la iteración
+	$j$-ésima.
+\end{description}
+El nuevo intervalo en la variable $x$ en el que se simulará la siguiente
+iteración estará comprendido entre:
+\[
+	x_{\max}^{j+1}=\frac{x_{\max}^b+x_{\min}^b
+		+\left(x_{\max}^b-x_{\min}^b\right)(1+tol)}{2},
+\]
+\[
+	x_{\min}^{j+1}=\frac{x_{\max}^b+x_{\min}^b
+		-\left(x_{\max}^b-x_{\min}^b\right)(1+tol)}{2},
+\]
+\EQ{x_i^{j+1}\in\left[x_{\min}^{j+1},\;x_{\max}^{j+1}\right].}
+{EqIterationInterval}
+being $tol$ a tolerance increasing the size of the variable intervals to
+simulate the next iteration.
+En la figura~\ref{FigIterative} se ilustra el procedimiento con el que el
+algoritmo iterativo modifica los intervalos de las variables para incrementar la
+convergencia.
+
+\PICTURE{210}{400}
+{
+	\small
+	\multiput(0,0)(0,200){2}
+	{
+		\put(20,10){\vector(0,1){180}}
+		\put(20,10){\vector(1,0){180}}
+		\put(10,190){$y$}
+		\put(200,0){$x$}
+	}
+	\put(90,380){1st iteration}
+	\put(50,370){*: bests results}
+	\put(59,359){\circle*{2}}
+	\put(153,273){\circle*{2}}
+	\put(98,267){*}
+	\put(129,354){\circle*{2}}
+	\put(128,304){*}
+	\put(119,331){\circle*{2}}
+	\put(136,277){\circle*{2}}
+	\put(60,302){\circle*{2}}
+	\put(87,297){*}
+	\put(65,266){\circle*{2}}
+	\put(80,243){\circle*{2}}
+	\put(153,263){\circle*{2}}
+	\put(147,309){\circle*{2}}
+	\put(99,319){*}
+	\put(61,307){\circle*{2}}
+	\put(54,275){\circle*{2}}
+	\put(117,247){\circle*{2}}
+	\put(116,327){\circle*{2}}
+	\put(51,325){\circle*{2}}
+	\put(52,323){\circle*{2}}
+	\put(100,255){\circle*{2}}
+	\put(74,264){\circle*{2}}
+	\put(55,249){\circle*{2}}
+	\put(49,305){\circle*{2}}
+	\put(146,275){\circle*{2}}	
+	\qbezier[50](50,210)(50,285)(50,360)
+	\put(40,200){$x_{\min}^1$}
+	\qbezier[50](170,210)(170,285)(170,360)
+	\put(160,200){$x_{\max}^1$}
+	\qbezier[50](20,240)(95,240)(170,240)
+	\put(0,237){$y_{\min}^1$}
+	\qbezier[50](20,360)(95,360)(170,360)
+	\put(0,357){$y_{\max}^1$}
+	\qbezier[21](89,272)(109.5,272)(130,272)
+	\qbezier[21](89,324)(109.5,324)(130,324)
+	\qbezier[26](89,272)(89,298)(89,324)
+	\qbezier[26](130,272)(130,298)(130,324)
+	\put(89,267){\vector(1,0){41}}
+	\put(130,267){\vector(-1,0){41}}
+	\put(90,255){$x_{\max}^b-x_{\min}^b$}
+	\put(84.9,215){\vector(1,0){49.2}}
+	\put(134.1,215){\vector(-1,0){49.2}}
+	\put(90,220){$x_{\max}^2-x_{\min}^2$}
+	\qbezier[20](89,272)(86.95,241)(84.9,210)
+	\qbezier[20](130,272)(132.05,241)(134.1,210)
+	\qbezier[23](89,272)(54.5,269.4)(20,266.8)
+	\qbezier[23](89,324)(54.5,326.6)(20,329.2)
+	\put(80,180){2nd iteration}
+	\put(92,123){\circle*{2}}
+	\put(131,83){\circle*{2}}
+	\put(108,80){\circle*{2}}
+	\put(121,121){\circle*{2}}
+	\put(121,97){\circle*{2}}
+	\put(117,110){\circle*{2}}
+	\put(124,84){\circle*{2}}
+	\put(93,96){\circle*{2}}
+	\put(104,94){\circle*{2}}
+	\put(95,79){\circle*{2}}
+	\put(101,68){\circle*{2}}
+	\put(131,78){\circle*{2}}
+	\put(129,100){\circle*{2}}
+	\put(109,104){\circle*{2}}
+	\put(93,98){\circle*{2}}
+	\put(90,83){\circle*{2}}
+	\put(116,70){\circle*{2}}
+	\put(116,108){\circle*{2}}
+	\put(89,107){\circle*{2}}
+	\put(90,106){\circle*{2}}
+	\put(109,74){\circle*{2}}
+	\put(99,78){\circle*{2}}
+	\put(91,71){\circle*{2}}
+	\put(89,98){\circle*{2}}
+	\put(128,83){\circle*{2}}
+	\qbezier[40](84.9,10)(84.9,69.6)(84.9,129.2)
+	\put(74.9,0){$x_{\min}^2$}
+	\qbezier[40](134.1,10)(134.1,69.6)(134.1,129.2)
+	\put(124.1,0){$x_{\max}^2$}
+	\qbezier[35](20,129.2)(77.05,129.2)(134.1,129.2)
+	\put(0,126.2){$y_{\max}^2$}
+	\qbezier[35](20,66.8)(77.05,66.8)(134.1,66.8)
+	\put(0,63.8){$y_{\min}^2$}
+}{Iterative algorithm applied to a Monte-Carlo brutal force method with two
+variables}{FigIterative}
+
+\subsection{Genetic method}
+
+CALIBRATOR implementa el método genético GENETIC \cite{genetic} con sus
+algoritmos por defecto. Los algoritmos están inspirados en \cite{gaul}, aunque
+han sido completamente reescritos con muchas simplificaciones y haciendo uso de
+modernas librerías externas. El código de GENETIC es también open source bajo
+licencia de tipo BSD. En la figura~\ref{FigGeneticFlow} puede verse un diagrama
+de flujo del funcionamiento del método genético implementado en GENETIC.
+
+\psset{xunit=0.47mm,yunit=0.5mm}
+\PSPICTURE{-130}{-200}{125}{20}
+{
+	\tiny
+	\rput(0,12.5){$generation=1$}
+	\pspolygon(-65,5)(65,5)(65,20)(-65,20)
+	\psline(0,5)(0,0)
+	\rput(0,-5){Generation of $N_{population}$}
+	\rput(0,-10){random genomes}
+	\pspolygon(-65,-15)(65,-15)(65,0)(-65,0)
+	\psline(0,-15)(0,-20)
+	\rput(0,-25){Simulation of the $N_{population}$}
+	\rput(0,-30){entities}
+	\pspolygon(-65,-35)(65,-35)(65,-20)(-65,-20)
+	\psline(0,-35)(0,-40)
+	\rput(0,-45){Sorting the $N_{population}$}
+	\rput(0,-50){entities by objective function value}
+	\pspolygon(-65,-55)(65,-55)(65,-40)(-65,-40)
+	\psline(0,-55)(0,-60)
+	\rput(0,-65){Elliminating the worst}
+	\rput(0,-70){$N_{mutation}+N_{reproduction}+N_{adaptation}$ entities}
+	\pspolygon(-65,-75)(65,-75)(65,-60)(-65,-60)
+	\psline(0,-75)(-90,-80)
+	\rput(-85,-85){Generation of $N_{mutation}$}
+	\rput(-85,-90){new entities by mutation}
+	\pspolygon(-125,-95)(-45,-95)(-45,-80)(-125,-80)
+	\psline(-90,-95)(-90,-100)
+	\rput(-85,-105){Simulation of the $N_{mutation}$}
+	\rput(-85,-110){new mutated entities}
+	\pspolygon(-125,-115)(-45,-115)(-45,-100)(-125,-100)
+	\psline(0,-75)(0,-80)
+	\rput(0,-85){Generation of $N_{reproduction}$}
+	\rput(0,-90){new entities by reproduction}
+	\pspolygon(-40,-95)(40,-95)(40,-80)(-40,-80)
+	\psline(0,-95)(0,-100)
+	\rput(0,-105){Simulation of the $N_{reproduction}$}
+	\rput(0,-110){new reproduced entities}
+	\pspolygon(-40,-115)(40,-115)(40,-100)(-40,-100)
+	\psline(0,-75)(90,-80)
+	\rput(85,-85){Generation of $N_{adaptation}$}
+	\rput(85,-90){new entities by adaptation}
+	\pspolygon(125,-95)(45,-95)(45,-80)(125,-80)
+	\psline(90,-95)(90,-100)
+	\rput(85,-105){Simulation of the $N_{adatation}$}
+	\rput(85,-110){new adaptated entities}
+	\pspolygon(125,-115)(45,-115)(45,-100)(125,-100)
+	\psline(-90,-115)(0,-120)
+	\psline(0,-115)(0,-120)
+	\psline(90,-115)(0,-120)
+	\rput(0,-125){Sorting the old $N_{survival}$ entities and the new}
+	\rput(0,-130){$N_{mutation}+N_{reproduction}+N_{adaptation}$ entities}
+	\rput(0,-135){by objective function values}
+	\pspolygon(-65,-120)(65,-120)(65,-140)(-65,-140)
+	\psline(0,-140)(0,-145)
+	\rput(0,-152.5){Increase $+1$ $generation$}
+	\pspolygon(-65,-145)(65,-145)(65,-160)(-65,-160)
+	\psline(0,-160)(0,-165)
+	\rput(0,-172.5){$generation<N_{generations}$?}
+	\pspolygon(-65,-172.5)(0,-180)(65,-172.5)(0,-165)
+	\psline(-65,-172.5)(-130,-172.5)(-130,-67.5)(-65,-67.5)
+	\rput(-70,-170){Yes}
+	\rput(-5,-182.5){No}
+	\psline(0,-180)(0,-185)
+	\rput(0,-192.5){Select the best entity}
+	\pspolygon(-65,-200)(65,-200)(65,-185)(-65,-185)
+}{Diagrama de flujo del método genético}{FigGeneticFlow}
+
+\subsubsection{The genome}
+
+Las variables a calibrar/optimizar se codifican en GENETIC en una cadena de bits
+(genoma). Cuanto mayor sea el número de bits asignado a una variable mayor es la
+precisión. El número de bits asignado a cada variable, y por tanto también el
+tamaño del genoma, es fijo y es igual para todas las simulaciones. En la
+figura~\ref{FigGenome} puede verse un ejemplo de una codifición de 3 variables,
+la primera y la tercera se han codificado con 14 bits y la segunda con 9 bits.
+El valor asignado a una variable $x$ viene determinado por los valores extremos
+permitidos $x_{\min}$ y $x_{\max}$ por el número binario asignado en el genoma a
+la variable $I_x$ y por el número de bits asignados a la variable $N_x$
+siguiendo la fórmula:
+\EQ{x=x_{\min}+\frac{I_x}{2^{N_x}}\,\left(x_{\max}-x_{\min}\right).}{EqGenome}
+\psset{unit=1mm}
+\PSPICTURE{0}{0}{80}{30}
+{
+	\scriptsize
+	\rput(40,27){Genome}
+	\rput(15,23){Variable 1}
+	\pspolygon(0,15)(30,15)(30,20)(0,20)
+	\rput(40,23){Variable 2}
+	\pspolygon(30,15)(50,15)(50,20)(30,20)
+	\rput(65,23){Variable 3}
+	\pspolygon(50,15)(80,15)(80,20)(50,20)
+	\psline{->}(10,12)(0,12)
+	\rput(5,9){Less}
+	\rput(5,6){significative}
+	\rput(5,3){bit}
+	\psline{->}(20,12)(30,12)
+	\rput(25,9){More}
+	\rput(25,6){significative}
+	\rput(25,3){bit}
+	\rput(2,17.5){1}
+	\rput(4,17.5){0}
+	\rput(6,17.5){0}
+	\rput(8,17.5){1}
+	\rput(10,17.5){0}
+	\rput(12,17.5){0}
+	\rput(14,17.5){1}
+	\rput(16,17.5){1}
+	\rput(18,17.5){1}
+	\rput(20,17.5){1}
+	\rput(22,17.5){1}
+	\rput(24,17.5){1}
+	\rput(26,17.5){0}
+	\rput(28,17.5){1}
+	\rput(32,17.5){1}
+	\rput(34,17.5){0}
+	\rput(36,17.5){0}
+	\rput(38,17.5){0}
+	\rput(40,17.5){0}
+	\rput(42,17.5){0}
+	\rput(44,17.5){0}
+	\rput(46,17.5){0}
+	\rput(48,17.5){0}
+	\rput(52,17.5){1}
+	\rput(54,17.5){1}
+	\rput(56,17.5){1}
+	\rput(58,17.5){1}
+	\rput(60,17.5){0}
+	\rput(62,17.5){1}
+	\rput(64,17.5){0}
+	\rput(66,17.5){0}
+	\rput(68,17.5){0}
+	\rput(70,17.5){0}
+	\rput(72,17.5){1}
+	\rput(74,17.5){1}
+	\rput(76,17.5){1}
+	\rput(78,17.5){1}
+}{Ejemplo de una codificación de tres variables a optimizar en un genoma}
+{FigGenome}
+
+\subsubsection{Supervivencia de los mejores individuos}
+
+
+Para una población de $N$ individuos, en la primera generación se
+simulan $N_{population}$ casos calculando las variables de entrada a partir del
+genoma de cada individuo.
+
+Después, en cada generación, se generarán $N_{population}\times R_{mutation}$
+individuos por mutación, $N_{population}\times R_{reproduction}$ individuos
+por reproducciónción y $N_{population}\times R_{adaptation}$ individuos
+pos adaptación sustituyendo los individuos de la antigua población que
+obtuvieron peores valores en la función de evaluación. Por tanto sobreviven los
+$N_{survival}$ mejores individuos:
+\EQ
+{
+	N_{survival}=N_{population}\times
+	\left(1-R_{mutation}-R_{reproduction}-R_{adaptation}\right),
+}{EqSurvival}
+Los nuevos individuos se generarán por mutación, reproducción y adpatación de
+los genomas de estos mejores individuos.
+
+\subsubsection{Mutation algorithm}
+
+\subsubsection{Reproduction algorithm}
+
+\subsubsection{Adaptation algorithm}
+
+\section{Implementation}
+
+\subsection{External libraries}
+
+CALIBRATOR hace uso de las siguientes librerías externas:
+
+\begin{itemize}
+\item\cite{libxml}: librería open source requerida para leer el fichero
+	de entrada que usa el formato XML.
+\item\cite{gsl}: librería científica open source requerida para generar
+	los números pseudo-aleatorios que usan los algoritmos genético y de
+	Monte-Carlo.
+\item\cite{glib}: librería open source requerida para implementar algunos
+	tipos de datos y las tareas con las que el programa paraleliza el uso de los
+	múltiples procesadores de la máquina.
+\item\cite{openmpi,mpich}: librerías open source opcionales. En
+	el caso de estar alguna de ellas instaladas en el sistema, el programa la
+	utiliza para permitir el uso paralelizado en múltiple máquinas.
+\end{itemize}
+
+\subsection{Building the executable file from the source code}
+
+El código fuente de CALIBRATOR está escrito en lenguaje C. Para poder crear el
+fichero ejecutable a partir del código fuente debe tener instalado en el sistema
+un compilador de C (\cite{gcc} or \cite{clang}), el sistema de configuración
+\cite{automake}, el programa de control de creación de ejecutables
+\cite{gnumake} y las librerías externas descritas en la subsección anterior. En
+sistemas de Microsoft Windows pueden seguirse las instrucciones dadas en
+\cite{mingw-make}.
+
+Una vez instaladas todas las herramientas debe descargarse el código fuente de
+GENETIC y compilarse en una terminal ejecutando:
+\begin{lstlisting}[language=bash,basicstyle=\scriptsize]
+$ cd PATH_TO_GENETIC/0.6.0
+$ aclocal
+$ autoconf
+$ automake --add-missing
+$ ./configure
+$ make
+\end{lstlisting}
+
+Entonces debe descargarse el código fuente de CALIBRATOR, enlazarse con GENETIC
+y compilarse ejecutando en una terminal:
+\begin{lstlisting}[language=bash,basicstyle=\scriptsize]
+$ cd PATH_TO_CALIBRATOR/0.2.3
+$ ln -s PATH_TO_GENETIC/0.6.0 genetic
+$ aclocal
+$ autoconf
+$ automake --add-missing
+$ ./configure
+$ make
+\end{lstlisting}
+
+Algunos sistemas (as Microsoft Windows 64 bits or OpenBSD) pueden requerir
+instrucciones u opciones extras, consultar los README files de ambos
+repositorios.
+
+\subsection{Command line format}
+
+\begin{itemize}
+
+\item Command line in sequential mode (where X is the number of threads to
+execute):
+\begin{lstlisting}[language=bash,basicstyle=\scriptsize]
+$ ./calibrator [-nthreads X] input_file.xml
+\end{lstlisting}
+
+\item Command line in parallelized mode (where X is the number of threads to
+open in every node):
+\begin{lstlisting}[language=bash,basicstyle=\scriptsize]
+$ mpirun [MPI options] ./calibrator [-nthreads X] input_file.xml
+\end{lstlisting}
+
+\item The sintaxis of the simulator has to be:
+\begin{lstlisting}[language=bash,basicstyle=\scriptsize]
+$ ./simulator_name input_file_1 [input_file_2] [...] output_file
+\end{lstlisting}
+They are two options for the ouput file. It can begin with a number indicating
+the objective function value or it can be a results file that has to be
+evaluated by an external program (the evaluator) comparing with an experimental
+file.
+
+\item In the last option of the former point, the sintaxis of the program to
+evaluate the objetive function has to be (where the results file has to begin
+with the objective function value):
+\begin{lstlisting}[language=bash,basicstyle=\scriptsize]
+$ ./evaluator_name simulated_file experimental_file results_file
+\end{lstlisting}
+
+\end{itemize}
+
+\subsubsection{Input data file}
+
+The format of the input data file is:
+\begin{lstlisting}[language=xml,basicstyle=\scriptsize]
+<?xml version="1.0"/>
+<calibrate simulator="simulator_name" evaluator="evaluator_name"
+	algorithm="algorithm_type" simulations="simulations_number"
+	iterations="iterations_number" tolerance="tolerance_value"
+	bests="bests_number">
+	<experiment name="data_file_1" template1="template_1_1"
+		template2="template_1_2" .../>
+	...
+	<experiment name="data_file_N" template1="template_N_1"
+		template2="template_N_2" .../>
+	<variable name="variable_1" minimum="min_value"
+		maximum="max_value" format="c_string_format"
+		sweeps="sweeps_number" bits="bits_number"/>
+	...
+	<variable name="variable_M" minimum="min_value"
+		maximum="max_value" format="c_string_format"
+		sweeps="sweeps_number" bits="bits_number"/>
+</calibrate>
+\end{lstlisting}
+
+The main XML node has to begin with key label "calibrate". The available fields
+are:
+\begin{description}
+\item{simulator}: to indicate the simulator program.
+\item{evaluator}: optional. It specify the evaluator program if required.
+\item{algorithm}: to set the optimization algorithm. Three value are available:
+	\begin{description}
+	\item{sweep}: sweep brutal force algorithm. Requires on each variable:
+		\begin{description}
+		\item{sweeps}: number of sweeps to generate on each variable in every
+			experiment.
+		\end{description}
+	\item{Monte-Carlo}: Monte-Carlo brutal force algorithm. Requires on the main
+		XML node:
+		\begin{description}
+		\item{simulations}: number of simulations to run on each iteration in
+			every experiment.
+		\end{description}
+	\item{genetic}: genetic algorithm. Requires the following parameters in the
+		main XML node:
+		\begin{description}
+		\item{population}: number of population entities.
+		\item{generations}: number of generations.
+		\item{mutation}: mutation ratio.
+		\item{reproduction}: reproduction ratio.
+		\item{adaptation}: adaptation ratio.
+		\end{description}
+	And on each variable:
+		\begin{description}
+		\item{bits}: number of bits to encode each variable.
+		\end{description}
+	\end{description}
+\item{iterations}: number of iterations (default 1) to perform the iterative
+algorithm. It applies only on sweep and Monte-Carlo methods.
+\item{bests}: number of bests simulations to calculate convergence interval on
+next iteration (default 1). It applies only on iterative algorithm.
+\item{tolerance}: tolerance parameter to increase convergence interval (default
+0). It applies only on iterative algorithm.
+\end{description}
+
+\section{Practical applications}
+
+\subsection{Calibration of empirical parameters on surface irrigation}
+
+\subsection{Optimization of a canal management}
+
+\subsection{Calibration of empirical parameters on sprinkler irrigation}
+
+\section{Conclusions}
+
+\section*{References}
+\bibliography{bib}
+
+\end{document}
+

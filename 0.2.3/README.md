@@ -1,4 +1,4 @@
-CALIBRATOR (0.2.1 version)
+CALIBRATOR (0.2.3 version)
 ===========================
 
 A software to perform calibrations or optimizations of empirical parameters.
@@ -60,12 +60,12 @@ ____________
 2. Dowload this repository
 
 3. Link the latest genetic version to genetic doing on a terminal:
-> $ cd PATH_TO_CALIBRATOR/0.2.1
+> $ cd PATH_TO_CALIBRATOR/0.2.3
 >
-> $ ln -s PATH_TO_THE_GENETIC/0.4.0 genetic
+> $ ln -s PATH_TO_THE_GENETIC/0.6.0 genetic
 
 4. Build doing on a terminal:
-> $ cd PATH_TO_CALIBRATOR/0.2.1
+> $ cd PATH_TO_CALIBRATOR/0.2.3
 >
 > $ aclocal
 >
@@ -85,14 +85,14 @@ ___________
 2. Dowload this repository
 
 3. Link the latest genetic version to genetic doing on a terminal:
-> $ cd PATH_TO_CALIBRATOR/0.2.1
+> $ cd PATH_TO_CALIBRATOR/0.2.3
 >
-> $ ln -s PATH_TO_THE_GENETIC/0.4.0 genetic
+> $ ln -s PATH_TO_THE_GENETIC/0.6.0 genetic
 
 4. Build doing on a terminal:
 > $ export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.14
 >
-> $ cd PATH_TO_CALIBRATOR/0.2.1
+> $ cd PATH_TO_CALIBRATOR/0.2.3
 >
 > $ aclocal
 >
@@ -107,7 +107,7 @@ ___________
 MAKING REFERENCE MANUAL INSTRUCTIONS (file latex/refman.pdf)
 ------------------------------------------------------------
 
-> $ cd PATH_TO_CALIBRATOR/0.2.1
+> $ cd PATH_TO_CALIBRATOR/0.2.3
 >
 > $ doxygen
 >
@@ -136,10 +136,10 @@ INPUT FILE FORMAT
 -----------------
 
     <?xml version="1.0"/>
-    <calibrate simulator="simulator_name" evaluator="evaluator_name" algorithm="algorithm_type" simulations="simulations_number">
-        <experiment name="data_file_1" template1="template_1_1" template2="template_1_2" template3="template_1_3" template4="template_1_4"/>
+    <calibrate simulator="simulator_name" evaluator="evaluator_name" algorithm="algorithm_type" simulations="simulations_number" iterations="iterations_number" tolerance="tolerance_value" bests="bests_number" population="population_number" generations="generations_number" mutation="mutation_ratio" reproduction="reproduction_ratio" adaptation="adaptation_ratio">
+        <experiment name="data_file_1" template1="template_1_1" template2="template_1_2" .../>
         ...
-        <experiment name="data_file_N" template1="template_N_1" template2="template_N_2" template3="template_N_3" template4="template_N_4"/>
+        <experiment name="data_file_N" template1="template_N_1" template2="template_N_2" .../>
         <variable name="variable_1" minimum="min_value" maximum="max_value" format="c_string_format" sweeps="sweeps_number" bits="bits_number"/>
         ...
         <variable name="variable_M" minimum="min_value" maximum="max_value" format="c_string_format" sweeps="sweeps_number" bits="bits_number"/>
@@ -149,18 +149,16 @@ Implemented algorithms are:
 
 * *"sweep"*: Sweep brutal force algorithm. Requires on each variable:
 > sweeps: number of sweeps to generate on each variable in every experiment. 
->
-> The total number of simulations to run is:
->
->> (number of experiments) x (variable 1 number of sweeps) x ... x
->> (variable n number of sweeps) x (number of iterations)
+
+  The total number of simulations to run is:
+> (number of experiments) x (variable 1 number of sweeps) x ... x
+> (variable n number of sweeps) x (number of iterations)
 
 * *"Monte-Carlo"*: Monte-Carlo brutal force algorithm. Requires on calibrate:
 > simulations: number of simulations to run in every experiment.
->
-> The total number of simulations to run is:
->
->> (number of experiments) x (number of simulations) x (number of iterations)
+
+  The total number of simulations to run is:
+> (number of experiments) x (number of simulations) x (number of iterations)
 
 * Both brutal force algorithms can be iterated to improve convergence by using
 the following parameters:
@@ -181,10 +179,13 @@ the following parameters:
 > reproduction: reproduction ratio.
 >
 > adaptation: adaptation ratio.
->
-> And on each variable:
->
->> bits: number of bits to encode each variable.
+
+  and on each variable:
+> bits: number of bits to encode each variable.
+
+  The total number of simulations to run is:
+> (number of experiments) x (population) x [1 + (generations - 1)
+> x (mutation + reproduction + adaptation)]
 
 SOME EXAMPLES OF INPUT FILES
 ----------------------------
@@ -233,7 +234,7 @@ _________
 
 * The input file is:
 
-__
+_
 
     <?xml version="1.0"?>
     <calibrate simulator="pivot" evaluator="compare" algorithm="sweep">
@@ -250,7 +251,7 @@ __
 
 * A template file as *template1.js*:
 
-__
+_
 
     {
       "towers" :
@@ -297,7 +298,7 @@ __
 * Produce simulator input files to reproduce the experimental data file
 *27-48.txt* as:
 
-__
+_
 
     {
       "towers" :

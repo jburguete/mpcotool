@@ -60,6 +60,12 @@ OF SUCH DAMAGE.
 #define DEBUG 0
 
 /**
+ * \def MAX_NINPUTS
+ * \brief Maximum number of input files in the simulator program.
+ */
+#define MAX_NINPUTS 8
+
+/**
  * \enum CalibrateAlgorithm
  * \brief Enum to define the calibration algorithm.
  */
@@ -142,7 +148,8 @@ typedef struct
  * \var mpi_rank
  * \brief Number of MPI task.
  */
-	char *simulator, *evaluator, **experiment, **template[4], **label, **format;
+	char *simulator, *evaluator, **experiment, **template[MAX_NINPUTS], **label,
+		**format;
 	unsigned int nvariables, nexperiments, ninputs, nsimulations, algorithm,
 		*nsweeps, nstart, nend, *thread, niterations, nbests, nsaveds,
 		*simulation_best;
@@ -150,7 +157,7 @@ typedef struct
 		mutation_ratio, reproduction_ratio, adaptation_ratio;
 	FILE *result;
 	gsl_rng *rng;
-	GMappedFile **file[4];
+	GMappedFile **file[MAX_NINPUTS];
 	GeneticVariable *genetic_variable;
 #if HAVE_MPI
 	int mpi_rank;
@@ -217,6 +224,9 @@ void calibrate_input(Calibrate *calibrate, unsigned int simulation,
 printf("calibrate_input: start\n");
 #endif
 
+	// Checking the file
+	if (!template) goto calibrate_input_end;
+
 	// Opening template
 	content = g_mapped_file_get_contents(template);
 	length = g_mapped_file_get_length(template);
@@ -269,9 +279,11 @@ printf("calibrate_input: value=%s\n", value);
 	g_free(buffer3);
 	fclose(file);
 
+calibrate_input_end:
 #if DEBUG
 printf("calibrate_input: end\n");
 #endif
+	return;
 }
 
 /**
@@ -292,7 +304,7 @@ double calibrate_parse(Calibrate *calibrate, unsigned int simulation,
 {
 	unsigned int i;
 	double e;
-	char buffer[512], input[4][32], output[32], result[32];
+	char buffer[512], input[MAX_NINPUTS][32], output[32], result[32];
 	FILE *file_result;
 
 #if DEBUG
@@ -311,36 +323,56 @@ printf("calibrate_parse: i=%u input=%s\n", i, &input[i][0]);
 		calibrate_input(calibrate, simulation, &input[i][0],
 			calibrate->file[i][experiment]);
 	}
-	for (; i < 4; ++i) snprintf(&input[i][0], 32, "");
+	for (; i < MAX_NINPUTS; ++i) snprintf(&input[i][0], 32, "");
 #if DEBUG
 printf("calibrate_parse: parsing end\n");
 #endif
 
 	// Performing the simulation
 	snprintf(output, 32, "output-%u-%u", simulation, experiment);
-	snprintf(result, 32, "result-%u-%u", simulation, experiment);
-	snprintf(buffer, 512, "./%s %s %s %s %s %s", calibrate->simulator,
-		&input[0][0], &input[1][0], &input[2][0], &input[3][0], output);
+	snprintf(buffer, 512, "./%s %s %s %s %s %s %s %s %s %s",
+		calibrate->simulator,
+		&input[0][0], &input[1][0], &input[2][0], &input[3][0], 
+		&input[4][0], &input[5][0], &input[6][0], &input[7][0], 
+		output);
 #if DEBUG
 printf("calibrate_parse: %s\n", buffer);
 #endif
 	system(buffer);
 
 	// Checking the objective value function
-	snprintf(buffer, 512, "./%s %s %s %s", calibrate->evaluator, output,
-		calibrate->experiment[experiment], result);
+	if (calibrate->evaluator)
+	{
+		snprintf(result, 32, "result-%u-%u", simulation, experiment);
+		snprintf(buffer, 512, "./%s %s %s %s", calibrate->evaluator, output,
+			calibrate->experiment[experiment], result);
 #if DEBUG
 printf("calibrate_parse: %s\n", buffer);
 #endif
-	system(buffer);
-	file_result = fopen(result, "r");
-	e = atof(fgets(buffer, 512, file_result));
-	fclose(file_result);
+		system(buffer);
+		file_result = fopen(result, "r");
+		e = atof(fgets(buffer, 512, file_result));
+		fclose(file_result);
+	}
+	else
+	{
+		snprintf(result, 32, "");
+		file_result = fopen(output, "r");
+		e = atof(fgets(buffer, 512, file_result));
+		fclose(file_result);
+	}
 
 	// Removing files
 #if !DEBUG
-	snprintf(buffer, 512, "rm %s %s %s %s %s %s", &input[0][0], &input[1][0],
-		&input[2][0], &input[3][0], output, result);
+	for (i = 0; i < calibrate->ninputs; ++i)
+	{
+		if (calibrate->file[i][0])
+		{
+			snprintf(buffer, 512, "rm %s", &input[i][0]);
+			system(buffer);
+		}
+	}
+	snprintf(buffer, 512, "rm %s %s", output, result);
 	system(buffer);
 #endif
 
@@ -922,8 +954,9 @@ int calibrate_new(Calibrate *calibrate, char *filename)
 	xmlChar *buffer;
 	xmlNode *node, *child;
 	xmlDoc *doc;
-	static const xmlChar *template[4]=
-		{XML_TEMPLATE1, XML_TEMPLATE2, XML_TEMPLATE3, XML_TEMPLATE4};
+	static const xmlChar *template[MAX_NINPUTS] = {
+		XML_TEMPLATE1, XML_TEMPLATE2, XML_TEMPLATE3, XML_TEMPLATE4,
+		XML_TEMPLATE5, XML_TEMPLATE6, XML_TEMPLATE7, XML_TEMPLATE8};
 
 #if DEBUG
 printf("calibrate_new: start\n");
@@ -963,14 +996,8 @@ printf("calibrate_new: start\n");
 
 	// Obtaining the evaluator file
 	if (xmlHasProp(node, XML_EVALUATOR))
-	{
 		calibrate->evaluator = (char*)xmlGetProp(node, XML_EVALUATOR);
-	}
-	else
-	{
-		printf("No error in the data file\n");
-		return 0;
-	}
+	else calibrate->evaluator = NULL;
 
 	// Reading the algorithm
 	if (xmlHasProp(node, XML_ALGORITHM))
@@ -1186,7 +1213,7 @@ printf("calibrate_new: start\n");
 	// Reading the experimental data file names
 	calibrate->nexperiments = 0;
 	calibrate->experiment = NULL;
-	for (i = 0; i < 4; ++i)
+	for (i = 0; i < MAX_NINPUTS; ++i)
 	{
 		calibrate->template[i] = NULL;
 		calibrate->file[i] = NULL;
@@ -1238,7 +1265,7 @@ printf("calibrate_new: ninputs=%u\n", calibrate->ninputs);
 			printf("No experiment %u template1\n", calibrate->nexperiments + 1);
 			return 0;
 		}
-		for (j = 1; j < 4; ++j)
+		for (j = 1; j < MAX_NINPUTS; ++j)
 		{
 #if DEBUG
 printf("calibrate_new: template%u\n", j + 1);
