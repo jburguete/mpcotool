@@ -3,6 +3,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{listings}
 \usepackage{pstricks}
+\usepackage{multido}
 
 \usepackage{lineno}
 \linenumbers
@@ -272,63 +273,63 @@ de flujo del funcionamiento del método genético implementado en GENETIC.
 	\tiny
 	\rput(0,12.5){$generation=1$}
 	\pspolygon(-65,5)(65,5)(65,20)(-65,20)
-	\psline(0,5)(0,0)
+	\psline{->}(0,5)(0,0)
 	\rput(0,-5){Generation of $N_{population}$}
 	\rput(0,-10){random genomes}
 	\pspolygon(-65,-15)(65,-15)(65,0)(-65,0)
-	\psline(0,-15)(0,-20)
+	\psline{->}(0,-15)(0,-20)
 	\rput(0,-25){Simulation of the $N_{population}$}
 	\rput(0,-30){entities}
 	\pspolygon(-65,-35)(65,-35)(65,-20)(-65,-20)
-	\psline(0,-35)(0,-40)
+	\psline{->}(0,-35)(0,-40)
 	\rput(0,-45){Sorting the $N_{population}$}
 	\rput(0,-50){entities by objective function value}
 	\pspolygon(-65,-55)(65,-55)(65,-40)(-65,-40)
-	\psline(0,-55)(0,-60)
+	\psline{->}(0,-55)(0,-60)
 	\rput(0,-65){Elliminating the worst}
 	\rput(0,-70){$N_{mutation}+N_{reproduction}+N_{adaptation}$ entities}
 	\pspolygon(-65,-75)(65,-75)(65,-60)(-65,-60)
-	\psline(0,-75)(-90,-80)
+	\psline{->}(0,-75)(-90,-80)
 	\rput(-85,-85){Generation of $N_{mutation}$}
 	\rput(-85,-90){new entities by mutation}
 	\pspolygon(-125,-95)(-45,-95)(-45,-80)(-125,-80)
-	\psline(-90,-95)(-90,-100)
+	\psline{->}(-90,-95)(-90,-100)
 	\rput(-85,-105){Simulation of the $N_{mutation}$}
 	\rput(-85,-110){new mutated entities}
 	\pspolygon(-125,-115)(-45,-115)(-45,-100)(-125,-100)
-	\psline(0,-75)(0,-80)
+	\psline{->}(0,-75)(0,-80)
 	\rput(0,-85){Generation of $N_{reproduction}$}
 	\rput(0,-90){new entities by reproduction}
 	\pspolygon(-40,-95)(40,-95)(40,-80)(-40,-80)
-	\psline(0,-95)(0,-100)
+	\psline{->}(0,-95)(0,-100)
 	\rput(0,-105){Simulation of the $N_{reproduction}$}
 	\rput(0,-110){new reproduced entities}
 	\pspolygon(-40,-115)(40,-115)(40,-100)(-40,-100)
-	\psline(0,-75)(90,-80)
+	\psline{->}(0,-75)(90,-80)
 	\rput(85,-85){Generation of $N_{adaptation}$}
 	\rput(85,-90){new entities by adaptation}
 	\pspolygon(125,-95)(45,-95)(45,-80)(125,-80)
-	\psline(90,-95)(90,-100)
+	\psline{->}(90,-95)(90,-100)
 	\rput(85,-105){Simulation of the $N_{adatation}$}
 	\rput(85,-110){new adaptated entities}
 	\pspolygon(125,-115)(45,-115)(45,-100)(125,-100)
-	\psline(-90,-115)(0,-120)
-	\psline(0,-115)(0,-120)
-	\psline(90,-115)(0,-120)
+	\psline{->}(-90,-115)(0,-120)
+	\psline{->}(0,-115)(0,-120)
+	\psline{->}(90,-115)(0,-120)
 	\rput(0,-125){Sorting the old $N_{survival}$ entities and the new}
 	\rput(0,-130){$N_{mutation}+N_{reproduction}+N_{adaptation}$ entities}
 	\rput(0,-135){by objective function values}
 	\pspolygon(-65,-120)(65,-120)(65,-140)(-65,-140)
-	\psline(0,-140)(0,-145)
+	\psline{->}(0,-140)(0,-145)
 	\rput(0,-152.5){Increase $+1$ $generation$}
 	\pspolygon(-65,-145)(65,-145)(65,-160)(-65,-160)
-	\psline(0,-160)(0,-165)
+	\psline{->}(0,-160)(0,-165)
 	\rput(0,-172.5){$generation<N_{generations}$?}
 	\pspolygon(-65,-172.5)(0,-180)(65,-172.5)(0,-165)
-	\psline(-65,-172.5)(-130,-172.5)(-130,-67.5)(-65,-67.5)
+	\psline{->}(-65,-172.5)(-130,-172.5)(-130,-67.5)(-65,-67.5)
 	\rput(-70,-170){Yes}
 	\rput(-5,-182.5){No}
-	\psline(0,-180)(0,-185)
+	\psline{->}(0,-180)(0,-185)
 	\rput(0,-192.5){Select the best entity}
 	\pspolygon(-65,-200)(65,-200)(65,-185)(-65,-185)
 }{Diagrama de flujo del método genético}{FigGeneticFlow}
@@ -346,6 +347,7 @@ permitidos $x_{\min}$ y $x_{\max}$ por el número binario asignado en el genoma 
 la variable $I_x$ y por el número de bits asignados a la variable $N_x$
 siguiendo la fórmula:
 \EQ{x=x_{\min}+\frac{I_x}{2^{N_x}}\,\left(x_{\max}-x_{\min}\right).}{EqGenome}
+
 \psset{unit=1mm}
 \PSPICTURE{0}{0}{80}{30}
 {
@@ -426,11 +428,391 @@ $N_{survival}$ mejores individuos:
 Los nuevos individuos se generarán por mutación, reproducción y adpatación de
 los genomas de estos mejores individuos.
 
+Además, los ancestros a partir de los que se generarán nuevos individuos entre
+la población superviviente, CALIBRATOR utiliza la selección por defecto de
+GENETIC que hace una elección aleatoria con una probabilidad linealmente
+decreciente según su ordinal en el conjunto ordenado de individuos
+supervivientes. En l
+\PICTURE{250}{110}
+{
+	\put(10,20){\vector(0,1){80}}
+	\put(10,20){\vector(1,0){235}}
+	\put(0,102){Probability}
+	\put(0,0){Survival population sorted by objective function values}
+	\multiput(20,20)(10,0){2}{\line(0,1){66}}
+	\put(20,86){\line(1,0){10}}
+	\put(17,10){1st}
+	\multiput(40,20)(10,0){2}{\line(0,1){60}}
+	\put(40,80){\line(1,0){10}}
+	\put(37,10){2nd}
+	\multiput(60,20)(10,0){2}{\line(0,1){54}}
+	\put(60,74){\line(1,0){10}}
+	\put(57,10){3rd}
+	\multiput(80,20)(10,0){2}{\line(0,1){48}}
+	\put(80,68){\line(1,0){10}}
+	\put(77,10){4th}
+	\multiput(100,20)(10,0){2}{\line(0,1){42}}
+	\put(100,62){\line(1,0){10}}
+	\put(97,10){...}
+	\multiput(120,20)(10,0){2}{\line(0,1){36}}
+	\put(120,56){\line(1,0){10}}
+	\multiput(140,20)(10,0){2}{\line(0,1){30}}
+	\put(140,50){\line(1,0){10}}
+	\multiput(160,20)(10,0){2}{\line(0,1){24}}
+	\put(160,44){\line(1,0){10}}
+	\multiput(180,20)(10,0){2}{\line(0,1){18}}
+	\put(180,38){\line(1,0){10}}
+	\multiput(200,20)(10,0){2}{\line(0,1){12}}
+	\put(200,32){\line(1,0){10}}
+	\multiput(220,20)(10,0){2}{\line(0,1){6}}
+	\put(220,26){\line(1,0){10}}
+	\put(215,10){Last}
+	\qbezier[54](10,90.5)(127.5,50.25)(245,20)
+
+}{Probabilidad de que los individuos supervivientes sean seleccionados como
+ancestros de los nuevos individuos generados por mutation, reproduction or
+adaptation algorithms.}{FigSelection}
+
 \subsubsection{Mutation algorithm}
+
+En el algoritmo de mutación se elige un progenitor aleatoriamente 
+una copia idéntica del del progenitor pero con un bit invertido elegido
+aleatoriamente con probabilidad uniforme.
+
+\psset{unit=1mm}
+\PSPICTURE{0}{0}{80}{20}
+{
+	\scriptsize
+	\rput(10,17.5){Mother}
+	\pspolygon(20,15)(80,15)(80,20)(20,20)
+	\rput(22,17.5){1}
+	\rput(24,17.5){1}
+	\rput(26,17.5){0}
+	\rput(28,17.5){1}
+	\rput(30,17.5){1}
+	\rput(32,17.5){1}
+	\rput(34,17.5){0}
+	\rput(36,17.5){0}
+	\rput(38,17.5){0}
+	\rput(40,17.5){0}
+	\rput(42,17.5){0}
+	\rput(44,17.5){0}
+	\rput(46,17.5){0}
+	\rput(48,17.5){0}
+	\rput(50,17.5){1}
+	\rput(52,17.5){1}
+	\rput(54,17.5){1}
+	\rput(56,17.5){1}
+	\rput(58,17.5){1}
+	\rput(60,17.5){0}
+	\rput(62,17.5){1}
+	\rput(64,17.5){0}
+	\rput(66,17.5){0}
+	\rput(68,17.5){0}
+	\rput(70,17.5){0}
+	\rput(72,17.5){1}
+	\rput(74,17.5){1}
+	\rput(76,17.5){1}
+	\rput(78,17.5){1}
+	\rput(10,2.5){Soon}
+	\pspolygon(20,0)(80,0)(80,5)(20,5)
+	\rput(22,2.5){1}
+	\rput(24,2.5){1}
+	\rput(26,2.5){0}
+	\rput(28,2.5){1}
+	\rput(30,2.5){1}
+	\rput(32,2.5){1}
+	\rput(34,2.5){0}
+	\rput(36,2.5){1}
+	\rput(38,2.5){0}
+	\rput(40,2.5){0}
+	\rput(42,2.5){0}
+	\rput(44,2.5){0}
+	\rput(46,2.5){0}
+	\rput(48,2.5){0}
+	\rput(50,2.5){1}
+	\rput(52,2.5){1}
+	\rput(54,2.5){1}
+	\rput(56,2.5){1}
+	\rput(58,2.5){1}
+	\rput(60,2.5){0}
+	\rput(62,2.5){1}
+	\rput(64,2.5){0}
+	\rput(66,2.5){0}
+	\rput(68,2.5){0}
+	\rput(70,2.5){0}
+	\rput(72,2.5){1}
+	\rput(74,2.5){1}
+	\rput(76,2.5){1}
+	\rput(78,2.5){1}
+	\psline{->}(50,15)(50,5)
+	\rput(60,10){Mutation}
+	\pspolygon(35,15)(37,15)(37,20)(35,20)
+	\pspolygon(35,5)(37,5)(37,0)(35,0)
+	\psline{->}(32,10)(36,10)(36,15)
+	\psline{->}(32,10)(36,10)(36,5)
+	\rput(16,10){Inversion of a random bit}
+}{Ejemplo de la creación de un nuevo individuo por mutación}
+{FigMutation}
 
 \subsubsection{Reproduction algorithm}
 
+En GENETIC el algoritmo por defecto, y usado en CALIBRATOR, selecciona 2
+ancestros diferentes. Entonces genera un nuevo individuo haciendo una mezcla
+aleatoria de los bits de los ancestros. El individuo generado tiene los mismos
+bits que los ancestros donde el genoma es igual en ambos ancestros, y un bit
+aleatorio en el resto. En la figura~\ref{FigReproduction} se representa un
+diagrama del esquema.
+
+\psset{unit=1mm}
+\PSPICTURE{0}{0}{80}{20}
+{
+	\scriptsize
+	\multido{\rb=0+7.5,\rt=5+7.5}{3}
+	{
+		\psframe[linecolor=gray,fillcolor=gray,fillstyle=solid](20,\rb)(23,\rt)
+		\psframe[linecolor=gray,fillcolor=gray,fillstyle=solid](25,\rb)(29,\rt)
+		\psframe[linecolor=gray,fillcolor=gray,fillstyle=solid](45,\rb)(47,\rt)
+		\psframe[linecolor=gray,fillcolor=gray,fillstyle=solid](49,\rb)(51,\rt)
+		\psframe[linecolor=gray,fillcolor=gray,fillstyle=solid](59,\rb)(61,\rt)
+		\psframe[linecolor=gray,fillcolor=gray,fillstyle=solid](63,\rb)(67,\rt)
+		\psframe[linecolor=gray,fillcolor=gray,fillstyle=solid](71,\rb)(75,\rt)
+	}
+	\rput(10,17.5){Mother}
+	\psframe(20,15)(80,20)
+	\rput(22,17.5){1}
+	\rput(24,17.5){1}
+	\rput(26,17.5){0}
+	\rput(28,17.5){1}
+	\rput(30,17.5){1}
+	\rput(32,17.5){1}
+	\rput(34,17.5){0}
+	\rput(36,17.5){0}
+	\rput(38,17.5){0}
+	\rput(40,17.5){0}
+	\rput(42,17.5){0}
+	\rput(44,17.5){0}
+	\rput(46,17.5){0}
+	\rput(48,17.5){0}
+	\rput(50,17.5){1}
+	\rput(52,17.5){1}
+	\rput(54,17.5){1}
+	\rput(56,17.5){1}
+	\rput(58,17.5){1}
+	\rput(60,17.5){0}
+	\rput(62,17.5){1}
+	\rput(64,17.5){0}
+	\rput(66,17.5){0}
+	\rput(68,17.5){0}
+	\rput(70,17.5){0}
+	\rput(72,17.5){1}
+	\rput(74,17.5){1}
+	\rput(76,17.5){1}
+	\rput(78,17.5){1}
+	\rput(10,2.5){Father}
+	\psframe(20,0)(80,5)
+	\rput(22,2.5){1}
+	\rput(24,2.5){0}
+	\rput(26,2.5){0}
+	\rput(28,2.5){1}
+	\rput(30,2.5){0}
+	\rput(32,2.5){0}
+	\rput(34,2.5){1}
+	\rput(36,2.5){1}
+	\rput(38,2.5){1}
+	\rput(40,2.5){1}
+	\rput(42,2.5){1}
+	\rput(44,2.5){1}
+	\rput(46,2.5){0}
+	\rput(48,2.5){1}
+	\rput(50,2.5){1}
+	\rput(52,2.5){0}
+	\rput(54,2.5){0}
+	\rput(56,2.5){0}
+	\rput(58,2.5){0}
+	\rput(60,2.5){0}
+	\rput(62,2.5){0}
+	\rput(64,2.5){0}
+	\rput(66,2.5){0}
+	\rput(68,2.5){1}
+	\rput(70,2.5){1}
+	\rput(72,2.5){1}
+	\rput(74,2.5){1}
+	\rput(76,2.5){0}
+	\rput(78,2.5){0}
+	\rput(10,10){Son}
+	\psframe(20,7.5)(80,12.5)
+	\rput(22,10){1}
+	\rput(24,10){0}
+	\rput(26,10){0}
+	\rput(28,10){1}
+	\rput(30,10){0}
+	\rput(32,10){0}
+	\rput(34,10){0}
+	\rput(36,10){1}
+	\rput(38,10){1}
+	\rput(40,10){0}
+	\rput(42,10){1}
+	\rput(44,10){1}
+	\rput(46,10){0}
+	\rput(48,10){1}
+	\rput(50,10){1}
+	\rput(52,10){1}
+	\rput(54,10){1}
+	\rput(56,10){1}
+	\rput(58,10){0}
+	\rput(60,10){0}
+	\rput(62,10){0}
+	\rput(64,10){0}
+	\rput(66,10){0}
+	\rput(68,10){1}
+	\rput(70,10){0}
+	\rput(72,10){1}
+	\rput(74,10){1}
+	\rput(76,10){0}
+	\rput(78,10){1}
+	\psline{->}(50,5)(50,7.5)
+	\psline{->}(50,15)(50,12.5)
+	\psline{->}(10,5)(10,7.5)
+	\psline{->}(10,15)(10,12.5)
+}{Ejemplo de la creación de un nuevo individuo por reproducción. Nótese que los
+bits iguales en ambos ancestros (en gris en el diagrama) se mantienen en el
+hijo. El resto de los bits son aleatorios}{FigReproduction}
+
 \subsubsection{Adaptation algorithm}
+
+En GENETIC se implementa un algoritmo que se ha denominado "adaptación" aunque,
+en el sentido biológico, es más bien una mutación "suave". El algoritmo
+selecciona aleatoriamente con probabilidad uniforme una de las variables
+codificadas en el genoma. Luego selecciona aleatoriamente un bit asignando una
+probabilidad linealmente decreciente según sea más significativo este bit. El
+nuevo individuo tiene una copia literal del genoma del ancestro con el bit
+seleccionado invertido. En la figura~\ref{FigAdaptation} puede verse un diagrama
+con un ejemplo.
+
+\psset{unit=1mm}
+\PSPICTURE{-30}{-7.5}{80}{26}
+{
+	\scriptsize
+	\rput(-10,17.5){Mother}
+	\rput(15,23){Variable 1}
+	\psframe(0,15)(30,20)
+	\rput(40,23){Variable 2}
+	\psframe(30,15)(50,20)
+	\rput(65,23){Variable 3}
+	\psframe(55,21)(75,26)
+	\psframe(50,15)(80,20)
+	\psline{->}(10,12)(0,12)
+	\rput(5,9){Less}
+	\rput(5,6){significative}
+	\rput(5,3){bit}
+	\psline{->}(20,12)(30,12)
+	\rput(25,9){More}
+	\rput(25,6){significative}
+	\rput(25,3){bit}
+	\rput(2,17.5){1}
+	\rput(4,17.5){0}
+	\rput(6,17.5){0}
+	\rput(8,17.5){1}
+	\rput(10,17.5){0}
+	\rput(12,17.5){0}
+	\rput(14,17.5){1}
+	\rput(16,17.5){1}
+	\rput(18,17.5){1}
+	\rput(20,17.5){1}
+	\rput(22,17.5){1}
+	\rput(24,17.5){1}
+	\rput(26,17.5){0}
+	\rput(28,17.5){1}
+	\rput(32,17.5){1}
+	\rput(34,17.5){0}
+	\rput(36,17.5){0}
+	\rput(38,17.5){0}
+	\rput(40,17.5){0}
+	\rput(42,17.5){0}
+	\rput(44,17.5){0}
+	\rput(46,17.5){0}
+	\rput(48,17.5){0}
+	\rput(52,17.5){1}
+	\rput(54,17.5){1}
+	\rput(56,17.5){1}
+	\rput(58,17.5){1}
+	\rput(60,17.5){0}
+	\rput(62,17.5){1}
+	\rput(64,17.5){0}
+	\rput(66,17.5){0}
+	\rput(68,17.5){0}
+	\rput(70,17.5){0}
+	\rput(72,17.5){1}
+	\rput(74,17.5){1}
+	\rput(76,17.5){1}
+	\rput(78,17.5){1}
+	\rput(65,10){Probability of selection}
+	\psframe[fillcolor=gray,fillstyle=solid](77,0)(79,0.5)
+	\psframe[fillcolor=gray,fillstyle=solid](75,0)(77,1.0)
+	\psframe[fillcolor=gray,fillstyle=solid](73,0)(75,1.5)
+	\psframe[fillcolor=gray,fillstyle=solid](71,0)(73,2.0)
+	\psframe[fillcolor=gray,fillstyle=solid](69,0)(71,2.5)
+	\psframe[fillcolor=gray,fillstyle=solid](67,0)(69,3.0)
+	\psframe[fillcolor=gray,fillstyle=solid](65,0)(67,3.5)
+	\psframe[fillcolor=gray,fillstyle=solid](63,0)(65,4.0)
+	\psframe[fillcolor=gray,fillstyle=solid](61,0)(63,4.5)
+	\psframe[fillcolor=gray,fillstyle=solid](59,0)(61,5.0)
+	\psframe[fillcolor=gray,fillstyle=solid](57,0)(59,5.5)
+	\psframe[fillcolor=gray,fillstyle=solid](55,0)(57,6.0)
+	\psframe[fillcolor=gray,fillstyle=solid](53,0)(55,6.5)
+	\psframe[fillcolor=gray,fillstyle=solid](51,0)(53,7.0)
+	\rput(-10,-5){Son}
+	\psframe(0,-2.5)(30,-7.5)
+	\psframe(30,-2.5)(50,-7.5)
+	\psframe(50,-2.5)(80,-7.5)
+	\rput(2,-5){1}
+	\rput(4,-5){0}
+	\rput(6,-5){0}
+	\rput(8,-5){1}
+	\rput(10,-5){0}
+	\rput(12,-5){0}
+	\rput(14,-5){1}
+	\rput(16,-5){1}
+	\rput(18,-5){1}
+	\rput(20,-5){1}
+	\rput(22,-5){1}
+	\rput(24,-5){1}
+	\rput(26,-5){0}
+	\rput(28,-5){1}
+	\rput(32,-5){1}
+	\rput(34,-5){0}
+	\rput(36,-5){0}
+	\rput(38,-5){0}
+	\rput(40,-5){0}
+	\rput(42,-5){0}
+	\rput(44,-5){0}
+	\rput(46,-5){0}
+	\rput(48,-5){0}
+	\rput(52,-5){1}
+	\rput(54,-5){1}
+	\rput(56,-5){0}
+	\rput(58,-5){1}
+	\rput(60,-5){0}
+	\rput(62,-5){1}
+	\rput(64,-5){0}
+	\rput(66,-5){0}
+	\rput(68,-5){0}
+	\rput(70,-5){0}
+	\rput(72,-5){1}
+	\rput(74,-5){1}
+	\rput(76,-5){1}
+	\rput(78,-5){1}
+	\psline{->}(-10,15)(-10,-2.5)
+	\rput(-20,6.25){Adaptation}
+	\psframe(55,-7.5)(57,-2.5)
+	\psframe(55,15)(57,20)
+}{Ejemplo de la generación de un nuevo individuo a partir de un ancestro por
+adaptación}{FigAdaptation}
+
+Este algoritmo es muy similar al de mutación, descrito en una previa subsección
+pero, puesto que tiene mayor probabilidad de afectar a bits menos
+significativos, tiene mayor probabilidad de hacer pequeños cambios.
 
 \section{Implementation}
 
