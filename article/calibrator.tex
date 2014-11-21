@@ -36,8 +36,8 @@
 \title{CALIBRATOR: a software to perform calibrations or optimizations of
 empirical parameters}
 
-\author{J. Burguete, B. Latorre, S. Ambroj, A. Lacasta, S. Ouazaa,
-P. García-Navarro}
+\author{J. Burguete, B. Latorre, S. Ambroj, A. Lacasta, S. Ouazaa, N. Zapata \\
+and P. García-Navarro}
  
 \bibliographystyle{elsarticle-harv}
 
@@ -57,7 +57,7 @@ Software Distribution) type license.
 
 El método de barrido divide el espacio entre los valores extremos de las
 variables en intervalos regulares y realiza una simulación para cada una de las
-combinaciones de variables resultantes. Véase un esquema en la
+combinaciones de variables resultantes. Véase el esquema de un ejemplo en la
 figura~\ref{FigSweep}. El número total de simulaciones que realiza es:
 \EQ{N_{simulations}=x_{sweeps}\times y_{sweeps}\times\cdots,}{EqNSweeps}
 siendo $x_{sweeps}$ el número de barridos en la variable $x$.
@@ -160,9 +160,9 @@ iteración estará comprendido entre:
 {EqIterationInterval}
 being $tol$ a tolerance increasing the size of the variable intervals to
 simulate the next iteration.
-En la figura~\ref{FigIterative} se ilustra el procedimiento con el que el
-algoritmo iterativo modifica los intervalos de las variables para incrementar la
-convergencia.
+En la figura~\ref{FigIterative} se ilustra un ejemplo del procedimiento con el
+que el algoritmo iterativo modifica los intervalos de las variables para
+incrementar la convergencia.
 
 \PICTURE{210}{400}
 {
@@ -270,71 +270,71 @@ modernas librerías externas. El código de GENETIC es también open source bajo
 licencia de tipo BSD. En la figura~\ref{FigGeneticFlow} puede verse un diagrama
 de flujo del funcionamiento del método genético implementado en GENETIC.
 
-\psset{xunit=0.47mm,yunit=0.5mm}
-\PSPICTURE{-130}{-200}{125}{20}
+\psset{xunit=0.5mm,yunit=0.5mm}
+\PSPICTURE{-120}{-185}{120}{20}
 {
 	\tiny
-	\rput(0,12.5){$generation=1$}
-	\pspolygon(-65,5)(65,5)(65,20)(-65,20)
+	\rput(0,15){Generation of $N_{population}$}
+	\rput(0,10){random genomes}
+	\psframe(-35,5)(35,20)
 	\psline{->}(0,5)(0,0)
-	\rput(0,-5){Generation of $N_{population}$}
-	\rput(0,-10){random genomes}
-	\pspolygon(-65,-15)(65,-15)(65,0)(-65,0)
-	\psline{->}(0,-15)(0,-20)
-	\rput(0,-25){Simulation of the $N_{population}$}
-	\rput(0,-30){entities}
-	\pspolygon(-65,-35)(65,-35)(65,-20)(-65,-20)
-	\psline{->}(0,-35)(0,-40)
-	\rput(0,-45){Sorting the $N_{population}$}
-	\rput(0,-50){entities by objective function value}
-	\pspolygon(-65,-55)(65,-55)(65,-40)(-65,-40)
-	\psline{->}(0,-55)(0,-60)
-	\rput(0,-65){Elliminating the worst}
-	\rput(0,-70){$N_{mutation}+N_{reproduction}+N_{adaptation}$ entities}
-	\pspolygon(-65,-75)(65,-75)(65,-60)(-65,-60)
-	\psline{->}(0,-75)(-90,-80)
-	\rput(-85,-85){Generation of $N_{mutation}$}
-	\rput(-85,-90){new entities by mutation}
-	\pspolygon(-125,-95)(-45,-95)(-45,-80)(-125,-80)
-	\psline{->}(-90,-95)(-90,-100)
-	\rput(-85,-105){Simulation of the $N_{mutation}$}
-	\rput(-85,-110){new mutated entities}
-	\pspolygon(-125,-115)(-45,-115)(-45,-100)(-125,-100)
-	\psline{->}(0,-75)(0,-80)
-	\rput(0,-85){Generation of $N_{reproduction}$}
-	\rput(0,-90){new entities by reproduction}
-	\pspolygon(-40,-95)(40,-95)(40,-80)(-40,-80)
-	\psline{->}(0,-95)(0,-100)
-	\rput(0,-105){Simulation of the $N_{reproduction}$}
-	\rput(0,-110){new reproduced entities}
-	\pspolygon(-40,-115)(40,-115)(40,-100)(-40,-100)
-	\psline{->}(0,-75)(90,-80)
-	\rput(85,-85){Generation of $N_{adaptation}$}
-	\rput(85,-90){new entities by adaptation}
-	\pspolygon(125,-95)(45,-95)(45,-80)(125,-80)
-	\psline{->}(90,-95)(90,-100)
-	\rput(85,-105){Simulation of the $N_{adatation}$}
-	\rput(85,-110){new adaptated entities}
-	\pspolygon(125,-115)(45,-115)(45,-100)(125,-100)
-	\psline{->}(-90,-115)(0,-120)
-	\psline{->}(0,-115)(0,-120)
-	\psline{->}(90,-115)(0,-120)
-	\rput(0,-125){Sorting the old $N_{survival}$ entities and the new}
-	\rput(0,-130){$N_{mutation}+N_{reproduction}+N_{adaptation}$ entities}
-	\rput(0,-135){by objective function values}
-	\pspolygon(-65,-120)(65,-120)(65,-140)(-65,-140)
-	\psline{->}(0,-140)(0,-145)
-	\rput(0,-152.5){Increase $+1$ $generation$}
-	\pspolygon(-65,-145)(65,-145)(65,-160)(-65,-160)
-	\psline{->}(0,-160)(0,-165)
-	\rput(0,-172.5){$generation<N_{generations}$?}
-	\pspolygon(-65,-172.5)(0,-180)(65,-172.5)(0,-165)
-	\psline{->}(-65,-172.5)(-130,-172.5)(-130,-67.5)(-65,-67.5)
-	\rput(-70,-170){Yes}
-	\rput(-5,-182.5){No}
-	\psline{->}(0,-180)(0,-185)
-	\rput(0,-192.5){Select the best entity}
-	\pspolygon(-65,-200)(65,-200)(65,-185)(-65,-185)
+	\rput(0,-5){$generation=1$}
+	\psframe(-25,-10)(25,0)
+	\psline{->}(0,-10)(0,-15)
+	\rput(0,-20){Simulation of the $N_{population}$}
+	\rput(0,-25){entities}
+	\psframe(-40,-30)(40,-15)
+	\psline{->}(0,-30)(0,-35)
+	\rput(0,-40){Sorting the $N_{population}$}
+	\rput(0,-45){entities by objective function value}
+	\psframe(-45,-50)(45,-35)
+	\psline{->}(0,-50)(0,-55)
+	\rput(0,-60){Elliminating the worst}
+	\rput(0,-65){$N_{mutation}+N_{reproduction}+N_{adaptation}$ entities}
+	\psframe(-65,-70)(65,-55)
+	\psline{->}(0,-70)(-80,-75)
+	\rput(-80,-80){Generation of $N_{mutation}$}
+	\rput(-80,-85){new entities by mutation}
+	\psframe(-115,-90)(-45,-75)
+	\psline{->}(-80,-90)(-80,-95)
+	\rput(-80,-100){Simulation of the $N_{mutation}$}
+	\rput(-80,-105){new mutated entities}
+	\psframe(-115,-110)(-45,-95)
+	\psline{->}(0,-70)(0,-75)
+	\rput(0,-80){Generation of $N_{reproduction}$}
+	\rput(0,-85){new entities by reproduction}
+	\psframe(-40,-90)(40,-75)
+	\psline{->}(0,-90)(0,-95)
+	\rput(0,-100){Simulation of the $N_{reproduction}$}
+	\rput(0,-105){new reproduced entities}
+	\psframe(-40,-110)(40,-95)
+	\psline{->}(0,-70)(82.5,-75)
+	\rput(82.5,-80){Generation of $N_{adaptation}$}
+	\rput(82.5,-85){new entities by adaptation}
+	\psframe(120,-90)(45,-75)
+	\psline{->}(82.5,-90)(82.5,-95)
+	\rput(82.5,-100){Simulation of the $N_{adaptation}$}
+	\rput(82.5,-105){new adaptated entities}
+	\psframe(120,-110)(45,-95)
+	\psline{->}(-80,-110)(0,-115)
+	\psline{->}(0,-110)(0,-115)
+	\psline{->}(82.5,-110)(0,-115)
+	\rput(0,-120){Sorting the old $N_{survival}$ entities and the new}
+	\rput(0,-125){$N_{mutation}+N_{reproduction}+N_{adaptation}$ entities}
+	\rput(0,-130){by objective function values}
+	\psframe(-65,-115)(65,-135)
+	\psline{->}(0,-135)(0,-140)
+	\rput(0,-145){Increase $+1$ $generation$}
+	\psframe(-30,-140)(30,-150)
+	\psline{->}(0,-150)(0,-155)
+	\rput(0,-162.5){$generation<N_{generations}$?}
+	\pspolygon(-50,-162.5)(0,-170)(50,-162.5)(0,-155)
+	\psline{->}(-50,-162.5)(-120,-162.5)(-120,-62.5)(-65,-62.5)
+	\rput(-60,-160){Yes}
+	\rput(-5,-172.5){No}
+	\psline{->}(0,-170)(0,-175)
+	\rput(0,-180){Select the best entity}
+	\psframe(-30,-185)(30,-175)
 }{Flow diagram of the genetic method implemented in GENETIC}{FigGeneticFlow}
 
 \subsubsection{The genome}
@@ -429,11 +429,11 @@ $N_{survival}$ mejores individuos:
 }{EqSurvival}
 Los nuevos individuos se generarán por mutación, reproducción y adpatación de
 los genomas de estos mejores individuos. Además, los ancestros a partir de los
-que se generarán nuevos individuos se eliben entre la población superviviente,
+que se generarán nuevos individuos se eligen entre la población superviviente,
 CALIBRATOR utiliza el algoritmo de selección por defecto de GENETIC, que hace
 una elección aleatoria con una probabilidad linealmente decreciente según su
 ordinal en el conjunto ordenado de individuos supervivientes (véase la
-figura~\ref{FigSelection}.
+figura~\ref{FigSelection}).
 
 \PICTURE{250}{110}
 {
@@ -817,7 +817,7 @@ de un ancestro por adaptación}{FigAdaptation}
 
 Este algoritmo es muy similar al de mutación, descrito en una previa subsección
 pero, puesto que tiene mayor probabilidad de afectar a bits menos
-significativos, tiene mayor probabilidad de hacer pequeños cambios.
+significativos, tiene mayor probabilidad de que los cambios sean pequeños.
 
 \section{Implementation}
 
@@ -980,14 +980,22 @@ next iteration (default 1). It applies only on iterative algorithm.
 
 Se ha usado CALIBRATOR para obtener los parámetros empíricos de los modelos de
 fricción, difusión e infiltración de un experimento publicado en
-\cite{JaviSurcos2} que va a ser simulado con el programa SURCOS
+\cite{JaviSurcos2} y que va a ser simulado con el programa SURCOS
 \cite{Surcos,SurcosGit,JaviSurcos3}.
 
 \subsection{Optimization of a canal management}
 
-\subsection{Calibration of empirical parameters on sprinkler irrigation}
+\subsection{Calibration of empirical parameters of the balistic model on
+sprinkler irrigation}
+
+\subsection{Calibration of empirical parameters of the movement of a sprinkler
+irrigation machine}
 
 \section{Conclusions}
+
+CALIBRATOR ha mostrado ser un programa muy flexible y versátil que permite
+calibrar y optimizar muy variados problemas de modelización de sistemas
+agrícolas adaptándose a la sintaxis de muy diversos programas.
 
 \section*{References}
 \bibliography{bib}
