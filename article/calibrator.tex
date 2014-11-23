@@ -4,6 +4,7 @@
 \usepackage{listings}
 \usepackage{pstricks}
 \usepackage{multido}
+\usepackage{multirow}
 
 \usepackage{lineno}
 \linenumbers
@@ -30,6 +31,34 @@
 			#5
 		\endpspicture
 		\caption{#6.\label{#7}}
+	\end{figure}
+}
+
+\newcommand{\TABLE}[5]
+{
+	\begin{table}[ht!]
+		\centering
+		\caption{#4.\label{#5}}
+		#1
+		\begin{tabular}{#2}
+			#3
+		\end{tabular}
+	\end{table}
+}
+
+\newcommand{\FIGVI}[8]
+{
+	\begin{figure}[ht!]
+		\centering
+		\begin{tabular}{cc}
+			(a) & (b)
+			\\ \includegraphics{#1} & \includegraphics{#2}
+			\\ (c) & (d)
+			\\ \includegraphics{#3} & \includegraphics{#4}
+			\\ (e) & (f)
+			\\ \includegraphics{#5} & \includegraphics{#6}
+		\end{tabular}
+		\caption{#7.\label{#8}}
 	\end{figure}
 }
 
@@ -411,10 +440,9 @@ siguiendo la fórmula:
 
 \subsubsection{Supervivencia de los mejores individuos}
 
-
-Para una población de $N$ individuos, en la primera generación se
-simulan $N_{population}$ casos calculando las variables de entrada a partir del
-genoma de cada individuo.
+Para una población de $N_{population}$ individuos, en la primera generación se
+simulan todos los casos calculando las variables de entrada a partir del genoma
+de cada individuo.
 
 Después, en cada generación, se generarán $N_{population}\times R_{mutation}$
 individuos por mutación, $N_{population}\times R_{reproduction}$ individuos
@@ -976,26 +1004,145 @@ next iteration (default 1). It applies only on iterative algorithm.
 
 \section{Practical applications}
 
+A continuación vamos a exponer unos casos de apliación práctica de CALIBRATOR en
+combinación con muy diferentes programas para calibrar u optimizar coeficientes
+en modelos tan diferentes como riego por superficie, flujo en canales, aspersión
+o movimiento de máquinas de riego.
+
 \subsection{Calibration of empirical parameters on surface irrigation}
 
 Se ha usado CALIBRATOR para obtener los parámetros empíricos de los modelos de
-fricción, difusión e infiltración de un experimento publicado en
-\cite{JaviSurcos2} y que va a ser simulado con el programa SURCOS
-\cite{Surcos,SurcosGit,JaviSurcos3}.
+fricción, difusión e infiltración de unos experimentos publicados en
+\cite{JaviSurcos2} y que van a ser simulado con el programa SURCOS
+\cite{Surcos,SurcosGit,JaviSurcos3}. Consisten en cuatro casos de riego en
+surcos con difusión de soluto. Los surcos tenían una longitud de $100$ m y se simularon con una malla de 100 celdas. Los surcos eran contiguos y se prepararon
+con la misma geometría. Además se realizaron casi simultáneamente, de forma que
+se puede asumir que el suelo presentaba idénticas propiedades.
+
+Se han utilizado el modelo de fricción de Manning y el de infiltración de
+Kostiakov-Lewis. Estos modelos requieren la calibración de tres coeficientes
+empíricos: el número de Manning $n$ y los coeficientes del modelo de
+infiltración $K$ y $a$. En el artículo original se usó un método de calibración
+de fuerza bruta con 3000  imulaciones, considerando que en cada una de estas
+simulaciones comprende el cálculo de los cuatro experimentos descritos en el
+paper. En este trabajo se han utilizado el mismo de simulaciones con varios de
+los métodos de calibración implementados en CALIBRATOR. Ejecutar las 3000
+simulaciones, paralelizadas en cuatro tareas para aprovechar al máximo el doble
+núcleo con hyperthreading del procesador, costó aproximadamente 1h30m en un
+laptop computer equipado con un procesador Intel(R) Core(TM) i7 M620 2.67GHz.
+
+En la tabla~\ref{TabSurcos} se muestran los resultados obtenidos de los
+coeficientes óptimos y del valor de la función de evaluación,
+donde se ha usado la misma norma de error descrita en \cite{JaviSurcos2}. Los
+resultados son muy similares entre los diferentes métodos y también muy
+similares a los del artículo original. Esto es debido a que se forma una región
+relativamente extensa de combinaciones de los parámetros empíricos que producen
+valores muy similares de la función objetivo, no permitiendo una obtención
+precisa de los valores óptimos.
+
+\TABLE{\scriptsize}{cccc}
+{
+	Optimization & Optimization & Optime empirical & Objective function
+	\\ algorithm & parameters & parameters & value
+	\\ \hline
+	\multirow{4}{*}{Monte-Carlo} & $N_{simulations}=500$
+	& $n=0.0403$
+	& \multirow{4}{*}{0.3327} \\
+	& $N_{iterations}=6$ & $K=1.010\cdot 10^{-3}$
+	\\ & $N_{bests}=10$ & $a=0.498$
+	\\ & $tol=0.1$
+	\\ \hline
+	\multirow{5}{*}{genetic} & $N_{population}=300$
+	& $n=0.0425$
+	& \multirow{4}{*}{0.3327}
+	\\ & $N_{generations}=16$ & $K=9.856\cdot 10^{-4}$
+	\\ & $R_{mutation}=0.2$ & $a=0.497$
+	\\ & $R_{reproduction}=0.2$
+	\\ & $R_{adaptation}=0.2$
+	\\ \hline
+	\multirow{5}{*}{genetic} & $N_{population}=300$
+	& $n=0.0425$
+	& \multirow{4}{*}{0.3327}
+	\\ & $N_{generations}=31$ & $K=9.856\cdot 10^{-4}$
+	\\ & $R_{mutation}=0.1$ & $a=0.497$
+	\\ & $R_{reproduction}=0.1$
+	\\ & $R_{adaptation}=0.1$
+	\\ \hline
+}{Parámetros empíricos óptimos y valor de la función objetivo obtenido para el
+experimento de riego por surcos descrito en \cite{JaviSurcos2} usando el
+programa SURCOS y varios algoritmos de optimización implementados en CALIBRATOR}
+{TabSurcos}
+
+En la figura~\ref{FigSurcos} se muestran los resultados de la simulación, con
+los coeficientes obtenidos por los métodos genéticos, frente a las medidas
+experimentales.
+
+\FIGVI{surcos-advance.eps}{surcos-depth.eps}{surcos-solute-q1.eps}
+{surcos-solute-q2.eps}{surcos-solute-q3.eps}{surcos-solute-q4.eps}
+{
+	(a) Advance time profile, (b) inlet depth evolution and (c-f) solute
+	concentration evolution at probes
+}{FigSurcos}
 
 \subsection{Optimization of a canal management}
 
 \subsection{Calibration of empirical parameters of the balistic model on
 sprinkler irrigation}
 
+El modelo balístico \cite{Fukui80,Playan06} es el más utilizado para
+caracterizar el comportamiento de los aspersores en riego por aspersión. En este
+modelo se considera que las gotas emitidas son aproximadamente esféricas y se
+comportan como un proyectil esférico que se mueve por la atmósfera sufriendo la
+fuerza de gravedad y la de resistencia aerodinámica. En este modelo ser requiere
+conocer la velocidad inicial de las gotas emitidas. En la mayoría de modelos de aspersores, el chorro inicial es lo suficientemente compacto como para poder
+considerar que todas las gotas emitidas salen de la boquilla con la misma
+velocidad inicial. Ésta puede obtenerse tanto midiendo la presión en el aspersor
+y aplicando Bernouilli como midiendo el caudal emitido y dividiendo por la
+sección de la boquilla. Los otros datos que se requieren para calcular el
+reparto del agua son los que caracterizan la distribución de tamaños de gotas
+emitidas. En el modelo utilizado, descrito en \cite{Playan06}, ésta distribución
+se caracteriza con dos parámetros $D_{50}$ y $n$. Además, para caracterizar
+efectos aerodinámicos del chorro, en presencia de viento el modelo utiliza otros
+dos coeficientes de corrección de la resistencia aerodinámica: $k_1$ y $k_2$.
+Por lo tanto el modelo se calibra en dos pasos: en un primero se ajustan los
+coeficientes $D_{50}$ y $n$ que ajustan la pluviometría recogida en condiciones
+sin viento y se consideran propios de cada modelo de aspersión a una presión
+determinada. En un segundo paso se calibran los coeficientes $k_1$ y $k_2$ que
+mejor ajustan las pluviometrías medidas para cada velocidad de viento.
+
 \subsection{Calibration of empirical parameters of the movement of a sprinkler
-irrigation machine}
+center-pivot}
+
+El movimiento de las torres de un center-pivot sigue un movimiento caótico que
+depende del movimiento de la torre exterior, de los ángulos de arranque y parada
+en las torres y de las velocidades de arranque y parada. En \cite{Ouazaa14} se
+propuso un modelo que pretende simular la distribución de marchas y paradas de
+cada una de las torres y se desarrollaron varios experimentos en los que se
+midieron estas distribuciones en el funcionamiento de un center-pivot real en
+campo.
 
 \section{Conclusions}
 
+En este trabajo se ha presentado CALIBRATOR, un nuevo programa de software para
+calibración y optimización de coeficientes empíricos de diferentes modelos de
+cálculo. Este programa implementa dos modelos clásicos de fuerza bruta, el de
+barrido y el de Monte-Carlo, a los que incorpora un algoritmo iterativo para
+mejorar la convergencia. Además CALIBRATOR permite utilizar el método genético
+por defecto implementado en GENETIC.
+
+Este programa permite la ejecución eficiente, aprovechando al máximo los
+múltiples procesadores de las máquinas y pudiendo utilizarse de forma sencilla
+en múltiples máquinas en paralelo, logrando una gran capacidad y velocidad de
+cómputo e independizando los modelos físicos de los algoritmos de optimización,
+calibración y paralelización.
+
 CALIBRATOR ha mostrado ser un programa muy flexible y versátil que permite
-calibrar y optimizar muy variados problemas de modelización de sistemas
-agrícolas adaptándose a la sintaxis de muy diversos programas.
+calibrar y optimizar muy variados problemas de modelización adaptándose a la
+sintaxis de muy diversos programas. En este trabajo CALIBRATOR ha sido utilizado
+con éxito en diversas aplicaciones prácticas de ingeniería agraria: optimización
+de manejo de canales y calibración de coeficientes empíricos de modelos de riego
+por gravedad, del modelo balístico de riego por aspersión y del movimiento de
+las máquinas de riego.
 
 \section*{References}
 \bibliography{bib}
