@@ -53,6 +53,10 @@ OF SUCH DAMAGE.
 // XML labels
 
 /**
+ * \def XML_ABSOLUTE_MINIMUM
+ * \brief absolute minimum XML label.
+ * \def XML_ABSOLUTE_MAXIMUM
+ * \brief absolute maximum XML label.
  * \def XML_ADAPTATION
  * \brief adaption XML label.
  * \def XML_ALGORITHM
@@ -118,6 +122,8 @@ OF SUCH DAMAGE.
  * \def XML_VARIABLE
  * \brief variable XML label.
  */
+#define XML_ABSOLUTE_MINIMUM (const xmlChar*)"absolute_minimum"
+#define XML_ABSOLUTE_MAXIMUM (const xmlChar*)"absolute_maximum"
 #define XML_ADAPTATION (const xmlChar*)"adaptation"
 #define XML_ALGORITHM (const xmlChar*)"algorithm"
 #define XML_BESTS (const xmlChar*)"bests"

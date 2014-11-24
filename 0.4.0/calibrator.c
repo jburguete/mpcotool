@@ -153,8 +153,9 @@ typedef struct
 	unsigned int nvariables, nexperiments, ninputs, nsimulations, algorithm,
 		*nsweeps, nstart, nend, *thread, niterations, nbests, nsaveds,
 		*simulation_best;
-	double *value, *rangemin, *rangemax, *error_best, tolerance,
-		mutation_ratio, reproduction_ratio, adaptation_ratio;
+	double *value, *rangemin, *rangemax, *rangeminabs, *rangemaxabs,
+		*error_best, tolerance, mutation_ratio, reproduction_ratio,
+		adaptation_ratio;
 	FILE *result;
 	gsl_rng *rng;
 	GMappedFile **file[MAX_NINPUTS];
@@ -323,7 +324,7 @@ printf("calibrate_parse: i=%u input=%s\n", i, &input[i][0]);
 		calibrate_input(calibrate, simulation, &input[i][0],
 			calibrate->file[i][experiment]);
 	}
-	for (; i < MAX_NINPUTS; ++i) snprintf(&input[i][0], 32, "");
+	for (; i < MAX_NINPUTS; ++i) strcpy(&input[i][0], "");
 #if DEBUG
 printf("calibrate_parse: parsing end\n");
 #endif
@@ -356,7 +357,7 @@ printf("calibrate_parse: %s\n", buffer);
 	}
 	else
 	{
-		snprintf(result, 32, "");
+		strcpy(result, "");
 		file_result = fopen(output, "r");
 		e = atof(fgets(buffer, 512, file_result));
 		fclose(file_result);
@@ -778,10 +779,14 @@ printf("calibrate_refine: start\n");
 		}
 		for (j = 0; j < calibrate->nvariables; ++j)
 		{
-			d = (1. + calibrate->tolerance)
+			d = 0.5 * calibrate->tolerance
 				* (calibrate->rangemax[j] - calibrate->rangemin[j]);
 			calibrate->rangemin[j] -= d;
+			calibrate->rangemin[j]
+				= fmax(calibrate->rangemin[j], calibrate->rangeminabs[j]);
 			calibrate->rangemax[j] += d;
+			calibrate->rangemax[j]
+				= fmin(calibrate->rangemax[j], calibrate->rangemaxabs[j]);
 			printf("%s min=%lg max=%lg\n", calibrate->label[j],
 				calibrate->rangemin[j], calibrate->rangemax[j]);
 			fprintf(calibrate->result, "%s min=%lg max=%lg\n",
@@ -1321,6 +1326,8 @@ printf("calibrate_new: nexperiments=%u\n", calibrate->nexperiments);
 	calibrate->label = NULL;
 	calibrate->rangemin = NULL;
 	calibrate->rangemax = NULL;
+	calibrate->rangeminabs = NULL;
+	calibrate->rangemaxabs = NULL;
 	calibrate->format = NULL;
 	calibrate->nsweeps = NULL;
 	if (calibrate->algorithm == CALIBRATE_ALGORITHM_SWEEP)
@@ -1348,9 +1355,19 @@ printf("calibrate_new: nexperiments=%u\n", calibrate->nexperiments);
 		{
 			calibrate->rangemin = g_realloc(calibrate->rangemin,
 				(1 + calibrate->nvariables) * sizeof(double));
+			calibrate->rangeminabs = g_realloc(calibrate->rangeminabs,
+				(1 + calibrate->nvariables) * sizeof(double));
 			buffer = xmlGetProp(child, XML_MINIMUM);
 			calibrate->rangemin[calibrate->nvariables] = atof((char*)buffer);
 			xmlFree(buffer);
+			if (xmlHasProp(child, XML_ABSOLUTE_MINIMUM))
+			{
+				buffer = xmlGetProp(child, XML_ABSOLUTE_MINIMUM);
+				calibrate->rangeminabs[calibrate->nvariables]
+					= atof((char*)buffer);
+				xmlFree(buffer);
+			}
+			else calibrate->rangeminabs[calibrate->nvariables] = -INFINITY;
 		}
 		else
 		{
@@ -1361,9 +1378,19 @@ printf("calibrate_new: nexperiments=%u\n", calibrate->nexperiments);
 		{
 			calibrate->rangemax = g_realloc(calibrate->rangemax,
 				(1 + calibrate->nvariables) * sizeof(double));
+			calibrate->rangemaxabs = g_realloc(calibrate->rangemaxabs,
+				(1 + calibrate->nvariables) * sizeof(double));
 			buffer = xmlGetProp(child, XML_MAXIMUM);
 			calibrate->rangemax[calibrate->nvariables] = atof((char*)buffer);
 			xmlFree(buffer);
+			if (xmlHasProp(child, XML_ABSOLUTE_MAXIMUM))
+			{
+				buffer = xmlGetProp(child, XML_ABSOLUTE_MAXIMUM);
+				calibrate->rangemaxabs[calibrate->nvariables]
+					= atof((char*)buffer);
+				xmlFree(buffer);
+			}
+			else calibrate->rangemaxabs[calibrate->nvariables] = INFINITY;
 		}
 		else
 		{
