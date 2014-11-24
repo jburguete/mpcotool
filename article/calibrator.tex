@@ -62,32 +62,86 @@
 	\end{figure}
 }
 
-\title{CALIBRATOR: a software to perform calibrations or optimizations of
-empirical parameters}
-
-\author{J. Burguete, B. Latorre, S. Ambroj, A. Lacasta, S. Ouazaa, N. Zapata \\
-and P. García-Navarro}
- 
 \bibliographystyle{elsarticle-harv}
 
 \begin{document}
+
+\title{CALIBRATOR: a software to perform calibrations or optimizations of
+empirical parameters}
+
+\author[eead,bifi]{J. Burguete\corref{cor1}}
+\ead{jburguete@eead.csic.es}
+
+\author[eead]{B. Latorre}
+\ead{borja.latorre@csic.es}
+
+\author[kit]{S. Ambroj}
+\ead{samuel.perez@kit.edu}
+
+\author[unizar]{A. Lacasta}
+\ead{alacasta@unizar.es}
+
+\author[eead]{S. Ouazaa}
+\ead{sofiane.ouazaa@eead.csic.es}
+
+\author[eead]{N. Zapata}
+\ead{v.zapata@csic.es}
+
+\author[unizar]{P. García-Navarro}
+\ead{pigar@unizar.es}
+
+\cortext[cor1]{Corresponding author}
+
+\address[eead]{Soil and Water, EEAD / CSIC.
+P.O. Box 13034, 50080~Zaragoza, Spain.}
+\address[bifi]{BIFI: Instituto de Biocomputación y Física de Sistemas Complejos,
+Universidad de Zaragoza.
+Mariano Esquillor, Edificio I+D, 50009~Zaragoza, Spain.}
+\address[kit]{Steinbuch Centre for Computing (SCC),
+Karlsruhe Institute of Technology (KIT).
+KIT-Campus Nord, Hermann von Helmholtzplatz 1, 76344 Eggenstein - Leopoldshafen,
+Germany.}
+\address[unizar]{Fluid Mechanics, LIFTEC, CSIC-Universidad de Zaragoza.
+María de Luna 3, 50018~Zaragoza, Spain.}
+
+\begin{keyword}
+calibration, optimization, simulation, software, irrigation, sprinkler, furrow,
+canal
+\end{keyword}
+
+\begin{abstract}
+En este trabajo se presenta CALIBRATOR, a software program to perform
+calibrations or optimization o empirical parameters. La sintaxis del programa es
+lo suficientemente flexible para poder combinarlo con múltiples y variados
+programas de simulación.
+En el programa están implementados dos algoritmos de optimización de fuerza
+bruta: sweeps and Monte-Carlo y un algoritmo genético.
+El programa permite la ejecución paralelizada de manera sencilla en múltiples
+computadoras y aprovechar los múltiples procesadores de cada computadora.
+El manejo y las posibilidades de CALIBRATOR se analizan en cuatro aplicaciones
+prácticas: optimización de manejo de canales y calibración de coeficientes
+empíricos de modelos de riego por gravedad, del modelo balístico de riego por
+aspersión y del movimiento de las máquinas de riego.
+This software is open source source and is distributed with a BSD (Berkeley
+Software Distribution) type license.
+\end{abstract}
 
 \maketitle
 
 \section{Introduction}
 
-CALIBRATOR \cite{CalibratorGit} is an open source software to perform
-calibrations or optimizations of empirical parameters with a BSD (Berkeley
-Software Distribution) type license.
+CALIBRATOR \citep{CalibratorGit} is an open source software to perform
+calibrations or optimizations of empirical parameters with a BSD type license.
 
 \section{Methods}
 
 \subsection{Sweep brutal force method}
 
 El método de barrido divide el espacio entre los valores extremos de las
-variables en intervalos regulares y realiza una simulación para cada una de las
-combinaciones de variables resultantes. Véase el esquema de un ejemplo en la
-figura~\ref{FigSweep}. El número total de simulaciones que realiza es:
+variables a optimizar en intervalos regulares y realiza una simulación para cada
+una de las combinaciones de variables resultantes. Véase el esquema de un
+ejemplo en la figura~\ref{FigSweep}. El número total de simulaciones que se
+realizan es:
 \EQ{N_{simulations}=x_{sweeps}\times y_{sweeps}\times\cdots,}{EqNSweeps}
 siendo $x_{sweeps}$ el número de barridos en la variable $x$.
 
@@ -113,9 +167,9 @@ with two variables for $x_{sweeps}=y_{sweeps}=5$}{FigSweep}
 
 \subsection{Monte-Carlo method}
 
-El método de Monte-Carlo realiza simulaciones de variables obtenidas
-aleatoriamente con probabilidad uniforme en el rango comprendido entre los
-valores extremos. En la figura~\ref{FigMonteCarlo} vemos el esquema de un
+El método de Monte-Carlo realiza simulaciones con las variables a optimizar
+obtenidas aleatoriamente con probabilidad uniforme en el rango comprendido entre
+los valores extremos. En la figura~\ref{FigMonteCarlo} vemos el esquema de un
 ejemplo con dos variables.
 
 \PICTURE{210}{200}
@@ -175,8 +229,8 @@ iteración, definimos las siguientes magnitudes:
 	variable $x$ en el subconjunto de las mejores simulaciones de la iteración
 	$j$-ésima.
 \end{description}
-El nuevo intervalo en la variable $x$ en el que se simulará la siguiente
-iteración estará comprendido entre:
+El nuevo intervalo en la variable $x$ con el que se construirán las variables a
+optimizar en la siguiente iteración estará comprendido entre:
 \[
 	x_{\max}^{j+1}=\frac{x_{\max}^b+x_{\min}^b
 		+\left(x_{\max}^b-x_{\min}^b\right)(1+tol)}{2},
@@ -292,8 +346,8 @@ two iterations}{FigIterative}
 
 \subsection{Genetic method}
 
-CALIBRATOR implementa el método genético GENETIC \cite{genetic} con sus
-algoritmos por defecto. Los algoritmos están inspirados en \cite{gaul}, aunque
+CALIBRATOR implementa el método genético GENETIC \citep{genetic} con sus
+algoritmos por defecto. Los algoritmos están inspirados en \citet{gaul}, aunque
 han sido completamente reescritos con muchas simplificaciones y haciendo uso de
 modernas librerías externas. El código de GENETIC es también open source bajo
 licencia de tipo BSD. En la figura~\ref{FigGeneticFlow} puede verse un diagrama
@@ -372,12 +426,11 @@ Las variables a calibrar/optimizar se codifican en GENETIC en una cadena de bits
 (genoma). Cuanto mayor sea el número de bits asignado a una variable mayor es la
 precisión. El número de bits asignado a cada variable, y por tanto también el
 tamaño del genoma, es fijo y es igual para todas las simulaciones. En la
-figura~\ref{FigGenome} puede verse un ejemplo de una codifición de 3 variables,
-la primera y la tercera se han codificado con 14 bits y la segunda con 9 bits.
-El valor asignado a una variable $x$ viene determinado por los valores extremos
-permitidos $x_{\min}$ y $x_{\max}$ por el número binario asignado en el genoma a
-la variable $I_x$ y por el número de bits asignados a la variable $N_x$
-siguiendo la fórmula:
+figura~\ref{FigGenome} puede verse un diagrama de ejemplo de una codifición de 3
+variables. El valor asignado a una variable $x$ viene determinado por los
+valores extremos permitidos $x_{\min}$ y $x_{\max}$ por el número binario
+asignado en el genoma a la variable $I_x$ y por el número de bits asignados a la
+variable $N_x$ siguiendo la fórmula:
 \EQ{x=x_{\min}+\frac{I_x}{2^{N_x}}\,\left(x_{\max}-x_{\min}\right).}{EqGenome}
 
 \psset{unit=1mm}
@@ -436,7 +489,9 @@ siguiendo la fórmula:
 	\rput(74,17.5){1}
 	\rput(76,17.5){1}
 	\rput(78,17.5){1}
-}{An example codifying three variables to optimize into a genome}{FigGenome}
+}{Diagram illustrating an example codifying three variables to optimize into a
+genome. First and third variables have been codified with 14 bits, and second
+variable has been codified with 9 bits.}{FigGenome}
 
 \subsubsection{Supervivencia de los mejores individuos}
 
@@ -781,6 +836,7 @@ con un ejemplo.
 	\rput(76,17.5){1}
 	\rput(78,17.5){1}
 	\rput(65,10){Probability of selection}
+	\rput(65,7){of a bit}
 	\psframe[fillcolor=gray,fillstyle=solid](77,0)(79,0.5)
 	\psframe[fillcolor=gray,fillstyle=solid](75,0)(77,1.0)
 	\psframe[fillcolor=gray,fillstyle=solid](73,0)(75,1.5)
@@ -851,33 +907,51 @@ significativos, tiene mayor probabilidad de que los cambios sean pequeños.
 
 \subsection{External libraries}
 
-CALIBRATOR hace uso de las siguientes librerías externas:
+CALIBRATOR hace uso de las siguientes librerías externas, todas ellas open
+source:
 
 \begin{itemize}
-\item\cite{libxml}: librería open source requerida para leer el fichero
+\item\citet{libxml}: librería open source requerida para leer el fichero
 	de entrada que usa el formato XML.
-\item\cite{gsl}: librería científica open source requerida para generar
+\item\citet{gsl}: librería científica open source requerida para generar
 	los números pseudo-aleatorios que usan los algoritmos genético y de
 	Monte-Carlo.
-\item\cite{glib}: librería open source requerida para implementar algunos
-	tipos de datos y las tareas con las que el programa paraleliza el uso de los
-	múltiples procesadores de la máquina.
-\item\cite{openmpi,mpich}: librerías open source opcionales. En
+\item\citet{glib}: librería open source requerida para implementar algunos
+	tipos de datos, to parse the input file templates y las tareas con las que
+	el programa paraleliza el uso de los múltiples procesadores de la máquina.
+\item\citet{openmpi,mpich}: librerías open source opcionales. En
 	el caso de estar alguna de ellas instaladas en el sistema, el programa la
 	utiliza para permitir el uso paralelizado en múltiple máquinas.
 \end{itemize}
 
 \subsection{Building the executable file from the source code}
 
-El código fuente de CALIBRATOR está escrito en lenguaje C. Para poder crear el
-fichero ejecutable a partir del código fuente debe tener instalado en el sistema
-un compilador de C (\cite{gcc} or \cite{clang}), el sistema de configuración
-\cite{automake}, el programa de control de creación de ejecutables
-\cite{gnumake} y las librerías externas descritas en la subsección anterior. En
-sistemas de Microsoft Windows pueden seguirse las instrucciones dadas en
-\cite{mingw-make}.
+El código fuente de CALIBRATOR está escrito en lenguaje C. This software has
+been built and tested in the following operative systems:
+\begin{itemize}
+\item Debian Linux 7.7,
+\item Debian kFreeBSD 7.7,
+\item DragonFly BSD 3.8.2,
+\item FreeBSD 10.0,
+\item NetBSD 6.1.5,
+\item OpenBSD 5.6,
+\item Windows XP\footnotemark[1],
+\item and Window 7\footnotemark[1].
+\footnotetext[1]{Windows XP and Windows 7 are trademarks of Microsoft
+Corporation.}
+\end{itemize}
+Probabily, this software can be built and works in other operative systems,
+software distributions or versions but it has not been tested.
 
-Una vez instaladas todas las herramientas debe descargarse el código fuente de
+Para poder crear el fichero ejecutable a partir del código fuente debe tener
+instalado en el sistema un compilador de C (\citet{gcc} or \citet{clang}), los
+sistemas de configuración \citet{autoconf} y \citet{automake}, el programa de
+control de creación de ejecutables \citet{gnumake} y las librerías externas
+descritas en la subsección anterior. En sistemas Microsoft Windows pueden
+seguirse las instrucciones dadas en \citet{mingw-make} para instalar todas estas
+utilidades.
+
+Una vez instaladas todas las herramientas, debe descargarse el código fuente de
 GENETIC y compilarse en una terminal ejecutando:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 $ cd PATH_TO_GENETIC/0.6.0
@@ -888,7 +962,7 @@ $ ./configure
 $ make
 \end{lstlisting}
 
-Entonces debe descargarse el código fuente de CALIBRATOR, enlazarse con GENETIC
+Después, debe descargarse el código fuente de CALIBRATOR, enlazarse con GENETIC
 y compilarse ejecutando en una terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 $ cd PATH_TO_CALIBRATOR/0.2.3
@@ -1009,12 +1083,14 @@ combinación con muy diferentes programas para calibrar u optimizar coeficientes
 en modelos tan diferentes como riego por superficie, flujo en canales, aspersión
 o movimiento de máquinas de riego.
 
+\subsection{Optimization of a canal management}
+
 \subsection{Calibration of empirical parameters on surface irrigation}
 
 Se ha usado CALIBRATOR para obtener los parámetros empíricos de los modelos de
 fricción, difusión e infiltración de unos experimentos publicados en
-\cite{JaviSurcos2} y que van a ser simulado con el programa SURCOS
-\cite{Surcos,SurcosGit,JaviSurcos3}. Consisten en cuatro casos de riego en
+\citet{JaviSurcos2} y que van a ser simulado con el programa SURCOS
+\citep{Surcos,SurcosGit,JaviSurcos3}. Consisten en cuatro casos de riego en
 surcos con difusión de soluto. Los surcos tenían una longitud de $100$ m y se simularon con una malla de 100 celdas. Los surcos eran contiguos y se prepararon
 con la misma geometría. Además se realizaron casi simultáneamente, de forma que
 se puede asumir que el suelo presentaba idénticas propiedades.
@@ -1033,7 +1109,7 @@ laptop computer equipado con un procesador Intel(R) Core(TM) i7 M620 2.67GHz.
 
 En la tabla~\ref{TabSurcos} se muestran los resultados obtenidos de los
 coeficientes óptimos y del valor de la función de evaluación,
-donde se ha usado la misma norma de error descrita en \cite{JaviSurcos2}. Los
+donde se ha usado la misma norma de error descrita en \citet{JaviSurcos2}. Los
 resultados son muy similares entre los diferentes métodos y también muy
 similares a los del artículo original. Esto es debido a que se forma una región
 relativamente extensa de combinaciones de los parámetros empíricos que producen
@@ -1046,10 +1122,10 @@ precisa de los valores óptimos.
 	\\ algorithm & parameters & parameters & value
 	\\ \hline
 	\multirow{4}{*}{Monte-Carlo} & $N_{simulations}=500$
-	& $n=0.0403$
-	& \multirow{4}{*}{0.3327} \\
-	& $N_{iterations}=6$ & $K=1.010\cdot 10^{-3}$
-	\\ & $N_{bests}=10$ & $a=0.498$
+	& $n=0.0381$
+	& \multirow{4}{*}{0.3139} \\
+	& $N_{iterations}=6$ & $K=2.343\cdot 10^{-3}$
+	\\ & $N_{bests}=10$ & $a=0.347$
 	\\ & $tol=0.1$
 	\\ \hline
 	\multirow{5}{*}{genetic} & $N_{population}=300$
@@ -1069,7 +1145,7 @@ precisa de los valores óptimos.
 	\\ & $R_{adaptation}=0.1$
 	\\ \hline
 }{Parámetros empíricos óptimos y valor de la función objetivo obtenido para el
-experimento de riego por surcos descrito en \cite{JaviSurcos2} usando el
+experimento de riego por surcos descrito en \citet{JaviSurcos2} usando el
 programa SURCOS y varios algoritmos de optimización implementados en CALIBRATOR}
 {TabSurcos}
 
@@ -1081,15 +1157,15 @@ experimentales.
 {surcos-solute-q2.eps}{surcos-solute-q3.eps}{surcos-solute-q4.eps}
 {
 	(a) Advance time profile, (b) inlet depth evolution and (c-f) solute
-	concentration evolution at probes
+	concentration evolution at probes for the experiments Q1-Q4 described in
+	\citet{JaviSurcos2} simulated with the optime calibrated parameters obtained
+	for the Monte-Carlo method (see table~\ref{TabSurcos})
 }{FigSurcos}
-
-\subsection{Optimization of a canal management}
 
 \subsection{Calibration of empirical parameters of the balistic model on
 sprinkler irrigation}
 
-El modelo balístico \cite{Fukui80,Playan06} es el más utilizado para
+El modelo balístico \citep{Fukui80,Playan06} es el más utilizado para
 caracterizar el comportamiento de los aspersores en riego por aspersión. En este
 modelo se considera que las gotas emitidas son aproximadamente esféricas y se
 comportan como un proyectil esférico que se mueve por la atmósfera sufriendo la
@@ -1100,10 +1176,11 @@ velocidad inicial. Ésta puede obtenerse tanto midiendo la presión en el aspers
 y aplicando Bernouilli como midiendo el caudal emitido y dividiendo por la
 sección de la boquilla. Los otros datos que se requieren para calcular el
 reparto del agua son los que caracterizan la distribución de tamaños de gotas
-emitidas. En el modelo utilizado, descrito en \cite{Playan06}, ésta distribución
-se caracteriza con dos parámetros $D_{50}$ y $n$. Además, para caracterizar
-efectos aerodinámicos del chorro, en presencia de viento el modelo utiliza otros
-dos coeficientes de corrección de la resistencia aerodinámica: $k_1$ y $k_2$.
+emitidas. En el modelo utilizado, descrito en \citet{Playan06}, esta
+distribución se caracteriza con dos parámetros $D_{50}$ y $n$. Además, para
+caracterizar efectos aerodinámicos del chorro, en presencia de viento el modelo
+utiliza otros dos coeficientes de corrección de la resistencia aerodinámica:
+$k_1$ y $k_2$.
 Por lo tanto el modelo se calibra en dos pasos: en un primero se ajustan los
 coeficientes $D_{50}$ y $n$ que ajustan la pluviometría recogida en condiciones
 sin viento y se consideran propios de cada modelo de aspersión a una presión
@@ -1115,7 +1192,7 @@ center-pivot}
 
 El movimiento de las torres de un center-pivot sigue un movimiento caótico que
 depende del movimiento de la torre exterior, de los ángulos de arranque y parada
-en las torres y de las velocidades de arranque y parada. En \cite{Ouazaa14} se
+en las torres y de las velocidades de arranque y parada. En \citet{Ouazaa14} se
 propuso un modelo que pretende simular la distribución de marchas y paradas de
 cada una de las torres y se desarrollaron varios experimentos en los que se
 midieron estas distribuciones en el funcionamiento de un center-pivot real en
