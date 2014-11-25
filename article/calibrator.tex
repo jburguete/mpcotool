@@ -911,17 +911,16 @@ CALIBRATOR hace uso de las siguientes librerías externas, todas ellas open
 source:
 
 \begin{itemize}
-\item\citet{libxml}: librería open source requerida para leer el fichero
-	de entrada que usa el formato XML.
-\item\citet{gsl}: librería científica open source requerida para generar
-	los números pseudo-aleatorios que usan los algoritmos genético y de
-	Monte-Carlo.
-\item\citet{glib}: librería open source requerida para implementar algunos
-	tipos de datos, to parse the input file templates y las tareas con las que
-	el programa paraleliza el uso de los múltiples procesadores de la máquina.
-\item\citet{openmpi,mpich}: librerías open source opcionales. En
-	el caso de estar alguna de ellas instaladas en el sistema, el programa la
-	utiliza para permitir el uso paralelizado en múltiple máquinas.
+\item\citet{libxml}: librería requerida para leer el fichero de entrada que usa
+	el formato XML.
+\item\citet{gsl}: librería científica requerida para generar los números
+	pseudo-aleatorios que usan los algoritmos genético y de Monte-Carlo.
+\item\citet{glib}: librería requerida para implementar algunos tipos de datos,
+	to parse the input file templates y las tareas con las que el programa
+	paraleliza el uso de los múltiples procesadores de la máquina.
+\item\citet{openmpi,mpich}: librerías opcionales. En el caso de estar alguna de
+	ellas instaladas en el sistema, el programa la utiliza para permitir el uso
+	paralelizado en múltiples máquinas.
 \end{itemize}
 
 \subsection{Building the executable file from the source code}
@@ -1139,7 +1138,7 @@ simulaciones.
 	\\ \hline
 	\multirow{5}{*}{genetic} & $N_{population}=300$
 	& $n=0.0425$
-	& \multirow{4}{*}{0.3327}
+	& \multirow{5}{*}{0.3327}
 	\\ & $N_{generations}=16$ & $K=9.856\cdot 10^{-4}$
 	\\ & $R_{mutation}=0.2$ & $a=0.497$
 	\\ & $R_{reproduction}=0.2$
@@ -1147,7 +1146,7 @@ simulaciones.
 	\\ \hline
 	\multirow{5}{*}{genetic} & $N_{population}=300$
 	& $n=0.0425$
-	& \multirow{4}{*}{0.3327}
+	& \multirow{5}{*}{0.3327}
 	\\ & $N_{generations}=31$ & $K=9.856\cdot 10^{-4}$
 	\\ & $R_{mutation}=0.1$ & $a=0.497$
 	\\ & $R_{reproduction}=0.1$
@@ -1217,10 +1216,11 @@ midieron estas distribuciones en el funcionamiento de un center-pivot real en
 campo. La torre exterior es la que gobierna el movimiento, funcionando con un
 régimen de arranques y paradas que depende del tiempo de ciclo y del porcentaje
 de funcionamiento ambos ajustables para que la máquina haga el riego deseado.
-El resto de las torres hace un régimen de arranques y paradas bastante caótico
-en el que la entrada en marcha o parada de la torre responde a que se sobrepasen
-ángulos máximos o mínimos en las juntas de las tuberías (véase un diagrama en la
-figura~\ref{FigPivotDiagram}).
+El resto de las torres hace un régimen de arranques y paradas en el que la
+entrada en marcha o parada de la torre responde a que se sobrepasen ángulos
+máximos o mínimos en las juntas de las tuberías (véase un diagrama en la
+figura~\ref{FigPivotDiagram}). Este movimiento es bastante caótico debido a una
+cierta incertidumbre en los ángulos de parada y marcha.
 
 \psset{unit=1mm}
 \PSPICTURE{-10}{-6}{93}{20}
@@ -1248,7 +1248,47 @@ figura~\ref{FigPivotDiagram}).
 }{Diagram illustrating the movement of a centre-pivot irrigation machine with
 four towers}{FigPivotDiagram}
 
-En este trabajo, vamos a simular un pivot de cuatro torres.
+En este trabajo, vamos a simular un pivot de cuatro torres separadas 50.11 m. La
+velocidad lineal máxima de cada torre se midió experimentalmente resultando:
+$v_1=0.02738$ m/s, $v_2=0.02824$ m/s, $v_3=0.03008$ m/s y $v_4=0.03753$ m/s.
+La torre exterior lleva una velocidad considerablemente superior porque soporta
+menos peso y por tanto sufre menor rozamiento. En el modelo hay que calibrar
+cuatro parámetros empíricos: los ángulos medios de arranque
+$\overline{\alpha_{start}}$ y parada $\overline{\alpha_{stop}}$, la
+incertidumbre en estos ángulos $\delta$ y el tiempo de arranque y parada $\tau$.
+En cada ciclo de movimiento de cada torre, los ángulos de arranque y parada se
+obtienen como:
+\EQ
+{
+	\alpha_{start}=\overline{\alpha_{start}}+(r-0.5)\,\delta,\quad
+	\alpha_{stop}=\overline{\alpha_{stop}}+(r-0.5)\,\delta,
+}{EqPivotStartStop}
+con $r$ un número aleatorio definido con probabilidad uniforme en el rango
+$r\in[0,1)$.
+
+\psset{unit=1mm}
+\PSPICTURE{-16}{-6}{75}{39}
+{
+	\psline{->}(0,0)(0,30)
+	\psline{->}(0,0)(70,0)
+	\rput(0,36){Tower}
+	\rput(0,32){linear velocity}
+	\rput(70,-3){Time}
+	\psline(0,0)(10,0)(15,20)(25,20)(30,0)(45,0)(50,20)(60,20)(65,0)
+	\rput(-8,22){Maximum}
+	\rput(-8,18){velocity}
+	\psline[linestyle=dotted](0,20)(15,20)
+	\psline{<->}(10,23)(15,23)
+	\rput(12.5,26){$\tau$}
+	\psline{<->}(15,23)(25,23)
+	\rput(20,29){Start}
+	\rput(20,26){time}
+	\psline{<->}(25,23)(30,23)
+	\rput(27.5,26){$\tau$}
+	\psline{<->}(30,23)(45,23)
+	\rput(37.5,29){Stop}
+	\rput(37.5,26){time}
+}{Linear velocity of a centre-pivot tower on starts and stops}{FigPivotVelocity}
 
 \section{Conclusions}
 
@@ -1267,11 +1307,11 @@ calibración y paralelización.
 
 CALIBRATOR ha mostrado ser un programa muy flexible y versátil que permite
 calibrar y optimizar muy variados problemas de modelización adaptándose a la
-sintaxis de muy diversos programas. En este trabajo CALIBRATOR ha sido utilizado
-con éxito en diversas aplicaciones prácticas de ingeniería agraria: optimización
-de manejo de canales y calibración de coeficientes empíricos de modelos de riego
-por gravedad, del modelo balístico de riego por aspersión y del movimiento de
-las máquinas de riego.
+sintaxis de programas muy diferentes. En este trabajo CALIBRATOR ha sido
+utilizado con éxito en aplicaciones prácticas de ingeniería agraria tan diversas
+como optimización de manejo de canales y calibración de coeficientes empíricos
+de un modelo de riego por surcos, de un modelo balístico de riego por aspersión
+y de un modelo de movimiento de máquinas de riego.
 
 \section*{References}
 \bibliography{bib}
