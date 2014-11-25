@@ -1035,8 +1035,8 @@ The format of the input data file is:
 </calibrate>
 \end{lstlisting}
 
-The main XML node has to begin with key label "calibrate". The available fields
-are:
+The main XML node has to begin with the key label \emph{"calibrate"}. The
+available fields are:
 \begin{description}
 \item{simulator}: to indicate the simulator program.
 \item{evaluator}: optional. It specify the evaluator program if required.
@@ -1070,9 +1070,36 @@ are:
 \item{iterations}: number of iterations (default 1) to perform the iterative
 algorithm. It applies only on sweep and Monte-Carlo methods.
 \item{bests}: number of bests simulations to calculate convergence interval on
-next iteration (default 1). It applies only on iterative algorithm.
-\item{tolerance}: tolerance parameter to increase convergence interval (default
-0). It applies only on iterative algorithm.
+next iteration for the iterative algorithm (default 1). It applies only on
+sweep and Monte-Carlo methods.
+\item{tolerance}: tolerance parameter to relax convergence interval of the
+iterative algoritm (default 0). It applies only on sweep and Monte-Carlo
+methods.
+\end{description}
+
+The first type of child XML nodes has to begin with the key label
+\emph{"experiment"}. It details the experimental data and it has the fields:
+\begin{description}
+\item{name}: name of the input data file with experimental results to calibrate.
+\item{templateX}: $X$-th input data file template for the simulation program.
+\end{description}
+
+The second type of child XML nodes has to begin with the key label
+\emph{"variable"}. It specifies the variables data and it has the fields:
+\begin{description}
+\item{name}: variable label. On the $X$-th variable, the program parse all input
+file templates creating the input simulation files by substituying all
+@variableX@ labels by this name.
+\item{minimum, maximum}: variable extreme values. The program creates the input
+simulation files by substituying all @valueX@ labels in the input file templates
+by a value between these extreme values on the $X$-th variable, depending on
+optimization algorithm.
+\item{absolute\_minimum, absolute\_maximum}: absolute variable extreme values.
+On iterative methods, the tolerance can increase initial \emph{minimum} or
+\emph{maximum} values in each iteration. These values are the extreme values
+allowed to prevent to exceed the model parameter limits.
+\item{format}: standard C-format string to set the format to save the variable
+in the simulation input files.
 \end{description}
 
 \section{Practical applications}
