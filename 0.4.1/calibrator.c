@@ -127,8 +127,16 @@ typedef struct
  * \brief Array of minimum variable values.
  * \var rangemax
  * \brief Array of maximum variable values.
+ * \var rangeminabs
+ * \brief Array of absolute minimum variable values.
+ * \var rangemaxabs
+ * \brief Array of absolute maximum variable values.
  * \var error_best
- * \brief Array of best minimum errors.
+ * \brief Array of the best minimum errors.
+ * \var value_old
+ * \brief Array of the best variable values on the previous step.
+ * \var error_old
+ * \brief Array of the best minimum errors on the previous step.
  * \var tolerance
  * \brief Algorithm tolerance.
  * \var mutation_ratio
@@ -815,6 +823,13 @@ printf("calibrate_refine: end\n");
 #endif
 }
 
+/**
+ * \fn double calibrate_genetic_objective(Entity *entity)
+ * \brief Function to calculate the objective function of an entity.
+ * \param entity
+ * \brief entity data.
+ * \return objective function value.
+ */
 double calibrate_genetic_objective(Entity *entity)
 {
 	unsigned int j;
@@ -918,6 +933,12 @@ void calibrate_print(Calibrate *calibrate)
 #endif
 }
 
+/**
+ * \fn void calibrate_save_old(Calibrate *calibrate)
+ * \brief Function to save the best results on iterative methods.
+ * \param calibrate
+ * \brief Calibration data.
+ */
 void calibrate_save_old(Calibrate *calibrate)
 {
 	unsigned int i, j;
@@ -933,14 +954,21 @@ printf("calibrate_save_old: start\n");
 			calibrate->value + j * calibrate->nvariables,
 			calibrate->nvariables * sizeof(double));
 	}
-//#if DEBUG
+#if DEBUG
 for (i = 0; i < calibrate->nvariables; ++i)
 printf("calibrate_save_old: best variable %u=%lg\n",
 i, calibrate->value_old[i]);
 printf("calibrate_save_old: end\n");
-//#endif
+#endif
 }
 
+/**
+ * \fn void calibrate_merge_old(Calibrate *calibrate)
+ * \brief Function to merge the best results with the previous step best results
+ *   on iterative methods.
+ * \param calibrate
+ * \brief Calibration data.
+ */
 void calibrate_merge_old(Calibrate *calibrate)
 {
 	unsigned int i, j, k;
