@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<calibrate simulator="calibrate_surcos" algorithm="genetic" population="750"
+		generations="6" mutation="0.2" reproduction="0.2" adaptation="0.2">
+	<experiment name="q1" template1="template.in" template2="input1.in"
+		template3="q1a" template4="q1h" template5="q1c1" template6="q1c2"
+		template7="q1c3" template8="q1c4"/>
+	<experiment name="q2" template1="template.in" template2="input2.in"
+		template3="q2a" template4="q2h" template5="q2c1" template6="q2c2"
+		template7="q2c3" template8="q2c4"/>
+	<experiment name="q3" template1="template.in" template2="input3.in"
+		template3="q3a" template4="q3h" template5="q3c1" template6="q3c2"
+		template7="q3c3" template8="q3c4"/>
+	<experiment name="q4" template1="template.in" template2="input4.in"
+		template3="q4a" template4="q4h" template5="q4c1" template6="q4c2"
+		template7="q4c3" template8="q4c4"/>
+	<variable name="n" minimum="0.020" maximum="0.060" format="%.4lf" bits="9"/>
+	<variable name="K" minimum="1e-5" maximum="1e-3" format="%.3le" bits="14"/>
+	<variable name="a" minimum="0.10" maximum="1.00" format="%.3lf" bits="10"/>
+</calibrate>

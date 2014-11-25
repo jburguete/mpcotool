@@ -1104,7 +1104,7 @@ simulaciones comprende el cálculo de los cuatro experimentos descritos en el
 paper. En este trabajo se han utilizado el mismo de simulaciones con varios de
 los métodos de calibración implementados en CALIBRATOR. Ejecutar las 3000
 simulaciones, paralelizadas en cuatro tareas para aprovechar al máximo el doble
-núcleo con hyperthreading del procesador, costó aproximadamente 1h30m en un
+núcleo con hyperthreading del procesador, costó aproximadamente 1h20m en un
 laptop computer equipado con un procesador Intel(R) Core(TM) i7 M620 2.67GHz.
 
 En la tabla~\ref{TabSurcos} se muestran los resultados obtenidos de los
@@ -1114,19 +1114,28 @@ resultados son muy similares entre los diferentes métodos y también muy
 similares a los del artículo original. Esto es debido a que se forma una región
 relativamente extensa de combinaciones de los parámetros empíricos que producen
 valores muy similares de la función objetivo, no permitiendo una obtención
-precisa de los valores óptimos.
+precisa de los valores óptimos. No obstante, puede comprobarse como tanto el
+método iterativo como los genéticos obtienen mejores resultados que el método de
+fuerza de bruta de Monte-Carlo sin iteraciones con el mismo número total de
+simulaciones.
 
 \TABLE{\scriptsize}{cccc}
 {
 	Optimization & Optimization & Optime empirical & Objective function
 	\\ algorithm & parameters & parameters & value
 	\\ \hline
+	\multirow{3}{*}{Monte-Carlo} & $N_{simulations}=3000$
+	& $n=0.0395$
+	& \multirow{3}{*}{0.3430} \\
+	& $N_{iterations}=1$ & $K=7.861\cdot 10^{-4}$
+	\\ & & $a=0.534$
+	\\ \hline
 	\multirow{4}{*}{Monte-Carlo} & $N_{simulations}=500$
-	& $n=0.0381$
-	& \multirow{4}{*}{0.3139} \\
-	& $N_{iterations}=6$ & $K=2.343\cdot 10^{-3}$
-	\\ & $N_{bests}=10$ & $a=0.347$
-	\\ & $tol=0.1$
+	& $n=0.0404$
+	& \multirow{4}{*}{0.3327} \\
+	& $N_{iterations}=6$ & $K=1.010\cdot 10^{-3}$
+	\\ & $N_{bests}=10$ & $a=0.498$
+	\\ & $tol=0.2$
 	\\ \hline
 	\multirow{5}{*}{genetic} & $N_{population}=300$
 	& $n=0.0425$
@@ -1146,12 +1155,12 @@ precisa de los valores óptimos.
 	\\ \hline
 }{Parámetros empíricos óptimos y valor de la función objetivo obtenido para el
 experimento de riego por surcos descrito en \citet{JaviSurcos2} usando el
-programa SURCOS y varios algoritmos de optimización implementados en CALIBRATOR}
-{TabSurcos}
+programa SURCOS y varios algoritmos de optimización implementados en CALIBRATOR
+con el mismo número total de simulaciones}{TabSurcos}
 
 En la figura~\ref{FigSurcos} se muestran los resultados de la simulación, con
-los coeficientes obtenidos por los métodos genéticos, frente a las medidas
-experimentales.
+los coeficientes obtenidos por el método de Monte-Carlo con $N_{iterations}=6$,
+frente a las medidas experimentales.
 
 \FIGVI{surcos-advance.eps}{surcos-depth.eps}{surcos-solute-q1.eps}
 {surcos-solute-q2.eps}{surcos-solute-q3.eps}{surcos-solute-q4.eps}
@@ -1159,7 +1168,8 @@ experimentales.
 	(a) Advance time profile, (b) inlet depth evolution and (c-f) solute
 	concentration evolution at probes for the experiments Q1-Q4 described in
 	\citet{JaviSurcos2} simulated with the optime calibrated parameters obtained
-	for the Monte-Carlo method (see table~\ref{TabSurcos})
+	for the Monte-Carlo method with $N_{iterartions}=6$ (see
+	table~\ref{TabSurcos})
 }{FigSurcos}
 
 \subsection{Calibration of empirical parameters of the balistic model on
@@ -1187,16 +1197,58 @@ sin viento y se consideran propios de cada modelo de aspersión a una presión
 determinada. En un segundo paso se calibran los coeficientes $k_1$ y $k_2$ que
 mejor ajustan las pluviometrías medidas para cada velocidad de viento.
 
+En este trabajo vamos a calibrar un modelo de aspersor de tipo spray, el N44
+fabricado por Senninger, a una presión de trabajo de 20PSI. En este tipo de
+aspersores, el chorro impacta con un plato fijo surcado de acanaladuras. Para
+determinar la velocidad inicial de salida de las gotas tras el impacto con el
+plato se recurrió a la técnica fotográfica descrita en \citet{Salvador09}. Con
+esta técnica se determinó que la pérdida de carga en el impacto con el plato era
+del 50\%.
+
 \subsection{Calibration of empirical parameters of the movement of a sprinkler
 center-pivot}
 
 El movimiento de las torres de un center-pivot sigue un movimiento caótico que
 depende del movimiento de la torre exterior, de los ángulos de arranque y parada
 en las torres y de las velocidades de arranque y parada. En \citet{Ouazaa14} se
-propuso un modelo que pretende simular la distribución de marchas y paradas de
+propuso un modelo pretendiendo simular la distribución de marchas y paradas de
 cada una de las torres y se desarrollaron varios experimentos en los que se
 midieron estas distribuciones en el funcionamiento de un center-pivot real en
-campo.
+campo. La torre exterior es la que gobierna el movimiento, funcionando con un
+régimen de arranques y paradas que depende del tiempo de ciclo y del porcentaje
+de funcionamiento ambos ajustables para que la máquina haga el riego deseado.
+El resto de las torres hace un régimen de arranques y paradas bastante caótico
+en el que la entrada en marcha o parada de la torre responde a que se sobrepasen
+ángulos máximos o mínimos en las juntas de las tuberías (véase un diagrama en la
+figura~\ref{FigPivotDiagram}).
+
+\psset{unit=1mm}
+\PSPICTURE{-10}{-6}{93}{20}
+{
+	\rput(25,17){$\alpha_i<\alpha_{start}\;\Rightarrow\;T_i$ start}
+	\rput(65,17){$\alpha_i>\alpha_{stop}\;\Rightarrow\;T_i$ stop}
+	\psarc{->}(0,0){93}{0}{7}
+	\psline(0,0)(20,0)(40,1)(60,2.5)(90,5.5)
+	\pscircle*(20,0){0.5}
+	\pscircle*(40,1){0.5}
+	\pscircle*(60,2.5){0.5}
+	\pscircle*(80,4.5){0.5}
+	\pscircle*(0,0){1.0}
+	\rput(0,-3){Centre}
+	\rput(20,-3){$T_1$}
+	\rput(40,-2){$T_2$}
+	\rput(60,-0.5){$T_3$}
+	\rput(80,1.5){$T_4$}
+	\psarc(20,0){3}{2.86}{180}
+	\psarc(40,1){3}{4.29}{177.14}
+	\psarc(60,2.5){3}{5.71}{175.71}
+	\rput(20,6){$\alpha_1$}
+	\rput(40,7){$\alpha_2$}
+	\rput(60,8.5){$\alpha_3$}
+}{Diagram illustrating the movement of a centre-pivot irrigation machine with
+four towers}{FigPivotDiagram}
+
+En este trabajo, vamos a simular un pivot de cuatro torres.
 
 \section{Conclusions}
 

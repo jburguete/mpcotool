@@ -154,8 +154,8 @@ typedef struct
 		*nsweeps, nstart, nend, *thread, niterations, nbests, nsaveds,
 		*simulation_best;
 	double *value, *rangemin, *rangemax, *rangeminabs, *rangemaxabs,
-		*error_best, tolerance, mutation_ratio, reproduction_ratio,
-		adaptation_ratio;
+		*error_best, *value_old, *error_old, tolerance, mutation_ratio,
+		reproduction_ratio, adaptation_ratio;
 	FILE *result;
 	gsl_rng *rng;
 	GMappedFile **file[MAX_NINPUTS];
@@ -903,21 +903,83 @@ void calibrate_print(Calibrate *calibrate)
 #endif
 		printf("THE BEST IS\n");
 		fprintf(calibrate->result, "THE BEST IS\n");
-		printf("error=%le\n", calibrate->error_best[0]);
-		fprintf(calibrate->result, "error=%le\n", calibrate->error_best[0]);
+		printf("error=%le\n", calibrate->error_old[0]);
+		fprintf(calibrate->result, "error=%le\n", calibrate->error_old[0]);
 		for (i = 0; i < calibrate->nvariables; ++i)
 		{
 			snprintf(buffer, 512, "%s=%s\n",
 				calibrate->label[i], calibrate->format[i]);
-			printf(buffer, calibrate->value[calibrate->simulation_best[0]
-				* calibrate->nvariables + i]);
-			fprintf(calibrate->result, buffer,
-				calibrate->value[calibrate->simulation_best[0]
-					* calibrate->nvariables + i]);
+			printf(buffer, calibrate->value_old[i]);
+			fprintf(calibrate->result, buffer, calibrate->value_old[i]);
 		}
 		fflush(calibrate->result);
 #if HAVE_MPI
 	}
+#endif
+}
+
+void calibrate_save_old(Calibrate *calibrate)
+{
+	unsigned int i, j;
+#if DEBUG
+printf("calibrate_save_old: start\n");
+#endif
+	memcpy(calibrate->error_old, calibrate->error_best,
+		calibrate->nbests * sizeof(double));
+	for (i = 0; i < calibrate->nbests; ++i)
+	{
+		j = calibrate->simulation_best[i];
+		memcpy(calibrate->value_old + i * calibrate->nvariables,
+			calibrate->value + j * calibrate->nvariables,
+			calibrate->nvariables * sizeof(double));
+	}
+//#if DEBUG
+for (i = 0; i < calibrate->nvariables; ++i)
+printf("calibrate_save_old: best variable %u=%lg\n",
+i, calibrate->value_old[i]);
+printf("calibrate_save_old: end\n");
+//#endif
+}
+
+void calibrate_merge_old(Calibrate *calibrate)
+{
+	unsigned int i, j, k;
+	double v[calibrate->nbests * calibrate->nvariables], e[calibrate->nbests],
+		*enew, *eold;
+#if DEBUG
+printf("calibrate_merge_old: start\n");
+#endif
+	i = j = k = 0;
+	enew = calibrate->error_best;
+	eold = calibrate->error_old;
+	do
+	{
+		if (*enew < *eold)
+		{
+			memcpy(v + k * calibrate->nvariables,
+				calibrate->value
+					+ calibrate->simulation_best[i] * calibrate->nvariables,
+				calibrate->nvariables * sizeof(double));
+			e[k] = *enew;
+			++k;
+			++enew;
+			++i;
+		}
+		else
+		{
+			memcpy(v + k * calibrate->nvariables, calibrate->value_old + j,
+				calibrate->nvariables * sizeof(double));
+			e[k] = *eold;
+			++k;
+			++eold;
+			++j;
+		}
+	}
+	while (k < calibrate->nbests);
+	memcpy(calibrate->value_old, v, k * calibrate->nvariables * sizeof(double));
+	memcpy(calibrate->error_old, e, k * sizeof(double));
+#if DEBUG
+printf("calibrate_merge_old: end\n");
 #endif
 }
 
@@ -933,12 +995,23 @@ void calibrate_iterate(Calibrate *calibrate)
 #if DEBUG
 printf("calibrate_iterate: start\n");
 #endif
-	for (i = 0; i < calibrate->niterations; ++i)
+	calibrate->error_old
+		= (double*)g_malloc(calibrate->nbests * sizeof(double));
+	calibrate->value_old = (double*)
+		g_malloc(calibrate->nbests * calibrate->nvariables * sizeof(double));
+	calibrate_step(calibrate);
+	calibrate_save_old(calibrate);
+	calibrate_refine(calibrate);
+	calibrate_print(calibrate);
+	for (i = 1; i < calibrate->niterations; ++i)
 	{
 		calibrate_step(calibrate);
+		calibrate_merge_old(calibrate);
 		calibrate_refine(calibrate);
 		calibrate_print(calibrate);
 	}
+	g_free(calibrate->error_old);
+	g_free(calibrate->value_old);
 #if DEBUG
 printf("calibrate_iterate: end\n");
 #endif
