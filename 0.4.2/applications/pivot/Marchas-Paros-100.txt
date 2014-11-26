@@ -1,0 +1,5 @@
+Torre	"Tiempo Marchas"	"Tiempo Paros"	"Número marchas"	"Número paros"	
+T1	5693	11064	440	440	16757
+T2	10808	5749	574	579	16557
+T3	15593	1089	127	127	16682
+T4	16665	0	1	0	16665					

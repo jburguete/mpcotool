@@ -1,0 +1,6 @@
+Torre	"Tiempo Marchas"	"Tiempo Paros"	"Número marchas"	"Número paros"	"Tiempo total"
+T1	5773	60625	489	489	66398
+T2	11499	54889	912	911	66388
+T3	16801	49534	917	915	66335
+T4	18236	48107	934	932	66343
+

@@ -1,0 +1,5 @@
+Torre	"Tiempo Marchas"	"Tiempo Paros"	"Número marchas"	"Número paros"	"Tiempo total"
+T1	5707	35927	470	470	41634
+T2	11200	30425	709	708	41625
+T3	16317	25375	581	581	41692
+T4	17275	24372	580	579	41647
