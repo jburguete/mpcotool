@@ -1342,7 +1342,7 @@ laptop computer usado en las anteriores subsecciones.
 	\\ \hline
 	\multirow{4}{*}{Sweep} & $N_{simulations}=625$
 	& $\overline{\alpha_{start}}=179.395^\circ$
-	& \multirow{4}{*}{12314.58} \\
+	& \multirow{4}{*}{12326.04} \\
 	& $N_{iterations}=16$ & $\overline{\alpha_{stop}}=180.313^\circ$
 	\\ & $N_{bests}=10$ & $\delta=0.257^\circ$
 	\\ & $tol=0.25$ & $\tau=3.42$s
@@ -1354,13 +1354,21 @@ laptop computer usado en las anteriores subsecciones.
 	\\ & $N_{bests}=10$ & $\delta=0.27^\circ$
 	\\ & $tol=0.25$ & $\tau=1.7$s
 	\\ \hline
-	\multirow{5}{*}{genetic} & $N_{population}=300$
-	& $n=0.0425$
+	\multirow{5}{*}{genetic} & $N_{population}=1000$
+	& $\overline{\alpha_{start}}=179.37^\circ$
 	& \multirow{5}{*}{0.3327}
-	\\ & $N_{generations}=16$ & $K=9.856\cdot 10^{-4}$
-	\\ & $R_{mutation}=0.2$ & $a=0.497$
-	\\ & $R_{reproduction}=0.2$
+	\\ & $N_{generations}=16$ & $\overline{\alpha_{stop}}=180.33^\circ$
+	\\ & $R_{mutation}=0.2$ & $\delta=0.27^\circ$
+	\\ & $R_{reproduction}=0.2$ & $\tau=1.7$s
 	\\ & $R_{adaptation}=0.2$
+	\\ \hline
+	\multirow{5}{*}{genetic} & $N_{population}=400$
+	& $\overline{\alpha_{start}}=179.37^\circ$
+	& \multirow{5}{*}{0.3327}
+	\\ & $N_{generations}=81$ & $\overline{\alpha_{stop}}=180.33^\circ$
+	\\ & $R_{mutation}=0.1$ & $\delta=0.27^\circ$
+	\\ & $R_{reproduction}=0.1$ & $\tau=1.7$s
+	\\ & $R_{adaptation}=0.1$
 	\\ \hline
 }{Parámetros empíricos óptimos y valor de la función objetivo obtenido para el
 pivot de cuatro torres descrito en \citet{Ouazaa14} usando varios algoritmos de
