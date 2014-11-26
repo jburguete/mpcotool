@@ -1,0 +1,14 @@
+alpha1 min=180.3 max=180.3
+alpha2 min=179.42 max=179.42
+random min=0.16 max=0.16
+boot-time min=1.2 max=1.2
+THE BEST IS
+error=1.183933e+07
+alpha1=180.30
+alpha2=179.42
+random=0.16
+boot-time=1.2
+
+real	6m6.754s
+user	21m55.336s
+sys	0m5.832s

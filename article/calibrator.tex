@@ -1291,11 +1291,17 @@ obtienen como:
 	\alpha_{stop}=\overline{\alpha_{stop}}+(r-0.5)\,\delta,
 }{EqPivotStartStop}
 con $r$ un número aleatorio definido con probabilidad uniforme en el rango
-$r\in[0,1)$.
+$r\in[0,1)$. Los tiempos de arranque y parada resultantes de cada torre se
+midieron en cuatro experimentos de un día de duración con el pivot trabajando en
+ciclos de 71 segundos al 100\%, 52\%, 42\% y 27.48\%. Estos tiempos se agruparon
+en cuatro respectivos histogramas y definimos la función objetivo a minimizar
+como el mean square error que se produce entre los histogramas simulados y los
+medidos.
 
 \psset{unit=1mm}
 \PSPICTURE{-16}{-6}{75}{39}
 {
+	\scriptsize
 	\psline{->}(0,0)(0,30)
 	\psline{->}(0,0)(70,0)
 	\rput(0,36){Tower}
@@ -1307,15 +1313,67 @@ $r\in[0,1)$.
 	\psline[linestyle=dotted](0,20)(15,20)
 	\psline{<->}(10,23)(15,23)
 	\rput(12.5,26){$\tau$}
-	\psline{<->}(15,23)(25,23)
-	\rput(20,29){Start}
-	\rput(20,26){time}
+	\psline{<->}(10,29)(30,29)
+	\rput(20,35){Start}
+	\rput(20,32){time}
 	\psline{<->}(25,23)(30,23)
 	\rput(27.5,26){$\tau$}
 	\psline{<->}(30,23)(45,23)
 	\rput(37.5,29){Stop}
 	\rput(37.5,26){time}
 }{Linear velocity of a centre-pivot tower on starts and stops}{FigPivotVelocity}
+
+En la tabla~\ref{TabPivot} se muestran algunos de los resultados obtenidos con
+un total de 10000 simulaciones de cada uno de los cuatro experimentos, que
+costaron aproximadamente 50 minutos paralelizadas en cuatro tareas en el mismo
+laptop computer usado en las anteriores subsecciones.
+
+\TABLE{\scriptsize}{cccc}
+{
+	Optimization & Optimization & Optime empirical & Objective function
+	\\ algorithm & parameters & parameters & value
+	\\ \hline
+	\multirow{4}{*}{Sweep} & $N_{simulations}=10000$
+	& $\overline{\alpha_{start}}=179.370^\circle$
+	& \multirow{4}{*}{12327.19} \\
+	& $N_{iterations}=1$ & $\overline{\alpha_{stop}}=180.330^\circle$
+	\\ & & $\delta=0.270^\circle$
+	\\ & & $\tau=1.70$s
+	\\ \hline
+	\multirow{4}{*}{Sweep} & $N_{simulations}=625$
+	& $\overline{\alpha_{start}}=179.395^\circle$
+	& \multirow{4}{*}{12314.58} \\
+	& $N_{iterations}=16$ & $\overline{\alpha_{stop}}=180.313^\circle$
+	\\ & $N_{bests}=10$ & $\delta=0.257^\circle$
+	\\ & $tol=0.25$ & $\tau=3.42$s
+	\\ \hline
+	\multirow{4}{*}{Monte-Carlo} & $N_{simulations}=625$
+	& $\overline{\alpha_{start}}=179.37^\circle$
+	& \multirow{4}{*}{12327.19} \\
+	& $N_{iterations}=16$ & $\overline{\alpha_{stop}}=180.33^\circle$
+	\\ & $N_{bests}=10$ & $\delta=0.27^\circle$
+	\\ & $tol=0.25$ & $\tau=1.7$s
+	\\ \hline
+	\multirow{5}{*}{genetic} & $N_{population}=300$
+	& $n=0.0425$
+	& \multirow{5}{*}{0.3327}
+	\\ & $N_{generations}=16$ & $K=9.856\cdot 10^{-4}$
+	\\ & $R_{mutation}=0.2$ & $a=0.497$
+	\\ & $R_{reproduction}=0.2$
+	\\ & $R_{adaptation}=0.2$
+	\\ \hline
+	\multirow{5}{*}{genetic} & $N_{population}=300$
+	& $n=0.0425$
+	& \multirow{5}{*}{0.3327}
+	\\ & $N_{generations}=31$ & $K=9.856\cdot 10^{-4}$
+	\\ & $R_{mutation}=0.1$ & $a=0.497$
+	\\ & $R_{reproduction}=0.1$
+	\\ & $R_{adaptation}=0.1$
+	\\ \hline
+}{Parámetros empíricos óptimos y valor de la función objetivo obtenido para el
+pivot de cuatro torres descrito en \citet{Ouazaa14} usando varios algoritmos de
+optimización implementados en CALIBRATOR con el mismo número total de
+simulaciones}{TabPivot}
 
 \section{Conclusions}
 

@@ -687,6 +687,7 @@ printf("calibrate_sweep: start\n");
 			calibrate->value[i * calibrate->nvariables + j] = e;
 		}
 	}
+	calibrate->nsaveds = 0;
 	if (nthreads <= 1)
 		calibrate_sequential(calibrate);
 	else
@@ -727,6 +728,7 @@ printf("calibrate_MonteCarlo: start\n");
 			calibrate->value[i * calibrate->nvariables + j] =
 				calibrate->rangemin[j] + gsl_rng_uniform(calibrate->rng)
 				* (calibrate->rangemax[j] - calibrate->rangemin[j]);
+	calibrate->nsaveds = 0;
 	if (nthreads <= 1) calibrate_sequential(calibrate);
 	else
 	{
@@ -744,82 +746,6 @@ printf("calibrate_MonteCarlo: start\n");
 #endif
 #if DEBUG
 printf("calibrate_MonteCarlo: end\n");
-#endif
-}
-
-/**
- * \fn void calibrate_refine(Calibrate *calibrate)
- * \brief Function to refine the search ranges of the variables in iterative
- *   algorithms.
- * \param calibrate
- * \brief Calibration data.
- */
-void calibrate_refine(Calibrate *calibrate)
-{
-	unsigned int i, j;
-	double d;
-#if HAVE_MPI
-	MPI_Status mpi_stat;
-#endif
-#if DEBUG
-printf("calibrate_refine: start\n");
-#endif
-#if HAVE_MPI
-	if (!calibrate->mpi_rank)
-	{
-#endif
-		for (j = 0; j < calibrate->nvariables; ++j)
-			calibrate->rangemin[j] = calibrate->rangemax[j] = calibrate->value
-				[calibrate->simulation_best[0] * calibrate->nvariables + j];
-		for (i = 0; ++i < calibrate->nsaveds;)
-		{
-			for (j = 0; j < calibrate->nvariables; ++j)
-			{
-				calibrate->rangemin[j] = fmin(calibrate->rangemin[j],
-					calibrate->value
-						[calibrate->simulation_best[i] * calibrate->nvariables
-							+ j]);
-				calibrate->rangemax[j] = fmax(calibrate->rangemax[j],
-					calibrate->value
-						[calibrate->simulation_best[i] * calibrate->nvariables
-							+ j]);
-			}
-		}
-		for (j = 0; j < calibrate->nvariables; ++j)
-		{
-			d = 0.5 * calibrate->tolerance
-				* (calibrate->rangemax[j] - calibrate->rangemin[j]);
-			calibrate->rangemin[j] -= d;
-			calibrate->rangemin[j]
-				= fmax(calibrate->rangemin[j], calibrate->rangeminabs[j]);
-			calibrate->rangemax[j] += d;
-			calibrate->rangemax[j]
-				= fmin(calibrate->rangemax[j], calibrate->rangemaxabs[j]);
-			printf("%s min=%lg max=%lg\n", calibrate->label[j],
-				calibrate->rangemin[j], calibrate->rangemax[j]);
-			fprintf(calibrate->result, "%s min=%lg max=%lg\n",
-				calibrate->label[j], calibrate->rangemin[j],
-				calibrate->rangemax[j]);
-		}
-#if HAVE_MPI
-		for (i = 1; i < ntasks; ++i)
-		{
-			MPI_Send(calibrate->rangemin, calibrate->nvariables, MPI_DOUBLE, i,
-				1, MPI_COMM_WORLD);
-			MPI_Send(calibrate->rangemax, calibrate->nvariables, MPI_DOUBLE, i,
-				1, MPI_COMM_WORLD);
-		}
-	}
-	else
-	{
-		MPI_Recv(calibrate->rangemin, calibrate->nvariables, MPI_DOUBLE, 0, 1,
-			MPI_COMM_WORLD, &mpi_stat);
-		MPI_Recv(calibrate->rangemax, calibrate->nvariables, MPI_DOUBLE, 0, 1,
-			MPI_COMM_WORLD, &mpi_stat);
-	}
-#endif
-#if DEBUG
-printf("calibrate_refine: end\n");
 #endif
 }
 
@@ -977,9 +903,9 @@ void calibrate_merge_old(Calibrate *calibrate)
 #if DEBUG
 printf("calibrate_merge_old: start\n");
 #endif
-	i = j = k = 0;
 	enew = calibrate->error_best;
 	eold = calibrate->error_old;
+	i = j = k = 0;
 	do
 	{
 		if (*enew < *eold)
@@ -995,7 +921,8 @@ printf("calibrate_merge_old: start\n");
 		}
 		else
 		{
-			memcpy(v + k * calibrate->nvariables, calibrate->value_old + j,
+			memcpy(v + k * calibrate->nvariables,
+				calibrate->value_old + j * calibrate->nvariables,
 				calibrate->nvariables * sizeof(double));
 			e[k] = *eold;
 			++k;
@@ -1008,6 +935,80 @@ printf("calibrate_merge_old: start\n");
 	memcpy(calibrate->error_old, e, k * sizeof(double));
 #if DEBUG
 printf("calibrate_merge_old: end\n");
+#endif
+}
+
+/**
+ * \fn void calibrate_refine(Calibrate *calibrate)
+ * \brief Function to refine the search ranges of the variables in iterative
+ *   algorithms.
+ * \param calibrate
+ * \brief Calibration data.
+ */
+void calibrate_refine(Calibrate *calibrate)
+{
+	unsigned int i, j;
+	double d;
+#if HAVE_MPI
+	MPI_Status mpi_stat;
+#endif
+#if DEBUG
+printf("calibrate_refine: start\n");
+#endif
+#if HAVE_MPI
+	if (!calibrate->mpi_rank)
+	{
+#endif
+		for (j = 0; j < calibrate->nvariables; ++j)
+		{
+			calibrate->rangemin[j] = calibrate->rangemax[j]
+				= calibrate->value_old[j];
+		}
+		for (i = 0; ++i < calibrate->nbests;)
+		{
+			for (j = 0; j < calibrate->nvariables; ++j)
+			{
+				calibrate->rangemin[j] = fmin(calibrate->rangemin[j],
+					calibrate->value_old[i * calibrate->nvariables + j]);
+				calibrate->rangemax[j] = fmax(calibrate->rangemax[j],
+					calibrate->value_old[i * calibrate->nvariables + j]);
+			}
+		}
+		for (j = 0; j < calibrate->nvariables; ++j)
+		{
+			d = 0.5 * calibrate->tolerance
+				* (calibrate->rangemax[j] - calibrate->rangemin[j]);
+			calibrate->rangemin[j] -= d;
+			calibrate->rangemin[j]
+				= fmax(calibrate->rangemin[j], calibrate->rangeminabs[j]);
+			calibrate->rangemax[j] += d;
+			calibrate->rangemax[j]
+				= fmin(calibrate->rangemax[j], calibrate->rangemaxabs[j]);
+			printf("%s min=%lg max=%lg\n", calibrate->label[j],
+				calibrate->rangemin[j], calibrate->rangemax[j]);
+			fprintf(calibrate->result, "%s min=%lg max=%lg\n",
+				calibrate->label[j], calibrate->rangemin[j],
+				calibrate->rangemax[j]);
+		}
+#if HAVE_MPI
+		for (i = 1; i < ntasks; ++i)
+		{
+			MPI_Send(calibrate->rangemin, calibrate->nvariables, MPI_DOUBLE, i,
+				1, MPI_COMM_WORLD);
+			MPI_Send(calibrate->rangemax, calibrate->nvariables, MPI_DOUBLE, i,
+				1, MPI_COMM_WORLD);
+		}
+	}
+	else
+	{
+		MPI_Recv(calibrate->rangemin, calibrate->nvariables, MPI_DOUBLE, 0, 1,
+			MPI_COMM_WORLD, &mpi_stat);
+		MPI_Recv(calibrate->rangemax, calibrate->nvariables, MPI_DOUBLE, 0, 1,
+			MPI_COMM_WORLD, &mpi_stat);
+	}
+#endif
+#if DEBUG
+printf("calibrate_refine: end\n");
 #endif
 }
 
@@ -1242,7 +1243,7 @@ printf("calibrate_new: start\n");
 			}
 			else
 			{
-				printf("No simulations number in the data file\n");
+				printf("Monte-Carlo: no simulations number in the data file\n");
 				return 0;
 			}
 		}
@@ -1266,7 +1267,7 @@ printf("calibrate_new: start\n");
 		}
 		else
 		{
-			printf("No simulations number in the data file\n");
+			printf("Default: no simulations number in the data file\n");
 			return 0;
 		}
 	}
@@ -1301,7 +1302,6 @@ printf("calibrate_new: start\n");
 	calibrate->simulation_best
 		= (unsigned int*)alloca(calibrate->nbests * sizeof(unsigned int));
 	calibrate->error_best = (double*)alloca(calibrate->nbests * sizeof(double));
-	calibrate->nsaveds = 0;
 
 	// Reading the algorithm tolerance
 	if (xmlHasProp(node, XML_TOLERANCE))

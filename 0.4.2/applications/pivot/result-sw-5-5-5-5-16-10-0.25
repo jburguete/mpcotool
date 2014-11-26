@@ -1,0 +1,164 @@
+alpha1 min=180.219 max=180.531
+alpha2 min=179.272 max=179.553
+random min=0.075 max=0.325
+boot-time min=0 max=3.375
+THE BEST IS
+error=1.185376e+07
+alpha1=180.375
+alpha2=179.450
+random=0.100
+boot-time=0.75
+alpha1 min=180.189 max=180.482
+alpha2 min=179.237 max=179.588
+random min=0.192188 max=0.270313
+boot-time min=0.527344 max=3.69141
+THE BEST IS
+error=1.184128e+07
+alpha1=180.297
+alpha2=179.342
+random=0.200
+boot-time=0.84
+alpha1 min=180.162 max=180.437
+alpha2 min=179.303 max=179.522
+random min=0.182422 max=0.280078
+boot-time min=0.527344 max=3.69141
+THE BEST IS
+error=1.184028e+07
+alpha1=180.189
+alpha2=179.325
+random=0.270
+boot-time=2.90
+alpha1 min=180.159 max=180.468
+alpha2 min=179.282 max=179.488
+random min=0.170215 max=0.292285
+boot-time min=0.131836 max=4.08691
+THE BEST IS
+error=1.183743e+07
+alpha1=180.437
+alpha2=179.467
+random=0.207
+boot-time=1.32
+alpha1 min=180.159 max=180.468
+alpha2 min=179.279 max=179.511
+random min=0.191211 max=0.279102
+boot-time min=0.0823975 max=4.53186
+THE BEST IS
+error=1.183607e+07
+alpha1=180.236
+alpha2=179.385
+random=0.262
+boot-time=4.09
+alpha1 min=180.124 max=180.471
+alpha2 min=179.282 max=179.488
+random min=0.193103 max=0.269397
+boot-time min=0.0823975 max=4.53186
+THE BEST IS
+error=1.183300e+07
+alpha1=180.313
+alpha2=179.395
+random=0.257
+boot-time=3.42
+alpha1 min=180.124 max=180.471
+alpha2 min=179.282 max=179.488
+random min=0.18452 max=0.270351
+boot-time min=0.0823975 max=4.53186
+THE BEST IS
+error=1.183300e+07
+alpha1=180.313
+alpha2=179.395
+random=0.257
+boot-time=3.42
+alpha1 min=180.124 max=180.471
+alpha2 min=179.282 max=179.488
+random min=0.18452 max=0.270351
+boot-time min=0.0823975 max=4.53186
+THE BEST IS
+error=1.183300e+07
+alpha1=180.313
+alpha2=179.395
+random=0.257
+boot-time=3.42
+alpha1 min=180.124 max=180.471
+alpha2 min=179.282 max=179.488
+random min=0.18452 max=0.270351
+boot-time min=0.0823975 max=4.53186
+THE BEST IS
+error=1.183300e+07
+alpha1=180.313
+alpha2=179.395
+random=0.257
+boot-time=3.42
+alpha1 min=180.124 max=180.471
+alpha2 min=179.282 max=179.488
+random min=0.18452 max=0.270351
+boot-time min=0.0823975 max=4.53186
+THE BEST IS
+error=1.183300e+07
+alpha1=180.313
+alpha2=179.395
+random=0.257
+boot-time=3.42
+alpha1 min=180.124 max=180.471
+alpha2 min=179.282 max=179.488
+random min=0.18452 max=0.270351
+boot-time min=0.0823975 max=4.53186
+THE BEST IS
+error=1.183300e+07
+alpha1=180.313
+alpha2=179.395
+random=0.257
+boot-time=3.42
+alpha1 min=180.124 max=180.471
+alpha2 min=179.282 max=179.488
+random min=0.18452 max=0.270351
+boot-time min=0.0823975 max=4.53186
+THE BEST IS
+error=1.183300e+07
+alpha1=180.313
+alpha2=179.395
+random=0.257
+boot-time=3.42
+alpha1 min=180.124 max=180.471
+alpha2 min=179.282 max=179.488
+random min=0.18452 max=0.270351
+boot-time min=0.0823975 max=4.53186
+THE BEST IS
+error=1.183300e+07
+alpha1=180.313
+alpha2=179.395
+random=0.257
+boot-time=3.42
+alpha1 min=180.124 max=180.471
+alpha2 min=179.282 max=179.488
+random min=0.18452 max=0.270351
+boot-time min=0.0823975 max=4.53186
+THE BEST IS
+error=1.183300e+07
+alpha1=180.313
+alpha2=179.395
+random=0.257
+boot-time=3.42
+alpha1 min=180.124 max=180.471
+alpha2 min=179.282 max=179.488
+random min=0.18452 max=0.270351
+boot-time min=0.0823975 max=4.53186
+THE BEST IS
+error=1.183300e+07
+alpha1=180.313
+alpha2=179.395
+random=0.257
+boot-time=3.42
+alpha1 min=180.124 max=180.471
+alpha2 min=179.282 max=179.488
+random min=0.18452 max=0.270351
+boot-time min=0.0823975 max=4.53186
+THE BEST IS
+error=1.183300e+07
+alpha1=180.313
+alpha2=179.395
+random=0.257
+boot-time=3.42
+
+real	53m8.025s
+user	193m40.960s
+sys	0m51.980s
