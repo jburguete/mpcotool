@@ -6,12 +6,12 @@
 	<experiment name="Velocidad-Frecuencia-42.txt" template1="template2.js"/>
 	<experiment name="Velocidad-Frecuencia-52.txt" template1="template3.js"/>
 	<experiment name="Velocidad-Frecuencia-100.txt" template1="template4.js"/>
-	<variable name="alpha1" minimum="180.000" maximum="180.500" format="%.3lf"
+	<variable name="alpha1" minimum="179.900" maximum="180.500" format="%.3lf"
 		bits="9"/>
 	<variable name="alpha2" minimum="179.300" maximum="179.600" format="%.3lf"
 		bits="9"/>
 	<variable name="random" minimum="0.000" maximum="0.400" format="%.3lf"
 		bits="9"/>
-	<variable name="boot-time" minimum="0.00" maximum="3.00" format="%.2lf"
+	<variable name="boot-time" minimum="0.00" maximum="5.00" format="%.2lf"
 		bits="9"/>
 </calibrate>
