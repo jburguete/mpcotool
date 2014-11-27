@@ -1,0 +1,6 @@
+time ../../calibrator pivot-mc-625-16-10-0.25.xml > log-mc-625-16-10-0.25
+mv result result-mc-625-16-10-0.25
+time ../../calibrator pivot-ga-1000-16-0.2-0.2-0.2.xml > log-ga-1000-16-0.2-0.2-0.2
+mv result result-ga-1000-16-0.2-0.2-0.2
+time ../../calibrator pivot-ga-400-81-0.1-0.1-0.1.xml > log-ga-400-81-0.1-0.1-0.1
+mv result result-ga-400-81-0.1-0.1-0.1
