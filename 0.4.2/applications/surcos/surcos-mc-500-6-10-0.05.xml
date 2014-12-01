@@ -13,7 +13,7 @@
 	<experiment name="q4" template1="template.in" template2="input4.in"
 		template3="q4a" template4="q4h" template5="q4c1" template6="q4c2"
 		template7="q4c3" template8="q4c4"/>
-	<variable name="n" minimum="0.010" maximum="0.040" format="%.4lf"/>
+	<variable name="n" minimum="0.020" maximum="0.060" format="%.4lf"/>
 	<variable name="K" minimum="1e-5" maximum="1e-3" format="%.3le"/>
 	<variable name="a" minimum="0.10" maximum="1.00" format="%.3lf"/>
 </calibrate>
