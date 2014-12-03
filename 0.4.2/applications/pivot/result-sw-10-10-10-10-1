@@ -1,10 +1,10 @@
-alpha1 min=180.367 max=180.367
-alpha2 min=179.5 max=179.5
+alpha1 min=180.033 max=180.033
+alpha2 min=179.6 max=179.6
 random min=0.177778 max=0.177778
 boot-time min=2.77778 max=2.77778
 THE BEST IS
-error=1.183503e+07
-alpha1=180.37
-alpha2=179.50
+error=1.112580e+04
+alpha1=180.03
+alpha2=179.60
 random=0.18
 boot-time=2.8
