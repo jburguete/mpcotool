@@ -230,7 +230,7 @@ void calibrate_input(Calibrate *calibrate, unsigned int simulation,
 	GRegex *regex;
 
 #if DEBUG
-printf("calibrate_input: start\n");
+fprintf(stderr, "calibrate_input: start\n");
 #endif
 
 	// Checking the file
@@ -240,7 +240,7 @@ printf("calibrate_input: start\n");
 	content = g_mapped_file_get_contents(template);
 	length = g_mapped_file_get_length(template);
 #if DEBUG
-printf("calibrate_input: length=%lu\ncontent:\n%s", length, content);
+fprintf(stderr, "calibrate_input: length=%lu\ncontent:\n%s", length, content);
 #endif
 	file = fopen(input, "w");
 
@@ -248,7 +248,7 @@ printf("calibrate_input: length=%lu\ncontent:\n%s", length, content);
 	for (i = 0; i < calibrate->nvariables; ++i)
 	{
 #if DEBUG
-printf("calibrate_input: variable=%u\n", i);
+fprintf(stderr, "calibrate_input: variable=%u\n", i);
 #endif
 		snprintf(buffer, 32, "@variable%u@", i + 1);
 		regex = g_regex_new(buffer, 0, 0, NULL);
@@ -257,7 +257,7 @@ printf("calibrate_input: variable=%u\n", i);
 			buffer2 = g_regex_replace_literal(regex, content, length, 0,
 				calibrate->label[i], 0, NULL);
 #if DEBUG
-printf("calibrate_input: buffer2\n%s", buffer2);
+fprintf(stderr, "calibrate_input: buffer2\n%s", buffer2);
 #endif
 		}
 		else
@@ -275,7 +275,7 @@ printf("calibrate_input: buffer2\n%s", buffer2);
 			calibrate->value[simulation * calibrate->nvariables + i]);
 
 #if DEBUG
-printf("calibrate_input: value=%s\n", value);
+fprintf(stderr, "calibrate_input: value=%s\n", value);
 #endif
 		buffer3 = g_regex_replace_literal(regex, buffer2, length, 0, value,
 			0, NULL);
@@ -290,7 +290,7 @@ printf("calibrate_input: value=%s\n", value);
 
 calibrate_input_end:
 #if DEBUG
-printf("calibrate_input: end\n");
+fprintf(stderr, "calibrate_input: end\n");
 #endif
 	return;
 }
@@ -317,8 +317,8 @@ double calibrate_parse(Calibrate *calibrate, unsigned int simulation,
 	FILE *file_result;
 
 #if DEBUG
-printf("calibrate_parse: start\n");
-printf("calibrate_parse: simulation=%u experiment=%u\n", simulation,
+fprintf(stderr, "calibrate_parse: start\n");
+fprintf(stderr, "calibrate_parse: simulation=%u experiment=%u\n", simulation,
 experiment);
 #endif
 
@@ -327,14 +327,14 @@ experiment);
 	{
 		snprintf(&input[i][0], 32, "input-%u-%u-%u", i, simulation, experiment);
 #if DEBUG
-printf("calibrate_parse: i=%u input=%s\n", i, &input[i][0]);
+fprintf(stderr, "calibrate_parse: i=%u input=%s\n", i, &input[i][0]);
 #endif
 		calibrate_input(calibrate, simulation, &input[i][0],
 			calibrate->file[i][experiment]);
 	}
 	for (; i < MAX_NINPUTS; ++i) strcpy(&input[i][0], "");
 #if DEBUG
-printf("calibrate_parse: parsing end\n");
+fprintf(stderr, "calibrate_parse: parsing end\n");
 #endif
 
 	// Performing the simulation
@@ -345,7 +345,7 @@ printf("calibrate_parse: parsing end\n");
 		&input[4][0], &input[5][0], &input[6][0], &input[7][0], 
 		output);
 #if DEBUG
-printf("calibrate_parse: %s\n", buffer);
+fprintf(stderr, "calibrate_parse: %s\n", buffer);
 #endif
 	system(buffer);
 
@@ -356,7 +356,7 @@ printf("calibrate_parse: %s\n", buffer);
 		snprintf(buffer, 512, "./%s %s %s %s", calibrate->evaluator, output,
 			calibrate->experiment[experiment], result);
 #if DEBUG
-printf("calibrate_parse: %s\n", buffer);
+fprintf(stderr, "calibrate_parse: %s\n", buffer);
 #endif
 		system(buffer);
 		file_result = fopen(result, "r");
@@ -386,7 +386,7 @@ printf("calibrate_parse: %s\n", buffer);
 #endif
 
 #if DEBUG
-printf("calibrate_parse: end\n");
+fprintf(stderr, "calibrate_parse: end\n");
 #endif
 
 	// Returning the objective function
@@ -410,7 +410,7 @@ void calibrate_best_thread(Calibrate *calibrate, unsigned int simulation,
 	unsigned int i, j;
 	double e;
 #if DEBUG
-printf("calibrate_best_thread: start\n");
+fprintf(stderr, "calibrate_best_thread: start\n");
 #endif
 	if (calibrate->nsaveds < calibrate->nbests
 		|| value < calibrate->error_best[calibrate->nsaveds - 1])
@@ -436,7 +436,7 @@ printf("calibrate_best_thread: start\n");
 		g_mutex_unlock(&mutex);
 	}
 #if DEBUG
-printf("calibrate_best_thread: end\n");
+fprintf(stderr, "calibrate_best_thread: end\n");
 #endif
 }
 
@@ -457,7 +457,7 @@ void calibrate_best_sequential(Calibrate *calibrate, unsigned int simulation,
 	unsigned int i, j;
 	double e;
 #if DEBUG
-printf("calibrate_best_sequential: start\n");
+fprintf(stderr, "calibrate_best_sequential: start\n");
 #endif
 	if (calibrate->nsaveds < calibrate->nbests
 		|| value < calibrate->error_best[calibrate->nsaveds - 1])
@@ -481,7 +481,7 @@ printf("calibrate_best_sequential: start\n");
 		}
 	}
 #if DEBUG
-printf("calibrate_best_sequential: end\n");
+fprintf(stderr, "calibrate_best_sequential: end\n");
 #endif
 }
 
@@ -498,12 +498,12 @@ void* calibrate_thread(ParallelData *data)
 	double e;
 	Calibrate *calibrate;
 #if DEBUG
-printf("calibrate_thread: start\n");
+fprintf(stderr, "calibrate_thread: start\n");
 #endif
 	thread = data->thread;
 	calibrate = data->calibrate;
 #if DEBUG
-printf("calibrate_thread: thread=%u start=%u end=%u\n", thread,
+fprintf(stderr, "calibrate_thread: thread=%u start=%u end=%u\n", thread,
 calibrate->thread[thread], calibrate->thread[thread + 1]);
 #endif
 	for (i = calibrate->thread[thread]; i < calibrate->thread[thread + 1]; ++i)
@@ -513,11 +513,11 @@ calibrate->thread[thread], calibrate->thread[thread + 1]);
 			e += calibrate_parse(calibrate, i, j);
 		calibrate_best_thread(calibrate, i, e);
 #if DEBUG
-printf("calibrate_thread: i=%u e=%lg\n", i, e);
+fprintf(stderr, "calibrate_thread: i=%u e=%lg\n", i, e);
 #endif
 	}
 #if DEBUG
-printf("calibrate_thread: end\n");
+fprintf(stderr, "calibrate_thread: end\n");
 #endif
 	g_thread_exit(NULL);
 	return NULL;
@@ -534,8 +534,8 @@ void calibrate_sequential(Calibrate *calibrate)
 	unsigned int i, j;
 	double e;
 #if DEBUG
-printf("calibrate_sequential: start\n");
-printf("calibrate_sequential: nstart=%u nend=%u\n",
+fprintf(stderr, "calibrate_sequential: start\n");
+fprintf(stderr, "calibrate_sequential: nstart=%u nend=%u\n",
 calibrate->nstart, calibrate->nend);
 #endif
 	for (i = calibrate->nstart; i < calibrate->nend; ++i)
@@ -545,11 +545,11 @@ calibrate->nstart, calibrate->nend);
 			e += calibrate_parse(calibrate, i, j);
 		calibrate_best_sequential(calibrate, i, e);
 #if DEBUG
-printf("calibrate_sequential: i=%u e=%lg\n", i, e);
+fprintf(stderr, "calibrate_sequential: i=%u e=%lg\n", i, e);
 #endif
 	}
 #if DEBUG
-printf("calibrate_sequential: end\n");
+fprintf(stderr, "calibrate_sequential: end\n");
 #endif
 }
 
@@ -572,7 +572,7 @@ void calibrate_merge(Calibrate *calibrate, unsigned int nsaveds,
 	unsigned int i, j, k, s[calibrate->nbests];
 	double e[calibrate->nbests];
 #if DEBUG
-printf("calibrate_merge: start\n");
+fprintf(stderr, "calibrate_merge: start\n");
 #endif
 	i = j = k = 0;
 	do
@@ -613,7 +613,7 @@ printf("calibrate_merge: start\n");
 	memcpy(calibrate->simulation_best, s, k * sizeof(unsigned int));
 	memcpy(calibrate->error_best, e, k * sizeof(double));
 #if DEBUG
-printf("calibrate_merge: end\n");
+fprintf(stderr, "calibrate_merge: end\n");
 #endif
 }
 
@@ -630,7 +630,7 @@ void calibrate_synchronise(Calibrate *calibrate)
 	double error_best[calibrate->nbests];
 	MPI_Status mpi_stat;
 #if DEBUG
-printf("calibrate_synchronise: start\n");
+fprintf(stderr, "calibrate_synchronise: start\n");
 #endif
 	if (calibrate->mpi_rank == 0)
 	{
@@ -653,7 +653,7 @@ printf("calibrate_synchronise: start\n");
 			MPI_COMM_WORLD);
 	}
 #if DEBUG
-printf("calibrate_synchronise: end\n");
+fprintf(stderr, "calibrate_synchronise: end\n");
 #endif
 }
 #endif
@@ -671,7 +671,7 @@ void calibrate_sweep(Calibrate *calibrate)
 	GThread *thread[nthreads];
 	ParallelData data[nthreads];
 #if DEBUG
-printf("calibrate_sweep: start\n");
+fprintf(stderr, "calibrate_sweep: start\n");
 #endif
 	for (i = 0; i < calibrate->nsimulations; ++i)
 	{
@@ -705,7 +705,7 @@ printf("calibrate_sweep: start\n");
 	calibrate_synchronise(calibrate);
 #endif
 #if DEBUG
-printf("calibrate_sweep: end\n");
+fprintf(stderr, "calibrate_sweep: end\n");
 #endif
 }
 
@@ -721,7 +721,7 @@ void calibrate_MonteCarlo(Calibrate *calibrate)
 	GThread *thread[nthreads];
 	ParallelData data[nthreads];
 #if DEBUG
-printf("calibrate_MonteCarlo: start\n");
+fprintf(stderr, "calibrate_MonteCarlo: start\n");
 #endif
 	for (i = 0; i < calibrate->nsimulations; ++i)
 		for (j = 0; j < calibrate->nvariables; ++j)
@@ -745,7 +745,7 @@ printf("calibrate_MonteCarlo: start\n");
 	calibrate_synchronise(calibrate);
 #endif
 #if DEBUG
-printf("calibrate_MonteCarlo: end\n");
+fprintf(stderr, "calibrate_MonteCarlo: end\n");
 #endif
 }
 
@@ -786,11 +786,13 @@ void calibrate_genetic(Calibrate *calibrate)
 	char buffer[512], *best_genome;
 	double best_objective, *best_variable;
 #if DEBUG
-printf("calibrate_genetic: start\n");
-printf("calibrate_genetic: ntasks=%u nthreads=%u\n", ntasks, nthreads);
-printf("calibrate_genetic: nvariables=%u population=%u generations=%u\n",
+fprintf(stderr, "calibrate_genetic: start\n");
+fprintf(stderr, "calibrate_genetic: ntasks=%u nthreads=%u\n", ntasks, nthreads);
+fprintf(stderr,
+"calibrate_genetic: nvariables=%u population=%u generations=%u\n",
 calibrate->nvariables, calibrate->nsimulations, calibrate->niterations);
-printf("calibrate_genetic: mutation=%lg reproduction=%lg adaptation=%lg\n",
+fprintf(stderr,
+"calibrate_genetic: mutation=%lg reproduction=%lg adaptation=%lg\n",
 calibrate->mutation_ratio, calibrate->reproduction_ratio,
 calibrate->adaptation_ratio);
 #endif
@@ -807,7 +809,7 @@ calibrate->adaptation_ratio);
 		&best_variable,
 		&best_objective);
 #if DEBUG
-printf("calibrate_genetic: the best\n");
+fprintf(stderr, "calibrate_genetic: the best\n");
 #endif
 	printf("THE BEST IS\n");
 	fprintf(calibrate->result, "THE BEST IS\n");
@@ -824,7 +826,7 @@ printf("calibrate_genetic: the best\n");
 	g_free(best_genome);
 	g_free(best_variable);
 #if DEBUG
-printf("calibrate_genetic: start\n");
+fprintf(stderr, "calibrate_genetic: start\n");
 #endif
 }
 
@@ -869,7 +871,7 @@ void calibrate_save_old(Calibrate *calibrate)
 {
 	unsigned int i, j;
 #if DEBUG
-printf("calibrate_save_old: start\n");
+fprintf(stderr, "calibrate_save_old: start\n");
 #endif
 	memcpy(calibrate->error_old, calibrate->error_best,
 		calibrate->nbests * sizeof(double));
@@ -882,9 +884,9 @@ printf("calibrate_save_old: start\n");
 	}
 #if DEBUG
 for (i = 0; i < calibrate->nvariables; ++i)
-printf("calibrate_save_old: best variable %u=%lg\n",
+fprintf(stderr, "calibrate_save_old: best variable %u=%lg\n",
 i, calibrate->value_old[i]);
-printf("calibrate_save_old: end\n");
+fprintf(stderr, "calibrate_save_old: end\n");
 #endif
 }
 
@@ -901,7 +903,7 @@ void calibrate_merge_old(Calibrate *calibrate)
 	double v[calibrate->nbests * calibrate->nvariables], e[calibrate->nbests],
 		*enew, *eold;
 #if DEBUG
-printf("calibrate_merge_old: start\n");
+fprintf(stderr, "calibrate_merge_old: start\n");
 #endif
 	enew = calibrate->error_best;
 	eold = calibrate->error_old;
@@ -934,7 +936,7 @@ printf("calibrate_merge_old: start\n");
 	memcpy(calibrate->value_old, v, k * calibrate->nvariables * sizeof(double));
 	memcpy(calibrate->error_old, e, k * sizeof(double));
 #if DEBUG
-printf("calibrate_merge_old: end\n");
+fprintf(stderr, "calibrate_merge_old: end\n");
 #endif
 }
 
@@ -953,7 +955,7 @@ void calibrate_refine(Calibrate *calibrate)
 	MPI_Status mpi_stat;
 #endif
 #if DEBUG
-printf("calibrate_refine: start\n");
+fprintf(stderr, "calibrate_refine: start\n");
 #endif
 #if HAVE_MPI
 	if (!calibrate->mpi_rank)
@@ -1008,7 +1010,7 @@ printf("calibrate_refine: start\n");
 	}
 #endif
 #if DEBUG
-printf("calibrate_refine: end\n");
+fprintf(stderr, "calibrate_refine: end\n");
 #endif
 }
 
@@ -1022,7 +1024,7 @@ void calibrate_iterate(Calibrate *calibrate)
 {
 	unsigned int i;
 #if DEBUG
-printf("calibrate_iterate: start\n");
+fprintf(stderr, "calibrate_iterate: start\n");
 #endif
 	calibrate->error_old
 		= (double*)g_malloc(calibrate->nbests * sizeof(double));
@@ -1042,7 +1044,7 @@ printf("calibrate_iterate: start\n");
 	g_free(calibrate->error_old);
 	g_free(calibrate->value_old);
 #if DEBUG
-printf("calibrate_iterate: end\n");
+fprintf(stderr, "calibrate_iterate: end\n");
 #endif
 }
 
@@ -1066,7 +1068,7 @@ int calibrate_new(Calibrate *calibrate, char *filename)
 		XML_TEMPLATE5, XML_TEMPLATE6, XML_TEMPLATE7, XML_TEMPLATE8};
 
 #if DEBUG
-printf("calibrate_new: start\n");
+fprintf(stderr, "calibrate_new: start\n");
 #endif
 
 	// Parsing the XML data file
@@ -1146,8 +1148,6 @@ printf("calibrate_new: start\n");
 			{
 				buffer = xmlGetProp(node, XML_GENERATIONS);
 				calibrate->niterations = strtoul((char*)buffer, NULL, 0);
-				calibrate->nsimulations
-					= calibrate->nsimulations * calibrate->niterations;
 				xmlFree(buffer);
 				if (!calibrate->niterations)
 				{
@@ -1273,18 +1273,21 @@ printf("calibrate_new: start\n");
 	}
 
 	// Reading the iterations number
-	if (xmlHasProp(node, XML_ITERATIONS))
-	{
-		buffer = xmlGetProp(node, XML_ITERATIONS);
-		calibrate->niterations = strtoul((char*)buffer, NULL, 0);
-		xmlFree(buffer);
-		if (!calibrate->niterations)
+	if (calibrate->algorithm != CALIBRATE_ALGORITHM_GENETIC)
+	{		
+		if (xmlHasProp(node, XML_ITERATIONS))
 		{
-			printf("Null iterations number in the data file\n");
-			return 0;
+			buffer = xmlGetProp(node, XML_ITERATIONS);
+			calibrate->niterations = strtoul((char*)buffer, NULL, 0);
+			xmlFree(buffer);
+			if (!calibrate->niterations)
+			{
+				printf("Null iterations number in the data file\n");
+				return 0;
+			}
 		}
+		else calibrate->niterations = 1;
 	}
-	else calibrate->niterations = 1;
 
 	// Reading the best simulations number
 	if (xmlHasProp(node, XML_BESTS))
@@ -1328,7 +1331,7 @@ printf("calibrate_new: start\n");
 	{
 		if (xmlStrcmp(child->name, XML_EXPERIMENT)) break;
 #if DEBUG
-printf("calibrate_new: nexperiments=%u\n", calibrate->nexperiments);
+fprintf(stderr, "calibrate_new: nexperiments=%u\n", calibrate->nexperiments);
 #endif
 		if (xmlHasProp(child, XML_NAME))
 		{
@@ -1344,7 +1347,7 @@ printf("calibrate_new: nexperiments=%u\n", calibrate->nexperiments);
 		}
 		if (!calibrate->nexperiments) calibrate->ninputs = 0;
 #if DEBUG
-printf("calibrate_new: template[0]\n");
+fprintf(stderr, "calibrate_new: template[0]\n");
 #endif
 		if (xmlHasProp(child, XML_TEMPLATE1))
 		{
@@ -1355,15 +1358,15 @@ printf("calibrate_new: template[0]\n");
 			calibrate->file[0] = g_realloc(calibrate->file[0],
 				(1 + calibrate->nexperiments) * sizeof(GMappedFile*));
 #if DEBUG
-printf("calibrate_new: experiment=%u template1=%s\n", calibrate->nexperiments,
-calibrate->template[0][calibrate->nexperiments]);
+fprintf(stderr, "calibrate_new: experiment=%u template1=%s\n",
+calibrate->nexperiments, calibrate->template[0][calibrate->nexperiments]);
 #endif
 			calibrate->file[0][calibrate->nexperiments] =
 				g_mapped_file_new
 					(calibrate->template[0][calibrate->nexperiments], 0, NULL);
 			if (!calibrate->nexperiments) ++calibrate->ninputs;
 #if DEBUG
-printf("calibrate_new: ninputs=%u\n", calibrate->ninputs);
+fprintf(stderr, "calibrate_new: ninputs=%u\n", calibrate->ninputs);
 #endif
 		}
 		else
@@ -1374,7 +1377,7 @@ printf("calibrate_new: ninputs=%u\n", calibrate->ninputs);
 		for (j = 1; j < MAX_NINPUTS; ++j)
 		{
 #if DEBUG
-printf("calibrate_new: template%u\n", j + 1);
+fprintf(stderr, "calibrate_new: template%u\n", j + 1);
 #endif
 			if (xmlHasProp(child, template[j]))
 			{
@@ -1391,8 +1394,9 @@ printf("calibrate_new: template%u\n", j + 1);
 				calibrate->file[j] = g_realloc(calibrate->file[j],
 					(1 + calibrate->nexperiments) * sizeof(GMappedFile*));
 #if DEBUG
-printf("calibrate_new: experiment=%u template%u=%s\n", calibrate->nexperiments,
-j + 1, calibrate->template[j][calibrate->nexperiments]);
+fprintf(stderr, "calibrate_new: experiment=%u template%u=%s\n",
+calibrate->nexperiments, j + 1,
+calibrate->template[j][calibrate->nexperiments]);
 #endif
 				calibrate->file[j][calibrate->nexperiments] =
 					g_mapped_file_new
@@ -1400,7 +1404,7 @@ j + 1, calibrate->template[j][calibrate->nexperiments]);
 						 	NULL);
 				if (!calibrate->nexperiments) ++calibrate->ninputs;
 #if DEBUG
-printf("calibrate_new: ninputs=%u\n", calibrate->ninputs);
+fprintf(stderr, "calibrate_new: ninputs=%u\n", calibrate->ninputs);
 #endif
 			}
 			else if (calibrate->nexperiments && calibrate->ninputs > 1)
@@ -1413,7 +1417,7 @@ printf("calibrate_new: ninputs=%u\n", calibrate->ninputs);
 		}
 		++calibrate->nexperiments;
 #if DEBUG
-printf("calibrate_new: nexperiments=%u\n", calibrate->nexperiments);
+fprintf(stderr, "calibrate_new: nexperiments=%u\n", calibrate->nexperiments);
 #endif
 	}
 	if (!calibrate->nexperiments)
@@ -1530,7 +1534,7 @@ printf("calibrate_new: nexperiments=%u\n", calibrate->nexperiments);
 			calibrate->nsimulations *=
 				calibrate->nsweeps[calibrate->nvariables];
 #if DEBUG
-printf("calibrate_new: nsweeps=%u nsimulations=%u\n",
+fprintf(stderr, "calibrate_new: nsweeps=%u nsimulations=%u\n",
 calibrate->nsweeps[calibrate->nvariables], calibrate->nsimulations);
 #endif
 		}
@@ -1566,7 +1570,7 @@ calibrate->nsweeps[calibrate->nvariables], calibrate->nsimulations);
 		return 0;
 	}
 #if DEBUG
-printf("calibrate_new: nvariables=%u\n", calibrate->nvariables);
+fprintf(stderr, "calibrate_new: nvariables=%u\n", calibrate->nvariables);
 #endif
 
 	// Allocating values
@@ -1596,7 +1600,7 @@ printf("calibrate_new: nvariables=%u\n", calibrate->nvariables);
 	calibrate->nend = calibrate->nsimulations;
 #endif
 #if DEBUG
-printf("calibrate_new: nstart=%u nend=%u\n", calibrate->nstart,
+fprintf(stderr, "calibrate_new: nstart=%u nend=%u\n", calibrate->nstart,
 calibrate->nend);
 #endif
 
@@ -1608,7 +1612,7 @@ calibrate->nend);
 	   calibrate->thread[i] = calibrate->nstart
 		   + i * (calibrate->nend - calibrate->nstart) / nthreads;
 #if DEBUG
-printf("calibrate_new: i=%u thread=%u\n", i, calibrate->thread[i]);
+fprintf(stderr, "calibrate_new: i=%u thread=%u\n", i, calibrate->thread[i]);
 #endif
 	}
 
@@ -1666,7 +1670,7 @@ printf("calibrate_new: i=%u thread=%u\n", i, calibrate->thread[i]);
 	g_free(calibrate->genetic_variable);
 
 #if DEBUG
-printf("calibrate_new: end\n");
+fprintf(stderr, "calibrate_new: end\n");
 #endif
 
 	return 1;

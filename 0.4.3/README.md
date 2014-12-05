@@ -1,4 +1,4 @@
-CALIBRATOR (0.4.2 version)
+CALIBRATOR (0.4.3 version)
 ===========================
 
 A software to perform calibrations or optimizations of empirical parameters.
@@ -60,12 +60,12 @@ ____________
 2. Dowload this repository
 
 3. Link the latest genetic version to genetic doing on a terminal:
-> $ cd PATH_TO_CALIBRATOR/0.4.2
+> $ cd PATH_TO_CALIBRATOR/0.4.3
 >
 > $ ln -s PATH_TO_THE_GENETIC/0.6.0 genetic
 
 4. Build doing on a terminal:
-> $ cd PATH_TO_CALIBRATOR/0.4.2
+> $ cd PATH_TO_CALIBRATOR/0.4.3
 >
 > $ aclocal
 >
@@ -85,14 +85,14 @@ ___________
 2. Dowload this repository
 
 3. Link the latest genetic version to genetic doing on a terminal:
-> $ cd PATH_TO_CALIBRATOR/0.4.2
+> $ cd PATH_TO_CALIBRATOR/0.4.3
 >
 > $ ln -s PATH_TO_THE_GENETIC/0.6.0 genetic
 
 4. Build doing on a terminal:
 > $ export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.14
 >
-> $ cd PATH_TO_CALIBRATOR/0.4.2
+> $ cd PATH_TO_CALIBRATOR/0.4.3
 >
 > $ aclocal
 >
@@ -107,7 +107,7 @@ ___________
 MAKING REFERENCE MANUAL INSTRUCTIONS (file latex/refman.pdf)
 ------------------------------------------------------------
 
-> $ cd PATH_TO_CALIBRATOR/0.4.2
+> $ cd PATH_TO_CALIBRATOR/0.4.3
 >
 > $ doxygen
 >
