@@ -1,0 +1,30 @@
+set term pos eps enh 16
+set size 0.9,0.9
+
+set xlabel 'Radial distance to the sprinkler (m)'
+set ylabel 'Pluviometry (mm)'
+
+r(x,y,x0,y0)=sqrt((x-x0)**2+(y-y0)**2)
+set key left
+
+set out 'sprinkler-0.eps'
+plot [0:10][0:50] '0.res' u (r($4,$5,10,10)):($6*1000) t'Simulated' w p pt 6,\
+	'0.res' u (r($1,$2,10,10)):($3*1000) t'Measured' w l lt 1
+
+set xlabel 'Position (m)'
+
+set out 'sprinkler-2,84.eps'
+plot [-10:10][0:80] \
+	'2,84-a.res' u ($4>20?r($4,$5,20,20):-r($4,$5,20,20)):($6*1000) \
+		t 'Simulated E-W' w p pt 6, \
+	'2,84-a.res' u ($1>20?r($1,$2,20,20):-r($1,$2,20,20)):($3*1000) \
+		t 'Measured E-W' w l lt 1, \
+	'2,84-b.res' u ($4>20?r($4,$5,20,20):-r($4,$5,20,20)):($6*1000) \
+		t 'Simulated S-N' w p pt 8, \
+	'2,84-b.res' u ($1>20?r($1,$2,20,20):-r($1,$2,20,20)):($3*1000) \
+		t 'Measured S-N' w l lt 2, \
+	
+#set out 'fig-N44-20-2,84-y.png'
+#plot [-20:20][0:100] 'sim-N44-20-2,84' u (x1($1,$2,20,20,25)**2>1?1/0:y1($1,$2,20,20,25)):($3*1000)  t 'Variable wind (k1=0.87 k2=0.29 r=0.41)',\
+#	'sim-N44-20-2,84-b' u (x1($1,$2,20,20,25)**2>1?1/0:y1($1,$2,20,20,25)):($3*1000) t 'Constant wind (k1=1.03 k2=0.50 r=0.31)',\
+#	'N44-20PSI-2,84.res' u (x1($1,$2,20,20,25)**2>1?1/0:y1($1,$2,20,20,25)):3 t'Measured'

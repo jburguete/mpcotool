@@ -1,0 +1,11 @@
+SIMULATION
+initial_date(s):      0
+final_date(s):        3600
+stability:            0.2
+SlicesNumber:         360
+DropDiametersNumber:  1000
+runge_kutta_type:     2
+ballistic_model_type: 1
+drop_landing_type:    1
+drop_generation_type: 2
+wind_model_type:      1

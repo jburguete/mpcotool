@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<calibrate simulator="aspersion" evaluator="compare" algorithm="sweep">
+	<experiment name="0.mea" template1="0.env" template2="0.sim"
+		template3="template-0" template4="0.mea"/>
+	<variable name="D50" minimum="0.00100" maximum="0.00600" format="%.5lf"
+		sweeps="10"/>
+	<variable name="N" minimum="0.000" maximum="40.000" format="%.3lf"
+		sweeps="10"/>
+	<variable name="P" minimum="0.000" maximum="1.000" format="%.3lf"
+		sweeps="10"/>
+</calibrate>

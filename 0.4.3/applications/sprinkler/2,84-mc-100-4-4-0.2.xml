@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<calibrate simulator="aspersion" evaluator="compare"
+	simulations="100" iterations="4" bests="4" tolerance="0.2">
+	<experiment name="2,84.mea" template1="2,84.env" template2="2,84.sim"
+		template3="template-2,84" template4="2,84.mea"/>
+	<variable name="k1" minimum="0.000" absolute_minimum="0.000" maximum="1.000"
+		format="%.3lf"/>
+	<variable name="k2" minimum="0.000" absolute_minimum="0.000" maximum="1.000"
+		format="%.3lf"/>
+</calibrate>

@@ -1141,12 +1141,11 @@ characteristics of the parcels and hydrants, the electricity tariffs depending o
 reservoir in the area, seven different scenarios were obtained as a function of the historical irrigation requirements for 
 the same period using real data \citet{Zapata09}.
 
-
 \subsection{Calibration of empirical parameters on surface irrigation}
 
 Se ha usado CALIBRATOR para obtener los parámetros empíricos de los modelos de
 fricción, difusión e infiltración de unos experimentos publicados en
-\citet{JaviSurcos2} y que van a ser simulado con el programa SURCOS
+\citet{JaviSurcos2} y que van a ser simulados con el programa SURCOS
 \citep{Surcos,SurcosGit,JaviSurcos3}. Consisten en cuatro casos de riego en
 surcos con difusión de soluto. Los surcos tenían una longitud de $100$ m y se simularon con una malla de 100 celdas. Los surcos eran contiguos y se prepararon
 con la misma geometría. Además se realizaron casi simultáneamente, de forma que
@@ -1195,18 +1194,18 @@ simulaciones.
 	\\ & $tol=0.2$
 	\\ \hline
 	\multirow{5}{*}{genetic} & $N_{population}=750$
-	& $n=0.0425$
-	& \multirow{5}{*}{0.3327}
-	\\ & $N_{generations}=6$ & $K=9.856\cdot 10^{-4}$
-	\\ & $R_{mutation}=0.2$ & $a=0.497$
+	& $n=0.0399$
+	& \multirow{5}{*}{0.3339}
+	\\ & $N_{generations}=6$ & $K=9.907\cdot 10^{-4}$
+	\\ & $R_{mutation}=0.2$ & $a=0.498$
 	\\ & $R_{reproduction}=0.2$
 	\\ & $R_{adaptation}=0.2$
 	\\ \hline
 	\multirow{5}{*}{genetic} & $N_{population}=300$
-	& $n=0.0425$
-	& \multirow{5}{*}{0.3327}
-	\\ & $N_{generations}=31$ & $K=9.856\cdot 10^{-4}$
-	\\ & $R_{mutation}=0.1$ & $a=0.497$
+	& $n=0.0417$
+	& \multirow{5}{*}{0.3322}
+	\\ & $N_{generations}=31$ & $K=9.989\cdot 10^{-4}$
+	\\ & $R_{mutation}=0.1$ & $a=0.496$
 	\\ & $R_{reproduction}=0.1$
 	\\ & $R_{adaptation}=0.1$
 	\\ \hline
@@ -1249,10 +1248,10 @@ caracterizar efectos aerodinámicos del chorro, en presencia de viento el modelo
 utiliza otros dos coeficientes de corrección de la resistencia aerodinámica:
 $k_1$ y $k_2$.
 Por lo tanto el modelo se calibra en dos pasos: en un primero se ajustan los
-coeficientes $D_{50}$ y $n$ que ajustan la pluviometría recogida en condiciones
-sin viento y se consideran propios de cada modelo de aspersión a una presión
-determinada. En un segundo paso se calibran los coeficientes $k_1$ y $k_2$ que
-mejor ajustan las pluviometrías medidas para cada velocidad de viento.
+coeficientes $D_{50}$, $n$ y $P$ que ajustan la pluviometría recogida en
+condiciones sin viento y se consideran propios de cada modelo de aspersión a una
+presión determinada. En un segundo paso se calibran los coeficientes $k_1$ y
+$k_2$ que mejor ajustan las pluviometrías medidas para cada velocidad de viento.
 
 En este trabajo vamos a calibrar un modelo de aspersor de tipo spray, el N44
 fabricado por Senninger, a una presión de trabajo de 20PSI. En este tipo de
@@ -1261,6 +1260,62 @@ determinar la velocidad inicial de salida de las gotas tras el impacto con el
 plato se recurrió a la técnica fotográfica descrita en \citet{Salvador09}. Con
 esta técnica se determinó que la pérdida de carga en el impacto con el plato era
 del 50\%.
+
+En la tabla~\ref{TabSprinklerI} se muestran los resultados de la calibración de
+los parámetros $D_{50}$, $n$ y $P$ en condiciones sin viento utilizando un total
+de 1000 simulaciones con diferentes algoritmos de optimización.
+
+\TABLE{\scriptsize}{cccc}
+{
+	Optimization & Optimization & Optime empirical & Objective function
+	\\ algorithm & parameters & parameters & value
+	\\ \hline
+	\multirow{3}{*}{Sweeps} & $N_{simulations}=1000$
+	& $D_{50}=0.00378$
+	& \multirow{3}{*}{0.00254} \\
+	& $N_{iterations}=1$ & $n=17.778$
+	\\ & & $P=0.556$
+	\\ \hline
+	\multirow{4}{*}{Sweeps} & $N_{simulations}=125$
+	& $D_{50}=0.00350$
+	& \multirow{4}{*}{0.00324} \\
+	& $N_{iterations}=8$ & $n=10.225$
+	\\ & $N_{bests}=8$ & $P=0.364$
+	\\ & $tol=0.4$
+	\\ \hline
+	\multirow{3}{*}{Monte-Carlo} & $N_{simulations}=1000$
+	& $D_{50}=0.00307$
+	& \multirow{3}{*}{0.00201} \\
+	& $N_{iterations}=1$ & $n=21.513$
+	\\ & & $P=0.770$
+	\\ \hline
+	\multirow{4}{*}{Monte-Carlo} & $N_{simulations}=125$
+	& $D_{50}=0.00306$
+	& \multirow{4}{*}{0.00160} \\
+	& $N_{iterations}=8$ & $n=20.878$
+	\\ & $N_{bests}=8$ & $P=0.388$
+	\\ & $tol=0.4$
+	\\ \hline
+	\multirow{5}{*}{genetic} & $N_{population}=250$
+	& $D_{50}=0.00306$
+	& \multirow{5}{*}{0.00171}
+	\\ & $N_{generations}=6$ & $n=21.001$
+	\\ & $R_{mutation}=0.2$ & $P=0.563$
+	\\ & $R_{reproduction}=0.2$
+	\\ & $R_{adaptation}=0.2$
+	\\ \hline
+	\multirow{5}{*}{genetic} & $N_{population}=100$
+	& $D_{50}=0.00306$
+	& \multirow{5}{*}{0.00162}
+	\\ & $N_{generations}=31$ & $n=19.963$
+	\\ & $R_{mutation}=0.1$ & $P=0.377$
+	\\ & $R_{reproduction}=0.1$
+	\\ & $R_{adaptation}=0.1$
+	\\ \hline
+}{Parámetros empíricos óptimos y valor de la función objetivo obtenido para el
+experimento de riego por aspersión en condiciones sin viento usando el programa
+SURCOS y varios algoritmos de optimización implementados en CALIBRATOR con el
+mismo número total de simulaciones}{TabSprinklerI}
 
 \subsection{Calibration of empirical parameters of the movement of a sprinkler
 center-pivot}
