@@ -46,6 +46,18 @@
 	\end{table}
 }
 
+\newcommand{\FIGii}[4]
+{
+	\begin{figure}[ht!]
+		\centering
+		\begin{tabular}{cc}
+			(a) & \includegraphics{#1} \\
+			(b) & \includegraphics{#2}
+		\end{tabular}
+		\caption{#3.\label{#4}}
+	\end{figure}
+}
+
 \newcommand{\FIGVI}[8]
 {
 	\begin{figure}[ht!]
@@ -1109,6 +1121,11 @@ combinación con muy diferentes programas para calibrar u optimizar coeficientes
 en modelos tan diferentes como riego por superficie, flujo en canales, aspersión
 o movimiento de máquinas de riego.
 
+En casi todos los casos se ha simulado en un laptop computer equipado con un
+procesador Intel(R) Core(TM) i7 M620 2.67GHz. La ejecución en esta computadora
+se realizó en cuatro tareas paralelizadas para aprovechar al máximo el doble
+núcleo con hyperthreading del procesador.
+
 \subsection{Optimization of a canal management}
 
 A real irrigation channel has been analysed in order to find out the optimal values of two
@@ -1159,9 +1176,8 @@ de fuerza bruta con 3000  imulaciones, considerando que en cada una de estas
 simulaciones comprende el cálculo de los cuatro experimentos descritos en el
 paper. En este trabajo se han utilizado el mismo de simulaciones con varios de
 los métodos de calibración implementados en CALIBRATOR. Ejecutar las 3000
-simulaciones, paralelizadas en cuatro tareas para aprovechar al máximo el doble
-núcleo con hyperthreading del procesador, costó aproximadamente 1h20m en un
-laptop computer equipado con un procesador Intel(R) Core(TM) i7 M620 2.67GHz.
+simulaciones costó aproximadamente 1h20m en el laptop computer descrito al
+principio de la sección.
 
 En la tabla~\ref{TabSurcos} se muestran los resultados obtenidos de los
 coeficientes óptimos y del valor de la función de evaluación,
@@ -1263,7 +1279,9 @@ del 50\%.
 
 En la tabla~\ref{TabSprinklerI} se muestran los resultados de la calibración de
 los parámetros $D_{50}$, $n$ y $P$ en condiciones sin viento utilizando un total
-de 1000 simulaciones con diferentes algoritmos de optimización.
+de 1000 simulaciones con diferentes algoritmos de optimización. El cálculo de
+las 1000 simulaciones costó aproximadamente 7 minutos en el laptop computer
+descrito al principio de esta sección.
 
 \TABLE{\scriptsize}{cccc}
 {
@@ -1313,9 +1331,72 @@ de 1000 simulaciones con diferentes algoritmos de optimización.
 	\\ & $R_{adaptation}=0.1$
 	\\ \hline
 }{Parámetros empíricos óptimos y valor de la función objetivo obtenido para el
-experimento de riego por aspersión en condiciones sin viento usando el programa
-SURCOS y varios algoritmos de optimización implementados en CALIBRATOR con el
-mismo número total de simulaciones}{TabSprinklerI}
+experimento de riego por aspersión en condiciones sin viento usando varios
+algoritmos de optimización implementados en CALIBRATOR con el mismo número total
+de simulaciones}{TabSprinklerI}
+
+A continuación, y usando los valores óptimos $D_{50}=3.06$ mm, $n=20.878$ y
+$P=0.388$ obtenidos con el mejor método (Monte-Carlo con 8 iteraciones, véase
+tabla~\ref{TabSprinklerI}) se ha procedido a calibrar los valores de $k_1$ y
+$k_2$ en un experimento con intensidad media de viento de 2.84 m/s usando los
+diferentes algoritmos de CALIBRATOR con un número total de 400 simulaciones en
+todos los casos. Estas 400 simulaciones costaban aproximadamente 4 minutos en el
+laptop computer descrito anteriormente.
+
+\TABLE{\scriptsize}{cccc}
+{
+	Optimization & Optimization & Optime empirical & Objective function
+	\\ algorithm & parameters & parameters & value
+	\\ \hline
+	\multirow{2}{*}{Sweeps} & $N_{simulations}=400$
+	& $k_1=0.263$
+	& \multirow{2}{*}{0.01217} \\
+	& $N_{iterations}=1$ & $k_2=0.105$
+	\\ \hline
+	\multirow{4}{*}{Sweeps} & $N_{simulations}=100$
+	& $k_1=0.284$
+	& \multirow{4}{*}{0.01217} \\
+	& $N_{iterations}=4$ & $k_2=0.098$
+	\\ & $N_{bests}=11$
+	\\ & $tol=0.2$
+	\\ \hline
+	\multirow{3}{*}{Monte-Carlo} & $N_{simulations}=400$
+	& $k_1=0.396$
+	& \multirow{3}{*}{0.01219} \\
+	& $N_{iterations}=1$ & $k_2=0.067$
+	\\ & & $P=0.770$
+	\\ \hline
+	\multirow{4}{*}{Monte-Carlo} & $N_{simulations}=100$
+	& $k_1=0.370$
+	& \multirow{4}{*}{0.01215} \\
+	& $N_{iterations}=4$ & $k_2=0.079$
+	\\ & $N_{bests}=4$
+	\\ & $tol=0.2$
+	\\ \hline
+	\multirow{5}{*}{genetic} & $N_{population}=100$
+	& $k_1=0.400$
+	& \multirow{5}{*}{0.01209}
+	\\ & $N_{generations}=6$ & $k_2=0.070$
+	\\ & $R_{mutation}=0.2$
+	\\ & $R_{reproduction}=0.2$
+	\\ & $R_{adaptation}=0.2$
+	\\ \hline
+	\multirow{5}{*}{genetic} & $N_{population}=100$
+	& $k_1=0.400$
+	& \multirow{5}{*}{0.01209}
+	\\ & $N_{generations}=11$ & $k_2=0.070$
+	\\ & $R_{mutation}=0.1$
+	\\ & $R_{reproduction}=0.1$
+	\\ & $R_{adaptation}=0.1$
+	\\ \hline
+}{Parámetros empíricos óptimos y valor de la función objetivo obtenido para el
+experimento de riego por aspersión en condiciones de intensidad de viento media
+de 2.84 m/s usando varios algoritmos de optimización implementados en CALIBRATOR
+con el mismo número total de simulaciones}{TabSprinklerII}
+
+\FIGii{sprinkler-0.eps}{sprinkler-2,84.eps}
+{(a) Radial pluviometry for non-wind conditions and (b) pluviometry at the two
+pluviometers axes}{FigSprinkler}
 
 \subsection{Calibration of empirical parameters of the movement of a sprinkler
 center-pivot}
@@ -1411,8 +1492,8 @@ medidos.
 
 En la tabla~\ref{TabPivot} se muestran algunos de los resultados obtenidos con
 un total de 10000 simulaciones de cada uno de los cuatro experimentos, que
-costaron aproximadamente 50 minutos paralelizadas en cuatro tareas en el mismo
-laptop computer usado en las anteriores subsecciones.
+costaron aproximadamente 50 minutos en el mismo laptop computer usado en las
+anteriores subsecciones.
 
 \TABLE{\scriptsize}{cccc}
 {
@@ -1480,7 +1561,7 @@ CALIBRATOR ha mostrado ser un programa muy flexible y versátil que permite
 calibrar y optimizar muy variados problemas de modelización adaptándose a la
 sintaxis de programas muy diferentes. En este trabajo CALIBRATOR ha sido
 utilizado con éxito en aplicaciones prácticas de ingeniería agraria tan diversas
-como optimización de manejo de canales y calibración de coeficientes empíricos
+como optimización del manejo de un canal y calibración de coeficientes empíricos
 de un modelo de riego por surcos, de un modelo balístico de riego por aspersión
 y de un modelo de movimiento de máquinas de riego.
 
