@@ -10,5 +10,5 @@
 	<variable name="random" minimum="0.000" absolute_minimum="0.000"
 		maximum="0.400" format="%.3lf"/>
 	<variable name="boot-time" minimum="0.00" absolute_minimum="0.00"
-		maximum="10.00" format="%.2lf"/>
+		maximum="5.00" format="%.2lf"/>
 </calibrate>

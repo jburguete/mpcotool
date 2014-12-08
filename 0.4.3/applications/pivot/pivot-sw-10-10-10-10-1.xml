@@ -10,6 +10,6 @@
 		sweeps="10"/>
 	<variable name="random" minimum="0.00" maximum="0.40" format="%.2lf"
 		sweeps="10"/>
-	<variable name="boot-time" minimum="0.0" maximum="10.0" format="%.1lf"
+	<variable name="boot-time" minimum="0.0" maximum="5.0" format="%.1lf"
 		sweeps="10"/>
 </calibrate>

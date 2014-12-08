@@ -1,10 +1,10 @@
-time ../../calibrator pivot-sw-10-10-10-10-1.xml > log-sw-10-10-10-10-1
+time ../../calibrator pivot-sw-10-10-10-10-1.xml
 mv result result-sw-10-10-10-10-1
-time ../../calibrator pivot-sw-5-5-5-5-16-10-0.4.xml > log-sw-5-5-5-5-16-10-0.4
+time ../../calibrator pivot-sw-5-5-5-5-16-10-0.4.xml
 mv result result-sw-5-5-5-5-16-10-0.4
-time ../../calibrator pivot-mc-625-16-10-0.1.xml > log-mc-625-16-10-0.1
+time ../../calibrator pivot-mc-625-16-10-0.1.xml
 mv result result-mc-625-16-10-0.1
-time ../../calibrator pivot-ga-1000-16-0.2-0.2-0.2.xml > log-ga-1000-16-0.2-0.2-0.2
+time ../../calibrator pivot-ga-1000-16-0.2-0.2-0.2.xml
 mv result result-ga-1000-16-0.2-0.2-0.2
-time ../../calibrator pivot-ga-400-81-0.1-0.1-0.1.xml > log-ga-400-81-0.1-0.1-0.1
+time ../../calibrator pivot-ga-400-81-0.1-0.1-0.1.xml
 mv result result-ga-400-81-0.1-0.1-0.1

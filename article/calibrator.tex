@@ -4,7 +4,6 @@
 \usepackage{listings}
 \usepackage{pstricks}
 \usepackage{multido}
-\usepackage{multirow}
 
 \usepackage{lineno}
 \linenumbers
@@ -1196,30 +1195,22 @@ simulaciones.
 	Optimization & Optimization & Optime empirical & Objective function
 	\\ algorithm & parameters & parameters & value
 	\\ \hline
-	\multirow{3}{*}{Monte-Carlo} & $N_{simulations}=3000$
-	& $n=0.0395$
-	& \multirow{3}{*}{0.3430} \\
-	& $N_{iterations}=1$ & $K=7.861\cdot 10^{-4}$
+	Monte-Carlo & $N_{simulations}=3000$ & $n=0.0395$ & 0.3430
+	\\ & $N_{iterations}=1$ & $K=7.861\cdot 10^{-4}$
 	\\ & & $a=0.534$
 	\\ \hline
-	\multirow{4}{*}{Monte-Carlo} & $N_{simulations}=500$
-	& $n=0.0422$
-	& \multirow{4}{*}{0.3321} \\
-	& $N_{iterations}=6$ & $K=9.994\cdot 10^{-4}$
+	Monte-Carlo & $N_{simulations}=500$ & $n=0.0422$ & 0.3321
+	\\ & $N_{iterations}=6$ & $K=9.994\cdot 10^{-4}$
 	\\ & $N_{bests}=10$ & $a=0.497$
 	\\ & $tol=0.2$
 	\\ \hline
-	\multirow{5}{*}{genetic} & $N_{population}=750$
-	& $n=0.0399$
-	& \multirow{5}{*}{0.3339}
+	genetic & $N_{population}=750$ & $n=0.0399$ & 0.3339
 	\\ & $N_{generations}=6$ & $K=9.907\cdot 10^{-4}$
 	\\ & $R_{mutation}=0.2$ & $a=0.498$
 	\\ & $R_{reproduction}=0.2$
 	\\ & $R_{adaptation}=0.2$
 	\\ \hline
-	\multirow{5}{*}{genetic} & $N_{population}=300$
-	& $n=0.0417$
-	& \multirow{5}{*}{0.3322}
+	genetic & $N_{population}=300$ & $n=0.0417$ & 0.3322
 	\\ & $N_{generations}=31$ & $K=9.989\cdot 10^{-4}$
 	\\ & $R_{mutation}=0.1$ & $a=0.496$
 	\\ & $R_{reproduction}=0.1$
@@ -1281,50 +1272,41 @@ En la tabla~\ref{TabSprinklerI} se muestran los resultados de la calibración de
 los parámetros $D_{50}$, $n$ y $P$ en condiciones sin viento utilizando un total
 de 1000 simulaciones con diferentes algoritmos de optimización. El cálculo de
 las 1000 simulaciones costó aproximadamente 7 minutos en el laptop computer
-descrito al principio de esta sección.
+descrito al principio de esta sección. Se observa que los mejores resultados se
+obtuvieron con el algoritmo de Monte-Carlo iterado seguido de cerca por los
+algoritmos genéticos. En este caso el método de barrido obtiene peores
+resultados, sobre todo cuando se complementa con el método iterado.
 
 \TABLE{\scriptsize}{cccc}
 {
 	Optimization & Optimization & Optime empirical & Objective function
 	\\ algorithm & parameters & parameters & value
 	\\ \hline
-	\multirow{3}{*}{Sweeps} & $N_{simulations}=1000$
-	& $D_{50}=0.00378$
-	& \multirow{3}{*}{0.00254} \\
-	& $N_{iterations}=1$ & $n=17.778$
+	Sweeps & $N_{simulations}=1000$ & $D_{50}=3.78$ mm & 2.54 mm
+	\\ & $N_{iterations}=1$ & $n=17.778$
 	\\ & & $P=0.556$
 	\\ \hline
-	\multirow{4}{*}{Sweeps} & $N_{simulations}=125$
-	& $D_{50}=0.00350$
-	& \multirow{4}{*}{0.00324} \\
-	& $N_{iterations}=8$ & $n=10.225$
+	Sweeps & $N_{simulations}=125$ & $D_{50}=3.50$ mm & 3.24 mm
+	\\ & $N_{iterations}=8$ & $n=10.225$
 	\\ & $N_{bests}=8$ & $P=0.364$
 	\\ & $tol=0.4$
 	\\ \hline
-	\multirow{3}{*}{Monte-Carlo} & $N_{simulations}=1000$
-	& $D_{50}=0.00307$
-	& \multirow{3}{*}{0.00201} \\
-	& $N_{iterations}=1$ & $n=21.513$
+	Monte-Carlo & $N_{simulations}=1000$ & $D_{50}=3.07$ mm & 2.01 mm
+	\\ & $N_{iterations}=1$ & $n=21.513$
 	\\ & & $P=0.770$
 	\\ \hline
-	\multirow{4}{*}{Monte-Carlo} & $N_{simulations}=125$
-	& $D_{50}=0.00306$
-	& \multirow{4}{*}{0.00160} \\
-	& $N_{iterations}=8$ & $n=20.878$
+	Monte-Carlo & $N_{simulations}=125$ & $D_{50}=3.06$ mm & 1.60 mm
+	\\ & $N_{iterations}=8$ & $n=20.878$
 	\\ & $N_{bests}=8$ & $P=0.388$
 	\\ & $tol=0.4$
 	\\ \hline
-	\multirow{5}{*}{genetic} & $N_{population}=250$
-	& $D_{50}=0.00306$
-	& \multirow{5}{*}{0.00171}
+	genetic & $N_{population}=250$ & $D_{50}=3.06$ mm & 1.71 mm
 	\\ & $N_{generations}=6$ & $n=21.001$
 	\\ & $R_{mutation}=0.2$ & $P=0.563$
 	\\ & $R_{reproduction}=0.2$
 	\\ & $R_{adaptation}=0.2$
 	\\ \hline
-	\multirow{5}{*}{genetic} & $N_{population}=100$
-	& $D_{50}=0.00306$
-	& \multirow{5}{*}{0.00162}
+	genetic & $N_{population}=100$ & $D_{50}=3.06$ mm & 1.62 mm
 	\\ & $N_{generations}=31$ & $n=19.963$
 	\\ & $R_{mutation}=0.1$ & $P=0.377$
 	\\ & $R_{reproduction}=0.1$
@@ -1341,49 +1323,40 @@ tabla~\ref{TabSprinklerI}) se ha procedido a calibrar los valores de $k_1$ y
 $k_2$ en un experimento con intensidad media de viento de 2.84 m/s usando los
 diferentes algoritmos de CALIBRATOR con un número total de 400 simulaciones en
 todos los casos. Estas 400 simulaciones costaban aproximadamente 4 minutos en el
-laptop computer descrito anteriormente.
+laptop computer descrito anteriormente. En este caso fueron los algoritmos
+genéticos los que obtuvieron los mejores resultados (nótese que con dos
+configuraciones diferentes obtuvieron idénticos resultados) aunque el resto de
+métodos, incluidos los métodos puros de fuerza bruta, obtuvieron resultados
+similares.
 
 \TABLE{\scriptsize}{cccc}
 {
 	Optimization & Optimization & Optime empirical & Objective function
 	\\ algorithm & parameters & parameters & value
 	\\ \hline
-	\multirow{2}{*}{Sweeps} & $N_{simulations}=400$
-	& $k_1=0.263$
-	& \multirow{2}{*}{0.01217} \\
-	& $N_{iterations}=1$ & $k_2=0.105$
+	Sweeps & $N_{simulations}=400$ & $k_1=0.263$ & 12.17 mm
+	\\ & $N_{iterations}=1$ & $k_2=0.105$
 	\\ \hline
-	\multirow{4}{*}{Sweeps} & $N_{simulations}=100$
-	& $k_1=0.284$
-	& \multirow{4}{*}{0.01217} \\
-	& $N_{iterations}=4$ & $k_2=0.098$
+	Sweeps & $N_{simulations}=100$ & $k_1=0.284$ & 12.17 mm
+	\\ & $N_{iterations}=4$ & $k_2=0.098$
 	\\ & $N_{bests}=11$
 	\\ & $tol=0.2$
 	\\ \hline
-	\multirow{3}{*}{Monte-Carlo} & $N_{simulations}=400$
-	& $k_1=0.396$
-	& \multirow{3}{*}{0.01219} \\
-	& $N_{iterations}=1$ & $k_2=0.067$
-	\\ & & $P=0.770$
+	Monte-Carlo & $N_{simulations}=400$ & $k_1=0.396$ & 12.19 mm
+	\\ & $N_{iterations}=1$ & $k_2=0.067$
 	\\ \hline
-	\multirow{4}{*}{Monte-Carlo} & $N_{simulations}=100$
-	& $k_1=0.370$
-	& \multirow{4}{*}{0.01215} \\
-	& $N_{iterations}=4$ & $k_2=0.079$
+	Monte-Carlo & $N_{simulations}=100$ & $k_1=0.370$ & 12.15 mm
+	\\ & $N_{iterations}=4$ & $k_2=0.079$
 	\\ & $N_{bests}=4$
 	\\ & $tol=0.2$
 	\\ \hline
-	\multirow{5}{*}{genetic} & $N_{population}=100$
-	& $k_1=0.400$
-	& \multirow{5}{*}{0.01209}
+	genetic & $N_{population}=100$ & $k_1=0.400$ & 12.09 mm
 	\\ & $N_{generations}=6$ & $k_2=0.070$
 	\\ & $R_{mutation}=0.2$
 	\\ & $R_{reproduction}=0.2$
 	\\ & $R_{adaptation}=0.2$
 	\\ \hline
-	\multirow{5}{*}{genetic} & $N_{population}=100$
-	& $k_1=0.400$
-	& \multirow{5}{*}{0.01209}
+	genetic & $N_{population}=100$ & $k_1=0.400$ & 12.09 mm
 	\\ & $N_{generations}=11$ & $k_2=0.070$
 	\\ & $R_{mutation}=0.1$
 	\\ & $R_{reproduction}=0.1$
@@ -1393,6 +1366,10 @@ laptop computer descrito anteriormente.
 experimento de riego por aspersión en condiciones de intensidad de viento media
 de 2.84 m/s usando varios algoritmos de optimización implementados en CALIBRATOR
 con el mismo número total de simulaciones}{TabSprinklerII}
+
+Finalmente, en la figura~\ref{FigSprinkler} mostramos las pluviometrías
+registradas y simuladas con los valores empíricos óptimos en condiciones sin
+viento y con un viento de intensidad media de 2.84 m/s.
 
 \FIGii{sprinkler-0.eps}{sprinkler-2,84.eps}
 {(a) Radial pluviometry for non-wind conditions and (b) pluviometry at the two
@@ -1500,47 +1477,49 @@ anteriores subsecciones.
 	Optimization & Optimization & Optime empirical & Objective function
 	\\ algorithm & parameters & parameters & value
 	\\ \hline
-	\multirow{4}{*}{Sweep} & $N_{simulations}=10000$
-	& $\overline{\alpha_{start}}=179.370^\circ$
-	& \multirow{4}{*}{12327.19}
-	\\ & $N_{iterations}=1$ & $\overline{\alpha_{stop}}=180.330^\circ$
-	\\ & & $\delta=0.270^\circ$
-	\\ & & $\tau=1.70$s
+	Sweep & $N_{simulations}=10000$ & $\overline{\alpha_{start}}=179.910^\circ$
+	& 9924.1
+	\\ & $N_{iterations}=1$ & $\overline{\alpha_{stop}}=180.300^\circ$
+	\\ & & $\delta=0.130^\circ$
+	\\ & & $\tau=4.40$s
 	\\ \hline
-	\multirow{4}{*}{Sweep} & $N_{simulations}=625$
-	& $\overline{\alpha_{start}}=179.395^\circ$
-	& \multirow{4}{*}{12326.04} \\
-	& $N_{iterations}=16$ & $\overline{\alpha_{stop}}=180.313^\circ$
-	\\ & $N_{bests}=10$ & $\delta=0.257^\circ$
-	\\ & $tol=0.25$ & $\tau=3.42$s
+	Sweep & $N_{simulations}=625$ & $\overline{\alpha_{start}}=179.335^\circ$
+	& 10443.4
+	\\ & $N_{iterations}=16$ & $\overline{\alpha_{stop}}=179.735^\circ$
+	\\ & $N_{bests}=10$ & $\delta=0.113^\circ$
+	\\ & $tol=0.4$ & $\tau=4.08$s
 	\\ \hline
-	\multirow{4}{*}{Monte-Carlo} & $N_{simulations}=625$
-	& $\overline{\alpha_{start}}=179.37^\circ$
-	& \multirow{4}{*}{12327.19} \\
-	& $N_{iterations}=16$ & $\overline{\alpha_{stop}}=180.33^\circ$
-	\\ & $N_{bests}=10$ & $\delta=0.27^\circ$
-	\\ & $tol=0.25$ & $\tau=1.7$s
+	Monte-Carlo & $N_{simulations}=10000$
+	& $\overline{\alpha_{start}}=179.768^\circ$ & 9741.8
+	\\ & $N_{iterations}=1$ & $\overline{\alpha_{stop}}=180.177^\circ$
+	\\ & & $\delta=0.139^\circ$
+	\\ & & $\tau=3.77$s
 	\\ \hline
-	\multirow{5}{*}{genetic} & $N_{population}=1000$
-	& $\overline{\alpha_{start}}=179.37^\circ$
-	& \multirow{5}{*}{0.3327}
-	\\ & $N_{generations}=16$ & $\overline{\alpha_{stop}}=180.33^\circ$
-	\\ & $R_{mutation}=0.2$ & $\delta=0.27^\circ$
-	\\ & $R_{reproduction}=0.2$ & $\tau=1.7$s
+	Monte-Carlo & $N_{simulations}=625$
+	& $\overline{\alpha_{start}}=179.786^\circ$ & 9741.8
+	\\ & $N_{iterations}=16$ & $\overline{\alpha_{stop}}=180.194^\circ$
+	\\ & $N_{bests}=10$ & $\delta=0.122^\circ$
+	\\ & $tol=0.1$ & $\tau=3.82$s
+	\\ \hline
+	genetic & $N_{population}=1000$ & $\overline{\alpha_{start}}=179.800^\circ$
+	& 9552.8
+	\\ & $N_{generations}=16$ & $\overline{\alpha_{stop}}=180.190^\circ$
+	\\ & $R_{mutation}=0.2$ & $\delta=0.137^\circ$
+	\\ & $R_{reproduction}=0.2$ & $\tau=4.39$s
 	\\ & $R_{adaptation}=0.2$
 	\\ \hline
-	\multirow{5}{*}{genetic} & $N_{population}=400$
-	& $\overline{\alpha_{start}}=179.37^\circ$
-	& \multirow{5}{*}{0.3327}
-	\\ & $N_{generations}=81$ & $\overline{\alpha_{stop}}=180.33^\circ$
-	\\ & $R_{mutation}=0.1$ & $\delta=0.27^\circ$
-	\\ & $R_{reproduction}=0.1$ & $\tau=1.7$s
+	genetic & $N_{population}=400$ & $\overline{\alpha_{start}}=179.751^\circ$
+	& 9187.5
+	\\ & $N_{generations}=81$ & $\overline{\alpha_{stop}}=180.166^\circ$
+	\\ & $R_{mutation}=0.1$ & $\delta=0.136^\circ$
+	\\ & $R_{reproduction}=0.1$ & $\tau=3.32$s
 	\\ & $R_{adaptation}=0.1$
 	\\ \hline
 }{Parámetros empíricos óptimos y valor de la función objetivo obtenido para el
 pivot de cuatro torres descrito en \citet{Ouazaa14} usando varios algoritmos de
 optimización implementados en CALIBRATOR con el mismo número total de
 simulaciones}{TabPivot}
+
 
 \section{Conclusions}
 
