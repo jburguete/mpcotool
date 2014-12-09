@@ -1,6 +1,116 @@
-set term pos eps enh
-set size 0.9,0.9
+set term pos eps enh mono 8
+set size 0.44,0.44
 
 set xlabel 'Duration (min)'
+set yrange [0:1800]
+
+set style data histogram
+set style histogram cluster gap 2
+#set boxwidth 0.9
+set xtic rotate by -90 scale 0
+
+set title 'Simulated'
 set ylabel 'Number of starts'
 
+set out 'pivot-measured-starts-100.eps'
+plot 'his-100' using 2:xtic(1) ti col w histogram fill solid border 1 lc 1, \
+	'' u 4 ti col w histogram fill empty border 1 lt 1 lc 1, \
+	'' u 6 ti col w histogram fill pattern 2 border 1 lt 1 lc 1, \
+	'' u 8 ti col w histogram fill pattern 3 border 1 lt 1 lc 1
+
+set out 'pivot-measured-starts-52.eps'
+plot 'his-52' using 2:xtic(1) ti col w histogram fill solid border 1 lc 1, \
+	'' u 4 ti col w histogram fill empty border 1 lt 1 lc 1, \
+	'' u 6 ti col w histogram fill pattern 2 border 1 lt 1 lc 1, \
+	'' u 8 ti col w histogram fill pattern 3 border 1 lt 1 lc 1
+
+set out 'pivot-measured-starts-42.eps'
+plot 'his-42' using 2:xtic(1) ti col w histogram fill solid border 1 lc 1, \
+	'' u 4 ti col w histogram fill empty border 1 lt 1 lc 1, \
+	'' u 6 ti col w histogram fill pattern 2 border 1 lt 1 lc 1, \
+	'' u 8 ti col w histogram fill pattern 3 border 1 lt 1 lc 1
+
+set out 'pivot-measured-starts-27,48.eps'
+plot 'his-27,48' using 2:xtic(1) ti col w histogram fill solid border 1 lc 1, \
+	'' u 4 ti col w histogram fill empty border 1 lt 1 lc 1, \
+	'' u 6 ti col w histogram fill pattern 2 border 1 lt 1 lc 1, \
+	'' u 8 ti col w histogram fill pattern 3 border 1 lt 1 lc 1
+
+set ylabel 'Number of stops'
+
+set out 'pivot-measured-stops-100.eps'
+plot 'his-100' using 3:xtic(1) ti col w histogram fill solid border 1 lc 1, \
+	'' u 5 ti col w histogram fill empty border 1 lt 1 lc 1, \
+	'' u 7 ti col w histogram fill pattern 2 border 1 lt 1 lc 1, \
+	'' u 9 ti col w histogram fill pattern 3 border 1 lt 1 lc 1
+
+set out 'pivot-measured-stops-52.eps'
+plot 'his-52' using 3:xtic(1) ti col w histogram fill solid border 1 lc 1, \
+	'' u 5 ti col w histogram fill empty border 1 lt 1 lc 1, \
+	'' u 7 ti col w histogram fill pattern 2 border 1 lt 1 lc 1, \
+	'' u 9 ti col w histogram fill pattern 3 border 1 lt 1 lc 1
+
+set out 'pivot-measured-stops-42.eps'
+plot 'his-42' using 3:xtic(1) ti col w histogram fill solid border 1 lc 1, \
+	'' u 5 ti col w histogram fill empty border 1 lt 1 lc 1, \
+	'' u 7 ti col w histogram fill pattern 2 border 1 lt 1 lc 1, \
+	'' u 9 ti col w histogram fill pattern 3 border 1 lt 1 lc 1
+
+set out 'pivot-measured-stops-27,48.eps'
+plot 'his-27,48' using 3:xtic(1) ti col w histogram fill solid border 1 lc 1, \
+	'' u 5 ti col w histogram fill empty border 1 lt 1 lc 1, \
+	'' u 7 ti col w histogram fill pattern 2 border 1 lt 1 lc 1, \
+	'' u 9 ti col w histogram fill pattern 3 border 1 lt 1 lc 1
+
+set title 'Measured'
+set ylabel 'Number of starts'
+
+set out 'pivot-simulated-starts-100.eps'
+plot 'mea-100' using 2:xtic(1) ti col w histogram fill solid border 1 lc 1, \
+	'' u 4 ti col w histogram fill empty border 1 lt 1 lc 1, \
+	'' u 6 ti col w histogram fill pattern 2 border 1 lt 1 lc 1, \
+	'' u 8 ti col w histogram fill pattern 3 border 1 lt 1 lc 1
+
+set out 'pivot-simulated-starts-52.eps'
+plot 'mea-52' using 2:xtic(1) ti col w histogram fill solid border 1 lc 1, \
+	'' u 4 ti col w histogram fill empty border 1 lt 1 lc 1, \
+	'' u 6 ti col w histogram fill pattern 2 border 1 lt 1 lc 1, \
+	'' u 8 ti col w histogram fill pattern 3 border 1 lt 1 lc 1
+
+set out 'pivot-simulated-starts-42.eps'
+plot 'mea-42' using 2:xtic(1) ti col w histogram fill solid border 1 lc 1, \
+	'' u 4 ti col w histogram fill empty border 1 lt 1 lc 1, \
+	'' u 6 ti col w histogram fill pattern 2 border 1 lt 1 lc 1, \
+	'' u 8 ti col w histogram fill pattern 3 border 1 lt 1 lc 1
+
+set out 'pivot-simulated-starts-27,48.eps'
+plot 'mea-27,48' using 2:xtic(1) ti col w histogram fill solid border 1 lc 1, \
+	'' u 4 ti col w histogram fill empty border 1 lt 1 lc 1, \
+	'' u 6 ti col w histogram fill pattern 2 border 1 lt 1 lc 1, \
+	'' u 8 ti col w histogram fill pattern 3 border 1 lt 1 lc 1
+
+set ylabel 'Number of stops'
+
+set out 'pivot-simulated-stops-100.eps'
+plot 'mea-100' using 3:xtic(1) ti col w histogram fill solid border 1 lc 1, \
+	'' u 5 ti col w histogram fill empty border 1 lt 1 lc 1, \
+	'' u 7 ti col w histogram fill pattern 2 border 1 lt 1 lc 1, \
+	'' u 9 ti col w histogram fill pattern 3 border 1 lt 1 lc 1
+
+set out 'pivot-simulated-stops-52.eps'
+plot 'mea-52' using 3:xtic(1) ti col w histogram fill solid border 1 lc 1, \
+	'' u 5 ti col w histogram fill empty border 1 lt 1 lc 1, \
+	'' u 7 ti col w histogram fill pattern 2 border 1 lt 1 lc 1, \
+	'' u 9 ti col w histogram fill pattern 3 border 1 lt 1 lc 1
+
+set out 'pivot-simulated-stops-42.eps'
+plot 'mea-42' using 3:xtic(1) ti col w histogram fill solid border 1 lc 1, \
+	'' u 5 ti col w histogram fill empty border 1 lt 1 lc 1, \
+	'' u 7 ti col w histogram fill pattern 2 border 1 lt 1 lc 1, \
+	'' u 9 ti col w histogram fill pattern 3 border 1 lt 1 lc 1
+
+set out 'pivot-simulated-stops-27,48.eps'
+plot 'mea-27,48' using 3:xtic(1) ti col w histogram fill solid border 1 lc 1, \
+	'' u 5 ti col w histogram fill empty border 1 lt 1 lc 1, \
+	'' u 7 ti col w histogram fill pattern 2 border 1 lt 1 lc 1, \
+	'' u 9 ti col w histogram fill pattern 3 border 1 lt 1 lc 1

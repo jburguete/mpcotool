@@ -57,6 +57,20 @@
 	\end{figure}
 }
 
+\newcommand{\FIGIV}[6]
+{
+	\begin{figure}[ht!]
+		\centering
+		\begin{tabular}{cc}
+			(a) & (b)
+			\\ \includegraphics{#1} & \includegraphics{#2}
+			\\ (c) & (d)
+			\\ \includegraphics{#3} & \includegraphics{#4}
+		\end{tabular}
+		\caption{#5.\label{#6}}
+	\end{figure}
+}
+
 \newcommand{\FIGVI}[8]
 {
 	\begin{figure}[ht!]
@@ -1127,25 +1141,27 @@ núcleo con hyperthreading del procesador.
 
 \subsection{Optimization of a canal management}
 
-A real irrigation channel has been analysed in order to find out the optimal values of two
-variables of interest which take into account the daily gate modification time, being performed
-in a scenario of modernization to sprinkler irrigation.
+A real irrigation channel has been analysed in order to find out the optimal
+values of two variables of interest which take into account the daily gate
+modification time, being performed in a scenario of modernization to sprinkler
+irrigation. The area of study is located in the northeast of Spain, in the
+province of Huesca. It consists of the first 13657 meters of the Canal de
+Violada. The studied stretch was designed for a maximum discharge of 6 m$^3$/s.
+This stretch delivers water to three irrigation communities: Almudévar, Gurrea
+and El Temple. 
 
-The area of study is located in the northeast of Spain, in the province of Huesca. It consists of
-the first 13657 meters of the Canal de Violada. This canal was built and designed in the 1930s, 
-but due to severe infiltration problems, the initial stretch of the canal (13353 m) was rebuilt at 
-the beginning of the 21st century. Canal de Violada is supplied by the Canal de Monegros and the studied 
-stretch was designed for a maximum discharge of 6 $m^3 \cdot s^{-1}$. This stretch delivers water to three irrigation 
-communities: Almudévar, Gurrea and El Temple. 
+Two sections can be distinguished in this work, the new stretch and the last 304
+meters. Both share the same bottom slope, $S_0$ = 0.00059 and differ in the
+cross section dimensions and the value of the Gauckler-Manning  roughness
+coefficient, having a value of 0.014 and 0.02 s m$^{-1/3}$ for the first
+and the final stretch respectively. These values correspond to polished and
+coarse concrete \citep{Chow59}.
 
-Two sections can be distinguished in this work, the new stretch and the last 304 meters. Both share the 
-same bottom slope, $S_0$ = 0.00059 and differ in the cross section dimensions and the value of the Gauckler-Manning 
-roughness coefficient, having a value of 0.014 and 0.02 $m^{-1/3}\cdot s$ for the first and the final stretch 
-respectively. These values correspond to polished and coarse concrete \citet{Chow59}.
-
-Two key optimization variables have been studied: $d_A$ and $d_{GT}$. Where $d_A$ takes into account the delay between 
-the modification time of the inlet discharge and the modification time in the Almudévar gate and $d_{GT}$ takes into account 
-the delay between the inlet and Gurrea and Temple gates modification.
+Two key optimization variables have been studied: $d_A$ and $d_{GT}$. Where
+$d_A$ takes into account the delay between  the modification time of the inlet
+discharge and the modification time in the Almudévar gate and $d_{GT}$ takes
+into account the delay between the inlet and Gurrea and Temple gates
+modification.
 
 The canal was initially dry and it was waited until a stationary state with a discharge of 2 $m^{-1/3}\cdot s$ was reached. 
 The objective of this work was to provide the required daily discharge to the three important irrigation gates together 
@@ -1520,6 +1536,29 @@ pivot de cuatro torres descrito en \citet{Ouazaa14} usando varios algoritmos de
 optimización implementados en CALIBRATOR con el mismo número total de
 simulaciones}{TabPivot}
 
+\FIGIV{pivot-measured-starts-100.eps}{pivot-measured-stops-100.eps}
+{pivot-simulated-starts-100.eps}{pivot-simulated-stops-100.eps}
+{Histograma del número de (a) arranques medidos, (b) paradas medidas, (c)
+arranques simulados y (d) paradas simuladas para las torres del pivot trabajando
+al 100\% de velocidad.}{FigPivot100}
+
+\FIGIV{pivot-measured-starts-52.eps}{pivot-measured-stops-52.eps}
+{pivot-simulated-starts-52.eps}{pivot-simulated-stops-52.eps}
+{Histograma del número de (a) arranques medidos, (b) paradas medidas, (c)
+arranques simulados y (d) paradas simuladas para las torres del pivot trabajando
+al 52\% de velocidad.}{FigPivot52}
+
+\FIGIV{pivot-measured-starts-42.eps}{pivot-measured-stops-42.eps}
+{pivot-simulated-starts-42.eps}{pivot-simulated-stops-42.eps}
+{Histograma del número de (a) arranques medidos, (b) paradas medidas, (c)
+arranques simulados y (d) paradas simuladas para las torres del pivot trabajando
+al 42\% de velocidad.}{FigPivot42}
+
+\FIGIV{pivot-measured-starts-27,48.eps}{pivot-measured-stops-27,48.eps}
+{pivot-simulated-starts-27,48.eps}{pivot-simulated-stops-27,48.eps}
+{Histograma del número de (a) arranques medidos, (b) paradas medidas, (c)
+arranques simulados y (d) paradas simuladas para las torres del pivot trabajando
+al 27.48\% de velocidad.}{FigPivot27}
 
 \section{Conclusions}
 
