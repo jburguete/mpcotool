@@ -203,7 +203,11 @@ typedef struct
  */
 int ntasks;
 unsigned int nthreads;
-GMutex mutex;
+#if GLIB_MINOR_VERSION >= 32
+GMutex mutex[1];
+#else
+GMutex *mutex;
+#endif
 void (*calibrate_step)(Calibrate*);
 Calibrate calibrate[1];
 
@@ -415,7 +419,7 @@ fprintf(stderr, "calibrate_best_thread: start\n");
 	if (calibrate->nsaveds < calibrate->nbests
 		|| value < calibrate->error_best[calibrate->nsaveds - 1])
 	{
-		g_mutex_lock(&mutex);
+		g_mutex_lock(mutex);
 		if (calibrate->nsaveds < calibrate->nbests) ++calibrate->nsaveds;
 		calibrate->error_best[calibrate->nsaveds - 1] = value;
 		calibrate->simulation_best[calibrate->nsaveds - 1] = simulation;
@@ -433,7 +437,7 @@ fprintf(stderr, "calibrate_best_thread: start\n");
 			}
 			else break;
 		}
-		g_mutex_unlock(&mutex);
+		g_mutex_unlock(mutex);
 	}
 #if DEBUG
 fprintf(stderr, "calibrate_best_thread: end\n");
@@ -696,7 +700,11 @@ fprintf(stderr, "calibrate_sweep: start\n");
 		{
 			data[i].calibrate = calibrate;
 			data[i].thread = i;
+#if GLIB_MINOR_VERSION >= 32
 			thread[i] = g_thread_new(NULL, (void(*))calibrate_thread, &data[i]);
+#else
+			thread[i] = g_thread_create((void(*))calibrate_thread, &data[i], TRUE, NULL);
+#endif
 		}
 		for (i = 0; i < nthreads; ++i) g_thread_join(thread[i]);
 	}
@@ -736,7 +744,11 @@ fprintf(stderr, "calibrate_MonteCarlo: start\n");
 		{
 			data[i].calibrate = calibrate;
 			data[i].thread = i;
+#if GLIB_MINOR_VERSION >= 32
 			thread[i] = g_thread_new(NULL, (void(*))calibrate_thread, &data[i]);
+#else
+			thread[i] = g_thread_create((void(*))calibrate_thread, &data[i], TRUE, NULL);
+#endif
 		}
 		for (i = 0; i < nthreads; ++i) g_thread_join(thread[i]);
 	}
@@ -1729,6 +1741,9 @@ int main(int argn, char **argc)
 	if (argn == 2) nthreads = cores_number();
 	else nthreads = atoi(argc[2]);
 	printf("nthreads=%u\n", nthreads);
+#if GLIB_MINOR_VERSION < 32
+	if (nthreads > 1) mutex = g_mutex_new();
+#endif
 
 	// Starting pseudo-random numbers generator
 	calibrate->rng = gsl_rng_alloc(gsl_rng_taus2);
