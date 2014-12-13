@@ -1742,6 +1742,7 @@ int main(int argn, char **argc)
 	else nthreads = atoi(argc[2]);
 	printf("nthreads=%u\n", nthreads);
 #if GLIB_MINOR_VERSION < 32
+	g_thread_init(NULL);
 	if (nthreads > 1) mutex = g_mutex_new();
 #endif
 
