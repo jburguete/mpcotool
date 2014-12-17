@@ -29,7 +29,7 @@
 # ./configure
 # make
 
-AC_PREREQ([2.69])
+AC_PREREQ([2.67])
 AC_INIT([calibrator], [0.4.5], [https://github.com/jburguete/calibrator])
 
 # Checks for operative systems
