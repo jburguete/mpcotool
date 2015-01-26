@@ -135,18 +135,16 @@ canal
 \end{keyword}
 
 \begin{abstract}
-En este trabajo se presenta CALIBRATOR, a software program to perform
-calibrations or optimization o empirical parameters. La sintaxis del programa es
-lo suficientemente flexible para poder combinarlo con múltiples y variados
-programas de simulación.
-En el programa están implementados dos algoritmos de optimización de fuerza
-bruta: sweeps and Monte-Carlo y un algoritmo genético.
-El programa permite la ejecución paralelizada de manera sencilla en múltiples
-computadoras y aprovechar los múltiples procesadores de cada computadora.
-El manejo y las posibilidades de CALIBRATOR se analizan en cuatro aplicaciones
-prácticas: optimización de manejo de canales y calibración de coeficientes
-empíricos de modelos de riego por gravedad, del modelo balístico de riego por
-aspersión y del movimiento de las máquinas de riego.
+The present work describes CALIBRATOR, a new software program to perform
+calibrations or optimization of empirical parameters required in the formulation of 
+numerical simulation models. The structure is such that it can be easily adapted to 
+different simulation codes.
+One genetic algorithm and two brute force optimization algorithms are included (sweeps and Monte-Carlo).
+Parallel computations are enabled in a simple way so that the work load can be distributed among the 
+different processors available in a a computer. 
+The CALIBRATOR usage and possibilities are illustrated by showing four practical applications in agriculture:
+optimization of canal management, calibration of the empirical infiltration coeffcients in surface irrigation,
+optimization of a ballistic sprinkler irrigation model and opimization of irrigation engines movement.
 This software is open source source and is distributed with a BSD (Berkeley
 Software Distribution) type license.
 \end{abstract}
@@ -160,15 +158,12 @@ calibrations or optimizations of empirical parameters with a BSD type license.
 
 \section{Methods}
 
-\subsection{Sweep brutal force method}
+\subsection{Sweep brute force method}
 
-El método de barrido divide el espacio entre los valores extremos de las
-variables a optimizar en intervalos regulares y realiza una simulación para cada
-una de las combinaciones de variables resultantes. Véase el esquema de un
-ejemplo en la figura~\ref{FigSweep}. El número total de simulaciones que se
-realizan es:
+In the sweep method, first the domain defined by the extreme values of the variables to optimize is divided in regular intervals. Then a simulation is performed using each of the resulting combinations. (NO SE ENTIENDE). The sketch of an example is shown
+in figure~\ref{FigSweep}. The total number of required simulations is:
 \EQ{N_{simulations}=x_{sweeps}\times y_{sweeps}\times\cdots,}{EqNSweeps}
-siendo $x_{sweeps}$ el número de barridos en la variable $x$.
+being $x_{sweeps}$ the number of sweeps in the variable $x$.
 
 \PICTURE{210}{200}
 {
@@ -187,15 +182,14 @@ siendo $x_{sweeps}$ el número de barridos en la variable $x$.
 	\put(0,37){$y_{\min}$}
 	\qbezier[10](20,160)(35,160)(50,160)
 	\put(0,157){$y_{\max}$}
-}{Diagram showing an example of application of the sweep brutal force method
+}{Diagram showing an example of application of the sweep brute force method
 with two variables for $x_{sweeps}=y_{sweeps}=5$}{FigSweep}
 
 \subsection{Monte-Carlo method}
 
-El método de Monte-Carlo realiza simulaciones con las variables a optimizar
-obtenidas aleatoriamente con probabilidad uniforme en el rango comprendido entre
-los valores extremos. En la figura~\ref{FigMonteCarlo} vemos el esquema de un
-ejemplo con dos variables.
+Monte-Carlo based methods run simulations using alleatory values of the variables assuming 
+uniform probability within the extrema values range. Figure~\ref{FigMonteCarlo} shows the structure 
+of an example using two variables.
 
 \PICTURE{210}{200}
 {
@@ -236,26 +230,22 @@ ejemplo con dos variables.
 	\put(0,37){$y_{\min}$}
 	\qbezier[50](20,160)(95,160)(170,160)
 	\put(0,157){$y_{\max}$}
-}{Diagram illustrating a Monte-Carlo brutal force method with two variables and
+}{Diagram illustrating a Monte-Carlo brute force method with two variables and
 $N_{simulations}=25$}{FigMonteCarlo}
 
-\subsection{Iterative algorithm applied to brutal force methods}
+\subsection{Iterative algorithm applied to brute force methods}
 
-CALIBRATOR allows to iterate both brutal force methods (sweep or Monte-Carlo) to
-increase the convergence. In this case, the bests results of the previous
-iteration are used to force new intervals in the variables. Then, para
-$N_{bests}^j$ el subconjunto de las mejores simulaciones de la $j$-ésima
-iteración, definimos las siguientes magnitudes:
+CALIBRATOR allows to iterate both sweep or Monte-Carlo brute force methods in order to
+seek convergence. In this case, the best results from the previous
+iteration are used to force new intervals in the variables for the following iteration. Then, for
+$N_{best}^j$ the subset of the best simulation results in the $j$ iteration, the following quantities are 
+defined:
 \begin{description}
-\item{$\displaystyle x_{\max}^b=\max_{i\in N_{bests}}x_i^j$}: máximo valor de la
-	variable $x$ en el subconjunto de las mejores simulaciones de la iteración
-	$j$-ésima.
-\item{$\displaystyle x_{\min}^b=\max_{i\in N_{bests}}x_i^j$}: mínimo valor de la
-	variable $x$ en el subconjunto de las mejores simulaciones de la iteración
-	$j$-ésima.
+\item{$\displaystyle x_{\max}^b=\max_{i\in N_{best}}x_i^j$}: Maximum value of variable $x$ 
+in the subset of the best simulation results from the $j$ iteration.
+\item{$\displaystyle x_{\min}^b=\max_{i\in N_{best}}x_i^j$}: Minimum value of variable $x$ in the subset of the best simulation results from the $j$ iteration.
 \end{description}
-El nuevo intervalo en la variable $x$ con el que se construirán las variables a
-optimizar en la siguiente iteración estará comprendido entre:
+A new interval in the variable $x$ is defined to build the optimization values in the next iteration between:
 \[
 	x_{\max}^{j+1}=\frac{x_{\max}^b+x_{\min}^b
 		+\left(x_{\max}^b-x_{\min}^b\right)(1+tol)}{2},
@@ -268,9 +258,7 @@ optimizar en la siguiente iteración estará comprendido entre:
 {EqIterationInterval}
 being $tol$ a tolerance increasing the size of the variable intervals to
 simulate the next iteration.
-En la figura~\ref{FigIterative} se ilustra un ejemplo del procedimiento con el
-que el algoritmo iterativo modifica los intervalos de las variables para
-incrementar la convergencia.
+Figure~\ref{FigIterative} contains an example of the procedure used by the the iterative algorithm to modify the variables intervals in order to enforce convergence. 
 
 \PICTURE{210}{400}
 {
@@ -366,17 +354,14 @@ incrementar la convergencia.
 	\qbezier[35](20,66.8)(77.05,66.8)(134.1,66.8)
 	\put(0,63.8){$y_{\min}^2$}
 }{Diagram representing an example of the iterative algorithm applied to a
-Monte-Carlo brutal force method with two variables for $N_{simulations}= 25$ and
+Monte-Carlo brute force method with two variables for $N_{simulations}= 25$ and
 two iterations}{FigIterative}
 
 \subsection{Genetic method}
 
-CALIBRATOR implementa el método genético GENETIC \citep{genetic} con sus
-algoritmos por defecto. Los algoritmos están inspirados en \citet{gaul}, aunque
-han sido completamente reescritos con muchas simplificaciones y haciendo uso de
-modernas librerías externas. El código de GENETIC es también open source bajo
-licencia de tipo BSD. En la figura~\ref{FigGeneticFlow} puede verse un diagrama
-de flujo del funcionamiento del método genético implementado en GENETIC.
+CALIBRATOR also offers the use of a genetic method GENETIC \citep{genetic} with its default algorithms.
+They are based on the ideas in \citet{gaul}, but have been fully programmed involving modern external lybraries.
+The code in GENETIC is also open source under BSD license. Figure~\ref{FigGeneticFlow} shows the flowchart of the genetic method implemented in GENETIC.
 
 \psset{xunit=0.5mm,yunit=0.5mm}
 \PSPICTURE{-120}{-185}{120}{20}
@@ -447,15 +432,10 @@ de flujo del funcionamiento del método genético implementado en GENETIC.
 
 \subsubsection{The genome}
 
-Las variables a calibrar/optimizar se codifican en GENETIC en una cadena de bits
-(genoma). Cuanto mayor sea el número de bits asignado a una variable mayor es la
-precisión. El número de bits asignado a cada variable, y por tanto también el
-tamaño del genoma, es fijo y es igual para todas las simulaciones. En la
-figura~\ref{FigGenome} puede verse un diagrama de ejemplo de una codifición de 3
-variables. El valor asignado a una variable $x$ viene determinado por los
-valores extremos permitidos $x_{\min}$ y $x_{\max}$ por el número binario
-asignado en el genoma a la variable $I_x$ y por el número de bits asignados a la
-variable $N_x$ siguiendo la fórmula:
+The variables to calibrate/optimize are coded in GENETIC using a bit chain
+(genome). The larger the number of bits assigned to a variable the higher the resolution.
+The number of bits assigned to each variable, and therefore the genoma size, is fixed and the same for all the 
+simulations. Figure~\ref{FigGenome} shows an example for the coding of three variables. The value assigned to a variable $x$ is determined by the allowed extreme values $x_{\min}$ and $x_{\max}$, the binary number assigned in the genome to variable $I_x$ and by the number of bits assigned to variable $N_x$ according tothe following formula:
 \EQ{x=x_{\min}+\frac{I_x}{2^{N_x}}\,\left(x_{\max}-x_{\min}\right).}{EqGenome}
 
 \psset{unit=1mm}
@@ -514,34 +494,21 @@ variable $N_x$ siguiendo la fórmula:
 	\rput(74,17.5){1}
 	\rput(76,17.5){1}
 	\rput(78,17.5){1}
-}{Diagram illustrating an example codifying three variables to optimize into a
-genome. First and third variables have been codified with 14 bits, and second
-variable has been codified with 9 bits.}{FigGenome}
+}{Example coding three variables to optimize into a
+genome. The first and third variables have been coded with 14 bits, and the second
+variable has been coded with 9 bits.}{FigGenome}
 
-\subsubsection{Supervivencia de los mejores individuos}
+\subsubsection{Survival of the best individuals}
 
-Para una población de $N_{population}$ individuos, en la primera generación se
-simulan todos los casos calculando las variables de entrada a partir del genoma
-de cada individuo.
-
-Después, en cada generación, se generarán $N_{population}\times R_{mutation}$
-individuos por mutación, $N_{population}\times R_{reproduction}$ individuos
-por reproducciónción y $N_{population}\times R_{adaptation}$ individuos
-pos adaptación sustituyendo los individuos de la antigua población que
-obtuvieron peores valores en la función de evaluación. Por tanto sobreviven los
-$N_{survival}$ mejores individuos:
+In a population with $N_{population}$ individuals, in the fist generation all the cases are simulated. The input variables are
+taken from the genome of each individual. Next, in every generation, $N_{population}\times R_{mutation}$ individuals are generated by mutation, $N_{population}\times R_{reproduction}$ individuals are generated by reproduction and $N_{population}\times R_{adaptation}$ individuals are generated by adaptation. The individuals of the former population that obtained lower values in the evaluation function are replaced so that the best $N_{survival}$ individuals survive:
 \EQ
 {
 	N_{survival}=N_{population}\times
 	\left(1-R_{mutation}-R_{reproduction}-R_{adaptation}\right),
 }{EqSurvival}
-Los nuevos individuos se generarán por mutación, reproducción y adpatación de
-los genomas de estos mejores individuos. Además, los ancestros a partir de los
-que se generarán nuevos individuos se eligen entre la población superviviente,
-CALIBRATOR utiliza el algoritmo de selección por defecto de GENETIC, que hace
-una elección aleatoria con una probabilidad linealmente decreciente según su
-ordinal en el conjunto ordenado de individuos supervivientes (véase la
-figura~\ref{FigSelection}).
+New individuals will be generated by mutation, reproduction and adaptatation from the genomes of these best individuals and so on. Furthermore, the ancestors to generate new individulas are chosen among the surviving population.
+CALIBRATOR uses a default alleatory criterion in GENETIC, with a probability linearly decreasing with the ordinal in the ordered set of surviving individuals (see figure~\ref{FigSelection}).
 
 \PICTURE{250}{110}
 {
@@ -578,22 +545,18 @@ figura~\ref{FigSelection}).
 	\put(220,26){\line(1,0){10}}
 	\put(215,10){Last}
 	\qbezier[54](10,90.5)(127.5,50.25)(245,20)
-}{Graphic showing the probability of a survival entity to be selected as parent
+}{Probability of a survival entity to be selected as parent
 of the new entities generated by mutation, reproduction or adaptation
 algorithms}{FigSelection}
 
 \subsubsection{Mutation algorithm}
 
-En el algoritmo de mutación se realiza una copia idéntica del genoma del
-progenitor pero con un bit invertido elegido aleatoriamente con probabilidad
-uniforme. En la figura~\ref{FigMutation} puede verse un ejemplo ilustrando el
-procedimiento.
-
+In the mutation algorithm an identical copy of the parent genome is made except for a bit, randomly chosen with uniform probability, which is inverted. Figure~\ref{FigMutation} shows an example of the procedure.
 \psset{unit=1mm}
 \PSPICTURE{0}{0}{80}{20}
 {
 	\scriptsize
-	\rput(10,17.5){Mother}
+	\rput(10,17.5){Parent}
 	\pspolygon(20,15)(80,15)(80,20)(20,20)
 	\rput(22,17.5){1}
 	\rput(24,17.5){1}
@@ -624,7 +587,7 @@ procedimiento.
 	\rput(74,17.5){1}
 	\rput(76,17.5){1}
 	\rput(78,17.5){1}
-	\rput(10,2.5){Soon}
+	\rput(10,2.5){Son}
 	\pspolygon(20,0)(80,0)(80,5)(20,5)
 	\rput(22,2.5){1}
 	\rput(24,2.5){1}
@@ -667,12 +630,9 @@ procedimiento.
 
 \subsubsection{Reproduction algorithm}
 
-En GENETIC el algoritmo por defecto, y usado en CALIBRATOR, selecciona 2
-ancestros diferentes. Entonces genera un nuevo individuo haciendo una mezcla
-aleatoria de los bits de los ancestros. El individuo generado tiene los mismos
-bits que los ancestros donde el genoma es igual en ambos ancestros, y un bit
-aleatorio en el resto. En la figura~\ref{FigReproduction} se representa un
-esquema del algoritmo.
+The default algorithm in GENETIC, used by CALIBRATOR, selects 2
+different parents. A new individual is then generated by means of a random blending of the bits from the parents.
+It has the same bits as the parents and the same genome but for a bit (NO SE ENTIENDE). Figure~\ref{FigReproduction} shows a sketch of the algorithm.
 
 \psset{unit=1mm}
 \PSPICTURE{0}{0}{80}{20}
@@ -688,7 +648,7 @@ esquema del algoritmo.
 		\psframe[linecolor=gray,fillcolor=gray,fillstyle=solid](63,\rb)(67,\rt)
 		\psframe[linecolor=gray,fillcolor=gray,fillstyle=solid](71,\rb)(75,\rt)
 	}
-	\rput(10,17.5){Mother}
+	\rput(10,17.5){Parent1}
 	\psframe(20,15)(80,20)
 	\rput(22,17.5){1}
 	\rput(24,17.5){1}
@@ -719,7 +679,7 @@ esquema del algoritmo.
 	\rput(74,17.5){1}
 	\rput(76,17.5){1}
 	\rput(78,17.5){1}
-	\rput(10,2.5){Father}
+	\rput(10,2.5){Parent2}
 	\psframe(20,0)(80,5)
 	\rput(22,2.5){1}
 	\rput(24,2.5){0}
@@ -785,27 +745,20 @@ esquema del algoritmo.
 	\psline{->}(50,15)(50,12.5)
 	\psline{->}(10,5)(10,7.5)
 	\psline{->}(10,15)(10,12.5)
-}{Diagram illustrating an example of the generation of a new entitiy by
-reproduction in the GENETIC default algorithm. Nótese que los bits iguales en
-ambos ancestros (en gris en el diagrama) se mantienen en el hijo. El resto de 
-los bits son aleatorios}{FigReproduction}
+}{Example of the generation of a new entity by
+reproduction in the GENETIC default algorithm. Note that the identical bits in both parents (in grey) are also present in the son. The rest of the bits are random}{FigReproduction}
 
 \subsubsection{Adaptation algorithm}
 
-En GENETIC se implementa un algoritmo que se ha denominado "adaptación" aunque,
-en el sentido biológico, es más bien una mutación "suave". El algoritmo
-selecciona aleatoriamente con probabilidad uniforme una de las variables
-codificadas en el genoma. Luego selecciona aleatoriamente un bit asignando una
-probabilidad linealmente decreciente según sea más significativo este bit. El
-nuevo individuo tiene una copia literal del genoma del ancestro con el bit
-seleccionado invertido. En la figura~\ref{FigAdaptation} puede verse un diagrama
-con un ejemplo.
+Another algorithm is included in GENETIC called "adaptación" although, in the biological sense, it would be better
+a smooth mutation. First, one of the variables codified in the genome is randomly selected with uniform probability. Then,
+a bit is randonly chosen assuming a probability linearly decresing with the significance of the bit. The new individual receives a copy of the parent's genome with the selected bit inverted. Figure~\ref{FigAdaptation} contains an example.
 
 \psset{unit=1mm}
 \PSPICTURE{-30}{-7.5}{80}{30}
 {
 	\scriptsize
-	\rput(-10,17.5){Mother}
+	\rput(-10,17.5){Parent}
 	\rput(15,23){Variable 1}
 	\psframe(0,15)(30,20)
 	\rput(40,23){Variable 2}
@@ -921,36 +874,26 @@ con un ejemplo.
 	\rput(-20,6.25){Adaptation}
 	\psframe(55,-7.5)(57,-2.5)
 	\psframe(55,15)(57,20)
-}{Diagrama mostrando un ejemplo de la generación de un nuevo individuo a partir
-de un ancestro por adaptación}{FigAdaptation}
+}{Example of the generation of a new individual from a parent by adaptation}{FigAdaptation}
 
-Este algoritmo es muy similar al de mutación, descrito en una previa subsección
-pero, puesto que tiene mayor probabilidad de afectar a bits menos
-significativos, tiene mayor probabilidad de que los cambios sean pequeños.
+This algorithm is rather similar to the mutation algorithm previously described but, since the probability to affect bits less significativ is larger, so is the probability to produce small changes.
 
 \section{Implementation}
 
 \subsection{External libraries}
 
-CALIBRATOR hace uso de las siguientes librerías externas, todas ellas open
-source:
+CALIBRATOR uses the following open source external libraries:
 
 \begin{itemize}
-\item\citet{libxml}: librería requerida para leer el fichero de entrada que usa
-	el formato XML.
-\item\citet{gsl}: librería científica requerida para generar los números
-	pseudo-aleatorios que usan los algoritmos genético y de Monte-Carlo.
-\item\citet{glib}: librería requerida para implementar algunos tipos de datos,
-	to parse the input file templates y las tareas con las que el programa
-	paraleliza el uso de los múltiples procesadores de la máquina.
-\item\citet{openmpi,mpich}: librerías opcionales. En el caso de estar alguna de
-	ellas instaladas en el sistema, el programa la utiliza para permitir el uso
-	paralelizado en múltiples máquinas.
-\end{itemize}
+\item\citet{libxml}:Library required to read the input file in XML format.
+\item\citet{gsl}: Scientific library librería required to generate the pseudo-random numbers used by 
+the genetic algorithms and the Monte-Carlo method.
+\item\citet{glib}: Library required to implement some data,	to parse the input file templates and the routines used to parallelize the usage of the computer's processors.
+\item\citet{openmpi,mpich}: Optional libraries. When installed,  they are used to allow parallelization in multiple computers. \end{itemize}
 
 \subsection{Building the executable file from the source code}
 
-El código fuente de CALIBRATOR está escrito en lenguaje C. This software has
+The source code in CALIBRATOR is written in C language. This software has
 been built and tested in the following operative systems:
 \begin{itemize}
 \item Debian Linux 7.7,
@@ -964,19 +907,12 @@ been built and tested in the following operative systems:
 \footnotetext[1]{Windows XP and Windows 7 are trademarks of Microsoft
 Corporation.}
 \end{itemize}
-Probabily, this software can be built and works in other operative systems,
+Probably, this software can be built and it works in other operative systems,
 software distributions or versions but it has not been tested.
 
-Para poder crear el fichero ejecutable a partir del código fuente debe tener
-instalado en el sistema un compilador de C (\citet{gcc} or \citet{clang}), los
-sistemas de configuración \citet{autoconf} y \citet{automake}, el programa de
-control de creación de ejecutables \citet{gnumake} y las librerías externas
-descritas en la subsección anterior. En sistemas Microsoft Windows pueden
-seguirse las instrucciones dadas en \citet{mingw-make} para instalar todas estas
-utilidades.
+In order to build the executable file from the source code, a C compiler (\citet{gcc} or \citet{clang}), the configuration systems \citet{autoconf} and \citet{automake}, the executable creation control program \citet{gnumake} and the external libraries previously listed are required. When using Microsoft Windows systems, the indications provided in \citet{mingw-make} can be followed in order to install all these utilities.
 
-Una vez instaladas todas las herramientas, debe descargarse el código fuente de
-GENETIC y compilarse en una terminal ejecutando:
+Once allthe tools installed, the GENETIC source code must be downloaded and it must be compiled following:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 $ cd PATH_TO_GENETIC/0.6.0
 $ aclocal
@@ -986,10 +922,9 @@ $ ./configure
 $ make
 \end{lstlisting}
 
-Después, debe descargarse el código fuente de CALIBRATOR, enlazarse con GENETIC
-y compilarse ejecutando en una terminal:
+The following step is to download the source code CALIBRATOR, to link it with GENETIC and compile together by means of:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ cd PATH_TO_CALIBRATOR/0.2.3
+$ cd PATH_TO_CALIBRATOR/0.4.5
 $ ln -s PATH_TO_GENETIC/0.6.0 genetic
 $ aclocal
 $ autoconf
@@ -998,9 +933,7 @@ $ ./configure
 $ make
 \end{lstlisting}
 
-Algunos sistemas (as Microsoft Windows 64 bits or OpenBSD) pueden requerir
-instrucciones u opciones extras, consultar los README files de ambos
-repositorios.
+Some systems (such as Microsoft Windows 64 bits or OpenBSD) might require extra options. In those cases follow the README files in both repositories.
 
 \subsection{Command line format}
 
@@ -1022,7 +955,7 @@ $ mpirun [MPI options] ./calibrator [-nthreads X] input_file.xml
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 $ ./simulator_name input_file_1 [input_file_2] [...] output_file
 \end{lstlisting}
-They are two options for the ouput file. It can begin with a number indicating
+There are two options for the ouput file. It can begin with a number indicating
 the objective function value or it can be a results file that has to be
 evaluated by an external program (the evaluator) comparing with an experimental
 file.
@@ -1064,21 +997,21 @@ The main XML node has to begin with the key label \emph{"calibrate"}. The
 available fields are:
 \begin{description}
 \item{simulator}: to indicate the simulator program.
-\item{evaluator}: optional. It specify the evaluator program if required.
+\item{evaluator}: optional. It specifies the evaluator program if required.
 \item{algorithm}: to set the optimization algorithm. Three value are available:
 	\begin{description}
-	\item{sweep}: sweep brutal force algorithm. Requires on each variable:
+	\item{sweep}: sweep brute force algorithm. It requires for each variable:
 		\begin{description}
-		\item{sweeps}: number of sweeps to generate on each variable in every
+		\item{sweeps}: number of sweeps to generate each variable in every
 			experiment.
 		\end{description}
-	\item{Monte-Carlo}: Monte-Carlo brutal force algorithm. Requires on the main
+	\item{Monte-Carlo}: Monte-Carlo brute force algorithm. It requires on the main
 		XML node:
 		\begin{description}
 		\item{simulations}: number of simulations to run on each iteration in
 			every experiment.
 		\end{description}
-	\item{genetic}: genetic algorithm. Requires the following parameters in the
+	\item{genetic}: genetic algorithm. It requires the following parameters in the
 		main XML node:
 		\begin{description}
 		\item{population}: number of population entities.
@@ -1113,11 +1046,11 @@ The second type of child XML nodes has to begin with the key label
 \emph{"variable"}. It specifies the variables data and it has the fields:
 \begin{description}
 \item{name}: variable label. On the $X$-th variable, the program parse all input
-file templates creating the input simulation files by substituying all
+file templates creating the input simulation files by replacing all
 @variableX@ labels by this name.
 \item{minimum, maximum}: variable extreme values. The program creates the input
-simulation files by substituying all @valueX@ labels in the input file templates
-by a value between these extreme values on the $X$-th variable, depending on
+simulation files by replacing all @valueX@ labels in the input file templates
+by a value between these extreme values on the $X$-th variable, depending on the
 optimization algorithm.
 \item{absolute\_minimum, absolute\_maximum}: absolute variable extreme values.
 On iterative methods, the tolerance can increase initial \emph{minimum} or
@@ -1129,32 +1062,29 @@ in the simulation input files.
 
 \section{Practical applications}
 
-A continuación vamos a exponer unos casos de apliación práctica de CALIBRATOR en
-combinación con muy diferentes programas para calibrar u optimizar coeficientes
-en modelos tan diferentes como riego por superficie, flujo en canales, aspersión
-o movimiento de máquinas de riego.
+In what follows, a few cases of practical application of CALIBRATOR in combination with
+differentt simulation codes are presented. The will deal with teh optimizationand/or calibration 
+of variables in models used for surface irrigation, open channel flow,sprinckler irrigation or irrigation
+engines movement.   
 
-En casi todos los casos se ha simulado en un laptop computer equipado con un
-procesador Intel(R) Core(TM) i7 M620 2.67GHz. La ejecución en esta computadora
-se realizó en cuatro tareas paralelizadas para aprovechar al máximo el doble
-núcleo con hyperthreading del procesador.
+All the cases have been run on a laptop computer equiped with an Intel(R) Core(TM) i7 M620 2.67GHz processor. 
+The computation was performed in four parallelized tasks to make the most of the processor's double nucleus with hyperthreading.
 
 \subsection{Optimization of a canal management}
 
-A real irrigation channel has been analysed in order to find out the optimal
-values of two variables of interest which take into account the daily gate
-modification time, being performed in a scenario of modernization to sprinkler
-irrigation. The area of study is located in the northeast of Spain, in the
+A real irrigation canal has been analysed in order to find out the optimal
+values of two variables of interest which take into account the daily gate openning
+modification time. The area of study is located in the North-east of Spain, in the
 province of Huesca. It consists of the first 13657 meters of the Canal de
 Violada. The studied stretch was designed for a maximum discharge of 6 m$^3$/s.
 This stretch delivers water to three irrigation communities: Almudévar, Gurrea
 and El Temple. 
 
-Two sections can be distinguished in this work, the new stretch and the last 304
-meters. Both share the same bottom slope, $S_0$ = 0.00059 and differ in the
-cross section dimensions and the value of the Gauckler-Manning  roughness
-coefficient, having a value of 0.014 and 0.02 s m$^{-1/3}$ for the first
-and the final stretch respectively. These values correspond to polished and
+Two sections can be distinguished in this work, the new reach and the last 304
+meters. Both share the same bottom slope, $S_0$ = 0.00059 but differ in the
+cross section dimensions and the value of the Gauckler-Manning roughness
+coefficient (0.014 and 0.02 s m$^{-1/3}$ for the first
+and the final reaches respectively). The values correspond to polished and
 coarse concrete \citep{Chow59}.
 
 Two key optimization variables have been studied: $d_A$ and $d_{GT}$. Where
@@ -1163,48 +1093,25 @@ discharge and the modification time in the Almudévar gate and $d_{GT}$ takes
 into account the delay between the inlet and Gurrea and Temple gates
 modification.
 
-The canal was initially dry and it was waited until a stationary state with a discharge of 2 $m^{-1/3}\cdot s$ was reached. 
-The objective of this work was to provide the required daily discharge to the three important irrigation gates together 
-with keeping a constant discharge of 2 $m^{-1/3}\cdot s$ at the outlet gate. 
+The canal was initially dry and the simulation was run until a steady state with a discharge of 2 $m^{-1/3}\cdot s$ was reached. 
+The objective of this work was to provide the required daily discharge to the three important irrigation gates as well as
+to keep a constant discharge of 2 $m^{-1/3}\cdot s$ at the outlet gate. 
 
-The required discharge in every gate for a modernization scenario to sprinkler irrigation was obtained after an elaborate 
-field analysis. As a brief explanation, taking into account the crops distribution, soil water retention properties, 
-characteristics of the parcels and hydrants, the electricity tariffs depending on the hour of the day and the design of a 
+The required discharge at every gate for a modernization scenario to sprinkler irrigation was obtained after an elaborate 
+field analysis. Taking into account the crop distribution, soil water retention properties, 
+characteristics of the parcels and hydrants, the electricity cost depending on the hour of the day and the design of a 
 reservoir in the area, seven different scenarios were obtained as a function of the historical irrigation requirements for 
 the same period using real data \citet{Zapata09}.
 
 \subsection{Calibration of empirical parameters on surface irrigation}
 
-Se ha usado CALIBRATOR para obtener los parámetros empíricos de los modelos de
-fricción, difusión e infiltración de unos experimentos publicados en
-\citet{JaviSurcos2} y que van a ser simulados con el programa SURCOS
-\citep{Surcos,SurcosGit,JaviSurcos3}. Consisten en cuatro casos de riego en
-surcos con difusión de soluto. Los surcos tenían una longitud de $100$ m y se simularon con una malla de 100 celdas. Los surcos eran contiguos y se prepararon
-con la misma geometría. Además se realizaron casi simultáneamente, de forma que
-se puede asumir que el suelo presentaba idénticas propiedades.
+CALIBRATOR has also been used to find out the empirical parameters required by the friction, diffusion and infitration
+models used in the model SURCOS \citep{Surcos,SurcosGit,JaviSurcos3} for the simulation of the four furrow fertigation experiments publisehd in \citet{JaviSurcos2}. The furrows were $100$ m long and they were simulated using 100 computatioanl cells per furrow. The furrows were close together, they had the same geometry and the experiments were almost simultaneous, hence the soil properties were assumed uniform. 
 
-Se han utilizado el modelo de fricción de Manning y el de infiltración de
-Kostiakov-Lewis. Estos modelos requieren la calibración de tres coeficientes
-empíricos: el número de Manning $n$ y los coeficientes del modelo de
-infiltración $K$ y $a$. En el artículo original se usó un método de calibración
-de fuerza bruta con 3000  imulaciones, considerando que en cada una de estas
-simulaciones comprende el cálculo de los cuatro experimentos descritos en el
-paper. En este trabajo se han utilizado el mismo de simulaciones con varios de
-los métodos de calibración implementados en CALIBRATOR. Ejecutar las 3000
-simulaciones costó aproximadamente 1h20m en el laptop computer descrito al
-principio de la sección.
+The friction model used in SURCOS is the Gauckler-Manning model. The infiltration model is the Kostiakov-Lewis model. They require calibration of three coefficients: the Manning $n$ and the infiltration $K$ and $a$. In the original paper, a brute force method using 3000 simulations was applie, each of them including the four experiments. In the present work, the same number of simulations has been used with the calibration methods implemented in CALIBRATOR. The execution of 3000 simulations in the mentioned laptop computer took about 1h20m.  
 
-En la tabla~\ref{TabSurcos} se muestran los resultados obtenidos de los
-coeficientes óptimos y del valor de la función de evaluación,
-donde se ha usado la misma norma de error descrita en \citet{JaviSurcos2}. Los
-resultados son muy similares entre los diferentes métodos y también muy
-similares a los del artículo original. Esto es debido a que se forma una región
-relativamente extensa de combinaciones de los parámetros empíricos que producen
-valores muy similares de la función objetivo, no permitiendo una obtención
-precisa de los valores óptimos. No obstante, puede comprobarse como tanto el
-método iterativo como los genéticos obtienen mejores resultados que el método de
-fuerza de bruta de Monte-Carlo sin iteraciones con el mismo número total de
-simulaciones.
+Table~\ref{TabSurcos} displays the results obtained for the optimal coefficient valuesand the corresponding
+value of the evaluation function, where the error norm is the same as in \citet{JaviSurcos2}. The results are similar among the different methods and also similar to those in the original paper. This is due to the existence of a relativeley large region of combinations of the empirical parameters producing similar values in the evaluation function, thus preventing from an accurate convergence to the optimum set. However, it can be noticed that both the iterative method and the genetic methods produce better results than the Monte-Carlo method without iterations with the same total number of simulations.
 
 \TABLE{\scriptsize}{cccc}
 {
@@ -1232,21 +1139,16 @@ simulaciones.
 	\\ & $R_{reproduction}=0.1$
 	\\ & $R_{adaptation}=0.1$
 	\\ \hline
-}{Parámetros empíricos óptimos y valor de la función objetivo obtenido para el
-experimento de riego por surcos descrito en \citet{JaviSurcos2} usando el
-programa SURCOS y varios algoritmos de optimización implementados en CALIBRATOR
-con el mismo número total de simulaciones}{TabSurcos}
+}{Optimal empirical parameters and value of the evaluation function in the simulation of the furrow irrigation cases in \citet{JaviSurcos2} using program SURCOS and several optimization algorithms in CALIBRATOR with the same totalnumber of simulations}{TabSurcos}
 
-En la figura~\ref{FigSurcos} se muestran los resultados de la simulación, con
-los coeficientes obtenidos por el método de Monte-Carlo con $N_{iterations}=6$,
-frente a las medidas experimentales.
+Figure~\ref{FigSurcos} shows the results of the water depths and solute concentration from the simulation using the coefficients obtained by the Monte-Carlo method with$N_{iterations}=6$, compared with the experimental values.
 
 \FIGVI{surcos-advance.eps}{surcos-depth.eps}{surcos-solute-q1.eps}
 {surcos-solute-q2.eps}{surcos-solute-q3.eps}{surcos-solute-q4.eps}
 {
 	(a) Advance time profile, (b) inlet depth evolution and (c-f) solute
 	concentration evolution at probes for the experiments Q1-Q4 described in
-	\citet{JaviSurcos2} simulated with the optime calibrated parameters obtained
+	\citet{JaviSurcos2} simulated with the optimal calibrated parameters obtained
 	for the Monte-Carlo method with $N_{iterartions}=6$ (see
 	table~\ref{TabSurcos})
 }{FigSurcos}
@@ -1254,44 +1156,13 @@ frente a las medidas experimentales.
 \subsection{Calibration of empirical parameters of the balistic model on
 sprinkler irrigation}
 
-El modelo balístico \citep{Fukui80,Playan06} es el más utilizado para
-caracterizar el comportamiento de los aspersores en riego por aspersión. En este
-modelo se considera que las gotas emitidas son aproximadamente esféricas y se
-comportan como un proyectil esférico que se mueve por la atmósfera sufriendo la
-fuerza de gravedad y la de resistencia aerodinámica. En este modelo ser requiere
-conocer la velocidad inicial de las gotas emitidas. En la mayoría de modelos de aspersores, el chorro inicial es lo suficientemente compacto como para poder
-considerar que todas las gotas emitidas salen de la boquilla con la misma
-velocidad inicial. Ésta puede obtenerse tanto midiendo la presión en el aspersor
-y aplicando Bernouilli como midiendo el caudal emitido y dividiendo por la
-sección de la boquilla. Los otros datos que se requieren para calcular el
-reparto del agua son los que caracterizan la distribución de tamaños de gotas
-emitidas. En el modelo utilizado, descrito en \citet{Playan06}, esta
-distribución se caracteriza con dos parámetros $D_{50}$ y $n$. Además, para
-caracterizar efectos aerodinámicos del chorro, en presencia de viento el modelo
-utiliza otros dos coeficientes de corrección de la resistencia aerodinámica:
+The ballistic model \citep{Fukui80,Playan06} is the most widespread o characterize the behaviour and performance of sprinklers in sprinkler irrigation management. The model assumes that the travelling drops are approximately spherical and subject to the resulting effect of gravity and drag forces. The ejecting drop velocity is required by the model, and it is frequent to assume that the jet is compact enough to consider that all the drops carry the same velocity when leaving the sprinkler. This velocity cam be estimated either by measuring the pressure and using Bernoulli's equation or, alternatively, by measuring the discharge and dividing by the outlet cross section. Other data required to characterize the water spread are related to the drop size distribution. The model used in the present work, described in \citet{Playan06}, is based on two parameters $D_{50}$ and $n$. Furthermore, to include the influence of the wind, the model includes two more aerodynamic resistance coefficients:
 $k_1$ y $k_2$.
-Por lo tanto el modelo se calibra en dos pasos: en un primero se ajustan los
-coeficientes $D_{50}$, $n$ y $P$ que ajustan la pluviometría recogida en
-condiciones sin viento y se consideran propios de cada modelo de aspersión a una
-presión determinada. En un segundo paso se calibran los coeficientes $k_1$ y
-$k_2$ que mejor ajustan las pluviometrías medidas para cada velocidad de viento.
+The model is calibrated in two stes: First, the coefficients $D_{50}$, $n$ and $P$ are fitted to adjust the water distribution in windless conditions and are considered representative of the sprinkler model at a given pressure. In a second step, the coefficients $k_1$ and $k_2$ fitting better the water distribution in wind conditions are found.
 
-En este trabajo vamos a calibrar un modelo de aspersor de tipo spray, el N44
-fabricado por Senninger, a una presión de trabajo de 20PSI. En este tipo de
-aspersores, el chorro impacta con un plato fijo surcado de acanaladuras. Para
-determinar la velocidad inicial de salida de las gotas tras el impacto con el
-plato se recurrió a la técnica fotográfica descrita en \citet{Salvador09}. Con
-esta técnica se determinó que la pérdida de carga en el impacto con el plato era
-del 50\%.
+In the present example, a spray sprinkler Senninger N44 at a working pressure of 20PSI will be calibrated. In this sprinkler model, the water jet impacts against a fixed plate. In order to estimate the water velocity after the impact, an image technique as described in \citet{Salvador09} was applied. According to this measurements, the head loss due to the impact against the plate was found to be of 50\%.
 
-En la tabla~\ref{TabSprinklerI} se muestran los resultados de la calibración de
-los parámetros $D_{50}$, $n$ y $P$ en condiciones sin viento utilizando un total
-de 1000 simulaciones con diferentes algoritmos de optimización. El cálculo de
-las 1000 simulaciones costó aproximadamente 7 minutos en el laptop computer
-descrito al principio de esta sección. Se observa que los mejores resultados se
-obtuvieron con el algoritmo de Monte-Carlo iterado seguido de cerca por los
-algoritmos genéticos. En este caso el método de barrido obtiene peores
-resultados, sobre todo cuando se complementa con el método iterado.
+Table~\ref{TabSprinklerI} shows the results from the calibration of parameters $D_{50}$, $n$ and $P$ in windless conditions using a total number of 1000 simulations with different optimization algorithms. The computation time was around 7 minutes in the laptop computer. The results show that the best results are supplied by the iterative Monte-Carlo method followed by the genetic algorithms. In this case, the sweep method leads to worse results, mainly when supplied with the iterative method. 
 
 \TABLE{\scriptsize}{cccc}
 {
@@ -1328,22 +1199,10 @@ resultados, sobre todo cuando se complementa con el método iterado.
 	\\ & $R_{reproduction}=0.1$
 	\\ & $R_{adaptation}=0.1$
 	\\ \hline
-}{Parámetros empíricos óptimos y valor de la función objetivo obtenido para el
-experimento de riego por aspersión en condiciones sin viento usando varios
-algoritmos de optimización implementados en CALIBRATOR con el mismo número total
-de simulaciones}{TabSprinklerI}
+}{Optimal empirical parameters and value of the evaluation function in the case of the sprinkler irrigation
+using different optimization algorithms in CALIBRATOR with the same number of total simulations.}{TabSprinklerI}
 
-A continuación, y usando los valores óptimos $D_{50}=3.06$ mm, $n=20.878$ y
-$P=0.388$ obtenidos con el mejor método (Monte-Carlo con 8 iteraciones, véase
-tabla~\ref{TabSprinklerI}) se ha procedido a calibrar los valores de $k_1$ y
-$k_2$ en un experimento con intensidad media de viento de 2.84 m/s usando los
-diferentes algoritmos de CALIBRATOR con un número total de 400 simulaciones en
-todos los casos. Estas 400 simulaciones costaban aproximadamente 4 minutos en el
-laptop computer descrito anteriormente. En este caso fueron los algoritmos
-genéticos los que obtuvieron los mejores resultados (nótese que con dos
-configuraciones diferentes obtuvieron idénticos resultados) aunque el resto de
-métodos, incluidos los métodos puros de fuerza bruta, obtuvieron resultados
-similares.
+Next, using the optimal $D_{50}=3.06$ mm, $n=20.878$ and $P=0.388$ obtained by the Monte-Carlo method (Monte-Carlo with 8 iterations, see table~\ref{TabSprinklerI}) the values of $k_1$ and $k_2$ are calibrated in an experiment with medium wind velocity of 2.84 m/s. The different algorithms in CALIBRATOR are used with a total number of 400 simulations in all cases. Their computational time was around 4 minutes in the laptop computer. In this case, the genetic algorithms provided the best results  (note that they provided identical results in two different configurations), although the rest of the methods reached similar values.
 
 \TABLE{\scriptsize}{cccc}
 {
@@ -1378,14 +1237,9 @@ similares.
 	\\ & $R_{reproduction}=0.1$
 	\\ & $R_{adaptation}=0.1$
 	\\ \hline
-}{Parámetros empíricos óptimos y valor de la función objetivo obtenido para el
-experimento de riego por aspersión en condiciones de intensidad de viento media
-de 2.84 m/s usando varios algoritmos de optimización implementados en CALIBRATOR
-con el mismo número total de simulaciones}{TabSprinklerII}
+}{Optimal parameters and values of the evaluations function in the experiment of the sprinkler irrigation under wind conditions of 2.84 m/s using different optimization algorithms implemented in CALIBRATOR with the same total number of simulations.}{TabSprinklerII}
 
-Finalmente, en la figura~\ref{FigSprinkler} mostramos las pluviometrías
-registradas y simuladas con los valores empíricos óptimos en condiciones sin
-viento y con un viento de intensidad media de 2.84 m/s.
+Finally, figure~\ref{FigSprinkler} shows the measured (in pluviometers) and simulated water distribution using the optimal parameters in windless and wind conditions of average velocity 2.84 m/s.
 
 \FIGii{sprinkler-0.eps}{sprinkler-2,84.eps}
 {(a) Radial pluviometry for non-wind conditions and (b) pluviometry at the two
@@ -1394,20 +1248,7 @@ pluviometers axes}{FigSprinkler}
 \subsection{Calibration of empirical parameters of the movement of a sprinkler
 center-pivot}
 
-El movimiento de las torres de un center-pivot sigue un movimiento caótico que
-depende del movimiento de la torre exterior, de los ángulos de arranque y parada
-en las torres y de las velocidades de arranque y parada. En \citet{Ouazaa14} se
-propuso un modelo pretendiendo simular la distribución de marchas y paradas de
-cada una de las torres y se desarrollaron varios experimentos en los que se
-midieron estas distribuciones en el funcionamiento de un center-pivot real en
-campo. La torre exterior es la que gobierna el movimiento, funcionando con un
-régimen de arranques y paradas que depende del tiempo de ciclo y del porcentaje
-de funcionamiento ambos ajustables para que la máquina haga el riego deseado.
-El resto de las torres hace un régimen de arranques y paradas en el que la
-entrada en marcha o parada de la torre responde a que se sobrepasen ángulos
-máximos o mínimos en las juntas de las tuberías (véase un diagrama en la
-figura~\ref{FigPivotDiagram}). Este movimiento es bastante caótico debido a una
-cierta incertidumbre en los ángulos de parada y marcha.
+The movement of a center-pivot tower follows a chaotic pattern depnding from the movement of the exterior tower, the tower start and stop angles and the strat and stop velocities. In \citet{Ouazaa14} a model was proposed to simulate the tower movements and several controlled experiments  were carried out to measure them in a real field center-pivot. The exterior tower controls the movement, with a sequence of working periods that depend on the cycle period and the working percentage, both adjustable to reach a desired irrigation service. The rest of the towers move according to a complex pattern (see figure~\ref{FigPivotDiagram}). 
 
 \psset{unit=1mm}
 \PSPICTURE{-10}{-6}{93}{20}
@@ -1432,31 +1273,17 @@ cierta incertidumbre en los ángulos de parada y marcha.
 	\rput(20,6){$\alpha_1$}
 	\rput(40,7){$\alpha_2$}
 	\rput(60,8.5){$\alpha_3$}
-}{Diagram illustrating the movement of a centre-pivot irrigation machine with
+}{Example of movement of a centre-pivot irrigation engine with
 four towers}{FigPivotDiagram}
 
-En este trabajo, vamos a simular un pivot de cuatro torres separadas 50.11 m. La
-velocidad lineal máxima de cada torre se midió experimentalmente resultando:
-$v_1=0.02738$ m/s, $v_2=0.02824$ m/s, $v_3=0.03008$ m/s y $v_4=0.03753$ m/s.
-La torre exterior lleva una velocidad considerablemente superior porque soporta
-menos peso y por tanto sufre menor rozamiento. En el modelo hay que calibrar
-cuatro parámetros empíricos: los ángulos medios de arranque
-$\overline{\alpha_{start}}$ y parada $\overline{\alpha_{stop}}$, la
-incertidumbre en estos ángulos $\delta$ y el tiempo de arranque y parada $\tau$.
-En cada ciclo de movimiento de cada torre, los ángulos de arranque y parada se
-obtienen como:
+The movement of a real pivot with four towers separated 50.11 m is next simulated and calibrated. The maximum linear velocity of each tower were measured to be: $v_1=0.02738$ m/s, $v_2=0.02824$ m/s, $v_3=0.03008$ m/s and $v_4=0.03753$ m/s.
+The exterior tower is considerably faster as it carries less weight and produces less friction. The model includes four empirical parameters to calibrate: The average angles of start $\overline{\alpha_{start}}$ and stop $\overline{\alpha_{stop}}$, the uncertainty in these angles $\delta$ and the start and stop times $\tau$. In every tower cycle, the start and stop angles are obtained as:
 \EQ
 {
 	\alpha_{start}=\overline{\alpha_{start}}+(r-0.5)\,\delta,\quad
 	\alpha_{stop}=\overline{\alpha_{stop}}+(r-0.5)\,\delta,
 }{EqPivotStartStop}
-con $r$ un número aleatorio definido con probabilidad uniforme en el rango
-$r\in[0,1)$. Los tiempos de arranque y parada resultantes de cada torre se
-midieron en cuatro experimentos de un día de duración con el pivot trabajando en
-ciclos de 71 segundos al 100\%, 52\%, 42\% y 27.48\%. Estos tiempos se agruparon
-en cuatro respectivos histogramas y definimos la función objetivo a minimizar
-como el mean square error que se produce entre los histogramas simulados y los
-medidos.
+with $r$ a random number defined with uniform probability in the range $r\in[0,1)$. The start and stop times of each tower were measured in four experiments of 24 hours with th epivot working in cycles of 71s at 100\%, 52\%, 42\% y 27.48\%. The times were grouped in four histograhs and the evaluation function was defined as the mean square error between the measured and simulated histographs.
 
 \psset{unit=1mm}
 \PSPICTURE{-16}{-6}{75}{39}
@@ -1483,10 +1310,7 @@ medidos.
 	\rput(37.5,26){time}
 }{Linear velocity of a centre-pivot tower on starts and stops}{FigPivotVelocity}
 
-En la tabla~\ref{TabPivot} se muestran algunos de los resultados obtenidos con
-un total de 10000 simulaciones de cada uno de los cuatro experimentos, que
-costaron aproximadamente 50 minutos en el mismo laptop computer usado en las
-anteriores subsecciones.
+Table~\ref{TabPivot} shows some of the results obtained in a total of 10000 simulations of each of the four experiments, taking around 50 minutes each in the same laptop computer used before.
 
 \TABLE{\scriptsize}{cccc}
 {
@@ -1531,57 +1355,36 @@ anteriores subsecciones.
 	\\ & $R_{reproduction}=0.1$ & $\tau=3.32$s
 	\\ & $R_{adaptation}=0.1$
 	\\ \hline
-}{Parámetros empíricos óptimos y valor de la función objetivo obtenido para el
-pivot de cuatro torres descrito en \citet{Ouazaa14} usando varios algoritmos de
-optimización implementados en CALIBRATOR con el mismo número total de
-simulaciones}{TabPivot}
+}{Optimal parameters and values of the evaluation fucntion in the four towers pivot case in \citet{Ouazaa14} using different optimization algorithms implemented in CALIBRATOR with the same number of total simulations.}{TabPivot}
 
 \FIGIV{pivot-measured-starts-100.eps}{pivot-measured-stops-100.eps}
 {pivot-simulated-starts-100.eps}{pivot-simulated-stops-100.eps}
-{Histograma del número de (a) arranques medidos, (b) paradas medidas, (c)
-arranques simulados y (d) paradas simuladas para las torres del pivot trabajando
-al 100\% de velocidad.}{FigPivot100}
+{Histograph of the number of (a) measured starts, (b) measured stops, (c)
+simulated starts and (d)simulated stops for the pivot towers working at 100\% velocity.}{FigPivot100}
 
 \FIGIV{pivot-measured-starts-52.eps}{pivot-measured-stops-52.eps}
 {pivot-simulated-starts-52.eps}{pivot-simulated-stops-52.eps}
-{Histograma del número de (a) arranques medidos, (b) paradas medidas, (c)
-arranques simulados y (d) paradas simuladas para las torres del pivot trabajando
-al 52\% de velocidad.}{FigPivot52}
+{Histograph of the number of (a) measured starts, (b) measured stops, (c)
+simulated starts and (d)simulated stops for the pivot towers working at 52\% velocity.}{FigPivot52}
 
 \FIGIV{pivot-measured-starts-42.eps}{pivot-measured-stops-42.eps}
 {pivot-simulated-starts-42.eps}{pivot-simulated-stops-42.eps}
-{Histograma del número de (a) arranques medidos, (b) paradas medidas, (c)
-arranques simulados y (d) paradas simuladas para las torres del pivot trabajando
-al 42\% de velocidad.}{FigPivot42}
+{Histograph of the number of (a) measured starts, (b) measured stops, (c)
+simulated starts and (d)simulated stops for the pivot towers working at 42\% velocity.}{FigPivot42}
 
 \FIGIV{pivot-measured-starts-27,48.eps}{pivot-measured-stops-27,48.eps}
 {pivot-simulated-starts-27,48.eps}{pivot-simulated-stops-27,48.eps}
-{Histograma del número de (a) arranques medidos, (b) paradas medidas, (c)
-arranques simulados y (d) paradas simuladas para las torres del pivot trabajando
-al 27.48\% de velocidad.}{FigPivot27}
+{Histograph of the number of (a) measured starts, (b) measured stops, (c)
+simulated starts and (d)simulated stops for the pivot towers working at 27.48\% velocity.}{FigPivot27}
 
 \section{Conclusions}
 
-En este trabajo se ha presentado CALIBRATOR, un nuevo programa de software para
-calibración y optimización de coeficientes empíricos de diferentes modelos de
-cálculo. Este programa implementa dos modelos clásicos de fuerza bruta, el de
-barrido y el de Monte-Carlo, a los que incorpora un algoritmo iterativo para
-mejorar la convergencia. Además CALIBRATOR permite utilizar el método genético
-por defecto implementado en GENETIC.
+The features and design of CALIBRATOR, a new software tool to enable efficient calibration and optimization of empirical coefficients present in simulation models has been presented. The program includes the option of two classic brute force models, the sweep and the Monte-Carlo method, both supplied with the option of an iterative procedure to improve convergence. Also, CALIBRATOR offers the alternative of a genetic algorithm as implemented in GENETIC.
 
-Este programa permite la ejecución eficiente, aprovechando al máximo los
-múltiples procesadores de las máquinas y pudiendo utilizarse de forma sencilla
-en múltiples máquinas en paralelo, logrando una gran capacidad y velocidad de
-cómputo e independizando los modelos físicos de los algoritmos de optimización,
-calibración y paralelización.
+The new tool allows an efficient performance, making the most of the processors present in a single computer and allowing an easy extension to parallelization distributed among different computers. In whole, a considerable data capacity and computational speed are achieved with independence of the physical problem under study or the algorithm chosen.
 
-CALIBRATOR ha mostrado ser un programa muy flexible y versátil que permite
-calibrar y optimizar muy variados problemas de modelización adaptándose a la
-sintaxis de programas muy diferentes. En este trabajo CALIBRATOR ha sido
-utilizado con éxito en aplicaciones prácticas de ingeniería agraria tan diversas
-como optimización del manejo de un canal y calibración de coeficientes empíricos
-de un modelo de riego por surcos, de un modelo balístico de riego por aspersión
-y de un modelo de movimiento de máquinas de riego.
+CALIBRATOR has proved to be flexible in the adaptation to the sintaxis of diverse simulation codes and useful in the calibration and optimization of parameters involved in rather different irrigation problems. In the present work it has been shown succesfulfor practical applications such as open channle flow management, furrow fertigation, sprinkler irrigationa and sprinkler tower movement design.
+
 
 \section*{References}
 \bibliography{bib}
