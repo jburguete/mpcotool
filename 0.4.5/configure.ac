@@ -42,10 +42,12 @@ if test $host = "x86_64-w64-mingw32"; then
 	AC_MSG_NOTICE([Microsoft Windows 64 bits])
 	CPPFLAGS="$CPPFLAGS -I/mingw/include"
 	AC_SUBST(PREFIX, "/mingw")
+elif test $host = "x86_64-pc-mingw64"; then
+	AC_MSG_NOTICE([Microsoft Windows 64 bits])
+	AC_SUBST(PREFIX, "/mingw64")
 elif test $host = "i686-pc-mingw32"; then
 	AC_MSG_NOTICE([Microsoft Windows 32 bits])
-	CPPFLAGS="$CPPFLAGS -I/mingw/include"
-	AC_SUBST(PREFIX, "/mingw")
+	AC_SUBST(PREFIX, "/mingw32")
 elif test `uname -s` = "NetBSD"; then
 	AC_MSG_NOTICE([NetBSD])
 	AC_SUBST(PREFIX,"/usr/pkg")
