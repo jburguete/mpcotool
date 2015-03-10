@@ -10,8 +10,7 @@ double evaluation(
 	FILE *file_experiment,
 	unsigned int nexperiment,
 	unsigned int xexperiment,
-	unsigned int yexperiment,
-	FILE *file_overflow)
+	unsigned int yexperiment)
 {
 	unsigned int i, end_simulation, ndata;
 	double e, ey, maxy, rs1[nsimulation], rs2[nsimulation], re[nexperiment];
@@ -56,74 +55,43 @@ exit_simulation:
 	while (1);
 exit_evaluate:
 	e /= ndata;
-	fscanf(file_overflow, "%d", &i);
-	if (i) e *= 100.;
 	return e;
 }
 
 int main(int argn, char **argc)
 {
-	double e, ea, eh, es;
+	int i;
+	double e;
 	char buffer[512];
-	FILE *file_simulation, *file_experiment, *file_evaluation;
-	snprintf(buffer, 512, "mkdir %s", argc[9]);
+	FILE *file_simulation, *file_experiment, *file_evaluation, *file_overflow;
+	snprintf(buffer, 512, "mkdir %s", argc[3]);
 	system(buffer);
-	snprintf(buffer, 512, "cp mesh.in model.in probe.in times.in %s", argc[9]);
+	snprintf(buffer, 512, "cp %s %s/case.xml", argc[1], argc[3]);
 	system(buffer);
-	snprintf(buffer, 512, "cp %s %s/field.in", argc[1], argc[9]);
+	snprintf(buffer, 512, "cp simulate.xml %s", argc[3]);
 	system(buffer);
-	snprintf(buffer, 512, "cp %s %s/input.in", argc[2], argc[9]);
-	system(buffer);
-	snprintf(buffer, 512, "./surcos %s", argc[9]);
+	snprintf(buffer, 512, "cd %s; ../guad1dbin simulate.xml", argc[3]);
 	system(buffer);
 	e = 0.;
-	snprintf(buffer, 512, "%s/00b.out", argc[9]);
+	snprintf(buffer, 512, "%s/contributions", argc[3]);
 	file_simulation = fopen(buffer, "r");
-	file_experiment = fopen(argc[3], "r");
-	ea = sqrt
-		(evaluation(file_simulation, 3, 0, 1, file_experiment, 2, 0, 1, 0.));
+	file_experiment = fopen(argc[2], "r");
+	e += evaluation(file_simulation, 1, 0, 1, file_experiment, 1, 0, 1);
+	e += evaluation(file_simulation, 2, 0, 1, file_experiment, 2, 0, 1);
+	e += evaluation(file_simulation, 3, 0, 1, file_experiment, 3, 0, 1);
+	e += evaluation(file_simulation, 4, 0, 1, file_experiment, 4, 0, 1);
 	fclose(file_simulation);
 	fclose(file_experiment);
-	snprintf(buffer, 512, "%s/probes.out", argc[9]);
-	file_simulation = fopen(buffer, "r");
-	file_experiment = fopen(argc[4], "r");
-	eh = sqrt
-		(evaluation(file_simulation, 11, 0, 1, file_experiment, 2, 0, 1, 0.));
-	fclose(file_simulation);
-	fclose(file_experiment);
-	snprintf(buffer, 512, "%s/probes.out", argc[9]);
-	file_simulation = fopen(buffer, "r");
-	file_experiment = fopen(argc[5], "r");
-	es = evaluation(file_simulation, 11, 0, 4, file_experiment, 2, 0, 1, 10.6);
-	fclose(file_simulation);
-	fclose(file_experiment);
-	snprintf(buffer, 512, "%s/probes.out", argc[9]);
-	file_simulation = fopen(buffer, "r");
-	file_experiment = fopen(argc[6], "r");
-	es += evaluation(file_simulation, 11, 0, 6, file_experiment, 2, 0, 1, 10.6);
-	fclose(file_simulation);
-	fclose(file_experiment);
-	snprintf(buffer, 512, "%s/probes.out", argc[9]);
-	file_simulation = fopen(buffer, "r");
-	file_experiment = fopen(argc[7], "r");
-	es += evaluation(file_simulation, 11, 0, 8, file_experiment, 2, 0, 1, 10.6);
-	fclose(file_simulation);
-	fclose(file_experiment);
-	snprintf(buffer, 512, "%s/probes.out", argc[9]);
-	file_simulation = fopen(buffer, "r");
-	file_experiment = fopen(argc[8], "r");
-	es += evaluation(file_simulation, 10, 0, 8, file_experiment, 2, 0, 1, 10.6);
-	fclose(file_simulation);
-	fclose(file_experiment);
-	es = sqrt(es / 4);
-	printf("error in advance: %lg\n", ea);
-	printf("error in depth: %lg\n", eh);
-	printf("error in concentration: %lg\n", es);
-	e = ea + 0.5 * (eh + es);
+	file_overflow = fopen(buffer, "r");
+	snprintf(buffer, 512, "%s/overflow", argc[3]);
+	fscanf(file_overflow, "%d", &i);
+	fclose(file_overflow);
+	if (i) e *= 100.;
+	e = sqrt(e);
 	printf("total error: %lg\n", e);
-	snprintf(buffer, 512, "rm -rf %s", argc[9]);
+	snprintf(buffer, 512, "rm -rf %s", argc[3]);
 	system(buffer);
-	file_evaluation = fopen(argc[9], "w");
+	file_evaluation = fopen(argc[3], "w");
 	fprintf(file_evaluation, "%.14le", e);
 	fclose(file_evaluation);
 	return 0;
