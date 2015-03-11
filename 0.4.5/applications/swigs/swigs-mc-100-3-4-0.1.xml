@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<calibrate simulator="calibrate_swigs" simulations="100" iterations="3"
-		bests="4" tolerance="0.1">
-	<experiment name="q1" template1="template.xml"/>
+<calibrate simulator="calibrate_swigs" simulations="4" iterations="1"
+		bests="2" tolerance="0.1">
+	<experiment name="demands" template1="template.xml"/>
 	<variable name="delay1" minimum="0" absolute_minimum="0" maximum="3600"
 		format="%.3le"/>
 	<variable name="delay2" minimum="0" absolute_minimum="0" maximum="7200"
