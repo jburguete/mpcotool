@@ -51,6 +51,9 @@ double evaluation(
 exit_simulation:
 		if (end_simulation) ey = rs1[ysimulation] - re[yexperiment];
 		e += ey * ey;
+		printf("xs=%lg ys=%lg xe=%lg ye=%lg e=%lg\n",
+			rs1[xsimulation], rs1[ysimulation],
+			re[xexperiment], re[yexperiment], e);
 	}
 	while (1);
 exit_evaluate:
@@ -73,14 +76,23 @@ int main(int argn, char **argc)
 	system(buffer);
 	snprintf(buffer, 512, "cd %s; ../swigsbin simulate.xml", argc[2]);
 	system(buffer);
-	e = 0.;
 	snprintf(buffer, 512, "%s/contributions", argc[2]);
 	file_simulation = fopen(buffer, "r");
 	file_experiment = fopen("demands", "r");
-	e += evaluation(file_simulation, 2, 0, 1, file_experiment, 1, 0, 1);
-	e += evaluation(file_simulation, 3, 0, 1, file_experiment, 2, 0, 1);
-	e += evaluation(file_simulation, 4, 0, 1, file_experiment, 3, 0, 1);
-	e += evaluation(file_simulation, 5, 0, 1, file_experiment, 4, 0, 1);
+	e = evaluation(file_simulation, 6, 0, 2, file_experiment, 5, 0, 1);
+	printf("e1=%lg\n", e);
+	fseek(file_simulation, 0L, SEEK_SET);
+	fseek(file_experiment, 0L, SEEK_SET);
+	e += evaluation(file_simulation, 6, 0, 3, file_experiment, 5, 0, 2);
+	printf("e2=%lg\n", e);
+	fseek(file_simulation, 0L, SEEK_SET);
+	fseek(file_experiment, 0L, SEEK_SET);
+	e += evaluation(file_simulation, 6, 0, 4, file_experiment, 5, 0, 3);
+	printf("e3=%lg\n", e);
+	fseek(file_simulation, 0L, SEEK_SET);
+	fseek(file_experiment, 0L, SEEK_SET);
+	e += evaluation(file_simulation, 6, 0, 5, file_experiment, 5, 0, 4);
+	printf("e4=%lg\n", e);
 	fclose(file_simulation);
 	fclose(file_experiment);
 	file_overflow = fopen(buffer, "r");
@@ -92,7 +104,7 @@ int main(int argn, char **argc)
 	printf("total error: %lg\n", e);
 	snprintf(buffer, 512, "rm -rf %s", argc[2]);
 	system(buffer);
-	file_evaluation = fopen(argc[3], "w");
+	file_evaluation = fopen(argc[2], "w");
 	fprintf(file_evaluation, "%.14le", e);
 	fclose(file_evaluation);
 	return 0;
