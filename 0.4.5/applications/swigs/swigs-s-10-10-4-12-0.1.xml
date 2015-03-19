@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<calibrate simulator="calibrate_swigs" algorithm="sweep" iterations="4"
+	bests="12" tolerance="0.1">
+	<experiment name="demands" template1="template.xml"/>
+	<variable name="delay1" minimum="0" absolute_minimum="0" maximum="3600"
+		format="%.3le" sweeps="10"/>
+	<variable name="delay2" minimum="0" absolute_minimum="0" maximum="7200"
+		format="%.3le" sweeps="10"/>
+</calibrate>
