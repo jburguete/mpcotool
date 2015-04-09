@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<system initial_time="2010 1 1 0 0 0" final_time="2010 1 15 0 0 0" measured_time="60" max_steady_time="86400" solution_file="case.bin" contributions="contributions">
+<system initial_time="2010 1 1 0 0 0" final_time="2010 1 2 0 0 0" measured_time="60" max_steady_time="86400" solution_file="case.bin" contributions="contributions">
   <channel name="Violada" cell_size="10">
     <geometry>
       <cross_section name="inicio" x="0.">

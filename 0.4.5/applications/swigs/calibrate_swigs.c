@@ -58,6 +58,7 @@ exit_simulation:
 	while (1);
 exit_evaluate:
 	e /= ndata;
+	printf("e=%lg\n", e);
 	return e;
 }
 
@@ -79,19 +80,19 @@ int main(int argn, char **argc)
 	snprintf(buffer, 512, "%s/contributions", argc[2]);
 	file_simulation = fopen(buffer, "r");
 	file_experiment = fopen("demands", "r");
-	e = evaluation(file_simulation, 6, 0, 2, file_experiment, 5, 0, 1);
+	e = evaluation(file_experiment, 5, 0, 1, file_simulation, 6, 0, 2);
 	printf("e1=%lg\n", e);
 	fseek(file_simulation, 0L, SEEK_SET);
 	fseek(file_experiment, 0L, SEEK_SET);
-	e += evaluation(file_simulation, 6, 0, 3, file_experiment, 5, 0, 2);
+	e += evaluation(file_experiment, 5, 0, 2, file_simulation, 6, 0, 3);
 	printf("e2=%lg\n", e);
 	fseek(file_simulation, 0L, SEEK_SET);
 	fseek(file_experiment, 0L, SEEK_SET);
-	e += evaluation(file_simulation, 6, 0, 4, file_experiment, 5, 0, 3);
+	e += evaluation(file_experiment, 5, 0, 3, file_simulation, 6, 0, 4);
 	printf("e3=%lg\n", e);
 	fseek(file_simulation, 0L, SEEK_SET);
 	fseek(file_experiment, 0L, SEEK_SET);
-	e += evaluation(file_simulation, 6, 0, 5, file_experiment, 5, 0, 4);
+	e += evaluation(file_experiment, 5, 0, 4, file_simulation, 6, 0, 5);
 	printf("e4=%lg\n", e);
 	fclose(file_simulation);
 	fclose(file_experiment);
