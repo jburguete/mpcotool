@@ -102,8 +102,7 @@ int main(int argn, char **argc)
 	printf("total error: %lg\n", e);
 	snprintf(buffer, 512, "rm -rf %s", argc[2]);
 	system(buffer);
-	snprintf(buffer, 512, "result-%s", argc[2]);
-	file_evaluation = fopen(buffer, "w");
+	file_evaluation = fopen(argc[2], "w");
 	fprintf(file_evaluation, "%.14le", e);
 	fclose(file_evaluation);
 	return 0;
