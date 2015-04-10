@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 
 double evaluation(
 	FILE *file_simulation,
@@ -12,53 +13,49 @@ double evaluation(
 	unsigned int xexperiment,
 	unsigned int yexperiment)
 {
-	unsigned int i, end_simulation, ndata;
-	double e, ey, maxy, rs1[nsimulation], rs2[nsimulation], re[nexperiment];
+	unsigned int i, end_experiment, ndata;
+	double e, ey, maxy, re1[nexperiment], re2[nexperiment], rs[nsimulation];
 	e = 0.;
 	maxy = 0.;
-	end_simulation = ndata = 0;
-	for (i = 0; i < nsimulation; ++i)
-		if (fscanf(file_simulation, "%lf", rs2 + i) != 1) goto exit_evaluate;
+	end_experiment = ndata = 0;
+	for (i = 0; i < nexperiment; ++i)
+		if (fscanf(file_experiment, "%lf", re2 + i) != 1) goto exit_evaluate;
+	maxy = fmax(maxy, fabs(re2[yexperiment]));
+	memcpy(re1, re2, nexperiment * sizeof(double));
 	do
 	{
-		for (i = 0; i < nexperiment; ++i)
-			if (fscanf(file_experiment, "%lf", re + i) != 1) goto exit_evaluate;
+		for (i = 0; i < nsimulation; ++i)
+			if (fscanf(file_simulation, "%lf", rs + i) != 1) goto exit_evaluate;
 		++ndata;
-		maxy = fmax(maxy, re[yexperiment]);
-		for (i = 0; i < nsimulation; ++i) rs1[i] = rs2[i];
-		if (rs1[xsimulation] > re[xexperiment])
-			ey = rs1[ysimulation] - re[yexperiment];
-		else if (!end_simulation)
+		if (re1[xexperiment] >= rs[xsimulation])
+			ey = re1[yexperiment] - rs[ysimulation];
+		else if (!end_experiment)
 		{
-			do
+			while (re2[xexperiment] < rs[xsimulation])
 			{
-				for (i = 0; i < nsimulation; ++i) rs1[i] = rs2[i];
-				for (i = 0; i < nsimulation; ++i)
+				memcpy(re1, re2, nexperiment * sizeof(double));
+				for (i = 0; i < nexperiment; ++i)
 				{
-					if (fscanf(file_simulation, "%lf", rs2 + i) != 1)
+					if (fscanf(file_experiment, "%lf", re2 + i) != 1)
 					{
-						end_simulation = 1;
-						goto exit_simulation;
+						end_experiment = 1;
+						goto exit_experiment;
 					}
 				}
+				maxy = fmax(maxy, fabs(re2[yexperiment]));
 			}
-			while (rs2[xsimulation] < re[xsimulation]);
-			ey = rs1[ysimulation] + (rs2[ysimulation] - rs1[ysimulation])
-				* (re[xexperiment] - rs1[xsimulation])
-				/ (rs2[xsimulation] - rs1[xsimulation])
-				- re[yexperiment];
+			ey = re1[yexperiment] + (re2[yexperiment] - re1[yexperiment])
+				* (rs[xsimulation] - re1[xexperiment])
+				/ (re2[xexperiment] - re1[xexperiment])
+				- rs[ysimulation];
 		}
-exit_simulation:
-		if (end_simulation) ey = rs1[ysimulation] - re[yexperiment];
+exit_experiment:
+		if (end_experiment) ey = re1[yexperiment] - rs[ysimulation];
 		e += ey * ey;
-		printf("xs=%lg ys=%lg xe=%lg ye=%lg e=%lg\n",
-			rs1[xsimulation], rs1[ysimulation],
-			re[xexperiment], re[yexperiment], e);
 	}
 	while (1);
 exit_evaluate:
 	e /= ndata;
-	printf("e=%lg\n", e);
 	return e;
 }
 
@@ -80,19 +77,19 @@ int main(int argn, char **argc)
 	snprintf(buffer, 512, "%s/contributions", argc[2]);
 	file_simulation = fopen(buffer, "r");
 	file_experiment = fopen("demands", "r");
-	e = evaluation(file_experiment, 5, 0, 1, file_simulation, 6, 0, 2);
+	e = evaluation(file_simulation, 6, 0, 2, file_experiment, 5, 0, 1);
 	printf("e1=%lg\n", e);
 	fseek(file_simulation, 0L, SEEK_SET);
 	fseek(file_experiment, 0L, SEEK_SET);
-	e += evaluation(file_experiment, 5, 0, 2, file_simulation, 6, 0, 3);
+	e += evaluation(file_simulation, 6, 0, 3, file_experiment, 5, 0, 2);
 	printf("e2=%lg\n", e);
 	fseek(file_simulation, 0L, SEEK_SET);
 	fseek(file_experiment, 0L, SEEK_SET);
-	e += evaluation(file_experiment, 5, 0, 3, file_simulation, 6, 0, 4);
+	e += evaluation(file_simulation, 6, 0, 4, file_experiment, 5, 0, 3);
 	printf("e3=%lg\n", e);
 	fseek(file_simulation, 0L, SEEK_SET);
 	fseek(file_experiment, 0L, SEEK_SET);
-	e += evaluation(file_experiment, 5, 0, 4, file_simulation, 6, 0, 5);
+	e += evaluation(file_simulation, 6, 0, 5, file_experiment, 5, 0, 4);
 	printf("e4=%lg\n", e);
 	fclose(file_simulation);
 	fclose(file_experiment);
@@ -105,7 +102,8 @@ int main(int argn, char **argc)
 	printf("total error: %lg\n", e);
 	snprintf(buffer, 512, "rm -rf %s", argc[2]);
 	system(buffer);
-	file_evaluation = fopen(argc[2], "w");
+	snprintf(buffer, 512, "result-%s", argc[2]);
+	file_evaluation = fopen(buffer, "w");
 	fprintf(file_evaluation, "%.14le", e);
 	fclose(file_evaluation);
 	return 0;
