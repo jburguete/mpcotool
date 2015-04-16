@@ -95,7 +95,9 @@ if test $openbsd = 1; then
 else
 	# Unable to use AC_PROG_CC([mpicc gcc clang]) on conditional statements
 	# Trying to recover
-	if test -x "$PREFIX/bin/mpicc"; then
+	if test -x "/cm/shared/apps/openmpi/gcc/64/1.6.4/bin/mpicc"; then
+		CC="mpicc"
+	elif test -x "$PREFIX/bin/mpicc"; then
 		CC="mpicc"
 	elif test -x "$PREFIX/bin/gcc"; then
 		CC="gcc"

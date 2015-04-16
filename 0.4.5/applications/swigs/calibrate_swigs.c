@@ -93,10 +93,13 @@ int main(int argn, char **argc)
 	printf("e4=%lg\n", e);
 	fclose(file_simulation);
 	fclose(file_experiment);
-	file_overflow = fopen(buffer, "r");
+	snprintf(buffer, 512, "ls %s", argc[2]);
+	system(buffer);
 	snprintf(buffer, 512, "%s/overflow", argc[2]);
+	file_overflow = fopen(buffer, "r");
 	fscanf(file_overflow, "%d", &i);
 	fclose(file_overflow);
+	printf("overflow=%d\n", i);
 	if (i) e *= 100.;
 	e = sqrt(e);
 	printf("total error: %lg\n", e);
