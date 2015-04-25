@@ -5,5 +5,5 @@
 	<variable name="delay1" minimum="0" absolute_minimum="0" maximum="3600"
 		format="%.3le" bits="12"/>
 	<variable name="delay2" minimum="0" absolute_minimum="0" maximum="7200"
-		format="%.3le" bit2="13"/>
+		format="%.3le" bits="13"/>
 </calibrate>

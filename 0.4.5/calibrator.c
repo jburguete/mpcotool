@@ -57,7 +57,7 @@ OF SUCH DAMAGE.
  * \def DEBUG
  * \brief Macro to debug.
  */
-#define DEBUG 0
+#define DEBUG 1
 
 /**
  * \def MAX_NINPUTS
