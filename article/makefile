@@ -8,7 +8,8 @@ figs = surcos-advance.eps surcos-depth.eps surcos-solute-q1.eps \
 	pivot-simulated-starts-42.eps pivot-simulated-stops-42.eps \
 	pivot-measured-starts-42.eps pivot-measured-stops-42.eps \
 	pivot-simulated-starts-27,48.eps pivot-simulated-stops-27,48.eps \
-	pivot-measured-starts-27,48.eps pivot-measured-stops-27,48.eps
+	pivot-measured-starts-27,48.eps pivot-measured-stops-27,48.eps \
+	Violada-contributions.eps Violada-optimized-contributions.eps
 
 calibrator.pdf: calibrator.tex bib.bib makefile $(figs)
 	latex calibrator

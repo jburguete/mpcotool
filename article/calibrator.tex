@@ -45,7 +45,7 @@
 	\end{table}
 }
 
-\newcommand{\FIGii}[4]
+\newcommand{\FIGII}[4]
 {
 	\begin{figure}[ht!]
 		\centering
@@ -144,8 +144,8 @@ Parallel computations are enabled in a simple way so that the work load can be d
 different processors available in a a computer. 
 The CALIBRATOR usage and possibilities are illustrated by showing four practical applications in agriculture:
 optimization of canal management, calibration of the empirical infiltration coeffcients in surface irrigation,
-optimization of a ballistic sprinkler irrigation model and opimization of irrigation engines movement.
-This software is open source source and is distributed with a BSD (Berkeley
+optimization of a ballistic sprinkler irrigation model and optimization of irrigation engines movement.
+This software is open source and is distributed with a BSD (Berkeley
 Software Distribution) type license.
 \end{abstract}
 
@@ -160,7 +160,7 @@ calibrations or optimizations of empirical parameters with a BSD type license.
 
 \subsection{Sweep brute force method}
 
-In the sweep method, first the domain defined by the extreme values of the variables to optimize is divided in regular intervals. Then a simulation is performed using each of the resulting combinations. (NO SE ENTIENDE). The sketch of an example is shown
+In the sweep method, the domain defined by the extreme values of the variables to optimize is divided in regular intervals. Then, a simulation is performed using each of the resulting combinations. (NO SE ENTIENDE). The sketch of an example is shown
 in figure~\ref{FigSweep}. The total number of required simulations is:
 \EQ{N_{simulations}=x_{sweeps}\times y_{sweeps}\times\cdots,}{EqNSweeps}
 being $x_{sweeps}$ the number of sweeps in the variable $x$.
@@ -360,7 +360,7 @@ two iterations}{FigIterative}
 \subsection{Genetic method}
 
 CALIBRATOR also offers the use of a genetic method GENETIC \citep{genetic} with its default algorithms.
-They are based on the ideas in \citet{gaul}, but have been fully programmed involving modern external lybraries.
+They are based on the ideas in \citet{gaul}, but have been fully programmed involving more modern external libraries.
 The code in GENETIC is also open source under BSD license. Figure~\ref{FigGeneticFlow} shows the flowchart of the genetic method implemented in GENETIC.
 
 \psset{xunit=0.5mm,yunit=0.5mm}
@@ -648,7 +648,7 @@ It has the same bits as the parents and the same genome but for a bit (NO SE ENT
 		\psframe[linecolor=gray,fillcolor=gray,fillstyle=solid](63,\rb)(67,\rt)
 		\psframe[linecolor=gray,fillcolor=gray,fillstyle=solid](71,\rb)(75,\rt)
 	}
-	\rput(10,17.5){Parent1}
+	\rput(10,17.5){1st parent}
 	\psframe(20,15)(80,20)
 	\rput(22,17.5){1}
 	\rput(24,17.5){1}
@@ -679,7 +679,7 @@ It has the same bits as the parents and the same genome but for a bit (NO SE ENT
 	\rput(74,17.5){1}
 	\rput(76,17.5){1}
 	\rput(78,17.5){1}
-	\rput(10,2.5){Parent2}
+	\rput(10,2.5){2nd parent}
 	\psframe(20,0)(80,5)
 	\rput(22,2.5){1}
 	\rput(24,2.5){0}
@@ -876,7 +876,7 @@ a bit is randonly chosen assuming a probability linearly decresing with the sign
 	\psframe(55,15)(57,20)
 }{Example of the generation of a new individual from a parent by adaptation}{FigAdaptation}
 
-This algorithm is rather similar to the mutation algorithm previously described but, since the probability to affect bits less significativ is larger, so is the probability to produce small changes.
+This algorithm is rather similar to the mutation algorithm previously described but, since the probability to affect bits less significative is larger, so is the probability to produce small changes.
 
 \section{Implementation}
 
@@ -885,8 +885,8 @@ This algorithm is rather similar to the mutation algorithm previously described 
 CALIBRATOR uses the following open source external libraries:
 
 \begin{itemize}
-\item\citet{libxml}:Library required to read the input file in XML format.
-\item\citet{gsl}: Scientific library librería required to generate the pseudo-random numbers used by 
+\item\citet{libxml}: Library required to read the input file in XML format.
+\item\citet{gsl}: Scientific library required to generate the pseudo-random numbers used by 
 the genetic algorithms and the Monte-Carlo method.
 \item\citet{glib}: Library required to implement some data,	to parse the input file templates and the routines used to parallelize the usage of the computer's processors.
 \item\citet{openmpi,mpich}: Optional libraries. When installed,  they are used to allow parallelization in multiple computers. \end{itemize}
@@ -895,24 +895,21 @@ the genetic algorithms and the Monte-Carlo method.
 
 The source code in CALIBRATOR is written in C language. This software has
 been built and tested in the following operative systems:
-\begin{itemize}
-\item Debian Linux 7.7,
-\item Debian kFreeBSD 7.7,
-\item DragonFly BSD 4.0.1,
-\item FreeBSD 10.0,
-\item NetBSD 6.1.5,
-\item OpenBSD 5.6,
-\item Windows XP\footnotemark[1],
-\item and Window 7\footnotemark[1].
-\footnotetext[1]{Windows XP and Windows 7 are trademarks of Microsoft
-Corporation.}
-\end{itemize}
+Debian Linux 8.0,
+DragonFly BSD 4.0.5,
+FreeBSD 10.1,
+NetBSD 6.1.5,
+OpenBSD 5.6,
+Windows 7\footnotemark[1],
+and Window 8.1\footnotemark[1].
 Probably, this software can be built and it works in other operative systems,
 software distributions or versions but it has not been tested.
+\footnotetext[1]{Windows 7 and Windows 8.1 are trademarks of Microsoft
+Corporation.}
 
 In order to build the executable file from the source code, a C compiler (\citet{gcc} or \citet{clang}), the configuration systems \citet{autoconf} and \citet{automake}, the executable creation control program \citet{gnumake} and the external libraries previously listed are required. When using Microsoft Windows systems, the indications provided in \citet{mingw-make} can be followed in order to install all these utilities.
 
-Once allthe tools installed, the GENETIC source code must be downloaded and it must be compiled following:
+Once all the tools installed, the GENETIC source code must be downloaded and it must be compiled following:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 $ cd PATH_TO_GENETIC/0.6.0
 $ aclocal
@@ -933,7 +930,7 @@ $ ./configure
 $ make
 \end{lstlisting}
 
-Some systems (such as Microsoft Windows 64 bits or OpenBSD) might require extra options. In those cases follow the README files in both repositories.
+Some systems (such OpenBSD) might require extra options. In those cases follow the README files in both repositories.
 
 \subsection{Command line format}
 
@@ -1063,12 +1060,15 @@ in the simulation input files.
 \section{Practical applications}
 
 In what follows, a few cases of practical application of CALIBRATOR in combination with
-differentt simulation codes are presented. The will deal with teh optimizationand/or calibration 
-of variables in models used for surface irrigation, open channel flow,sprinckler irrigation or irrigation
+differentt simulation codes are presented. The will deal with the optimization
+and/or calibration 
+of variables in models used for surface irrigation, open channel flow, sprinkler irrigation or irrigation
 engines movement.   
 
-All the cases have been run on a laptop computer equiped with an Intel(R) Core(TM) i7 M620 2.67GHz processor. 
-The computation was performed in four parallelized tasks to make the most of the processor's double nucleus with hyperthreading.
+Most of cases have been run on a laptop computer equiped with an Intel(R) Core(TM) i7 M620 2.67GHz processor. 
+Then, the computation was performed in four parallelized tasks to make the most of the processor's double nucleus with hyperthreading. Only on the optimization
+of the management of the Violada canal, much more expensive computationally, the
+Memento cluster of the BIFI has been used.
 
 \subsection{Optimization of a canal management}
 
@@ -1087,15 +1087,16 @@ coefficient (0.014 and 0.02 s m$^{-1/3}$ for the first
 and the final reaches respectively). The values correspond to polished and
 coarse concrete \citep{Chow59}.
 
-Two key optimization variables have been studied: $d_A$ and $d_{GT}$. Where
-$d_A$ takes into account the delay between  the modification time of the inlet
-discharge and the modification time in the Almudévar gate and $d_{GT}$ takes
-into account the delay between the inlet and Gurrea and Temple gates
-modification.
+Two key optimization variables have been studied: $\Delta t_A$ and
+$\Delta_{GT}$. Where $\delta t_A$ takes into account the delay between the
+modification time of the inlet discharge and the modification time in the
+Almudévar gate and $\delta_{GT}$ takes into account the delay between the inlet
+and Gurrea and Temple gates modification.
 
-The canal was initially dry and the simulation was run until a steady state with a discharge of 2 $m^{-1/3}\cdot s$ was reached. 
-The objective of this work was to provide the required daily discharge to the three important irrigation gates as well as
-to keep a constant discharge of 2 $m^{-1/3}\cdot s$ at the outlet gate. 
+The canal was initially dry and the simulation was run until a steady state with
+a discharge of 2 m$^3$/s was reached. The objective of this work was to provide
+the required daily discharge to the three important irrigation gates as well as
+to keep a constant discharge of 2 m$^3$/s at the outlet gate. 
 
 The required discharge at every gate for a modernization scenario to sprinkler irrigation was obtained after an elaborate 
 field analysis. Taking into account the crop distribution, soil water retention properties, 
@@ -1103,14 +1104,65 @@ characteristics of the parcels and hydrants, the electricity cost depending on t
 reservoir in the area, seven different scenarios were obtained as a function of the historical irrigation requirements for 
 the same period using real data \citet{Zapata09}.
 
+Table~\ref{TabSwigs} displays the results obtained for the optimal coefficient
+values and the corresponding value of the evaluation function, where the error
+norm:
+
+The results are similar among the different methods.
+However, it can be noticed that both the iterative method and the genetic methods produce better results than the Monte-Carlo method without iterations with the same total number of simulations. Cada optimización, que realizó un número
+total de 1024 simulaciones, costó un tiempo aproximado de 14 horas usando 64
+núcleos del clúster Memento alojado en el BIFI.
+
+\TABLE{\scriptsize}{cccc}
+{
+	Optimization & Optimization & Optime empirical & Objective function
+	\\ algorithm & parameters & parameters & value
+	\\ \hline
+	Sweeps & $N_{simulations}=1024$ & $d_A=3368$ s & 0.047170
+	\\ & $N_{iterations}=1$ & $d_{GT}=3716$ s
+	\\ \hline
+	Sweeps & $N_{simulations}=256$ & $d_A=3329$ s & 0.047148
+	\\ & $N_{iterations}=4$ & $d_{GT}=3742$ s
+	\\ & $N_{bests}=20$ &
+	\\ & $tol=0.1$
+	\\ \hline
+	Monte-Carlo & $N_{simulations}=1024$ & $d_A=3193$ s & 0.047183
+	\\ & $N_{iterations}=1$ & $d_{GT}=3705$ s
+	\\ \hline
+	Monte-Carlo & $N_{simulations}=256$ & $d_A=3250$ s & 0.047139
+	\\ & $N_{iterations}=4$ & $d_{GT}=3751$ s
+	\\ & $N_{bests}=4$
+	\\ & $tol=0.1$
+	\\ \hline
+	Genetic & $N_{population}=256$ & $d_A=3363$ s & 0.047135
+	\\ & $N_{generations}=9$ & $d_{GT}=3752$ s
+	\\ & $R_{mutation}=0.125$
+	\\ & $R_{reproduction}=0.125$
+	\\ & $R_{adaptation}=0.125$
+	\\ \hline
+	Genetic & $N_{population}=64$ & $d_A=3375$ s & 0.047252
+	\\ & $N_{generations}=21$ & $d_{GT}=3599$ s
+	\\ & $R_{mutation}=0.25$
+	\\ & $R_{reproduction}=0.25$
+	\\ & $R_{adaptation}=0.25$
+	\\ \hline
+}{Optimal empirical parameters and value of the evaluation function in the simulation of the Violada canal using program SWIGS and several optimization algorithms in CALIBRATOR with the same total number of simulations}{TabSwigs}
+
+\FIGII{Violada-contributions.eps}{Violada-optimized-contributions.eps}
+{
+	Temporal evolution of discharges supplied at inlet, outlet and gates as (a)
+	using los horarios de apertura aplicados por los guardas and (b) los
+	horarios de apertura óptimos obtenidos en este trabajo
+}{FigSwigs}
+
 \subsection{Calibration of empirical parameters on surface irrigation}
 
 CALIBRATOR has also been used to find out the empirical parameters required by the friction, diffusion and infitration
-models used in the model SURCOS \citep{Surcos,SurcosGit,JaviSurcos3} for the simulation of the four furrow fertigation experiments publisehd in \citet{JaviSurcos2}. The furrows were $100$ m long and they were simulated using 100 computatioanl cells per furrow. The furrows were close together, they had the same geometry and the experiments were almost simultaneous, hence the soil properties were assumed uniform. 
+models used in the model SURCOS \citep{Surcos,SurcosGit,JaviSurcos3} for the simulation of the four furrow fertigation experiments published in \citet{JaviSurcos2}. The furrows were $100$ m long and they were simulated using 100 computatioanl cells per furrow. The furrows were close together, they had the same geometry and the experiments were almost simultaneous, hence the soil properties were assumed uniform. 
 
-The friction model used in SURCOS is the Gauckler-Manning model. The infiltration model is the Kostiakov-Lewis model. They require calibration of three coefficients: the Manning $n$ and the infiltration $K$ and $a$. In the original paper, a brute force method using 3000 simulations was applie, each of them including the four experiments. In the present work, the same number of simulations has been used with the calibration methods implemented in CALIBRATOR. The execution of 3000 simulations in the mentioned laptop computer took about 1h20m.  
+The friction model used in SURCOS is the Gauckler-Manning model. The infiltration model is the Kostiakov-Lewis model. They require calibration of three coefficients: the Manning $n$ and the infiltration $K$ and $a$. In the original paper, a brute force method using 3000 simulations was applied, each of them including the four experiments. In the present work, the same number of simulations has been used with the calibration methods implemented in CALIBRATOR. The execution of 3000 simulations in the mentioned laptop computer took about 1h20m.  
 
-Table~\ref{TabSurcos} displays the results obtained for the optimal coefficient valuesand the corresponding
+Table~\ref{TabSurcos} displays the results obtained for the optimal coefficient values and the corresponding
 value of the evaluation function, where the error norm is the same as in \citet{JaviSurcos2}. The results are similar among the different methods and also similar to those in the original paper. This is due to the existence of a relativeley large region of combinations of the empirical parameters producing similar values in the evaluation function, thus preventing from an accurate convergence to the optimum set. However, it can be noticed that both the iterative method and the genetic methods produce better results than the Monte-Carlo method without iterations with the same total number of simulations.
 
 \TABLE{\scriptsize}{cccc}
@@ -1127,19 +1179,19 @@ value of the evaluation function, where the error norm is the same as in \citet{
 	\\ & $N_{bests}=10$ & $a=0.497$
 	\\ & $tol=0.2$
 	\\ \hline
-	genetic & $N_{population}=750$ & $n=0.0399$ & 0.3339
+	Genetic & $N_{population}=750$ & $n=0.0399$ & 0.3339
 	\\ & $N_{generations}=6$ & $K=9.907\cdot 10^{-4}$
 	\\ & $R_{mutation}=0.2$ & $a=0.498$
 	\\ & $R_{reproduction}=0.2$
 	\\ & $R_{adaptation}=0.2$
 	\\ \hline
-	genetic & $N_{population}=300$ & $n=0.0417$ & 0.3322
+	Genetic & $N_{population}=300$ & $n=0.0417$ & 0.3322
 	\\ & $N_{generations}=31$ & $K=9.989\cdot 10^{-4}$
 	\\ & $R_{mutation}=0.1$ & $a=0.496$
 	\\ & $R_{reproduction}=0.1$
 	\\ & $R_{adaptation}=0.1$
 	\\ \hline
-}{Optimal empirical parameters and value of the evaluation function in the simulation of the furrow irrigation cases in \citet{JaviSurcos2} using program SURCOS and several optimization algorithms in CALIBRATOR with the same totalnumber of simulations}{TabSurcos}
+}{Optimal empirical parameters and value of the evaluation function in the simulation of the furrow irrigation cases in \citet{JaviSurcos2} using program SURCOS and several optimization algorithms in CALIBRATOR with the same total number of simulations}{TabSurcos}
 
 Figure~\ref{FigSurcos} shows the results of the water depths and solute concentration from the simulation using the coefficients obtained by the Monte-Carlo method with$N_{iterations}=6$, compared with the experimental values.
 
@@ -1187,13 +1239,13 @@ Table~\ref{TabSprinklerI} shows the results from the calibration of parameters $
 	\\ & $N_{bests}=8$ & $P=0.388$
 	\\ & $tol=0.4$
 	\\ \hline
-	genetic & $N_{population}=250$ & $D_{50}=3.06$ mm & 1.71 mm
+	Genetic & $N_{population}=250$ & $D_{50}=3.06$ mm & 1.71 mm
 	\\ & $N_{generations}=6$ & $n=21.001$
 	\\ & $R_{mutation}=0.2$ & $P=0.563$
 	\\ & $R_{reproduction}=0.2$
 	\\ & $R_{adaptation}=0.2$
 	\\ \hline
-	genetic & $N_{population}=100$ & $D_{50}=3.06$ mm & 1.62 mm
+	Genetic & $N_{population}=100$ & $D_{50}=3.06$ mm & 1.62 mm
 	\\ & $N_{generations}=31$ & $n=19.963$
 	\\ & $R_{mutation}=0.1$ & $P=0.377$
 	\\ & $R_{reproduction}=0.1$
@@ -1225,13 +1277,13 @@ Next, using the optimal $D_{50}=3.06$ mm, $n=20.878$ and $P=0.388$ obtained by t
 	\\ & $N_{bests}=4$
 	\\ & $tol=0.2$
 	\\ \hline
-	genetic & $N_{population}=100$ & $k_1=0.400$ & 12.09 mm
+	Genetic & $N_{population}=100$ & $k_1=0.400$ & 12.09 mm
 	\\ & $N_{generations}=6$ & $k_2=0.070$
 	\\ & $R_{mutation}=0.2$
 	\\ & $R_{reproduction}=0.2$
 	\\ & $R_{adaptation}=0.2$
 	\\ \hline
-	genetic & $N_{population}=100$ & $k_1=0.400$ & 12.09 mm
+	Genetic & $N_{population}=100$ & $k_1=0.400$ & 12.09 mm
 	\\ & $N_{generations}=11$ & $k_2=0.070$
 	\\ & $R_{mutation}=0.1$
 	\\ & $R_{reproduction}=0.1$
@@ -1241,7 +1293,7 @@ Next, using the optimal $D_{50}=3.06$ mm, $n=20.878$ and $P=0.388$ obtained by t
 
 Finally, figure~\ref{FigSprinkler} shows the measured (in pluviometers) and simulated water distribution using the optimal parameters in windless and wind conditions of average velocity 2.84 m/s.
 
-\FIGii{sprinkler-0.eps}{sprinkler-2,84.eps}
+\FIGII{sprinkler-0.eps}{sprinkler-2,84.eps}
 {(a) Radial pluviometry for non-wind conditions and (b) pluviometry at the two
 pluviometers axes}{FigSprinkler}
 
@@ -1341,14 +1393,14 @@ Table~\ref{TabPivot} shows some of the results obtained in a total of 10000 simu
 	\\ & $N_{bests}=10$ & $\delta=0.122^\circ$
 	\\ & $tol=0.1$ & $\tau=3.82$s
 	\\ \hline
-	genetic & $N_{population}=1000$ & $\overline{\alpha_{start}}=179.800^\circ$
+	Genetic & $N_{population}=1000$ & $\overline{\alpha_{start}}=179.800^\circ$
 	& 9552.8
 	\\ & $N_{generations}=16$ & $\overline{\alpha_{stop}}=180.190^\circ$
 	\\ & $R_{mutation}=0.2$ & $\delta=0.137^\circ$
 	\\ & $R_{reproduction}=0.2$ & $\tau=4.39$s
 	\\ & $R_{adaptation}=0.2$
 	\\ \hline
-	genetic & $N_{population}=400$ & $\overline{\alpha_{start}}=179.751^\circ$
+	Genetic & $N_{population}=400$ & $\overline{\alpha_{start}}=179.751^\circ$
 	& 9187.5
 	\\ & $N_{generations}=81$ & $\overline{\alpha_{stop}}=180.166^\circ$
 	\\ & $R_{mutation}=0.1$ & $\delta=0.136^\circ$
