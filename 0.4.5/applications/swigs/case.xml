@@ -330,7 +330,7 @@
       2010 1 14 0 0 0 3.207
       2010 1 15 0 0 0 3.207
     </inlet>
-    <boundary name="extAlm" type="qt" initial="V-5.3" delay="1200">
+    <boundary name="extAlm" type="qt" initial="V-5.3" delay="3600">
       2010 1 1 0 0 0 -0.264
       2010 1 2 0 0 0 -0.264
       2010 1 2 0 0 0 -0.27
@@ -360,7 +360,7 @@
       2010 1 14 0 0 0 -0.169
       2010 1 15 0 0 0 -0.169
     </boundary>
-    <boundary name="extGur" type="qt" initial="13623" delay="3600">
+    <boundary name="extGur" type="qt" initial="13623" delay="12600">
       2010 1 1 0 0 0 -0.729
       2010 1 2 0 0 0 -0.729
       2010 1 2 0 0 0 -0.694
@@ -390,7 +390,7 @@
       2010 1 14 0 0 0 -0.569
       2010 1 15 0 0 0 -0.569
     </boundary>
-    <boundary name="extTem" type="qt" initial="13630" delay="3600">
+    <boundary name="extTem" type="qt" initial="13630" delay="12600">
       2010 1 1 0 0 0 -0.639
       2010 1 2 0 0 0 -0.639
       2010 1 2 0 0 0 -0.586

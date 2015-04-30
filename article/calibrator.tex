@@ -1088,10 +1088,10 @@ and the final reaches respectively). The values correspond to polished and
 coarse concrete \citep{Chow59}.
 
 Two key optimization variables have been studied: $\Delta t_A$ and
-$\Delta_{GT}$. Where $\Delta t_A$ takes into account the delay between the
+$\Delta t_{GT}$. Where $\Delta t_A$ takes into account the delay between the
 modification time of the inlet discharge and the modification time in the
-Almudévar gate and $\Delta_{GT}$ takes into account the delay between the inlet
-and Gurrea and Temple gates modification.
+Almudévar gate and $\Delta t_{GT}$ takes into account the delay between the
+inlet and Gurrea and Temple gates modification.
 
 The canal was initially dry and the simulation was run until a steady state with
 a discharge of 2 m$^3$/s was reached. The objective of this work was to provide
@@ -1118,30 +1118,33 @@ núcleos del clúster Memento alojado en el BIFI.
 	Optimization & Optimization & Optime empirical & Objective function
 	\\ algorithm & parameters & parameters & value
 	\\ \hline
-	Sweeps & $N_{simulations}=1024$ & $d_A=3368$ s & 0.047170
-	\\ & $N_{iterations}=1$ & $d_{GT}=3716$ s
+	\multicolumn{2}{c}{Manejo de los guardas} & $\Delta t_A=3600$ s & 1.049056
+	\\ & & $\Delta t_{GT}=12600$ s
 	\\ \hline
-	Sweeps & $N_{simulations}=256$ & $d_A=3329$ s & 0.047148
-	\\ & $N_{iterations}=4$ & $d_{GT}=3742$ s
+	Sweeps & $N_{simulations}=1024$ & $\Delta t_A=3368$ s & 0.047170
+	\\ & $N_{iterations}=1$ & $\Delta t_{GT}=3716$ s
+	\\ \hline
+	Sweeps & $N_{simulations}=256$ & $\Delta t_A=3329$ s & 0.047148
+	\\ & $N_{iterations}=4$ & $\Delta t_{GT}=3742$ s
 	\\ & $N_{bests}=20$ &
 	\\ & $tol=0.1$
 	\\ \hline
-	Monte-Carlo & $N_{simulations}=1024$ & $d_A=3193$ s & 0.047183
-	\\ & $N_{iterations}=1$ & $d_{GT}=3705$ s
+	Monte-Carlo & $N_{simulations}=1024$ & $\Delta t_A=3193$ s & 0.047183
+	\\ & $N_{iterations}=1$ & $\Delta t_{GT}=3705$ s
 	\\ \hline
-	Monte-Carlo & $N_{simulations}=256$ & $d_A=3250$ s & 0.047139
-	\\ & $N_{iterations}=4$ & $d_{GT}=3751$ s
+	Monte-Carlo & $N_{simulations}=256$ & $\Delta t_A=3250$ s & 0.047139
+	\\ & $N_{iterations}=4$ & $\Delta t_{GT}=3751$ s
 	\\ & $N_{bests}=4$
 	\\ & $tol=0.1$
 	\\ \hline
-	Genetic & $N_{population}=256$ & $d_A=3363$ s & 0.047135
-	\\ & $N_{generations}=9$ & $d_{GT}=3752$ s
+	Genetic & $N_{population}=256$ & $\Delta t_A=3363$ s & 0.047135
+	\\ & $N_{generations}=9$ & $\Delta t_{GT}=3752$ s
 	\\ & $R_{mutation}=0.125$
 	\\ & $R_{reproduction}=0.125$
 	\\ & $R_{adaptation}=0.125$
 	\\ \hline
-	Genetic & $N_{population}=64$ & $d_A=3375$ s & 0.047252
-	\\ & $N_{generations}=21$ & $d_{GT}=3599$ s
+	Genetic & $N_{population}=64$ & $\Delta t_A=3375$ s & 0.047252
+	\\ & $N_{generations}=21$ & $\Delta t_{GT}=3599$ s
 	\\ & $R_{mutation}=0.25$
 	\\ & $R_{reproduction}=0.25$
 	\\ & $R_{adaptation}=0.25$
