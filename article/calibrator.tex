@@ -136,17 +136,22 @@ canal
 
 \begin{abstract}
 The present work describes CALIBRATOR, a new software program to perform
-calibrations or optimization of empirical parameters required in the formulation of 
-numerical simulation models. The structure is such that it can be easily adapted to 
-different simulation codes.
-One genetic algorithm and two brute force optimization algorithms are included (sweeps and Monte-Carlo).
-Parallel computations are enabled in a simple way so that the work load can be distributed among the 
-different processors available in a a computer. 
-The CALIBRATOR usage and possibilities are illustrated by showing four practical applications in agriculture:
-optimization of canal management, calibration of the empirical infiltration coeffcients in surface irrigation,
-optimization of a ballistic sprinkler irrigation model and optimization of irrigation engines movement.
-This software is open source and is distributed with a BSD (Berkeley
-Software Distribution) type license.
+calibrations or optimization of empirical parameters required in the formulation
+of numerical simulation models. The structure is such that it can be easily
+adapted to different simulation codes.
+One genetic algorithm, two brute force optimization algorithms (sweeps and
+Monte-Carlo) and an iterative algorithm to improve the brute force methods are
+included.
+Parallel computations are enabled in a simple way so that the work load can be
+distributed among the different processors available in one computer or in
+multiple computers of a cluster.
+The CALIBRATOR usage and possibilities are illustrated by showing four practical
+applications in agriculture: optimization of canal management and calibration of
+the empirical infiltration coeffcients in a surface irrigation model, in a
+ballistic sprinkler irrigation model and in an irrigation engines movement
+model.
+This software is open source and is distributed with a BSD (Berkeley Software
+Distribution) type license.
 \end{abstract}
 
 \maketitle
@@ -1076,7 +1081,7 @@ in the simulation input files.
 \section{Practical applications}
 
 In what follows, a few cases of practical application of CALIBRATOR in combination with
-differentt simulation codes are presented. The will deal with the optimization
+different simulation codes are presented. The will deal with the optimization
 and/or calibration 
 of variables in models used for surface irrigation, open channel flow, sprinkler irrigation or irrigation
 engines movement.   
