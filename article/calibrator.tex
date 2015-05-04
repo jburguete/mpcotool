@@ -1117,9 +1117,9 @@ Two key optimization variables have been studied: $\Delta t_A$ and
 $\Delta t_{GT}$. Where $\Delta t_A$ takes into account the delay between the
 modification time of the inlet discharge and the modification time in the
 Almudévar gate and $\Delta t_{GT}$ takes into account the delay between the
-inlet and Gurrea and Temple gates modification. Antes de la realización de este
-trabajo los guardas encargados del manejo del canal abrían las compuertas usando
-$\Delta t_A=$1h and $\Delta t_{GT}=$3h30m.
+inlet and Gurrea and Temple gates modification. Before the development of this 
+study, the channel guards responsible for its management carried out the gates
+opening using $\Delta t_A=$1h and $\Delta t_{GT}=$3h30m.
 
 The canal was initially dry and the simulation was run until a steady state with
 a discharge of 2 m$^3$/s was reached. The objective of this work was to provide
@@ -1130,30 +1130,28 @@ The required discharge at every gate for a modernization scenario to sprinkler i
 field analysis. Taking into account the crop distribution, soil water retention properties, 
 characteristics of the parcels and hydrants, the electricity cost depending on the hour of the day and the design of a 
 reservoir in the area, seven different scenarios were obtained as a function of the historical irrigation requirements for 
-the same period using real data \citet{Zapata09}. Un periodo de 14 días en una
-de las épocas de mayor demanda, elegido entre uno de estos escenarios, fue
-elegido para la optimización del manejo del canal.
+the same period using real data \citet{Zapata09}. A 14 days period in one of the epochs with higher demand was selected from
+one of these scenarios in order to optimize the channel management.
 
-Cada optimización, que realizó un número total de 1024 simulaciones, costó un
-tiempo aproximado de 14 horas usando 64 núcleos del clúster Memento alojado en
-el BIFI.
+Each optimization, which executed a total number of 1024 simulations, took 
+approximately 14 hours using 64 cores in the Memento cluster housed at BIFI.
 
 Table~\ref{TabSwigs} displays the results obtained for the optimal coefficient
 values and the corresponding value of the evaluation function, where the error
 norm is defined as the root mean square error between demanded discharges and
-supplied discharges multiplied by a factor 10 in cases of channel overflow.
-The results are similar among the different optimization methods. Con el manejo
-de los guardas esta norma de error es mucho mayor, no sólo debido a que se
-produce un mayor error en el caudal demandado a la salida sino también a que se
-produce un ligero desbordamiento en uno de los aliviaderos del canal.
+supplied discharges multiplied by a factor of 10 in cases of channel overflow.
+The results are similar among the different optimization methods. With the channel
+guards management this error norm is much higher, due not only to a greater error
+in the desired outlet discharge but also to a slight overflow in one of the 
+spillways of the canal.
 
-En la figura~\ref{FigSwigs} se ilustran los caudales suministrados por el canal
-en la entrada y en las diferentes tomas usando el horario de apertura de
-compuertas de los guardas y el obtenido en la mejor de nuestras optimizaciones.
-Puede verse que en ambos casos se proporciona el caudal demandado en las tomas
-de Almudévar, Gurrea y El Temple, propagándose unos picos transitorios aguas
-abajo afectando a la salida del canal. Se comprueba que con el manejo optimizado
-se reduce notablamente la amplitud de estos picos
+Figure~\ref{FigSwigs} shows the supplied discharges at the inlet and at the different
+gates using the default schedule developed by the channel guards and that one 
+obtained in the best of our simulations. It can be observed that in both cases 
+the desired discharge at the different gates in Almudevar, Gurrea and El Temple is supplied,
+being propagated downstream some transitory peaks, affecting the outlet discharge.
+This work confirmed that an optimized management reduces remarkably the amplitude of
+these undesired peaks.
 
 \TABLE{\scriptsize}{cccc}
 {
@@ -1196,8 +1194,8 @@ se reduce notablamente la amplitud de estos picos
 \FIGII{Violada-contributions.eps}{Violada-optimized-contributions.eps}
 {
 	Temporal evolution of discharges supplied at inlet, outlet and gates as (a)
-	using los horarios de apertura aplicados por los guardas and (b) los
-	horarios de apertura óptimos obtenidos en este trabajo
+	using the opening times applied by the channel guards and (b) the optimum 
+	opening times obtained in this work.
 }{FigSwigs}
 
 \subsection{Calibration of empirical parameters on surface irrigation}
