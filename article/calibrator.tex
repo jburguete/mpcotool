@@ -771,9 +771,13 @@ reproduction in the GENETIC default algorithm. Note that the identical bits in b
 
 \subsubsection{Adaptation algorithm}
 
-Another algorithm is included in GENETIC called "adaptación" although, in the biological sense, it would be better
-a smooth mutation. First, one of the variables codified in the genome is randomly selected with uniform probability. Then,
-a bit is randonly chosen assuming a probability linearly decresing with the significance of the bit. The new individual receives a copy of the parent's genome with the selected bit inverted. Figure~\ref{FigAdaptation} contains an example.
+Another algorithm is included in GENETIC called "adaptation" although, in the
+biological sense, it would be better a smooth mutation. First, one of the
+variables codified in the genome is randomly selected with uniform probability.
+Then, a bit is randonly chosen assuming a probability linearly decresing with
+the significance of the bit. The new individual receives a copy of the parent's
+genome with the selected bit inverted. Figure~\ref{FigAdaptation} contains an
+example.
 
 \psset{unit=1mm}
 \PSPICTURE{-30}{-7.5}{80}{30}
@@ -895,7 +899,8 @@ a bit is randonly chosen assuming a probability linearly decresing with the sign
 	\rput(-20,6.25){Adaptation}
 	\psframe(55,-7.5)(57,-2.5)
 	\psframe(55,15)(57,20)
-}{Example of the generation of a new individual from a parent by adaptation}{FigAdaptation}
+}{Example of the generation of a new individual from a parent by adaptation}
+{FigAdaptation}
 
 This algorithm is rather similar to the mutation algorithm previously described but, since the probability to affect bits less significative is larger, so is the probability to produce small changes.
 
