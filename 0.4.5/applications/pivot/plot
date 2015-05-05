@@ -5,8 +5,8 @@ set xlabel 'Duration (min)'
 set yrange [0:1800]
 
 set style data histogram
-set style histogram cluster gap 2
-#set boxwidth 0.9
+set style histogram cluster gap 1
+set boxwidth 1
 set xtic rotate by -90 scale 0
 
 set title 'Simulated'
