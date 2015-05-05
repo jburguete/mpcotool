@@ -49,9 +49,9 @@
 {
 	\begin{figure}[ht!]
 		\centering
-		\begin{tabular}{cc}
-			(a) & \includegraphics{#1} \\
-			(b) & \includegraphics{#2}
+		\begin{tabular}{c}
+			(a) \\ \includegraphics{#1} \\
+			(b) \\ \includegraphics{#2}
 		\end{tabular}
 		\caption{#3.\label{#4}}
 	\end{figure}
@@ -1231,10 +1231,10 @@ these undesired peaks.
 
 \subsection{Calibration of empirical parameters on surface irrigation}
 
-CALIBRATOR has also been used to find out the empirical parameters required by the friction, diffusion and infitration
+CALIBRATOR has also been used to find out the empirical parameters required by the friction, and infitration
 models used in the model SURCOS \citep{Surcos,SurcosGit,JaviSurcos3} for the simulation of the four furrow fertigation experiments published in \citet{JaviSurcos2}. The furrows were $100$ m long and they were simulated using 100 computational cells per furrow. The furrows were close together, they had the same geometry and the experiments were almost simultaneous, hence the soil properties were assumed uniform. 
 
-The friction model used in SURCOS is the Gauckler-Manning model. The infiltration model is the Kostiakov-Lewis model. They require calibration of three coefficients: the Manning $n$ and the infiltration $K$ and $a$. In the original paper, a brute force method using 3000 simulations was applied, each of them including the four experiments. In the present work, the same number of simulations has been used with the calibration methods implemented in CALIBRATOR. The execution of 3000 simulations in the mentioned laptop computer took about 1h20m.  
+The friction model used in SURCOS is the Gauckler-Manning model. The infiltration model is the Kostiakov-Lewis model. They require calibration of three coefficients: the Gauckler-Manning number $n$ and the infiltration parameters $K$ and $a$. In the original paper, a brute force method using 3000 simulations was applied, each of them including the four experiments. In the present work, the same number of simulations has been used with the calibration methods implemented in CALIBRATOR. The execution of 3000 simulations in the mentioned laptop computer took about 1h20m.  
 
 Table~\ref{TabSurcos} displays the results obtained for the optimal coefficient values and the corresponding
 value of the evaluation function, where the error norm is the same as in \citet{JaviSurcos2}. The results are similar among the different methods and also similar to those in the original paper. This is due to the existence of a relativeley large region of combinations of the empirical parameters producing similar values in the evaluation function, thus preventing from an accurate convergence to the optimum set. However, it can be noticed that both the iterative method and the genetic methods produce better results than the Monte-Carlo method without iterations with the same total number of simulations.
@@ -1284,7 +1284,7 @@ sprinkler irrigation}
 
 The ballistic model \citep{Fukui80,Playan06} is the most widespread o characterize the behaviour and performance of sprinklers in sprinkler irrigation management. The model assumes that the travelling drops are approximately spherical and subject to the resulting effect of gravity and drag forces. The ejecting drop velocity is required by the model, and it is frequent to assume that the jet is compact enough to consider that all the drops carry the same velocity when leaving the sprinkler. This velocity cam be estimated either by measuring the pressure and using Bernoulli's equation or, alternatively, by measuring the discharge and dividing by the outlet cross section. Other data required to characterize the water spread are related to the drop size distribution. The model used in the present work, described in \citet{Playan06}, is based on two parameters $D_{50}$ and $n$. Furthermore, to include the influence of the wind, the model includes two more aerodynamic resistance coefficients:
 $k_1$ y $k_2$.
-The model is calibrated in two steps: First, the coefficients $D_{50}$, $n$ and $P$ are fitted to adjust the water distribution in windless conditions and are considered representative of the sprinkler model at a given pressure. In a second step, the coefficients $k_1$ and $k_2$ fitting better the water distribution in wind conditions are found.
+The model is calibrated in two steps. First, the coefficients $D_{50}$, $n$ and $P$ are fitted to adjust the water distribution in windless conditions and are considered representative of the sprinkler model at a given pressure. In a second step, the coefficients $k_1$ and $k_2$ fitting better the water distribution in wind conditions are found.
 
 In the present example, a spray sprinkler Senninger N44 at a working pressure of 20PSI will be calibrated. In this sprinkler model, the water jet impacts against a fixed plate. In order to estimate the water velocity after the impact, an image technique as described in \citet{Salvador09} was applied. According to this measurements, the head loss due to the impact against the plate was found to be of 50\%.
 
@@ -1374,7 +1374,7 @@ pluviometers axes}{FigSprinkler}
 \subsection{Calibration of empirical parameters of the movement of a sprinkler
 center-pivot}
 
-The movement of a center-pivot tower follows a chaotic pattern depnding from the movement of the exterior tower, the tower start and stop angles and the strat and stop velocities. In \citet{Ouazaa14} a model was proposed to simulate the tower movements and several controlled experiments  were carried out to measure them in a real field center-pivot. The exterior tower controls the movement, with a sequence of working periods that depend on the cycle period and the working percentage, both adjustable to reach a desired irrigation service. The rest of the towers move according to a complex pattern (see figure~\ref{FigPivotDiagram}). 
+The movement of a center-pivot tower follows a chaotic pattern depending from the movement of the exterior tower, the tower start and stop angles and the start and stop velocities. In \citet{Ouazaa14} a model was proposed to simulate the tower movements and several controlled experiments  were carried out to measure them in a real field center-pivot. The exterior tower controls the movement, with a sequence of working periods that depend on the cycle period and the working percentage, both adjustable to reach a desired irrigation service. The rest of the towers move according to a complex pattern (see figure~\ref{FigPivotDiagram}). 
 
 \psset{unit=1mm}
 \PSPICTURE{-10}{-6}{93}{20}
@@ -1403,7 +1403,7 @@ The movement of a center-pivot tower follows a chaotic pattern depnding from the
 four towers}{FigPivotDiagram}
 
 The movement of a real pivot with four towers separated 50.11 m is next simulated and calibrated. The maximum linear velocity of each tower were measured to be: $v_1=0.02738$ m/s, $v_2=0.02824$ m/s, $v_3=0.03008$ m/s and $v_4=0.03753$ m/s.
-The exterior tower is considerably faster as it carries less weight and produces less friction. The model includes four empirical parameters to calibrate: The average angles of start $\overline{\alpha_{start}}$ and stop $\overline{\alpha_{stop}}$, the uncertainty in these angles $\delta$ and the start and stop times $\tau$. In every tower cycle, the start and stop angles are obtained as:
+The exterior tower is considerably faster as it carries less weight and produces less friction. The model includes four empirical parameters to calibrate: the average angles of start $\overline{\alpha_{start}}$ and stop $\overline{\alpha_{stop}}$, the uncertainty in these angles $\delta$ and the start and stop times $\tau$. In every tower cycle, the start and stop angles are obtained as:
 \EQ
 {
 	\alpha_{start}=\overline{\alpha_{start}}+(r-0.5)\,\delta,\quad
