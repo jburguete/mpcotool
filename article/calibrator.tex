@@ -136,9 +136,9 @@ canal
 
 \begin{abstract}
 The present work describes CALIBRATOR, a new software program to perform
-calibrations or optimization of empirical parameters required in the formulation
-of numerical simulation models. The structure is such that it can be easily
-adapted to different simulation codes.
+calibrations or optimizations of empirical parameters required in the
+formulation of numerical simulation models. The structure is such that it can be
+easily adapted to different simulation codes.
 One genetic algorithm, two brute force optimization algorithms (sweeps and
 Monte-Carlo) and an iterative algorithm to improve the brute force methods are
 included.
@@ -925,7 +925,7 @@ Debian Linux 8.0,
 DragonFly BSD 4.0.5,
 FreeBSD 10.1,
 NetBSD 6.1.5,
-OpenBSD 5.6,
+OpenBSD 5.7,
 Windows 7\footnotemark[1],
 and Window 8.1\footnotemark[1].
 Probably, this software can be built and it works in other operative systems,
@@ -933,11 +933,12 @@ software distributions or versions but it has not been tested.
 \footnotetext[1]{Windows 7 and Windows 8.1 are trademarks of Microsoft
 Corporation.}
 
-In order to build the executable file from the source code, a C compiler (\citet{gcc} or \citet{clang}), the configuration systems \citet{autoconf} and \citet{automake}, the executable creation control program \citet{gnumake} and the external libraries previously listed are required. When using Microsoft Windows systems, the indications provided in \citet{mingw-make} can be followed in order to install all these utilities.
+In order to build the executable file from the source code, a C compiler (\citet{gcc} or \citet{clang}), the configuration systems \citet{autoconf} and \citet{automake}, the executable creation control program \citet{gnumake} and the external libraries previously listed are required. When using Microsoft Windows systems, the indications provided in \citet{install-unix} can be followed in order to install all these utilities.
 
-Once all the tools installed, the GENETIC source code must be downloaded and it must be compiled following:
+Once all the tools installed, the GENETIC source code must be downloaded and it must be compiled following on a terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ cd PATH_TO_GENETIC/0.6.0
+$ git clone https://github.com/jburguete/genetic.git
+$ cd genetic/0.6.1
 $ aclocal
 $ autoconf
 $ automake --add-missing
@@ -947,8 +948,9 @@ $ make
 
 The following step is to download the source code CALIBRATOR, to link it with GENETIC and compile together by means of:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ cd PATH_TO_CALIBRATOR/0.4.5
-$ ln -s PATH_TO_GENETIC/0.6.0 genetic
+$ git clone https://github.com/jburguete/calibrator.git
+$ cd calibrator/0.4.5
+$ ln -s ../../genetic/0.6.1 genetic
 $ aclocal
 $ autoconf
 $ automake --add-missing
