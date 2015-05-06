@@ -44,28 +44,35 @@ BUILDING INSTRUCTIONS
 
 This software has been built and tested in the following operative systems:
 
-Debian Linux 7.7
+Debian Linux 8.0
 ________________
-Debian kFreeBSD 7.7
+Debian kFreeBSD 8.0
 ___________________
-DragonFly BSD 4.0.1
+DragonFly BSD 4.0.5
 ___________________
-FreeBSD 10.0
+FreeBSD 10.1
 ____________
 NetBSD 6.1.5
 ____________
+Windows 7 (with MSYS2)
+______________________
+Windows 8.1 (with MSYS2)
+________________________
 
-1. Download the latest [genetic](https://github.com/jburguete/genetic)
+1. Download the latest [genetic](https://github.com/jburguete/genetic) doing on
+a terminal:
+> $ git clone https://github.com/jburguete/genetic.git
 
-2. Dowload this repository
+2. Download this repository:
+> $ git clone https://github.com/jburguete/calibrator.git
 
-3. Link the latest genetic version to genetic doing on a terminal:
-> $ cd PATH_TO_CALIBRATOR/0.4.5
+3. Link the latest genetic version to genetic:
+> $ cd calibrator/0.4.5
 >
-> $ ln -s PATH_TO_THE_GENETIC/0.6.0 genetic
+> $ ln -s ../../genetic/0.6.1 genetic
 
 4. Build doing on a terminal:
-> $ cd PATH_TO_CALIBRATOR/0.4.5
+> $ cd calibrator/0.4.5
 >
 > $ aclocal
 >
@@ -77,22 +84,25 @@ ____________
 >
 > $ make
 
-OpenBSD 5.6
+OpenBSD 5.7
 ___________
 
-1. Download the latest [genetic](https://github.com/jburguete/genetic)
+1. Download the latest [genetic](https://github.com/jburguete/genetic) doing on
+a terminal:
+> $ git clone https://github.com/jburguete/genetic.git
 
-2. Dowload this repository
+2. Download this repository:
+> $ git clone https://github.com/jburguete/calibrator.git
 
-3. Link the latest genetic version to genetic doing on a terminal:
-> $ cd PATH_TO_CALIBRATOR/0.4.5
+3. Link the latest genetic version to genetic:
+> $ cd calibrator/0.4.5
 >
-> $ ln -s PATH_TO_THE_GENETIC/0.6.0 genetic
+> $ ln -s ../../genetic/0.6.1 genetic
 
 4. Build doing on a terminal:
 > $ export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.14
 >
-> $ cd PATH_TO_CALIBRATOR/0.4.5
+> $ cd calibrator/0.4.5
 >
 > $ aclocal
 >
@@ -107,7 +117,10 @@ ___________
 MAKING REFERENCE MANUAL INSTRUCTIONS (file latex/refman.pdf)
 ------------------------------------------------------------
 
-> $ cd PATH_TO_CALIBRATOR/0.4.5
+On UNIX type systems you need [texlive](https://www.tug.org/texlive) installed.
+On Windows systems you need [MiKTeX](http://miktex.org). Then do in a terminal:
+
+> $ cd calibrator/0.4.5
 >
 > $ doxygen
 >
