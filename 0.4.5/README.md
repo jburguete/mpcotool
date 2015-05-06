@@ -42,7 +42,9 @@ FILES
 BUILDING INSTRUCTIONS
 ---------------------
 
-This software has been built and tested in the following operative systems:
+This software has been built and tested in the following operative systems.
+Probably, it can be built in other systems, distributions, or versions but it
+has not been tested.
 
 Debian Linux 8.0
 ________________
@@ -54,10 +56,6 @@ FreeBSD 10.1
 ____________
 NetBSD 6.1.5
 ____________
-Windows 7 (with MSYS2)
-______________________
-Windows 8.1 (with MSYS2)
-________________________
 
 1. Download the latest [genetic](https://github.com/jburguete/genetic) doing on
 a terminal:
@@ -87,32 +85,23 @@ a terminal:
 OpenBSD 5.7
 ___________
 
-1. Download the latest [genetic](https://github.com/jburguete/genetic) doing on
-a terminal:
-> $ git clone https://github.com/jburguete/genetic.git
+1. Select adequate versions:
+> $ export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.15
 
-2. Download this repository:
-> $ git clone https://github.com/jburguete/calibrator.git
+2. Then, in a MSYS2 terminal, follow steps 1 to 4 of the previous Debian Linux
 
-3. Link the latest genetic version to genetic:
-> $ cd calibrator/0.4.5
->
-> $ ln -s ../../genetic/0.6.1 genetic
+Microsoft Windows 7 (with MSYS2)
+________________________________
+Microsoft Windows 8.1 (with MSYS2)
+__________________________________
 
-4. Build doing on a terminal:
-> $ export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.14
->
-> $ cd calibrator/0.4.5
->
-> $ aclocal
->
-> $ autoconf
->
-> $ automake --add-missing
->
-> $ ./configure
->
-> $ make
+1. Install [MSYS2](http://sourceforge.net/projects/msys2) and the required
+libraries and utilities. You can follow detailed instructions in
+[install-unix]
+(https://github.com/jburguete/install-unix/blob/master/tutorial.pdf)
+
+2. Then, in a MSYS2 terminal, follow steps 1 to 4 of the previous Debian Linux
+8.0 section.
 
 MAKING REFERENCE MANUAL INSTRUCTIONS (file latex/refman.pdf)
 ------------------------------------------------------------
