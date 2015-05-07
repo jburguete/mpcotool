@@ -1272,7 +1272,7 @@ models used in the model SURCOS \citep{Surcos,SurcosGit,JaviSurcos3} for the sim
 The friction model used in SURCOS is the Gauckler-Manning model. The infiltration model is the Kostiakov-Lewis model. They require calibration of three coefficients: the Gauckler-Manning number $n$ and the infiltration parameters $K$ and $a$. In the original paper, a brute force method using 3000 simulations was applied, each of them including the four experiments. In the present work, the same number of simulations has been used with the calibration methods implemented in CALIBRATOR. The execution of 3000 simulations in the mentioned laptop computer took about 1h20m.  
 
 Table~\ref{TabSurcos} displays the results obtained for the optimal coefficient values and the corresponding
-value of the evaluation function, where the error norm is the same as in \citet{JaviSurcos2}. The results are similar among the different methods and also similar to those in the original paper. This is due to the existence of a relativeley large region of combinations of the empirical parameters producing similar values in the evaluation function, thus preventing from an accurate convergence to the optimum set. However, it can be noticed that both the iterative method and the genetic methods produce better results than the Monte-Carlo method without iterations with the same total number of simulations.
+value of the evaluation function, where the error norm is the same as in \citet{JaviSurcos2}. The results are similar among the different methods and also similar to those in the original paper. This is due to the existence of a relatively large region of combinations of the empirical parameters producing similar values in the evaluation function, thus preventing from an accurate convergence to the optimum set. However, it can be noticed that both the iterative method and the genetic methods produce better results than the Monte-Carlo method without iterations with the same total number of simulations.
 
 \TABLE{\scriptsize}{cccc}
 {
@@ -1317,11 +1317,11 @@ Figure~\ref{FigSurcos} shows the results of the water depths and solute concentr
 \subsection{Calibration of empirical parameters of the balistic model on
 sprinkler irrigation}
 
-The ballistic model \citep{Fukui80,Playan06} is the most widespread o characterize the behaviour and performance of sprinklers in sprinkler irrigation management. The model assumes that the travelling drops are approximately spherical and subject to the resulting effect of gravity and drag forces. The ejecting drop velocity is required by the model, and it is frequent to assume that the jet is compact enough to consider that all the drops carry the same velocity when leaving the sprinkler. This velocity cam be estimated either by measuring the pressure and using Bernoulli's equation or, alternatively, by measuring the discharge and dividing by the outlet cross section. Other data required to characterize the water spread are related to the drop size distribution. The model used in the present work, described in \citet{Playan06}, is based on two parameters $D_{50}$ and $n$. Furthermore, to include the influence of the wind, the model includes two more aerodynamic resistance coefficients:
+The ballistic model \citep{Fukui80,Playan06} is the most widespread o characterize the behaviour and performance of sprinklers in sprinkler irrigation management. The model assumes that the travelling drops are approximately spherical and subject to the resulting effect of gravity and drag forces. The ejecting drop velocity is required by the model, and it is frequent to assume that the jet is compact enough to consider that all the drops carry the same velocity when leaving the sprinkler. This velocity cam be estimated either by measuring the pressure and using Bernoulli's equation or, alternatively, by measuring the discharge and dividing by the outlet cross section. Other data required to characterize the water spread are related to the drop size distribution. The model used in the present work, described in \cite{Ouazaa14}, is based on three parameters $D_{50}$, $n$ and $P$. Furthermore, to include the influence of the wind, the model includes two more aerodynamic resistance coefficients:
 $k_1$ y $k_2$.
 The model is calibrated in two steps. First, the coefficients $D_{50}$, $n$ and $P$ are fitted to adjust the water distribution in windless conditions and are considered representative of the sprinkler model at a given pressure. In a second step, the coefficients $k_1$ and $k_2$ fitting better the water distribution in wind conditions are found.
 
-In the present example, a spray sprinkler Senninger N44 at a working pressure of 20PSI will be calibrated. In this sprinkler model, the water jet impacts against a fixed plate. In order to estimate the water velocity after the impact, an image technique as described in \citet{Salvador09} was applied. According to this measurements, the head loss due to the impact against the plate was found to be of 50\%.
+In the present example, a spray sprinkler Senninger N44 at a working pressure of 138 kPa will be calibrated. In this sprinkler model, the water jet impacts against a fixed plate. In order to estimate the water velocity after the impact, an image technique as described in \citet{Salvador09} was applied. According to this measurements, the head loss due to the impact against the plate was found to be of 50\%.
 
 Table~\ref{TabSprinklerI} shows the results from the calibration of parameters $D_{50}$, $n$ and $P$ in windless conditions using a total number of 1000 simulations with different optimization algorithms. The computation time was around 7 minutes in the laptop computer. The results show that the best results are supplied by the iterative Monte-Carlo method followed by the genetic algorithms. In this case, the sweep method leads to worse results, mainly when supplied with the iterative method. 
 
@@ -1361,7 +1361,7 @@ Table~\ref{TabSprinklerI} shows the results from the calibration of parameters $
 	\\ & $R_{adaptation}=0.1$
 	\\ \hline
 }{Optimal empirical parameters and value of the evaluation function in the case of the sprinkler irrigation
-using different optimization algorithms in CALIBRATOR with the same number of total simulations.}{TabSprinklerI}
+using different optimization algorithms in CALIBRATOR with the same number of total simulations}{TabSprinklerI}
 
 Next, using the optimal $D_{50}=3.06$ mm, $n=20.878$ and $P=0.388$ obtained by the Monte-Carlo method (Monte-Carlo with 8 iterations, see table~\ref{TabSprinklerI}) the values of $k_1$ and $k_2$ are calibrated in an experiment with medium wind velocity of 2.84 m/s. The different algorithms in CALIBRATOR are used with a total number of 400 simulations in all cases. Their computational time was around 4 minutes in the laptop computer. In this case, the genetic algorithms provided the best results  (note that they provided identical results in two different configurations), although the rest of the methods reached similar values.
 
@@ -1398,7 +1398,7 @@ Next, using the optimal $D_{50}=3.06$ mm, $n=20.878$ and $P=0.388$ obtained by t
 	\\ & $R_{reproduction}=0.1$
 	\\ & $R_{adaptation}=0.1$
 	\\ \hline
-}{Optimal parameters and values of the evaluations function in the experiment of the sprinkler irrigation under wind conditions of 2.84 m/s using different optimization algorithms implemented in CALIBRATOR with the same total number of simulations.}{TabSprinklerII}
+}{Optimal parameters and values of the evaluations function in the experiment of the sprinkler irrigation under wind conditions of 2.84 m/s using different optimization algorithms implemented in CALIBRATOR with the same total number of simulations}{TabSprinklerII}
 
 Finally, figure~\ref{FigSprinkler} shows the measured (in pluviometers) and simulated water distribution using the optimal parameters in windless and wind conditions of average velocity 2.84 m/s.
 
@@ -1409,7 +1409,7 @@ pluviometers axes}{FigSprinkler}
 \subsection{Calibration of empirical parameters of the movement of a sprinkler
 center-pivot}
 
-The movement of a center-pivot tower follows a chaotic pattern depending from the movement of the exterior tower, the tower start and stop angles and the start and stop velocities. In \citet{Ouazaa14} a model was proposed to simulate the tower movements and several controlled experiments  were carried out to measure them in a real field center-pivot. The exterior tower controls the movement, with a sequence of working periods that depend on the cycle period and the working percentage, both adjustable to reach a desired irrigation service. The rest of the towers move according to a complex pattern (see figure~\ref{FigPivotDiagram}). 
+The movement of a center-pivot tower follows a chaotic pattern depending from the movement of the exterior tower, the tower start and stop angles and the start and stop velocities. In \citet{Ouazaa15} a model was proposed to simulate the tower movements and several controlled experiments  were carried out to measure them in a real field center-pivot. The exterior tower controls the movement, with a sequence of working periods that depend on the cycle period and the working percentage, both adjustable to reach a desired irrigation service. The rest of the towers move according to a complex pattern (see figure~\ref{FigPivotDiagram}). 
 
 \psset{unit=1mm}
 \PSPICTURE{-10}{-6}{93}{20}
@@ -1444,7 +1444,8 @@ The exterior tower is considerably faster as it carries less weight and produces
 	\alpha_{start}=\overline{\alpha_{start}}+(r-0.5)\,\delta,\quad
 	\alpha_{stop}=\overline{\alpha_{stop}}+(r-0.5)\,\delta,
 }{EqPivotStartStop}
-with $r$ a random number defined with uniform probability in the range $r\in[0,1)$. The start and stop times of each tower were measured in four experiments of 24 hours with th epivot working in cycles of 71s at 100\%, 52\%, 42\% y 27.48\%. The times were grouped in four histograhs and the evaluation function was defined as the mean square error between the measured and simulated histographs.
+with $r$ a random number defined with uniform probability in the range $r\in[0,1)$. The same time $\tau$ is considered for start and stop, and the velocity
+increases or decreases linearly (see figure~\ref{FigPivotVelocities}).
 
 \psset{unit=1mm}
 \PSPICTURE{-16}{-6}{75}{39}
@@ -1471,7 +1472,16 @@ with $r$ a random number defined with uniform probability in the range $r\in[0,1
 	\rput(37.5,26){time}
 }{Linear velocity of a centre-pivot tower on starts and stops}{FigPivotVelocity}
 
+The start and stop times of each tower were measured in four experiments of 24 hours with the pivot working in cycles of 71s at 100\%, 52\%, 42\% y 27.48\%. The times were grouped in four histograhs and the evaluation function was defined as the mean square error between the measured and simulated histographs.
 Table~\ref{TabPivot} shows some of the results obtained in a total of 10000 simulations of each of the four experiments, taking around 50 minutes each in the same laptop computer used before.
+%%%%%%%%%%%%%%%%%%%%%%
+Los mejores resultados se obtuvieron con los algoritmos genéticos. Llama la
+atención que, como en el resto de casos presentados, el algoritmo genético
+obtiene mejores resultados con los valores más bajos de los coeficientes $R$.
+Por otro lado, el algoritmo iterativo ha mejorado considerablemente los
+resultados cuando se ha aplicado al método de Monte-Carlo pero ha perjudicado
+ligeramente al método de barrido.
+%%%%%%%%%%%%%%%%%%%%%%
 
 \TABLE{\scriptsize}{cccc}
 {
@@ -1516,7 +1526,15 @@ Table~\ref{TabPivot} shows some of the results obtained in a total of 10000 simu
 	\\ & $R_{reproduction}=0.1$ & $\tau=3.32$s
 	\\ & $R_{adaptation}=0.1$
 	\\ \hline
-}{Optimal parameters and values of the evaluation fucntion in the four towers pivot case in \citet{Ouazaa14} using different optimization algorithms implemented in CALIBRATOR with the same number of total simulations.}{TabPivot}
+}{Optimal parameters and values of the evaluation function in the four towers pivot case in \citet{Ouazaa15} using different optimization algorithms implemented in CALIBRATOR with the same number of total simulations}{TabPivot}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+In figures \ref{FigPivot100} to \ref{FigPivot27} the histographs of the number
+of measured and simulated starts and stops are represented for the different
+machine workings. El acuerdo entre los resultados medidos y simulados, con los
+parámetros calibrados con el algoritmo genético óptimo, deben considerarse
+razonables dada la extrema caoticidad del movimiento.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \FIGIV{pivot-measured-starts-100.eps}{pivot-measured-stops-100.eps}
 {pivot-simulated-starts-100.eps}{pivot-simulated-stops-100.eps}
@@ -1543,6 +1561,10 @@ simulated starts and (d)simulated stops for the pivot towers working at 27.48\% 
 The features and design of CALIBRATOR, a new software tool to enable efficient calibration and optimization of empirical coefficients present in simulation models has been presented. The program includes the option of two classic brute force models, the sweep and the Monte-Carlo method, both supplied with the option of an iterative procedure to improve convergence. Also, CALIBRATOR offers the alternative of a genetic algorithm as implemented in GENETIC.
 
 The new tool allows an efficient performance, making the most of the processors present in a single computer and allowing an easy extension to parallelization distributed among different computers. In whole, a considerable data capacity and computational speed are achieved with independence of the physical problem under study or the algorithm chosen.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+En los casos analizados, los diferentes algoritmos de optimización implementados han obtenido resultados similares con el mismo número total de simulaciones. No obstante, el algoritmo iterativo aplicado con el método de Monte-Carlo y el algoritmo genético han mejorado ligeramente los resultados de los métodos de fuerza bruta. El algoritmo iterativo no ha mejorado en cambio los resultados del método de barrido. En cuanto al algoritmo genético siempre ha dado mejores resultados con los valores más bajos ensayados para los coeficientes $R$. Esto parece indicar que la eficacia de este algoritmo es dependiente del valor de estos coeficientes y que una mayor investigación sobre su valor óptimo debería ser realizada.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 CALIBRATOR has proved to be flexible in the adaptation to the sintaxis of diverse simulation codes and useful in the calibration and optimization of parameters involved in rather different irrigation problems. In the present work it has been shown succesful for practical applications such as open channle flow management, furrow fertigation, sprinkler irrigation and sprinkler tower movement design.
 
