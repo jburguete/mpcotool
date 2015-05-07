@@ -1103,7 +1103,7 @@ in the simulation input files.
 In what follows, a few cases of practical application of CALIBRATOR in combination with
 different simulation codes are presented. The will deal with the optimization
 and/or calibration 
-of variables in models used for surface irrigation, open channel flow, sprinkler irrigation or irrigation
+of variables in models used for open channel flow, surface irrigation, sprinkler irrigation or irrigation
 engines movement.   
 
 Most of cases have been run on a laptop computer equiped with an Intel(R) Core(TM) i7 M620 2.67GHz processor. 
@@ -1221,14 +1221,6 @@ guards management this error norm is much higher, due not only to a greater erro
 in the desired outlet discharge but also to a slight overflow in one of the 
 spillways of the canal.
 
-Figure~\ref{FigSwigs} shows the supplied discharges at the inlet and at the different
-gates using the default schedule developed by the channel guards and that one 
-obtained in the best of our simulations. It can be observed that in both cases 
-the desired discharge at the different gates in Almudévar, Gurrea and El Temple is supplied,
-being propagated downstream some transitory peaks, affecting the outlet discharge.
-This work confirmed that an optimized management reduces remarkably the amplitude of
-these undesired peaks.
-
 \TABLE{\scriptsize}{cccc}
 {
 	Optimization & Optimization & Optime empirical & Objective function
@@ -1268,10 +1260,18 @@ these undesired peaks.
 }{Optimal empirical parameters and value of the evaluation function in the simulation of the Violada canal using program SWIGS and several optimization algorithms in CALIBRATOR with the same total number of simulations ($N_{total}=1024$)}
 {TabSwigs}
 
+Figure~\ref{FigSwigs} shows the supplied discharges at the inlet and at the different
+gates using the default schedule developed by the channel guards and that one 
+obtained in the best of our simulations. It can be observed that in both cases 
+the desired discharge at the different gates in Almudévar, Gurrea and El Temple is supplied,
+being propagated downstream some transitory peaks, affecting the outlet discharge.
+This work confirmed that an optimized management reduces remarkably the amplitude of
+these undesired peaks.
+
 \FIGII{Violada-contributions.eps}{Violada-optimized-contributions.eps}
 {
 	Temporal evolution of discharges supplied at inlet, outlet and gates as (a)
-	using the opening times applied by the channel guards and (b) the optimum 
+	using the opening times applied by the canal guards and (b) the optimum 
 	opening times obtained in this work
 }{FigSwigs}
 
@@ -1313,7 +1313,7 @@ value of the evaluation function, where the error norm is the same as in \citet{
 	\\ \hline
 }{Optimal empirical parameters and value of the evaluation function in the simulation of the furrow irrigation cases in \citet{JaviSurcos2} using program SURCOS and several optimization algorithms in CALIBRATOR with the same total number of simulations}{TabSurcos}
 
-Figure~\ref{FigSurcos} shows the results of the water depths and solute concentration from the simulation using the coefficients obtained by the Monte-Carlo method with$N_{iterations}=6$, compared with the experimental values.
+Figure~\ref{FigSurcos} shows the results of the water depths and solute concentration from the simulation using the coefficients obtained by the Monte-Carlo method with $N_{iterations}=6$, compared with the experimental values.
 
 \FIGVI{surcos-advance.eps}{surcos-depth.eps}{surcos-solute-q1.eps}
 {surcos-solute-q2.eps}{surcos-solute-q3.eps}{surcos-solute-q4.eps}
