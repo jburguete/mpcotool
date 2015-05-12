@@ -1726,10 +1726,10 @@ int main(int argn, char **argc)
 	ntasks = 1;
 #endif
 
-	// Checking sintaxis
+	// Checking syntax
 	if (!(argn == 2 || (argn == 4 && !strcmp(argc[1], "-nthreads"))))
 	{
-		printf("The sintaxis is:\ncalibrator [-nthreads x] data_file\n");
+		printf("The syntax is:\ncalibrator [-nthreads x] data_file\n");
 #if HAVE_MPI
 		// Closing MPI
 		MPI_Finalize();

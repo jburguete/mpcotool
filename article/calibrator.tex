@@ -91,7 +91,7 @@
 
 \begin{document}
 
-\title{CALIBRATOR: a software to perform calibrations or optimizations of
+\title{CALIBRATOR: a software to perform optimizations or calibrations of
 empirical parameters}
 
 \author[eead,bifi]{J. Burguete\corref{cor1}}
@@ -130,13 +130,13 @@ Germany.}
 María de Luna 3, 50018~Zaragoza, Spain.}
 
 \begin{keyword}
-calibration, optimization, simulation, software, irrigation, sprinkler, furrow,
+optimization, calibration, simulation, software, irrigation, sprinkler, furrow,
 canal
 \end{keyword}
 
 \begin{abstract}
 The present work describes CALIBRATOR, a new software program to perform
-calibrations or optimizations of empirical parameters required in the
+optimizations or calibrations of empirical parameters required in the
 formulation of numerical simulation models. The structure is such that it can be
 easily adapted to different simulation codes.
 One genetic algorithm, two brute force optimization algorithms (sweeps and
@@ -159,15 +159,15 @@ Distribution) type license.
 \section{Introduction}
 
 CALIBRATOR \citep{CalibratorGit} is an open source software to perform
-calibrations or optimizations of empirical parameters with a BSD type license.
+optimizations or calibrations of empirical parameters with a BSD type license.
 
 \section{Methods}
 
 The following notation has been used:
 \begin{description}
-\item{$N_{simulations}$}: number of simulations made on each step.
-\item{$N_{iterations}$}: number of iterations on iterative methods.
-\item{$N_{total}$}: total number of simulations.
+	\item[$N_{simulations}$]: number of simulations made on each step.
+	\item[$N_{iterations}$]: number of iterations on iterative methods.
+	\item[$N_{total}$]: total number of simulations.
 \end{description}
 On iterative methods $N_{total}=N_{simulations}\times N_{iterations}$.
 On pure brute force methods
@@ -205,7 +205,7 @@ with two variables for $x_{sweeps}=y_{sweeps}=5$}{FigSweep}
 
 \subsection{Monte-Carlo method}
 
-Monte-Carlo based methods run simulations using alleatory values of the
+Monte-Carlo based methods run simulations using aleatory values of the
 variables assuming  uniform probability within the extrema values range. This is
 an old brute force method attributed to different authors. In
 \citet{AtanassovDimov08} an interesting analysis of this method is presented.
@@ -262,9 +262,9 @@ iteration are used to force new intervals in the variables for the following ite
 $N_{best}^j$ the subset of the best simulation results in the $j$ iteration, the following quantities are 
 defined:
 \begin{description}
-\item{$\displaystyle x_{\max}^b=\max_{i\in N_{best}}x_i^j$}: Maximum value of variable $x$ 
+	\item[$\displaystyle x_{\max}^b=\max_{i\in N_{best}}x_i^j$]: Maximum value of variable $x$ 
 in the subset of the best simulation results from the $j$ iteration.
-\item{$\displaystyle x_{\min}^b=\max_{i\in N_{best}}x_i^j$}: Minimum value of variable $x$ in the subset of the best simulation results from the $j$ iteration.
+\item[$\displaystyle x_{\min}^b=\max_{i\in N_{best}}x_i^j$]: Minimum value of variable $x$ in the subset of the best simulation results from the $j$ iteration.
 \end{description}
 A new interval in the variable $x$ is defined to build the optimization values in the next iteration between:
 \[
@@ -403,7 +403,7 @@ The code in GENETIC is also open source under BSD license. Figure~\ref{FigGeneti
 	\rput(0,-45){entities by objective function value}
 	\psframe(-45,-50)(45,-35)
 	\psline{->}(0,-50)(0,-55)
-	\rput(0,-60){Elliminating the worst}
+	\rput(0,-60){Eliminating the worst}
 	\rput(0,-65){$N_{mutation}+N_{reproduction}+N_{adaptation}$ entities}
 	\psframe(-65,-70)(65,-55)
 	\psline{->}(0,-70)(-80,-75)
@@ -428,7 +428,7 @@ The code in GENETIC is also open source under BSD license. Figure~\ref{FigGeneti
 	\psframe(120,-90)(45,-75)
 	\psline{->}(82.5,-90)(82.5,-95)
 	\rput(82.5,-100){Simulation of the $N_{adaptation}$}
-	\rput(82.5,-105){new adaptated entities}
+	\rput(82.5,-105){new adapted entities}
 	\psframe(120,-110)(45,-95)
 	\psline{->}(-80,-110)(0,-115)
 	\psline{->}(0,-110)(0,-115)
@@ -455,8 +455,9 @@ The code in GENETIC is also open source under BSD license. Figure~\ref{FigGeneti
 
 The variables to calibrate/optimize are coded in GENETIC using a bit chain
 (genome). The larger the number of bits assigned to a variable the higher the resolution.
-The number of bits assigned to each variable, and therefore the genoma size, is fixed and the same for all the 
-simulations. Figure~\ref{FigGenome} shows an example for the coding of three variables. The value assigned to a variable $x$ is determined by the allowed extreme values $x_{\min}$ and $x_{\max}$, the binary number assigned in the genome to variable $I_x$ and by the number of bits assigned to variable $N_x$ according tothe following formula:
+The number of bits assigned to each variable, and therefore the genome size, is fixed and the same for all the 
+simulations. Figure~\ref{FigGenome} shows an example for the coding of three variables. The value assigned to a variable $x$ is determined by the allowed extreme values $x_{\min}$ and $x_{\max}$, the binary number assigned in the genome to variable $I_x$ and by the number of bits assigned to variable $N_x$ according to
+the following formula:
 \EQ{x=x_{\min}+\frac{I_x}{2^{N_x}}\,\left(x_{\max}-x_{\min}\right).}{EqGenome}
 
 \psset{unit=1mm}
@@ -472,11 +473,11 @@ simulations. Figure~\ref{FigGenome} shows an example for the coding of three var
 	\pspolygon(50,15)(80,15)(80,20)(50,20)
 	\psline{->}(10,12)(0,12)
 	\rput(5,9){Less}
-	\rput(5,6){significative}
+	\rput(5,6){significant}
 	\rput(5,3){bit}
 	\psline{->}(20,12)(30,12)
 	\rput(25,9){More}
-	\rput(25,6){significative}
+	\rput(25,6){significant}
 	\rput(25,3){bit}
 	\rput(2,17.5){1}
 	\rput(4,17.5){0}
@@ -531,8 +532,8 @@ taken from the genome of each individual. Next, in every generation, $N_{populat
 Obviously, to avoid negative survival population, the following condition has to
 be hold:
 \EQ{R_{mutation}+R_{reproduction}+R_{adaptation}\leq 1}{EqSurvivalCondition}
-New individuals will be generated by mutation, reproduction and adaptatation from the genomes of these best individuals and so on. Furthermore, the ancestors to generate new individuals are chosen among the surviving population.
-CALIBRATOR uses a default alleatory criterion in GENETIC, with a probability linearly decreasing with the ordinal in the ordered set of surviving individuals (see figure~\ref{FigSelection}).
+New individuals will be generated by mutation, reproduction and adaptation from the genomes of these best individuals and so on. Furthermore, the ancestors to generate new individuals are chosen among the surviving population.
+CALIBRATOR uses a default aleatory criterion in GENETIC, with a probability linearly decreasing with the ordinal in the ordered set of surviving individuals (see figure~\ref{FigSelection}).
 
 \PICTURE{250}{110}
 {
@@ -787,7 +788,7 @@ reproduction in the GENETIC default algorithm. Note that the identical bits in b
 Another algorithm is included in GENETIC called "adaptation" although, in the
 biological sense, it would be better a smooth mutation. First, one of the
 variables codified in the genome is randomly selected with uniform probability.
-Then, a bit is randonly chosen assuming a probability linearly decresing with
+Then, a bit is randomly chosen assuming a probability linearly decreasing with
 the significance of the bit. The new individual receives a copy of the parent's
 genome with the selected bit inverted. Figure~\ref{FigAdaptation} contains an
 example.
@@ -808,11 +809,11 @@ example.
 	\psframe(50,15)(80,20)
 	\psline{->}(10,12)(0,12)
 	\rput(5,9){Less}
-	\rput(5,6){significative}
+	\rput(5,6){significant}
 	\rput(5,3){bit}
 	\psline{->}(20,12)(30,12)
 	\rput(25,9){More}
-	\rput(25,6){significative}
+	\rput(25,6){significant}
 	\rput(25,3){bit}
 	\rput(2,17.5){1}
 	\rput(4,17.5){0}
@@ -915,7 +916,7 @@ example.
 }{Example of the generation of a new individual from a parent by adaptation}
 {FigAdaptation}
 
-This algorithm is rather similar to the mutation algorithm previously described but, since the probability to affect bits less significative is larger, so is the probability to produce small changes.
+This algorithm is rather similar to the mutation algorithm previously described but, since the probability to affect bits less significant is larger, so is the probability to produce small changes.
 
 \section{Implementation}
 
@@ -928,7 +929,9 @@ CALIBRATOR uses the following open source external libraries:
 \item\citet{gsl}: Scientific library required to generate the pseudo-random numbers used by 
 the genetic algorithms and the Monte-Carlo method.
 \item\citet{glib}: Library required to implement some data,	to parse the input file templates and the routines used to parallelize the usage of the computer's processors.
-\item\citet{openmpi,mpich}: Optional libraries. When installed,  they are used to allow parallelization in multiple computers. \end{itemize}
+\item\citet{openmpi} or \citet{mpich}: Optional libraries. When installed, one
+of them is used to allow parallelization in multiple computers.
+\end{itemize}
 
 \subsection{Building the executable file from the source code}
 
@@ -940,7 +943,7 @@ FreeBSD 10.1,
 NetBSD 6.1.5,
 OpenBSD 5.7,
 Windows 7\footnotemark[1],
-and Window 8.1\footnotemark[1].
+and Windows 8.1\footnotemark[1].
 Probably, this software can be built and it works in other operative systems,
 software distributions or versions but it has not been tested.
 \footnotetext[1]{Windows 7 and Windows 8.1 are trademarks of Microsoft
@@ -989,23 +992,149 @@ open in every node):
 $ mpirun [MPI options] ./calibrator [-nthreads X] input_file.xml
 \end{lstlisting}
 
-\item The sintaxis of the simulator has to be:
+\item The syntax of the simulator has to be:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 $ ./simulator_name input_file_1 [input_file_2] [...] output_file
 \end{lstlisting}
-There are two options for the ouput file. It can begin with a number indicating
+There are two options for the output file. It can begin with a number indicating
 the objective function value or it can be a results file that has to be
 evaluated by an external program (the evaluator) comparing with an experimental
 file.
 
-\item In the last option of the former point, the sintaxis of the program to
-evaluate the objetive function has to be (where the results file has to begin
+\item In the last option of the former point, the syntax of the program to
+evaluate the objective function has to be (where the results file has to begin
 with the objective function value):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 $ ./evaluator_name simulated_file experimental_file results_file
 \end{lstlisting}
 
 \end{itemize}
+
+\subsection{Organización de CALIBRATOR}
+
+La estructura con la que trabaja CALIBRATOR queda definida en el
+\emph{input data file}, donde hay que especificar tanto el número  $N$ de
+experimentos así como el número $n$ de ficheros de entrada que requiere el
+programa de simulación. Además en este mismo fichero deben definirse los valores
+que determinarán los parámetros empíricos y el algoritmo de optimización.
+Entonces, CALIBRATOR lee las $N\times n$ plantillas con las que construir los
+ficheros de entrada del simulador substituyendo etiquetas con los parámetros
+empíricos creados por el algoritmo de optimización. El simulador puede bien
+comparar directamente con el \emph{experimental data file} generando un fichero
+con el valor de la función objetivo, o bien crear un fichero de resultados que
+un programa externo denominado \emph{evaluator} comparará con el
+\emph{experimenta data file} para generar el \emph{objective value file}.
+Finalmente, cada \emph{objective value file} asociado a los $N$ experimentos es
+combinado mendiante mean square error para el \emph{objective function value}
+asociado a la combinación de parámetros empíricos. Todo este proceso se repite
+para cada combinación de parámetros empíricos generada por el algoritmo de
+optimización. Además, CALIBRATOR paraleliza las simulaciones de manera
+automática usando todos los recursos disponibles de procesadores y computadores.
+Véase un esquema de esta estructura en la figura~\ref{FigStructure}.
+
+El formato con el que deben definirse el \emph{input data file} así como el de
+los \emph{template files} se detalla en la siguiente subsección.
+
+\psset{xunit=0.4mm,yunit=0.4mm}
+\PSPICTURE{-20}{-90}{280}{55}
+{
+	\tiny
+	\rput(15,5){Input data file}
+	\psframe(-20,0)(50,10)
+	\psline{->}(50,5)(60,5)
+	\rput(15,-20){1st template file}
+	\psframe(-20,-25)(50,-15)
+	\psline{->}(50,-20)(60,-20)
+	\rput(15,-30){$\cdots$}
+	\rput(15,-40){$(N\times n)$-th template file}
+	\psframe(-20,-45)(50,-35)
+	\psline{->}(50,-40)(60,-40)
+	\rput(75,-20){Calibrator}
+	\psframe(60,-55)(90,15)
+	\psline{->}(90,10)(100,25)
+	\psline{->}(90,5)(100,5)
+	\psline{->}(90,-45)(100,-55)
+	\psline{->}(90,-50)(100,-75)
+	\rput(120,5){$n$-th input file}
+	\psframe(100,0)(140,10)
+	\psline{->}(140,5)(150,5)
+	\rput(120,15){$\cdots$}
+	\rput(120,25){1st input file}
+	\psframe(100,20)(140,30)
+	\psline{->}(140,25)(145,25)(145,5)
+	\rput(185,5){Simulator}
+	\psframe(150,0)(220,10)
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(185,10)(185,20)
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(220,5)(230,7.5)
+	\rput(185,25){Results file}
+	\psframe(150,20)(220,30)
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(220,25)(230,30)
+	\rput(185,45){Experimental data file}
+	\psframe(150,40)(220,50)
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(220,45)(230,30)
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(150,45)(145,45)(145,25)
+	\rput(250,30){Evaluator}
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(250,25)(250,15)
+	\psframe(230,25)(270,35)
+	\rput(250,10){Objective}
+	\rput(250,5){value file}
+	\psframe(230,0)(270,15)
+	\psline{->}(270,7.5)(280,7.5)(280,-90)(50,-90)(50,-80)
+	\rput(50,-75){Objective function value}
+	\psframe(15,-80)(85,-70)
+	\psline{->}(50,-70)(75,-55)
+	\rput(120,50){1st experiment}
+	\psframe[linestyle=dotted](95,-5)(275,55)
+	\rput(185,-15){$\cdots$}
+	\rput(120,-75){$n$-th input file}
+	\psframe(100,-80)(140,-70)
+	\psline{->}(140,-75)(150,-75)
+	\rput(120,-65){$\cdots$}
+	\rput(120,-55){1st input file}
+	\psframe(100,-60)(140,-50)
+	\psline{->}(140,-55)(145,-55)(145,-75)
+	\rput(185,-75){Simulator}
+	\psframe(150,-80)(220,-70)
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(185,-70)(185,-60)
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(220,-75)(230,-72.5)
+	\rput(185,-55){Results file}
+	\psframe(150,-60)(220,-50)
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(220,-55)(230,-50)
+	\rput(185,-35){Experimental data file}
+	\psframe(150,-40)(220,-30)
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(220,-35)(230,-50)
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(150,-35)(145,-35)(145,-55)
+	\rput(250,-50){Evaluator}
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(250,-55)(250,-65)
+	\psframe(230,-55)(270,-45)
+	\rput(250,-70){Objective}
+	\rput(250,-75){value file}
+	\psframe(230,-80)(270,-65)
+	\psline(270,-72.5)(280,-72.5)
+	\rput(120,-30){$N$-th experiment}
+	\psframe[linestyle=dotted](95,-85)(275,-25)
+}{Diagrama ilustrativo de las interacciones entre CALIBRATOR, los ficheros de
+entrada, y los programas de simulación y evaluación}{FigStructure}
+
+\subsection{Input files}
+
+\subsubsection{Template files}
+
+Supongamos que buscamos la optimización de $M$ parámetros empíricos que mejor
+ajusten el resultado de $N$ experimentos. Supongamos también que el programa de
+simulación requiere $n$ ficheros de entrada. Entonces debemos crear $N\times n$
+template files que deben reproducir cada fichero de entrada asociado a cada
+experimento. Cada uno de estos template files es analizado sintácticamente por
+CALIBRATOR que sustituirá las siguientes etiquetas para generar los ficheros de
+entrada para el programa de simulación:
+\begin{description}
+\item[@variableX@]: se sustituye por la etiqueta asociada a ese parámetro
+	empírico que se define en el \emph{input data file};
+\item[@valueX@]: se sustituye por el valor asociado a ese parámetro empírico que
+	es calculado por el algoritmo de optimización;
+\end{description}
+donde en ambos casos $X$ corresponde al ordinal de uno de los $M$ parámetros
+empíricos.
 
 \subsubsection{Input data file}
 
@@ -1034,67 +1163,67 @@ The format of the input data file is:
 The main XML node has to begin with the key label \emph{"calibrate"}. The
 available fields are:
 \begin{description}
-\item{simulator}: to indicate the simulator program.
-\item{evaluator}: optional. It specifies the evaluator program if required.
-\item{algorithm}: to set the optimization algorithm. Three value are available:
+	\item[simulator]: to indicate the simulator program.
+	\item[evaluator]: optional. It specifies the evaluator program if required.
+	\item[algorithm]: to set the optimization algorithm. Three value are available:
 	\begin{description}
-	\item{sweep}: sweep brute force algorithm. It requires for each variable:
+		\item[sweep]: sweep brute force algorithm. It requires for each variable:
 		\begin{description}
-		\item{sweeps}: number of sweeps to generate each variable in every
+			\item[sweeps]: number of sweeps to generate each variable in every
 			experiment.
 		\end{description}
-	\item{Monte-Carlo}: Monte-Carlo brute force algorithm. It requires on the main
+	\item[Monte-Carlo]: Monte-Carlo brute force algorithm. It requires on the main
 		XML node:
 		\begin{description}
-		\item{simulations}: number of simulations to run on each iteration in
+			\item[simulations]: number of simulations to run on each iteration in
 			every experiment.
 		\end{description}
-	\item{genetic}: genetic algorithm. It requires the following parameters in the
+	\item[genetic]: genetic algorithm. It requires the following parameters in the
 		main XML node:
 		\begin{description}
-		\item{population}: number of population entities.
-		\item{generations}: number of generations.
-		\item{mutation}: mutation ratio.
-		\item{reproduction}: reproduction ratio.
-		\item{adaptation}: adaptation ratio.
+			\item[population]: number of population entities.
+			\item[generations]: number of generations.
+			\item[mutation]: mutation ratio.
+			\item[reproduction]: reproduction ratio.
+			\item[adaptation]: adaptation ratio.
 		\end{description}
 	And on each variable:
 		\begin{description}
-		\item{bits}: number of bits to encode each variable.
+			\item[bits]: number of bits to encode each variable.
 		\end{description}
 	\end{description}
-\item{iterations}: number of iterations (default 1) to perform the iterative
+\item[iterations]: number of iterations (default 1) to perform the iterative
 algorithm. It applies only on sweep and Monte-Carlo methods.
-\item{bests}: number of bests simulations to calculate convergence interval on
+\item[bests]: number of bests simulations to calculate convergence interval on
 next iteration for the iterative algorithm (default 1). It applies only on
 sweep and Monte-Carlo methods.
-\item{tolerance}: tolerance parameter to relax convergence interval of the
-iterative algoritm (default 0). It applies only on sweep and Monte-Carlo
+\item[tolerance]: tolerance parameter to relax convergence interval of the
+iterative algorithm (default 0). It applies only on sweep and Monte-Carlo
 methods.
 \end{description}
 
 The first type of child XML nodes has to begin with the key label
 \emph{"experiment"}. It details the experimental data and it has the fields:
 \begin{description}
-\item{name}: name of the input data file with experimental results to calibrate.
-\item{templateX}: $X$-th input data file template for the simulation program.
+	\item[name]: name of the input data file with experimental results to calibrate.
+	\item[templateX]: $X$-th input data file template for the simulation program.
 \end{description}
 
 The second type of child XML nodes has to begin with the key label
 \emph{"variable"}. It specifies the variables data and it has the fields:
 \begin{description}
-\item{name}: variable label. On the $X$-th variable, the program parse all input
+	\item[name]: variable label. On the $X$-th variable, the program parse all input
 file templates creating the input simulation files by replacing all
 @variableX@ labels by this name.
-\item{minimum, maximum}: variable extreme values. The program creates the input
+\item[minimum, maximum]: variable extreme values. The program creates the input
 simulation files by replacing all @valueX@ labels in the input file templates
 by a value between these extreme values on the $X$-th variable, depending on the
 optimization algorithm.
-\item{absolute\_minimum, absolute\_maximum}: absolute variable extreme values.
+\item[absolute\_minimum, absolute\_maximum]: absolute variable extreme values.
 On iterative methods, the tolerance can increase initial \emph{minimum} or
 \emph{maximum} values in each iteration. These values are the extreme values
 allowed to prevent to exceed the model parameter limits.
-\item{format}: standard C-format string to set the format to save the variable
+\item[format]: standard C-format string to set the format to save the variable
 in the simulation input files.
 \end{description}
 
@@ -1106,7 +1235,7 @@ and/or calibration
 of variables in models used for open channel flow, surface irrigation, sprinkler irrigation or irrigation
 engines movement.   
 
-Most of cases have been run on a laptop computer equiped with an Intel(R) Core(TM) i7 M620 2.67GHz processor. 
+Most of cases have been run on a laptop computer equipped with an Intel(R) Core(TM) i7 M620 2.67GHz processor. 
 Then, the computation was performed in four parallelized tasks to make the most of the processor's double nucleus with hyperthreading. Only on the optimization
 of the management of the Violada canal, much more expensive computationally, the
 Memento cluster of the BIFI has been used.
@@ -1190,8 +1319,8 @@ inlet and Gurrea and Temple gates modification. Before the development of this
 study, the channel guards responsible for its management carried out the gates
 opening using $\Delta t_A=$1h and $\Delta t_{GT}=$3h30m.
 
-The canal was initially dry and the simulation was run until a steady state with
-a discharge of 2 m$^3$/s was reached. The objective of this work was to provide
+The initial conditions for the canal were a steady state with a discharge of
+2~m$^3$/s. The objective of this work was to provide
 the required daily discharge to the three important irrigation gates as well as
 to keep a constant discharge of 2 m$^3$/s at the outlet gate. It is important to 
 note that Gurrea and Temple gates are only separated by a few meters and are located
@@ -1265,8 +1394,7 @@ gates using the default schedule developed by the channel guards and that one
 obtained in the best of our simulations. It can be observed that in both cases 
 the desired discharge at the different gates in Almudévar, Gurrea and El Temple is supplied,
 being propagated downstream some transitory peaks, affecting the outlet discharge.
-This work confirmed that an optimized management reduces remarkably the amplitude of
-these undesired peaks.
+This work confirmed that an optimized management reduces remarkably the amplitude and the duration of these undesired peaks.
 
 \FIGII{Violada-contributions.eps}{Violada-optimized-contributions.eps}
 {
@@ -1277,7 +1405,7 @@ these undesired peaks.
 
 \subsection{Calibration of empirical parameters on surface irrigation}
 
-CALIBRATOR has also been used to find out the empirical parameters required by the friction, and infitration
+CALIBRATOR has also been used to find out the empirical parameters required by the friction, and infiltration
 models used in the model SURCOS \citep{Surcos,SurcosGit,JaviSurcos3} for the simulation of the four furrow fertigation experiments published in \citet{JaviSurcos2}. The furrows were $100$ m long and they were simulated using 100 computational cells per furrow. The furrows were close together, they had the same geometry and the experiments were almost simultaneous, hence the soil properties were assumed uniform. 
 
 The friction model used in SURCOS is the Gauckler-Manning model. The infiltration model is the Kostiakov-Lewis model. They require calibration of three coefficients: the Gauckler-Manning number $n$ and the infiltration parameters $K$ and $a$. In the original paper, a brute force method using 3000 simulations was applied, each of them including the four experiments. In the present work, the same number of simulations has been used with the calibration methods implemented in CALIBRATOR. The execution of 3000 simulations in the mentioned laptop computer took about 1h20m.  
@@ -1321,11 +1449,11 @@ Figure~\ref{FigSurcos} shows the results of the water depths and solute concentr
 	(a) Advance time profile, (b) inlet depth evolution and (c-f) solute
 	concentration evolution at probes for the experiments Q1-Q4 described in
 	\citet{JaviSurcos2} simulated with the optimal calibrated parameters obtained
-	for the Monte-Carlo method with $N_{iterartions}=6$ (see
+	for the Monte-Carlo method with $N_{iterations}=6$ (see
 	table~\ref{TabSurcos})
 }{FigSurcos}
 
-\subsection{Calibration of empirical parameters of the balistic model on
+\subsection{Calibration of empirical parameters of the ballistic model on
 sprinkler irrigation}
 
 The ballistic model \citep{Fukui80,Playan06} is the most widespread o characterize the behaviour and performance of sprinklers in sprinkler irrigation management. The model assumes that the travelling drops are approximately spherical and subject to the resulting effect of gravity and drag forces. The ejecting drop velocity is required by the model, and it is frequent to assume that the jet is compact enough to consider that all the drops carry the same velocity when leaving the sprinkler. This velocity can be estimated either by measuring the pressure and using Bernoulli's equation or, alternatively, by measuring the discharge and dividing by the outlet cross section. Other data required to characterize the water spread are related to the drop size distribution. The model used in the present work, described in \cite{Ouazaa14}, is based on three parameters $D_{50}$, $n$ and $P$. Furthermore, to include the influence of the wind, the model includes two more aerodynamic resistance coefficients:
@@ -1483,7 +1611,7 @@ increases or decreases linearly (see figure~\ref{FigPivotVelocity}).
 	\rput(37.5,26){time}
 }{Linear velocity of a centre-pivot tower on starts and stops}{FigPivotVelocity}
 
-The start and stop times of each tower were measured in four experiments of 24 hours with the pivot working in cycles of 71s at 100\%, 52\%, 42\% y 27.48\%. The times were grouped in four histograhs and the evaluation function was defined as the mean square error between the measured and simulated histographs.
+The start and stop times of each tower were measured in four experiments of 24 hours with the pivot working in cycles of 71s at 100\%, 52\%, 42\% y 27.48\%. The times were grouped in four histographs and the evaluation function was defined as the mean square error between the measured and simulated histographs.
 Table~\ref{TabPivot} shows some of the results obtained in a total of 10000 simulations of each of the four experiments, taking around 50 minutes each in the same laptop computer used before.
 %%%%%%%%%%%%%%%%%%%%%%
 Los mejores resultados se obtuvieron con los algoritmos genéticos. Llama la
@@ -1577,10 +1705,10 @@ The features and design of CALIBRATOR, a new software tool to enable efficient c
 The new tool allows an efficient performance, making the most of the processors present in a single computer and allowing an easy extension to parallelization distributed among different computers. In whole, a considerable data capacity and computational speed are achieved with independence of the physical problem under study or the algorithm chosen.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-En los casos analizados, los diferentes algoritmos de optimización implementados han obtenido resultados similares con el mismo número total de simulaciones. No obstante, el algoritmo iterativo aplicado con el método de Monte-Carlo y el algoritmo genético han mejorado ligeramente los resultados de los métodos de fuerza bruta. El algoritmo iterativo no ha mejorado en cambio los resultados del método de barrido. En cuanto al algoritmo genético siempre ha dado mejores resultados con los valores más bajos ensayados para los coeficientes $R$. Esto parece indicar que la eficacia de este algoritmo es dependiente del valor de estos coeficientes y que una mayor investigación sobre su valor óptimo debería ser realizada.
+En los casos analizados, los diferentes algoritmos de optimización implementados han obtenido resultados similares con el mismo número total de simulaciones. No obstante, el algoritmo iterativo aplicado con el método de Monte-Carlo y el algoritmo genético han mejorado ligeramente los resultados de los métodos de fuerza bruta. El algoritmo iterativo no ha mejorado significativamente en cambio los resultados del método de barrido. En cuanto al algoritmo genético siempre ha dado mejores resultados con los valores más bajos ensayados para los coeficientes $R$. Esto parece indicar que la eficacia de este algoritmo es dependiente del valor de estos coeficientes y que una mayor investigación sobre su valor óptimo debería ser realizada.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-CALIBRATOR has proved to be flexible in the adaptation to the sintaxis of diverse simulation codes and useful in the calibration and optimization of parameters involved in rather different irrigation problems. In the present work it has been shown succesful for practical applications such as open channle flow management, furrow fertigation, sprinkler irrigation and sprinkler tower movement design.
+CALIBRATOR has proved to be flexible in the adaptation to the syntax of diverse simulation codes and useful in the calibration and optimization of parameters involved in rather different irrigation problems. In the present work it has been shown successful for practical applications such as open channel flow management, furrow fertigation, sprinkler irrigation and sprinkler tower movement design.
 
 
 \section*{References}
