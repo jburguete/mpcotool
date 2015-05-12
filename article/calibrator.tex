@@ -269,15 +269,15 @@ in the subset of the best simulation results from the $j$ iteration.
 A new interval in the variable $x$ is defined to build the optimization values in the next iteration between:
 \[
 	x_{\max}^{j+1}=\frac{x_{\max}^b+x_{\min}^b
-		+\left(x_{\max}^b-x_{\min}^b\right)(1+tol)}{2},
+		+\left(x_{\max}^b-x_{\min}^b\right)(1+tolerance)}{2},
 \]
 \[
 	x_{\min}^{j+1}=\frac{x_{\max}^b+x_{\min}^b
-		-\left(x_{\max}^b-x_{\min}^b\right)(1+tol)}{2},
+		-\left(x_{\max}^b-x_{\min}^b\right)(1+tolerance)}{2},
 \]
 \EQ{x_i^{j+1}\in\left[x_{\min}^{j+1},\;x_{\max}^{j+1}\right],}
 {EqIterationInterval}
-being $tol$ a tolerance increasing the size of the variable intervals to
+being $tolerance$ a factor increasing the size of the variable intervals to
 simulate the next iteration.
 Figure~\ref{FigIterative} contains an example of the procedure used by the the iterative algorithm to modify the variables intervals in order to enforce convergence. 
 
@@ -1032,9 +1032,6 @@ optimización. Además, CALIBRATOR paraleliza las simulaciones de manera
 automática usando todos los recursos disponibles de procesadores y computadores.
 Véase un esquema de esta estructura en la figura~\ref{FigStructure}.
 
-El formato con el que deben definirse el \emph{input data file} así como el de
-los \emph{template files} se detalla en la siguiente subsección.
-
 \psset{xunit=0.4mm,yunit=0.4mm}
 \PSPICTURE{-20}{-90}{280}{55}
 {
@@ -1115,6 +1112,9 @@ los \emph{template files} se detalla en la siguiente subsección.
 	\psframe[linestyle=dotted](95,-85)(275,-25)
 }{Diagrama ilustrativo de las interacciones entre CALIBRATOR, los ficheros de
 entrada, y los programas de simulación y evaluación}{FigStructure}
+
+El formato con el que deben definirse el \emph{input data file} así como el de
+los \emph{template files} se detalla en la siguiente subsección.
 
 \subsection{Input files}
 
