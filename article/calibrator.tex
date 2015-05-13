@@ -1010,20 +1010,23 @@ $ ./evaluator_name simulated_file experimental_file results_file
 
 \end{itemize}
 
-\subsection{Organización de CALIBRATOR}
+\subsection{Organization of CALIBRATOR}
 
-La estructura con la que trabaja CALIBRATOR queda definida en el
-\emph{input data file}, donde hay que especificar tanto el número  $N$ de
-experimentos así como el número $n$ de ficheros de entrada que requiere el
-programa de simulación. Además en este mismo fichero deben definirse los valores
-que determinarán los parámetros empíricos y el algoritmo de optimización.
-Entonces, CALIBRATOR lee las $N\times n$ plantillas con las que construir los
-ficheros de entrada del simulador substituyendo etiquetas con los parámetros
-empíricos creados por el algoritmo de optimización. El simulador puede bien
-comparar directamente con el \emph{experimental data file} generando un fichero
-con el valor de la función objetivo, o bien crear un fichero de resultados que
-un programa externo denominado \emph{evaluator} comparará con el
-\emph{experimenta data file} para generar el \emph{objective value file}.
+The structure used by CALIBRATOR is defined in the \emph{input data file},
+where it is necessary to specify the number of experiments $N$ as well as
+the number of input files $n$ required by the simulation program. In addition,
+the values which determine the empirical parameters and the optimization
+algorithm have to be defined in this very same file. Then, CALIBRATOR
+reads the $N\times n$ template files, which are used to build the simulator
+input files, substituting labels by empirical parameters created by the
+optimization algorithm. The simulator can either directly compare with
+the \emph{experimental data file} generating a file with the value of the
+objective function or can create a results file that an external program
+called \emph{evaluator} will compare to the \emph{experimental data file}
+in order to generate the \emph{objective value file}.
+Eventually, each \emph{objective value file} associated with the $N$ experiments
+is combined by means of mean square error
+
 Finalmente, cada \emph{objective value file} asociado a los $N$ experimentos es
 combinado mendiante mean square error para el \emph{objective function value}
 asociado a la combinación de parámetros empíricos. Todo este proceso se repite
