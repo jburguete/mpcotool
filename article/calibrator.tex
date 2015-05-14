@@ -158,6 +158,15 @@ Distribution) type license.
 
 \section{Introduction}
 
+Calibration is related to the optimization process of finding the minimum of a function usually defined as a relation between the desired quantity and the simulated one. There are many fields where calibration is required. This process is more necessary when simplifications on models are done. 
+Deterministic models are sensitive to parameters and their ability increases when the quality of the calibration improves [1]. In some way, the model may acquire a predictive character when calibrated. The calibration can be understood as an optimization process where the error between the estimation of the model and the data set is minimized.
+On the other hand, there are many phenomena that can be modelled using differential equations (PDEs) that participate in conservation laws. The application of mathematical models to describe physical processes is helpful to perform simulations of possible scenarios using computational facilities. Despite the quality of these mathematical models for predictive purposes, calibration is usually required to provide them useful properties.
+The application of the Shallow Water Equations (SWE) for the simulation of open-channel flow, for instance, has been widely used, in particular for irrigation water delivery analysis [2]. To complete the equations with regulation elements, it is accepted that some simplifications can be applied. These simplifications usually include parameters that make possible to model simpler the phenomena that occur on those regulation elements [3].
+
+Because of the mathematical model, PDE constrained optimization may be performed using two optimizer families: gradient based methods and gradient-free optimizers. While the latter do not require gradient information to perform the calibration, the former one must have information about the variation of the objective with respect to the controlled variable 
+
+In this work, a descent gradient method is used as example of gradient based optimization. In order to compare this optimizer against a non-gradient based method, the use of Monte Carlo processes by means of [9] as an example of brute force methodology to calibrate is used. Moreover, both  techniques are compared using …
+
 CALIBRATOR \citep{CalibratorGit} is an open source software to perform
 optimizations or calibrations of empirical parameters with a BSD type license.
 
@@ -1024,6 +1033,11 @@ the \emph{experimental data file} generating a file with the value of the
 objective function or can create a results file that an external program
 called \emph{evaluator} will compare to the \emph{experimental data file}
 in order to generate the \emph{objective value file}.
+%%%%%%%%%%%%%%
+Para cada experimento se obtiene por tanto un valor objetivo. El valor final de
+la función objetivo asociada al conjunto de $N$ experimentos se calcula como la
+suma de los cuadrados del valor objetivo asociado a cada experimento.
+%%%%%%%%%%%%%%
 Eventually, each \emph{objective value file} associated with the $N$ experiments
 is combined by means of mean square error
 
