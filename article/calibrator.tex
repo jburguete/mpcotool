@@ -50,8 +50,7 @@
 	\begin{figure}[ht!]
 		\centering
 		\begin{tabular}{c}
-			(a) \\ \includegraphics{#1} \\
-			(b) \\ \includegraphics{#2}
+			\includegraphics{#1} \\ \includegraphics{#2}
 		\end{tabular}
 		\caption{#3.\label{#4}}
 	\end{figure}
@@ -62,10 +61,8 @@
 	\begin{figure}[ht!]
 		\centering
 		\begin{tabular}{cc}
-			(a) & (b)
-			\\ \includegraphics{#1} & \includegraphics{#2}
-			\\ (c) & (d)
-			\\ \includegraphics{#3} & \includegraphics{#4}
+			\includegraphics{#1} & \includegraphics{#2} \\
+			\includegraphics{#3} & \includegraphics{#4}
 		\end{tabular}
 		\caption{#5.\label{#6}}
 	\end{figure}
@@ -76,12 +73,9 @@
 	\begin{figure}[ht!]
 		\centering
 		\begin{tabular}{cc}
-			(a) & (b)
-			\\ \includegraphics{#1} & \includegraphics{#2}
-			\\ (c) & (d)
-			\\ \includegraphics{#3} & \includegraphics{#4}
-			\\ (e) & (f)
-			\\ \includegraphics{#5} & \includegraphics{#6}
+			\includegraphics{#1} & \includegraphics{#2} \\
+			\includegraphics{#3} & \includegraphics{#4} \\
+			\includegraphics{#5} & \includegraphics{#6}
 		\end{tabular}
 		\caption{#7.\label{#8}}
 	\end{figure}
@@ -130,8 +124,8 @@ Germany.}
 María de Luna 3, 50018~Zaragoza, Spain.}
 
 \begin{keyword}
-optimization, calibration, simulation, software, irrigation, sprinkler, furrow,
-canal
+optimization, calibration, simulation, model, software, irrigation, sprinkler,
+furrow, canal
 \end{keyword}
 
 \begin{abstract}
@@ -147,9 +141,8 @@ distributed among the different processors available in one computer or in
 multiple computers of a cluster.
 The CALIBRATOR usage and possibilities are illustrated by showing four practical
 applications in agriculture: optimization of canal management and calibration of
-the empirical infiltration coeffcients in a surface irrigation model, in a
-ballistic sprinkler irrigation model and in an irrigation engines movement
-model.
+the empirical coefficients in a surface irrigation model, in a ballistic
+sprinkler irrigation model and in an irrigation engines movement model.
 This software is open source and is distributed with a BSD (Berkeley Software
 Distribution) type license.
 \end{abstract}
@@ -586,8 +579,8 @@ algorithms}{FigSelection}
 Total number of simulations performed by the genetic algorithm is:
 \EQ
 {
-	N_{total}=N_{population}\,N_{generations}
-	-\left(N_{generations}-1\right)\,N_{survival},
+	N_{total}=N_{population}\times N_{generations}
+	-\left(N_{generations}-1\right)\times N_{survival},
 }{EqGeneticNumber}
 with $N_{generations}$ the number of generations of new entities.
 
@@ -1021,14 +1014,15 @@ $ ./evaluator_name simulated_file experimental_file results_file
 
 \subsection{Organization of CALIBRATOR}
 
-The structure used by CALIBRATOR is defined in the \emph{input data file},
-where it is necessary to specify the number of experiments $N$ as well as
-the number of input files $n$ required by the simulation program. In addition,
-the values which determine the empirical parameters and the optimization
-algorithm have to be defined in this very same file. Then, CALIBRATOR
-reads the $N\times n$ template files, which are used to build the simulator
-input files, substituting labels by empirical parameters created by the
-optimization algorithm. The simulator can either directly compare with
+Supongamos que buscamos la optimización de $M$ parámetros empíricos que mejor
+ajusten el resultado de $N$ experimentos. Supongamos también que el programa de
+simulación requiere $n$ ficheros de entrada.
+The structure used by CALIBRATOR is defined in the \emph{main input file}. In
+addition, the values which determine the empirical parameters and the
+optimization algorithm have to be defined in this very same file. Then,
+CALIBRATOR reads the $N\times n$ template files, which are used to build the
+simulator input files, substituting labels by empirical parameters created by
+the optimization algorithm. The simulator can either directly compare with
 the \emph{experimental data file} generating a file with the value of the
 objective function or can create a results file that an external program
 called \emph{evaluator} will compare to the \emph{experimental data file}
@@ -1036,24 +1030,18 @@ in order to generate the \emph{objective value file}.
 %%%%%%%%%%%%%%
 Para cada experimento se obtiene por tanto un valor objetivo. El valor final de
 la función objetivo asociada al conjunto de $N$ experimentos se calcula como la
-suma de los cuadrados del valor objetivo asociado a cada experimento.
+raíz cuadrada de la media de los cuadrados de los valores objetivo asociados a
+cada experimento.
 %%%%%%%%%%%%%%
 Eventually, each \emph{objective value file} associated with the $N$ experiments
-is combined by means of mean square error
-
-Finalmente, cada \emph{objective value file} asociado a los $N$ experimentos es
-combinado mendiante mean square error para el \emph{objective function value}
-asociado a la combinación de parámetros empíricos. Todo este proceso se repite
-para cada combinación de parámetros empíricos generada por el algoritmo de
-optimización. Además, CALIBRATOR paraleliza las simulaciones de manera
-automática usando todos los recursos disponibles de procesadores y computadores.
+is combined by means of mean square error.
 Véase un esquema de esta estructura en la figura~\ref{FigStructure}.
 
 \psset{xunit=0.4mm,yunit=0.4mm}
 \PSPICTURE{-20}{-90}{280}{55}
 {
 	\tiny
-	\rput(15,5){Input data file}
+	\rput(15,5){Main input file}
 	\psframe(-20,0)(50,10)
 	\psline{->}(50,5)(60,5)
 	\rput(15,-20){1st template file}
@@ -1081,7 +1069,7 @@ Véase un esquema de esta estructura en la figura~\ref{FigStructure}.
 	\psline[linestyle=dashed,dash=2pt 1pt]{->}(185,10)(185,20)
 	\psline[linestyle=dashed,dash=2pt 1pt]{->}(220,5)(230,7.5)
 	\rput(185,25){Results file}
-	\psframe(150,20)(220,30)
+	\psframe[linestyle=dashed,dash=3pt 1pt](150,20)(220,30)
 	\psline[linestyle=dashed,dash=2pt 1pt]{->}(220,25)(230,30)
 	\rput(185,45){Experimental data file}
 	\psframe(150,40)(220,50)
@@ -1089,7 +1077,7 @@ Véase un esquema de esta estructura en la figura~\ref{FigStructure}.
 	\psline[linestyle=dashed,dash=2pt 1pt]{->}(150,45)(145,45)(145,25)
 	\rput(250,30){Evaluator}
 	\psline[linestyle=dashed,dash=2pt 1pt]{->}(250,25)(250,15)
-	\psframe(230,25)(270,35)
+	\psframe[linestyle=dashed,dash=3pt 1pt](230,25)(270,35)
 	\rput(250,10){Objective}
 	\rput(250,5){value file}
 	\psframe(230,0)(270,15)
@@ -1112,7 +1100,7 @@ Véase un esquema de esta estructura en la figura~\ref{FigStructure}.
 	\psline[linestyle=dashed,dash=2pt 1pt]{->}(185,-70)(185,-60)
 	\psline[linestyle=dashed,dash=2pt 1pt]{->}(220,-75)(230,-72.5)
 	\rput(185,-55){Results file}
-	\psframe(150,-60)(220,-50)
+	\psframe[linestyle=dashed,dash=3pt 1pt](150,-60)(220,-50)
 	\psline[linestyle=dashed,dash=2pt 1pt]{->}(220,-55)(230,-50)
 	\rput(185,-35){Experimental data file}
 	\psframe(150,-40)(220,-30)
@@ -1120,62 +1108,121 @@ Véase un esquema de esta estructura en la figura~\ref{FigStructure}.
 	\psline[linestyle=dashed,dash=2pt 1pt]{->}(150,-35)(145,-35)(145,-55)
 	\rput(250,-50){Evaluator}
 	\psline[linestyle=dashed,dash=2pt 1pt]{->}(250,-55)(250,-65)
-	\psframe(230,-55)(270,-45)
+	\psframe[linestyle=dashed,dash=3pt 1pt](230,-55)(270,-45)
 	\rput(250,-70){Objective}
 	\rput(250,-75){value file}
 	\psframe(230,-80)(270,-65)
 	\psline(270,-72.5)(280,-72.5)
 	\rput(120,-30){$N$-th experiment}
 	\psframe[linestyle=dotted](95,-85)(275,-25)
-}{ Illustrative diagram of the interactions among CALIBRATOR, the input files
-	and the simulation and evaluation programs}{FigStructure}
+}{Diagram of the interactions among CALIBRATOR, the input files and the
+simulation and evaluation programs to produce an objective function value for
+each empirical parameters combination generated by the optimization algorithm}
+{FigStructure}
 
-El formato con el que deben definirse el \emph{input data file} así como el de
+Todo este proceso se repite
+para cada combinación de parámetros empíricos generada por el algoritmo de
+optimización. Además, CALIBRATOR paraleliza las simulaciones de manera
+automática usando todos los recursos disponibles de procesadores y computadores.
+
+El formato con el que deben definirse el \emph{main input file} así como el de
 los \emph{template files} se detalla en la siguiente subsección.
 
 \subsection{Input files}
 
-\subsubsection{Template files}
+\subsubsection{Main input file}
 
-Supongamos que buscamos la optimización de $M$ parámetros empíricos que mejor
-ajusten el resultado de $N$ experimentos. Supongamos también que el programa de
-simulación requiere $n$ ficheros de entrada. Entonces debemos crear $N\times n$
-template files que deben reproducir cada fichero de entrada asociado a cada
-experimento. Cada uno de estos template files es analizado sintácticamente por
-CALIBRATOR que sustituirá las siguientes etiquetas para generar los ficheros de
-entrada para el programa de simulación:
-\begin{description}
-\item[@variableX@]: se sustituye por la etiqueta asociada a ese parámetro
-	empírico que se define en el \emph{input data file};
-\item[@valueX@]: se sustituye por el valor asociado a ese parámetro empírico que
-	es calculado por el algoritmo de optimización;
-\end{description}
-donde en ambos casos $X$ corresponde al ordinal de uno de los $M$ parámetros
-empíricos.
+This file has to be in a XML format with a tree type structure as the
+represented in figure~\ref{FigMainFile}.
+\psset{xunit=0.4mm,yunit=0.4mm}
+\PSPICTURE{0}{-115}{280}{15}
+{
+	\tiny
+	\psframe(0,-5)(280,15)
+	\psline(40,-5)(40,15)
+	\rput(20,10){\bf calibrate}
+	\rput(60,10){\bf simulator}
+	\rput(100,10){\bf algorithm}
+	\rput(140,10){evaluator}
+	\rput(180,10){simulations}
+	\rput(220,10){iterations}
+	\rput(260,10){tolerance}
+	\rput(60,0){bests}
+	\rput(100,0){population}
+	\rput(140,0){generations}
+	\rput(180,0){mutation}
+	\rput(220,0){reproduction}
+	\rput(260,0){adaptation}
+	\psline(20,-5)(20,-15)(40,-15)
+	\psframe(40,-20)(280,-10)
+	\psline(80,-20)(80,-10)
+	\rput(60,-15){\bf experiment}
+	\rput(100,-15){\bf name}
+	\rput(140,-15){\bf template$_\mathbf{1}$}
+	\rput(180,-15){template$_2$}
+	\rput(220,-15){$\cdots$}
+	\rput(260,-15){template$_n$}
+	\psline(20,-15)(20,-25)
+	\rput(140,-30){$\cdots$}
+	\psline(20,-35)(20,-45)(40,-45)
+	\psframe(40,-50)(280,-40)
+	\psline(80,-50)(80,-40)
+	\rput(60,-45){\bf experiment}
+	\rput(100,-45){\bf name}
+	\rput(140,-45){\bf template$_\mathbf{1}$}
+	\rput(180,-45){template$_2$}
+	\rput(220,-45){$\cdots$}
+	\rput(260,-45){template$_n$}
+	\psline(20,-45)(20,-65)(40,-65)
+	\psframe(40,-75)(280,-55)
+	\psline(80,-75)(80,-55)
+	\rput(60,-60){\bf variable}
+	\rput(100,-60){\bf name}
+	\rput(140,-60){\bf minimum}
+	\rput(180,-60){\bf maximum}
+	\rput(230,-60){absolute\_minimum}
+	\rput(110,-70){absolute\_maximum}
+	\rput(160,-70){format}
+	\rput(200,-70){sweeps}
+	\rput(240,-70){bits}
+	\psline(20,-65)(20,-80)
+	\rput(140,-85){$\cdots$}
+	\psline(20,-90)(20,-105)(40,-105)
+	\psframe(40,-115)(280,-95)
+	\psline(80,-115)(80,-95)
+	\rput(60,-100){\bf variable}
+	\rput(100,-100){\bf name}
+	\rput(140,-100){\bf minimum}
+	\rput(180,-100){\bf maximum}
+	\rput(230,-100){absolute\_minimum}
+	\rput(110,-110){absolute\_maximum}
+	\rput(160,-110){format}
+	\rput(200,-110){sweeps}
+	\rput(240,-110){bits}
+}{Structure of the main input file. Mandatory nodes and properties are in bold.
+Others properties can be also mandatory depending on the selected optimization
+algorithm}{FigMainFile}
 
-\subsubsection{Input data file}
-
-The format of the input data file is:
-\begin{lstlisting}[language=xml,basicstyle=\scriptsize]
-<?xml version="1.0"/>
-<calibrate simulator="simulator_name" evaluator="evaluator_name"
-	algorithm="algorithm_type" simulations="simulations_number"
-	iterations="iterations_number" tolerance="tolerance_value"
-	bests="bests_number">
-	<experiment name="data_file_1" template1="template_1_1"
-		template2="template_1_2" .../>
-	...
-	<experiment name="data_file_N" template1="template_N_1"
-		template2="template_N_2" .../>
-	<variable name="variable_1" minimum="min_value"
-		maximum="max_value" format="c_string_format"
-		sweeps="sweeps_number" bits="bits_number"/>
-	...
-	<variable name="variable_M" minimum="min_value"
-		maximum="max_value" format="c_string_format"
-		sweeps="sweeps_number" bits="bits_number"/>
-</calibrate>
-\end{lstlisting}
+%\begin{lstlisting}[language=xml,basicstyle=\scriptsize]
+%<?xml version="1.0"/>
+%<calibrate simulator="simulator_name" evaluator="evaluator_name"
+%	algorithm="algorithm_type" simulations="simulations_number"
+%	iterations="iterations_number" tolerance="tolerance_value"
+%	bests="bests_number">
+%	<experiment name="data_file_1" template1="template_1_1"
+%		template2="template_1_2" .../>
+%	...
+%	<experiment name="data_file_N" template1="template_N_1"
+%		template2="template_N_2" .../>
+%	<variable name="variable_1" minimum="min_value"
+%		maximum="max_value" format="c_string_format"
+%		sweeps="sweeps_number" bits="bits_number"/>
+%	...
+%	<variable name="variable_M" minimum="min_value"
+%		maximum="max_value" format="c_string_format"
+%		sweeps="sweeps_number" bits="bits_number"/>
+%</calibrate>
+%\end{lstlisting}
 
 The main XML node has to begin with the key label \emph{"calibrate"}. The
 available fields are:
@@ -1244,6 +1291,24 @@ allowed to prevent to exceed the model parameter limits.
 in the simulation input files.
 \end{description}
 
+\subsubsection{Template files}
+
+Debemos crear $N\times n$ template files que servirán para reproducir cada
+fichero de entrada asociado a cada experimento. Una vez que el algoritmo de
+optimización ha generado un conjunto de $M$ parámetros empíricas, cada uno de
+estos template files es analizado sintácticamente por CALIBRATOR para generar
+los ficheros de entrada para el programa de simulación. Éstos serán una copia
+del template file pero donde se sustituyen las siguientes etiquetas clave:
+\begin{description}
+\item[@variableX@]: se sustituye por la etiqueta asociada a ese parámetro
+	empírico que se define en el \emph{main input file};
+\item[@valueX@]: se sustituye por el valor asociado a ese parámetro empírico que
+	proporciona el algoritmo de optimización usando el formato definido en el
+	\emph{main input file};
+\end{description}
+donde en ambos casos $X$ corresponde al ordinal del correspondiente parámetro
+empírico.
+
 \section{Practical applications}
 
 In what follows, a few cases of practical application of CALIBRATOR in combination with
@@ -1254,7 +1319,7 @@ engines movement.
 
 Most of cases have been run on a laptop computer equipped with an Intel(R) Core(TM) i7 M620 2.67GHz processor. 
 Then, the computation was performed in four parallelized tasks to make the most of the processor's double nucleus with hyperthreading. Only on the optimization
-of the management of the Violada canal, much more expensive computationally, the
+of the management of the Canal de Violada, much more expensive computationally, the
 Memento cluster of the BIFI has been used.
 
 \subsection{Optimization of a canal management}
@@ -1403,7 +1468,7 @@ spillways of the canal.
 	\\ & $R_{reproduction}=0.25$
 	\\ & $R_{adaptation}=0.25$
 	\\ \hline
-}{Optimal empirical parameters and value of the evaluation function in the simulation of the Violada canal using program SWIGS and several optimization algorithms in CALIBRATOR with the same total number of simulations ($N_{total}=1024$)}
+}{Optimal empirical parameters and value of the evaluation function in the simulation of the Canal de Violada using program SWIGS and several optimization algorithms in CALIBRATOR with the same total number of simulations ($N_{total}=1024$)}
 {TabSwigs}
 
 Figure~\ref{FigSwigs} shows the supplied discharges at the inlet and at the different
@@ -1414,11 +1479,9 @@ being propagated downstream some transitory peaks, affecting the outlet discharg
 This work confirmed that an optimized management reduces remarkably the amplitude and the duration of these undesired peaks.
 
 \FIGII{Violada-contributions.eps}{Violada-optimized-contributions.eps}
-{
-	Temporal evolution of discharges supplied at inlet, outlet and gates as (a)
-	using the opening times applied by the canal guards and (b) the optimum 
-	opening times obtained in this work
-}{FigSwigs}
+{Temporal evolution of discharges supplied at inlet, outlet and gates as (top)
+using the opening times applied by the canal guards and (bottom) the optimum
+opening times obtained in this work}{FigSwigs}
 
 \subsection{Calibration of empirical parameters on surface irrigation}
 
@@ -1462,13 +1525,11 @@ Figure~\ref{FigSurcos} shows the results of the water depths and solute concentr
 
 \FIGVI{surcos-advance.eps}{surcos-depth.eps}{surcos-solute-q1.eps}
 {surcos-solute-q2.eps}{surcos-solute-q3.eps}{surcos-solute-q4.eps}
-{
-	(a) Advance time profile, (b) inlet depth evolution and (c-f) solute
-	concentration evolution at probes for the experiments Q1-Q4 described in
-	\citet{JaviSurcos2} simulated with the optimal calibrated parameters obtained
-	for the Monte-Carlo method with $N_{iterations}=6$ (see
-	table~\ref{TabSurcos})
-}{FigSurcos}
+{(top left) Advance time profile, (top right) inlet depth evolution and
+(middle-bottom) solute oncentration evolution at probes for the experiments
+Q1-Q4 described in \citet{JaviSurcos2} simulated with the optimal calibrated
+parameters obtained for the Monte-Carlo method with $N_{iterations}=6$ (see
+table~\ref{TabSurcos})}{FigSurcos}
 
 \subsection{Calibration of empirical parameters of the ballistic model on
 sprinkler irrigation}
@@ -1559,8 +1620,8 @@ Next, using the optimal $D_{50}=3.06$ mm, $n=20.878$ and $P=0.388$ obtained by t
 Finally, figure~\ref{FigSprinkler} shows the measured (in pluviometers) and simulated water distribution using the optimal parameters in windless and wind conditions of average velocity 2.84 m/s.
 
 \FIGII{sprinkler-0.eps}{sprinkler-2,84.eps}
-{(a) Radial pluviometry for non-wind conditions and (b) pluviometry at the two
-pluviometers axes}{FigSprinkler}
+{(top) Radial pluviometry for non-wind conditions and (bottom) pluviometry at
+the two pluviometers axes}{FigSprinkler}
 
 \subsection{Calibration of empirical parameters of the movement of a sprinkler
 center-pivot}
@@ -1628,7 +1689,7 @@ increases or decreases linearly (see figure~\ref{FigPivotVelocity}).
 	\rput(37.5,26){time}
 }{Linear velocity of a centre-pivot tower on starts and stops}{FigPivotVelocity}
 
-The start and stop times of each tower were measured in four experiments of 24 hours with the pivot working in cycles of 71s at 100\%, 52\%, 42\% y 27.48\%. The times were grouped in four histographs and the evaluation function was defined as the mean square error between the measured and simulated histographs.
+The start and stop times of each tower were measured in four experiments of 24 hours with the pivot working in cycles of 71s at 100\%, 52\%, 42\% y 27.48\%. The times were grouped in four histograms and the evaluation function was defined as the mean square error between the measured and simulated histograms.
 Table~\ref{TabPivot} shows some of the results obtained in a total of 10000 simulations of each of the four experiments, taking around 50 minutes each in the same laptop computer used before.
 %%%%%%%%%%%%%%%%%%%%%%
 Los mejores resultados se obtuvieron con los algoritmos genéticos. Llama la
@@ -1685,35 +1746,39 @@ ligeramente al método de barrido.
 }{Optimal parameters and values of the evaluation function in the four towers pivot case in \citet{Ouazaa15} using different optimization algorithms implemented in CALIBRATOR with the same number of total simulations}{TabPivot}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
-In figures \ref{FigPivot100} to \ref{FigPivot27} the histographs of the number
+In figures \ref{FigPivot100} to \ref{FigPivot27} the histograms of the number
 of measured and simulated starts and stops are represented for the different
-machine workings. El acuerdo entre los resultados medidos y simulados, con los
-parámetros calibrados con el algoritmo genético óptimo, deben considerarse
-razonables dada la extrema caoticidad del movimiento.
+machine workings. Nótese que las figuras no se han representado en una escala
+uniforme para una mejor visualización de las diferencias entre los resultados
+medidos y simulados. El acuerdo entre los resultados medidos y simulados, con
+los parámetros calibrados con el algoritmo genético óptimo, debe considerarse
+razonable dada la extrema caoticidad del movimiento. En todo caso, se pudo
+estimar que la pérdida de uniformidad en el reparto del agua asociada al
+movimiento no uniforme de las torres puede considerarse despreciable.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \FIGIV{pivot-measured-starts-100.eps}{pivot-measured-stops-100.eps}
 {pivot-simulated-starts-100.eps}{pivot-simulated-stops-100.eps}
-{Histograph of the number of (a) measured starts, (b) measured stops, (c)
-simulated starts and (d) simulated stops for the pivot towers working at 100\%
+{Histogram of the number of (top left) measured starts, (top right) measured stops, (bottom left)
+simulated starts and (bottom right) simulated stops for the pivot towers working at 100\%
 velocity}{FigPivot100}
 
 \FIGIV{pivot-measured-starts-52.eps}{pivot-measured-stops-52.eps}
 {pivot-simulated-starts-52.eps}{pivot-simulated-stops-52.eps}
-{Histograph of the number of (a) measured starts, (b) measured stops, (c)
-simulated starts and (d) simulated stops for the pivot towers working at 52\%
+{Histogram of the number of (top left) measured starts, (top right) measured stops, (bottom left)
+simulated starts and (bottom right) simulated stops for the pivot towers working at 52\%
 velocity}{FigPivot52}
 
 \FIGIV{pivot-measured-starts-42.eps}{pivot-measured-stops-42.eps}
 {pivot-simulated-starts-42.eps}{pivot-simulated-stops-42.eps}
-{Histograph of the number of (a) measured starts, (b) measured stops, (c)
-simulated starts and (d) simulated stops for the pivot towers working at 42\%
+{Histogram of the number of (top left) measured starts, (top right) measured stops, (bottom left)
+simulated starts and (bottom right) simulated stops for the pivot towers working at 42\%
 velocity}{FigPivot42}
 
 \FIGIV{pivot-measured-starts-27,48.eps}{pivot-measured-stops-27,48.eps}
 {pivot-simulated-starts-27,48.eps}{pivot-simulated-stops-27,48.eps}
-{Histograph of the number of (a) measured starts, (b) measured stops, (c)
-simulated starts and (d)simulated stops for the pivot towers working at 27.48\% velocity}{FigPivot27}
+{Histogram of the number of (top left) measured starts, (top right) measured stops, (bottom left)
+simulated starts and (bottom right)simulated stops for the pivot towers working at 27.48\% velocity}{FigPivot27}
 
 \section{Conclusions}
 
