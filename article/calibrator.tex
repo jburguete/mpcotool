@@ -151,14 +151,9 @@ Distribution) type license.
 
 \section{Introduction}
 
-Calibration is related to the optimization process of finding the minimum of a function usually defined as a relation between the desired quantity and the simulated one. There are many fields where calibration is required. This process is more necessary when simplifications on models are done. 
-Deterministic models are sensitive to parameters and their ability increases when the quality of the calibration improves [1]. In some way, the model may acquire a predictive character when calibrated. The calibration can be understood as an optimization process where the error between the estimation of the model and the data set is minimized.
-On the other hand, there are many phenomena that can be modelled using differential equations (PDEs) that participate in conservation laws. The application of mathematical models to describe physical processes is helpful to perform simulations of possible scenarios using computational facilities. Despite the quality of these mathematical models for predictive purposes, calibration is usually required to provide them useful properties.
-The application of the Shallow Water Equations (SWE) for the simulation of open-channel flow, for instance, has been widely used, in particular for irrigation water delivery analysis [2]. To complete the equations with regulation elements, it is accepted that some simplifications can be applied. These simplifications usually include parameters that make possible to model simpler the phenomena that occur on those regulation elements [3].
-
+Calibration is related to the optimization process of finding the minimum of a function usually defined as a relation between the desired quantity and the simulated one. There are many fields where calibration is required. This process is more necessary when simplifications on models are done. Deterministic models are sensitive to parameters and their ability increases when the quality of the calibration improves. In some way, the model may acquire a true predictive character when calibrated. The calibration can be understood as an optimization process where the error between the estimation of the model and the data set is minimized.
+On the other hand, there are many phenomena that can be modelled using differential equations (PDEs) that participate in conservation laws. The application of mathematical models to describe physical processes is helpful to perform simulations of possible scenarios using computational facilities. Despite the quality of these mathematical models for predictive purposes, calibration is usually required to provide them useful properties. The application of the Shallow Water Equations (SWE) for the simulation of open-channel flow, for instance, has been widely used, in particular for irrigation water delivery analysis. To complete the equations with regulation elements, it is accepted that some simplifications can be applied. These simplifications usually include parameters that make possible to model simpler the phenomena that occur on those regulation elements.
 Because of the mathematical model, PDE constrained optimization may be performed using two optimizer families: gradient based methods and gradient-free optimizers. While the latter do not require gradient information to perform the calibration, the former one must have information about the variation of the objective with respect to the controlled variable 
-
-In this work, a descent gradient method is used as example of gradient based optimization. In order to compare this optimizer against a non-gradient based method, the use of Monte Carlo processes by means of [9] as an example of brute force methodology to calibrate is used. Moreover, both  techniques are compared using …
 
 CALIBRATOR \citep{CalibratorGit} is an open source software to perform
 optimizations or calibrations of empirical parameters with a BSD type license.
@@ -783,7 +778,7 @@ of the algorithm.
 	\psline{->}(10,5)(10,7.5)
 	\psline{->}(10,15)(10,12.5)
 }{Example of the generation of a new entity by
-reproduction in the GENETIC default algorithm. Note that the identical bits in both parents (in grey) are also present in the son. The rest of the bits are random}{FigReproduction}
+reproduction in the GENETIC default algorithm. Note that the identical bits in both parents (in grey) are also present in their son. The rest of the bits are random}{FigReproduction}
 
 \subsubsection{Adaptation algorithm}
 
@@ -1014,19 +1009,19 @@ $ ./evaluator_name simulated_file experimental_file results_file
 
 \subsection{Organization of CALIBRATOR}
 
-Supongamos que buscamos la optimización de $M$ parámetros empíricos que mejor
-ajusten el resultado de $N$ experimentos. Supongamos también que el programa de
-simulación requiere $n$ ficheros de entrada.
-The structure used by CALIBRATOR is defined in the \emph{main input file}. In
-addition, the values which determine the empirical parameters and the
-optimization algorithm have to be defined in this very same file. Then,
-CALIBRATOR reads the $N\times n$ template files, which are used to build the
-simulator input files, substituting labels by empirical parameters created by
-the optimization algorithm. The simulator can either directly compare with
-the \emph{experimental data file} generating a file with the value of the
-objective function or can create a results file that an external program
-called \emph{evaluator} will compare to the \emph{experimental data file}
-in order to generate the \emph{objective value file}.
+Let us assume that the combination of $M$ empirical parameters is desired so that they
+are the best fit to $N$ experimental data and that the simulator requires $n$ input files.
+The structure followed by CALIBRATOR is summarized in \emph{main input file},
+where both the number of experiments and the number of required input files
+are specified. Furthermore, it contains the values of the empirical parameters
+and the chosen optimization algorithm.
+Then, CALIBRATOR reads the $N\times n$ templates to build the simulator input files
+replacing labels by empirical parameter values created by the optimization algorithm.
+There are two options: either the simulator compares directly with the
+\emph{experimental data file}, hence generating a file with the value of the error, or
+an external program called \emph{evaluator} will compare with the
+\emph{experimenta data file} to produce the error value. In both cases this error value
+is saved in a \emph{objective value file}.
 %%%%%%%%%%%%%%
 Para cada experimento se obtiene por tanto un valor objetivo. El valor final de
 la función objetivo asociada al conjunto de $N$ experimentos se calcula como la
@@ -1035,8 +1030,7 @@ cada experimento.
 %%%%%%%%%%%%%%
 Eventually, each \emph{objective value file} associated with the $N$ experiments
 is combined by means of mean square error.
-Véase un esquema de esta estructura en la figura~\ref{FigStructure}.
-
+Figure~\ref{FigStructure} is a sketch of the structure.
 \psset{xunit=0.4mm,yunit=0.4mm}
 \PSPICTURE{-20}{-90}{280}{55}
 {
@@ -1115,18 +1109,14 @@ Véase un esquema de esta estructura en la figura~\ref{FigStructure}.
 	\psline(270,-72.5)(280,-72.5)
 	\rput(120,-30){$N$-th experiment}
 	\psframe[linestyle=dotted](95,-85)(275,-25)
-}{Diagram of the interactions among CALIBRATOR, the input files and the
+}{Flowchart of the interactions among CALIBRATOR, the input files and the
 simulation and evaluation programs to produce an objective function value for
 each empirical parameters combination generated by the optimization algorithm}
 {FigStructure}
 
-Todo este proceso se repite
-para cada combinación de parámetros empíricos generada por el algoritmo de
-optimización. Además, CALIBRATOR paraleliza las simulaciones de manera
-automática usando todos los recursos disponibles de procesadores y computadores.
+The whole process is repeated for each combination of empirical parameters generated by the optimization algorithm. Furthermore, CALIBRATOR automatically parallelizes the simulations using all the available computing resources. Figure~\ref{FigStructure} is a sketch of the structure.
 
-El formato con el que deben definirse el \emph{main input file} así como el de
-los \emph{template files} se detalla en la siguiente subsección.
+The required format for the \emph{main input file} and the \emph{template files} are described in next subsection.
 
 \subsection{Input files}
 
@@ -1293,21 +1283,13 @@ in the simulation input files.
 
 \subsubsection{Template files}
 
-Debemos crear $N\times n$ template files que servirán para reproducir cada
-fichero de entrada asociado a cada experimento. Una vez que el algoritmo de
-optimización ha generado un conjunto de $M$ parámetros empíricas, cada uno de
-estos template files es analizado sintácticamente por CALIBRATOR para generar
-los ficheros de entrada para el programa de simulación. Éstos serán una copia
-del template file pero donde se sustituyen las siguientes etiquetas clave:
+Then $N\times n$
+template files must be generated to reproduce every input file associated to every experiment. All the template files are sintactically analyzed by CALIBRATOR to replace the labels as follows in order to generate the simulation program input files:
 \begin{description}
-\item[@variableX@]: se sustituye por la etiqueta asociada a ese parámetro
-	empírico que se define en el \emph{main input file};
-\item[@valueX@]: se sustituye por el valor asociado a ese parámetro empírico que
-	proporciona el algoritmo de optimización usando el formato definido en el
-	\emph{main input file};
+\item[@variableX@]: is replaced by the label associated to this empirical parameter defined in \emph{main input file};
+\item[@valueX@]: is replaced by the value associated to that empirical parameter calculated by the optimization algorithm using the format defined in \emph{main input file};
 \end{description}
-donde en ambos casos $X$ corresponde al ordinal del correspondiente parámetro
-empírico.
+where in both cases $X$ corresponds to the ordinal of the corresponding empirical parameter.
 
 \section{Practical applications}
 
@@ -1331,7 +1313,7 @@ Spain, in the province of Huesca. It consists of the first 13657 meters of the
 Canal de Violada. The studied stretch was designed for a maximum discharge of
 6~m$^3$/s. This stretch delivers water to three irrigation communities:
 Almudévar, Gurrea and El Temple. In figure~\ref{FigViolada} a diagram with the
-gates and spillways positions is shown.
+gates and spillways locations is shown.
 \psset{xunit=9mm,yunit=6mm}
 \PSPICTURE{-1}{-2}{11.4}{2}
 {
@@ -1359,13 +1341,13 @@ gates and spillways positions is shown.
 	\rput(8.75,-0.7){7 m}
 	\psline{<->}(9,-0.3)(10,-0.3)
 	\rput(9.5,-0.7){27 m}
-}{Diagram showing the position of the two spillways and the three gates on the
+}{Sketch showing the position of the two spillways and the three gates on the
 Canal de Violada. The dimensions are not on scale for a better visualization}
 {FigViolada}
 
 Two cross sections can be distinguished in the channel, the new initial reach
 and the last 304 meters. Both share the same bottom slope, $S_0$ = 0.00059 but
-differ in the cross section dimensions, as shown in
+they differ in the cross section dimensions, as shown in
 Figure~\ref{FigCrossSections}, and in the value of the Gauckler-Manning
 roughness coefficient (0.014 and 0.02~s~m$^{-1/3}$ for the first
 and the final reaches respectively). The values correspond to polished and
@@ -1406,13 +1388,13 @@ The initial conditions for the canal were a steady state with a discharge of
 the required daily discharge to the three important irrigation gates as well as
 to keep a constant discharge of 2 m$^3$/s at the outlet gate. It is important to 
 note that Gurrea and Temple gates are only separated by a few meters and are located
-in the nearby of the outlet gate.
+near the outlet gate.
 
 The required discharge at every gate for a modernization scenario to sprinkler irrigation was obtained after an elaborate 
 field analysis. Taking into account the crop distribution, soil water retention properties, 
 characteristics of the parcels and hydrants, the electricity cost depending on the hour of the day and the design of a 
 reservoir in the area, seven different scenarios were obtained as a function of the historical irrigation requirements for 
-the same period using real data \citet{Zapata09}. A 14 days period in one of the epochs with higher demand was selected from
+the same period using real data \citet{Zapata09}. A 14 days period in one of the periods with higher demand was selected from
 one of these scenarios in order to optimize the channel management.
 
 Each optimization, which executed a total number of 1024 simulations, took 
@@ -1422,11 +1404,11 @@ Table~\ref{TabSwigs} displays the results obtained for the optimal coefficient
 values and the corresponding value of the evaluation function, where the error
 norm is defined as the root mean square error between demanded discharges and
 supplied discharges multiplied by a factor of 10 in cases of channel overflow.
-The results are similar among the different optimization methods.
+The results are similar when comparing the different optimization methods.
 Nevertheless, it can be observed that the iterative algorithm, applied to the 
 brute force methods, has improved slightly the results for this canal management.
-It is also remarkable the fact that the genetic algorithm has obtained the best
-and the worst of the results, from which it can be deduced that this method
+It is also remarkable that the genetic algorithm obtains the best
+and the worst of the results, hence indicating that this method
 is sensitive to the election of the genetic parameters. With the channel
 guards management this error norm is much higher, due not only to a greater error
 in the desired outlet discharge but also to a slight overflow in one of the 
@@ -1472,10 +1454,10 @@ spillways of the canal.
 {TabSwigs}
 
 Figure~\ref{FigSwigs} shows the supplied discharges at the inlet and at the different
-gates using the default schedule developed by the channel guards and that one 
+gates using the default schedule developed by the channel guards and that 
 obtained in the best of our simulations. It can be observed that in both cases 
 the desired discharge at the different gates in Almudévar, Gurrea and El Temple is supplied,
-being propagated downstream some transitory peaks, affecting the outlet discharge.
+with some transient peaks, affecting the outlet discharge.
 This work confirmed that an optimized management reduces remarkably the amplitude and the duration of these undesired peaks.
 
 \FIGII{Violada-contributions.eps}{Violada-optimized-contributions.eps}
@@ -1691,14 +1673,9 @@ increases or decreases linearly (see figure~\ref{FigPivotVelocity}).
 
 The start and stop times of each tower were measured in four experiments of 24 hours with the pivot working in cycles of 71s at 100\%, 52\%, 42\% y 27.48\%. The times were grouped in four histograms and the evaluation function was defined as the mean square error between the measured and simulated histograms.
 Table~\ref{TabPivot} shows some of the results obtained in a total of 10000 simulations of each of the four experiments, taking around 50 minutes each in the same laptop computer used before.
-%%%%%%%%%%%%%%%%%%%%%%
-Los mejores resultados se obtuvieron con los algoritmos genéticos. Llama la
-atención que, como en el resto de casos presentados, el algoritmo genético
-obtiene mejores resultados con los valores más bajos de los coeficientes $R$.
-Por otro lado, el algoritmo iterativo ha mejorado considerablemente los
-resultados cuando se ha aplicado al método de Monte-Carlo pero ha perjudicado
-ligeramente al método de barrido.
-%%%%%%%%%%%%%%%%%%%%%%
+
+The best results where obtained with the genetic algorithms. It is surprising that in this case again the genetic algorithm produces the results with the lowest $R$ coefficients. It is also worth noting that the iterative algorithm improves the results when applied to the Monte Carlo method but it makes things slightly worse in the sweep method.
+
 
 \TABLE{\scriptsize}{cccc}
 {
@@ -1745,14 +1722,17 @@ ligeramente al método de barrido.
 	\\ \hline
 }{Optimal parameters and values of the evaluation function in the four towers pivot case in \citet{Ouazaa15} using different optimization algorithms implemented in CALIBRATOR with the same number of total simulations}{TabPivot}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%
 In figures \ref{FigPivot100} to \ref{FigPivot27} the histograms of the number
 of measured and simulated starts and stops are represented for the different
-machine workings. Nótese que las figuras no se han representado en una escala
+machine workings.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Nótese que las figuras no se han representado en una escala
 uniforme para una mejor visualización de las diferencias entre los resultados
-medidos y simulados. El acuerdo entre los resultados medidos y simulados, con
-los parámetros calibrados con el algoritmo genético óptimo, debe considerarse
-razonable dada la extrema caoticidad del movimiento. En todo caso, se pudo
+medidos y simulados.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The agreement between measured and simulated data when using the parameters calibrated with the optimal genetic algorithm must be considered reasonable taking into account the chaotic character of the movement.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+En todo caso, se pudo
 estimar que la pérdida de uniformidad en el reparto del agua asociada al
 movimiento no uniforme de las torres puede considerarse despreciable.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1786,9 +1766,7 @@ The features and design of CALIBRATOR, a new software tool to enable efficient c
 
 The new tool allows an efficient performance, making the most of the processors present in a single computer and allowing an easy extension to parallelization distributed among different computers. In whole, a considerable data capacity and computational speed are achieved with independence of the physical problem under study or the algorithm chosen.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-En los casos analizados, los diferentes algoritmos de optimización implementados han obtenido resultados similares con el mismo número total de simulaciones. No obstante, el algoritmo iterativo aplicado con el método de Monte-Carlo y el algoritmo genético han mejorado ligeramente los resultados de los métodos de fuerza bruta. El algoritmo iterativo no ha mejorado significativamente en cambio los resultados del método de barrido. En cuanto al algoritmo genético siempre ha dado mejores resultados con los valores más bajos ensayados para los coeficientes $R$. Esto parece indicar que la eficacia de este algoritmo es dependiente del valor de estos coeficientes y que una mayor investigación sobre su valor óptimo debería ser realizada.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+In the cases analyzed, all the optimization algorithms implemented have reached similar results in the same total number of simulations. However, the iterative algorithm applied in combination with the Monte-Carlo method and the genetic algorithm leads to slightly better results than the brute force technique. On the other hand, the iterative algorithm does not improve significatively the sweep method results. It is important to stress that the genetic algorithm has provided always the best results with the lowest values of the $R$ coefficient. This indicates that the efficiency of the genetic algorithm depends on the values of that coefficient and requires further research. 
 
 CALIBRATOR has proved to be flexible in the adaptation to the syntax of diverse simulation codes and useful in the calibration and optimization of parameters involved in rather different irrigation problems. In the present work it has been shown successful for practical applications such as open channel flow management, furrow fertigation, sprinkler irrigation and sprinkler tower movement design.
 
