@@ -33,7 +33,6 @@ AC_PREREQ([2.67])
 AC_INIT([calibrator], [0.4.5], [https://github.com/jburguete/calibrator])
 
 # Checks for operative systems
-openbsd=0
 AC_CANONICAL_SYSTEM
 AM_INIT_AUTOMAKE
 AC_MSG_NOTICE([Build: $build])
@@ -67,53 +66,31 @@ fi
 AC_MSG_NOTICE([prefix=$PREFIX])
 
 # Checks for programs
-if test $openbsd = 1; then
-	AC_MSG_NOTICE([OpenBSD])
-	# On OpenBSD mpicc uses very old GCC compiler
-	# then is better: egcc `mpicc -showme:compile` `mpicc -showme:link`
-	if test -x "$PREFIX/bin/mpicc"; then
-		OPENBSD_FLAGS="`mpicc -showme:compile` `mpicc -showme:link`"
-	else
-		OPENBSD_FLAGS=""
-	fi
-	AC_MSG_NOTICE([MPI flags: $OPENBSD_FLAGS])
-	# Unable to use AC_PROG_CC([egcc gcc clang]) on conditional statements
-	# Trying to recover
-	if test -x "$PREFIX/bin/egcc"; then
-		CC="egcc"
-	elif test -x "$PREFIX/bin/gcc"; then
-		CC="gcc"
-	elif test -x "$PREFIX/bin/clang"; then
-		CC="clang"
-	elif test -x "/usr/bin/gcc"; then
-		CC="gcc"
-	else
-		AC_MSG_ERROR([No C compiler])
-	fi
-	CC="$CC $OPENBSD_FLAGS"
-	AC_MSG_NOTICE([Compiler: $CC])
-else
-	# Unable to use AC_PROG_CC([mpicc gcc clang]) on conditional statements
-	# Trying to recover
-	if test -x "/cm/shared/apps/openmpi/gcc/64/1.6.4/bin/mpicc"; then
-		CC="mpicc"
-	elif test -x "$PREFIX/bin/mpicc"; then
-		CC="mpicc"
-	elif test -x "$PREFIX/bin/gcc"; then
-		CC="gcc"
-	elif test -x "$PREFIX/bin/clang"; then
-		CC="clang"
-	elif test -x "/usr/bin/gcc"; then
-		CC="gcc"
-	else
-		AC_MSG_ERROR([No C compiler])
-	fi
-fi
+AC_PROG_CC([egcc mpicc gcc clang])
 AC_MSG_NOTICE([Compiler: $CC])
 AC_PROG_MAKE_SET
 AC_LANG([C])
 PKG_PROG_PKG_CONFIG
 
+# Checking MPI
+if test $CC = "mpicc"; then
+	AC_MSG_NOTICE([checking for MPI... yes])
+	AC_SUBST(MPI, "-DHAVE_MPI=1")
+elif test $CC = "egcc"; then
+	if test -x "/usr/local/bin/mpicc"; then
+		AC_MSG_NOTICE([checking for MPI... yes])
+		AC_SUBST(MPI, "-DHAVE_MPI=1")
+		CPPFLAGS="$CPPFLAGS `mpicc -showme:compile`"
+		LDFLAGS="$LDFLAGS `mpicc -showme:link`"
+	else
+		AC_MSG_NOTICE([checking for MPI... no])
+		AC_SUBST(MPI, "")
+	fi
+else
+	AC_MSG_NOTICE([checking for MPI... no])
+	AC_SUBST(MPI, "")
+fi
+	
 # Checks for libraries
 AC_SEARCH_LIBS([sqrt], [m])
 PKG_CHECK_MODULES([GSL], [gsl])
