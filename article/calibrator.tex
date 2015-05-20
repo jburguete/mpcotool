@@ -1021,16 +1021,9 @@ There are two options: either the simulator compares directly with the
 \emph{experimental data file}, hence generating a file with the value of the error, or
 an external program called \emph{evaluator} will compare with the
 \emph{experimenta data file} to produce the error value. In both cases this error value
-is saved in a \emph{objective value file}.
-%%%%%%%%%%%%%%
-Para cada experimento se obtiene por tanto un valor objetivo. El valor final de
-la función objetivo asociada al conjunto de $N$ experimentos se calcula como la
-raíz cuadrada de la media de los cuadrados de los valores objetivo asociados a
-cada experimento.
-%%%%%%%%%%%%%%
-Eventually, each \emph{objective value file} associated with the $N$ experiments
-is combined by means of mean square error.
-Figure~\ref{FigStructure} is a sketch of the structure.
+is saved in a \emph{objective value file}. For each experiment, an ojective value
+is obtained. The final value of the objective function associated with the $N$ experiments
+is calculated by means of mean square error. Figure~\ref{FigStructure} is a sketch of the structure.
 \psset{xunit=0.4mm,yunit=0.4mm}
 \PSPICTURE{-20}{-90}{280}{55}
 {
