@@ -89,8 +89,8 @@
 
 \begin{document}
 
-\title{CALIBRATOR: a software to perform optimizations or calibrations of
-empirical parameters}
+\title{CALIBRATOR: an open source software to perform optimizations or
+calibrations of empirical parameters}
 
 \author[eead,bifi]{J. Burguete\corref{cor1}}
 \ead{jburguete@eead.csic.es}
@@ -1750,17 +1750,10 @@ The best results where obtained with the genetic algorithms. Note that in this c
 In figures \ref{FigPivot100} to \ref{FigPivot27} the histograms of the number
 of measured and simulated starts and stops are represented for the different
 machine workings.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Nótese que las figuras no se han representado en una escala
-uniforme para una mejor visualización de las diferencias entre los resultados
-medidos y simulados.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Note that the figures are not represented with uniform scales to better
+visualization of the differences among measured and simulated results.
 The agreement between measured and simulated data when using the parameters calibrated with the optimal genetic algorithm must be considered reasonable taking into account the chaotic character of the movement.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%
-En todo caso, se pudo
-estimar que la pérdida de uniformidad en el reparto del agua asociada al
-movimiento no uniforme de las torres puede considerarse despreciable.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%
+However, coupling a sprinkler irrigation model, it could be concluded that losses in water distribution uniformity associated to the tower movement variabilities can be considered negligible \citep{Ouazaa15}.
 
 \FIGIV{pivot-measured-starts-100.eps}{pivot-measured-stops-100.eps}
 {pivot-simulated-starts-100.eps}{pivot-simulated-stops-100.eps}
@@ -1787,7 +1780,7 @@ simulated starts and (bottom right)simulated stops for the pivot towers working 
 
 \section{Conclusions}
 
-The features and design of CALIBRATOR, a new software tool to enable efficient calibration and optimization of empirical coefficients present in simulation models has been presented. The program includes the option of two classic brute force models, the sweep and the Monte-Carlo method, both supplied with the option of an iterative procedure to improve convergence. Also, CALIBRATOR offers the alternative of a genetic algorithm as implemented in GENETIC.
+The features and design of CALIBRATOR, a new open source software tool to enable efficient calibration and optimization of empirical coefficients present in simulation models, has been presented. The program includes the option of two classic brute force models, the sweep and the Monte-Carlo method, both supplied with the option of an iterative procedure to improve convergence. Also, CALIBRATOR offers the alternative of a genetic algorithm as implemented in GENETIC.
 
 The new tool allows an efficient performance, making the most of the processors present in a single computer and allowing an easy extension to parallelization distributed among different computers. In whole, a considerable data capacity and computational speed are achieved with independence of the physical problem under study or the algorithm chosen.
 
