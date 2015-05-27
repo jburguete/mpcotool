@@ -4,6 +4,7 @@
 \usepackage{listings}
 \usepackage{pstricks}
 \usepackage{multido}
+\usepackage{amsfonts}
 
 \usepackage{lineno}
 \linenumbers
@@ -81,6 +82,9 @@
 	\end{figure}
 }
 
+\newcommand{\ABS}[1]{\left|#1\right|}
+\newcommand{\PA}[1]{\left(#1\right)}
+
 \bibliographystyle{elsarticle-harv}
 
 \begin{document}
@@ -152,17 +156,48 @@ Distribution) type license.
 \section{Introduction}
 
 Calibration is related to the optimization process of finding the minimum of a function usually defined as a relation between the desired quantity and the simulated one. There are many fields where calibration is required. This process is more necessary when simplifications on models are done. Deterministic models are sensitive to parameters and their ability increases when the quality of the calibration improves. In some way, the model may acquire a true predictive character when calibrated. The calibration can be understood as an optimization process where the error between the estimation of the model and the data set is minimized.
+
 On the other hand, there are many phenomena that can be modelled using differential equations (PDEs) that participate in conservation laws. The application of mathematical models to describe physical processes is helpful to perform simulations of possible scenarios using computational facilities. Despite the quality of these mathematical models for predictive purposes, calibration is usually required to provide them useful properties. The application of the Shallow Water Equations (SWE) for the simulation of open-channel flow, for instance, has been widely used, in particular for irrigation water delivery analysis. To complete the equations with regulation elements, it is accepted that some simplifications can be applied. These simplifications usually include parameters that make possible to model simpler the phenomena that occur on those regulation elements.
+
 Because of the mathematical model, PDE constrained optimization may be performed using two optimizer families: gradient based methods and gradient-free optimizers. While the latter do not require gradient information to perform the calibration, the former one must have information about the variation of the objective with respect to the controlled variable 
 
 CALIBRATOR \citep{CalibratorGit} is an open source software to perform
 optimizations or calibrations of empirical parameters with a BSD type license.
 
+\section{Calibration and optimization}
+
+Calibration can be considered a particular case of optimization, probably the most widely applied. It usually deals with setting the correct parameters that allow to represent correctly the behavior of a component or model. It is very common to describe physical phenomena using complex mathematical models including all the possible scales. Nevertheless, it is very useful to simplify them including adjustable parameters that enclose smaller scales.
+
+Optimization can be understood as the minimization process of some functional that evaluates the objective of a model. Therefore, a functional $J$ must be defined in order to evaluate the deviation between your model results $\mathbf{x}$ and your objectives $\mathbf{x}_o$. The root mean square deviation (RMSD) for example measures the average distance between both:
+\EQ
+{
+	J \equiv J\PA{\mathbf{x}}
+	=\sqrt{\frac{1}{n}\,\sum_i^n\ABS{x_i-x_{o,i}}^2},
+}{EqRMSD}
+with $\mathbf{x},\mathbf{x}_o\in\mathbb{R}^n$ real vectors of $n\ge 1$
+components ($x_i$ and $x_{o,i}$ respectively) and
+$J:\mathbb{R}^n \rightarrow \mathbb{R}$. 
+%%%%%%%%%%%%%%
+Éste es uno de los ejemplos más usados de función objetivo, aunque existen
+infinitas formas de definir $J$, por ejemplo penalizando más o menos distintas
+variables según sean nuestros objetivos.
+%%%%%%%%%%%%%%
+The aim is to find the minimum of this functional:
+\EQ{\min_{\mathbf{x}}\;J\PA{\mathbf{x}}.}{EqFunctionalMin}
+
+In order to meet the optimal solution it is
+important to keep in mind that $\mathbf{x}\equiv\mathbf{x}\PA{\mathbf{y}}$ is directly or indirectly related with another tunable quantity: $\mathbf{y}\in\mathbb{R}^n$, the set of parameters which can be optimized in the model. The complexity of the optimization process comes from the relation that may be established between the model and this tuneable set of parameters. Bearing in mind that relation, the optimization is the minimization of the functional by means of the modification of those parameters. Moreover, those parameters are usually defined in a range $y_i\in\PA{y_{i,min},\,y_{i,max}}$ so the minimization problem is formally defined as:
+\EQ
+{
+	\mathbf{y}_o=\arg\min_{\mathbf{y}}J\PA{\mathbf{x}\PA{\mathbf{y}}},
+}{EqParametersOptimal}
+being $\mathbf{y}_o$ the optimum set of parameters obtained by the model. CALIBRATOR allows to achieve them by means of different methods. In addition, the metric used to evaluate the functional is open and may be defined by the user.
+
 \section{Methods}
 
-The following notation has been used:
+The following notation will be used:
 \begin{description}
-	\item[$N_{simulations}$]: number of simulations made on each step.
+	\item[$N_{simulations}$]: number of simulations made on each iteration.
 	\item[$N_{iterations}$]: number of iterations on iterative methods.
 	\item[$N_{total}$]: total number of simulations.
 \end{description}
@@ -172,13 +207,12 @@ $N_{iterations}=1\;\Rightarrow\;N_{total}=N_{simulations}$.
 
 \subsection{Sweep brute force method}
 
-In the sweep method, the domain defined by the extreme values of the variables to optimize is divided in regular intervals. Then, a simulation is performed using each of the resulting combinations. (NO SE ENTIENDE). The sketch of an example is shown
-in figure~\ref{FigSweep}.
-
-The total number of required simulations is:
-\EQ{N_{simulations}=x_{sweeps}\times y_{sweeps}\times\cdots,}
+The \textit{sweep brute force method} finds the optimal set of parameters within a solution region by dividing it into regular subdomains. To find the optimal solution, the domain interval $x_i \in \PA{x_{i,min},\,x_{i,max}}$ is first defined for each variable $x_i$. Then, a regular partition in  $N_{x,i}$ subintervals is made. Taking into account this division of the solution space, the number of required simulations is:
+\EQ{N_{simulations}=N_{x,1}\times N_{x,2}\times\cdots,}
 {EqNSweeps}
-being $x_{sweeps}$ the number of sweeps in the variable $x$.
+where $N_{x,i}$ is the number of sweeps in the variable $x_i$.
+
+In figure~\ref{FigSweep} the $(x,y)$ domain is defined by the intervals $x\in\PA{x_{min},\,x_{max}}$ and $y \in \PA{y_{min},\,y_{max}}$. Both $x$ and $y$ intervals are divided into 5 regions with $N_{x}=N_{y}=5$. The optimal will be found within the region by evaluating the error of each $\PA{x_i,\,y_i}$ set of parameters requiring 25 evaluations. Note that the computational requirement increases strongly as the number of variables grow.
 
 \PICTURE{210}{200}
 {
@@ -198,7 +232,7 @@ being $x_{sweeps}$ the number of sweeps in the variable $x$.
 	\qbezier[10](20,160)(35,160)(50,160)
 	\put(0,157){$y_{\max}$}
 }{Diagram showing an example of application of the sweep brute force method
-with two variables for $x_{sweeps}=y_{sweeps}=5$}{FigSweep}
+with two variables for $N_x=N_y=5$}{FigSweep}
 
 \subsection{Monte-Carlo method}
 
@@ -372,13 +406,13 @@ Figure~\ref{FigIterative} contains an example of the procedure used by the the i
 	\qbezier[35](20,66.8)(77.05,66.8)(134.1,66.8)
 	\put(0,63.8){$y_{\min}^2$}
 }{Diagram representing an example of the iterative algorithm applied to a
-Monte-Carlo brute force method with two variables for $N_{simulations}= 25$ and
-two iterations}{FigIterative}
+Monte-Carlo brute force method with two variables for $N_{simulations}= 25$,
+$N_{bests}=4$ and two iterations}{FigIterative}
 
 \subsection{Genetic method}
 
 CALIBRATOR also offers the use of a genetic method GENETIC \citep{genetic} with its default algorithms.
-They are based on the ideas in \citet{gaul}, but have been fully programmed involving more modern external libraries.
+They are based on the ideas in \citet{gaul}, but have been fully reprogrammed involving more modern external libraries.
 The code in GENETIC is also open source under BSD license. Figure~\ref{FigGeneticFlow} shows the flowchart of the genetic method implemented in GENETIC.
 
 \psset{xunit=0.5mm,yunit=0.5mm}
@@ -913,7 +947,7 @@ example.
 }{Example of the generation of a new individual from a parent by adaptation}
 {FigAdaptation}
 
-This algorithm is rather similar to the mutation algorithm previously described but, since the probability to affect bits less significant is larger, so is the probability to produce small changes.
+This algorithm is rather similar to the mutation algorithm previously described but, since the probability to affect bits less significant is larger, so is the probability to produce smaller changes.
 
 \section{Implementation}
 
@@ -922,10 +956,9 @@ This algorithm is rather similar to the mutation algorithm previously described 
 CALIBRATOR uses the following open source external libraries:
 
 \begin{itemize}
-\item\citet{libxml}: Library required to read the input file in XML format.
-\item\citet{gsl}: Scientific library required to generate the pseudo-random numbers used by 
-the genetic algorithms and the Monte-Carlo method.
-\item\citet{glib}: Library required to implement some data,	to parse the input file templates and the routines used to parallelize the usage of the computer's processors.
+\item\citet{libxml}: Library required to read the main input file in XML format.
+\item\citet{gsl}: Scientific library required to generate the pseudo-random numbers used by the genetic and the Monte-Carlo algorithms.
+\item\citet{glib}: Library required to implement some data types, to parse the input file templates and the routines used to parallelize the usage of the computer's processors.
 \item\citet{openmpi} or \citet{mpich}: Optional libraries. When installed, one
 of them is used to allow parallelization in multiple computers.
 \end{itemize}
@@ -971,7 +1004,7 @@ $ ./configure
 $ make
 \end{lstlisting}
 
-Some systems (such OpenBSD) might require extra options. In those cases follow the README files in both repositories.
+Some systems (such OpenBSD) might require extra options. In those cases follow the instructions of the README files in both repositories.
 
 \subsection{Command line format}
 
@@ -1016,12 +1049,12 @@ where both the number of experiments and the number of required input files
 are specified. Furthermore, it contains the values of the empirical parameters
 and the chosen optimization algorithm.
 Then, CALIBRATOR reads the $N\times n$ templates to build the simulator input files
-replacing labels by empirical parameter values created by the optimization algorithm.
+replacing key labels by empirical parameter values created by the optimization algorithm.
 There are two options: either the simulator compares directly with the
 \emph{experimental data file}, hence generating a file with the value of the error, or
 an external program called \emph{evaluator} will compare with the
-\emph{experimenta data file} to produce the error value. In both cases this error value
-is saved in a \emph{objective value file}. For each experiment, an ojective value
+\emph{experimental data file} to produce the error value. In both cases this error value
+is saved in an \emph{objective value file}. For each experiment, an objective value
 is obtained. The final value of the objective function associated with the $N$ experiments
 is calculated by means of mean square error. Figure~\ref{FigStructure} is a sketch of the structure.
 \psset{xunit=0.4mm,yunit=0.4mm}
@@ -1667,8 +1700,7 @@ increases or decreases linearly (see figure~\ref{FigPivotVelocity}).
 The start and stop times of each tower were measured in four experiments of 24 hours with the pivot working in cycles of 71s at 100\%, 52\%, 42\% y 27.48\%. The times were grouped in four histograms and the evaluation function was defined as the mean square error between the measured and simulated histograms.
 Table~\ref{TabPivot} shows some of the results obtained in a total of 10000 simulations of each of the four experiments, taking around 50 minutes each in the same laptop computer used before.
 
-The best results where obtained with the genetic algorithms. It is surprising that in this case again the genetic algorithm produces the results with the lowest $R$ coefficients. It is also worth noting that the iterative algorithm improves the results when applied to the Monte Carlo method but it makes things slightly worse in the sweep method.
-
+The best results where obtained with the genetic algorithms. Note that in this case again the genetic algorithm produces the results with the lowest $R$ coefficient values. It is also worth noting that the iterative algorithm improves the results when applied to the Monte Carlo method but it makes things slightly worse in the sweep method.
 
 \TABLE{\scriptsize}{cccc}
 {
@@ -1763,9 +1795,7 @@ In the cases analyzed, all the optimization algorithms implemented have reached 
 
 CALIBRATOR has proved to be flexible in the adaptation to the syntax of diverse simulation codes and useful in the calibration and optimization of parameters involved in rather different irrigation problems. In the present work it has been shown successful for practical applications such as open channel flow management, furrow fertigation, sprinkler irrigation and sprinkler tower movement design.
 
-
 \section*{References}
 \bibliography{bib}
 
 \end{document}
-
