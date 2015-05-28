@@ -186,7 +186,7 @@ The aim is to find the minimum of this functional:
 \EQ{\min_{\mathbf{x}}\;J\PA{\mathbf{x}}.}{EqFunctionalMin}
 
 In order to meet the optimal solution it is
-important to keep in mind that $\mathbf{x}\equiv\mathbf{x}\PA{\mathbf{y}}$ is directly or indirectly related with another tunable quantity: $\mathbf{y}\in\mathbb{R}^n$, the set of parameters which can be optimized in the model. The complexity of the optimization process comes from the relation that may be established between the model and this tuneable set of parameters. Bearing in mind that relation, the optimization is the minimization of the functional by means of the modification of those parameters. Moreover, those parameters are usually defined in a range $y_i\in\PA{y_{i,min},\,y_{i,max}}$ so the minimization problem is formally defined as:
+important to keep in mind that $\mathbf{x}\equiv\mathbf{x}\PA{\mathbf{y}}$ is directly or indirectly related with another tunable quantity: $\mathbf{y}\in\mathbb{R}^m$, the set of $m$ parameters which can be optimized in the model. The complexity of the optimization process comes from the relation that may be established between the model and this tuneable set of parameters. Bearing in mind that relation, the optimization is the minimization of the functional by means of the modification of those parameters. Moreover, those parameters are usually defined in a range $y_i\in\PA{y_{i,min},\,y_{i,max}}$ so the minimization problem is formally defined as:
 \EQ
 {
 	\mathbf{y}_o=\arg\min_{\mathbf{y}}J\PA{\mathbf{x}\PA{\mathbf{y}}},
