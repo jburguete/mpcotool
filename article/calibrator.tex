@@ -166,7 +166,7 @@ optimizations or calibrations of empirical parameters with a BSD type license.
 
 \section{Calibration and optimization}
 
-Calibration can be considered a particular case of optimization, probably the most widely applied. It usually deals with setting the correct parameters that allow to represent correctly the behavior of a component or model. It is very common to describe physical phenomena using complex mathematical models including all the possible scales. Nevertheless, it is very useful to simplify them including adjustable parameters that enclose smaller scales.
+Calibration can be considered a particular case of optimization \citep{WrightNocedal99}, probably the most widely applied. It usually deals with setting the correct parameters that allow to represent correctly the behavior of a component or model. It is very common to describe physical phenomena using complex mathematical models including all the possible scales. Nevertheless, it is very useful to simplify them including adjustable parameters that enclose smaller scales.
 
 Optimization can be understood as the minimization process of some functional that evaluates the objective of a model. Therefore, a functional $J$ must be defined in order to evaluate the deviation between your model results $\mathbf{x}$ and your objectives $\mathbf{x}_o$. The root mean square deviation (RMSD) for example measures the average distance between both:
 \EQ
@@ -177,16 +177,14 @@ Optimization can be understood as the minimization process of some functional th
 with $\mathbf{x},\mathbf{x}_o\in\mathbb{R}^n$ real vectors of $n\ge 1$
 components ($x_i$ and $x_{o,i}$ respectively) and
 $J:\mathbb{R}^n \rightarrow \mathbb{R}$. 
-
 This is one of the most used examples with the objective function, although 
 infinite ways of defining $J$ can be used, for example penalizing different variables
 with different weights according to their importance to our objectives.
-
 The aim is to find the minimum of this functional:
 \EQ{\min_{\mathbf{x}}\;J\PA{\mathbf{x}}.}{EqFunctionalMin}
 
 In order to meet the optimal solution it is
-important to keep in mind that $\mathbf{x}\equiv\mathbf{x}\PA{\mathbf{y}}$ is directly or indirectly related with another tunable quantity: $\mathbf{y}\in\mathbb{R}^m$, the set of $m$ parameters which can be optimized in the model. The complexity of the optimization process comes from the relation that may be established between the model and this tuneable set of parameters. Bearing in mind that relation, the optimization is the minimization of the functional by means of the modification of those parameters. Moreover, those parameters are usually defined in a range $y_i\in\PA{y_{i,min},\,y_{i,max}}$ so the minimization problem is formally defined as:
+important to keep in mind that $\mathbf{x}\equiv\mathbf{x}\PA{\mathbf{y}}$ may be directly or indirectly related with another tunable quantity: $\mathbf{y}\in\mathbb{R}^m$  ($m$ parameters which can be optimized in the model). The complexity of the optimization process comes from the relation that may be established between the model and this tuneable set of parameters. Bearing in mind that relation, the optimization is the minimization of the functional by means of the modification of those parameters. Moreover, those parameters are usually defined in a range $y_i\in\PA{y_{i,min},\,y_{i,max}}$ so the minimization problem is formally defined as:
 \EQ
 {
 	\mathbf{y}_o=\arg\min_{\mathbf{y}}J\PA{\mathbf{x}\PA{\mathbf{y}}},
@@ -979,7 +977,7 @@ software distributions or versions but it has not been tested.
 \footnotetext[1]{Windows 7 and Windows 8.1 are trademarks of Microsoft
 Corporation.}
 
-In order to build the executable file from the source code, a C compiler (\citet{gcc} or \citet{clang}), the configuration systems \citet{autoconf} and \citet{automake}, the executable creation control program \citet{gnumake} and the external libraries previously listed are required. When using Microsoft Windows systems, the indications provided in \citet{install-unix} can be followed in order to install all these utilities.
+In order to build the executable file from the source code, a C compiler (\citet{gcc} or \citet{clang}), the configuration systems \citet{autoconf} and \citet{automake}, the executable creation control program \citet{gnumake} and the external libraries previously listed are required. The indications provided in \citet{install-unix} can be followed in order to install all these utilities.
 
 Once all the tools installed, the GENETIC source code must be downloaded and it must be compiled following on a terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
@@ -1309,7 +1307,7 @@ in the simulation input files.
 
 \subsubsection{Template files}
 
-Then $N\times n$
+$N\times n$
 template files must be generated to reproduce every input file associated to every experiment. All the template files are sintactically analyzed by CALIBRATOR to replace the labels as follows in order to generate the simulation program input files:
 \begin{description}
 \item[@variableX@]: is replaced by the label associated to this empirical parameter defined in \emph{main input file};
@@ -1787,6 +1785,14 @@ The new tool allows an efficient performance, making the most of the processors 
 In the cases analyzed, all the optimization algorithms implemented have reached similar results in the same total number of simulations. However, the iterative algorithm applied in combination with the Monte-Carlo method and the genetic algorithm leads to slightly better results than the pure brute force techniques. On the other hand, the iterative algorithm does not improve significatively the sweep method results. It is important to stress that the genetic algorithm has provided always the best results with the lowest values of the $R$ coefficient. This indicates that the efficiency of the genetic algorithm depends on the values of that coefficient and requires further research. 
 
 CALIBRATOR has proved to be flexible in the adaptation to the syntax of diverse simulation codes and useful in the calibration and optimization of parameters involved in rather different irrigation problems. In the present work it has been shown successful for practical applications such as open channel flow management, furrow fertigation, sprinkler irrigation and sprinkler tower movement design.
+
+\section*{Acknowledgements}
+
+\begin{itemize}
+\item BIFI por usar el clúster?
+\item Arturo Giner y Guillermo Losilla por ayudarnos a manejar el clúster?
+\item Financiación de algún proyecto?
+\end{itemize}
 
 \section*{References}
 \bibliography{bib}
