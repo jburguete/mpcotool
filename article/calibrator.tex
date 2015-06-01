@@ -89,8 +89,8 @@
 
 \begin{document}
 
-\title{CALIBRATOR: an open source software to perform optimizations or
-calibrations of empirical parameters}
+\title{CALIBRATOR: an open source software to supply empirical parameters required
+in simulation models}
 
 \author[eead,bifi]{J. Burguete\corref{cor1}}
 \ead{jburguete@eead.csic.es}
@@ -139,14 +139,14 @@ formulation of numerical simulation models. The structure is such that it can be
 easily adapted to different simulation codes.
 One genetic algorithm, two brute force optimization algorithms (sweeps and
 Monte-Carlo) and an iterative algorithm to improve the brute force methods are
-included.
+included as alternative methods.
 Parallel computations are enabled in a simple way so that the work load can be
 distributed among the different processors available in one computer or in
 multiple computers of a cluster.
 The CALIBRATOR usage and possibilities are illustrated by showing four practical
-applications in agriculture: optimization of canal management and calibration of
-the empirical coefficients in a surface irrigation model, in a ballistic
-sprinkler irrigation model and in an irrigation engines movement model.
+applications in agriculture: optimization of canal management; calibration of
+the empirical coefficients in a surface irrigation model; application in a ballistic
+sprinkler irrigation model and optimization in an irrigation engines movement model.
 This software is open source and is distributed with a BSD (Berkeley Software
 Distribution) type license.
 \end{abstract}
@@ -155,14 +155,14 @@ Distribution) type license.
 
 \section{Introduction}
 
-Calibration is related to the optimization process of finding the minimum of a function usually defined as a relation between the desired quantity and the simulated one. There are many fields where calibration is required. This process is more necessary when simplifications on models are done. Deterministic models are sensitive to parameters and their ability increases when the quality of the calibration improves. In some way, the model may acquire a true predictive character when calibrated. The calibration can be understood as an optimization process where the error between the estimation of the model and the data set is minimized.
+Calibration is related to the optimization process of finding the minimum of a function usually defined as a relation between the desired value of a quantity and that supplied by a suitable simulation model. This process is more necessary when simplifications on models are done as some of the physical processes are hidden in black box parameters. Deterministic models are sensitive to parameters and their ability increases when the quality of the calibration improves. In some way, the model may acquire a true predictive character when calibrated. The calibration can be understood as an optimization process where the error between the estimation of the model and the data set is minimized.
 
-On the other hand, there are many phenomena that can be modelled using differential equations (PDEs) that participate in conservation laws. The application of mathematical models to describe physical processes is helpful to perform simulations of possible scenarios using computational facilities. Despite the quality of these mathematical models for predictive purposes, calibration is usually required to provide them useful properties. The application of the Shallow Water Equations (SWE) for the simulation of open-channel flow, for instance, has been widely used, in particular for irrigation water delivery analysis. To complete the equations with regulation elements, it is accepted that some simplifications can be applied. These simplifications usually include parameters that make possible to model simpler the phenomena that occur on those regulation elements.
+There are many fields where calibration is required.Whthin agriculture, there are many phenomena that can be modelled using differential equations (PDEs) that participate in conservation laws. The application of mathematical models to describe physical processes is helpful to perform simulations of possible scenarios using computational facilities. Despite the quality of these mathematical models for predictive purposes, calibration is usually required to provide them useful properties. The application of the Shallow Water Equations (SWE) for the simulation of open-channel flow, for instance, has been widely used, in particular for irrigation water delivery analysis. To complete the equations with regulation elements, it is accepted that some simplifications can be applied. These simplifications usually include parameters that make possible to model simpler the phenomena that occur on those regulation elements.
 
-Because of the mathematical model, PDE constrained optimization may be performed using two optimizer families: gradient based methods and gradient-free optimizers. While the latter do not require gradient information to perform the calibration, the former one must have information about the variation of the objective with respect to the controlled variable 
+Because of the mathematical model, PDE constrained optimization may be performed using two optimizer families: gradient based methods and gradient-free optimizers. While the latter do not require gradient information to perform the calibration, the former must have information about the variation of the objective with respect to the controlled variable 
 
 CALIBRATOR \citep{CalibratorGit} is an open source software to perform
-optimizations or calibrations of empirical parameters with a BSD type license.
+optimizations or calibrations of empirical parameters with a BSD type license. The present paper is organized as follows: First, the concepts of calibration and optimization are presented as the main goal. Then, the methods used to achieve them in CALIBRATOR are described. The tool structure and organization are next presented in detail. Finally the performance is demonstrated using four different applications of interest in agriculture and the conclusions are drawn.
 
 \section{Calibration and optimization}
 
@@ -193,14 +193,14 @@ being $\mathbf{y}_o$ the optimum set of parameters obtained by the model. CALIBR
 
 \section{Methods}
 
-The following notation will be used:
+The optimization methods implemented in CALIBRATOR are next presented. The following notation will be used:
 \begin{description}
 	\item[$N_{simulations}$]: number of simulations made on each iteration.
 	\item[$N_{iterations}$]: number of iterations on iterative methods.
 	\item[$N_{total}$]: total number of simulations.
 \end{description}
-On iterative methods $N_{total}=N_{simulations}\times N_{iterations}$.
-On pure brute force methods
+In iterative methods $N_{total}=N_{simulations}\times N_{iterations}$.
+In pure brute force methods
 $N_{iterations}=1\;\Rightarrow\;N_{total}=N_{simulations}$.
 
 \subsection{Sweep brute force method}
@@ -210,7 +210,7 @@ The \textit{sweep brute force method} finds the optimal set of parameters within
 {EqNSweeps}
 where $N_{x,i}$ is the number of sweeps in the variable $x_i$.
 
-In figure~\ref{FigSweep} the $(x,y)$ domain is defined by the intervals $x\in\PA{x_{min},\,x_{max}}$ and $y \in \PA{y_{min},\,y_{max}}$. Both $x$ and $y$ intervals are divided into 5 regions with $N_{x}=N_{y}=5$. The optimal will be found within the region by evaluating the error of each $\PA{x_i,\,y_i}$ set of parameters requiring 25 evaluations. Note that the computational requirement increases strongly as the number of variables grow.
+In figure~\ref{FigSweep} the $(x,y)$ domain is defined by the intervals $x\in\PA{x_{min},\,x_{max}}$ and $y \in \PA{y_{min},\,y_{max}}$. Both $x$ and $y$ intervals are divided into 5 regions with $N_{x}=N_{y}=5$. The optimal will be found within the region by evaluating the error of each $\PA{x_i,\,y_i}$ set of parameters hence requiring 25 evaluations. Note that the computational cost increases strongly as the number of variables grow.
 
 \PICTURE{210}{200}
 {
@@ -330,7 +330,10 @@ defined:
 in the subset of the best simulation results from the $j$ iteration.
 \item[$\displaystyle x_{\min}^b=\max_{i\in N_{best}}x_i^j$]: Minimum value of variable $x$ in the subset of the best simulation results from the $j$ iteration.
 \end{description}
-A new interval in the variable $x$ is defined to build the optimization values in the next iteration between:
+A new interval in the variable $x$ is defined to build the optimization values in the next $(j+1)$ iteration so that:
+\EQ{x_i^{j+1}\in\left[x_{\min}^{j+1},\;x_{\max}^{j+1}\right],}
+{EqIterationInterval}
+with:
 \[
 	x_{\max}^{j+1}=\frac{x_{\max}^b+x_{\min}^b
 		+\left(x_{\max}^b-x_{\min}^b\right)(1+tolerance)}{2},
@@ -339,11 +342,9 @@ A new interval in the variable $x$ is defined to build the optimization values i
 	x_{\min}^{j+1}=\frac{x_{\max}^b+x_{\min}^b
 		-\left(x_{\max}^b-x_{\min}^b\right)(1+tolerance)}{2},
 \]
-\EQ{x_i^{j+1}\in\left[x_{\min}^{j+1},\;x_{\max}^{j+1}\right],}
-{EqIterationInterval}
 being $tolerance$ a factor increasing the size of the variable intervals to
 simulate the next iteration.
-Figure~\ref{FigIterative} contains an example of the procedure used by the the iterative algorithm to modify the variables intervals in order to enforce convergence. 
+Figure~\ref{FigIterative} contains a sketch of the procedure used by the the iterative algorithm to modify the variables intervals in order to enforce convergence. 
 
 \PICTURE{210}{400}
 {
@@ -356,7 +357,7 @@ Figure~\ref{FigIterative} contains an example of the procedure used by the the i
 		\put(200,0){$x$}
 	}
 	\put(90,380){1st iteration}
-	\put(50,370){*: bests results}
+	\put(50,370){*: best results}
 	\put(69,359){\circle*{2}}
 	\put(163,273){\circle*{2}}
 	\put(108,267){*}
@@ -440,7 +441,7 @@ Figure~\ref{FigIterative} contains an example of the procedure used by the the i
 	\put(0,63.8){$y_{\min}^2$}
 }{Diagram representing an example of the iterative algorithm applied to a
 Monte-Carlo brute force method with two variables for $N_{simulations}= 25$,
-$N_{bests}=4$ and two iterations}{FigIterative}
+$N_{best}=4$ and two iterations}{FigIterative}
 
 The iterative algorithm can be also easily parallelized. However, this method is
 less parallelizable than pure brute force methods because the parallelization
@@ -783,7 +784,7 @@ In the mutation algorithm an identical copy of the parent genome is made except 
 
 The default algorithm in GENETIC, used by CALIBRATOR, selects two different parents with one of the least errors after the 
 complete simulation of one generation. 
-A new individual is then generated by sharing the common bits of both parents and a random election in the others.
+A new individual is then generated by sharing the common bits of both parents and a random choice in the others.
 The new child has the same number of bits as the parents and different genome. Figure~\ref{FigReproduction} shows a sketch
 of the algorithm.
 
@@ -904,10 +905,10 @@ reproduction in the GENETIC default algorithm. Note that the identical bits in b
 \subsubsection{Adaptation algorithm}
 
 Another algorithm is included in GENETIC called "adaptation" although, in the
-biological sense, it would be better a smooth mutation. First, one of the
+biological sense, it would be rather be a smooth mutation. First, one of the
 variables codified in the genome is randomly selected with uniform probability.
 Then, a bit is randomly chosen assuming a probability linearly decreasing with
-the significance of the bit. The new individual receives a copy of the parent's
+the significance of the bit. The new individual receives a copy of the parents
 genome with the selected bit inverted. Figure~\ref{FigAdaptation} contains an
 example.
 
@@ -1306,7 +1307,7 @@ The required format for the \emph{main input file} and the \emph{template files}
 
 \subsubsection{Main input file}
 
-This file has to be in a XML format with a tree type structure as the
+This file has to be in XML format with a tree type structure as the
 represented in figure~\ref{FigMainFile}.
 \psset{xunit=0.4mm,yunit=0.4mm}
 \PSPICTURE{0}{-115}{280}{15}
@@ -1413,7 +1414,7 @@ available fields are:
 	\item[Monte-Carlo]: Monte-Carlo brute force algorithm. It requires on the main
 		XML node:
 		\begin{description}
-			\item[simulations]: number of simulations to run on each iteration in
+			\item[simulations]: number of simulations to run for each iteration in
 			every experiment.
 		\end{description}
 	\item[genetic]: genetic algorithm. It requires the following parameters in the
@@ -1425,17 +1426,17 @@ available fields are:
 			\item[reproduction]: reproduction ratio.
 			\item[adaptation]: adaptation ratio.
 		\end{description}
-	And on each variable:
+	And for each variable:
 		\begin{description}
 			\item[bits]: number of bits to encode each variable.
 		\end{description}
 	\end{description}
 \item[iterations]: number of iterations (default 1) to perform the iterative
 algorithm. It applies only on sweep and Monte-Carlo methods.
-\item[bests]: number of bests simulations to calculate convergence interval on
+\item[best]: number of best simulations to calculate convergence interval on
 next iteration for the iterative algorithm (default 1). It applies only on
 sweep and Monte-Carlo methods.
-\item[tolerance]: tolerance parameter to relax convergence interval of the
+\item[tolerance]: tolerance parameter to relax the convergence interval of the
 iterative algorithm (default 0). It applies only on sweep and Monte-Carlo
 methods.
 \end{description}
@@ -1459,8 +1460,8 @@ by a value between these extreme values on the $X$-th variable, depending on the
 optimization algorithm.
 \item[absolute\_minimum, absolute\_maximum]: absolute variable extreme values.
 On iterative methods, the tolerance can increase initial \emph{minimum} or
-\emph{maximum} values in each iteration. These values are the extreme values
-allowed to prevent to exceed the model parameter limits.
+\emph{maximum} values in each iteration. These values are the allowed extreme values
+compatible with the model parameter limits.
 \item[format]: standard C-format string to set the format to save the variable
 in the simulation input files.
 \end{description}
@@ -1470,21 +1471,20 @@ in the simulation input files.
 $N\times n$
 template files must be generated to reproduce every input file associated to every experiment. All the template files are sintactically analyzed by CALIBRATOR to replace the labels as follows in order to generate the simulation program input files:
 \begin{description}
-\item[@variableX@]: is replaced by the label associated to this empirical parameter defined in \emph{main input file};
-\item[@valueX@]: is replaced by the value associated to that empirical parameter calculated by the optimization algorithm using the format defined in \emph{main input file};
+\item[@variableX@]: is replaced by the label associated to the $X$-th empirical parameter defined in \emph{main input file};
+\item[@valueX@]: is replaced by the value associated to the $X$-th empirical parameter calculated by the optimization algorithm using the format defined in \emph{main input file};
 \end{description}
-where in both cases $X$ corresponds to the ordinal of the corresponding empirical parameter.
 
 \section{Practical applications}
 
 In what follows, a few cases of practical application of CALIBRATOR in combination with
-different simulation codes are presented. The will deal with the optimization
+different simulation codes are presented. They deal with the optimization
 and/or calibration 
-of variables in models used for open channel flow, surface irrigation, sprinkler irrigation or irrigation
+of variables in models used for open channel flow, surface irrigation, sprinkler irrigation and irrigation
 engines movement.   
 
-Most of cases have been run on a laptop computer equipped with an Intel(R) Core(TM) i7 M620 2.67GHz processor. 
-Then, the computation was performed in four parallelized tasks to make the most of the processor's double nucleus with hyperthreading. Only on the optimization
+Most of the cases have been run on a laptop computer equipped with an Intel(R) Core(TM) i7 M620 2.67GHz processor. 
+Then, the computation has been performed in four parallelized tasks to make the most of the processor's double nucleus with hyperthreading. Only in the optimization
 of the management of the Canal de Violada, much more expensive computationally, the
 Memento cluster of the BIFI has been used.
 
@@ -1529,7 +1529,13 @@ gates and spillways locations is shown.
 Canal de Violada. The dimensions are not on scale for a better visualization}
 {FigViolada}
 
-Two cross sections can be distinguished in the channel, the new initial reach
+The required discharge at every gate for a modernization scenario to sprinkler irrigation was obtained after an elaborate 
+field analysis. Taking into account the crop distribution, soil water retention properties, the electricity cost depending on the hour of the day and the design of a 
+reservoir in the area, seven different scenarios were obtained as a function of the historical irrigation requirements for 
+the same period using real data \citet{Zapata09}. A 14 days period was selected from
+one of these scenarios in order to optimize the channel management.
+
+Two cross sections can be distinguished in the channel, the longer 13352 meters initial reach
 and the last 304 meters. Both share the same bottom slope, $S_0$ = 0.00059 but
 they differ in the cross section dimensions, as shown in
 Figure~\ref{FigCrossSections}, and in the value of the Gauckler-Manning
@@ -1540,7 +1546,6 @@ coarse concrete \citep{Chow59}.
 \PSPICTURE{0}{-0.6}{12.7}{2.450}
 {
 	\psline(0,2.050)(0.615,0)(3.259,0)(3.874,2.050)
-	\rput(1.937,1.025){New channel}
 	\psline{<->}(0.615,-0.2)(3.259,-0.2)
 	\rput(1.937,-0.4){2.644 m}
 	\psline{<->}(0,2.250)(3.874,2.250)
@@ -1548,7 +1553,6 @@ coarse concrete \citep{Chow59}.
 	\psline{<->}(4.074,0)(4.074,2.050)
 	\rput(4.774,1.025){2.050 m}
 	\psline(5.5,1.8)(5.5,1.5)(7,0)(9.5,0)(11,1.5)(11,1.8)
-	\rput(8.25,0.9){Old channel}
 	\psline{<->}(5.5,2)(11,2)
 	\rput(8.25,2.2){5.500 m}
 	\psline{<->}(7,-0.2)(9.5,-0.2)
@@ -1557,7 +1561,7 @@ coarse concrete \citep{Chow59}.
 	\rput(11.9,0.75){1.500 m}
 	\psline{<->}(11.2,1.5)(11.2,1.8)
 	\rput(11.95,1.65){0.300 m}
-}{Channel cross sections for the first stretch of 13353 m (New) and the last part of 304 m (Old)}{FigCrossSections}
+}{Channel cross sections for the first stretch of 13353 m (left) and the last part of 304 m (right)}{FigCrossSections}
 
 Two key optimization variables have been studied: $\Delta t_A$ and
 $\Delta t_{GT}$. Where $\Delta t_A$ takes into account the delay between the
@@ -1565,24 +1569,17 @@ modification time of the inlet discharge and the modification time in the
 Almudévar gate and $\Delta t_{GT}$ takes into account the delay between the
 inlet and Gurrea and Temple gates modification. Before the development of this 
 study, the channel guards responsible for its management carried out the gates
-opening using $\Delta t_A=$1h and $\Delta t_{GT}=$3h30m.
+opening using fixed values $\Delta t_A=$1h and $\Delta t_{GT}=$3h30m.
 
 The initial conditions for the canal were a steady state with a discharge of
 2~m$^3$/s. The objective of this work was to provide
 the required daily discharge to the three important irrigation gates as well as
 to keep a constant discharge of 2 m$^3$/s at the outlet gate. It is important to 
-note that Gurrea and Temple gates are only separated by a few meters and are located
+stress that Gurrea and Temple gates are only separated by a few meters and are located
 near the outlet gate.
 
-The required discharge at every gate for a modernization scenario to sprinkler irrigation was obtained after an elaborate 
-field analysis. Taking into account the crop distribution, soil water retention properties, 
-characteristics of the parcels and hydrants, the electricity cost depending on the hour of the day and the design of a 
-reservoir in the area, seven different scenarios were obtained as a function of the historical irrigation requirements for 
-the same period using real data \citet{Zapata09}. A 14 days period in one of the periods with higher demand was selected from
-one of these scenarios in order to optimize the channel management.
-
 SWIGS open source software \citep{Swigs} has been used to simulate the channel
-flow. Each optimization, which executed a total number of 1024 simulations, took
+flow. Each optimization executed a total number of 1024 simulations and took 
 approximately 14 hours using 64 cores in the Memento cluster housed at BIFI.
 
 Table~\ref{TabSwigs} displays the results obtained for the optimal coefficient
@@ -1591,17 +1588,17 @@ norm is defined as the root mean square error between demanded discharges and
 supplied discharges multiplied by a factor of 10 in cases of channel overflow.
 The results are similar when comparing the different optimization methods.
 Nevertheless, it can be observed that the iterative algorithm, applied to the 
-brute force methods, has improved slightly the results for this canal management.
+brute force methods, improves slightly the results for this canal management.
 It is also remarkable that the genetic algorithm obtains the best
 and the worst of the results, hence indicating that this method
 is sensitive to the election of the genetic parameters. With the channel
-guards management this error norm is much higher, due not only to a greater error
+guards management pattern this error norm is much higher, due not only to a greater error
 in the desired outlet discharge but also to a slight overflow in one of the 
 spillways of the canal.
 
 \TABLE{\scriptsize}{cccc}
 {
-	Optimization & Optimization & Optime empirical & Objective function
+	Optimization & Optimization & Optimal empirical & Objective function
 	\\ algorithm & parameters & parameters & value
 	\\ \hline
 	\multicolumn{2}{c}{Manual management} & $\Delta t_A=3600$ s & 1.049056
@@ -1643,7 +1640,7 @@ gates using the default schedule developed by the channel guards and that
 obtained in the best of our simulations. It can be observed that in both cases 
 the desired discharge at the different gates in Almudévar, Gurrea and El Temple is supplied,
 with some transient peaks affecting the outlet discharge.
-This work confirmed that an optimized management reduces remarkably the amplitude and the duration of these undesired peaks.
+This work confirmes that an optimized management reduces remarkably the amplitude and the duration of these undesired peaks.
 
 \FIGII{Violada-contributions.eps}{Violada-optimized-contributions.eps}
 {Temporal evolution of discharges supplied at inlet, outlet and gates as (top)
@@ -1652,17 +1649,17 @@ opening times obtained in this work}{FigSwigs}
 
 \subsection{Calibration of empirical parameters on surface irrigation}
 
-CALIBRATOR has also been used to find out the empirical parameters required by the friction, and infiltration
+CALIBRATOR has also been used to find out the empirical parameters required by the friction and infiltration
 models used in the model SURCOS \citep{Surcos,SurcosGit,JaviSurcos3} for the simulation of the four furrow fertigation experiments published in \citet{JaviSurcos2}. The furrows were $100$ m long and they were simulated using 100 computational cells per furrow. The furrows were close together, they had the same geometry and the experiments were almost simultaneous, hence the soil properties were assumed uniform. 
 
-The friction model used in SURCOS is the Gauckler-Manning model. The infiltration model is the Kostiakov-Lewis model. They require calibration of three coefficients: the Gauckler-Manning number $n$ and the infiltration parameters $K$ and $a$. In the original paper, a brute force method using 3000 simulations was applied, each of them including the four experiments. In the present work, the same number of simulations has been used with the calibration methods implemented in CALIBRATOR. The execution of 3000 simulations in the mentioned laptop computer took about 1h20m.  
+The friction model used in SURCOS is the Gauckler-Manning model. The infiltration model is the Kostiakov-Lewis model. They require calibration of three coefficients: the Gauckler-Manning number $n$ and the infiltration parameters $K$ and $a$. In the original paper, a brute force method using 3000 simulations was applied, each of them including the four experiments. In the present work, the same number of simulations has been used with the calibration methods implemented in CALIBRATOR. The execution of 3000 simulations in the laptop computer took about 1h20m.  
 
 Table~\ref{TabSurcos} displays the results obtained for the optimal coefficient values and the corresponding
 value of the evaluation function, where the error norm is the same as in \citet{JaviSurcos2}. The results are similar among the different methods and also similar to those in the original paper. This is due to the existence of a relatively large region of combinations of the empirical parameters producing similar values in the evaluation function, thus preventing from an accurate convergence to the optimum set. However, it can be noticed that both the iterative method and the genetic methods produce better results than the Monte-Carlo method without iterations with the same total number of simulations.
 
 \TABLE{\scriptsize}{cccc}
 {
-	Optimization & Optimization & Optime empirical & Objective function
+	Optimization & Optimization & Optimal empirical & Objective function
 	\\ algorithm & parameters & parameters & value
 	\\ \hline
 	Monte-Carlo & $N_{simulations}=3000$ & $n=0.0395$ & 0.3430
@@ -1701,7 +1698,7 @@ table~\ref{TabSurcos})}{FigSurcos}
 \subsection{Calibration of empirical parameters of the ballistic model on
 sprinkler irrigation}
 
-The ballistic model \citep{Fukui80,Playan06} is the most widespread o characterize the behaviour and performance of sprinklers in sprinkler irrigation management. The model assumes that the travelling drops are approximately spherical and subject to the resulting effect of gravity and drag forces. The ejecting drop velocity is required by the model, and it is frequent to assume that the jet is compact enough to consider that all the drops carry the same velocity when leaving the sprinkler. This velocity can be estimated either by measuring the pressure and using Bernoulli's equation or, alternatively, by measuring the discharge and dividing by the outlet cross section. Other data required to characterize the water spread are related to the drop size distribution. The model used in the present work, described in \cite{Ouazaa14}, is based on three parameters $D_{50}$, $n$ and $P$. Furthermore, to include the influence of the wind, the model includes two more aerodynamic resistance coefficients:
+The ballistic model \citep{Fukui80,Playan06} is the most widespread to characterize the behaviour and performance of sprinklers in sprinkler irrigation management. The model assumes that the travelling drops are approximately spherical and subject to the resulting effect of gravity and drag forces. The ejecting drop velocity is required by the model, and it is frequent to assume that the jet is compact enough to consider that all the drops carry the same velocity when leaving the sprinkler. This velocity can be estimated either by measuring the pressure and using Bernoulli's equation or, alternatively, by measuring the discharge and dividing by the outlet cross section. Other data required to characterize the water spread are related to the drop size distribution. The model used in the present work, described in \cite{Ouazaa14}, is based on three parameters $D_{50}$, $n$ and $P$. Furthermore, to include the influence of the wind, the model involves two more aerodynamic resistance coefficients:
 $k_1$ y $k_2$.
 The model is calibrated in two steps. First, the coefficients $D_{50}$, $n$ and $P$ are fitted to adjust the water distribution in windless conditions and are considered representative of the sprinkler model at a given pressure. In a second step, the coefficients $k_1$ and $k_2$ fitting better the water distribution in wind conditions are found.
 
@@ -1711,7 +1708,7 @@ Table~\ref{TabSprinklerI} shows the results from the calibration of parameters $
 
 \TABLE{\scriptsize}{cccc}
 {
-	Optimization & Optimization & Optime empirical & Objective function
+	Optimization & Optimization & Optimal empirical & Objective function
 	\\ algorithm & parameters & parameters & value
 	\\ \hline
 	Sweeps & $N_{simulations}=1000$ & $D_{50}=3.78$ mm & 2.54 mm
