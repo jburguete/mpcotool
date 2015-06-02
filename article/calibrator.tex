@@ -1817,8 +1817,7 @@ The movement of a center-pivot tower follows a chaotic pattern depending on the 
 }{Example of movement of a centre-pivot irrigation engine with
 four towers}{FigPivotDiagram}
 
-The movement of a real pivot with four towers separated 50.11 m is next simulated and calibrated. The maximum linear velocity of each tower were measured to be: $v_1=0.02738$ m/s, $v_2=0.02824$ m/s, $v_3=0.03008$ m/s and $v_4=0.03753$ m/s.
-The exterior tower is considerably faster as it carries less weight and produces less friction. The model includes four empirical parameters to calibrate: the average angles of start $\overline{\alpha_{start}}$ and stop $\overline{\alpha_{stop}}$, the uncertainty in these angles $\delta$ and the start and stop times $\tau$. In every tower cycle, the start and stop angles are obtained as:
+The model includes four empirical parameters to calibrate: the average angles of start $\overline{\alpha_{start}}$ and stop $\overline{\alpha_{stop}}$, the uncertainty in these angles $\delta$ and the start and stop times $\tau$. In every tower cycle, the start and stop angles are obtained as:
 \EQ
 {
 	\alpha_{start}=\overline{\alpha_{start}}+(r-0.5)\,\delta,\quad
@@ -1852,7 +1851,11 @@ increases or decreases linearly (see figure~\ref{FigPivotVelocity}).
 	\rput(37.5,26){time}
 }{Linear velocity of a centre-pivot tower on starts and stops}{FigPivotVelocity}
 
-The start and stop times of each tower were measured in four experiments of 24 hours with the pivot working in cycles of 71s at 100\%, 52\%, 42\% y 27.48\%. The times were grouped in four histograms and the evaluation function was defined as the mean square error between the measured and simulated histograms.
+The movement of a real pivot with four towers separated 50.11 m is next simulated and calibrated. The maximum linear velocity of each tower were measured to be: $v_1=0.02738$ m/s, $v_2=0.02824$ m/s, $v_3=0.03008$ m/s and $v_4=0.03753$ m/s.
+The exterior tower is considerably faster as it carries less weight and produces less friction.
+The start and stop times of each tower were measured in four experiments of 24 hours with the pivot working in cycles of 71s at 100\%, 52\%, 42\% y 27.48\%.
+
+The times were grouped in four histograms and the evaluation function was defined as the mean square error between the measured and simulated histograms.
 Table~\ref{TabPivot} shows some of the results obtained in a total of 10000 simulations of each of the four experiments, taking around 50 minutes each in the same laptop computer used before.
 
 The best results where obtained with the genetic algorithms. Note that in this case again the genetic algorithm produces the results with the lowest $R$ coefficient values. It is also worth noting that the iterative algorithm improves the results when applied to the Monte Carlo method but it makes things slightly worse in the sweep method.
