@@ -137,7 +137,7 @@ The present work describes CALIBRATOR, a new software program to perform
 optimizations or calibrations of empirical parameters required in the
 formulation of numerical simulation models. The structure is such that it can be
 easily adapted to different simulation codes.
-One genetic algorithm, two brute force optimization algorithms (sweeps and
+One genetic algorithm, two brute force optimization algorithms (sweep and
 Monte-Carlo) and an iterative algorithm to improve the brute force methods are
 included as alternative methods.
 Parallel computations are enabled in a simple way so that the work load can be
@@ -157,7 +157,7 @@ Distribution) type license.
 
 Calibration is related to the optimization process of finding the minimum of a function usually defined as a relation between the desired value of a quantity and that supplied by a suitable simulation model. This process is more necessary when simplifications on models are done as some of the physical processes are hidden in black box parameters. Deterministic models are sensitive to parameters and their ability increases when the quality of the calibration improves. In some way, the model may acquire a true predictive character when calibrated. The calibration can be understood as an optimization process where the error between the estimation of the model and the data set is minimized.
 
-There are many fields where calibration is required.Whthin agriculture, there are many phenomena that can be modelled using differential equations (PDEs) that participate in conservation laws. The application of mathematical models to describe physical processes is helpful to perform simulations of possible scenarios using computational facilities. Despite the quality of these mathematical models for predictive purposes, calibration is usually required to provide them useful properties. The application of the Shallow Water Equations (SWE) for the simulation of open-channel flow, for instance, has been widely used, in particular for irrigation water delivery analysis. To complete the equations with regulation elements, it is accepted that some simplifications can be applied. These simplifications usually include parameters that make possible to model simpler the phenomena that occur on those regulation elements.
+There are many fields where calibration is required. Within agriculture, there are many phenomena that can be modelled using differential equations (PDEs) that participate in conservation laws. The application of mathematical models to describe physical processes is helpful to perform simulations of possible scenarios using computational facilities. Despite the quality of these mathematical models for predictive purposes, calibration is usually required to provide them useful properties. The application of the Shallow Water Equations (SWE) for the simulation of open-channel flow, for instance, has been widely used, in particular for irrigation water delivery analysis. To complete the equations with regulation elements, it is accepted that some simplifications can be applied. These simplifications usually include parameters that make possible to model simpler the phenomena that occur on those regulation elements.
 
 Because of the mathematical model, PDE constrained optimization may be performed using two optimizer families: gradient based methods and gradient-free optimizers. While the latter do not require gradient information to perform the calibration, the former must have information about the variation of the objective with respect to the controlled variable 
 
@@ -205,7 +205,7 @@ $N_{iterations}=1\;\Rightarrow\;N_{total}=N_{simulations}$.
 
 \subsection{Sweep brute force method}
 
-The \textit{sweep brute force method} finds the optimal set of parameters within a solution region by dividing it into regular subdomains. To find the optimal solution, the domain interval $x_i \in \PA{x_{i,min},\,x_{i,max}}$ is first defined for each variable $x_i$. Then, a regular partition in  $N_{x,i}$ subintervals is made. Taking into account this division of the solution space, the number of required simulations is:
+The sweep brute force method finds the optimal set of parameters within a solution region by dividing it into regular subdomains. To find the optimal solution, the domain interval $x_i \in \PA{x_{i,min},\,x_{i,max}}$ is first defined for each variable $x_i$. Then, a regular partition in  $N_{x,i}$ subintervals is made. Taking into account this division of the solution space, the number of required simulations is:
 \EQ{N_{simulations}=N_{x,1}\times N_{x,2}\times\cdots,}
 {EqNSweeps}
 where $N_{x,i}$ is the number of sweeps in the variable $x_i$.
@@ -468,7 +468,7 @@ figure~\ref{FigIterativeParallelization}).
 	\psline{->}(-60,-45)(0,-50)
 	\psline{->}(0,-45)(0,-50)
 	\psline{->}(60,-45)(0,-50)
-	\rput(0,-55){Getting $N_{bests}$ empirical paramaters sets}
+	\rput(0,-55){Getting $N_{best}$ empirical paramaters sets}
 	\psframe(-55,-50)(55,-60)
 	\psline{->}(0,-60)(0,-65)
 	\rput(0,-70){$\cdots$}
@@ -645,7 +645,7 @@ associated to this new individuals ($N_{new}$) have to be run:
 \EQ
 {
 	N_{new}=N_{population}
-	\times\left(R_{mutation}-R_{reproduction}-R_{adaptation}\right).
+	\times\left(R_{mutation}+R_{reproduction}+R_{adaptation}\right).
 }{EqNew}
 Then, total number of simulations performed by the genetic algorithm is:
 \EQ
@@ -658,7 +658,7 @@ The individuals of the former population that obtained lower values in the evalu
 {
 	N_{survival}=N_{population}-N_{new}.
 }{EqSurvival}
-Furthermore, the ancestors to generate new individuals are chosen among the surviving population. Obviously, to avoid negative survival population, the following condition has to be hold:
+Furthermore, the ancestors to generate new individuals are chosen among the surviving population. Obviously, to avoid negative survival population, the following condition has to be enforced:
 \EQ{R_{mutation}+R_{reproduction}+R_{adaptation}\leq 1}{EqSurvivalCondition}
 CALIBRATOR uses a default aleatory criterion in GENETIC, with a probability linearly decreasing with the ordinal in the ordered set of surviving individuals (see figure~\ref{FigSelection}).
 
@@ -1110,132 +1110,45 @@ method}{FigGeneticParallelization}
 
 \section{Implementation}
 
-\subsection{External libraries}
-
-CALIBRATOR uses the following open source external libraries:
-
-\begin{itemize}
-\item\citet{libxml}: Library required to read the main input file in XML format.
-\item\citet{gsl}: Scientific library required to generate the pseudo-random numbers used by the genetic and the Monte-Carlo algorithms.
-\item\citet{glib}: Library required to implement some data types, to parse the input file templates and the routines used to parallelize the usage of the computer's processors.
-\item\citet{openmpi} or \citet{mpich}: Optional libraries. When installed, one
-of them is used to allow parallelization in multiple computers.
-\end{itemize}
-
-\subsection{Building the executable file from the source code}
-
-The source code in CALIBRATOR is written in C language. This software has
-been built and tested in the following operative systems:
-Debian Linux 8.0,
-DragonFly BSD 4.0.5,
-FreeBSD 10.1,
-NetBSD 6.1.5,
-OpenBSD 5.7,
-Windows 7\footnotemark[1],
-and Windows 8.1\footnotemark[1].
-Probably, this software can be built and it works in other operative systems,
-software distributions or versions but it has not been tested.
-\footnotetext[1]{Windows 7 and Windows 8.1 are trademarks of Microsoft
-Corporation.}
-
-In order to build the executable file from the source code, a C compiler (\citet{gcc} or \citet{clang}), the configuration systems \citet{autoconf} and \citet{automake}, the executable creation control program \citet{gnumake} and the external libraries previously listed are required. The indications provided in \citet{install-unix} can be followed in order to install all these utilities.
-
-Once all the tools installed, the GENETIC source code must be downloaded and it must be compiled following on a terminal:
-\begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ git clone https://github.com/jburguete/genetic.git
-$ cd genetic/0.6.1
-$ aclocal
-$ autoconf
-$ automake --add-missing
-$ ./configure
-$ make
-\end{lstlisting}
-
-The following step is to download the source code CALIBRATOR, to link it with GENETIC and compile together by means of:
-\begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ git clone https://github.com/jburguete/calibrator.git
-$ cd calibrator/0.4.5
-$ ln -s ../../genetic/0.6.1 genetic
-$ aclocal
-$ autoconf
-$ automake --add-missing
-$ ./configure
-$ make
-\end{lstlisting}
-
-Some systems (such OpenBSD) might require extra options. In those cases follow the instructions of the README files in both repositories.
-
-\subsection{Command line format}
-
-\begin{itemize}
-
-\item Command line in sequential mode (where X is the number of threads to
-execute):
-\begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ ./calibrator [-nthreads X] input_file.xml
-\end{lstlisting}
-
-\item Command line in parallelized mode (where X is the number of threads to
-open in every node):
-\begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ mpirun [MPI options] ./calibrator [-nthreads X] input_file.xml
-\end{lstlisting}
-
-\item The syntax of the simulator has to be:
-\begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ ./simulator_name input_file_1 [input_file_2] [...] output_file
-\end{lstlisting}
-There are two options for the output file. It can begin with a number indicating
-the objective function value or it can be a results file that has to be
-evaluated by an external program (the evaluator) comparing with an experimental
-file.
-
-\item In the last option of the former point, the syntax of the program to
-evaluate the objective function has to be (where the results file has to begin
-with the objective function value):
-\begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ ./evaluator_name simulated_file experimental_file results_file
-\end{lstlisting}
-
-\end{itemize}
-
 \subsection{Organization of CALIBRATOR}
 
-Let us assume that the combination of $M$ empirical parameters is desired so that they
+Let us assume that $M$ empirical parameters are sought desired so that the results from a simulation model
 are the best fit to $N$ experimental data and that the simulator requires $n$ input files.
 The structure followed by CALIBRATOR is summarized in \emph{main input file},
-where both the number of experiments and the number of required input files
-are specified. Furthermore, it contains the values of the empirical parameters
+where both the number of experiments ($N$) and the number of required input files ($n$)
+are specified. Furthermore, it contains the extreme values of the empirical parameters
 and the chosen optimization algorithm.
 Then, CALIBRATOR reads the $N\times n$ templates to build the simulator input files
 replacing key labels by empirical parameter values created by the optimization algorithm.
-There are two options: either the simulator compares directly with the
+There are two options: either the simulator compares directly the simulation results with the
 \emph{experimental data file}, hence generating a file with the value of the error, or
-an external program called \emph{evaluator} will compare with the
-\emph{experimental data file} to produce the error value. In both cases this error value
+an external program called \emph{evaluator} is invoked to compare with the
+\emph{experimental data file} and to produce the error value. In both cases this error value
 is saved in an \emph{objective value file}. For each experiment, an objective value
 is obtained. The final value of the objective function associated with the $N$ experiments
 is calculated by means of RMSD, as in (\ref{EqRMSD}). Figure~\ref{FigStructure} is a sketch of the structure.
 \psset{xunit=0.4mm,yunit=0.4mm}
-\PSPICTURE{-20}{-90}{280}{55}
+\PSPICTURE{-20}{-95}{280}{55}
 {
 	\tiny
-	\rput(15,5){Main input file}
-	\psframe(-20,0)(50,10)
-	\psline{->}(50,5)(60,5)
-	\rput(15,-20){1st template file}
-	\psframe(-20,-25)(50,-15)
-	\psline{->}(50,-20)(60,-20)
-	\rput(15,-30){$\cdots$}
-	\rput(15,-40){$(N\times n)$-th template file}
-	\psframe(-20,-45)(50,-35)
-	\psline{->}(50,-40)(60,-40)
-	\rput(75,-20){Calibrator}
-	\psframe(60,-55)(90,15)
-	\psline{->}(90,10)(100,25)
+	\rput(15,50){Main input file}
+	\psframe(-20,45)(50,55)
+	\psline{->}(50,50)(60,50)
+	\rput(15,25){1st template file}
+	\psframe(-20,20)(50,30)
+	\psline{->}(50,25)(60,25)
+	\psline[linestyle=dotted,dotsep=1pt]{->}(60,25)(90,25)
+	\rput(15,-25){$\cdots$}
+	\rput(15,-75){$(N\times n)$-th template file}
+	\psframe(-20,-70)(50,-80)
+	\psline{->}(50,-75)(60,-75)
+	\psline[linestyle=dotted,dotsep=1pt]{->}(60,-75)(90,-75)
+	\rput(75,50){Calibrator}
+	\psframe(60,-95)(90,55)
+	\psline{->}(90,25)(100,25)
 	\psline{->}(90,5)(100,5)
-	\psline{->}(90,-45)(100,-55)
-	\psline{->}(90,-50)(100,-75)
+	\psline{->}(90,-55)(100,-55)
+	\psline{->}(90,-75)(100,-75)
 	\rput(120,5){$n$-th input file}
 	\psframe(100,0)(140,10)
 	\psline{->}(140,5)(150,5)
@@ -1260,10 +1173,11 @@ is calculated by means of RMSD, as in (\ref{EqRMSD}). Figure~\ref{FigStructure} 
 	\rput(250,10){Objective}
 	\rput(250,5){value file}
 	\psframe(230,0)(270,15)
-	\psline{->}(270,7.5)(280,7.5)(280,-90)(50,-90)(50,-80)
-	\rput(50,-75){Objective function value}
-	\psframe(15,-80)(85,-70)
-	\psline{->}(50,-70)(75,-55)
+	\psline{->}(270,7.5)(280,7.5)(280,-90)(90,-90)
+	\rput(15,-90){Objective function value}
+	\psframe(-20,-95)(50,-85)
+	\psline{->}(60,-90)(50,-90)
+	\psline[linestyle=dotted,dotsep=1pt]{->}(90,-90)(60,-90)
 	\rput(120,50){1st experiment}
 	\psframe[linestyle=dotted](95,-5)(275,55)
 	\rput(185,-15){$\cdots$}
@@ -1319,12 +1233,12 @@ represented in figure~\ref{FigMainFile}.
 	\rput(60,10){\bf simulator}
 	\rput(100,10){\bf algorithm}
 	\rput(140,10){evaluator}
-	\rput(180,10){simulations}
-	\rput(220,10){iterations}
+	\rput(180,10){nsimulations}
+	\rput(220,10){niterations}
 	\rput(260,10){tolerance}
-	\rput(60,0){bests}
-	\rput(100,0){population}
-	\rput(140,0){generations}
+	\rput(60,0){nbest}
+	\rput(100,0){npopulation}
+	\rput(140,0){ngenerations}
 	\rput(180,0){mutation}
 	\rput(220,0){reproduction}
 	\rput(260,0){adaptation}
@@ -1358,8 +1272,8 @@ represented in figure~\ref{FigMainFile}.
 	\rput(230,-60){absolute\_minimum}
 	\rput(110,-70){absolute\_maximum}
 	\rput(160,-70){format}
-	\rput(200,-70){sweeps}
-	\rput(240,-70){bits}
+	\rput(200,-70){nsweeps}
+	\rput(240,-70){nbits}
 	\psline(20,-65)(20,-80)
 	\rput(140,-85){$\cdots$}
 	\psline(20,-90)(20,-105)(40,-105)
@@ -1372,8 +1286,8 @@ represented in figure~\ref{FigMainFile}.
 	\rput(230,-100){absolute\_minimum}
 	\rput(110,-110){absolute\_maximum}
 	\rput(160,-110){format}
-	\rput(200,-110){sweeps}
-	\rput(240,-110){bits}
+	\rput(200,-110){nsweeps}
+	\rput(240,-110){nbits}
 }{Structure of the main input file. Mandatory nodes and properties are in bold.
 Others properties can be also mandatory depending on the selected optimization
 algorithm}{FigMainFile}
@@ -1381,9 +1295,9 @@ algorithm}{FigMainFile}
 %\begin{lstlisting}[language=xml,basicstyle=\scriptsize]
 %<?xml version="1.0"/>
 %<calibrate simulator="simulator_name" evaluator="evaluator_name"
-%	algorithm="algorithm_type" simulations="simulations_number"
-%	iterations="iterations_number" tolerance="tolerance_value"
-%	bests="bests_number">
+%	algorithm="algorithm_type" nsimulations="simulations_number"
+%	niterations="iterations_number" tolerance="tolerance_value"
+%	nbest="best_number">
 %	<experiment name="data_file_1" template1="template_1_1"
 %		template2="template_1_2" .../>
 %	...
@@ -1391,11 +1305,11 @@ algorithm}{FigMainFile}
 %		template2="template_N_2" .../>
 %	<variable name="variable_1" minimum="min_value"
 %		maximum="max_value" format="c_string_format"
-%		sweeps="sweeps_number" bits="bits_number"/>
+%		nsweeps="sweeps_number" nbits="bits_number"/>
 %	...
 %	<variable name="variable_M" minimum="min_value"
 %		maximum="max_value" format="c_string_format"
-%		sweeps="sweeps_number" bits="bits_number"/>
+%		nsweeps="sweeps_number" nbits="bits_number"/>
 %</calibrate>
 %\end{lstlisting}
 
@@ -1408,30 +1322,30 @@ available fields are:
 	\begin{description}
 		\item[sweep]: sweep brute force algorithm. It requires for each variable:
 		\begin{description}
-			\item[sweeps]: number of sweeps to generate each variable in every
+			\item[nsweeps]: number of sweeps to generate each variable in every
 			experiment.
 		\end{description}
 	\item[Monte-Carlo]: Monte-Carlo brute force algorithm. It requires on the main
 		XML node:
 		\begin{description}
-			\item[simulations]: number of simulations to run for each iteration in
+			\item[nsimulations]: number of simulations to run for each iteration in
 			every experiment.
 		\end{description}
 	\item[genetic]: genetic algorithm. It requires the following parameters in the
 		main XML node:
 		\begin{description}
-			\item[population]: number of population entities.
-			\item[generations]: number of generations.
+			\item[npopulation]: number of population entities.
+			\item[ngenerations]: number of generations.
 			\item[mutation]: mutation ratio.
 			\item[reproduction]: reproduction ratio.
 			\item[adaptation]: adaptation ratio.
 		\end{description}
 	And for each variable:
 		\begin{description}
-			\item[bits]: number of bits to encode each variable.
+			\item[nbits]: number of bits to encode each variable.
 		\end{description}
 	\end{description}
-\item[iterations]: number of iterations (default 1) to perform the iterative
+\item[niterations]: number of iterations (default 1) to perform the iterative
 algorithm. It applies only on sweep and Monte-Carlo methods.
 \item[best]: number of best simulations to calculate convergence interval on
 next iteration for the iterative algorithm (default 1). It applies only on
@@ -1442,7 +1356,7 @@ methods.
 \end{description}
 
 The first type of child XML nodes has to begin with the key label
-\emph{"experiment"}. It details the experimental data and it has the fields:
+\emph{"experiment"}. It details the experimental data and it contains the fields:
 \begin{description}
 	\item[name]: name of the input data file with experimental results to calibrate.
 	\item[templateX]: $X$-th input data file template for the simulation program.
@@ -1474,6 +1388,91 @@ template files must be generated to reproduce every input file associated to eve
 \item[@variableX@]: is replaced by the label associated to the $X$-th empirical parameter defined in \emph{main input file};
 \item[@valueX@]: is replaced by the value associated to the $X$-th empirical parameter calculated by the optimization algorithm using the format defined in \emph{main input file};
 \end{description}
+
+\subsection{Building the executable file from the source code}
+
+The source code in CALIBRATOR is written in C language. This software has
+been built and tested in the following operative systems:
+Debian Linux 8.0,
+DragonFly BSD 4.0.5,
+FreeBSD 10.1,
+NetBSD 6.1.5,
+OpenBSD 5.7,
+Windows 7\footnotemark[1],
+and Windows 8.1\footnotemark[1].
+Probably, this software can be built and it works in other operative systems,
+software distributions or versions but it has not been tested.
+\footnotetext[1]{Windows 7 and Windows 8.1 are trademarks of Microsoft
+Corporation.}
+
+In order to build the executable file from the source code, a C compiler (\citet{gcc} or \citet{clang}), the configuration systems \citet{autoconf} and \citet{automake}, the executable creation control program \citet{gnumake} and the following open source external libraries are required:
+\begin{itemize}
+\item\citet{libxml}: Library required to read the main input file in XML format.
+\item\citet{gsl}: Scientific library required to generate the pseudo-random numbers used by the genetic and the Monte-Carlo algorithms.
+\item\citet{glib}: Library required to implement some data types, to parse the input file templates and the routines used to parallelize the usage of the computer's processors.
+\item\citet{openmpi} or \citet{mpich}: Optional libraries. When installed, one
+of them is used to allow parallelization in multiple computers.
+\end{itemize}
+The indications provided in \citet{install-unix} can be followed in order to install all these utilities.
+
+Once all the tools installed, the GENETIC source code must be downloaded and it must be compiled following on a terminal:
+\begin{lstlisting}[language=bash,basicstyle=\scriptsize]
+$ git clone https://github.com/jburguete/genetic.git
+$ cd genetic/0.6.1
+$ aclocal
+$ autoconf
+$ automake --add-missing
+$ ./configure
+$ make
+\end{lstlisting}
+
+The following step is to download the source code CALIBRATOR, to link it with GENETIC and compile together by means of:
+\begin{lstlisting}[language=bash,basicstyle=\scriptsize]
+$ git clone https://github.com/jburguete/calibrator.git
+$ cd calibrator/0.6.0
+$ ln -s ../../genetic/0.6.1 genetic
+$ aclocal
+$ autoconf
+$ automake --add-missing
+$ ./configure
+$ make
+\end{lstlisting}
+
+Some systems (such OpenBSD) might require extra options. In those cases follow the instructions of the README files in both repositories.
+
+\subsection{Command line format}
+
+\begin{itemize}
+
+\item Command line in sequential mode (where X is the number of threads to
+execute):
+\begin{lstlisting}[language=bash,basicstyle=\scriptsize]
+$ ./calibrator [-nthreads X] input_file.xml
+\end{lstlisting}
+
+\item Command line in parallelized mode (where X is the number of threads to
+open in every node):
+\begin{lstlisting}[language=bash,basicstyle=\scriptsize]
+$ mpirun [MPI options] ./calibrator [-nthreads X] input_file.xml
+\end{lstlisting}
+
+\item The syntax of the simulator has to be:
+\begin{lstlisting}[language=bash,basicstyle=\scriptsize]
+$ ./simulator_name input_file_1 [input_file_2] [...] output_file
+\end{lstlisting}
+There are two options for the output file. It can begin with a number indicating
+the objective function value or it can be a results file that has to be
+evaluated by an external program (the evaluator) comparing with an experimental
+file.
+
+\item In the last option of the former point, the syntax of the program to
+evaluate the objective function has to be (where the results file has to begin
+with the objective function value):
+\begin{lstlisting}[language=bash,basicstyle=\scriptsize]
+$ ./evaluator_name simulated_file experimental_file results_file
+\end{lstlisting}
+
+\end{itemize}
 
 \section{Practical applications}
 
@@ -1609,7 +1608,7 @@ spillways of the canal.
 	\\ \hline
 	Sweeps & $N_{simulations}=256$ & $\Delta t_A=3329$ s & 0.047148
 	\\ & $N_{iterations}=4$ & $\Delta t_{GT}=3742$ s
-	\\ & $N_{bests}=20$ &
+	\\ & $N_{best}=20$ &
 	\\ & $tolerance=0.1$
 	\\ \hline
 	Monte-Carlo & $N_{simulations}=1024$ & $\Delta t_A=3193$ s & 0.047183
@@ -1617,7 +1616,7 @@ spillways of the canal.
 	\\ \hline
 	Monte-Carlo & $N_{simulations}=256$ & $\Delta t_A=3250$ s & 0.047139
 	\\ & $N_{iterations}=4$ & $\Delta t_{GT}=3751$ s
-	\\ & $N_{bests}=4$
+	\\ & $N_{best}=4$
 	\\ & $tolerance=0.1$
 	\\ \hline
 	Genetic & $N_{population}=256$ & $\Delta t_A=3363$ s & 0.047135
@@ -1668,7 +1667,7 @@ value of the evaluation function, where the error norm is the same as in \citet{
 	\\ \hline
 	Monte-Carlo & $N_{simulations}=500$ & $n=0.0422$ & 0.3321
 	\\ & $N_{iterations}=6$ & $K=9.994\cdot 10^{-4}$
-	\\ & $N_{bests}=10$ & $a=0.497$
+	\\ & $N_{best}=10$ & $a=0.497$
 	\\ & $tolerance=0.2$
 	\\ \hline
 	Genetic & $N_{population}=750$ & $n=0.0399$ & 0.3339
@@ -1717,7 +1716,7 @@ Table~\ref{TabSprinklerI} shows the results from the calibration of parameters $
 	\\ \hline
 	Sweeps & $N_{simulations}=125$ & $D_{50}=3.50$ mm & 3.24 mm
 	\\ & $N_{iterations}=8$ & $n=10.225$
-	\\ & $N_{bests}=8$ & $P=0.364$
+	\\ & $N_{best}=8$ & $P=0.364$
 	\\ & $tolerance=0.4$
 	\\ \hline
 	Monte-Carlo & $N_{simulations}=1000$ & $D_{50}=3.07$ mm & 2.01 mm
@@ -1726,7 +1725,7 @@ Table~\ref{TabSprinklerI} shows the results from the calibration of parameters $
 	\\ \hline
 	Monte-Carlo & $N_{simulations}=125$ & $D_{50}=3.06$ mm & 1.60 mm
 	\\ & $N_{iterations}=8$ & $n=20.878$
-	\\ & $N_{bests}=8$ & $P=0.388$
+	\\ & $N_{best}=8$ & $P=0.388$
 	\\ & $tolerance=0.4$
 	\\ \hline
 	Genetic & $N_{population}=250$ & $D_{50}=3.06$ mm & 1.71 mm
@@ -1744,11 +1743,11 @@ Table~\ref{TabSprinklerI} shows the results from the calibration of parameters $
 }{Optimal empirical parameters and value of the evaluation function in the case of the sprinkler irrigation
 using different optimization algorithms in CALIBRATOR with the same number of total simulations}{TabSprinklerI}
 
-Next, using the optimal $D_{50}=3.06$ mm, $n=20.878$ and $P=0.388$ obtained by the Monte-Carlo method (Monte-Carlo with 8 iterations, see table~\ref{TabSprinklerI}) the values of $k_1$ and $k_2$ are calibrated in an experiment with medium wind velocity of 2.84 m/s. The different algorithms in CALIBRATOR are used with a total number of 400 simulations in all cases. Their computational time was around 4 minutes in the laptop computer. In this case, the genetic algorithms provided the best results  (note that they provided identical results in two different configurations), although the rest of the methods reached similar values.
+Next, using the optimal $D_{50}=3.06$ mm, $n=20.878$ and $P=0.388$ obtained by the Monte-Carlo method (Monte-Carlo with 8 iterations, see table~\ref{TabSprinklerI}) the values of $k_1$ and $k_2$ were calibrated in an experiment with medium wind velocity of 2.84 m/s. The different algorithms in CALIBRATOR were used with a total number of 400 simulations in all cases. Their computational time was around 4 minutes in the laptop computer. In this case, the genetic algorithms provided the best results  (note that they provided identical results in two different configurations), although the rest of the methods reached similar values.
 
 \TABLE{\scriptsize}{cccc}
 {
-	Optimization & Optimization & Optime empirical & Objective function
+	Optimization & Optimization & Optimal empirical & Objective function
 	\\ algorithm & parameters & parameters & value
 	\\ \hline
 	Sweeps & $N_{simulations}=400$ & $k_1=0.263$ & 12.17 mm
@@ -1756,7 +1755,7 @@ Next, using the optimal $D_{50}=3.06$ mm, $n=20.878$ and $P=0.388$ obtained by t
 	\\ \hline
 	Sweeps & $N_{simulations}=100$ & $k_1=0.284$ & 12.17 mm
 	\\ & $N_{iterations}=4$ & $k_2=0.098$
-	\\ & $N_{bests}=11$
+	\\ & $N_{best}=11$
 	\\ & $tolerance=0.2$
 	\\ \hline
 	Monte-Carlo & $N_{simulations}=400$ & $k_1=0.396$ & 12.19 mm
@@ -1764,7 +1763,7 @@ Next, using the optimal $D_{50}=3.06$ mm, $n=20.878$ and $P=0.388$ obtained by t
 	\\ \hline
 	Monte-Carlo & $N_{simulations}=100$ & $k_1=0.370$ & 12.15 mm
 	\\ & $N_{iterations}=4$ & $k_2=0.079$
-	\\ & $N_{bests}=4$
+	\\ & $N_{best}=4$
 	\\ & $tolerance=0.2$
 	\\ \hline
 	Genetic & $N_{population}=100$ & $k_1=0.400$ & 12.09 mm
@@ -1790,7 +1789,7 @@ the two pluviometers axes with wind average velocity 2.84 m/s}{FigSprinkler}
 \subsection{Calibration of empirical parameters of the movement of a sprinkler
 center-pivot}
 
-The movement of a center-pivot tower follows a chaotic pattern depending from the movement of the exterior tower, the tower start and stop angles and the start and stop velocities. In \citet{Ouazaa15} a model was proposed to simulate the tower movements and several controlled experiments  were carried out to measure them in a real field center-pivot. The exterior tower controls the movement, with a sequence of working periods that depend on the cycle period and the working percentage, both adjustable to reach a desired irrigation service. The rest of the towers move according to a complex pattern (see figure~\ref{FigPivotDiagram}). 
+The movement of a center-pivot tower follows a chaotic pattern depending on the movement of the exterior tower, the tower start and stop angles and the start and stop velocities. In \citet{Ouazaa15} a model was proposed to simulate the tower movements and several controlled experiments  were carried out to measure them in a real field center-pivot. The exterior tower controls the movement, with a sequence of working periods that depend on the cycle period and the working percentage, both adjustable to reach a desired irrigation service. The rest of the towers move according to a complex pattern (see figure~\ref{FigPivotDiagram}). 
 
 \psset{unit=1mm}
 \PSPICTURE{-10}{-6}{93}{20}
@@ -1860,7 +1859,7 @@ The best results where obtained with the genetic algorithms. Note that in this c
 
 \TABLE{\scriptsize}{cccc}
 {
-	Optimization & Optimization & Optime empirical & Objective function
+	Optimization & Optimization & Optimal empirical & Objective function
 	\\ algorithm & parameters & parameters & value
 	\\ \hline
 	Sweep & $N_{simulations}=10000$ & $\overline{\alpha_{start}}=179.910^\circ$
@@ -1872,7 +1871,7 @@ The best results where obtained with the genetic algorithms. Note that in this c
 	Sweep & $N_{simulations}=625$ & $\overline{\alpha_{start}}=179.335^\circ$
 	& 10443.4
 	\\ & $N_{iterations}=16$ & $\overline{\alpha_{stop}}=179.735^\circ$
-	\\ & $N_{bests}=10$ & $\delta=0.113^\circ$
+	\\ & $N_{best}=10$ & $\delta=0.113^\circ$
 	\\ & $tolerance=0.4$ & $\tau=4.08$s
 	\\ \hline
 	Monte-Carlo & $N_{simulations}=10000$
@@ -1884,7 +1883,7 @@ The best results where obtained with the genetic algorithms. Note that in this c
 	Monte-Carlo & $N_{simulations}=625$
 	& $\overline{\alpha_{start}}=179.786^\circ$ & 9741.8
 	\\ & $N_{iterations}=16$ & $\overline{\alpha_{stop}}=180.194^\circ$
-	\\ & $N_{bests}=10$ & $\delta=0.122^\circ$
+	\\ & $N_{best}=10$ & $\delta=0.122^\circ$
 	\\ & $tolerance=0.1$ & $\tau=3.82$s
 	\\ \hline
 	Genetic & $N_{population}=1000$ & $\overline{\alpha_{start}}=179.800^\circ$
@@ -1940,7 +1939,7 @@ The features and design of CALIBRATOR, a new open source software tool to enable
 
 The new tool allows an efficient performance, making the most of the processors present in a single computer and allowing an easy extension to parallelization distributed among different computers. In whole, a considerable data capacity and computational speed are achieved with independence of the physical problem under study or the algorithm chosen.
 
-In the cases analyzed, all the optimization algorithms implemented have reached similar results in the same total number of simulations. However, the iterative algorithm applied in combination with the Monte-Carlo method and the genetic algorithm leads to slightly better results than the pure brute force techniques. On the other hand, the iterative algorithm does not improve significatively the sweep method results. It is important to stress that the genetic algorithm has provided always the best results with the lowest values of the $R$ coefficient. This indicates that the efficiency of the genetic algorithm depends on the values of that coefficient and requires further research. 
+In the cases analyzed, all the optimization algorithms implemented have reached similar results in the same total number of simulations. However, the iterative algorithm applied in combination with the Monte-Carlo method and the genetic algorithm leads to slightly better results than the pure brute force techniques. On the other hand, the iterative algorithm does not improve significantly the sweep method results. It is important to stress that the genetic algorithm provides always the best results with the lowest values of the $R$ coefficient. This indicates that the efficiency of the genetic algorithm depends on the values of that coefficient and requires further research. 
 
 CALIBRATOR has proved to be flexible in the adaptation to the syntax of diverse simulation codes and useful in the calibration and optimization of parameters involved in rather different irrigation problems. In the present work it has been shown successful for practical applications such as open channel flow management, furrow fertigation, sprinkler irrigation and sprinkler tower movement design.
 

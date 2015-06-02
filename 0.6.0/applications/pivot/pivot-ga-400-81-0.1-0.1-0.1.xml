@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<calibrate simulator="pivot" evaluator="compare" algorithm="genetic"
+	npopulation="400" ngenerations="81" mutation="0.1" reproduction="0.1"
+	adaptation="0.1">
+	<experiment name="Velocidad-Frecuencia-27,48.txt" template1="template1.js"/>
+	<experiment name="Velocidad-Frecuencia-42.txt" template1="template2.js"/>
+	<experiment name="Velocidad-Frecuencia-52.txt" template1="template3.js"/>
+	<experiment name="Velocidad-Frecuencia-100.txt" template1="template4.js"/>
+	<variable name="alpha1" minimum="180.100" maximum="180.400" format="%.3lf"
+		nbits="9"/>
+	<variable name="alpha2" minimum="179.600" maximum="180.000" format="%.3lf"
+		nbits="9"/>
+	<variable name="random" minimum="0.000" maximum="0.400" format="%.3lf"
+		nbits="9"/>
+	<variable name="boot-time" minimum="0.00" maximum="5.00" format="%.2lf"
+		nbits="9"/>
+</calibrate>
+

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<calibrate algorithm="sweep" simulator="pivot" evaluator="compare">
+	<experiment name="Velocidad-Frecuencia-27,48.txt" template1="template1.js"/>
+	<experiment name="Velocidad-Frecuencia-42.txt" template1="template2.js"/>
+	<experiment name="Velocidad-Frecuencia-52.txt" template1="template3.js"/>
+	<experiment name="Velocidad-Frecuencia-100.txt" template1="template4.js"/>
+	<variable name="alpha1" minimum="180.10" maximum="180.40" format="%.2lf"
+		nsweeps="10"/>
+	<variable name="alpha2" minimum="179.60" maximum="180.00" format="%.2lf"
+		nsweeps="10"/>
+	<variable name="random" minimum="0.00" maximum="0.40" format="%.2lf"
+		nsweeps="10"/>
+	<variable name="boot-time" minimum="0.0" maximum="5.0" format="%.1lf"
+		nsweeps="10"/>
+</calibrate>
