@@ -144,9 +144,10 @@ Parallel computations are enabled in a simple way so that the work load can be
 distributed among the different processors available in one computer or in
 multiple computers of a cluster.
 The CALIBRATOR usage and possibilities are illustrated by showing four practical
-applications in agriculture: optimization of canal management; calibration of
-the empirical coefficients in a surface irrigation model; application in a ballistic
-sprinkler irrigation model and optimization in an irrigation engines movement model.
+applications in agriculture: optimization of a canal management; calibration of
+the empirical coefficients in a surface irrigation model; calibration in a
+ballistic sprinkler irrigation model and calibration in an irrigation engines
+movement model.
 This software is open source and is distributed with a BSD (Berkeley Software
 Distribution) type license.
 \end{abstract}
@@ -155,22 +156,70 @@ Distribution) type license.
 
 \section{Introduction}
 
-Calibration is related to the optimization process of finding the minimum of a function usually defined as a relation between the desired value of a quantity and that supplied by a suitable simulation model. This process is more necessary when simplifications on models are done as some of the physical processes are hidden in black box parameters. Deterministic models are sensitive to parameters and their ability increases when the quality of the calibration improves. In some way, the model may acquire a true predictive character when calibrated. The calibration can be understood as an optimization process where the error between the estimation of the model and the data set is minimized.
+Calibration is related to the optimization process of finding the minimum of a
+function usually defined as a relation between the desired value of a quantity
+and that supplied by a suitable simulation model. This process is more necessary
+when simplifications on models are done as some of the physical processes are
+hidden in black box parameters. Deterministic models are sensitive to parameters
+and their ability increases when the quality of the calibration improves. In
+some way, the model may acquire a true predictive character when calibrated. The
+calibration can be understood as an optimization process where the error between
+the estimation of the model and the data set is minimized.
 
-There are many fields where calibration is required. Traditionally, fields such as hydrology or weather forecasting have used mathematical models with empirical parameters which require to be adjutsted. For example, watershed models usually estimates initial parameter values for sediment fractions, instream water temperature or infiltration rates \citep{Duan04}. Within agriculture, there are many phenomena that can be modelled using differential equations (PDEs) that participate in conservation laws. The application of mathematical models to describe physical processes is helpful to perform simulations of possible scenarios using computational facilities. Despite the quality of these mathematical models for predictive purposes, calibration is usually required to provide them useful properties. The application of the Shallow Water Equations (SWE) for the simulation of open-channel flow, for instance, has been widely used, in particular for irrigation water delivery analysis. To complete the equations with regulation elements, it is accepted that some simplifications can be applied. These simplifications usually include parameters that make possible to model simpler the phenomena that occur on those regulation elements.
+There are many fields where calibration is required. Traditionally, fields such
+as hydrology or weather forecasting have used mathematical models with empirical
+parameters which require to be adjutsted. For example, watershed models usually
+estimates initial parameter values for sediment fractions, instream water
+temperature or infiltration rates \citep{Duan04}. Within agriculture, there are
+many phenomena that can be modelled using differential equations (PDEs) that
+participate in conservation laws. The application of mathematical models to
+describe physical processes is helpful to perform simulations of possible
+scenarios using computational facilities. Despite the quality of these
+mathematical models for predictive purposes, calibration is usually required to
+provide them useful properties. The application of the shallow-water equations
+for the simulation of open-channel flow, for instance, has been widely used, in
+particular for irrigation water delivery analysis. To complete the equations
+with regulation elements, it is accepted that some simplifications can be
+applied. These simplifications usually include parameters that make possible to
+model simpler the phenomena that occur on those regulation elements.
 
-Because of the mathematical model, PDE constrained optimization may be performed using two optimizer families: gradient based methods and gradient-free optimizers. While the latter do not require gradient information to perform the calibration, the former must have information about the variation of the objective with respect to the controlled variable. Nonetheless, when calibration is understood as the adjustment of empirical values, gradient-based methods may fail due to the location of local minimums. In \cite{Lacasta15} a deeper comparison of both, gradient based and stochastic optimization methods can be found.
+Because of the mathematical model, PDE constrained optimization may be performed
+using two optimizer families: gradient based methods and gradient-free
+optimizers. While the latter do not require gradient information to perform the calibration, the former must have information about the variation of the
+objective with respect to the controlled variable. Therfore, although gradient
+based methods exhibit superior convergences, they are more difficult to
+implement in general purpose software. Nonetheless, when calibration is
+understood as the adjustment of empirical values, gradient-based methods may
+fail due to the location of local minimums. In \cite{Lacasta15} a deeper
+comparison of both, gradient based and stochastic optimization methods can be
+found.
 
-CALIBRATOR \citep{CalibratorGit} is an open source software to perform
-optimizations or calibrations of empirical parameters with a BSD type license.
+In this work CALIBRATOR \citep{CalibratorGit}, a software to perform
+optimizations or calibrations of empirical parameters required in simulation
+models, is presented. It is open source with a BSD type license.
 
-The present paper is organized as follows: First, the concepts of calibration and optimization are presented as the main goal. Then, the methods used to achieve them in CALIBRATOR are described. The tool structure and organization are next presented in detail. Finally the performance is demonstrated using four different applications of interest in agriculture and the conclusions are drawn.
+The present paper is organized as follows: First, the concepts of calibration
+and optimization are presented as the main goal. Then, the methods used to
+achieve them in CALIBRATOR are described. The tool structure and organization
+are next presented in detail. Finally, the performance is demonstrated using
+four different applications of interest in agriculture and the conclusions are
+drawn.
 
 \section{Calibration and optimization}
 
-Calibration can be considered a particular case of optimization \citep{WrightNocedal99}, probably the most widely applied. It usually deals with setting the correct parameters that allow to represent correctly the behavior of a component or model. It is very common to describe physical phenomena using complex mathematical models including all the possible scales. Nevertheless, it is very useful to simplify them including adjustable parameters that enclose smaller scales.
+Calibration can be considered a particular case of optimization
+\citep{WrightNocedal99}, probably the most widely applied. It usually deals with
+setting the correct parameters that allow to represent correctly the behavior of
+a component or model. It is very common to describe physical phenomena using
+complex mathematical models including all the possible scales. Nevertheless, it
+is very useful to simplify them including adjustable parameters that enclose
+smaller scales.
 
-Optimization can be understood as the minimization process of some functional that evaluates the objective of a model. Therefore, a functional $J$ must be defined in order to evaluate the deviation between your model results $\mathbf{x}$ and your objectives $\mathbf{x}_o$. The root mean square deviation (RMSD) for example measures the average distance between both:
+Optimization can be understood as the minimization process of some functional
+that evaluates the objective of a model. Therefore, a functional $J$ must be
+defined in order to evaluate the deviation between your model results
+$\mathbf{x}$ and your objectives $\mathbf{x}_o$. The root mean square deviation
+(RMSD) for example measures the average distance between both:
 \EQ
 {
 	J \equiv J\PA{\mathbf{x}}
@@ -180,18 +229,29 @@ with $\mathbf{x},\mathbf{x}_o\in\mathbb{R}^n$ real vectors of $n\ge 1$
 components ($x_i$ and $x_{o,i}$ respectively) and
 $J:\mathbb{R}^n \rightarrow \mathbb{R}$. 
 This is one of the most used examples with the objective function, although 
-infinite ways of defining $J$ can be used, for example penalizing different variables
-with different weights according to their importance to our objectives.
-The aim is to find the minimum of this functional:
+infinite ways of defining $J$ can be used, for example penalizing different
+variables with different weights according to their importance to our
+objectives. The aim is to find the minimum of this functional:
 \EQ{\min_{\mathbf{x}}\;J\PA{\mathbf{x}}.}{EqFunctionalMin}
 
-In order to meet the optimal solution it is
-important to keep in mind that $\mathbf{x}\equiv\mathbf{x}\PA{\mathbf{y}}$ may be directly or indirectly related with another tunable quantity: $\mathbf{y}\in\mathbb{R}^m$  ($m$ parameters which can be optimized in the model). The complexity of the optimization process comes from the relation that may be established between the model and this tuneable set of parameters. Bearing in mind that relation, the optimization is the minimization of the functional by means of the modification of those parameters. Moreover, those parameters are usually defined in a range $y_i\in\PA{y_{i,min},\,y_{i,max}}$ so the minimization problem is formally defined as:
+In order to meet the optimal solution it is important to keep in mind that
+$\mathbf{x}\equiv\mathbf{x}\PA{\mathbf{y}}$ may be directly or indirectly
+related with another tunable quantity: $\mathbf{y}\in\mathbb{R}^m$  ($m$
+parameters which can be optimized in the model). The complexity of the
+optimization process comes from the relation that may be established between the
+model and this tuneable set of parameters. Bearing in mind that relation, the
+optimization is the minimization of the functional by means of the modification
+of those parameters. Moreover, those parameters are usually defined in a range
+$y_i\in\PA{y_{i,min},\,y_{i,max}}$ so the minimization problem is formally
+defined as:
 \EQ
 {
 	\mathbf{y}_o=\arg\min_{\mathbf{y}}J\PA{\mathbf{x}\PA{\mathbf{y}}},
 }{EqParametersOptimal}
-being $\mathbf{y}_o$ the optimum set of parameters obtained by the model. CALIBRATOR allows to achieve them by means of different methods. In addition, the metric used to evaluate the functional is open and may be defined by the user.
+being $\mathbf{y}_o$ the optimum set of parameters obtained by the model.
+CALIBRATOR allows to achieve them by means of different methods. In addition,
+the metric used to evaluate the functional is open and may be defined by the
+user.
 
 \section{Methods}
 
@@ -237,7 +297,7 @@ with two variables for $N_x=N_y=5$}{FigSweep}
 Brute force algorithms present low convergence rates but they are strongly
 parallelizable because every simulation is completely independent. If the
 computer, or the computers cluster, can execute $N_{tasks}$ parallel tasks
-every task do $N_{total}/N_{tasks}$ simulations, taking into account
+every task do $N_{total}/N_{tasks}$ simulations, obviously taking into account
 rounding effects (every task have to perform a natural number of simulations).
 In figure~\ref{FigBruteForceParallelization} a flowchart of this
 parallelization scheme is represented. Being independent each task, a distribution on different execution threads may be performed exploding the full parallel capabilities of the machine where CALIBRATOR is run. 
@@ -447,7 +507,7 @@ $N_{best}=4$ and two iterations}{FigIterative}
 
 The iterative algorithm can be also easily parallelized. However, this method is
 less parallelizable than pure brute force methods because the parallelization
-have to be performed on each iteration (see a flowchart in the
+has to be performed for each iteration (see a flowchart in the
 figure~\ref{FigIterativeParallelization}).
 
 \psset{xunit=0.5mm,yunit=0.5mm}
@@ -499,7 +559,7 @@ method}{FigIterativeParallelization}
 \subsection{Genetic method}
 
 CALIBRATOR also offers the use of a genetic method GENETIC \citep{genetic} with its default algorithms.
-They are based on the ideas in \citet{gaul}, but have been fully reprogrammed involving more modern external libraries.
+It is inspired on the ideas in \citet{gaul}, but it has been fully reprogrammed involving more modern external libraries.
 The code in GENETIC is also open source under BSD license. Figure~\ref{FigGeneticFlow} shows the flowchart of the genetic method implemented in GENETIC.
 
 \psset{xunit=0.5mm,yunit=0.5mm}
@@ -1316,11 +1376,11 @@ algorithm}{FigMainFile}
 %\end{lstlisting}
 
 The main XML node has to begin with the key label \emph{"calibrate"}. The
-available fields are:
+available properties are:
 \begin{description}
 	\item[simulator]: to indicate the simulator program.
 	\item[evaluator]: optional. It specifies the evaluator program if required.
-	\item[algorithm]: to set the optimization algorithm. Three value are available:
+	\item[algorithm]: to set the optimization algorithm. Three value are currently available:
 	\begin{description}
 		\item[sweep]: sweep brute force algorithm. It requires for each variable:
 		\begin{description}
@@ -1358,14 +1418,14 @@ methods.
 \end{description}
 
 The first type of child XML nodes has to begin with the key label
-\emph{"experiment"}. It details the experimental data and it contains the fields:
+\emph{"experiment"}. It details the experimental data and it contains the properties:
 \begin{description}
 	\item[name]: name of the input data file with experimental results to calibrate.
 	\item[templateX]: $X$-th input data file template for the simulation program.
 \end{description}
 
 The second type of child XML nodes has to begin with the key label
-\emph{"variable"}. It specifies the variables data and it has the fields:
+\emph{"variable"}. It specifies the variables data and it has the properties:
 \begin{description}
 	\item[name]: variable label. On the $X$-th variable, the program parse all input
 file templates creating the input simulation files by replacing all
@@ -1411,7 +1471,7 @@ In order to build the executable file from the source code, a C compiler (\citet
 \begin{itemize}
 \item\citet{libxml}: Library required to read the main input file in XML format.
 \item\citet{gsl}: Scientific library required to generate the pseudo-random numbers used by the genetic and the Monte-Carlo algorithms.
-\item\citet{glib}: Library required to implement some data types, to parse the input file templates and the routines used to parallelize the usage of the computer's processors.
+\item\citet{glib}: Library required to parse the input file templates and to implement some data types and the routines used to parallelize the usage of the computer's processors.
 \item\citet{openmpi} or \citet{mpich}: Optional libraries. When installed, one
 of them is used to allow parallelization in multiple computers.
 \end{itemize}
@@ -1481,7 +1541,7 @@ $ ./evaluator_name simulated_file experimental_file results_file
 
 In what follows, a few cases of practical application of CALIBRATOR in combination with
 different simulation codes are presented. They deal with the optimization
-and/or calibration 
+or calibration 
 of variables in models used for open channel flow, surface irrigation, sprinkler irrigation and irrigation
 engines movement.   
 
@@ -1652,7 +1712,7 @@ opening times obtained in this work}{FigSwigs}
 \subsection{Calibration of empirical parameters on surface irrigation}
 
 CALIBRATOR has also been used to find out the empirical parameters required by the friction and infiltration
-models used in the model SURCOS \citep{Surcos,SurcosGit,JaviSurcos3} for the simulation of the four furrow fertigation experiments published in \citet{JaviSurcos2}. The furrows were $100$ m long and they were simulated using 100 computational cells per furrow. The furrows were close together, they had the same geometry and the experiments were almost simultaneous, hence the soil properties were assumed uniform. 
+models used in the open source software SURCOS \citep{Surcos,SurcosGit,JaviSurcos3} for the simulation of the four furrow fertigation experiments published in \citet{JaviSurcos2}. The furrows were $100$ m long and they were simulated using 100 computational cells per furrow. The furrows were close together, they had the same geometry and the experiments were almost simultaneous, hence the soil properties were assumed uniform. 
 
 The friction model used in SURCOS is the Gauckler-Manning model. The infiltration model is the Kostiakov-Lewis model. They require calibration of three coefficients: the Gauckler-Manning number $n$ and the infiltration parameters $K$ and $a$. In the original paper, a brute force method using 3000 simulations was applied, each of them including the four experiments. In the present work, the same number of simulations has been used with the calibration methods implemented in CALIBRATOR. The execution of 3000 simulations in the laptop computer took about 1h20m.  
 
