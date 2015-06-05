@@ -90,7 +90,7 @@ typedef struct
  * \var template
  * \brief Matrix of template names of input files.
  * \var experiment
- * \brief Array experimental data file names.
+ * \brief Array of experimental data file names.
  * \var label
  * \brief Array of variable names.
  * \var format
@@ -133,6 +133,8 @@ typedef struct
  * \brief Array of absolute maximum variable values.
  * \var error_best
  * \brief Array of the best minimum errors.
+ * \var weight
+ * \brief Array of the experiment weights.
  * \var value_old
  * \brief Array of the best variable values on the previous step.
  * \var error_old
@@ -162,7 +164,7 @@ typedef struct
 		*nsweeps, nstart, nend, *thread, niterations, nbest, nsaveds,
 		*simulation_best;
 	double *value, *rangemin, *rangemax, *rangeminabs, *rangemaxabs,
-		*error_best, *value_old, *error_old, tolerance, mutation_ratio,
+		*error_best, *weight, *value_old, *error_old, tolerance, mutation_ratio,
 		reproduction_ratio, adaptation_ratio;
 	FILE *result;
 	gsl_rng *rng;
@@ -394,7 +396,7 @@ fprintf(stderr, "calibrate_parse: end\n");
 #endif
 
 	// Returning the objective function
-	return e;
+	return e * calibrate->weight[experiment];
 }
 
 /**
@@ -1331,9 +1333,10 @@ fprintf(stderr, "calibrate_new: start\n");
 		}
 	}
 	else calibrate->tolerance = 0.;
-	// Reading the experimental data file names
+	// Reading the experimental data
 	calibrate->nexperiments = 0;
 	calibrate->experiment = NULL;
+	calibrate->weight = NULL;
 	for (i = 0; i < MAX_NINPUTS; ++i)
 	{
 		calibrate->template[i] = NULL;
@@ -1357,6 +1360,23 @@ fprintf(stderr, "calibrate_new: nexperiments=%u\n", calibrate->nexperiments);
 			printf("No experiment %u file name\n", calibrate->nexperiments + 1);
 			return 0;
 		}
+#if DEBUG
+fprintf(stderr, "calibrate_new: experiment=%s\n",
+calibrate->experiment[calibrate->nexperiments]);
+#endif
+		calibrate->weight = g_realloc(calibrate->weight,
+			(1 + calibrate->nexperiments) * sizeof(double));
+		if (xmlHasProp(child, XML_WEIGHT))
+		{
+			buffer = xmlGetProp(child, XML_WEIGHT);
+			calibrate->weight[calibrate->nexperiments] = atof((char*)buffer);
+			xmlFree(buffer);
+		}
+		else calibrate->weight[calibrate->nexperiments] = 1.;
+#if DEBUG
+fprintf(stderr, "calibrate_new: weight=%lg\n",
+calibrate->weight[calibrate->nexperiments]);
+#endif
 		if (!calibrate->nexperiments) calibrate->ninputs = 0;
 #if DEBUG
 fprintf(stderr, "calibrate_new: template[0]\n");

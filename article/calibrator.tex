@@ -171,7 +171,7 @@ as hydrology or weather forecasting have used mathematical models with empirical
 parameters which require to be adjutsted. For example, watershed models usually
 estimates initial parameter values for sediment fractions, instream water
 temperature or infiltration rates \citep{Duan04}. Within agriculture, there are
-many phenomena that can be modelled using differential equations (PDEs) that
+many phenomena that can be modelled using differential equations that
 participate in conservation laws. The application of mathematical models to
 describe physical processes is helpful to perform simulations of possible
 scenarios using computational facilities. Despite the quality of these
@@ -183,34 +183,39 @@ with regulation elements, it is accepted that some simplifications can be
 applied. These simplifications usually include parameters that make possible to
 model simpler the phenomena that occur on those regulation elements.
 
-Because of the mathematical model, PDE constrained optimization may be performed
-using two optimizer families: gradient based methods and gradient-free
-optimizers. While the latter do not require gradient information to perform the calibration, the former must have information about the variation of the
-objective with respect to the controlled variable. Therfore, although gradient
-based methods exhibit superior convergences, they are more difficult to
-implement in general purpose software. Nonetheless, when calibration is
-understood as the adjustment of empirical values, gradient-based methods may
-fail due to the location of local minimums. In \cite{Lacasta15} a deeper
-comparison of both, gradient based and stochastic optimization methods can be
-found.
+Because of the mathematical model, differential equations constrained
+optimization may be performed using two optimizer families: gradient based
+methods and gradient-free optimizers. While the latter do not require gradient
+information to perform the optimization, the former must have information about
+the variation of the objective with respect to the controlled variable.
+Therefore, although gradient based methods exhibit superior convergences, they
+are more difficult to implement in general purpose software. Nonetheless, when
+calibration is understood as the adjustment of empirical values, gradient-based
+methods may fail due to the location of local minimums. Moreover, stochastic
+based optimizations algorithms (as sweep, Monte-Carlo or genetic) are easily
+parallelizable increasing the performance when executed on machines with
+multiple processors. In \cite{Lacasta15} a deeper comparison of both, gradient
+based and stochastic optimization methods can be found.
 
 In this work CALIBRATOR \citep{CalibratorGit}, a software to perform
 optimizations or calibrations of empirical parameters required in simulation
-models, is presented. It is open source with a BSD type license.
+models, is presented. It is open source with a BSD type license. All input data
+files used in the manuscript are also free and they can be downloaded in the
+cited web page.
 
 The present paper is organized as follows: First, the concepts of calibration
-and optimization are presented as the main goal. Then, the methods used to
+and optimization are presented as the main goal. Then the methods used to
 achieve them in CALIBRATOR are described. The tool structure and organization
-are next presented in detail. Finally, the performance is demonstrated using
-four different applications of interest in agriculture and the conclusions are
-drawn.
+are next presented in detail. After, the performance is demonstrated using
+four different applications of interest in agriculture. Finally, the conclusions
+are drawn.
 
 \section{Calibration and optimization}
 
 Calibration can be considered a particular case of optimization
 \citep{WrightNocedal99}, probably the most widely applied. It usually deals with
-setting the correct parameters that allow to represent correctly the behavior of
-a component or model. It is very common to describe physical phenomena using
+setting the parameters that allow to represent correctly the behavior of a
+component or model. It is very common to describe physical phenomena using
 complex mathematical models including all the possible scales. Nevertheless, it
 is very useful to simplify them including adjustable parameters that enclose
 smaller scales.
@@ -219,7 +224,7 @@ Optimization can be understood as the minimization process of some functional
 that evaluates the objective of a model. Therefore, a functional $J$ must be
 defined in order to evaluate the deviation between your model results
 $\mathbf{x}$ and your objectives $\mathbf{x}_o$. The root mean square deviation
-(RMSD) for example measures the average distance between both:
+for example measures the average distance between both:
 \EQ
 {
 	J \equiv J\PA{\mathbf{x}}
@@ -257,7 +262,7 @@ user.
 
 The optimization methods implemented in CALIBRATOR are next presented. The following notation will be used:
 \begin{description}
-	\item[$N_{simulations}$]: number of simulations made on each iteration.
+	\item[$N_{simulations}$]: number of simulations made for each iteration.
 	\item[$N_{iterations}$]: number of iterations on iterative methods.
 	\item[$N_{total}$]: total number of simulations.
 \end{description}
@@ -298,9 +303,11 @@ Brute force algorithms present low convergence rates but they are strongly
 parallelizable because every simulation is completely independent. If the
 computer, or the computers cluster, can execute $N_{tasks}$ parallel tasks
 every task do $N_{total}/N_{tasks}$ simulations, obviously taking into account
-rounding effects (every task have to perform a natural number of simulations).
-In figure~\ref{FigBruteForceParallelization} a flowchart of this
-parallelization scheme is represented. Being independent each task, a distribution on different execution threads may be performed exploding the full parallel capabilities of the machine where CALIBRATOR is run. 
+rounding effects (every task has to perform a natural number of simulations).
+In figure~\ref{FigBruteForceParallelization} a flowchart of this parallelization
+scheme is represented. Being independent each task, a distribution on different
+execution threads may be performed exploding the full parallel capabilities of
+the machine where CALIBRATOR is run.
 
 \psset{xunit=0.5mm,yunit=0.5mm}
 \PSPICTURE{-90}{-55}{90}{-15}
@@ -382,15 +389,18 @@ flowchart represented in the figure~\ref{FigBruteForceParallelization}.
 
 \subsection{Iterative algorithm applied to brute force methods}
 
-CALIBRATOR allows to iterate both sweep or Monte-Carlo brute force methods in order to
-seek convergence. In this case, the best results from the previous
-iteration are used to force new intervals in the variables for the following iteration. Then, for
-$N_{best}^j$ the subset of the best simulation results in the $j$ iteration, the following quantities are 
-defined:
+CALIBRATOR allows to iterate both sweep or Monte-Carlo brute force methods in
+order to seek convergence. In this case, the best results from the previous
+iteration are used to force new intervals in the variables for the following
+iteration. Then for $N_{best}^j$, the subset of the best simulation results in
+the $j$-th iteration, the following quantities are defined:
 \begin{description}
-	\item[$\displaystyle x_{\max}^b=\max_{i\in N_{best}}x_i^j$]: Maximum value of variable $x$ 
-in the subset of the best simulation results from the $j$ iteration.
-\item[$\displaystyle x_{\min}^b=\max_{i\in N_{best}}x_i^j$]: Minimum value of variable $x$ in the subset of the best simulation results from the $j$ iteration.
+\item[$\displaystyle x_{\max}^b=\max_{i\in N_{best}}x_i^j$]: Maximum value of
+	variable $x$ in the subset of the best simulation results from the $j$-th
+	iteration.
+\item[$\displaystyle x_{\min}^b=\max_{i\in N_{best}}x_i^j$]: Minimum value of
+	variable $x$ in the subset of the best simulation results from the $j$-th
+	iteration.
 \end{description}
 A new interval in the variable $x$ is defined to build the optimization values in the next $(j+1)$ iteration so that:
 \EQ{x_i^{j+1}\in\left[x_{\min}^{j+1},\;x_{\max}^{j+1}\right],}
@@ -720,8 +730,8 @@ The individuals of the former population that obtained lower values in the evalu
 {
 	N_{survival}=N_{population}-N_{new}.
 }{EqSurvival}
-Furthermore, the ancestors to generate new individuals are chosen among the surviving population. Obviously, to avoid negative survival population, the following condition has to be enforced:
-\EQ{R_{mutation}+R_{reproduction}+R_{adaptation}\leq 1}{EqSurvivalCondition}
+Furthermore, the ancestors to generate new individuals are chosen among the surviving population. Obviously, to have survival population, the following condition has to be enforced:
+\EQ{R_{mutation}+R_{reproduction}+R_{adaptation}<1}{EqSurvivalCondition}
 CALIBRATOR uses a default aleatory criterion in GENETIC, with a probability linearly decreasing with the ordinal in the ordered set of surviving individuals (see figure~\ref{FigSelection}).
 
 \PICTURE{250}{110}
@@ -1174,21 +1184,32 @@ method}{FigGeneticParallelization}
 
 \subsection{Organization of CALIBRATOR}
 
-Let us assume that $M$ empirical parameters are sought desired so that the results from a simulation model
-are the best fit to $N$ experimental data and that the simulator requires $n$ input files.
-The structure followed by CALIBRATOR is summarized in \emph{main input file},
-where both the number of experiments ($N$) and the number of required input files ($n$)
-are specified. Furthermore, it contains the extreme values of the empirical parameters
-and the chosen optimization algorithm.
-Then, CALIBRATOR reads the $N\times n$ templates to build the simulator input files
-replacing key labels by empirical parameter values created by the optimization algorithm.
-There are two options: either the simulator compares directly the simulation results with the
-\emph{experimental data file}, hence generating a file with the value of the error, or
-an external program called \emph{evaluator} is invoked to compare with the
-\emph{experimental data file} and to produce the error value. In both cases this error value
-is saved in an \emph{objective value file}. For each experiment, an objective value
-is obtained. The final value of the objective function associated with the $N$ experiments
-is calculated by means of RMSD, as in (\ref{EqRMSD}). Figure~\ref{FigStructure} is a sketch of the structure.
+Let us assume that $N_{parameters}$ empirical parameters are sought desired so
+that the results from a simulation model are the best fit to $N_{experiments}$
+experimental data and that the simulator requires $N_{inputs}$ input files. The
+structure followed by CALIBRATOR is summarized in \emph{main input file},
+where both $N_{experiments}$ and $N_{inputs}$ are specified. Furthermore, it
+contains the extreme values of the empirical parameters and the chosen
+optimization algorithm. Then, CALIBRATOR reads the
+$N_{experiments}\times N_{inputs}$ templates to build the simulator input files
+replacing key labels by empirical parameter values created by the optimization
+algorithm. There are two options: either the simulator compares directly the
+simulation results with the \emph{experimental data file}, hence generating a
+file with the value of the error, or an external program called \emph{evaluator}
+is invoked to compare with the \emph{experimental data file} and to produce the
+error value. In both cases this error value is saved in an
+\emph{objective value file}. For each experiment, an objective value is
+obtained. The final value of the objective function associated with the
+experiments is calculated by means of:
+\EQ
+{
+	J=\sqrt{\frac{1}{N_{experiments}}
+	\,\sum_{i=1}^{N_{experiments}\ABS{w_i\,o_i}^2},
+}{EqObjectiveFunction}
+with $w_i$ the weigth associated to the $i$-th experiment, specified in the
+\emph{main input file} and $o_i$ the objective value obtained by the
+simulator/evaluator program. Figure~\ref{FigStructure} is a sketch of the
+structure.
 \psset{xunit=0.4mm,yunit=0.4mm}
 \PSPICTURE{-20}{-95}{280}{55}
 {

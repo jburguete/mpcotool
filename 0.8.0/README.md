@@ -1,4 +1,4 @@
-CALIBRATOR (0.6.0 version)
+CALIBRATOR (0.8.0 version)
 ===========================
 
 A software to perform calibrations or optimizations of empirical parameters.
@@ -65,12 +65,12 @@ a terminal:
 > $ git clone https://github.com/jburguete/calibrator.git
 
 3. Link the latest genetic version to genetic:
-> $ cd calibrator/0.6.0
+> $ cd calibrator/0.8.0
 >
 > $ ln -s ../../genetic/0.6.1 genetic
 
 4. Build doing on a terminal:
-> $ cd calibrator/0.6.0
+> $ cd calibrator/0.8.0
 >
 > $ aclocal
 >
@@ -109,7 +109,7 @@ MAKING REFERENCE MANUAL INSTRUCTIONS (file latex/refman.pdf)
 On UNIX type systems you need [texlive](https://www.tug.org/texlive) installed.
 On Windows systems you need [MiKTeX](http://miktex.org). Then do in a terminal:
 
-> $ cd calibrator/0.6.0
+> $ cd calibrator/0.8.0
 >
 > $ doxygen
 >
@@ -139,13 +139,16 @@ INPUT FILE FORMAT
 
     <?xml version="1.0"/>
     <calibrate simulator="simulator_name" evaluator="evaluator_name" algorithm="algorithm_type" nsimulations="simulations_number" niterations="iterations_number" tolerance="tolerance_value" nbest="best_number" npopulation="population_number" ngenerations="generations_number" mutation="mutation_ratio" reproduction="reproduction_ratio" adaptation="adaptation_ratio">
-        <experiment name="data_file_1" template1="template_1_1" template2="template_1_2" .../>
+        <experiment name="data_file_1" template1="template_1_1" template2="template_1_2" ... weight="weight_1"/>
         ...
-        <experiment name="data_file_N" template1="template_N_1" template2="template_N_2" .../>
+        <experiment name="data_file_N" template1="template_N_1" template2="template_N_2" ... weight="weight_N"/>
         <variable name="variable_1" minimum="min_value" maximum="max_value" format="c_string_format" sweeps="sweeps_number" nbits="bits_number"/>
         ...
         <variable name="variable_M" minimum="min_value" maximum="max_value" format="c_string_format" sweeps="sweeps_number" nbits="bits_number"/>
     </calibrate>
+
+* *"weight"* associated to every experiment multiplies the objective value
+obtained for every experiment in the final objective function value.
 
 Implemented algorithms are:
 

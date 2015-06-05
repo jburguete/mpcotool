@@ -121,6 +121,8 @@ OF SUCH DAMAGE.
  * \brief tolerance XML label.
  * \def XML_VARIABLE
  * \brief variable XML label.
+ * \def XML_WEIGHT
+ * \brief weight XML label.
  */
 #define XML_ABSOLUTE_MINIMUM (const xmlChar*)"absolute_minimum"
 #define XML_ABSOLUTE_MAXIMUM (const xmlChar*)"absolute_maximum"
@@ -156,5 +158,6 @@ OF SUCH DAMAGE.
 #define XML_TEMPLATE8 (const xmlChar*)"template8"
 #define XML_TOLERANCE (const xmlChar*)"tolerance"
 #define XML_VARIABLE (const xmlChar*)"variable"
+#define XML_WEIGHT (const xmlChar*)"weight"
 
 #endif
