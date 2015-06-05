@@ -158,13 +158,14 @@ Distribution) type license.
 
 Calibration is related to the optimization process of finding the minimum of a
 function usually defined as a relation between the desired value of a quantity
-and that supplied by a suitable simulation model. This process is more necessary
-when simplifications on models are done as some of the physical processes are
-hidden in black box parameters. Deterministic models are sensitive to parameters
-and their ability increases when the quality of the calibration improves. In
-some way, the model may acquire a true predictive character when calibrated. The
-calibration can be understood as an optimization process where the error between
-the estimation of the model and the data set is minimized.
+and that supplied by a suitable simulation model \citep{WrightNocedal99}. This
+process is more necessary when simplifications on models are done as some of the
+physical processes are hidden in black box parameters. Deterministic models are
+sensitive to parameters and their ability increases when the quality of the
+calibration improves. In some way, the model may acquire a true predictive
+character when calibrated. The calibration can be understood as an optimization
+process where the error between the estimation of the model and the data set is
+minimized.
 
 There are many fields where calibration is required. Traditionally, fields such
 as hydrology or weather forecasting have used mathematical models with empirical
@@ -172,16 +173,18 @@ parameters which require to be adjutsted. For example, watershed models usually
 estimates initial parameter values for sediment fractions, instream water
 temperature or infiltration rates \citep{Duan04}. Within agriculture, there are
 many phenomena that can be modelled using differential equations that
-participate in conservation laws. The application of mathematical models to
-describe physical processes is helpful to perform simulations of possible
-scenarios using computational facilities. Despite the quality of these
-mathematical models for predictive purposes, calibration is usually required to
-provide them useful properties. The application of the shallow-water equations
-for the simulation of open-channel flow, for instance, has been widely used, in
-particular for irrigation water delivery analysis. To complete the equations
-with regulation elements, it is accepted that some simplifications can be
-applied. These simplifications usually include parameters that make possible to
-model simpler the phenomena that occur on those regulation elements.
+participate in conservation laws
+\citep{Playan06,JaviSurcos2,Ebrahimiam13,Ouazaa14,Ouazaa15}. The application of
+mathematical models to describe physical processes is helpful to perform
+simulations of possible scenarios using computational facilities. Despite the
+quality of these mathematical models for predictive purposes, calibration is
+usually required to provide them useful properties. The application of the
+shallow-water equations for the simulation of open-channel flow, for instance,
+has been widely used, in particular for irrigation water delivery analysis. To
+complete the equations with regulation elements, it is accepted that some
+simplifications can be applied. These simplifications usually include parameters
+that make possible to model simpler the phenomena that occur on those regulation
+elements.
 
 Because of the mathematical model, differential equations constrained
 optimization may be performed using two optimizer families: gradient based
@@ -191,8 +194,11 @@ the variation of the objective with respect to the controlled variable.
 Therefore, although gradient based methods exhibit superior convergences, they
 are more difficult to implement in general purpose software. Nonetheless, when
 calibration is understood as the adjustment of empirical values, gradient-based
-methods may fail due to the location of local minimums. Moreover, stochastic
-based optimizations algorithms (as sweep, Monte-Carlo or genetic) are easily
+methods may fail due to the location of local minimums. Stochastic based
+optimizations algorithms (as sweep, Monte-Carlo or genetic) are not affected by
+local minimum presence. Applications of these methods in agriculture can be seen
+for instance in \citet{JaviSurcos2} (sweep),  \citet{Ouazaa15} (Monte-Carlo) or
+\citet{Ebrahimiam13} (genetic). Moreover, these methods are easily
 parallelizable increasing the performance when executed on machines with
 multiple processors. In \cite{Lacasta15} a deeper comparison of both, gradient
 based and stochastic optimization methods can be found.
