@@ -158,14 +158,14 @@ Distribution) type license.
 
 Calibration is related to the optimization process of finding the minimum of a
 function usually defined as a relation between the desired value of a quantity
-and that supplied by a suitable simulation model \citep{WrightNocedal99}. This
-process is more necessary when simplifications on models are done as some of the
+and that supplied by a suitable simulation model. This process is more necessary
+when simplifications on models are done as some of the
 physical processes are hidden in black box parameters. Deterministic models are
 sensitive to parameters and their ability increases when the quality of the
 calibration improves. In some way, the model may acquire a true predictive
 character when calibrated. The calibration can be understood as an optimization
 process where the error between the estimation of the model and the data set is
-minimized.
+minimized \citep{Lacasta15}.
 
 There are many fields where calibration is required. Traditionally, fields such
 as hydrology or weather forecasting have used mathematical models with empirical
@@ -190,18 +190,18 @@ Because of the mathematical model, differential equations constrained
 optimization may be performed using two optimizer families: gradient based
 methods and gradient-free optimizers. While the latter do not require gradient
 information to perform the optimization, the former must have information about
-the variation of the objective with respect to the controlled variable.
-Therefore, although gradient based methods exhibit superior convergences, they
-are more difficult to implement in general purpose software. Nonetheless, when
-calibration is understood as the adjustment of empirical values, gradient-based
-methods may fail due to the location of local minimums. Stochastic based
-optimizations algorithms (as sweep, Monte-Carlo or genetic) are not affected by
-local minimum presence. Applications of these methods in agriculture can be seen
-for instance in \citet{JaviSurcos2} (sweep),  \citet{Ouazaa15} (Monte-Carlo) or
-\citet{Ebrahimiam13} (genetic). Moreover, these methods are easily
-parallelizable increasing the performance when executed on machines with
-multiple processors. In \cite{Lacasta15} a deeper comparison of both, gradient
-based and stochastic optimization methods can be found.
+the variation of the objective with respect to the controlled variable
+\citep{Lacasta15}. Therefore, although gradient based methods exhibit superior
+convergences, they are more difficult to implement in general purpose software.
+Nonetheless, when calibration is understood as the adjustment of empirical
+values, gradient-based methods may fail due to the location of local minimums.
+Stochastic based optimizations algorithms (as sweep, Monte-Carlo or genetic) are
+not affected by local minimum presence. Applications of these methods in
+agriculture can be seen for instance in \citet{JaviSurcos2} (sweep),
+\citet{Ouazaa15} (Monte-Carlo) or \citet{Ebrahimiam13} (genetic). Moreover,
+these methods are easily parallelizable increasing the performance when executed
+on machines with multiple processors. In \cite{Lacasta15} a deeper comparison of
+both, gradient based and stochastic optimization methods can be found.
 
 In this work Calibrator \citep{CalibratorGit}, a software to perform
 optimizations or calibrations of empirical parameters required in simulation
@@ -1757,7 +1757,7 @@ value of the evaluation function, where the error norm is the same as in \citet{
 	\\ & $R_{reproduction}=0.1$
 	\\ & $R_{adaptation}=0.1$
 	\\ \hline
-}{Optimal empirical parameters and value of the evaluation function in the simulation of the furrow irrigation cases in \citet{JaviSurcos2} using program SURCOS and several optimization algorithms in Calibrator with the same total number of simulations}{TabSurcos}
+}{Optimal empirical parameters and value of the evaluation function in the simulation of the furrow irrigation cases in \citet{JaviSurcos2} using program SURCOS and several optimization algorithms in Calibrator with the same total number of simulations ($N_{total}=3000$)}{TabSurcos}
 
 Figure~\ref{FigSurcos} shows the results of the water depths and solute concentration from the simulation using the coefficients obtained by the Monte-Carlo method with $N_{iterations}=6$, compared with the experimental values.
 
@@ -1816,7 +1816,7 @@ Table~\ref{TabSprinklerI} shows the results from the calibration of parameters $
 	\\ & $R_{adaptation}=0.1$
 	\\ \hline
 }{Optimal empirical parameters and value of the evaluation function in the case of the sprinkler irrigation
-using different optimization algorithms in Calibrator with the same number of total simulations}{TabSprinklerI}
+using different optimization algorithms in Calibrator with the same number of total simulations ($N_{total}=1000$)}{TabSprinklerI}
 
 Next, using the optimal $D_{50}=3.06$ mm, $n=20.878$ and $P=0.388$ obtained by the Monte-Carlo method (Monte-Carlo with 8 iterations, see table~\ref{TabSprinklerI}) the values of $k_1$ and $k_2$ were calibrated in an experiment with medium wind velocity of 2.84 m/s. The different algorithms in Calibrator were used with a total number of 400 simulations in all cases. Their computational time was around 4 minutes in the laptop computer. In this case, the genetic algorithms provided the best results  (note that they provided identical results in two different configurations), although the rest of the methods reached similar values.
 
@@ -1853,7 +1853,7 @@ Next, using the optimal $D_{50}=3.06$ mm, $n=20.878$ and $P=0.388$ obtained by t
 	\\ & $R_{reproduction}=0.1$
 	\\ & $R_{adaptation}=0.1$
 	\\ \hline
-}{Optimal parameters and values of the evaluations function in the experiment of the sprinkler irrigation under wind conditions of 2.84 m/s using different optimization algorithms implemented in Calibrator with the same total number of simulations}{TabSprinklerII}
+}{Optimal parameters and values of the evaluations function in the experiment of the sprinkler irrigation under wind conditions of 2.84 m/s using different optimization algorithms implemented in Calibrator with the same total number of simulations ($N_{total}=400$)}{TabSprinklerII}
 
 Finally, figure~\ref{FigSprinkler} shows the measured (in pluviometers) and simulated water distribution using the optimal parameters in windless and wind conditions of average velocity 2.84 m/s.
 
@@ -1978,7 +1978,7 @@ The best results where obtained with the genetic algorithms. Note that in this c
 	\\ & $R_{reproduction}=0.1$ & $\tau=3.32$s
 	\\ & $R_{adaptation}=0.1$
 	\\ \hline
-}{Optimal parameters and values of the evaluation function in the four towers pivot case in \citet{Ouazaa15} using different optimization algorithms implemented in Calibrator with the same number of total simulations}{TabPivot}
+}{Optimal parameters and values of the evaluation function in the four towers pivot case in \citet{Ouazaa15} using different optimization algorithms implemented in Calibrator with the same number of total simulations ($N_{total}=10000$)}{TabPivot}
 
 In figures \ref{FigPivot100} to \ref{FigPivot27} the histograms of the number
 of measured and simulated starts and stops are represented for the different
