@@ -70,8 +70,6 @@ a terminal:
 > $ ln -s ../../genetic/0.6.1 genetic
 
 4. Build doing on a terminal:
-> $ cd calibrator/0.8.0
->
 > $ aclocal
 >
 > $ autoconf
@@ -88,7 +86,8 @@ ___________
 1. Select adequate versions:
 > $ export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.15
 
-2. Then, in a MSYS2 terminal, follow steps 1 to 4 of the previous Debian Linux
+2. Then, in a terminal, follow steps 1 to 4 of the previous Debian Linux 8.0
+section.
 
 Microsoft Windows 7 (with MSYS2)
 ________________________________
