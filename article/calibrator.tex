@@ -134,9 +134,9 @@ furrow, canal
 
 \begin{abstract}
 The present work describes Calibrator, a new software program to perform
-optimizations or calibrations of empirical parameters required in the
+optimization or calibration of empirical parameters required in the
 formulation of numerical simulation models. The structure is such that it can be
-easily adapted to different simulation codes.
+easily adapted to different external simulation codes.
 One genetic algorithm, two brute force optimization algorithms (sweep and
 Monte-Carlo) and an iterative algorithm to improve the brute force methods are
 included as alternative methods.
@@ -169,7 +169,7 @@ minimized \citep{Lacasta15}.
 
 There are many fields where calibration is required. Traditionally, fields such
 as hydrology or weather forecasting have used mathematical models with empirical
-parameters which require to be adjutsted. For example, watershed models usually
+parameters which require to be adjusted. For example, watershed models usually
 estimates initial parameter values for sediment fractions, instream water
 temperature or infiltration rates \citep{Duan04}. Within agriculture, there are
 many phenomena that can be modelled using differential equations that
@@ -195,7 +195,7 @@ the variation of the objective with respect to the controlled variable
 convergences, they are more difficult to implement in general purpose software.
 Nonetheless, when calibration is understood as the adjustment of empirical
 values, gradient-based methods may fail due to the location of local minimums.
-Stochastic based optimizations algorithms (as sweep, Monte-Carlo or genetic) are
+Stochastic based optimization algorithms (as sweep, Monte-Carlo or genetic) are
 not affected by local minimum presence. Applications of these methods in
 agriculture can be seen for instance in \citet{JaviSurcos2} (sweep),
 \citet{Ouazaa15} (Monte-Carlo) or \citet{Ebrahimiam13} (genetic). Moreover,
@@ -204,7 +204,7 @@ on machines with multiple processors. In \cite{Lacasta15} a deeper comparison of
 both, gradient based and stochastic optimization methods can be found.
 
 In this work Calibrator \citep{CalibratorGit}, a software to perform
-optimizations or calibrations of empirical parameters required in simulation
+optimization or calibration of empirical parameters required in simulation
 models, is presented. It is open source with a BSD type license. All input data
 files used in the manuscript are also free and they can be downloaded in the
 cited web page.
@@ -250,7 +250,7 @@ $\mathbf{x}\equiv\mathbf{x}\PA{\mathbf{y}}$ may be directly or indirectly
 related with another tunable quantity: $\mathbf{y}\in\mathbb{R}^m$  ($m$
 parameters which can be optimized in the model). The complexity of the
 optimization process comes from the relation that may be established between the
-model and this tuneable set of parameters. Bearing in mind that relation, the
+model and this tunable set of parameters. Bearing in mind that relation, the
 optimization is the minimization of the functional by means of the modification
 of those parameters. Moreover, those parameters are usually defined in a range
 $y_i\in\PA{y_{i,min},\,y_{i,max}}$ so the minimization problem is formally
@@ -334,7 +334,7 @@ the machine where Calibrator is run.
 	\psline{->}(-55,-40)(0,-45)
 	\psline{->}(0,-40)(0,-45)
 	\psline{->}(55,-40)(0,-45)
-	\rput(0,-50){Getting optimal empirical paramaters set}
+	\rput(0,-50){Getting optimal empirical parameters set}
 	\psframe(-50,-45)(50,-55)
 }{Flowchart of the parallelization scheme in Calibrator for brute force methods
 (sweep and Monte-Carlo)}{FigBruteForceParallelization}
@@ -342,7 +342,7 @@ the machine where Calibrator is run.
 \subsection{Monte-Carlo method}
 
 Monte-Carlo based methods run simulations using aleatory values of the
-variables assuming  uniform probability within the extrema values range. This is
+variables assuming  uniform probability within the extreme values range. This is
 an old brute force method attributed to different authors. In
 \citet{AtanassovDimov08} an interesting analysis of this method is presented.
 Figure~\ref{FigMonteCarlo} shows the structure of an example using two
@@ -546,7 +546,7 @@ figure~\ref{FigIterativeParallelization}).
 	\psline{->}(-60,-45)(0,-50)
 	\psline{->}(0,-45)(0,-50)
 	\psline{->}(60,-45)(0,-50)
-	\rput(0,-55){Getting $N_{best}$ empirical paramaters sets}
+	\rput(0,-55){Getting $N_{best}$ empirical parameters sets}
 	\psframe(-55,-50)(55,-60)
 	\psline{->}(0,-60)(0,-65)
 	\rput(0,-70){$\cdots$}
@@ -567,7 +567,7 @@ figure~\ref{FigIterativeParallelization}).
 	\psline{->}(-60,-115)(0,-120)
 	\psline{->}(0,-115)(0,-120)
 	\psline{->}(60,-115)(0,-120)
-	\rput(0,-125){Getting optimal empirical paramaters set}
+	\rput(0,-125){Getting optimal empirical parameters set}
 	\psframe(-55,-120)(55,-130)
 }{Flowchart of the parallelization scheme in Calibrator for the iterative
 method}{FigIterativeParallelization}
@@ -647,8 +647,8 @@ The code in Genetic is also open source under BSD license. Figure~\ref{FigGeneti
 
 \subsubsection{The genome}
 
-The variables to calibrate/optimize are coded in Genetic using a bit chain
-(genome). The larger the number of bits assigned to a variable the higher the resolution.
+The variables to calibrate/optimize are coded in Genetic using a bit chain: the
+genome. The larger the number of bits assigned to a variable the higher the resolution.
 The number of bits assigned to each variable, and therefore the genome size, is fixed and the same for all the 
 simulations. Figure~\ref{FigGenome} shows an example for the coding of three variables. The value assigned to a variable $x$ is determined by the allowed extreme values $x_{\min}$ and $x_{\max}$, the binary number assigned in the genome to variable $I_x$ and by the number of bits assigned to variable $N_x$ according to
 the following formula:
@@ -861,7 +861,7 @@ In the mutation algorithm an identical copy of the parent genome is made except 
 
 \subsubsection{Reproduction algorithm}
 
-The default algorithm in Genetic, used by Calibrator, selects two different parents with one of the least errors after the 
+The default algorithm in Genetic selects two different parents with one of the least errors after the 
 complete simulation of one generation. 
 A new individual is then generated by sharing the common bits of both parents and a random choice in the others.
 The new child has the same number of bits as the parents and different genome. Figure~\ref{FigReproduction} shows a sketch
@@ -1142,7 +1142,7 @@ figure~\ref{FigGeneticParallelization}.
 	\psline{->}(-60,-45)(0,-50)
 	\psline{->}(0,-45)(0,-50)
 	\psline{->}(60,-45)(0,-50)
-	\rput(0,-55){Getting $N_{survival}$ empirical paramaters sets}
+	\rput(0,-55){Getting $N_{survival}$ empirical parameters sets}
 	\psframe(-55,-50)(55,-60)
 	\psline{->}(0,-60)(0,-65)
 	\rput(0,-70){2nd generation:}
@@ -1161,7 +1161,7 @@ figure~\ref{FigGeneticParallelization}.
 	\psline{->}(-55,-100)(0,-105)
 	\psline{->}(0,-100)(0,-105)
 	\psline{->}(55,-100)(0,-105)
-	\rput(0,-110){Getting $N_{survival}$ empirical paramaters sets}
+	\rput(0,-110){Getting $N_{survival}$ empirical parameters sets}
 	\psframe(-55,-105)(55,-115)
 	\psline{->}(0,-115)(0,-120)
 	\rput(0,-125){$\cdots$}
@@ -1182,7 +1182,7 @@ figure~\ref{FigGeneticParallelization}.
 	\psline{->}(-55,-170)(0,-175)
 	\psline{->}(0,-170)(0,-175)
 	\psline{->}(55,-170)(0,-175)
-	\rput(0,-180){Getting optimal empirical paramaters set}
+	\rput(0,-180){Getting optimal empirical parameters set}
 	\psframe(-55,-175)(55,-185)
 }{Flowchart of the parallelization scheme implemented in Genetic for the genetic
 method}{FigGeneticParallelization}
@@ -1213,7 +1213,7 @@ experiments is calculated by means of:
 	J=\sqrt{\frac{1}{N_{experiments}}
 	\,\sum_{i=1}^{N_{experiments}}\ABS{w_i\,o_i}^2},
 }{EqObjectiveFunction}
-with $w_i$ the weigth associated to the $i$-th experiment, specified in the
+with $w_i$ the weight associated to the $i$-th experiment, specified in the
 \emph{main input file}. Figure~\ref{FigStructure} is a sketch of the
 structure.
 \psset{xunit=0.4mm,yunit=0.4mm}
@@ -1457,7 +1457,7 @@ in the simulation input files.
 \subsubsection{Template files}
 
 $N_{experiments}\times N_{inputs}$
-template files must be written to reproduce every input file associated to every experiment (see figure~\ref{FigStructure}). All the template files are sintactically analyzed by Calibrator to replace the labels as follows in order to generate the simulation program input files:
+template files must be written to reproduce every input file associated to every experiment (see figure~\ref{FigStructure}). All the template files are syntactically analyzed by Calibrator to replace the labels as follows in order to generate the simulation program input files:
 \begin{description}
 \item[@variableX@]: is replaced by the label associated to the $X$-th empirical parameter defined in \emph{main input file};
 \item[@valueX@]: is replaced by the value associated to the $X$-th empirical parameter calculated by the optimization algorithm using the format defined in \emph{main input file};
@@ -1513,7 +1513,7 @@ $ make
 \end{lstlisting}
 
 Some systems (such OpenBSD) might require extra options. In those cases follow the instructions of the README files in both repositories.
-Note that 0.6.1 and 0.8.0 were the most recent versions of Genetic and Calibrator repectively at the moment to write the present paper. Replace both by the latest versions.
+Note that 0.6.1 and 0.8.0 were the most recent versions of Genetic and Calibrator respectively at the moment to write the present paper. Replace both by the latest versions.
 
 \subsection{Command line format}
 
@@ -1558,13 +1558,12 @@ of variables in models used for open channel flow, surface irrigation, sprinkler
 engines movement. All input data files can be downloaded from the web page \citep{CalibratorGit}.
 
 Most of the cases have been run on a laptop computer equipped with an Intel(R) Core(TM) i7 M620 2.67GHz processor. 
-Then, the computation has been performed in four parallelized tasks to make the most of the processor's double nucleus with hyperthreading. Only in the optimization
-of the management of the Canal de Violada, much more expensive computationally, the
-Memento cluster of the BIFI has been used.
+Then, the computation has been performed in four parallelized tasks to make the most of the processor's double nucleus with hyperthreading.
+Only the optimization of the management of the Canal de Violada, much more computationally expensive, has been performed in the BIFI cluster Memento.
 
 \subsection{Optimization of a canal management}
 
-A real irrigation canal has been analysed in order to find out the optimal
+A real irrigation canal has been analyzed in order to find out the optimal
 values of two variables of interest which take into account the daily gate
 opening modification time. The area of study is located in the North-east of
 Spain, in the province of Huesca. It consists of the first 13657 meters of the
@@ -1714,7 +1713,7 @@ gates using the default schedule developed by the channel guards and that
 obtained in the best of our simulations. It can be observed that in both cases 
 the desired discharge at the different gates in Almudévar, Gurrea and El Temple is supplied,
 with some transient peaks affecting the outlet discharge.
-This work confirmes that an optimized management reduces remarkably the amplitude and the duration of these undesired peaks.
+This work confirms that an optimized management reduces remarkably the amplitude and the duration of these undesired peaks.
 
 \FIGII{Violada-contributions.eps}{Violada-optimized-contributions.eps}
 {Temporal evolution of discharges supplied at inlet, outlet and gates as (top)
@@ -1764,7 +1763,7 @@ Figure~\ref{FigSurcos} shows the results of the water depths and solute concentr
 \FIGVI{surcos-advance.eps}{surcos-depth.eps}{surcos-solute-q1.eps}
 {surcos-solute-q2.eps}{surcos-solute-q3.eps}{surcos-solute-q4.eps}
 {(top left) Advance time profile, (top right) inlet depth evolution and
-(middle-bottom) solute oncentration evolution at probes for the experiments
+(middle-bottom) solute concentration evolution at probes for the experiments
 Q1-Q4 described in \citet{JaviSurcos2} simulated with the optimal calibrated
 parameters obtained for the Monte-Carlo method with $N_{iterations}=6$ (see
 table~\ref{TabSurcos})}{FigSurcos}
@@ -1986,7 +1985,7 @@ machine workings.
 Note that the figures are not represented with uniform scales to better
 visualization of the differences among measured and simulated results.
 The agreement between measured and simulated data when using the parameters calibrated with the optimal genetic algorithm must be considered reasonable taking into account the chaotic character of the movement.
-However, coupling a sprinkler irrigation model, it could be concluded that losses in water distribution uniformity associated to the tower movement variabilities can be considered negligible \citep{Ouazaa15}.
+However, coupling a sprinkler irrigation model, it could be concluded that losses in water distribution uniformity associated to the tower movement variability can be considered negligible \citep{Ouazaa15}.
 
 \FIGIV{pivot-measured-starts-100.eps}{pivot-measured-stops-100.eps}
 {pivot-simulated-starts-100.eps}{pivot-simulated-stops-100.eps}
