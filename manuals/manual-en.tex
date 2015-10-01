@@ -99,8 +99,8 @@ required in simulation models}
 The source code in Calibrator is written in C language. This software has
 been built and tested in the following operative systems:
 \begin{itemize}
-\item Debian Linux 8.2,
-\item DragonFly BSD 4.0.5,
+\item Debian kFreeBSD and Linux 8.2,
+\item DragonFly BSD 4.2.4,
 \item FreeBSD 10.1,
 \item NetBSD 6.1.5,
 \item OpenBSD 5.7,
@@ -127,6 +127,11 @@ On OpenBSD 5.7, prior to build the code, you have to select adequate version of 
 $ export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.15
 \end{lstlisting}
 
+On Window systems, you have to install MSYS2
+(http://sourceforge.net/projects/msys2) and the required libraries and
+utilities. You can follow detailed instructions in
+https://github.com/jburguete/install-unix.
+
 Once all the tools installed, the Genetic source code must be downloaded and it must be compiled following on a terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 $ git clone https://github.com/jburguete/genetic.git
@@ -149,8 +154,6 @@ $ automake --add-missing
 $ ./configure
 $ make
 \end{lstlisting}
-
-Some systems (such OpenBSD) might require extra options. In those cases follow the instructions of the README files in both repositories.
 
 \chapter{Command line format}
 
