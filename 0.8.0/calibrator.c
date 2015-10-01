@@ -104,7 +104,7 @@ typedef struct
      * \var nsimulations
      * \brief Simulations number per experiment.
      * \var algorithm
-     * \brief Algorithm number
+     * \brief Algorithm type.
      * \var nsweeps
      * \brief Array of sweeps of the sweep algorithm.
      * \var nstart

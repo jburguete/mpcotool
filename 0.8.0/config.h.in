@@ -160,4 +160,15 @@ OF SUCH DAMAGE.
 #define XML_VARIABLE (const xmlChar*)"variable"
 #define XML_WEIGHT (const xmlChar*)"weight"
 
+// Interface labels
+
+/**
+ * \def LOCALE_DIR
+ * \brief Locales directory.
+ * \def PROGRAM_INTERFACE
+ * \brief Name of the interface program.
+ */
+#define LOCALE_DIR "locale"
+#define PROGRAM_INTERFACE "calibrator_gui"
+
 #endif
