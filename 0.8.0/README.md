@@ -46,10 +46,8 @@ This software has been built and tested in the following operative systems.
 Probably, it can be built in other systems, distributions, or versions but it
 has not been tested.
 
-Debian Linux 8.2
-________________
-Debian kFreeBSD 8.2
-___________________
+Debian 8.2 (Linux, kFreeBSD or Hurd)
+____________________________________
 DragonFly BSD 4.2.4
 ___________________
 FreeBSD 10.2
@@ -78,8 +76,7 @@ ___________
 1. Select adequate versions:
 > $ export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.15
 
-2. Then, in a terminal, follow steps 1 to 4 of the previous Debian Linux 8.0
-section.
+2. Then, in a terminal, follow steps 1 to 4 of the previous Debian 8.2 section.
 
 Microsoft Windows 7 (with MSYS2)
 ________________________________
@@ -91,8 +88,8 @@ libraries and utilities. You can follow detailed instructions in
 [install-unix]
 (https://github.com/jburguete/install-unix/blob/master/tutorial.pdf)
 
-2. Then, in a MSYS2 terminal, follow steps 1 to 4 of the previous Debian Linux
-8.2 section.
+2. Then, in a MSYS2 terminal, follow steps 1 to 4 of the previous Debian 8.2
+section.
 
 MAKING REFERENCE MANUAL INSTRUCTIONS (file latex/refman.pdf)
 ------------------------------------------------------------
