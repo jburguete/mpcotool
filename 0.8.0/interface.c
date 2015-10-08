@@ -3,7 +3,7 @@ Calibrator: a software to make calibrations of empirical parameters.
 
 AUTHORS: Javier Burguete and Borja Latorre.
 
-Copyright 2012-2014, AUTHORS.
+Copyright 2012-2015, AUTHORS.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -40,7 +40,15 @@ OF SUCH DAMAGE.
 #include <string.h>
 #include <math.h>
 #include <unistd.h>
+#include <locale.h>
 #include <libxml/parser.h>
+#include <libintl.h>
+#include <glib.h>
+#include <gtk/gtk.h>
+
+#define MAX_NINPUTS 8
+#define PROGRAM_INTERFACE "Calibrator"
+#define LOCALE_DIR "locales"
 
 /**
  * \struct Input
@@ -101,7 +109,7 @@ typedef struct
     unsigned int nvariables, nexperiments, ninputs, nsimulations, algorithm,
     *nsweeps, niterations, nbest;
     double *rangemin, *rangemax, *rangeminabs, *rangemaxabs, *weight, tolerance,
-		  mutation_ratio, reproduction_ratio, adaptation_ratio;
+    mutation_ratio, reproduction_ratio, adaptation_ratio;
 } Input;
 
 /**
@@ -110,18 +118,57 @@ typedef struct
  */
 typedef struct
 {
-	/**
-	 * \var button_save
-	 * \brief Save GtkButton.
-	 * \var window
-	 * \brief Main GtkWindow.
-	 */
-	GtkButton *button_save;
-	GtkWindow *window;
+    /**
+     * \var button_save
+     * \brief Save GtkButton.
+     * \var button_help
+     * \brief Help GtkButton.
+     * \var grid
+     * \brief Main GtkGrid.
+     * \var logo
+     * \brief Logo GdkPixbuf.
+     * \var window
+     * \brief Main GtkWindow.
+     */
+    GtkButton *button_save, *button_help;
+    GtkGrid *grid;
+    GdkPixbuf *logo;
+    GtkWindow *window;
 } Window;
 
+/**
+ * \var input
+ * \brief Input struct to define the input file to calibrator.
+ * \var window
+ * \brief Window struct to define the main interface window.
+ */
 Input input[1];
 Window window[1];
+
+/**
+ * \fn void show_error(char *msg)
+ * \brief Function to show a dialog with an error message.
+ * \param msg
+ * \brief Error message.
+ */
+void show_error(char *msg)
+{
+    GtkMessageDialog *dlg;
+
+    // Creating the dialog
+    dlg = (GtkMessageDialog*)gtk_message_dialog_new
+    (window->window, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK,
+     "%s", msg);
+
+    // Setting the dialog title
+    gtk_window_set_title(GTK_WINDOW(dlg), gettext("ERROR!"));
+
+    // Showing the dialog and waiting response
+    gtk_dialog_run(GTK_DIALOG(dlg));
+
+    // Closing and freeing memory
+    gtk_widget_destroy(GTK_WIDGET(dlg));
+}
 
 /**
  * \fn void input_save()
@@ -129,26 +176,113 @@ Window window[1];
  */
 void input_save()
 {
-	char *buffer;
-	xmlDoc *doc;
-	xmlNode *node, *child;
-	doc = xmlNewDoc((const xmlChar*)"1.0");
-	node = xmlNewDocNode(doc, 0, XML_CALIBRATE, 0);
-	xmlDocSetRootElement(doc, node);
-	xmlSaveFormatFile(buffer, doc, 1);
-	xmlFreeDoc(doc);
+    char *buffer;
+    xmlDoc *doc;
+    xmlNode *node, *child;
+    GtkFileChooserDialog *dlg;
+
+    // Opening the input file
+    doc = xmlNewDoc((const xmlChar*)"1.0");
+
+    // Root XML node
+    node = xmlNewDocNode(doc, 0, XML_CALIBRATE, 0);
+    xmlDocSetRootElement(doc, node);
+
+    // Opening the saving dialog
+    dlg = (GtkFileChooserDialog*)gtk_file_chooser_dialog_new(
+        gettext("Save file"),
+        window->window,
+        GTK_FILE_CHOOSER_ACTION_SAVE,
+        gettext("_Cancel"),
+        GTK_RESPONSE_CANCEL,
+        gettext("_OK"),
+        GTK_RESPONSE_OK,
+        NULL);
+
+    // If OK response then saving
+    if (gtk_dialog_run(GTK_DIALOG(dlg)) == GTK_RESPONSE_OK)
+        {
+            buffer = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dlg));
+            xmlSaveFormatFile(buffer, doc, 1);
+            g_free(buffer);
+        }
+
+    // Closing and freeing memory
+    gtk_widget_destroy(GTK_WIDGET(dlg));
+    xmlFreeDoc(doc);
 }
 
 /**
- * \fn int window_new()
- * \brief Function to open the main window.
- * \return 1 on success, 0 on error.
+ * \fn void window_help()
+ * \brief Function to show a help dialog.
  */
-int window_new()
+void window_help()
 {
-	window->window = (GtkWindow*)gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_title(window->window, PROGRAM_INTERFACE);
-	return 1;
+    gchar *authors[] =
+    {
+        "Javier Burguete Tolosa (jburguete@eead.csic.es)",
+		"Borja Latorre Garcés (borja.latorre@csic.es)",
+        NULL
+    };
+    gtk_show_about_dialog(window->window,
+                          "program_name",
+                          "Calibrator",
+                          "comments",
+                          gettext("A software to make calibrations of empirical parameters"),
+                          "authors",
+                          authors,
+                          "translator-credits",
+                          gettext("Javier Burguete Tolosa (jburguete@eead.csic.es)"),
+                          "version",
+                          "0.8.0",
+                          "copyright",
+                          "Copyright 2012-2015 Javier Burguete Tolosa",
+                          "logo",
+                          window->logo,
+                          "website-label",
+                          gettext("Website"),
+                          "website",
+                          "https://github.com/jburguete/calibrator",
+                          NULL);
+}
+
+/**
+ * \fn int window_new(GtkApplication *application)
+ * \brief Function to open the main window.
+ * \param application
+ * \brief Main GtkApplication.
+ */
+void window_new(GtkApplication *application)
+{
+    // Creating the window
+    window->window = (GtkWindow*)gtk_application_window_new(application);
+
+    // Setting the window title
+    gtk_window_set_title(window->window, PROGRAM_INTERFACE);
+
+    // Creating the save button
+    window->button_save
+    = (GtkButton*)gtk_button_new_with_mnemonic(gettext("_Save"));
+    g_signal_connect(window->button_save, "clicked", input_save, NULL);
+
+	// Creating the help button
+	window->button_help
+		= (GtkButton*)gtk_button_new_with_mnemonic(gettext("_Help"));
+	g_signal_connect(window->button_help, "clicked", window_help, NULL);
+
+    // Creating the grid and attaching the widgets to the grid
+    window->grid = (GtkGrid*)gtk_grid_new();
+    gtk_grid_attach(window->grid, GTK_WIDGET(window->button_save), 0, 0, 1, 1);
+    gtk_grid_attach(window->grid, GTK_WIDGET(window->button_help), 1, 0, 1, 1);
+    gtk_container_add(GTK_CONTAINER(window->window), GTK_WIDGET(window->grid));
+
+    // Setting the window logo
+    window->logo = gtk_image_get_pixbuf
+    (GTK_IMAGE(gtk_image_new_from_file("logo.png")));
+    gtk_window_set_icon(window->window, window->logo);
+
+    // Showing the window
+    gtk_widget_show_all(GTK_WIDGET(window->window));
 }
 
 /**
@@ -162,12 +296,21 @@ int window_new()
  */
 int main(int argn, char **argc)
 {
-	xmlKeepBlanksDefault(0);
-	setlocale(LC_ALL, "");
-	setlocale(LC_NUMERIC, "C");
-	buffer = g_get_current_dir();
-	bindtextdomain
-		(PROGRAM_INTERFACE, g_build_filename(buffer, LOCALE_DIR, NULL));
-	bind_textdomain_codeset(PROGRAM_INTERFACE, "UTF-8");
-	textdomain(PROGRAM_INTERFACE);
+    int status;
+    char *buffer;
+    GtkApplication *application;
+    xmlKeepBlanksDefault(0);
+    setlocale(LC_ALL, "");
+    setlocale(LC_NUMERIC, "C");
+    buffer = g_get_current_dir();
+    bindtextdomain
+    (PROGRAM_INTERFACE, g_build_filename(buffer, LOCALE_DIR, NULL));
+    bind_textdomain_codeset(PROGRAM_INTERFACE, "UTF-8");
+    textdomain(PROGRAM_INTERFACE);
+    application = gtk_application_new("git.jburguete.calibrator",
+                                      G_APPLICATION_FLAGS_NONE);
+    g_signal_connect(application, "activate", (void(*))window_new, NULL);
+    status = g_application_run(G_APPLICATION(application), argn, argc);
+    g_object_unref(application);
+    return status;
 }
