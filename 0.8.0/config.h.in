@@ -36,6 +36,15 @@ OF SUCH DAMAGE.
 #ifndef CONFIG__H
 #define CONFIG__H 1
 
+/**
+ * \def MAX_NINPUTS
+ * \brief Maximum number of input files in the simulator program.
+ * \def NALGORITHMS
+ * \brief Number of algorithms.
+ */
+#define MAX_NINPUTS 8
+#define NALGORITHMS 3
+
 // Default choices
 
 /**

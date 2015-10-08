@@ -60,12 +60,6 @@ OF SUCH DAMAGE.
 #define DEBUG 0
 
 /**
- * \def MAX_NINPUTS
- * \brief Maximum number of input files in the simulator program.
- */
-#define MAX_NINPUTS 8
-
-/**
  * \enum CalibrateAlgorithm
  * \brief Enum to define the calibration algorithm.
  */
