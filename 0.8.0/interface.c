@@ -254,6 +254,8 @@ void window_update()
     gtk_widget_hide(GTK_WIDGET(window->entry_mutation));
     gtk_widget_hide(GTK_WIDGET(window->label_reproduction));
     gtk_widget_hide(GTK_WIDGET(window->entry_reproduction));
+    gtk_widget_hide(GTK_WIDGET(window->label_sweeps));
+    gtk_widget_hide(GTK_WIDGET(window->entry_sweeps));
     switch (window_get_algorithm())
         {
         case 0:
@@ -273,6 +275,8 @@ void window_update()
             gtk_widget_show(GTK_WIDGET(window->entry_tolerance));
             gtk_widget_show(GTK_WIDGET(window->label_bests));
             gtk_widget_show(GTK_WIDGET(window->entry_bests));
+    		gtk_widget_show(GTK_WIDGET(window->label_sweeps));
+		    gtk_widget_show(GTK_WIDGET(window->entry_sweeps));
             break;
         default:
             gtk_widget_show(GTK_WIDGET(window->label_population));
@@ -412,6 +416,60 @@ void window_new(GtkApplication *application)
     gtk_container_add(GTK_CONTAINER(window->frame_algorithm),
                       GTK_WIDGET(window->grid_algorithm));
 
+	// Creating the variable widgets
+	window->combo_variable = (GtkComboBoxText*)gtk_combo_box_text_new();
+	window->button_add_variable = (GtkButton*)gtk_button_new_with_mnemonic(gettext("_Add"));
+	window->button_remove_variable = (GtkButton*)gtk_button_new_with_mnemonic(gettext("_Remove"));
+	window->label_variable = (GtkLabel*)gtk_label_new(gettext("Name"));
+	window->entry_variable = (GtkEntry*)gtk_entry_new();
+	window->label_min = (GtkLabel*)gtk_label_new(gettext("Minimum"));
+	window->entry_min = (GtkEntry*)gtk_entry_new();
+	window->label_max = (GtkLabel*)gtk_label_new(gettext("Maximum"));
+	window->entry_max = (GtkEntry*)gtk_entry_new();
+	window->label_absmin = (GtkLabel*)gtk_label_new(gettext("Absolute minimum"));
+	window->entry_absmin = (GtkEntry*)gtk_entry_new();
+	window->label_absmax = (GtkLabel*)gtk_label_new(gettext("Absolute maximum"));
+	window->entry_absmax = (GtkEntry*)gtk_entry_new();
+	window->label_sweeps = (GtkLabel*)gtk_label_new(gettext("Sweeps number"));
+	window->entry_sweeps = (GtkSpinButton*)gtk_spin_button_new_with_range(1., 1.e12, 1.);
+	window->grid_variable = (GtkGrid*)gtk_grid_new();
+	gtk_grid_attach(window->grid_variable, GTK_WIDGET(window->combo_variable), 0, 0, 2, 1);
+	gtk_grid_attach(window->grid_variable, GTK_WIDGET(window->button_add_variable), 0, 1, 1, 1);
+	gtk_grid_attach(window->grid_variable, GTK_WIDGET(window->button_remove_variable), 1, 1, 1, 1);
+	gtk_grid_attach(window->grid_variable, GTK_WIDGET(window->label_variable), 0, 2, 1, 1);
+	gtk_grid_attach(window->grid_variable, GTK_WIDGET(window->entry_variable), 1, 2, 1, 1);
+	gtk_grid_attach(window->grid_variable, GTK_WIDGET(window->label_min), 0, 3, 1, 1);
+	gtk_grid_attach(window->grid_variable, GTK_WIDGET(window->entry_min), 1, 3, 1, 1);
+	gtk_grid_attach(window->grid_variable, GTK_WIDGET(window->label_max), 0, 4, 1, 1);
+	gtk_grid_attach(window->grid_variable, GTK_WIDGET(window->entry_max), 1, 4, 1, 1);
+	gtk_grid_attach(window->grid_variable, GTK_WIDGET(window->label_absmin), 0, 5, 1, 1);
+	gtk_grid_attach(window->grid_variable, GTK_WIDGET(window->entry_absmin), 1, 5, 1, 1);
+	gtk_grid_attach(window->grid_variable, GTK_WIDGET(window->label_absmax), 0, 6, 1, 1);
+	gtk_grid_attach(window->grid_variable, GTK_WIDGET(window->entry_absmax), 1, 6, 1, 1);
+	gtk_grid_attach(window->grid_variable, GTK_WIDGET(window->label_sweeps), 0, 7, 1, 1);
+	gtk_grid_attach(window->grid_variable, GTK_WIDGET(window->entry_sweeps), 1, 7, 1, 1);
+	window->frame_variable = (GtkFrame*)gtk_frame_new(gettext("Variable"));
+	gtk_container_add(GTK_CONTAINER(window->frame_variable), GTK_WIDGET(window->grid_variable));
+
+	// Creating the experiment widgets
+	window->combo_experiment = (GtkComboBoxText*)gtk_combo_box_text_new();
+	window->button_add_experiment = (GtkButton*)gtk_button_new_with_mnemonic(gettext("_Add"));
+	window->button_remove_experiment = (GtkButton*)gtk_button_new_with_mnemonic(gettext("_Remove"));
+	window->label_experiment = (GtkLabel*)gtk_label_new(gettext("Name"));
+	window->button_experiment = (GtkFileChooserButton*)gtk_file_chooser_button_new(gettext("Experimental data file"), GTK_FILE_CHOOSER_ACTION_OPEN);
+	window->label_weight = (GtkLabel*)gtk_label_new(gettext("Weight"));
+	window->entry_weight = (GtkSpinButton*)gtk_spin_button_new_with_range(0., 1., 0.001);
+	window->grid_experiment = (GtkGrid*)gtk_grid_new();
+	gtk_grid_attach(window->grid_experiment, GTK_WIDGET(window->combo_experiment), 0, 0, 2, 1);
+	gtk_grid_attach(window->grid_experiment, GTK_WIDGET(window->button_add_experiment), 0, 1, 1, 1);
+	gtk_grid_attach(window->grid_experiment, GTK_WIDGET(window->button_remove_experiment), 1, 1, 1, 1);
+	gtk_grid_attach(window->grid_experiment, GTK_WIDGET(window->label_experiment), 0, 2, 1, 1);
+	gtk_grid_attach(window->grid_experiment, GTK_WIDGET(window->button_experiment), 1, 2, 1, 1);
+	gtk_grid_attach(window->grid_experiment, GTK_WIDGET(window->label_weight), 0, 3, 1, 1);
+	gtk_grid_attach(window->grid_experiment, GTK_WIDGET(window->entry_weight), 1, 3, 1, 1);
+	window->frame_experiment = (GtkFrame*)gtk_frame_new(gettext("Experiment"));
+	gtk_container_add(GTK_CONTAINER(window->frame_experiment), GTK_WIDGET(window->grid_experiment));
+	
     // Creating the grid and attaching the widgets to the grid
     window->grid = (GtkGrid*)gtk_grid_new();
     gtk_grid_attach(window->grid, GTK_WIDGET(window->button_save), 0, 0, 1, 1);
@@ -421,7 +479,9 @@ void window_new(GtkApplication *application)
     gtk_grid_attach(window->grid, GTK_WIDGET(window->button_simulator), 1, 1, 1, 1);
     gtk_grid_attach(window->grid, GTK_WIDGET(window->label_evaluator), 2, 1, 1, 1);
     gtk_grid_attach(window->grid, GTK_WIDGET(window->button_evaluator), 3, 1, 1, 1);
-    gtk_grid_attach(window->grid, GTK_WIDGET(window->frame_algorithm), 0, 2, 2, 1);
+    gtk_grid_attach(window->grid, GTK_WIDGET(window->frame_algorithm), 0, 2, 2, 2);
+	gtk_grid_attach(window->grid, GTK_WIDGET(window->frame_variable), 2, 2, 2, 1);
+	gtk_grid_attach(window->grid, GTK_WIDGET(window->frame_experiment), 2, 3, 2, 1);
     gtk_container_add(GTK_CONTAINER(window->window), GTK_WIDGET(window->grid));
 
     // Setting the window logo

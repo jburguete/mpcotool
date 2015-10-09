@@ -37,7 +37,7 @@ genetic/genetic.o: genetic/genetic.c genetic/genetic.h genetic/evolution.h \
 calibrator: calibrator.c $(OBJ) config.h Makefile
 	$(CC) $(CFLAGS) calibrator.c $(OBJ) $(LDFLAGS) -o calibrator
 
-calibrator_gui: interface.c config.h Makefile
+calibrator_gui: interface.c interface.h config.h Makefile
 	$(CC) $(CFLAGS) @GTK_CFLAGS@ interface.c $(LDFLAGS) @GTK_LIBS@ \
 		-o calibrator_gui
 

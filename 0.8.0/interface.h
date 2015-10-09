@@ -158,6 +158,8 @@ typedef struct
 	 * \brief Sweeps number GtkLabel.
 	 * \var label_experiment
 	 * \brief Experiment GtkLabel.
+	 * \var label_weight
+	 * \brief Weight GtkLabel.
 	 * \var entry_min
 	 * \brief Minimum GtkEntry.
 	 * \var entry_max
@@ -166,8 +168,8 @@ typedef struct
 	 * \brief Absolute minimum GtkEntry.
 	 * \var entry_absmax
 	 * \brief Absolute maximum GtkEntry.
-	 * \var entry_sweeps
-	 * \brief Sweeps number GtkEntry.
+	 * \var entry_variable
+	 * \brief GtkEntry to set the variable name.
 	 * \var combo_variable
 	 * \brief Variable GtkComboBoxEntry.
 	 * \var combo_experiment
@@ -176,6 +178,8 @@ typedef struct
      * \brief Simulator program GtkFileChooserButton.
      * \var button_evaluator
      * \brief Evaluator program GtkFileChooserButton.
+	 * \var button_experiment
+	 * \brief GtkFileChooserButton to set the experimental data file.
      * \var entry_simulations
      * \brief GtkSpinButton to set the simulations number.
      * \var entry_iterations
@@ -194,6 +198,10 @@ typedef struct
      * \brief GtkSpinButton to set the reproduction ratio.
      * \var entry_adaptation
      * \brief GtkSpinButton to set the adaptation ratio.
+	 * \var entry_sweeps
+	 * \brief Sweeps number GtkSpinButton.
+	 * \var entry_weight
+	 * \brief Weight GtkSpinButton.
      * \var grid
      * \brief Main GtkGrid.
      * \var grid_algorithm
@@ -220,14 +228,14 @@ typedef struct
     *label_iterations, *label_tolerance, *label_bests,
     *label_population, *label_generations, *label_mutation,
     *label_reproduction, *label_adaptation, *label_variable, *label_min,
-	*label_max, *label_absmin, *label_absmax, *label_sweeps, *label_experiment;
-	GtkEntry *entry_min, *entry_max, *entry_absmin, *entry_absmax,
-			 *entry_sweeps;
+	*label_max, *label_absmin, *label_absmax, *label_sweeps, *label_experiment,
+	*label_weight;
+	GtkEntry *entry_min, *entry_max, *entry_absmin, *entry_absmax, *entry_variable;
 	GtkComboBoxText *combo_variable, *combo_experiment;
-    GtkFileChooserButton *button_simulator, *button_evaluator;
+    GtkFileChooserButton *button_simulator, *button_evaluator, *button_experiment;
     GtkSpinButton *entry_simulations, *entry_iterations, *entry_tolerance,
     *entry_bests, *entry_population, *entry_generations,
-    *entry_mutation, *entry_reproduction, *entry_adaptation;
+    *entry_mutation, *entry_reproduction, *entry_adaptation, *entry_sweeps, *entry_weight;
     GtkGrid *grid, *grid_algorithm, *grid_variable, *grid_experiment;
     GtkFrame *frame_algorithm, *frame_variable, *frame_experiment;
     GdkPixbuf *logo;
