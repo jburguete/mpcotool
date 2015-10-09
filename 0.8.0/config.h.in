@@ -78,12 +78,8 @@ OF SUCH DAMAGE.
  * \brief experiment XML label.
  * \def XML_FORMAT
  * \brief format XML label.
- * \def XML_GENERATIONS
- * \brief generations XML label.
  * \def XML_GENETIC
  * \brief genetic XML label.
- * \def XML_ITERATIONS
- * \brief iterations XML label.
  * \def XML_MINIMUM
  * \brief minimum XML label.
  * \def XML_MAXIMUM
@@ -98,12 +94,16 @@ OF SUCH DAMAGE.
  * \brief nbest XML label.
  * \def XML_NBITS
  * \brief nbits XML label.
+ * \def XML_NGENERATIONS
+ * \brief generations XML label.
+ * \def XML_NITERATIONS
+ * \brief iterations XML label.
  * \def XML_NPOPULATION
  * \brief npopulation XML label.
+ * \def XML_NSIMULATIONS
+ * \brief simulations XML label.
  * \def XML_REPRODUCTION
  * \brief reproduction XML label.
- * \def XML_SIMULATIONS
- * \brief simulations XML label.
  * \def XML_SIMULATOR
  * \brief simulator XML label.
  * \def XML_SWEEP
