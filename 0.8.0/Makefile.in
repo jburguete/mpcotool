@@ -7,7 +7,7 @@ OBJ = genetic/entity.o genetic/population.o genetic/reproduction.o \
 	genetic/selection.o genetic/evolution.o genetic/genetic.o
 DEP = Makefile
 
-all: calibrator
+all: calibrator calibrator_gui
 
 genetic/entity.o: genetic/entity.c genetic/entity.h $(DEP)
 	$(CC) $(CFLAGS) -c genetic/entity.c -o genetic/entity.o
@@ -36,6 +36,10 @@ genetic/genetic.o: genetic/genetic.c genetic/genetic.h genetic/evolution.h \
 
 calibrator: calibrator.c $(OBJ) config.h Makefile
 	$(CC) $(CFLAGS) calibrator.c $(OBJ) $(LDFLAGS) -o calibrator
+
+calibrator_gui: interface.c config.h Makefile
+	$(CC) $(CFLAGS) @GTK_CFLAGS@ interface.c $(LDFLAGS) @GTK_LIBS@ \
+		-o calibrator_gui
 
 doc: calibrator.c config.h README.md Makefile
 	doxygen

@@ -66,6 +66,7 @@ PKG_CHECK_MODULES([GSL], [gsl])
 PKG_CHECK_MODULES([XML], [libxml-2.0])
 PKG_CHECK_MODULES([GLIB], [glib-2.0])
 PKG_CHECK_MODULES([GTHREAD], [gthread-2.0])
+PKG_CHECK_MODULES([GTK], [gtk+-3.0])
 
 # Checks for header files
 AC_CHECK_HEADERS([stdlib.h string.h unistd.h pthread.h])
