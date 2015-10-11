@@ -34,12 +34,12 @@ genetic/genetic.o: genetic/genetic.c genetic/genetic.h genetic/evolution.h \
 	genetic/entity.h genetic/bits.h $(DEP)
 	$(CC) $(CFLAGS) -c genetic/genetic.c -o genetic/genetic.o
 
-calibrator: calibrator.c $(OBJ) config.h Makefile
+calibrator: calibrator.c calibrator.h $(OBJ) config.h Makefile
 	$(CC) $(CFLAGS) calibrator.c $(OBJ) $(LDFLAGS) -o calibrator
 
-calibrator_gui: interface.c interface.h config.h Makefile
-	$(CC) $(CFLAGS) @GTK_CFLAGS@ interface.c $(LDFLAGS) @GTK_LIBS@ \
-		-o calibrator_gui
+calibrator_gui: calibrator.c interface.h calibrator.h $(OBJ) config.h Makefile
+	$(CC) $(CFLAGS) @GTK_CFLAGS@ calibrator.c $(LDFLAGS) @GTK_LIBS@ \
+		-o calibrator_gui -DHAVE_GTK=1
 
 doc: calibrator.c config.h README.md Makefile
 	doxygen

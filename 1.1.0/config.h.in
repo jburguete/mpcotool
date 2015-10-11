@@ -95,21 +95,21 @@ OF SUCH DAMAGE.
  * \def XML_NBITS
  * \brief nbits XML label.
  * \def XML_NGENERATIONS
- * \brief generations XML label.
+ * \brief ngenerations XML label.
  * \def XML_NITERATIONS
- * \brief iterations XML label.
+ * \brief niterations XML label.
  * \def XML_NPOPULATION
  * \brief npopulation XML label.
  * \def XML_NSIMULATIONS
- * \brief simulations XML label.
+ * \brief nsimulations XML label.
+ * \def XML_NSWEEPS
+ * \brief nsweeps XML label.
  * \def XML_REPRODUCTION
  * \brief reproduction XML label.
  * \def XML_SIMULATOR
  * \brief simulator XML label.
  * \def XML_SWEEP
  * \brief sweep XML label.
- * \def XML_SWEEPS
- * \brief sweeps XML label.
  * \def XML_TEMPLATE1
  * \brief template1 XML label.
  * \def XML_TEMPLATE2
