@@ -225,11 +225,8 @@ typedef struct
     /**
      * \var thread
      * \brief Thread number.
-     * \var calibrate
-     * \brief Calibration data pointer.
      */
   unsigned int thread;
-  Calibrate *calibrate;
 } ParallelData;
 
 // Public functions

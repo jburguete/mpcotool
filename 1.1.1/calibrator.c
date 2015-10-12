@@ -73,12 +73,14 @@ OF SUCH DAMAGE.
  * \brief Number of threads.
  * \var mutex
  * \brief Mutex struct.
- * \var void (*calibrate_step)(Calibrate*)
+ * \var void (*calibrate_step)()
  * \brief Pointer to the function to perform a calibration algorithm step.
  * \var input
  * \brief Input struct to define the input file to calibrator.
  * \var calibrate
  * \brief Calibration data.
+ * \var template
+ * \brief Array of xmlChar strings with template labels.
  */
 int ntasks;
 unsigned int nthreads;
@@ -87,9 +89,13 @@ GMutex mutex[1];
 #else
 GMutex *mutex;
 #endif
-void (*calibrate_step) (Calibrate *);
+void (*calibrate_step) ();
 Input input[1];
 Calibrate calibrate[1];
+const xmlChar *template[MAX_NINPUTS] = {
+  XML_TEMPLATE1, XML_TEMPLATE2, XML_TEMPLATE3, XML_TEMPLATE4,
+  XML_TEMPLATE5, XML_TEMPLATE6, XML_TEMPLATE7, XML_TEMPLATE8
+};
 
 #if HAVE_GTK
 /**
@@ -438,6 +444,124 @@ input_open (char *filename)
         input->tolerance = 0.;
     }
 
+  // Reading the experimental data
+  input->nexperiments = 0;
+  input->experiment = NULL;
+  input->weight = NULL;
+  for (i = 0; i < MAX_NINPUTS; ++i)
+    input->template[i] = NULL;
+  for (child = node->children; child; child = child->next)
+    {
+      if (xmlStrcmp (child->name, XML_EXPERIMENT))
+        break;
+#if DEBUG
+      fprintf (stderr, "input_open: nexperiments=%u\n", input->nexperiments);
+#endif
+      if (xmlHasProp (child, XML_NAME))
+        {
+          input->experiment =
+            g_realloc (input->experiment,
+                       (1 + input->nexperiments) * sizeof (char *));
+          input->experiment[input->nexperiments] =
+            (char *) xmlGetProp (child, XML_NAME);
+        }
+      else
+        {
+          show_error (gettext ("No experiment file name"));
+          return 0;
+        }
+#if DEBUG
+      fprintf (stderr, "input_open: experiment=%s\n",
+               input->experiment[input->nexperiments]);
+#endif
+      input->weight =
+        g_realloc (input->weight, (1 + input->nexperiments) * sizeof (double));
+      if (xmlHasProp (child, XML_WEIGHT))
+        input->weight[input->nexperiments] =
+          xml_node_get_float (child, XML_WEIGHT, &error_code);
+      else
+        input->weight[input->nexperiments] = 1.;
+#if DEBUG
+      fprintf (stderr, "input_open: weight=%lg\n",
+               input->weight[input->nexperiments]);
+#endif
+      if (!input->nexperiments)
+        input->ninputs = 0;
+#if DEBUG
+      fprintf (stderr, "input_open: template[0]\n");
+#endif
+      if (xmlHasProp (child, XML_TEMPLATE1))
+        {
+          input->template[0] =
+            g_realloc (input->template[0],
+                       (1 + input->nexperiments) * sizeof (char *));
+          input->template[0][input->nexperiments] =
+            (char *) xmlGetProp (child, template[0]);
+#if DEBUG
+          fprintf (stderr, "input_open: experiment=%u template1=%s\n",
+                   input->nexperiments,
+                   input->template[0][input->nexperiments]);
+#endif
+          if (!input->nexperiments)
+            ++input->ninputs;
+#if DEBUG
+          fprintf (stderr, "input_open: ninputs=%u\n", input->ninputs);
+#endif
+        }
+      else
+        {
+          show_error (gettext ("No experiment template"));
+          return 0;
+        }
+      for (i = 1; i < MAX_NINPUTS; ++i)
+        {
+#if DEBUG
+          fprintf (stderr, "input_open: template%u\n", i + 1);
+#endif
+          if (xmlHasProp (child, template[i]))
+            {
+              if (input->nexperiments && input->ninputs < 2)
+                {
+                  printf ("Experiment %u: bad templates number\n",
+                          input->nexperiments + 1);
+                  return 0;
+                }
+              input->template[i] =
+                g_realloc (input->template[i],
+                           (1 + input->nexperiments) * sizeof (char *));
+              input->template[i][input->nexperiments] =
+                (char *) xmlGetProp (child, template[i]);
+#if DEBUG
+              fprintf (stderr, "input_open: experiment=%u template%u=%s\n",
+                       input->nexperiments, i + 1,
+                       input->template[i][input->nexperiments]);
+#endif
+              if (!input->nexperiments)
+                ++input->ninputs;
+#if DEBUG
+              fprintf (stderr, "input_open: ninputs=%u\n", input->ninputs);
+#endif
+            }
+          else if (input->nexperiments && input->ninputs > 1)
+            {
+              printf ("No experiment %u template%u\n",
+                      input->nexperiments + 1, i + 1);
+              return 0;
+            }
+          else
+            break;
+        }
+      ++input->nexperiments;
+#if DEBUG
+      fprintf (stderr, "input_open: nexperiments=%u\n", input->nexperiments);
+#endif
+    }
+  if (!input->nexperiments)
+    {
+      show_error (gettext ("No calibration experiments"));
+      return 0;
+    }
+
   // Reading the variables data
   input->nvariables = 0;
   input->label = NULL;
@@ -485,7 +609,7 @@ input_open (char *filename)
         }
       else
         {
-          show_error (gettext ("No variable minimum range"));
+          show_error (gettext ("No minimum range"));
           return 0;
         }
       if (xmlHasProp (child, XML_MAXIMUM))
@@ -504,7 +628,7 @@ input_open (char *filename)
         }
       else
         {
-          show_error (gettext ("No variable maximum range"));
+          show_error (gettext ("No maximum range"));
           return 0;
         }
       input->format = g_realloc (input->format,
@@ -531,11 +655,11 @@ input_open (char *filename)
             }
           else
             {
-              show_error (gettext ("No variable sweeps number"));
+              show_error (gettext ("No sweeps number"));
               return 0;
             }
 #if DEBUG
-          fprintf (stderr, "input_new: nsweeps=%u nsimulations=%u\n",
+          fprintf (stderr, "input_open: nsweeps=%u nsimulations=%u\n",
                    input->nsweeps[input->nvariables], input->nsimulations);
 #endif
         }
@@ -557,7 +681,7 @@ input_open (char *filename)
             }
           else
             {
-              printf ("No variable %u bits number\n", input->nvariables + 1);
+              show_error (gettext ("No bits number"));
               return 0;
             }
         }
@@ -568,6 +692,10 @@ input_open (char *filename)
       show_error (gettext ("No calibration variables"));
       return 0;
     }
+
+  // Closing the XML document
+  xmlFreeDoc (doc);
+
 #if DEBUG
   fprintf (stderr, "input_open: end\n");
 #endif
@@ -576,11 +704,43 @@ input_open (char *filename)
 }
 
 /**
- * \fn void calibrate_input(Calibrate *calibrate, unsigned int simulation, \
- *   char *input, GMappedFile *template)
+ * \fn void input_free()
+ * \brief Function to free the memory of the input file data.
+ */
+void
+input_free ()
+{
+  unsigned int i, j;
+  xmlFree (input->simulator);
+  xmlFree (input->evaluator);
+  for (i = 0; i < input->nexperiments; ++i)
+    {
+      xmlFree (input->experiment[i]);
+      for (j = 0; j < input->ninputs; ++j)
+        xmlFree (input->template[j][i]);
+    }
+  g_free (input->experiment);
+  for (i = 0; i < input->ninputs; ++i)
+    g_free (input->template[i]);
+  for (i = 0; i < input->nvariables; ++i)
+    {
+      xmlFree (input->label[i]);
+      xmlFree (input->format[i]);
+    }
+  g_free (input->label);
+  g_free (input->rangemin);
+  g_free (input->rangemax);
+  g_free (input->rangeminabs);
+  g_free (input->rangemaxabs);
+  g_free (input->format);
+  g_free (input->nsweeps);
+  g_free (input->nbits);
+}
+
+/**
+ * \fn void calibrate_input(unsigned int simulation, char *input, \
+ *   GMappedFile *template)
  * \brief Function to write the simulation input file.
- * \param calibrate
- * \brief Calibration data.
  * \param simulation
  * \brief Simulation number.
  * \param input
@@ -589,8 +749,7 @@ input_open (char *filename)
  * \brief Template of the input file name.
  */
 void
-calibrate_input (Calibrate * calibrate, unsigned int simulation,
-                 char *input, GMappedFile * template)
+calibrate_input (unsigned int simulation, char *input, GMappedFile * template)
 {
   unsigned int i;
   char buffer[32], value[32], *buffer2, *buffer3, *content;
@@ -667,12 +826,9 @@ calibrate_input_end:
 }
 
 /**
- * \fn double calibrate_parse(Calibrate *calibrate, unsigned int simulation, \
- *   unsigned int experiment)
+ * \fn double calibrate_parse(unsigned int simulation, unsigned int experiment)
  * \brief Function to parse input files, simulating and calculating the \
  *   objective function.
- * \param calibrate
- * \brief Calibration data.
  * \param simulation
  * \brief Simulation number.
  * \param experiment
@@ -680,8 +836,7 @@ calibrate_input_end:
  * \return Objective function value.
  */
 double
-calibrate_parse (Calibrate * calibrate, unsigned int simulation,
-                 unsigned int experiment)
+calibrate_parse (unsigned int simulation, unsigned int experiment)
 {
   unsigned int i;
   double e;
@@ -701,7 +856,7 @@ calibrate_parse (Calibrate * calibrate, unsigned int simulation,
 #if DEBUG
       fprintf (stderr, "calibrate_parse: i=%u input=%s\n", i, &input[i][0]);
 #endif
-      calibrate_input (calibrate, simulation, &input[i][0],
+      calibrate_input (simulation, &input[i][0],
                        calibrate->file[i][experiment]);
     }
   for (; i < MAX_NINPUTS; ++i)
@@ -766,19 +921,15 @@ calibrate_parse (Calibrate * calibrate, unsigned int simulation,
 }
 
 /**
- * \fn void calibrate_best_thread(Calibrate *calibrate, \
- *   unsigned int simulation, double value)
+ * \fn void calibrate_best_thread(unsigned int simulation, double value)
  * \brief Function to save the best simulations of a thread.
- * \param calibrate
- * \brief Calibration data.
  * \param simulation
  * \brief Simulation number.
  * \param value
  * \brief Objective function value.
  */
 void
-calibrate_best_thread (Calibrate * calibrate, unsigned int simulation,
-                       double value)
+calibrate_best_thread (unsigned int simulation, double value)
 {
   unsigned int i, j;
   double e;
@@ -815,19 +966,15 @@ calibrate_best_thread (Calibrate * calibrate, unsigned int simulation,
 }
 
 /**
- * \fn void calibrate_best_sequential(Calibrate *calibrate, \
- *   unsigned int simulation, double value)
+ * \fn void calibrate_best_sequential(unsigned int simulation, double value)
  * \brief Function to save the best simulations.
- * \param calibrate
- * \brief Calibration data.
  * \param simulation
  * \brief Simulation number.
  * \param value
  * \brief Objective function value.
  */
 void
-calibrate_best_sequential (Calibrate * calibrate, unsigned int simulation,
-                           double value)
+calibrate_best_sequential (unsigned int simulation, double value)
 {
   unsigned int i, j;
   double e;
@@ -873,12 +1020,10 @@ calibrate_thread (ParallelData * data)
 {
   unsigned int i, j, thread;
   double e;
-  Calibrate *calibrate;
 #if DEBUG
   fprintf (stderr, "calibrate_thread: start\n");
 #endif
   thread = data->thread;
-  calibrate = data->calibrate;
 #if DEBUG
   fprintf (stderr, "calibrate_thread: thread=%u start=%u end=%u\n", thread,
            calibrate->thread[thread], calibrate->thread[thread + 1]);
@@ -887,8 +1032,8 @@ calibrate_thread (ParallelData * data)
     {
       e = 0.;
       for (j = 0; j < calibrate->nexperiments; ++j)
-        e += calibrate_parse (calibrate, i, j);
-      calibrate_best_thread (calibrate, i, e);
+        e += calibrate_parse (i, j);
+      calibrate_best_thread (i, e);
 #if DEBUG
       fprintf (stderr, "calibrate_thread: i=%u e=%lg\n", i, e);
 #endif
@@ -901,13 +1046,11 @@ calibrate_thread (ParallelData * data)
 }
 
 /**
- * \fn void calibrate_sequential(Calibrate *calibrate)
+ * \fn void calibrate_sequential()
  * \brief Function to calibrate sequentially.
- * \param calibrate
- * \brief Calibration data pointer.
  */
 void
-calibrate_sequential (Calibrate * calibrate)
+calibrate_sequential ()
 {
   unsigned int i, j;
   double e;
@@ -920,8 +1063,8 @@ calibrate_sequential (Calibrate * calibrate)
     {
       e = 0.;
       for (j = 0; j < calibrate->nexperiments; ++j)
-        e += calibrate_parse (calibrate, i, j);
-      calibrate_best_sequential (calibrate, i, e);
+        e += calibrate_parse (i, j);
+      calibrate_best_sequential (i, e);
 #if DEBUG
       fprintf (stderr, "calibrate_sequential: i=%u e=%lg\n", i, e);
 #endif
@@ -932,11 +1075,9 @@ calibrate_sequential (Calibrate * calibrate)
 }
 
 /**
- * \fn void calibrate_merge(Calibrate *calibrate, unsigned int nsaveds, \
+ * \fn void calibrate_merge(unsigned int nsaveds, \
  *   unsigned int *simulation_best, double *error_best)
  * \brief Function to merge the 2 calibration results.
- * \param calibrate
- * \brief Calibration data.
  * \param nsaveds
  * \brief Number of saved results.
  * \param simulation_best
@@ -945,8 +1086,8 @@ calibrate_sequential (Calibrate * calibrate)
  * \brief Array of best objective function values.
  */
 void
-calibrate_merge (Calibrate * calibrate, unsigned int nsaveds,
-                 unsigned int *simulation_best, double *error_best)
+calibrate_merge (unsigned int nsaveds, unsigned int *simulation_best,
+                 double *error_best)
 {
   unsigned int i, j, k, s[calibrate->nbest];
   double e[calibrate->nbest];
@@ -999,14 +1140,12 @@ calibrate_merge (Calibrate * calibrate, unsigned int nsaveds,
 }
 
 /**
- * \fn void calibrate_synchronise(Calibrate *calibrate)
+ * \fn void calibrate_synchronise()
  * \brief Function to synchronise the calibration results of MPI tasks.
- * \param calibrate
- * \brief Calibration data.
  */
 #if HAVE_MPI
 void
-calibrate_synchronise (Calibrate * calibrate)
+calibrate_synchronise ()
 {
   unsigned int i, nsaveds, simulation_best[calibrate->nbest];
   double error_best[calibrate->nbest];
@@ -1023,7 +1162,7 @@ calibrate_synchronise (Calibrate * calibrate)
                     MPI_COMM_WORLD, &mpi_stat);
           MPI_Recv (error_best, nsaveds, MPI_DOUBLE, i, 1,
                     MPI_COMM_WORLD, &mpi_stat);
-          calibrate_merge (calibrate, nsaveds, simulation_best, error_best);
+          calibrate_merge (nsaveds, simulation_best, error_best);
         }
     }
   else
@@ -1041,13 +1180,11 @@ calibrate_synchronise (Calibrate * calibrate)
 #endif
 
 /**
- * \fn void calibrate_sweep(Calibrate *calibrate)
+ * \fn void calibrate_sweep()
  * \brief Function to calibrate with the sweep algorithm.
- * \param calibrate
- * \brief Calibration data pointer.
  */
 void
-calibrate_sweep (Calibrate * calibrate)
+calibrate_sweep ()
 {
   unsigned int i, j, k, l;
   double e;
@@ -1072,12 +1209,11 @@ calibrate_sweep (Calibrate * calibrate)
     }
   calibrate->nsaveds = 0;
   if (nthreads <= 1)
-    calibrate_sequential (calibrate);
+    calibrate_sequential ();
   else
     {
       for (i = 0; i < nthreads; ++i)
         {
-          data[i].calibrate = calibrate;
           data[i].thread = i;
 #if GLIB_MINOR_VERSION >= 32
           thread[i] =
@@ -1092,7 +1228,7 @@ calibrate_sweep (Calibrate * calibrate)
     }
 #if HAVE_MPI
   // Communicating tasks results
-  calibrate_synchronise (calibrate);
+  calibrate_synchronise ();
 #endif
 #if DEBUG
   fprintf (stderr, "calibrate_sweep: end\n");
@@ -1100,13 +1236,11 @@ calibrate_sweep (Calibrate * calibrate)
 }
 
 /**
- * \fn void calibrate_MonteCarlo(Calibrate *calibrate)
+ * \fn void calibrate_MonteCarlo()
  * \brief Function to calibrate with the Monte-Carlo algorithm.
- * \param calibrate
- * \brief Calibration data pointer.
  */
 void
-calibrate_MonteCarlo (Calibrate * calibrate)
+calibrate_MonteCarlo ()
 {
   unsigned int i, j;
   GThread *thread[nthreads];
@@ -1121,12 +1255,11 @@ calibrate_MonteCarlo (Calibrate * calibrate)
         * (calibrate->rangemax[j] - calibrate->rangemin[j]);
   calibrate->nsaveds = 0;
   if (nthreads <= 1)
-    calibrate_sequential (calibrate);
+    calibrate_sequential ();
   else
     {
       for (i = 0; i < nthreads; ++i)
         {
-          data[i].calibrate = calibrate;
           data[i].thread = i;
 #if GLIB_MINOR_VERSION >= 32
           thread[i] =
@@ -1141,7 +1274,7 @@ calibrate_MonteCarlo (Calibrate * calibrate)
     }
 #if HAVE_MPI
   // Communicating tasks results
-  calibrate_synchronise (calibrate);
+  calibrate_synchronise ();
 #endif
 #if DEBUG
   fprintf (stderr, "calibrate_MonteCarlo: end\n");
@@ -1167,7 +1300,7 @@ calibrate_genetic_objective (Entity * entity)
     calibrate->value[entity->id * calibrate->nvariables + j]
       = genetic_get_variable (entity, calibrate->genetic_variable + j);
   for (j = 0, objective = 0.; j < calibrate->nexperiments; ++j)
-    objective += calibrate_parse (calibrate, entity->id, j);
+    objective += calibrate_parse (entity->id, j);
 #if DEBUG
   fprintf (stderr, "calibrate_genetic_objective: end\n");
 #endif
@@ -1175,13 +1308,11 @@ calibrate_genetic_objective (Entity * entity)
 }
 
 /**
- * \fn void calibrate_genetic(Calibrate *calibrate)
+ * \fn void calibrate_genetic()
  * \brief Function to calibrate with the genetic algorithm.
- * \param calibrate
- * \brief Calibration data pointer.
  */
 void
-calibrate_genetic (Calibrate * calibrate)
+calibrate_genetic ()
 {
   unsigned int i;
   char buffer[512], *best_genome;
@@ -1231,13 +1362,11 @@ calibrate_genetic (Calibrate * calibrate)
 }
 
 /**
- * \fn void calibrate_print(Calibrate *calibrate)
+ * \fn void calibrate_print()
  * \brief Function to print the results.
- * \param calibrate
- * \brief Calibration data.
  */
 void
-calibrate_print (Calibrate * calibrate)
+calibrate_print ()
 {
   unsigned int i;
   char buffer[512];
@@ -1263,13 +1392,11 @@ calibrate_print (Calibrate * calibrate)
 }
 
 /**
- * \fn void calibrate_save_old(Calibrate *calibrate)
+ * \fn void calibrate_save_old()
  * \brief Function to save the best results on iterative methods.
- * \param calibrate
- * \brief Calibration data.
  */
 void
-calibrate_save_old (Calibrate * calibrate)
+calibrate_save_old ()
 {
   unsigned int i, j;
 #if DEBUG
@@ -1293,14 +1420,12 @@ calibrate_save_old (Calibrate * calibrate)
 }
 
 /**
- * \fn void calibrate_merge_old(Calibrate *calibrate)
+ * \fn void calibrate_merge_old()
  * \brief Function to merge the best results with the previous step best results
  *   on iterative methods.
- * \param calibrate
- * \brief Calibration data.
  */
 void
-calibrate_merge_old (Calibrate * calibrate)
+calibrate_merge_old ()
 {
   unsigned int i, j, k;
   double v[calibrate->nbest * calibrate->nvariables], e[calibrate->nbest],
@@ -1344,14 +1469,12 @@ calibrate_merge_old (Calibrate * calibrate)
 }
 
 /**
- * \fn void calibrate_refine(Calibrate *calibrate)
+ * \fn void calibrate_refine()
  * \brief Function to refine the search ranges of the variables in iterative
  *   algorithms.
- * \param calibrate
- * \brief Calibration data.
  */
 void
-calibrate_refine (Calibrate * calibrate)
+calibrate_refine ()
 {
   unsigned int i, j;
   double d;
@@ -1376,8 +1499,9 @@ calibrate_refine (Calibrate * calibrate)
             {
               calibrate->rangemin[j] = fmin (calibrate->rangemin[j],
                                              calibrate->value_old[i *
-                                                                  calibrate->nvariables
-                                                                  + j]);
+                                                                  calibrate->
+                                                                  nvariables +
+                                                                  j]);
               calibrate->rangemax[j] =
                 fmax (calibrate->rangemax[j],
                       calibrate->value_old[i * calibrate->nvariables + j]);
@@ -1422,13 +1546,11 @@ calibrate_refine (Calibrate * calibrate)
 }
 
 /**
- * \fn void calibrate_iterate(Calibrate *calibrate)
+ * \fn void calibrate_iterate()
  * \brief Function to iterate the algorithm.
- * \param calibrate
- * \brief Calibration data.
  */
 void
-calibrate_iterate (Calibrate * calibrate)
+calibrate_iterate ()
 {
   unsigned int i;
 #if DEBUG
@@ -1438,16 +1560,16 @@ calibrate_iterate (Calibrate * calibrate)
     = (double *) g_malloc (calibrate->nbest * sizeof (double));
   calibrate->value_old = (double *)
     g_malloc (calibrate->nbest * calibrate->nvariables * sizeof (double));
-  calibrate_step (calibrate);
-  calibrate_save_old (calibrate);
-  calibrate_refine (calibrate);
-  calibrate_print (calibrate);
+  calibrate_step ();
+  calibrate_save_old ();
+  calibrate_refine ();
+  calibrate_print ();
   for (i = 1; i < calibrate->niterations; ++i)
     {
-      calibrate_step (calibrate);
-      calibrate_merge_old (calibrate);
-      calibrate_refine (calibrate);
-      calibrate_print (calibrate);
+      calibrate_step ();
+      calibrate_merge_old ();
+      calibrate_refine ();
+      calibrate_print ();
     }
   g_free (calibrate->error_old);
   g_free (calibrate->value_old);
@@ -1457,574 +1579,114 @@ calibrate_iterate (Calibrate * calibrate)
 }
 
 /**
- * \fn int calibrate_new(Calibrate *calibrate, char *filename)
+ * \fn int calibrate_new(char *filename)
  * \brief Function to open and perform a calibration.
- * \param calibrate
- * \brief Calibration data pointer.
  * \param filename
  * \brief Input data file name.
  * \return 1 on success, 0 on error.
  */
 int
-calibrate_new (Calibrate * calibrate, char *filename)
+calibrate_new (char *filename)
 {
   unsigned int i, j, *nbits;
-  int error_code;
-  xmlChar *buffer;
-  xmlNode *node, *child;
-  xmlDoc *doc;
-  static const xmlChar *template[MAX_NINPUTS] = {
-    XML_TEMPLATE1, XML_TEMPLATE2, XML_TEMPLATE3, XML_TEMPLATE4,
-    XML_TEMPLATE5, XML_TEMPLATE6, XML_TEMPLATE7, XML_TEMPLATE8
-  };
 
 #if DEBUG
   fprintf (stderr, "calibrate_new: start\n");
 #endif
 
   // Parsing the XML data file
-  doc = xmlParseFile (filename);
-  if (!doc)
-    {
-      show_error (gettext ("Unable to parse the data file"));
-      return 0;
-    }
-
-  // Obtaining the root XML node
-  node = xmlDocGetRootElement (doc);
-  if (!node)
-    {
-      show_error (gettext ("No XML nodes in the data file"));
-      return 0;
-    }
-  if (xmlStrcmp (node->name, XML_CALIBRATE))
-    {
-      show_error (gettext ("Bad name of the XML root node in the data file"));
-      return 0;
-    }
+  if (!input_open (filename))
+    return 0;
 
   // Obtaining the simulator file
-  if (xmlHasProp (node, XML_SIMULATOR))
-    {
-      calibrate->simulator = (char *) xmlGetProp (node, XML_SIMULATOR);
-    }
-  else
-    {
-      show_error (gettext ("No simulator in the data file"));
-      return 0;
-    }
+  calibrate->simulator = input->simulator;
 
   // Obtaining the evaluator file
-  if (xmlHasProp (node, XML_EVALUATOR))
-    calibrate->evaluator = (char *) xmlGetProp (node, XML_EVALUATOR);
-  else
-    calibrate->evaluator = NULL;
+  calibrate->evaluator = input->evaluator;
 
   // Reading the algorithm
-  if (xmlHasProp (node, XML_ALGORITHM))
+  calibrate->algorithm = input->algorithm;
+  switch (calibrate->algorithm)
     {
-      buffer = xmlGetProp (node, XML_ALGORITHM);
-      if (!xmlStrcmp (buffer, XML_SWEEP))
-        {
-          calibrate->algorithm = ALGORITHM_SWEEP;
-          calibrate_step = calibrate_sweep;
-          xmlFree (buffer);
-        }
-      else if (!xmlStrcmp (buffer, XML_GENETIC))
-        {
-          nbits = NULL;
-          calibrate->algorithm = ALGORITHM_GENETIC;
-          calibrate_step = calibrate_genetic;
-          xmlFree (buffer);
-
-          // Obtaining population
-          if (xmlHasProp (node, XML_NPOPULATION))
-            {
-              calibrate->nsimulations =
-                xml_node_get_uint (node, XML_NPOPULATION, &error_code);
-              if (error_code || calibrate->nsimulations < 3)
-                {
-                  show_error (gettext ("Invalid population number"));
-                  return 0;
-                }
-            }
-          else
-            {
-              show_error (gettext ("No population number in the data file"));
-              return 0;
-            }
-
-          // Obtaining generations
-          if (xmlHasProp (node, XML_NGENERATIONS))
-            {
-              calibrate->niterations =
-                xml_node_get_uint (node, XML_NGENERATIONS, &error_code);
-              if (error_code || !calibrate->niterations)
-                {
-                  show_error (gettext ("Invalid generation number"));
-                  return 0;
-                }
-            }
-          else
-            {
-              show_error (gettext ("No generation number in the data file"));
-              return 0;
-            }
-
-          // Obtaining mutation probability
-          if (xmlHasProp (node, XML_MUTATION))
-            {
-              calibrate->mutation_ratio =
-                xml_node_get_float (node, XML_MUTATION, &error_code);
-              if (error_code || calibrate->mutation_ratio < 0.
-                  || calibrate->mutation_ratio >= 1.)
-                {
-                  show_error (gettext ("Invalid mutation probability"));
-                  return 0;
-                }
-            }
-          else
-            {
-              show_error (gettext ("No mutation probability in the data file"));
-              return 0;
-            }
-
-          // Obtaining reproduction probability
-          if (xmlHasProp (node, XML_REPRODUCTION))
-            {
-              calibrate->reproduction_ratio =
-                xml_node_get_float (node, XML_REPRODUCTION, &error_code);
-              if (error_code || calibrate->reproduction_ratio < 0.
-                  || calibrate->reproduction_ratio >= 1.0)
-                {
-                  show_error (gettext ("Invalid reproduction probability"));
-                  return 0;
-                }
-            }
-          else
-            {
-              show_error (gettext
-                          ("No reproduction probability in the data file"));
-              return 0;
-            }
-
-          // Obtaining adaptation probability
-          if (xmlHasProp (node, XML_ADAPTATION))
-            {
-              calibrate->adaptation_ratio =
-                xml_node_get_float (node, XML_ADAPTATION, &error_code);
-              if (error_code || calibrate->adaptation_ratio < 0.
-                  || calibrate->adaptation_ratio >= 1.)
-                {
-                  show_error (gettext ("Invalid adaptation probability"));
-                  return 0;
-                }
-            }
-          else
-            {
-              show_error (gettext
-                          ("No adaptation probability in the data file"));
-              return 0;
-            }
-
-          // Checking survivals
-          i = calibrate->mutation_ratio * calibrate->nsimulations;
-          i += calibrate->reproduction_ratio * calibrate->nsimulations;
-          i += calibrate->adaptation_ratio * calibrate->nsimulations;
-          if (i > calibrate->nsimulations - 2)
-            {
-              show_error (gettext
-                          ("No enough survival entities to reproduce the population"));
-              return 0;
-            }
-        }
-      else if (!xmlStrcmp (buffer, XML_MONTE_CARLO))
-        {
-          calibrate->algorithm = ALGORITHM_MONTE_CARLO;
-          calibrate_step = calibrate_MonteCarlo;
-
-          // Obtaining the simulations number
-          if (xmlHasProp (node, XML_NSIMULATIONS))
-            {
-              calibrate->nsimulations =
-                xml_node_get_uint (node, XML_NSIMULATIONS, &error_code);
-            }
-          else
-            {
-              show_error (gettext
-                          ("Monte-Carlo: no simulations number in the data file"));
-              return 0;
-            }
-        }
-      else
-        {
-          show_error (gettext ("Unknown algorithm"));
-          return 0;
-        }
-    }
-  else
-    {
-      calibrate->algorithm = ALGORITHM_MONTE_CARLO;
+    case ALGORITHM_MONTE_CARLO:
       calibrate_step = calibrate_MonteCarlo;
-
-      // Obtaining the simulations number
-      if (xmlHasProp (node, XML_NSIMULATIONS))
-        {
-          calibrate->nsimulations =
-            xml_node_get_uint (node, XML_NSIMULATIONS, &error_code);
-        }
-      else
-        {
-          show_error (gettext
-                      ("Default: no simulations number in the data file"));
-          return 0;
-        }
+      break;
+    case ALGORITHM_SWEEP:
+      calibrate_step = calibrate_sweep;
+      break;
+    default:
+      calibrate_step = calibrate_genetic;
+      calibrate->mutation_ratio = input->mutation_ratio;
+      calibrate->reproduction_ratio = input->reproduction_ratio;
+      calibrate->adaptation_ratio = input->adaptation_ratio;
     }
+  calibrate->nsimulations = input->nsimulations;
+  calibrate->niterations = input->niterations;
+  calibrate->nbest = input->nbest;
+  calibrate->tolerance = input->tolerance;
 
-  // Reading the iterations number
-  if (calibrate->algorithm != ALGORITHM_GENETIC)
-    {
-      if (xmlHasProp (node, XML_NITERATIONS))
-        {
-          calibrate->niterations =
-            xml_node_get_uint (node, XML_NITERATIONS, &error_code);
-          if (error_code || !calibrate->niterations)
-            {
-              show_error (gettext
-                          ("Invalid iterations number in the data file"));
-              return 0;
-            }
-        }
-      else
-        calibrate->niterations = 1;
-    }
-
-  // Reading the best simulations number
-  if (xmlHasProp (node, XML_NBEST))
-    {
-      calibrate->nbest = xml_node_get_uint (node, XML_NBEST, &error_code);
-      if (!calibrate->nbest)
-        {
-          show_error (gettext ("Null best number in the data file"));
-          return 0;
-        }
-    }
-  else
-    calibrate->nbest = 1;
   calibrate->simulation_best =
     (unsigned int *) alloca (calibrate->nbest * sizeof (unsigned int));
   calibrate->error_best =
     (double *) alloca (calibrate->nbest * sizeof (double));
 
-  // Reading the algorithm tolerance
-  if (xmlHasProp (node, XML_TOLERANCE))
-    {
-      calibrate->tolerance =
-        xml_node_get_float (node, XML_TOLERANCE, &error_code);
-      if (error_code || calibrate->tolerance < 0.)
-        {
-          show_error (gettext ("Invalid tolerance"));
-          return 0;
-        }
-    }
-  else
-    calibrate->tolerance = 0.;
-
   // Reading the experimental data
-  calibrate->nexperiments = 0;
-  calibrate->experiment = NULL;
-  calibrate->weight = NULL;
-  for (i = 0; i < MAX_NINPUTS; ++i)
+  calibrate->nexperiments = input->nexperiments;
+  calibrate->ninputs = input->ninputs;
+  calibrate->experiment = input->experiment;
+  calibrate->weight = input->weight;
+  for (i = 0; i < input->ninputs; ++i)
     {
-      calibrate->template[i] = NULL;
-      calibrate->file[i] = NULL;
+      calibrate->template[i] = input->template[i];
+      calibrate->file[i] =
+        g_malloc (input->nexperiments * sizeof (GMappedFile *));
     }
-  for (child = node->children; child; child = child->next)
+  for (i = 0; i < input->nexperiments; ++i)
     {
-      if (xmlStrcmp (child->name, XML_EXPERIMENT))
-        break;
 #if DEBUG
-      fprintf (stderr, "calibrate_new: nexperiments=%u\n",
-               calibrate->nexperiments);
-#endif
-      if (xmlHasProp (child, XML_NAME))
-        {
-          calibrate->experiment = g_realloc (calibrate->experiment,
-                                             (1 +
-                                              calibrate->nexperiments) *
-                                             sizeof (char *));
-          calibrate->experiment[calibrate->nexperiments] =
-            (char *) xmlGetProp (child, XML_NAME);
-        }
-      else
-        {
-          printf ("No experiment %u file name\n", calibrate->nexperiments + 1);
-          return 0;
-        }
-#if DEBUG
+      fprintf (stderr, "calibrate_new: i=%u\n", i);
       fprintf (stderr, "calibrate_new: experiment=%s\n",
-               calibrate->experiment[calibrate->nexperiments]);
+               calibrate->experiment[i]);
+      fprintf (stderr, "calibrate_new: weight=%lg\n", calibrate->weight[i]);
 #endif
-      calibrate->weight = g_realloc (calibrate->weight,
-                                     (1 +
-                                      calibrate->nexperiments) *
-                                     sizeof (double));
-      if (xmlHasProp (child, XML_WEIGHT))
-        {
-          calibrate->weight[calibrate->nexperiments] =
-            xml_node_get_float (child, XML_WEIGHT, &error_code);
-        }
-      else
-        calibrate->weight[calibrate->nexperiments] = 1.;
-#if DEBUG
-      fprintf (stderr, "calibrate_new: weight=%lg\n",
-               calibrate->weight[calibrate->nexperiments]);
-#endif
-      if (!calibrate->nexperiments)
-        calibrate->ninputs = 0;
-#if DEBUG
-      fprintf (stderr, "calibrate_new: template[0]\n");
-#endif
-      if (xmlHasProp (child, XML_TEMPLATE1))
-        {
-          calibrate->template[0] = g_realloc (calibrate->template[0],
-                                              (1 +
-                                               calibrate->nexperiments) *
-                                              sizeof (char *));
-          calibrate->template[0][calibrate->nexperiments] =
-            (char *) xmlGetProp (child, template[0]);
-          calibrate->file[0] =
-            g_realloc (calibrate->file[0],
-                       (1 + calibrate->nexperiments) * sizeof (GMappedFile *));
-#if DEBUG
-          fprintf (stderr, "calibrate_new: experiment=%u template1=%s\n",
-                   calibrate->nexperiments,
-                   calibrate->template[0][calibrate->nexperiments]);
-#endif
-          calibrate->file[0][calibrate->nexperiments] =
-            g_mapped_file_new
-            (calibrate->template[0][calibrate->nexperiments], 0, NULL);
-          if (!calibrate->nexperiments)
-            ++calibrate->ninputs;
-#if DEBUG
-          fprintf (stderr, "calibrate_new: ninputs=%u\n", calibrate->ninputs);
-#endif
-        }
-      else
-        {
-          printf ("No experiment %u template1\n", calibrate->nexperiments + 1);
-          return 0;
-        }
-      for (j = 1; j < MAX_NINPUTS; ++j)
+      for (j = 0; j < input->ninputs; ++j)
         {
 #if DEBUG
           fprintf (stderr, "calibrate_new: template%u\n", j + 1);
+          fprintf (stderr, "calibrate_new: experiment=%u template%u=%s\n",
+                   i, j + 1, calibrate->template[j][i]);
 #endif
-          if (xmlHasProp (child, template[j]))
-            {
-              if (calibrate->nexperiments && calibrate->ninputs < 2)
-                {
-                  printf ("Experiment %u: bad templates number\n",
-                          calibrate->nexperiments + 1);
-                  return 0;
-                }
-              calibrate->template[j] = g_realloc (calibrate->template[j],
-                                                  (1 +
-                                                   calibrate->nexperiments) *
-                                                  sizeof (char *));
-              calibrate->template[j][calibrate->nexperiments] =
-                (char *) xmlGetProp (child, template[j]);
-              calibrate->file[j] =
-                g_realloc (calibrate->file[j],
-                           (1 +
-                            calibrate->nexperiments) * sizeof (GMappedFile *));
-#if DEBUG
-              fprintf (stderr, "calibrate_new: experiment=%u template%u=%s\n",
-                       calibrate->nexperiments, j + 1,
-                       calibrate->template[j][calibrate->nexperiments]);
-#endif
-              calibrate->file[j][calibrate->nexperiments] =
-                g_mapped_file_new
-                (calibrate->template[j][calibrate->nexperiments], 0, NULL);
-              if (!calibrate->nexperiments)
-                ++calibrate->ninputs;
-#if DEBUG
-              fprintf (stderr, "calibrate_new: ninputs=%u\n",
-                       calibrate->ninputs);
-#endif
-            }
-          else if (calibrate->nexperiments && calibrate->ninputs > 1)
-            {
-              printf ("No experiment %u template%u\n",
-                      calibrate->nexperiments + 1, j + 1);
-              return 0;
-            }
-          else
-            break;
+          calibrate->file[j][i] =
+            g_mapped_file_new (input->template[j][i], 0, NULL);
         }
-      ++calibrate->nexperiments;
-#if DEBUG
-      fprintf (stderr, "calibrate_new: nexperiments=%u\n",
-               calibrate->nexperiments);
-#endif
-    }
-  if (!calibrate->nexperiments)
-    {
-      show_error (gettext ("No calibration experiments"));
-      return 0;
     }
 
   // Reading the variables data
-  calibrate->nvariables = 0;
-  calibrate->label = NULL;
-  calibrate->rangemin = NULL;
-  calibrate->rangemax = NULL;
-  calibrate->rangeminabs = NULL;
-  calibrate->rangemaxabs = NULL;
-  calibrate->format = NULL;
-  calibrate->nsweeps = NULL;
-  if (calibrate->algorithm == ALGORITHM_SWEEP)
-    calibrate->nsimulations = 1;
-  for (; child; child = child->next)
+  calibrate->nvariables = input->nvariables;
+  calibrate->label = input->label;
+  calibrate->rangemin = input->rangemin;
+  calibrate->rangeminabs = input->rangeminabs;
+  calibrate->rangemax = input->rangemax;
+  calibrate->rangemaxabs = input->rangemaxabs;
+  calibrate->format = input->format;
+  calibrate->nsweeps = input->nsweeps;
+  nbits = input->nbits;
+  if (input->algorithm == ALGORITHM_SWEEP)
     {
-      if (xmlStrcmp (child->name, XML_VARIABLE))
-        {
-          show_error (gettext ("Bad XML node"));
-          return 0;
-        }
-      if (xmlHasProp (child, XML_NAME))
-        {
-          calibrate->label = g_realloc (calibrate->label,
-                                        (1 +
-                                         calibrate->nvariables) *
-                                        sizeof (char *));
-          calibrate->label[calibrate->nvariables] =
-            (char *) xmlGetProp (child, XML_NAME);
-        }
-      else
-        {
-          printf ("No variable %u name\n", calibrate->nvariables + 1);
-          return 0;
-        }
-      if (xmlHasProp (child, XML_MINIMUM))
-        {
-          calibrate->rangemin = g_realloc (calibrate->rangemin,
-                                           (1 +
-                                            calibrate->nvariables) *
-                                           sizeof (double));
-          calibrate->rangeminabs =
-            g_realloc (calibrate->rangeminabs,
-                       (1 + calibrate->nvariables) * sizeof (double));
-          calibrate->rangemin[calibrate->nvariables] =
-            xml_node_get_float (child, XML_MINIMUM, &error_code);
-          if (xmlHasProp (child, XML_ABSOLUTE_MINIMUM))
-            {
-              calibrate->rangeminabs[calibrate->nvariables] =
-                xml_node_get_float (child, XML_ABSOLUTE_MINIMUM, &error_code);
-            }
-          else
-            calibrate->rangeminabs[calibrate->nvariables] = -INFINITY;
-        }
-      else
-        {
-          printf ("No variable %u minimum range\n", calibrate->nvariables + 1);
-          return 0;
-        }
-      if (xmlHasProp (child, XML_MAXIMUM))
-        {
-          calibrate->rangemax = g_realloc (calibrate->rangemax,
-                                           (1 +
-                                            calibrate->nvariables) *
-                                           sizeof (double));
-          calibrate->rangemaxabs =
-            g_realloc (calibrate->rangemaxabs,
-                       (1 + calibrate->nvariables) * sizeof (double));
-          calibrate->rangemax[calibrate->nvariables] =
-            xml_node_get_float (child, XML_MAXIMUM, &error_code);
-          if (xmlHasProp (child, XML_ABSOLUTE_MAXIMUM))
-            {
-              calibrate->rangemaxabs[calibrate->nvariables]
-                = xml_node_get_float (child, XML_ABSOLUTE_MINIMUM, &error_code);
-            }
-          else
-            calibrate->rangemaxabs[calibrate->nvariables] = INFINITY;
-        }
-      else
-        {
-          printf ("No variable %u maximum range\n", calibrate->nvariables + 1);
-          return 0;
-        }
-      calibrate->format = g_realloc (calibrate->format,
-                                     (1 +
-                                      calibrate->nvariables) * sizeof (char *));
-      if (xmlHasProp (child, XML_FORMAT))
-        {
-          calibrate->format[calibrate->nvariables] =
-            (char *) xmlGetProp (child, XML_FORMAT);
-        }
-      else
-        {
-          calibrate->format[calibrate->nvariables] =
-            (char *) xmlStrdup (DEFAULT_FORMAT);
-        }
-      if (calibrate->algorithm == ALGORITHM_SWEEP)
-        {
-          if (xmlHasProp (child, XML_NSWEEPS))
-            {
-              calibrate->nsweeps = g_realloc (calibrate->nsweeps,
-                                              (1 +
-                                               calibrate->nvariables) *
-                                              sizeof (unsigned int));
-              calibrate->nsweeps[calibrate->nvariables] =
-                xml_node_get_uint (child, XML_NSWEEPS, &error_code);
-            }
-          else
-            {
-              printf ("No variable %u sweeps number\n",
-                      calibrate->nvariables + 1);
-              return 0;
-            }
-          calibrate->nsimulations *= calibrate->nsweeps[calibrate->nvariables];
-#if DEBUG
-          fprintf (stderr, "calibrate_new: nsweeps=%u nsimulations=%u\n",
-                   calibrate->nsweeps[calibrate->nvariables],
-                   calibrate->nsimulations);
-#endif
-        }
-      if (calibrate->algorithm == ALGORITHM_GENETIC)
-        {
-          // Obtaining bits representing each variable
-          if (xmlHasProp (child, XML_NBITS))
-            {
-              nbits = g_realloc (nbits,
-                                 (1 +
-                                  calibrate->nvariables) *
-                                 sizeof (unsigned int));
-              i = xml_node_get_uint (child, XML_NBITS, &error_code);
-              if (error_code || !i)
-                {
-                  show_error (gettext ("Invalid bit number"));
-                  return 0;
-                }
-              nbits[calibrate->nvariables] = i;
-            }
-          else
-            {
-              printf ("No variable %u bits number\n",
-                      calibrate->nvariables + 1);
-              return 0;
-            }
-        }
-      ++calibrate->nvariables;
+      calibrate->nsimulations = 1;
     }
-  if (!calibrate->nvariables)
-    {
-      show_error (gettext ("No calibration variables"));
-      return 0;
-    }
+  else if (input->algorithm == ALGORITHM_GENETIC)
+    for (i = 0; i < input->nvariables; ++i)
+      {
+        if (calibrate->algorithm == ALGORITHM_SWEEP)
+          {
+            calibrate->nsimulations *= input->nsweeps[i];
 #if DEBUG
-  fprintf (stderr, "calibrate_new: nvariables=%u\n", calibrate->nvariables);
+            fprintf (stderr, "calibrate_new: nsweeps=%u nsimulations=%u\n",
+                     calibrate->nsweeps[i], calibrate->nsimulations);
 #endif
+          }
+      }
 
   // Allocating values
   calibrate->genetic_variable = NULL;
@@ -2079,48 +1741,26 @@ calibrate_new (Calibrate * calibrate, char *filename)
     {
       // Genetic algorithm
     case ALGORITHM_GENETIC:
-      calibrate_genetic (calibrate);
+      calibrate_genetic ();
       break;
 
       // Iterative algorithm
     default:
-      calibrate_iterate (calibrate);
+      calibrate_iterate ();
     }
-
-  // Closing the XML document
-  xmlFreeDoc (doc);
 
   // Closing result file
   fclose (calibrate->result);
 
   // Freeing memory
-  xmlFree (calibrate->simulator);
-  xmlFree (calibrate->evaluator);
+  input_free ();
   for (i = 0; i < calibrate->nexperiments; ++i)
     {
-      xmlFree (calibrate->experiment[i]);
       for (j = 0; j < calibrate->ninputs; ++j)
-        {
-          xmlFree (calibrate->template[j][i]);
-          g_mapped_file_unref (calibrate->file[j][i]);
-        }
+        g_mapped_file_unref (calibrate->file[j][i]);
     }
-  g_free (calibrate->experiment);
   for (i = 0; i < calibrate->ninputs; ++i)
-    {
-      g_free (calibrate->template[i]);
-      g_free (calibrate->file[i]);
-    }
-  for (i = 0; i < calibrate->nvariables; ++i)
-    {
-      xmlFree (calibrate->label[i]);
-      xmlFree (calibrate->format[i]);
-    }
-  g_free (calibrate->label);
-  g_free (calibrate->rangemin);
-  g_free (calibrate->rangemax);
-  g_free (calibrate->format);
-  g_free (calibrate->nsweeps);
+    g_free (calibrate->file[i]);
   g_free (calibrate->value);
   g_free (calibrate->genetic_variable);
 
@@ -2266,7 +1906,7 @@ window_help ()
                          "authors", authors, "translator-credits",
                          gettext
                          ("Javier Burguete Tolosa (jburguete@eead.csic.es)"),
-                         "version", "1.1.0", "copyright",
+                         "version", "1.1.1", "copyright",
                          "Copyright 2012-2015 Javier Burguete Tolosa", "logo",
                          window->logo, "website-label", gettext ("Website"),
                          "website", "https://github.com/jburguete/calibrator",
@@ -2757,7 +2397,7 @@ main (int argn, char **argc)
   xmlKeepBlanksDefault (0);
 
   // Making calibration
-  calibrate_new (calibrate, argc[argn - 1]);
+  calibrate_new (argc[argn - 1]);
 
   // Freeing memory
   gsl_rng_free (calibrate->rng);
