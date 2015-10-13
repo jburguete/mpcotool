@@ -44,6 +44,7 @@ OF SUCH DAMAGE.
 #include <gsl/gsl_rng.h>
 #include <libxml/parser.h>
 #include <libintl.h>
+#include <gio/gio.h>
 #include <glib.h>
 #ifdef G_OS_WIN32
 #include <windows.h>
@@ -1861,9 +1862,10 @@ calibrate_new (char *filename)
 void
 input_save ()
 {
-  char *buffer;
+  char *path, *buffer, *buffer2;
   xmlDoc *doc;
   xmlNode *node, *child;
+  GFile *file, *file2;
   GtkFileChooserDialog *dlg;
 
   // Opening the saving dialog
@@ -1878,6 +1880,11 @@ input_save ()
   // If OK response then saving
   if (gtk_dialog_run (GTK_DIALOG (dlg)) == GTK_RESPONSE_OK)
     {
+      file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dlg));
+	  buffer = g_file_get_path (file);
+	  path = g_path_get_dirname (buffer);
+	  g_free (buffer);
+
       // Opening the input file
       doc = xmlNewDoc ((const xmlChar *) "1.0");
 
@@ -1886,13 +1893,21 @@ input_save ()
       xmlDocSetRootElement (doc, node);
 
       // Adding properties to the root XML node
-      xmlSetProp (node, XML_SIMULATOR,
-                  (xmlChar *) gtk_file_chooser_get_filename
-                  (GTK_FILE_CHOOSER (window->button_simulator)));
+	  buffer2 = gtk_file_chooser_get_filename
+		  (GTK_FILE_CHOOSER (window->button_simulator));
+	  buffer = g_file_get_relative_path (file2, file);
+	  g_object_unref (file2);
+      xmlSetProp (node, XML_SIMULATOR, (xmlChar *) buffer);
+	  g_free (buffer);
       buffer = gtk_file_chooser_get_filename
         (GTK_FILE_CHOOSER (window->button_evaluator));
       if (xmlStrlen ((xmlChar *) buffer))
-        xmlSetProp (node, XML_EVALUATOR, (xmlChar *) buffer);
+		{
+			buffer2 = g_path_get_basename (buffer);
+	        xmlSetProp (node, XML_EVALUATOR, (xmlChar *) buffer);
+			g_free (buffer2);
+		}
+	  g_free (buffer);
 
       // Setting the algorithm
       switch (window_get_algorithm ())
@@ -1984,7 +1999,7 @@ window_help ()
                          "authors", authors, "translator-credits",
                          gettext
                          ("Javier Burguete Tolosa (jburguete@eead.csic.es)"),
-                         "version", "1.1.2", "copyright",
+                         "version", "1.1.3", "copyright",
                          "Copyright 2012-2015 Javier Burguete Tolosa", "logo",
                          window->logo, "website-label", gettext ("Website"),
                          "website", "https://github.com/jburguete/calibrator",
