@@ -37,12 +37,61 @@ OF SUCH DAMAGE.
 #define INTERFACE__H 1
 
 /**
+ * \struct Experiment
+ * \brief Struct to define experiment data.
+ */
+typedef struct
+{
+    /**
+	 * \var name
+	 * \brief File name.
+	 * \var template
+	 * \brief Array of input template names.
+	 * \var weight
+	 * \brief Weight to calculate the objective function value.
+	 */
+  char *name, *template[MAX_NINPUTS];
+  double weight;
+} Experiment;
+
+/**
+ * \struct Variable
+ * \brief Struct to define variable data.
+ */
+typedef struct
+{
+    /**
+	 * \var label
+	 * \brief Variable label.
+	 * \var format
+	 * \brief C-string format.
+	 * \var rangemin
+	 * \brief Minimum value.
+	 * \var rangemax
+	 * \brief Maximum value.
+	 * \var rangeminabs
+	 * \brief Minimum allowed value.
+	 * \var rangemaxabs
+	 * \brief Maximum allowed value.
+	 * \var nsweeps
+	 * \brief Sweeps number of the sweep algorithm.
+	 * \var nbits
+	 * \brief Bits number of the genetic algorithm.
+	 */
+  char *label, *format;
+  double rangemin, rangemax, rangeminabs, rangemaxabs;
+  unsigned int nsweeps, nbits;
+} Variable;
+
+/**
  * \struct Window
  * \brief Struct to define the main window.
  */
 typedef struct
 {
     /**
+     * \var button_open
+     * \brief Open GtkButton.
      * \var button_save
      * \brief Save GtkButton.
      * \var button_help
@@ -163,9 +212,18 @@ typedef struct
      * \brief Logo GdkPixbuf.
      * \var window
      * \brief Main GtkWindow.
+	 * \var experiment
+	 * \brief Array of experiments data.
+	 * \var variable
+	 * \brief Array of variables data.
+	 * \var nexperiments
+	 * \brief Number of experiments.
+	 * \var nvariables
+	 * \brief Number of variables.
      */
-  GtkButton *button_save, *button_help, *button_exit, *button_add_variable,
-    *button_remove_variable, *button_add_experiment, *button_remove_experiment;
+  GtkButton *button_open, *button_save, *button_help, *button_exit,
+    *button_add_variable, *button_remove_variable, *button_add_experiment,
+    *button_remove_experiment;
   GtkRadioButton *button_algorithm[NALGORITHMS];
   GtkLabel *label_simulator, *label_evaluator, *label_simulations,
     *label_iterations, *label_tolerance, *label_bests, *label_population,
@@ -185,6 +243,9 @@ typedef struct
   GtkFrame *frame_algorithm, *frame_variable, *frame_experiment;
   GdkPixbuf *logo;
   GtkWindow *window;
+  Experiment *experiment;
+  Variable *variable;
+  unsigned int nexperiments, nvariables;
 } Window;
 
 // Public functions
@@ -192,6 +253,7 @@ void input_save ();
 void window_help ();
 int window_get_algorithm ();
 void window_update ();
+void window_open ();
 void window_new (GtkApplication * application);
 
 #endif

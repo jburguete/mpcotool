@@ -96,6 +96,82 @@ const xmlChar *template[MAX_NINPUTS] = {
   XML_TEMPLATE1, XML_TEMPLATE2, XML_TEMPLATE3, XML_TEMPLATE4,
   XML_TEMPLATE5, XML_TEMPLATE6, XML_TEMPLATE7, XML_TEMPLATE8
 };
+char * logo[] = {
+"32 32 3 1",
+" 	c None",
+".	c #0000FF",
+"+	c #FF0000",
+"                                ",
+"                                ",
+"                                ",
+"     .      .      .      .     ",
+"     .      .      .      .     ",
+"     .      .      .      .     ",
+"     .      .      .      .     ",
+"     .      .     +++     .     ",
+"     .      .    +++++    .     ",
+"     .      .    +++++    .     ",
+"     .      .    +++++    .     ",
+"    +++     .     +++    +++    ",
+"   +++++    .      .    +++++   ",
+"   +++++    .      .    +++++   ",
+"   +++++    .      .    +++++   ",
+"    +++     .      .     +++    ",
+"     .      .      .      .     ",
+"     .     +++     .      .     ",
+"     .    +++++    .      .     ",
+"     .    +++++    .      .     ",
+"     .    +++++    .      .     ",
+"     .     +++     .      .     ",
+"     .      .      .      .     ",
+"     .      .      .      .     ",
+"     .      .      .      .     ",
+"     .      .      .      .     ",
+"     .      .      .      .     ",
+"     .      .      .      .     ",
+"     .      .      .      .     ",
+"                                ",
+"                                ",
+"                                "};
+/*
+const char * logo[] = {
+"32 32 3 1",
+" 	c #FFFFFFFFFFFF",
+".	c #00000000FFFF",
+"X	c #FFFF00000000",
+"                                ",
+"                                ",
+"                                ",
+"     .      .      .      .     ",
+"     .      .      .      .     ",
+"     .      .      .      .     ",
+"     .      .      .      .     ",
+"     .      .     XXX     .     ",
+"     .      .    XXXXX    .     ",
+"     .      .    XXXXX    .     ",
+"     .      .    XXXXX    .     ",
+"    XXX     .     XXX    XXX    ",
+"   XXXXX    .      .    XXXXX   ",
+"   XXXXX    .      .    XXXXX   ",
+"   XXXXX    .      .    XXXXX   ",
+"    XXX     .      .     XXX    ",
+"     .      .      .      .     ",
+"     .     XXX     .      .     ",
+"     .    XXXXX    .      .     ",
+"     .    XXXXX    .      .     ",
+"     .    XXXXX    .      .     ",
+"     .     XXX     .      .     ",
+"     .      .      .      .     ",
+"     .      .      .      .     ",
+"     .      .      .      .     ",
+"     .      .      .      .     ",
+"     .      .      .      .     ",
+"     .      .      .      .     ",
+"     .      .      .      .     ",
+"                                ",
+"                                ",
+"                                "};
+*/
 
 #if HAVE_GTK
 /**
@@ -229,14 +305,14 @@ xml_node_get_float (xmlNode * node, const xmlChar * prop, int *error_code)
 }
 
 /**
- * \fn int input_open(char *filename)
+ * \fn int input_new(char *filename)
  * \brief Function to open the input file.
  * \param filename
  * \brief Input data file name.
  * \return 1 on success, 0 on error.
  */
 int
-input_open (char *filename)
+input_new (char *filename)
 {
   int error_code;
   unsigned int i;
@@ -245,7 +321,7 @@ input_open (char *filename)
   xmlNode *node, *child;
 
 #if DEBUG
-  fprintf (stderr, "input_open: start\n");
+  fprintf (stderr, "input_new: start\n");
 #endif
 
   // Parsing the input file
@@ -455,7 +531,7 @@ input_open (char *filename)
       if (xmlStrcmp (child->name, XML_EXPERIMENT))
         break;
 #if DEBUG
-      fprintf (stderr, "input_open: nexperiments=%u\n", input->nexperiments);
+      fprintf (stderr, "input_new: nexperiments=%u\n", input->nexperiments);
 #endif
       if (xmlHasProp (child, XML_NAME))
         {
@@ -471,7 +547,7 @@ input_open (char *filename)
           return 0;
         }
 #if DEBUG
-      fprintf (stderr, "input_open: experiment=%s\n",
+      fprintf (stderr, "input_new: experiment=%s\n",
                input->experiment[input->nexperiments]);
 #endif
       input->weight =
@@ -482,13 +558,13 @@ input_open (char *filename)
       else
         input->weight[input->nexperiments] = 1.;
 #if DEBUG
-      fprintf (stderr, "input_open: weight=%lg\n",
+      fprintf (stderr, "input_new: weight=%lg\n",
                input->weight[input->nexperiments]);
 #endif
       if (!input->nexperiments)
         input->ninputs = 0;
 #if DEBUG
-      fprintf (stderr, "input_open: template[0]\n");
+      fprintf (stderr, "input_new: template[0]\n");
 #endif
       if (xmlHasProp (child, XML_TEMPLATE1))
         {
@@ -498,14 +574,14 @@ input_open (char *filename)
           input->template[0][input->nexperiments] =
             (char *) xmlGetProp (child, template[0]);
 #if DEBUG
-          fprintf (stderr, "input_open: experiment=%u template1=%s\n",
+          fprintf (stderr, "input_new: experiment=%u template1=%s\n",
                    input->nexperiments,
                    input->template[0][input->nexperiments]);
 #endif
           if (!input->nexperiments)
             ++input->ninputs;
 #if DEBUG
-          fprintf (stderr, "input_open: ninputs=%u\n", input->ninputs);
+          fprintf (stderr, "input_new: ninputs=%u\n", input->ninputs);
 #endif
         }
       else
@@ -516,7 +592,7 @@ input_open (char *filename)
       for (i = 1; i < MAX_NINPUTS; ++i)
         {
 #if DEBUG
-          fprintf (stderr, "input_open: template%u\n", i + 1);
+          fprintf (stderr, "input_new: template%u\n", i + 1);
 #endif
           if (xmlHasProp (child, template[i]))
             {
@@ -532,14 +608,14 @@ input_open (char *filename)
               input->template[i][input->nexperiments] =
                 (char *) xmlGetProp (child, template[i]);
 #if DEBUG
-              fprintf (stderr, "input_open: experiment=%u template%u=%s\n",
+              fprintf (stderr, "input_new: experiment=%u template%u=%s\n",
                        input->nexperiments, i + 1,
                        input->template[i][input->nexperiments]);
 #endif
               if (!input->nexperiments)
                 ++input->ninputs;
 #if DEBUG
-              fprintf (stderr, "input_open: ninputs=%u\n", input->ninputs);
+              fprintf (stderr, "input_new: ninputs=%u\n", input->ninputs);
 #endif
             }
           else if (input->nexperiments && input->ninputs > 1)
@@ -553,7 +629,7 @@ input_open (char *filename)
         }
       ++input->nexperiments;
 #if DEBUG
-      fprintf (stderr, "input_open: nexperiments=%u\n", input->nexperiments);
+      fprintf (stderr, "input_new: nexperiments=%u\n", input->nexperiments);
 #endif
     }
   if (!input->nexperiments)
@@ -659,7 +735,7 @@ input_open (char *filename)
               return 0;
             }
 #if DEBUG
-          fprintf (stderr, "input_open: nsweeps=%u nsimulations=%u\n",
+          fprintf (stderr, "input_new: nsweeps=%u nsimulations=%u\n",
                    input->nsweeps[input->nvariables], input->nsimulations);
 #endif
         }
@@ -697,7 +773,7 @@ input_open (char *filename)
   xmlFreeDoc (doc);
 
 #if DEBUG
-  fprintf (stderr, "input_open: end\n");
+  fprintf (stderr, "input_new: end\n");
 #endif
 
   return 1;
@@ -711,6 +787,9 @@ void
 input_free ()
 {
   unsigned int i, j;
+#if DEBUG
+  fprintf (stderr, "input_free: start\n");
+#endif
   xmlFree (input->simulator);
   xmlFree (input->evaluator);
   for (i = 0; i < input->nexperiments; ++i)
@@ -735,6 +814,9 @@ input_free ()
   g_free (input->format);
   g_free (input->nsweeps);
   g_free (input->nbits);
+#if DEBUG
+  fprintf (stderr, "input_free: end\n");
+#endif
 }
 
 /**
@@ -1595,7 +1677,7 @@ calibrate_new (char *filename)
 #endif
 
   // Parsing the XML data file
-  if (!input_open (filename))
+  if (!input_new (filename))
     return 0;
 
   // Obtaining the simulator file
@@ -1700,7 +1782,6 @@ calibrate_new (char *filename)
           calibrate->genetic_variable[i].minimum = calibrate->rangemin[i];
           calibrate->genetic_variable[i].nbits = nbits[i];
         }
-      g_free (nbits);
     }
   calibrate->value = (double *) g_malloc (calibrate->nsimulations *
                                           calibrate->nvariables *
@@ -1786,15 +1867,12 @@ input_save ()
   GtkFileChooserDialog *dlg;
 
   // Opening the saving dialog
-  dlg =
-    (GtkFileChooserDialog *) gtk_file_chooser_dialog_new (gettext ("Save file"),
-                                                          window->window,
-                                                          GTK_FILE_CHOOSER_ACTION_SAVE,
-                                                          gettext ("_Cancel"),
-                                                          GTK_RESPONSE_CANCEL,
-                                                          gettext ("_OK"),
-                                                          GTK_RESPONSE_OK,
-                                                          NULL);
+  dlg = (GtkFileChooserDialog *)
+    gtk_file_chooser_dialog_new (gettext ("Save file"),
+                                 window->window,
+                                 GTK_FILE_CHOOSER_ACTION_SAVE,
+                                 gettext ("_Cancel"), GTK_RESPONSE_CANCEL,
+                                 gettext ("_OK"), GTK_RESPONSE_OK, NULL);
   gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dlg), TRUE);
 
   // If OK response then saving
@@ -1906,7 +1984,7 @@ window_help ()
                          "authors", authors, "translator-credits",
                          gettext
                          ("Javier Burguete Tolosa (jburguete@eead.csic.es)"),
-                         "version", "1.1.1", "copyright",
+                         "version", "1.1.2", "copyright",
                          "Copyright 2012-2015 Javier Burguete Tolosa", "logo",
                          window->logo, "website-label", gettext ("Website"),
                          "website", "https://github.com/jburguete/calibrator",
@@ -2001,10 +2079,57 @@ window_update ()
 void
 window_open ()
 {
+  GtkFileChooserDialog *dlg;
+  dlg = (GtkFileChooserDialog *)
+    gtk_file_chooser_dialog_new (gettext ("Open input file"),
+                                 window->window,
+                                 GTK_FILE_CHOOSER_ACTION_OPEN,
+                                 gettext ("_Cancel"), GTK_RESPONSE_CANCEL,
+                                 gettext ("_OK"), GTK_RESPONSE_OK, NULL);
+  if (gtk_dialog_run (GTK_DIALOG (dlg)) == GTK_RESPONSE_OK)
+    {
+      input_new (gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dlg)));
+      gtk_file_chooser_set_filename (GTK_FILE_CHOOSER
+                                     (window->button_simulator),
+                                     input->simulator);
+      if (input->evaluator)
+        gtk_file_chooser_set_filename (GTK_FILE_CHOOSER
+                                       (window->button_evaluator),
+                                       input->evaluator);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON
+                                    (window->
+                                     button_algorithm[input->algorithm]), TRUE);
+      switch (input->algorithm)
+        {
+        case ALGORITHM_MONTE_CARLO:
+          gtk_spin_button_set_value (window->entry_simulations,
+                                     (gdouble) input->nsimulations);
+        case ALGORITHM_SWEEP:
+          gtk_spin_button_set_value (window->entry_iterations,
+                                     (gdouble) input->niterations);
+          gtk_spin_button_set_value (window->entry_bests,
+                                     (gdouble) input->nbest);
+          gtk_spin_button_set_value (window->entry_tolerance, input->tolerance);
+          break;
+        default:
+          gtk_spin_button_set_value (window->entry_population,
+                                     (gdouble) input->nsimulations);
+          gtk_spin_button_set_value (window->entry_generations,
+                                     (gdouble) input->niterations);
+          gtk_spin_button_set_value (window->entry_mutation,
+                                     input->mutation_ratio);
+          gtk_spin_button_set_value (window->entry_reproduction,
+                                     input->reproduction_ratio);
+          gtk_spin_button_set_value (window->entry_adaptation,
+                                     input->adaptation_ratio);
+        }
+      window_update ();
+    }
+  gtk_widget_destroy (GTK_WIDGET (dlg));
 }
 
 /**
- * \fn int window_new(GtkApplication *application)
+ * \fn void window_new(GtkApplication *application)
  * \brief Function to open the main window.
  * \param application
  * \brief Main GtkApplication.
@@ -2024,6 +2149,11 @@ window_new (GtkApplication * application)
 
   // Setting the window title
   gtk_window_set_title (window->window, PROGRAM_INTERFACE);
+
+  // Creating the open button
+  window->button_open
+    = (GtkButton *) gtk_button_new_with_mnemonic (gettext ("_Open"));
+  g_signal_connect (window->button_open, "clicked", window_open, NULL);
 
   // Creating the save button
   window->button_save
@@ -2273,9 +2403,10 @@ window_new (GtkApplication * application)
 
   // Creating the grid and attaching the widgets to the grid
   window->grid = (GtkGrid *) gtk_grid_new ();
-  gtk_grid_attach (window->grid, GTK_WIDGET (window->button_save), 0, 0, 1, 1);
-  gtk_grid_attach (window->grid, GTK_WIDGET (window->button_help), 1, 0, 1, 1);
-  gtk_grid_attach (window->grid, GTK_WIDGET (window->button_exit), 2, 0, 1, 1);
+  gtk_grid_attach (window->grid, GTK_WIDGET (window->button_open), 0, 0, 1, 1);
+  gtk_grid_attach (window->grid, GTK_WIDGET (window->button_save), 1, 0, 1, 1);
+  gtk_grid_attach (window->grid, GTK_WIDGET (window->button_help), 2, 0, 1, 1);
+  gtk_grid_attach (window->grid, GTK_WIDGET (window->button_exit), 3, 0, 1, 1);
   gtk_grid_attach (window->grid, GTK_WIDGET (window->label_simulator), 0, 1, 1,
                    1);
   gtk_grid_attach (window->grid, GTK_WIDGET (window->button_simulator), 1, 1, 1,
@@ -2293,13 +2424,13 @@ window_new (GtkApplication * application)
   gtk_container_add (GTK_CONTAINER (window->window), GTK_WIDGET (window->grid));
 
   // Setting the window logo
-  window->logo = gtk_image_get_pixbuf
-    (GTK_IMAGE (gtk_image_new_from_file ("logo.png")));
+  window->logo = gdk_pixbuf_new_from_xpm_data(logo);
   gtk_window_set_icon (window->window, window->logo);
 
   // Showing the window
   gtk_widget_show_all (GTK_WIDGET (window->window));
   window_update ();
+
 }
 
 #endif
