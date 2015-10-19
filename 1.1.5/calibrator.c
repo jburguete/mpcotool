@@ -309,14 +309,88 @@ xml_node_get_float (xmlNode * node, const xmlChar * prop, int *error_code)
 }
 
 /**
- * \fn int input_new(char *filename)
+ * \fn void xml_node_set_int(xmlNode *node, const xmlChar *prop, int value)
+ * \brief Function to set an integer number in a XML node property.
+ * \param node
+ * \brief XML node.
+ * \param prop
+ * \brief XML property.
+ * \param value
+ * \brief Integer number value.
+ */
+void
+xml_node_set_int (xmlNode * node, const xmlChar * prop, int value)
+{
+  xmlChar buffer[64];
+  snprintf ((char *) buffer, 64, "%d", value);
+  xmlSetProp (node, prop, buffer);
+}
+
+/**
+ * \fn void xml_node_set_uint(xmlNode *node, const xmlChar *prop, \
+ *   unsigned int value)
+ * \brief Function to set an unsigned integer number in a XML node property.
+ * \param node
+ * \brief XML node.
+ * \param prop
+ * \brief XML property.
+ * \param value
+ * \brief Unsigned integer number value.
+ */
+void
+xml_node_set_uint (xmlNode * node, const xmlChar * prop, unsigned int value)
+{
+  xmlChar buffer[64];
+  snprintf ((char *) buffer, 64, "%u", value);
+  xmlSetProp (node, prop, buffer);
+}
+
+/**
+ * \fn void xml_node_set_float(xmlNode *node, const xmlChar *prop, \
+ *   double value)
+ * \brief Function to set a floating point number in a XML node property.
+ * \param node
+ * \brief XML node.
+ * \param prop
+ * \brief XML property.
+ * \param value
+ * \brief Floating point number value.
+ */
+void
+xml_node_set_float (xmlNode * node, const xmlChar * prop, double value)
+{
+  xmlChar buffer[64];
+  snprintf ((char *) buffer, 64, "%.14lg", value);
+  xmlSetProp (node, prop, buffer);
+}
+
+/**
+ * \fn void input_new()
+ * \brief Function to create a new Input struct.
+ */
+void
+input_new ()
+{
+  unsigned int i;
+  input->nvariables = input->nexperiments = input->ninputs = 0;
+  input->simulator = input->evaluator = input->directory = NULL;
+  input->experiment = input->label = input->format = NULL;
+  input->nsweeps = input->nbits = NULL;
+  input->rangemin = input->rangemax = input->rangeminabs = input->rangemaxabs
+    = input->weight = NULL;
+  for (i = 0; i < MAX_NINPUTS; ++i)
+    input->template[i] = NULL;
+}
+
+/**
+ * \fn int input_open(char *filename)
  * \brief Function to open the input file.
  * \param filename
  * \brief Input data file name.
  * \return 1 on success, 0 on error.
  */
 int
-input_new (char *filename)
+input_open (char *filename)
 {
   int error_code;
   unsigned int i;
@@ -327,6 +401,9 @@ input_new (char *filename)
 #if DEBUG
   fprintf (stderr, "input_new: start\n");
 #endif
+
+  // Resetting input data
+  input_new ();
 
   // Parsing the input file
   doc = xmlParseFile (filename);
@@ -525,11 +602,6 @@ input_new (char *filename)
     }
 
   // Reading the experimental data
-  input->nexperiments = 0;
-  input->experiment = NULL;
-  input->weight = NULL;
-  for (i = 0; i < MAX_NINPUTS; ++i)
-    input->template[i] = NULL;
   for (child = node->children; child; child = child->next)
     {
       if (xmlStrcmp (child->name, XML_EXPERIMENT))
@@ -643,15 +715,6 @@ input_new (char *filename)
     }
 
   // Reading the variables data
-  input->nvariables = 0;
-  input->label = NULL;
-  input->rangemin = NULL;
-  input->rangemax = NULL;
-  input->rangeminabs = NULL;
-  input->rangemaxabs = NULL;
-  input->format = NULL;
-  input->nsweeps = NULL;
-  input->nbits = NULL;
   for (; child; child = child->next)
     {
       if (xmlStrcmp (child->name, XML_VARIABLE))
@@ -798,8 +861,6 @@ input_free ()
   fprintf (stderr, "input_free: start\n");
 #endif
   g_free (input->directory);
-  xmlFree (input->simulator);
-  xmlFree (input->evaluator);
   for (i = 0; i < input->nexperiments; ++i)
     {
       xmlFree (input->experiment[i]);
@@ -815,13 +876,17 @@ input_free ()
       xmlFree (input->format[i]);
     }
   g_free (input->label);
+  g_free (input->format);
   g_free (input->rangemin);
   g_free (input->rangemax);
   g_free (input->rangeminabs);
   g_free (input->rangemaxabs);
-  g_free (input->format);
+  g_free (input->weight);
   g_free (input->nsweeps);
   g_free (input->nbits);
+  xmlFree (input->evaluator);
+  xmlFree (input->simulator);
+  input->nexperiments = input->ninputs = input->nvariables = 0;
 #if DEBUG
   fprintf (stderr, "input_free: end\n");
 #endif
@@ -1684,7 +1749,7 @@ calibrate_new (char *filename)
 #endif
 
   // Parsing the XML data file
-  if (!input_new (filename))
+  if (!input_open (filename))
     return 0;
 
   // Obtaining the simulator file
@@ -1870,6 +1935,7 @@ calibrate_new (char *filename)
 void
 input_save (char *filename)
 {
+  unsigned int i, j;
   char *buffer;
   xmlDoc *doc;
   xmlNode *node, *child;
@@ -1900,7 +1966,7 @@ input_save (char *filename)
   g_free (buffer);
 
   // Setting the algorithm
-  buffer = (char *) malloc (64);
+  buffer = (char *) g_malloc (64);
   switch (input->algorithm)
     {
     case ALGORITHM_MONTE_CARLO:
@@ -1936,7 +2002,37 @@ input_save (char *filename)
       xmlSetProp (node, XML_ADAPTATION, (xmlChar *) buffer);
       break;
     }
-  free (buffer);
+  g_free (buffer);
+
+  // Setting the experimental data
+  for (i = 0; i < input->nexperiments; ++i)
+    {
+      child = xmlNewChild (node, 0, XML_EXPERIMENT, 0);
+      xmlSetProp (child, XML_NAME, (xmlChar *) input->experiment[i]);
+      if (input->weight[i] != 1.)
+        xml_node_set_float (child, XML_WEIGHT, input->weight[i]);
+      for (j = 0; j < input->ninputs; ++j)
+        xmlSetProp (child, template[j], (xmlChar *) input->template[j][i]);
+    }
+
+  // Setting the variables data
+  for (i = 0; i < input->nvariables; ++i)
+    {
+      child = xmlNewChild (node, 0, XML_VARIABLE, 0);
+      xmlSetProp (child, XML_NAME, (xmlChar *) input->label[i]);
+      xml_node_set_float (child, XML_MINIMUM, input->rangemin[i]);
+      if (input->rangeminabs[i] != -INFINITY)
+        xml_node_set_float (child, XML_MINIMUM, input->rangeminabs[i]);
+      xml_node_set_float (child, XML_MAXIMUM, input->rangemax[i]);
+      if (input->rangemaxabs[i] != INFINITY)
+        xml_node_set_float (child, XML_MAXIMUM, input->rangemaxabs[i]);
+      if (xmlStrcmp ((xmlChar *) input->format[i], DEFAULT_FORMAT))
+        xmlSetProp (child, XML_FORMAT, (xmlChar *) input->format[i]);
+      if (input->algorithm == ALGORITHM_SWEEP)
+        xml_node_set_uint (child, XML_NSWEEPS, input->nsweeps[i]);
+      else if (input->algorithm == ALGORITHM_GENETIC)
+        xml_node_set_uint (child, XML_NBITS, input->nbits[i]);
+    }
 
   // Saving the XML file
   xmlSaveFormatFile (filename, doc, 1);
@@ -1954,16 +2050,15 @@ window_save ()
 {
   char *buffer;
   GtkFileChooserDialog *dlg;
-
   // Opening the saving dialog
   dlg = (GtkFileChooserDialog *)
     gtk_file_chooser_dialog_new (gettext ("Save file"),
                                  window->window,
                                  GTK_FILE_CHOOSER_ACTION_SAVE,
-                                 gettext ("_Cancel"), GTK_RESPONSE_CANCEL,
+                                 gettext ("_Cancel"),
+                                 GTK_RESPONSE_CANCEL,
                                  gettext ("_OK"), GTK_RESPONSE_OK, NULL);
   gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dlg), TRUE);
-
   // If OK response then saving
   if (gtk_dialog_run (GTK_DIALOG (dlg)) == GTK_RESPONSE_OK)
     {
@@ -1972,24 +2067,23 @@ window_save ()
         (GTK_FILE_CHOOSER (window->button_simulator));
       input->evaluator = gtk_file_chooser_get_filename
         (GTK_FILE_CHOOSER (window->button_evaluator));
-
       // Setting the algorithm
       switch (window_get_algorithm ())
         {
         case ALGORITHM_MONTE_CARLO:
           input->algorithm = ALGORITHM_MONTE_CARLO;
-          input->nsimulations
-            = gtk_spin_button_get_value_as_int (window->entry_simulations);
-          input->niterations
-            = gtk_spin_button_get_value_as_int (window->entry_iterations);
+          input->nsimulations =
+            gtk_spin_button_get_value_as_int (window->entry_simulations);
+          input->niterations =
+            gtk_spin_button_get_value_as_int (window->entry_iterations);
           input->tolerance =
             gtk_spin_button_get_value (window->entry_tolerance);
           input->nbest = gtk_spin_button_get_value_as_int (window->entry_bests);
           break;
         case ALGORITHM_SWEEP:
           input->algorithm = ALGORITHM_SWEEP;
-          input->niterations
-            = gtk_spin_button_get_value_as_int (window->entry_iterations);
+          input->niterations =
+            gtk_spin_button_get_value_as_int (window->entry_iterations);
           input->tolerance =
             gtk_spin_button_get_value (window->entry_tolerance);
           input->nbest = gtk_spin_button_get_value_as_int (window->entry_bests);
@@ -1998,21 +2092,20 @@ window_save ()
           input->algorithm = ALGORITHM_GENETIC;
           input->nsimulations
             = gtk_spin_button_get_value_as_int (window->entry_population);
-          input->niterations
-            = gtk_spin_button_get_value_as_int (window->entry_generations);
-          input->mutation_ratio
-            = gtk_spin_button_get_value (window->entry_mutation);
-          input->reproduction_ratio
-            = gtk_spin_button_get_value (window->entry_reproduction);
-          input->adaptation_ratio
-            = gtk_spin_button_get_value (window->entry_adaptation);
+          input->niterations =
+            gtk_spin_button_get_value_as_int (window->entry_generations);
+          input->mutation_ratio =
+            gtk_spin_button_get_value (window->entry_mutation);
+          input->reproduction_ratio =
+            gtk_spin_button_get_value (window->entry_reproduction);
+          input->adaptation_ratio =
+            gtk_spin_button_get_value (window->entry_adaptation);
           break;
         }
 
       // Saving the XML file
       buffer = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dlg));
       input_save (buffer);
-
       // Freeing memory
       g_free (buffer);
     }
@@ -2039,14 +2132,16 @@ window_help ()
                          "comments",
                          gettext
                          ("A software to make calibrations of empirical parameters"),
-                         "authors", authors, "translator-credits",
+                         "authors", authors,
+                         "translator-credits",
                          gettext
                          ("Javier Burguete Tolosa (jburguete@eead.csic.es)"),
-                         "version", "1.1.4", "copyright",
-                         "Copyright 2012-2015 Javier Burguete Tolosa", "logo",
-                         window->logo, "website-label", gettext ("Website"),
-                         "website", "https://github.com/jburguete/calibrator",
-                         NULL);
+                         "version", "1.1.5", "copyright",
+                         "Copyright 2012-2015 Javier Burguete Tolosa",
+                         "logo", window->logo,
+                         "website-label", gettext ("Website"),
+                         "website",
+                         "https://github.com/jburguete/calibrator", NULL);
 }
 
 /**
@@ -2143,22 +2238,21 @@ window_open ()
     gtk_file_chooser_dialog_new (gettext ("Open input file"),
                                  window->window,
                                  GTK_FILE_CHOOSER_ACTION_OPEN,
-                                 gettext ("_Cancel"), GTK_RESPONSE_CANCEL,
+                                 gettext ("_Cancel"),
+                                 GTK_RESPONSE_CANCEL,
                                  gettext ("_OK"), GTK_RESPONSE_OK, NULL);
   if (gtk_dialog_run (GTK_DIALOG (dlg)) == GTK_RESPONSE_OK)
     {
-      input_new (gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dlg)));
+      input_open (gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dlg)));
       buffer = g_build_filename (input->directory, input->simulator, NULL);
       gtk_file_chooser_set_filename (GTK_FILE_CHOOSER
-                                     (window->button_simulator),
-                                     buffer);
+                                     (window->button_simulator), buffer);
       g_free (buffer);
       if (input->evaluator)
         {
           buffer = g_build_filename (input->directory, input->evaluator, NULL);
           gtk_file_chooser_set_filename (GTK_FILE_CHOOSER
-                                         (window->button_evaluator),
-                                         buffer);
+                                         (window->button_evaluator), buffer);
           g_free (buffer);
         }
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON
@@ -2204,170 +2298,165 @@ window_new (GtkApplication * application)
 {
   unsigned int i;
   char *label_algorithm[NALGORITHMS] = {
-    "_Monte-Carlo",
-    gettext ("_Sweep"),
-    gettext ("_Genetic")
+    "_Monte-Carlo", gettext ("_Sweep"), gettext ("_Genetic")
   };
-
   // Creating the window
   window->window = (GtkWindow *) gtk_application_window_new (application);
-
   // Setting the window title
   gtk_window_set_title (window->window, PROGRAM_INTERFACE);
-
   // Creating the open button
   window->button_open
     = (GtkButton *) gtk_button_new_with_mnemonic (gettext ("_Open"));
   g_signal_connect (window->button_open, "clicked", window_open, NULL);
-
   // Creating the save button
   window->button_save
     = (GtkButton *) gtk_button_new_with_mnemonic (gettext ("_Save"));
   g_signal_connect (window->button_save, "clicked", window_save, NULL);
-
   // Creating the help button
   window->button_help
     = (GtkButton *) gtk_button_new_with_mnemonic (gettext ("_Help"));
   g_signal_connect (window->button_help, "clicked", window_help, NULL);
-
   // Creating the exit button
   window->button_exit
     = (GtkButton *) gtk_button_new_with_mnemonic (gettext ("E_xit"));
   g_signal_connect_swapped (window->button_exit, "clicked",
                             (void (*)) gtk_widget_destroy, window->window);
-
   // Creating the simulator program label and entry
   window->label_simulator
     = (GtkLabel *) gtk_label_new (gettext ("Simulator program"));
-  window->button_simulator
-    = (GtkFileChooserButton *) gtk_file_chooser_button_new
-    (gettext ("Simulator program"), GTK_FILE_CHOOSER_ACTION_OPEN);
-
+  window->button_simulator =
+    (GtkFileChooserButton *)
+    gtk_file_chooser_button_new (gettext ("Simulator program"),
+                                 GTK_FILE_CHOOSER_ACTION_OPEN);
   // Creating the evaluator program label and entry
   window->label_evaluator
     = (GtkLabel *) gtk_label_new (gettext ("Evaluator program"));
-  window->button_evaluator
-    = (GtkFileChooserButton *) gtk_file_chooser_button_new
-    (gettext ("Evaluator program"), GTK_FILE_CHOOSER_ACTION_OPEN);
-
+  window->button_evaluator =
+    (GtkFileChooserButton *)
+    gtk_file_chooser_button_new (gettext ("Evaluator program"),
+                                 GTK_FILE_CHOOSER_ACTION_OPEN);
   // Creating the algorithm properties
   window->label_simulations = (GtkLabel *) gtk_label_new
     (gettext ("Simulations number"));
   window->entry_simulations
     = (GtkSpinButton *) gtk_spin_button_new_with_range (1., 1.e12, 1.);
-  window->label_iterations
-    = (GtkLabel *) gtk_label_new (gettext ("Iterations number"));
-  window->entry_iterations
-    = (GtkSpinButton *) gtk_spin_button_new_with_range (1., 1.e6, 1.);
+  window->label_iterations =
+    (GtkLabel *) gtk_label_new (gettext ("Iterations number"));
+  window->entry_iterations =
+    (GtkSpinButton *) gtk_spin_button_new_with_range (1., 1.e6, 1.);
   window->label_tolerance = (GtkLabel *) gtk_label_new (gettext ("Tolerance"));
-  window->entry_tolerance
-    = (GtkSpinButton *) gtk_spin_button_new_with_range (0., 1., 0.001);
+  window->entry_tolerance =
+    (GtkSpinButton *) gtk_spin_button_new_with_range (0., 1., 0.001);
   window->label_bests = (GtkLabel *) gtk_label_new (gettext ("Bests number"));
-  window->entry_bests
-    = (GtkSpinButton *) gtk_spin_button_new_with_range (1., 1.e6, 1.);
-  window->label_population = (GtkLabel *) gtk_label_new
-    (gettext ("Population number"));
-  window->entry_population
-    = (GtkSpinButton *) gtk_spin_button_new_with_range (1., 1.e12, 1.);
-  window->label_generations
-    = (GtkLabel *) gtk_label_new (gettext ("Generations number"));
-  window->entry_generations
-    = (GtkSpinButton *) gtk_spin_button_new_with_range (1., 1.e6, 1.);
-  window->label_mutation
-    = (GtkLabel *) gtk_label_new (gettext ("Mutation ratio"));
-  window->entry_mutation
-    = (GtkSpinButton *) gtk_spin_button_new_with_range (0., 1., 0.001);
-  window->label_reproduction
-    = (GtkLabel *) gtk_label_new (gettext ("Reproduction ratio"));
-  window->entry_reproduction
-    = (GtkSpinButton *) gtk_spin_button_new_with_range (0., 1., 0.001);
-  window->label_adaptation
-    = (GtkLabel *) gtk_label_new (gettext ("Adaptation ratio"));
-  window->entry_adaptation
-    = (GtkSpinButton *) gtk_spin_button_new_with_range (0., 1., 0.001);
-
+  window->entry_bests =
+    (GtkSpinButton *) gtk_spin_button_new_with_range (1., 1.e6, 1.);
+  window->label_population =
+    (GtkLabel *) gtk_label_new (gettext ("Population number"));
+  window->entry_population =
+    (GtkSpinButton *) gtk_spin_button_new_with_range (1., 1.e12, 1.);
+  window->label_generations =
+    (GtkLabel *) gtk_label_new (gettext ("Generations number"));
+  window->entry_generations =
+    (GtkSpinButton *) gtk_spin_button_new_with_range (1., 1.e6, 1.);
+  window->label_mutation =
+    (GtkLabel *) gtk_label_new (gettext ("Mutation ratio"));
+  window->entry_mutation =
+    (GtkSpinButton *) gtk_spin_button_new_with_range (0., 1., 0.001);
+  window->label_reproduction =
+    (GtkLabel *) gtk_label_new (gettext ("Reproduction ratio"));
+  window->entry_reproduction =
+    (GtkSpinButton *) gtk_spin_button_new_with_range (0., 1., 0.001);
+  window->label_adaptation =
+    (GtkLabel *) gtk_label_new (gettext ("Adaptation ratio"));
+  window->entry_adaptation =
+    (GtkSpinButton *) gtk_spin_button_new_with_range (0., 1., 0.001);
   // Creating the array of algorithms
   window->grid_algorithm = (GtkGrid *) gtk_grid_new ();
   window->button_algorithm[0] = (GtkRadioButton *)
     gtk_radio_button_new_with_mnemonic (NULL, label_algorithm[0]);
   gtk_grid_attach (window->grid_algorithm,
                    GTK_WIDGET (window->button_algorithm[0]), 0, 0, 1, 1);
-  g_signal_connect (window->button_algorithm[0], "clicked", window_update,
-                    NULL);
+  g_signal_connect (window->button_algorithm[0], "clicked",
+                    window_update, NULL);
   for (i = 0; ++i < NALGORITHMS;)
     {
       window->button_algorithm[i] = (GtkRadioButton *)
-        gtk_radio_button_new_with_mnemonic (gtk_radio_button_get_group
-                                            (window->button_algorithm[0]),
-                                            label_algorithm[i]);
+        gtk_radio_button_new_with_mnemonic
+        (gtk_radio_button_get_group (window->button_algorithm[0]),
+         label_algorithm[i]);
       gtk_grid_attach (window->grid_algorithm,
                        GTK_WIDGET (window->button_algorithm[i]), 0, i, 1, 1);
-      g_signal_connect (window->button_algorithm[i], "clicked", window_update,
-                        NULL);
+      g_signal_connect (window->button_algorithm[i], "clicked",
+                        window_update, NULL);
     }
   gtk_grid_attach (window->grid_algorithm,
-                   GTK_WIDGET (window->label_simulations), 0, NALGORITHMS, 1,
-                   1);
+                   GTK_WIDGET (window->label_simulations), 0,
+                   NALGORITHMS, 1, 1);
   gtk_grid_attach (window->grid_algorithm,
-                   GTK_WIDGET (window->entry_simulations), 1, NALGORITHMS, 1,
-                   1);
+                   GTK_WIDGET (window->entry_simulations), 1,
+                   NALGORITHMS, 1, 1);
   gtk_grid_attach (window->grid_algorithm,
-                   GTK_WIDGET (window->label_iterations), 0, NALGORITHMS + 1, 1,
-                   1);
+                   GTK_WIDGET (window->label_iterations), 0,
+                   NALGORITHMS + 1, 1, 1);
   gtk_grid_attach (window->grid_algorithm,
-                   GTK_WIDGET (window->entry_iterations), 1, NALGORITHMS + 1, 1,
-                   1);
-  gtk_grid_attach (window->grid_algorithm, GTK_WIDGET (window->label_tolerance),
-                   0, NALGORITHMS + 2, 1, 1);
-  gtk_grid_attach (window->grid_algorithm, GTK_WIDGET (window->entry_tolerance),
-                   1, NALGORITHMS + 2, 1, 1);
-  gtk_grid_attach (window->grid_algorithm, GTK_WIDGET (window->label_bests), 0,
-                   NALGORITHMS + 3, 1, 1);
-  gtk_grid_attach (window->grid_algorithm, GTK_WIDGET (window->entry_bests), 1,
-                   NALGORITHMS + 3, 1, 1);
+                   GTK_WIDGET (window->entry_iterations), 1,
+                   NALGORITHMS + 1, 1, 1);
   gtk_grid_attach (window->grid_algorithm,
-                   GTK_WIDGET (window->label_population), 0, NALGORITHMS + 4, 1,
-                   1);
+                   GTK_WIDGET (window->label_tolerance), 0,
+                   NALGORITHMS + 2, 1, 1);
   gtk_grid_attach (window->grid_algorithm,
-                   GTK_WIDGET (window->entry_population), 1, NALGORITHMS + 4, 1,
-                   1);
+                   GTK_WIDGET (window->entry_tolerance), 1,
+                   NALGORITHMS + 2, 1, 1);
   gtk_grid_attach (window->grid_algorithm,
-                   GTK_WIDGET (window->label_generations), 0, NALGORITHMS + 5,
-                   1, 1);
+                   GTK_WIDGET (window->label_bests), 0, NALGORITHMS + 3, 1, 1);
   gtk_grid_attach (window->grid_algorithm,
-                   GTK_WIDGET (window->entry_generations), 1, NALGORITHMS + 5,
-                   1, 1);
-  gtk_grid_attach (window->grid_algorithm, GTK_WIDGET (window->label_mutation),
-                   0, NALGORITHMS + 6, 1, 1);
-  gtk_grid_attach (window->grid_algorithm, GTK_WIDGET (window->entry_mutation),
-                   1, NALGORITHMS + 6, 1, 1);
+                   GTK_WIDGET (window->entry_bests), 1, NALGORITHMS + 3, 1, 1);
   gtk_grid_attach (window->grid_algorithm,
-                   GTK_WIDGET (window->label_reproduction), 0, NALGORITHMS + 7,
-                   1, 1);
+                   GTK_WIDGET (window->label_population), 0,
+                   NALGORITHMS + 4, 1, 1);
   gtk_grid_attach (window->grid_algorithm,
-                   GTK_WIDGET (window->entry_reproduction), 1, NALGORITHMS + 7,
-                   1, 1);
+                   GTK_WIDGET (window->entry_population), 1,
+                   NALGORITHMS + 4, 1, 1);
   gtk_grid_attach (window->grid_algorithm,
-                   GTK_WIDGET (window->label_adaptation), 0, NALGORITHMS + 8, 1,
-                   1);
+                   GTK_WIDGET (window->label_generations), 0,
+                   NALGORITHMS + 5, 1, 1);
   gtk_grid_attach (window->grid_algorithm,
-                   GTK_WIDGET (window->entry_adaptation), 1, NALGORITHMS + 8, 1,
-                   1);
+                   GTK_WIDGET (window->entry_generations), 1,
+                   NALGORITHMS + 5, 1, 1);
+  gtk_grid_attach (window->grid_algorithm,
+                   GTK_WIDGET (window->label_mutation), 0,
+                   NALGORITHMS + 6, 1, 1);
+  gtk_grid_attach (window->grid_algorithm,
+                   GTK_WIDGET (window->entry_mutation), 1,
+                   NALGORITHMS + 6, 1, 1);
+  gtk_grid_attach (window->grid_algorithm,
+                   GTK_WIDGET (window->label_reproduction), 0,
+                   NALGORITHMS + 7, 1, 1);
+  gtk_grid_attach (window->grid_algorithm,
+                   GTK_WIDGET (window->entry_reproduction), 1,
+                   NALGORITHMS + 7, 1, 1);
+  gtk_grid_attach (window->grid_algorithm,
+                   GTK_WIDGET (window->label_adaptation), 0,
+                   NALGORITHMS + 8, 1, 1);
+  gtk_grid_attach (window->grid_algorithm,
+                   GTK_WIDGET (window->entry_adaptation), 1,
+                   NALGORITHMS + 8, 1, 1);
   window->frame_algorithm = (GtkFrame *) gtk_frame_new (gettext ("Algorithm"));
   gtk_container_add (GTK_CONTAINER (window->frame_algorithm),
                      GTK_WIDGET (window->grid_algorithm));
-
   // Creating the variable widgets
   window->combo_variable = (GtkComboBoxText *) gtk_combo_box_text_new ();
   window->button_add_variable =
     (GtkButton *) gtk_button_new_from_icon_name ("list-add",
                                                  GTK_ICON_SIZE_BUTTON);
-  gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_add_variable),
+  gtk_widget_set_tooltip_text (GTK_WIDGET
+                               (window->button_add_variable),
                                gettext ("Add variable"));
   window->button_remove_variable =
     (GtkButton *) gtk_button_new_from_icon_name ("list-remove",
                                                  GTK_ICON_SIZE_BUTTON);
-  gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_remove_variable),
+  gtk_widget_set_tooltip_text (GTK_WIDGET
+                               (window->button_remove_variable),
                                gettext ("Remove variable"));
   window->label_variable = (GtkLabel *) gtk_label_new (gettext ("Name"));
   window->entry_variable = (GtkEntry *) gtk_entry_new ();
@@ -2388,60 +2477,62 @@ window_new (GtkApplication * application)
   window->entry_bits =
     (GtkSpinButton *) gtk_spin_button_new_with_range (1., 64., 1.);
   window->grid_variable = (GtkGrid *) gtk_grid_new ();
-  gtk_grid_attach (window->grid_variable, GTK_WIDGET (window->combo_variable),
-                   0, 0, 2, 1);
+  gtk_grid_attach (window->grid_variable,
+                   GTK_WIDGET (window->combo_variable), 0, 0, 2, 1);
   gtk_grid_attach (window->grid_variable,
                    GTK_WIDGET (window->button_add_variable), 2, 0, 1, 1);
   gtk_grid_attach (window->grid_variable,
                    GTK_WIDGET (window->button_remove_variable), 3, 0, 1, 1);
-  gtk_grid_attach (window->grid_variable, GTK_WIDGET (window->label_variable),
-                   0, 1, 1, 1);
-  gtk_grid_attach (window->grid_variable, GTK_WIDGET (window->entry_variable),
-                   1, 1, 3, 1);
-  gtk_grid_attach (window->grid_variable, GTK_WIDGET (window->label_min), 0, 2,
-                   1, 1);
-  gtk_grid_attach (window->grid_variable, GTK_WIDGET (window->entry_min), 1, 2,
-                   3, 1);
-  gtk_grid_attach (window->grid_variable, GTK_WIDGET (window->label_max), 0, 3,
-                   1, 1);
-  gtk_grid_attach (window->grid_variable, GTK_WIDGET (window->entry_max), 1, 3,
-                   3, 1);
-  gtk_grid_attach (window->grid_variable, GTK_WIDGET (window->label_absmin), 0,
-                   4, 1, 1);
-  gtk_grid_attach (window->grid_variable, GTK_WIDGET (window->entry_absmin), 1,
-                   4, 3, 1);
-  gtk_grid_attach (window->grid_variable, GTK_WIDGET (window->label_absmax), 0,
-                   5, 1, 1);
-  gtk_grid_attach (window->grid_variable, GTK_WIDGET (window->entry_absmax), 1,
-                   5, 3, 1);
-  gtk_grid_attach (window->grid_variable, GTK_WIDGET (window->label_sweeps), 0,
-                   6, 1, 1);
-  gtk_grid_attach (window->grid_variable, GTK_WIDGET (window->entry_sweeps), 1,
-                   6, 3, 1);
-  gtk_grid_attach (window->grid_variable, GTK_WIDGET (window->label_bits), 0, 6,
-                   1, 1);
-  gtk_grid_attach (window->grid_variable, GTK_WIDGET (window->entry_bits), 1, 6,
-                   3, 1);
+  gtk_grid_attach (window->grid_variable,
+                   GTK_WIDGET (window->label_variable), 0, 1, 1, 1);
+  gtk_grid_attach (window->grid_variable,
+                   GTK_WIDGET (window->entry_variable), 1, 1, 3, 1);
+  gtk_grid_attach (window->grid_variable,
+                   GTK_WIDGET (window->label_min), 0, 2, 1, 1);
+  gtk_grid_attach (window->grid_variable,
+                   GTK_WIDGET (window->entry_min), 1, 2, 3, 1);
+  gtk_grid_attach (window->grid_variable,
+                   GTK_WIDGET (window->label_max), 0, 3, 1, 1);
+  gtk_grid_attach (window->grid_variable,
+                   GTK_WIDGET (window->entry_max), 1, 3, 3, 1);
+  gtk_grid_attach (window->grid_variable,
+                   GTK_WIDGET (window->label_absmin), 0, 4, 1, 1);
+  gtk_grid_attach (window->grid_variable,
+                   GTK_WIDGET (window->entry_absmin), 1, 4, 3, 1);
+  gtk_grid_attach (window->grid_variable,
+                   GTK_WIDGET (window->label_absmax), 0, 5, 1, 1);
+  gtk_grid_attach (window->grid_variable,
+                   GTK_WIDGET (window->entry_absmax), 1, 5, 3, 1);
+  gtk_grid_attach (window->grid_variable,
+                   GTK_WIDGET (window->label_sweeps), 0, 6, 1, 1);
+  gtk_grid_attach (window->grid_variable,
+                   GTK_WIDGET (window->entry_sweeps), 1, 6, 3, 1);
+  gtk_grid_attach (window->grid_variable,
+                   GTK_WIDGET (window->label_bits), 0, 6, 1, 1);
+  gtk_grid_attach (window->grid_variable,
+                   GTK_WIDGET (window->entry_bits), 1, 6, 3, 1);
   window->frame_variable = (GtkFrame *) gtk_frame_new (gettext ("Variable"));
   gtk_container_add (GTK_CONTAINER (window->frame_variable),
                      GTK_WIDGET (window->grid_variable));
-
   // Creating the experiment widgets
   window->combo_experiment = (GtkComboBoxText *) gtk_combo_box_text_new ();
   window->button_add_experiment =
     (GtkButton *) gtk_button_new_from_icon_name ("list-add",
                                                  GTK_ICON_SIZE_BUTTON);
-  gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_add_experiment),
+  gtk_widget_set_tooltip_text (GTK_WIDGET
+                               (window->button_add_experiment),
                                gettext ("Add experiment"));
   window->button_remove_experiment =
     (GtkButton *) gtk_button_new_from_icon_name ("list-remove",
                                                  GTK_ICON_SIZE_BUTTON);
-  gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_remove_experiment),
+  gtk_widget_set_tooltip_text (GTK_WIDGET
+                               (window->button_remove_experiment),
                                gettext ("Remove experiment"));
   window->label_experiment = (GtkLabel *) gtk_label_new (gettext ("Name"));
   window->button_experiment =
     (GtkFileChooserButton *)
-    gtk_file_chooser_button_new (gettext ("Experimental data file"),
+    gtk_file_chooser_button_new (gettext
+                                 ("Experimental data file"),
                                  GTK_FILE_CHOOSER_ACTION_OPEN);
   window->label_weight = (GtkLabel *) gtk_label_new (gettext ("Weight"));
   window->entry_weight =
@@ -2457,45 +2548,41 @@ window_new (GtkApplication * application)
                    GTK_WIDGET (window->label_experiment), 0, 1, 1, 1);
   gtk_grid_attach (window->grid_experiment,
                    GTK_WIDGET (window->button_experiment), 1, 1, 3, 1);
-  gtk_grid_attach (window->grid_experiment, GTK_WIDGET (window->label_weight),
-                   0, 2, 1, 1);
-  gtk_grid_attach (window->grid_experiment, GTK_WIDGET (window->entry_weight),
-                   1, 2, 3, 1);
+  gtk_grid_attach (window->grid_experiment,
+                   GTK_WIDGET (window->label_weight), 0, 2, 1, 1);
+  gtk_grid_attach (window->grid_experiment,
+                   GTK_WIDGET (window->entry_weight), 1, 2, 3, 1);
   window->frame_experiment =
     (GtkFrame *) gtk_frame_new (gettext ("Experiment"));
   gtk_container_add (GTK_CONTAINER (window->frame_experiment),
                      GTK_WIDGET (window->grid_experiment));
-
   // Creating the grid and attaching the widgets to the grid
   window->grid = (GtkGrid *) gtk_grid_new ();
   gtk_grid_attach (window->grid, GTK_WIDGET (window->button_open), 0, 0, 1, 1);
   gtk_grid_attach (window->grid, GTK_WIDGET (window->button_save), 1, 0, 1, 1);
   gtk_grid_attach (window->grid, GTK_WIDGET (window->button_help), 2, 0, 1, 1);
   gtk_grid_attach (window->grid, GTK_WIDGET (window->button_exit), 3, 0, 1, 1);
-  gtk_grid_attach (window->grid, GTK_WIDGET (window->label_simulator), 0, 1, 1,
-                   1);
-  gtk_grid_attach (window->grid, GTK_WIDGET (window->button_simulator), 1, 1, 1,
-                   1);
-  gtk_grid_attach (window->grid, GTK_WIDGET (window->label_evaluator), 2, 1, 1,
-                   1);
-  gtk_grid_attach (window->grid, GTK_WIDGET (window->button_evaluator), 3, 1, 1,
-                   1);
-  gtk_grid_attach (window->grid, GTK_WIDGET (window->frame_algorithm), 0, 2, 2,
-                   1);
-  gtk_grid_attach (window->grid, GTK_WIDGET (window->frame_variable), 2, 2, 2,
-                   1);
-  gtk_grid_attach (window->grid, GTK_WIDGET (window->frame_experiment), 4, 2, 2,
-                   1);
+  gtk_grid_attach (window->grid,
+                   GTK_WIDGET (window->label_simulator), 0, 1, 1, 1);
+  gtk_grid_attach (window->grid,
+                   GTK_WIDGET (window->button_simulator), 1, 1, 1, 1);
+  gtk_grid_attach (window->grid,
+                   GTK_WIDGET (window->label_evaluator), 2, 1, 1, 1);
+  gtk_grid_attach (window->grid,
+                   GTK_WIDGET (window->button_evaluator), 3, 1, 1, 1);
+  gtk_grid_attach (window->grid,
+                   GTK_WIDGET (window->frame_algorithm), 0, 2, 2, 1);
+  gtk_grid_attach (window->grid,
+                   GTK_WIDGET (window->frame_variable), 2, 2, 2, 1);
+  gtk_grid_attach (window->grid,
+                   GTK_WIDGET (window->frame_experiment), 4, 2, 2, 1);
   gtk_container_add (GTK_CONTAINER (window->window), GTK_WIDGET (window->grid));
-
   // Setting the window logo
   window->logo = gdk_pixbuf_new_from_xpm_data (logo);
   gtk_window_set_icon (window->window, window->logo);
-
   // Showing the window
   gtk_widget_show_all (GTK_WIDGET (window->window));
   window_update ();
-
 }
 
 #endif
@@ -2543,13 +2630,12 @@ main (int argn, char **argc)
   bind_textdomain_codeset (PROGRAM_INTERFACE, "UTF-8");
   textdomain (PROGRAM_INTERFACE);
   gtk_disable_setlocale ();
-  application = gtk_application_new ("git.jburguete.calibrator",
-                                     G_APPLICATION_FLAGS_NONE);
+  application =
+    gtk_application_new ("git.jburguete.calibrator", G_APPLICATION_FLAGS_NONE);
   g_signal_connect (application, "activate", (void (*)) window_new, NULL);
   status = g_application_run (G_APPLICATION (application), argn, argc);
   g_object_unref (application);
   return status;
-
 #else
 
 #if HAVE_MPI
@@ -2561,7 +2647,6 @@ main (int argn, char **argc)
 #else
   ntasks = 1;
 #endif
-
   // Checking syntax
   if (!(argn == 2 || (argn == 4 && !strcmp (argc[1], "-nthreads"))))
     {
@@ -2584,26 +2669,19 @@ main (int argn, char **argc)
   if (nthreads > 1)
     mutex = g_mutex_new ();
 #endif
-
   // Starting pseudo-random numbers generator
   calibrate->rng = gsl_rng_alloc (gsl_rng_taus2);
   gsl_rng_set (calibrate->rng, DEFAULT_RANDOM_SEED);
-
   // Allowing spaces in the XML data file
   xmlKeepBlanksDefault (0);
-
   // Making calibration
   calibrate_new (argc[argn - 1]);
-
   // Freeing memory
   gsl_rng_free (calibrate->rng);
-
 #if HAVE_MPI
   // Closing MPI
   MPI_Finalize ();
 #endif
-
   return 0;
-
 #endif
 }

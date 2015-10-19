@@ -238,6 +238,7 @@ unsigned int xml_node_get_uint (xmlNode * node, const xmlChar * prop,
                                 int *error_code);
 double xml_node_get_float (xmlNode * node, const xmlChar * prop,
                            int *error_code);
+void input_new ();
 int input_open (char *filename);
 
 #endif
