@@ -97,43 +97,46 @@ const xmlChar *template[MAX_NINPUTS] = {
   XML_TEMPLATE1, XML_TEMPLATE2, XML_TEMPLATE3, XML_TEMPLATE4,
   XML_TEMPLATE5, XML_TEMPLATE6, XML_TEMPLATE7, XML_TEMPLATE8
 };
-char * logo[] = {
-"32 32 3 1",
-" 	c None",
-".	c #0000FF",
-"+	c #FF0000",
-"                                ",
-"                                ",
-"                                ",
-"     .      .      .      .     ",
-"     .      .      .      .     ",
-"     .      .      .      .     ",
-"     .      .      .      .     ",
-"     .      .     +++     .     ",
-"     .      .    +++++    .     ",
-"     .      .    +++++    .     ",
-"     .      .    +++++    .     ",
-"    +++     .     +++    +++    ",
-"   +++++    .      .    +++++   ",
-"   +++++    .      .    +++++   ",
-"   +++++    .      .    +++++   ",
-"    +++     .      .     +++    ",
-"     .      .      .      .     ",
-"     .     +++     .      .     ",
-"     .    +++++    .      .     ",
-"     .    +++++    .      .     ",
-"     .    +++++    .      .     ",
-"     .     +++     .      .     ",
-"     .      .      .      .     ",
-"     .      .      .      .     ",
-"     .      .      .      .     ",
-"     .      .      .      .     ",
-"     .      .      .      .     ",
-"     .      .      .      .     ",
-"     .      .      .      .     ",
-"                                ",
-"                                ",
-"                                "};
+
+const char *logo[] = {
+  "32 32 3 1",
+  " 	c None",
+  ".	c #0000FF",
+  "+	c #FF0000",
+  "                                ",
+  "                                ",
+  "                                ",
+  "     .      .      .      .     ",
+  "     .      .      .      .     ",
+  "     .      .      .      .     ",
+  "     .      .      .      .     ",
+  "     .      .     +++     .     ",
+  "     .      .    +++++    .     ",
+  "     .      .    +++++    .     ",
+  "     .      .    +++++    .     ",
+  "    +++     .     +++    +++    ",
+  "   +++++    .      .    +++++   ",
+  "   +++++    .      .    +++++   ",
+  "   +++++    .      .    +++++   ",
+  "    +++     .      .     +++    ",
+  "     .      .      .      .     ",
+  "     .     +++     .      .     ",
+  "     .    +++++    .      .     ",
+  "     .    +++++    .      .     ",
+  "     .    +++++    .      .     ",
+  "     .     +++     .      .     ",
+  "     .      .      .      .     ",
+  "     .      .      .      .     ",
+  "     .      .      .      .     ",
+  "     .      .      .      .     ",
+  "     .      .      .      .     ",
+  "     .      .      .      .     ",
+  "     .      .      .      .     ",
+  "                                ",
+  "                                ",
+  "                                "
+};
+
 /*
 const char * logo[] = {
 "32 32 3 1",
@@ -770,6 +773,9 @@ input_new (char *filename)
       return 0;
     }
 
+  // Getting the working directory
+  input->directory = g_path_get_dirname (filename);
+
   // Closing the XML document
   xmlFreeDoc (doc);
 
@@ -791,6 +797,7 @@ input_free ()
 #if DEBUG
   fprintf (stderr, "input_free: start\n");
 #endif
+  g_free (input->directory);
   xmlFree (input->simulator);
   xmlFree (input->evaluator);
   for (i = 0; i < input->nexperiments; ++i)
@@ -1582,9 +1589,8 @@ calibrate_refine ()
             {
               calibrate->rangemin[j] = fmin (calibrate->rangemin[j],
                                              calibrate->value_old[i *
-                                                                  calibrate->
-                                                                  nvariables +
-                                                                  j]);
+                                                                  calibrate->nvariables
+                                                                  + j]);
               calibrate->rangemax[j] =
                 fmax (calibrate->rangemax[j],
                       calibrate->value_old[i * calibrate->nvariables + j]);
@@ -1856,16 +1862,97 @@ calibrate_new (char *filename)
 #if HAVE_GTK
 
 /**
- * \fn void input_save()
+ * \fn void input_save(char *filename)
  * \brief Function to save the input file.
+ * \param filename
+ * \brief Input file name.
  */
 void
-input_save ()
+input_save (char *filename)
 {
-  char *path, *buffer, *buffer2;
+  char *buffer;
   xmlDoc *doc;
   xmlNode *node, *child;
   GFile *file, *file2;
+
+  // Getting the input file directory
+  input->directory = g_path_get_dirname (filename);
+  file = g_file_new_for_path (input->directory);
+
+  // Opening the input file
+  doc = xmlNewDoc ((const xmlChar *) "1.0");
+
+  // Setting root XML node
+  node = xmlNewDocNode (doc, 0, XML_CALIBRATE, 0);
+  xmlDocSetRootElement (doc, node);
+
+  // Adding properties to the root XML node
+  file2 = g_file_new_for_path (input->simulator);
+  buffer = g_file_get_relative_path (file, file2);
+  g_object_unref (file2);
+  xmlSetProp (node, XML_SIMULATOR, (xmlChar *) buffer);
+  g_free (buffer);
+  file2 = g_file_new_for_path (input->evaluator);
+  buffer = g_file_get_relative_path (file, file2);
+  g_object_unref (file2);
+  if (xmlStrlen ((xmlChar *) buffer))
+    xmlSetProp (node, XML_EVALUATOR, (xmlChar *) buffer);
+  g_free (buffer);
+
+  // Setting the algorithm
+  buffer = (char *) malloc (64);
+  switch (input->algorithm)
+    {
+    case ALGORITHM_MONTE_CARLO:
+      snprintf (buffer, 64, "%u", input->nsimulations);
+      xmlSetProp (node, XML_NSIMULATIONS, (xmlChar *) buffer);
+      snprintf (buffer, 64, "%u", input->niterations);
+      xmlSetProp (node, XML_NITERATIONS, (xmlChar *) buffer);
+      snprintf (buffer, 64, "%.3lg", input->tolerance);
+      xmlSetProp (node, XML_TOLERANCE, (xmlChar *) buffer);
+      snprintf (buffer, 64, "%u", input->nbest);
+      xmlSetProp (node, XML_NBEST, (xmlChar *) buffer);
+      break;
+    case ALGORITHM_SWEEP:
+      xmlSetProp (node, XML_ALGORITHM, XML_SWEEP);
+      snprintf (buffer, 64, "%u", input->niterations);
+      xmlSetProp (node, XML_NITERATIONS, (xmlChar *) buffer);
+      snprintf (buffer, 64, "%.3lg", input->tolerance);
+      xmlSetProp (node, XML_TOLERANCE, (xmlChar *) buffer);
+      snprintf (buffer, 64, "%u", input->nbest);
+      xmlSetProp (node, XML_NBEST, (xmlChar *) buffer);
+      break;
+    default:
+      xmlSetProp (node, XML_ALGORITHM, XML_GENETIC);
+      snprintf (buffer, 64, "%u", input->nsimulations);
+      xmlSetProp (node, XML_NPOPULATION, (xmlChar *) buffer);
+      snprintf (buffer, 64, "%u", input->niterations);
+      xmlSetProp (node, XML_NGENERATIONS, (xmlChar *) buffer);
+      snprintf (buffer, 64, "%.3lg", input->mutation_ratio);
+      xmlSetProp (node, XML_MUTATION, (xmlChar *) buffer);
+      snprintf (buffer, 64, "%.3lg", input->reproduction_ratio);
+      xmlSetProp (node, XML_REPRODUCTION, (xmlChar *) buffer);
+      snprintf (buffer, 64, "%.3lg", input->adaptation_ratio);
+      xmlSetProp (node, XML_ADAPTATION, (xmlChar *) buffer);
+      break;
+    }
+  free (buffer);
+
+  // Saving the XML file
+  xmlSaveFormatFile (filename, doc, 1);
+
+  // Freeing memory
+  xmlFreeDoc (doc);
+}
+
+/**
+ * \fn void window_save()
+ * \brief Function to save the input file.
+ */
+void
+window_save ()
+{
+  char *buffer;
   GtkFileChooserDialog *dlg;
 
   // Opening the saving dialog
@@ -1880,98 +1967,54 @@ input_save ()
   // If OK response then saving
   if (gtk_dialog_run (GTK_DIALOG (dlg)) == GTK_RESPONSE_OK)
     {
-      file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dlg));
-	  buffer = g_file_get_path (file);
-	  path = g_path_get_dirname (buffer);
-	  g_free (buffer);
-
-      // Opening the input file
-      doc = xmlNewDoc ((const xmlChar *) "1.0");
-
-      // Setting root XML node
-      node = xmlNewDocNode (doc, 0, XML_CALIBRATE, 0);
-      xmlDocSetRootElement (doc, node);
-
       // Adding properties to the root XML node
-	  buffer2 = gtk_file_chooser_get_filename
-		  (GTK_FILE_CHOOSER (window->button_simulator));
-	  buffer = g_file_get_relative_path (file2, file);
-	  g_object_unref (file2);
-      xmlSetProp (node, XML_SIMULATOR, (xmlChar *) buffer);
-	  g_free (buffer);
-      buffer = gtk_file_chooser_get_filename
+      input->simulator = gtk_file_chooser_get_filename
+        (GTK_FILE_CHOOSER (window->button_simulator));
+      input->evaluator = gtk_file_chooser_get_filename
         (GTK_FILE_CHOOSER (window->button_evaluator));
-      if (xmlStrlen ((xmlChar *) buffer))
-		{
-			buffer2 = g_path_get_basename (buffer);
-	        xmlSetProp (node, XML_EVALUATOR, (xmlChar *) buffer);
-			g_free (buffer2);
-		}
-	  g_free (buffer);
 
       // Setting the algorithm
       switch (window_get_algorithm ())
         {
         case ALGORITHM_MONTE_CARLO:
-          xmlSetProp (node, XML_NSIMULATIONS,
-                      (xmlChar *)
-                      gtk_entry_get_text (GTK_ENTRY
-                                          (window->entry_simulations)));
-          xmlSetProp (node, XML_NITERATIONS,
-                      (xmlChar *)
-                      gtk_entry_get_text (GTK_ENTRY
-                                          (window->entry_iterations)));
-          xmlSetProp (node, XML_TOLERANCE,
-                      (xmlChar *)
-                      gtk_entry_get_text (GTK_ENTRY (window->entry_tolerance)));
-          xmlSetProp (node, XML_NBEST,
-                      (xmlChar *)
-                      gtk_entry_get_text (GTK_ENTRY (window->entry_bests)));
+          input->algorithm = ALGORITHM_MONTE_CARLO;
+          input->nsimulations
+            = gtk_spin_button_get_value_as_int (window->entry_simulations);
+          input->niterations
+            = gtk_spin_button_get_value_as_int (window->entry_iterations);
+          input->tolerance =
+            gtk_spin_button_get_value (window->entry_tolerance);
+          input->nbest = gtk_spin_button_get_value_as_int (window->entry_bests);
           break;
         case ALGORITHM_SWEEP:
-          xmlSetProp (node, XML_ALGORITHM, XML_SWEEP);
-          xmlSetProp (node, XML_NITERATIONS,
-                      (xmlChar *)
-                      gtk_entry_get_text (GTK_ENTRY
-                                          (window->entry_iterations)));
-          xmlSetProp (node, XML_TOLERANCE,
-                      (xmlChar *)
-                      gtk_entry_get_text (GTK_ENTRY (window->entry_tolerance)));
-          xmlSetProp (node, XML_NBEST,
-                      (xmlChar *)
-                      gtk_entry_get_text (GTK_ENTRY (window->entry_bests)));
+          input->algorithm = ALGORITHM_SWEEP;
+          input->niterations
+            = gtk_spin_button_get_value_as_int (window->entry_iterations);
+          input->tolerance =
+            gtk_spin_button_get_value (window->entry_tolerance);
+          input->nbest = gtk_spin_button_get_value_as_int (window->entry_bests);
           break;
         default:
-          xmlSetProp (node, XML_ALGORITHM, XML_GENETIC);
-          xmlSetProp (node, XML_NPOPULATION,
-                      (xmlChar *)
-                      gtk_entry_get_text (GTK_ENTRY
-                                          (window->entry_population)));
-          xmlSetProp (node, XML_NGENERATIONS,
-                      (xmlChar *)
-                      gtk_entry_get_text (GTK_ENTRY
-                                          (window->entry_generations)));
-          xmlSetProp (node, XML_MUTATION,
-                      (xmlChar *)
-                      gtk_entry_get_text (GTK_ENTRY (window->entry_mutation)));
-          xmlSetProp (node, XML_REPRODUCTION,
-                      (xmlChar *)
-                      gtk_entry_get_text (GTK_ENTRY
-                                          (window->entry_reproduction)));
-          xmlSetProp (node, XML_ADAPTATION,
-                      (xmlChar *)
-                      gtk_entry_get_text (GTK_ENTRY
-                                          (window->entry_adaptation)));
+          input->algorithm = ALGORITHM_GENETIC;
+          input->nsimulations
+            = gtk_spin_button_get_value_as_int (window->entry_population);
+          input->niterations
+            = gtk_spin_button_get_value_as_int (window->entry_generations);
+          input->mutation_ratio
+            = gtk_spin_button_get_value (window->entry_mutation);
+          input->reproduction_ratio
+            = gtk_spin_button_get_value (window->entry_reproduction);
+          input->adaptation_ratio
+            = gtk_spin_button_get_value (window->entry_adaptation);
           break;
         }
 
       // Saving the XML file
       buffer = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dlg));
-      xmlSaveFormatFile (buffer, doc, 1);
+      input_save (buffer);
 
       // Freeing memory
       g_free (buffer);
-      xmlFreeDoc (doc);
     }
 
   // Closing and freeing memory
@@ -1999,7 +2042,7 @@ window_help ()
                          "authors", authors, "translator-credits",
                          gettext
                          ("Javier Burguete Tolosa (jburguete@eead.csic.es)"),
-                         "version", "1.1.3", "copyright",
+                         "version", "1.1.4", "copyright",
                          "Copyright 2012-2015 Javier Burguete Tolosa", "logo",
                          window->logo, "website-label", gettext ("Website"),
                          "website", "https://github.com/jburguete/calibrator",
@@ -2094,6 +2137,7 @@ window_update ()
 void
 window_open ()
 {
+  char *buffer;
   GtkFileChooserDialog *dlg;
   dlg = (GtkFileChooserDialog *)
     gtk_file_chooser_dialog_new (gettext ("Open input file"),
@@ -2104,16 +2148,22 @@ window_open ()
   if (gtk_dialog_run (GTK_DIALOG (dlg)) == GTK_RESPONSE_OK)
     {
       input_new (gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dlg)));
+      buffer = g_build_filename (input->directory, input->simulator, NULL);
       gtk_file_chooser_set_filename (GTK_FILE_CHOOSER
                                      (window->button_simulator),
-                                     input->simulator);
+                                     buffer);
+      g_free (buffer);
       if (input->evaluator)
-        gtk_file_chooser_set_filename (GTK_FILE_CHOOSER
-                                       (window->button_evaluator),
-                                       input->evaluator);
+        {
+          buffer = g_build_filename (input->directory, input->evaluator, NULL);
+          gtk_file_chooser_set_filename (GTK_FILE_CHOOSER
+                                         (window->button_evaluator),
+                                         buffer);
+          g_free (buffer);
+        }
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON
-                                    (window->
-                                     button_algorithm[input->algorithm]), TRUE);
+                                    (window->button_algorithm
+                                     [input->algorithm]), TRUE);
       switch (input->algorithm)
         {
         case ALGORITHM_MONTE_CARLO:
@@ -2173,7 +2223,7 @@ window_new (GtkApplication * application)
   // Creating the save button
   window->button_save
     = (GtkButton *) gtk_button_new_with_mnemonic (gettext ("_Save"));
-  g_signal_connect (window->button_save, "clicked", input_save, NULL);
+  g_signal_connect (window->button_save, "clicked", window_save, NULL);
 
   // Creating the help button
   window->button_help
@@ -2439,7 +2489,7 @@ window_new (GtkApplication * application)
   gtk_container_add (GTK_CONTAINER (window->window), GTK_WIDGET (window->grid));
 
   // Setting the window logo
-  window->logo = gdk_pixbuf_new_from_xpm_data(logo);
+  window->logo = gdk_pixbuf_new_from_xpm_data (logo);
   gtk_window_set_icon (window->window, window->logo);
 
   // Showing the window

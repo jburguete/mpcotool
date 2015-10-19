@@ -249,6 +249,7 @@ typedef struct
 } Window;
 
 // Public functions
+void input_save (char *filename);
 void input_save ();
 void window_help ();
 int window_get_algorithm ();

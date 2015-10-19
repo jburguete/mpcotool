@@ -72,24 +72,8 @@ typedef struct
      * \brief Array of variable names.
      * \var format
      * \brief Array of variable formats.
-     * \var nvariables
-     * \brief Variables number.
-     * \var nexperiments
-     * \brief Experiments number.
-     * \var ninputs
-     * \brief Number of input files to the simulator.
-     * \var nsimulations
-     * \brief Simulations number per experiment.
-     * \var algorithm
-     * \brief Algorithm type.
-     * \var nsweeps
-     * \brief Array of sweeps of the sweep algorithm.
-	 * \var nbits
-	 * \param Array of bits numbers of the genetic algorithm.
-     * \var niterations
-     * \brief Number of algorithm iterations
-     * \var nbest
-     * \brief Number of best simulations.
+	 * \var directory
+	 * \brief Working directory.
      * \var rangemin
      * \brief Array of minimum variable values.
      * \var rangemax
@@ -108,13 +92,31 @@ typedef struct
      * \brief Reproduction probability.
      * \var adaptation_ratio
      * \brief Adaptation probability.
+     * \var nvariables
+     * \brief Variables number.
+     * \var nexperiments
+     * \brief Experiments number.
+     * \var ninputs
+     * \brief Number of input files to the simulator.
+     * \var nsimulations
+     * \brief Simulations number per experiment.
+     * \var algorithm
+     * \brief Algorithm type.
+     * \var nsweeps
+     * \brief Array of sweeps of the sweep algorithm.
+	 * \var nbits
+	 * \param Array of bits numbers of the genetic algorithm.
+     * \var niterations
+     * \brief Number of algorithm iterations
+     * \var nbest
+     * \brief Number of best simulations.
      */
   char *simulator, *evaluator, **experiment, **template[MAX_NINPUTS], **label,
-    **format;
-  unsigned int nvariables, nexperiments, ninputs, nsimulations, algorithm,
-    *nsweeps, *nbits, niterations, nbest;
+    **format, *directory;
   double *rangemin, *rangemax, *rangeminabs, *rangemaxabs, *weight, tolerance,
     mutation_ratio, reproduction_ratio, adaptation_ratio;
+  unsigned int nvariables, nexperiments, ninputs, nsimulations, algorithm,
+    *nsweeps, *nbits, niterations, nbest;
 } Input;
 
 /**
