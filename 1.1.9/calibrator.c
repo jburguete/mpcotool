@@ -375,7 +375,7 @@ input_new ()
 {
   unsigned int i;
   input->nvariables = input->nexperiments = input->ninputs = 0;
-  input->simulator = input->evaluator = input->directory = NULL;
+  input->simulator = input->evaluator = input->directory = input->name = NULL;
   input->experiment = input->label = input->format = NULL;
   input->nsweeps = input->nbits = NULL;
   input->rangemin = input->rangemax = input->rangeminabs = input->rangemaxabs
@@ -840,6 +840,7 @@ input_open (char *filename)
 
   // Getting the working directory
   input->directory = g_path_get_dirname (filename);
+  input->name = g_path_get_basename (filename);
 
   // Closing the XML document
   xmlFreeDoc (doc);
@@ -862,6 +863,7 @@ input_free ()
 #if DEBUG
   fprintf (stderr, "input_free: start\n");
 #endif
+  g_free (input->name);
   g_free (input->directory);
   for (i = 0; i < input->nexperiments; ++i)
     {
@@ -2121,6 +2123,25 @@ window_save ()
 }
 
 /**
+ * \fn void window_run()
+ * \brief Function to run a calibration.
+ */
+void
+window_run ()
+{
+  char *dir, *program, buffer[1024];
+  window_save ();
+  dir = g_get_current_dir ();
+  program = g_build_filename (dir, "calibrator", NULL);
+  snprintf
+    (buffer, 1024, "cd %s; %s %s", input->directory, program, input->name);
+  printf ("%s\n", buffer);
+  system (buffer);
+  g_free (program);
+  g_free (dir);
+}
+
+/**
  * \fn void window_help()
  * \brief Function to show a help dialog.
  */
@@ -2140,9 +2161,8 @@ window_help ()
                          ("A software to make calibrations of empirical parameters"),
                          "authors", authors,
                          "translator-credits",
-                         gettext
-                         ("Javier Burguete Tolosa (jburguete@eead.csic.es)"),
-                         "version", "1.1.8", "copyright",
+                         "Javier Burguete Tolosa (jburguete@eead.csic.es)",
+                         "version", "1.1.9", "copyright",
                          "Copyright 2012-2015 Javier Burguete Tolosa",
                          "logo", window->logo,
                          "website-label", gettext ("Website"),
@@ -2814,6 +2834,12 @@ window_new (GtkApplication * application)
   window->button_save
     = (GtkButton *) gtk_button_new_with_mnemonic (gettext ("_Save"));
   g_signal_connect (window->button_save, "clicked", window_save, NULL);
+
+  // Creating the run button
+  window->button_run
+    = (GtkButton *) gtk_button_new_with_mnemonic (gettext ("_Run"));
+  g_signal_connect (window->button_run, "clicked", window_run, NULL);
+
   // Creating the help button
   window->button_help
     = (GtkButton *) gtk_button_new_with_mnemonic (gettext ("_Help"));
@@ -2824,6 +2850,18 @@ window_new (GtkApplication * application)
     = (GtkButton *) gtk_button_new_with_mnemonic (gettext ("E_xit"));
   g_signal_connect_swapped (window->button_exit, "clicked",
                             (void (*)) gtk_widget_destroy, window->window);
+
+  window->grid_buttons = (GtkGrid *) gtk_grid_new ();
+  gtk_grid_attach (window->grid_buttons, GTK_WIDGET (window->button_open),
+                   0, 0, 1, 1);
+  gtk_grid_attach (window->grid_buttons, GTK_WIDGET (window->button_save),
+                   1, 0, 1, 1);
+  gtk_grid_attach (window->grid_buttons, GTK_WIDGET (window->button_run),
+                   2, 0, 1, 1);
+  gtk_grid_attach (window->grid_buttons, GTK_WIDGET (window->button_help),
+                   3, 0, 1, 1);
+  gtk_grid_attach (window->grid_buttons, GTK_WIDGET (window->button_exit),
+                   4, 0, 1, 1);
 
   // Creating the simulator program label and entry
   window->label_simulator
@@ -3103,10 +3141,7 @@ window_new (GtkApplication * application)
 
   // Creating the grid and attaching the widgets to the grid
   window->grid = (GtkGrid *) gtk_grid_new ();
-  gtk_grid_attach (window->grid, GTK_WIDGET (window->button_open), 0, 0, 1, 1);
-  gtk_grid_attach (window->grid, GTK_WIDGET (window->button_save), 1, 0, 1, 1);
-  gtk_grid_attach (window->grid, GTK_WIDGET (window->button_help), 2, 0, 1, 1);
-  gtk_grid_attach (window->grid, GTK_WIDGET (window->button_exit), 3, 0, 1, 1);
+  gtk_grid_attach (window->grid, GTK_WIDGET (window->grid_buttons), 0, 0, 6, 1);
   gtk_grid_attach (window->grid,
                    GTK_WIDGET (window->label_simulator), 0, 1, 1, 1);
   gtk_grid_attach (window->grid,

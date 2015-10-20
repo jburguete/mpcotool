@@ -74,6 +74,8 @@ typedef struct
      * \brief Array of variable formats.
 	 * \var directory
 	 * \brief Working directory.
+	 * \var name
+	 * \brief Input data file name.
      * \var rangemin
      * \brief Array of minimum variable values.
      * \var rangemax
@@ -112,7 +114,7 @@ typedef struct
      * \brief Number of best simulations.
      */
   char *simulator, *evaluator, **experiment, **template[MAX_NINPUTS], **label,
-    **format, *directory;
+    **format, *directory, *name;
   double *rangemin, *rangemax, *rangeminabs, *rangemaxabs, *weight, tolerance,
     mutation_ratio, reproduction_ratio, adaptation_ratio;
   unsigned int nvariables, nexperiments, ninputs, nsimulations, algorithm,

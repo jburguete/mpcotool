@@ -94,6 +94,8 @@ typedef struct
      * \brief Open GtkButton.
      * \var button_save
      * \brief Save GtkButton.
+	 * \var button_run
+	 * \brief Run GtkButton.
      * \var button_help
      * \brief Help GtkButton.
      * \var button_exit
@@ -233,7 +235,7 @@ typedef struct
 	 * \var nvariables
 	 * \brief Number of variables.
      */
-  GtkButton *button_open, *button_save, *button_help, *button_exit,
+  GtkButton *button_open, *button_save, *button_run, *button_help, *button_exit,
     *button_add_variable, *button_remove_variable, *button_add_experiment,
     *button_remove_experiment;
   GtkRadioButton *button_algorithm[NALGORITHMS];
@@ -251,7 +253,8 @@ typedef struct
     *entry_bests, *entry_population, *entry_generations, *entry_mutation,
     *entry_reproduction, *entry_adaptation, *entry_sweeps, *entry_bits,
     *entry_weight;
-  GtkGrid *grid, *grid_algorithm, *grid_variable, *grid_experiment;
+  GtkGrid *grid, *grid_buttons, *grid_algorithm, *grid_variable,
+    *grid_experiment;
   GtkFrame *frame_algorithm, *frame_variable, *frame_experiment;
   GdkPixbuf *logo;
   GtkWindow *window;
