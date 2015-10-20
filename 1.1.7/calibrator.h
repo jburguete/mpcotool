@@ -238,7 +238,34 @@ unsigned int xml_node_get_uint (xmlNode * node, const xmlChar * prop,
                                 int *error_code);
 double xml_node_get_float (xmlNode * node, const xmlChar * prop,
                            int *error_code);
+void xml_node_set_int (xmlNode * node, const xmlChar * prop, int value);
+void xml_node_set_uint (xmlNode * node, const xmlChar * prop,
+                        unsigned int value);
+void xml_node_set_float (xmlNode * node, const xmlChar * prop, double value);
 void input_new ();
 int input_open (char *filename);
+void input_free ();
+void calibrate_input (unsigned int simulation, char *input,
+                      GMappedFile * template);
+double calibrate_parse (unsigned int simulation, unsigned int experiment);
+void calibrate_best_thread (unsigned int simulation, double value);
+void calibrate_best_sequential (unsigned int simulation, double value);
+void *calibrate_thread (ParallelData * data);
+void calibrate_sequential ();
+void calibrate_merge (unsigned int nsaveds, unsigned int *simulation_best,
+                      double *error_best);
+#if HAVE_MPI
+void calibrate_synchronise ();
+#endif
+void calibrate_sweep ();
+void calibrate_MonteCarlo ();
+double calibrate_genetic_objective (Entity * entity);
+void calibrate_genetic ();
+void calibrate_print ();
+void calibrate_save_old ();
+void calibrate_merge_old ();
+void calibrate_refine ();
+void calibrate_iterate ();
+int calibrate_new (char *filename);
 
 #endif

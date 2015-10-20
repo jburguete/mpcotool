@@ -136,10 +136,12 @@ typedef struct
      * \brief Minimum GtkLabel.
      * \var label_max
      * \brief Maximum GtkLabel.
-     * \var label_absmin
+     * \var label_minabs
      * \brief Absolute minimum GtkLabel.
-     * \var label_absmax
+     * \var label_maxabs
      * \brief Absolute maximum GtkLabel.
+     * \var label_format
+     * \brief Format GtkLabel.
      * \var label_sweeps
      * \brief Sweeps number GtkLabel.
      * \var label_bits
@@ -152,10 +154,12 @@ typedef struct
      * \brief Minimum GtkEntry.
      * \var entry_max
      * \brief Maximum GtkEntry.
-     * \var entry_absmin
+     * \var entry_minabs
      * \brief Absolute minimum GtkEntry.
-     * \var entry_absmax
+     * \var entry_maxabs
      * \brief Absolute maximum GtkEntry.
+     * \var entry_format
+     * \brief GtkEntry to set the variable format.
      * \var entry_variable
      * \brief GtkEntry to set the variable name.
      * \var combo_variable
@@ -236,9 +240,9 @@ typedef struct
   GtkLabel *label_simulator, *label_evaluator, *label_simulations,
     *label_iterations, *label_tolerance, *label_bests, *label_population,
     *label_generations, *label_mutation, *label_reproduction, *label_adaptation,
-    *label_variable, *label_min, *label_max, *label_absmin, *label_absmax,
-    *label_sweeps, *label_bits, *label_experiment, *label_weight;
-  GtkEntry *entry_min, *entry_max, *entry_absmin, *entry_absmax,
+    *label_variable, *label_min, *label_max, *label_minabs, *label_maxabs,
+    *label_format, *label_sweeps, *label_bits, *label_experiment, *label_weight;
+  GtkEntry *entry_min, *entry_max, *entry_minabs, *entry_maxabs, *entry_format,
     *entry_variable;
   GtkComboBoxText *combo_variable, *combo_experiment;
   GtkFileChooserButton *button_simulator, *button_evaluator, *button_experiment,
