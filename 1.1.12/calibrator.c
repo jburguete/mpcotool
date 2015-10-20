@@ -1672,9 +1672,8 @@ calibrate_refine ()
             {
               calibrate->rangemin[j] = fmin (calibrate->rangemin[j],
                                              calibrate->value_old[i *
-                                                                  calibrate->
-                                                                  nvariables +
-                                                                  j]);
+                                                                  calibrate->nvariables
+                                                                  + j]);
               calibrate->rangemax[j] =
                 fmax (calibrate->rangemax[j],
                       calibrate->value_old[i * calibrate->nvariables + j]);
@@ -2038,11 +2037,11 @@ input_save (char *filename)
       child = xmlNewChild (node, 0, XML_VARIABLE, 0);
       xmlSetProp (child, XML_NAME, (xmlChar *) input->label[i]);
       xml_node_set_float (child, XML_MINIMUM, input->rangemin[i]);
-      if (input->rangeminabs[i] != -INFINITY)
-        xml_node_set_float (child, XML_MINIMUM, input->rangeminabs[i]);
+      if (input->rangeminabs[i] != -INFINITY && !isnan (input->rangeminabs[i]))
+        xml_node_set_float (child, XML_ABSOLUTE_MINIMUM, input->rangeminabs[i]);
       xml_node_set_float (child, XML_MAXIMUM, input->rangemax[i]);
-      if (input->rangemaxabs[i] != INFINITY)
-        xml_node_set_float (child, XML_MAXIMUM, input->rangemaxabs[i]);
+      if (input->rangemaxabs[i] != INFINITY && !isnan (input->rangemaxabs[i]))
+        xml_node_set_float (child, XML_ABSOLUTE_MAXIMUM, input->rangemaxabs[i]);
       if (xmlStrcmp ((xmlChar *) input->format[i], DEFAULT_FORMAT))
         xmlSetProp (child, XML_FORMAT, (xmlChar *) input->format[i]);
       if (input->algorithm == ALGORITHM_SWEEP)
@@ -2285,25 +2284,41 @@ window_update ()
   gtk_widget_set_sensitive
     (GTK_WIDGET (window->button_remove_variable), input->nvariables > 1);
   for (i = 0; i < input->ninputs; ++i)
-	 {
-		 gtk_widget_show (GTK_WIDGET (window->check_template[i]));
-		 gtk_widget_show (GTK_WIDGET (window->button_template[i]));
-		 gtk_widget_set_sensitive (GTK_WIDGET (window->check_template[i]), 0);
-		 gtk_toggle_button_set_active
-		   (GTK_TOGGLE_BUTTON (window->check_template[i]), 1);
-	 }
+    {
+      gtk_widget_show (GTK_WIDGET (window->check_template[i]));
+      gtk_widget_show (GTK_WIDGET (window->button_template[i]));
+      gtk_widget_set_sensitive (GTK_WIDGET (window->check_template[i]), 0);
+      g_signal_handler_block
+        (window->check_template[i], window->id_template[i]);
+      g_signal_handler_block (window->button_template[i], window->id_input[i]);
+      gtk_toggle_button_set_active
+        (GTK_TOGGLE_BUTTON (window->check_template[i]), 1);
+      g_signal_handler_unblock
+        (window->button_template[i], window->id_input[i]);
+      g_signal_handler_unblock
+        (window->check_template[i], window->id_template[i]);
+    }
   if (i > 0)
     gtk_widget_set_sensitive (GTK_WIDGET (window->check_template[i - 1]), 1);
   if (i < MAX_NINPUTS)
-	{
-	  gtk_widget_set_sensitive (GTK_WIDGET (window->check_template[i]), 1);
-	  gtk_widget_show (GTK_WIDGET (window->check_template[i]));
-	  gtk_widget_show (GTK_WIDGET (window->button_template[i]));
+    {
+      gtk_widget_show (GTK_WIDGET (window->check_template[i]));
+      gtk_widget_show (GTK_WIDGET (window->button_template[i]));
+      gtk_widget_set_sensitive (GTK_WIDGET (window->check_template[i]), 1);
+      g_signal_handler_block
+        (window->check_template[i], window->id_template[i]);
+      g_signal_handler_block (window->button_template[i], window->id_input[i]);
+      gtk_toggle_button_set_active
+        (GTK_TOGGLE_BUTTON (window->check_template[i]), 0);
+      g_signal_handler_unblock
+        (window->button_template[i], window->id_input[i]);
+      g_signal_handler_unblock
+        (window->check_template[i], window->id_template[i]);
     }
   while (++i < MAX_NINPUTS)
-	{
-	  gtk_widget_hide (GTK_WIDGET (window->check_template[i]));
-	  gtk_widget_hide (GTK_WIDGET (window->button_template[i]));
+    {
+      gtk_widget_hide (GTK_WIDGET (window->check_template[i]));
+      gtk_widget_hide (GTK_WIDGET (window->button_template[i]));
     }
 }
 
@@ -2336,7 +2351,7 @@ window_set_algorithm ()
 void
 window_set_experiment ()
 {
-  unsigned int i;
+  unsigned int i, j;
   char *buffer1, *buffer2;
 #if DEBUG
   fprintf (stderr, "window_set_experiment: start\n");
@@ -2353,6 +2368,17 @@ window_set_experiment ()
   g_signal_handler_unblock
     (window->button_experiment, window->id_experiment_name);
   g_free (buffer2);
+  for (j = 0; j < input->ninputs; ++j)
+    {
+      g_signal_handler_block (window->button_template[j], window->id_input[j]);
+      buffer2
+        = g_build_filename (input->directory, input->template[j][i], NULL);
+      gtk_file_chooser_set_filename
+        (GTK_FILE_CHOOSER (window->button_template[j]), buffer2);
+      g_free (buffer2);
+      g_signal_handler_unblock
+        (window->button_template[j], window->id_input[j]);
+    }
 #if DEBUG
   fprintf (stderr, "window_set_experiment: end\n");
 #endif
@@ -2380,11 +2406,15 @@ window_remove_experiment ()
   j = input->nexperiments - 1;
   if (i > j)
     i = j;
+  for (j = 0; j < input->ninputs; ++j)
+    g_signal_handler_block (window->button_template[j], window->id_input[j]);
   g_signal_handler_block
     (window->button_experiment, window->id_experiment_name);
   gtk_combo_box_set_active (GTK_COMBO_BOX (window->combo_experiment), i);
   g_signal_handler_unblock
     (window->button_experiment, window->id_experiment_name);
+  for (j = 0; j < input->ninputs; ++j)
+    g_signal_handler_unblock (window->button_template[j], window->id_input[j]);
   window_update ();
 }
 
@@ -2414,11 +2444,15 @@ window_add_experiment ()
     = (char *) xmlStrdup ((xmlChar *) input->experiment[j]);
   input->weight[j + 1] = input->weight[j];
   ++input->nexperiments;
+  for (j = 0; j < input->ninputs; ++j)
+    g_signal_handler_block (window->button_template[j], window->id_input[j]);
   g_signal_handler_block
     (window->button_experiment, window->id_experiment_name);
   gtk_combo_box_set_active (GTK_COMBO_BOX (window->combo_experiment), i + 1);
   g_signal_handler_unblock
     (window->button_experiment, window->id_experiment_name);
+  for (j = 0; j < input->ninputs; ++j)
+    g_signal_handler_unblock (window->button_template[j], window->id_input[j]);
   window_update ();
 }
 
@@ -2468,6 +2502,71 @@ window_weight_experiment ()
   input->weight[i] = gtk_spin_button_get_value (window->entry_weight);
 #if DEBUG
   fprintf (stderr, "window_weight_experiment: end\n");
+#endif
+}
+
+/**
+ * \fn void window_inputs_experiment()
+ * \brief Function to update the experiment input templates number in the main
+ *   window.
+ */
+void
+window_inputs_experiment ()
+{
+  unsigned int j;
+#if DEBUG
+  fprintf (stderr, "window_inputs_experiment: start\n");
+#endif
+  j = input->ninputs - 1;
+  if (j
+      && !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON
+                                        (window->check_template[j])))
+    --input->ninputs;
+  if (input->ninputs < MAX_NINPUTS
+      && gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON
+                                       (window->check_template[j])))
+    {
+      ++input->ninputs;
+      for (j = 0; j < input->ninputs; ++j)
+        {
+          input->template[j] = (char **)
+            g_realloc (input->template[j], input->nvariables * sizeof (char *));
+        }
+    }
+  window_update ();
+#if DEBUG
+  fprintf (stderr, "window_inputs_experiment: end\n");
+#endif
+}
+
+/**
+ * \fn void window_template_experiment(void *data)
+ * \brief Function to update the experiment i-th input template in the main
+ *   window.
+ * \param data
+ * \brief Callback data (i-th input template).
+ */
+void
+window_template_experiment (void *data)
+{
+  unsigned int i, j;
+  char *buffer;
+  GFile *file1, *file2;
+#if DEBUG
+  fprintf (stderr, "window_template_experiment: start\n");
+#endif
+  i = (size_t) data;
+  j = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_experiment));
+  file1
+    = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (window->button_template[i]));
+  file2 = g_file_new_for_path (input->directory);
+  buffer = g_file_get_relative_path (file2, file1);
+  input->template[i][j] = (char *) xmlStrdup ((xmlChar *) buffer);
+  g_free (buffer);
+  g_object_unref (file2);
+  g_object_unref (file1);
+#if DEBUG
+  fprintf (stderr, "window_template_experiment: end\n");
 #endif
 }
 
@@ -3190,11 +3289,19 @@ window_new (GtkApplication * application)
     {
       window->check_template[i] = (GtkCheckButton *)
         gtk_check_button_new_with_label ((char *) template[i]);
+      window->id_template[i]
+        = g_signal_connect (window->check_template[i], "toggled",
+                            window_inputs_experiment, NULL);
       gtk_grid_attach (window->grid_experiment,
                        GTK_WIDGET (window->check_template[i]), 0, 3 + i, 1, 1);
       window->button_template[i] = (GtkFileChooserButton *)
         gtk_file_chooser_button_new (gettext ("Input template"),
                                      GTK_FILE_CHOOSER_ACTION_OPEN);
+      window->id_input[i]
+        = g_signal_connect_swapped (window->button_template[i],
+                                    "selection-changed",
+                                    (void (*)) window_template_experiment,
+                                    (void *) (size_t) i);
       gtk_grid_attach (window->grid_experiment,
                        GTK_WIDGET (window->button_template[i]), 1, 3 + i, 3, 1);
     }

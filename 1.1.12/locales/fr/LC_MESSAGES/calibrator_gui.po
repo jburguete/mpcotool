@@ -1,57 +1,57 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# French translations for calibrator package.
+# Copyright (C) 2015 THE calibrator'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the calibrator package.
+# Automatically generated, 2015.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: 1.1.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-20 19:01+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2015-10-20 18:47+0200\n"
+"PO-Revision-Date: 2015-10-20 18:47+0200\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: calibrator.c:232
 msgid "ERROR!"
-msgstr ""
+msgstr "ERREUR!"
 
 #: calibrator.c:428
 msgid "Unable to parse the input file"
-msgstr ""
+msgstr "On ne peut pas analyser le fichier d'entrée"
 
 #: calibrator.c:436
 msgid "Bad root XML node"
-msgstr ""
+msgstr "Node XML source incorrect"
 
 #: calibrator.c:444
 msgid "Bad simulator program"
-msgstr ""
+msgstr "Programme simulateur incorrect"
 
 #: calibrator.c:462
 msgid "Bad simulations number"
-msgstr ""
+msgstr "Numéro de simulations incorrect"
 
 #: calibrator.c:479
 msgid "Invalid population number"
-msgstr ""
+msgstr "Numér de population incorrect"
 
 #: calibrator.c:485
 msgid "No population number"
-msgstr ""
+msgstr "Numéro de population indéfini"
 
 #: calibrator.c:496
 msgid "Invalid generation number"
-msgstr ""
+msgstr "Numéro de générations incorrect"
 
 #: calibrator.c:502
 msgid "No generation number"
-msgstr ""
+msgstr "Numéro de générations indéfini"
 
 #: calibrator.c:514
 msgid "Invalid mutation probability"

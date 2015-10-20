@@ -204,14 +204,16 @@ typedef struct
      * \brief Weight GtkSpinButton.
      * \var grid
      * \brief Main GtkGrid.
+     * \var grid_buttons
+     * \brief GtkGrid to store the main buttons.
      * \var grid_algorithm
-     * \brief GtkGrid to set the algorithm
+     * \brief GtkGrid to set the algorithm.
      * \var grid_variable
      * \brief Variable GtkGrid.
      * \var grid_experiment
      * \brief Experiment GtkGrid.
      * \var frame_algorithm
-     * \brief GtkFrame to set the algorithm
+     * \brief GtkFrame to set the algorithm.
      * \var frame_variable
      * \brief Variable GtkFrame.
      * \var frame_experiment
@@ -232,6 +234,10 @@ typedef struct
 	 * \brief Identifier (gulong) of the combo_variable signal.
 	 * \var id_variable_label
 	 * \brief Identifier (gulong) of the entry_variable signal.
+	 * \var id_template
+	 * \brief Array of identifiers (gulong) of the check_template signal.
+	 * \var id_input
+	 * \brief Array of identifiers (gulong) of the button_template signal.
 	 * \var nexperiments
 	 * \brief Number of experiments.
 	 * \var nvariables
@@ -263,7 +269,8 @@ typedef struct
   GtkWindow *window;
   Experiment *experiment;
   Variable *variable;
-  gulong id_experiment, id_experiment_name, id_variable, id_variable_label;
+  gulong id_experiment, id_experiment_name, id_variable, id_variable_label,
+    id_template[MAX_NINPUTS], id_input[MAX_NINPUTS];
   unsigned int nexperiments, nvariables;
 } Window;
 

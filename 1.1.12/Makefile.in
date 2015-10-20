@@ -9,8 +9,9 @@ OBJ = genetic/entity.o genetic/population.o genetic/reproduction.o \
 	genetic/selection.o genetic/evolution.o genetic/genetic.o
 DEP = Makefile
 ES = locales/es/LC_MESSAGES/
+FR = locales/fr/LC_MESSAGES/
 
-all: calibrator calibrator_gui $(ES)calibrator_gui.mo
+all: calibrator calibrator_gui $(ES)calibrator_gui.mo $(FR)calibrator_gui.mo
 
 genetic/entity.o: genetic/entity.c genetic/entity.h $(DEP)
 	$(CC) $(CFLAGS) -c genetic/entity.c -o genetic/entity.o
@@ -57,6 +58,16 @@ $(ES)calibrator_gui.po: locales/calibrator_gui.pot
 
 $(ES)calibrator_gui.mo: $(ES)calibrator_gui.po locales/calibrator_gui.pot
 	msgfmt -c -v -o $(ES)calibrator_gui.mo $(ES)calibrator_gui.po
+
+$(FR)calibrator_gui.po: locales/calibrator_gui.pot
+	test -d $(FR) || mkdir -p $(FR)
+	test -f $(FR)calibrator_gui.po || msginit -l fr -o $(FR)calibrator_gui.po \
+		-i locales/calibrator_gui.pot --no-translator
+	msgmerge -U $(FR)calibrator_gui.po locales/calibrator_gui.pot
+	vim -p $(FR)calibrator_gui.po
+
+$(FR)calibrator_gui.mo: $(FR)calibrator_gui.po locales/calibrator_gui.pot
+	msgfmt -c -v -o $(FR)calibrator_gui.mo $(FR)calibrator_gui.po
 
 doc: calibrator.c config.h README.md $(DEP)
 	doxygen
