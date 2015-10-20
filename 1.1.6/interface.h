@@ -216,6 +216,14 @@ typedef struct
 	 * \brief Array of experiments data.
 	 * \var variable
 	 * \brief Array of variables data.
+	 * \var id_experiment
+	 * \brief Identifier (gulong) of the combo_experiment signal.
+	 * \var id_experiment_name
+	 * \brief Identifier (gulong) of the button_experiment signal.
+	 * \var id_variable
+	 * \brief Identifier (gulong) of the combo_variable signal.
+	 * \var id_variable_label
+	 * \brief Identifier (gulong) of the entry_variable signal.
 	 * \var nexperiments
 	 * \brief Number of experiments.
 	 * \var nvariables
@@ -245,12 +253,12 @@ typedef struct
   GtkWindow *window;
   Experiment *experiment;
   Variable *variable;
+  gulong id_experiment, id_experiment_name, id_variable, id_variable_label;
   unsigned int nexperiments, nvariables;
 } Window;
 
 // Public functions
 void input_save (char *filename);
-void input_save ();
 void window_help ();
 int window_get_algorithm ();
 void window_update ();

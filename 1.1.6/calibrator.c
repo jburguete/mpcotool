@@ -44,7 +44,6 @@ OF SUCH DAMAGE.
 #include <gsl/gsl_rng.h>
 #include <libxml/parser.h>
 #include <libintl.h>
-#include <gio/gio.h>
 #include <glib.h>
 #ifdef G_OS_WIN32
 #include <windows.h>
@@ -57,6 +56,7 @@ OF SUCH DAMAGE.
 #include "genetic/genetic.h"
 #include "calibrator.h"
 #if HAVE_GTK
+#include <gio/gio.h>
 #include <gtk/gtk.h>
 #include "interface.h"
 #endif
@@ -82,6 +82,8 @@ OF SUCH DAMAGE.
  * \brief Calibration data.
  * \var template
  * \brief Array of xmlChar strings with template labels.
+ * \var logo
+ * \brief Logo pixmap.
  */
 int ntasks;
 unsigned int nthreads;
@@ -1826,9 +1828,7 @@ calibrate_new (char *filename)
   calibrate->nsweeps = input->nsweeps;
   nbits = input->nbits;
   if (input->algorithm == ALGORITHM_SWEEP)
-    {
-      calibrate->nsimulations = 1;
-    }
+    calibrate->nsimulations = 1;
   else if (input->algorithm == ALGORITHM_GENETIC)
     for (i = 0; i < input->nvariables; ++i)
       {
@@ -2050,6 +2050,7 @@ window_save ()
 {
   char *buffer;
   GtkFileChooserDialog *dlg;
+
   // Opening the saving dialog
   dlg = (GtkFileChooserDialog *)
     gtk_file_chooser_dialog_new (gettext ("Save file"),
@@ -2059,14 +2060,17 @@ window_save ()
                                  GTK_RESPONSE_CANCEL,
                                  gettext ("_OK"), GTK_RESPONSE_OK, NULL);
   gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dlg), TRUE);
+
   // If OK response then saving
   if (gtk_dialog_run (GTK_DIALOG (dlg)) == GTK_RESPONSE_OK)
     {
+
       // Adding properties to the root XML node
       input->simulator = gtk_file_chooser_get_filename
         (GTK_FILE_CHOOSER (window->button_simulator));
       input->evaluator = gtk_file_chooser_get_filename
         (GTK_FILE_CHOOSER (window->button_evaluator));
+
       // Setting the algorithm
       switch (window_get_algorithm ())
         {
@@ -2106,6 +2110,7 @@ window_save ()
       // Saving the XML file
       buffer = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dlg));
       input_save (buffer);
+
       // Freeing memory
       g_free (buffer);
     }
@@ -2136,7 +2141,7 @@ window_help ()
                          "translator-credits",
                          gettext
                          ("Javier Burguete Tolosa (jburguete@eead.csic.es)"),
-                         "version", "1.1.5", "copyright",
+                         "version", "1.1.6", "copyright",
                          "Copyright 2012-2015 Javier Burguete Tolosa",
                          "logo", window->logo,
                          "website-label", gettext ("Website"),
@@ -2223,6 +2228,152 @@ window_update ()
       gtk_widget_show (GTK_WIDGET (window->label_bits));
       gtk_widget_show (GTK_WIDGET (window->entry_bits));
     }
+  gtk_widget_set_sensitive
+    (GTK_WIDGET (window->button_remove_experiment), input->nexperiments > 1);
+  gtk_widget_set_sensitive
+    (GTK_WIDGET (window->button_remove_variable), input->nvariables > 1);
+}
+
+/**
+ * \fn void window_set_experiment()
+ * \brief Function to set the experiment data in the main window.
+ */
+void
+window_set_experiment ()
+{
+  unsigned int i;
+  char *buffer1, *buffer2;
+#if DEBUG
+  fprintf (stderr, "window_set_experiment: start\n");
+#endif
+  i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_experiment));
+  gtk_spin_button_set_value (window->entry_weight, input->weight[i]);
+  buffer1 = gtk_combo_box_text_get_active_text (window->combo_experiment);
+  buffer2 = g_build_filename (input->directory, buffer1, NULL);
+  g_free (buffer1);
+  g_signal_handler_block
+    (window->button_experiment, window->id_experiment_name);
+  gtk_file_chooser_set_filename
+    (GTK_FILE_CHOOSER (window->button_experiment), buffer2);
+  g_signal_handler_unblock
+    (window->button_experiment, window->id_experiment_name);
+  g_free (buffer2);
+#if DEBUG
+  fprintf (stderr, "window_set_experiment: end\n");
+#endif
+}
+
+/**
+ * \fn void window_remove_experiment()
+ * \brief Function to remove an experiment in the main window.
+ */
+void
+window_remove_experiment ()
+{
+  unsigned int i, j;
+  i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_experiment));
+  g_signal_handler_block (window->combo_experiment, window->id_experiment);
+  gtk_combo_box_text_remove (window->combo_experiment, i);
+  g_signal_handler_unblock (window->combo_experiment, window->id_experiment);
+  xmlFree (input->experiment[i]);
+  for (j = i; j < input->nexperiments; ++j)
+    {
+      input->experiment[j] = input->experiment[j + 1];
+      input->weight[j] = input->weight[j + 1];
+    }
+  --input->nexperiments;
+  j = input->nexperiments - 1;
+  if (i > j)
+    i = j;
+  g_signal_handler_block
+    (window->button_experiment, window->id_experiment_name);
+  gtk_combo_box_set_active (GTK_COMBO_BOX (window->combo_experiment), i);
+  g_signal_handler_unblock
+    (window->button_experiment, window->id_experiment_name);
+  window_update ();
+}
+
+/**
+ * \fn void window_add_experiment()
+ * \brief Function to add an experiment in the main window.
+ */
+void
+window_add_experiment ()
+{
+  unsigned int i, j;
+  i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_experiment));
+  g_signal_handler_block (window->combo_experiment, window->id_experiment);
+  gtk_combo_box_text_insert_text
+    (window->combo_experiment, i, input->experiment[i]);
+  g_signal_handler_unblock (window->combo_experiment, window->id_experiment);
+  input->experiment = (char **) g_realloc
+    (input->experiment, (input->nexperiments + 1) * sizeof (char *));
+  input->weight = (double *) g_realloc
+    (input->weight, (input->nexperiments + 1) * sizeof (double));
+  for (j = input->nexperiments; j > i; --j)
+    {
+      input->experiment[j + 1] = input->experiment[j];
+      input->weight[j + 1] = input->weight[j];
+    }
+  input->experiment[j + 1]
+    = (char *) xmlStrdup ((xmlChar *) input->experiment[j]);
+  input->weight[j + 1] = input->weight[j];
+  ++input->nexperiments;
+  g_signal_handler_block
+    (window->button_experiment, window->id_experiment_name);
+  gtk_combo_box_set_active (GTK_COMBO_BOX (window->combo_experiment), i + 1);
+  g_signal_handler_unblock
+    (window->button_experiment, window->id_experiment_name);
+  window_update ();
+}
+
+/**
+ * \fn void window_name_experiment()
+ * \brief Function to set the experiment name in the main window.
+ */
+void
+window_name_experiment ()
+{
+  unsigned int i;
+  char *buffer;
+  GFile *file1, *file2;
+#if DEBUG
+  fprintf (stderr, "window_name_experiment: start\n");
+#endif
+  i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_experiment));
+  file1
+    = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (window->button_experiment));
+  file2 = g_file_new_for_path (input->directory);
+  buffer = g_file_get_relative_path (file2, file1);
+  g_signal_handler_block (window->combo_experiment, window->id_experiment);
+  gtk_combo_box_text_remove (window->combo_experiment, i);
+  gtk_combo_box_text_insert_text (window->combo_experiment, i, buffer);
+  gtk_combo_box_set_active (GTK_COMBO_BOX (window->combo_experiment), i);
+  g_signal_handler_unblock (window->combo_experiment, window->id_experiment);
+  g_free (buffer);
+  g_object_unref (file2);
+  g_object_unref (file1);
+#if DEBUG
+  fprintf (stderr, "window_name_experiment: end\n");
+#endif
+}
+
+/**
+ * \fn void window_weight_experiment()
+ * \brief Function to set the experiment weight in the main window.
+ */
+void
+window_weight_experiment ()
+{
+  unsigned int i;
+#if DEBUG
+  fprintf (stderr, "window_weight_experiment: start\n");
+#endif
+  i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_experiment));
+  input->weight[i] = gtk_spin_button_get_value (window->entry_weight);
+#if DEBUG
+  fprintf (stderr, "window_weight_experiment: end\n");
+#endif
 }
 
 /**
@@ -2232,6 +2383,7 @@ window_update ()
 void
 window_open ()
 {
+  unsigned int i;
   char *buffer;
   GtkFileChooserDialog *dlg;
   dlg = (GtkFileChooserDialog *)
@@ -2243,6 +2395,7 @@ window_open ()
                                  gettext ("_OK"), GTK_RESPONSE_OK, NULL);
   if (gtk_dialog_run (GTK_DIALOG (dlg)) == GTK_RESPONSE_OK)
     {
+      input_free ();
       input_open (gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dlg)));
       buffer = g_build_filename (input->directory, input->simulator, NULL);
       gtk_file_chooser_set_filename (GTK_FILE_CHOOSER
@@ -2282,6 +2435,18 @@ window_open ()
           gtk_spin_button_set_value (window->entry_adaptation,
                                      input->adaptation_ratio);
         }
+      g_signal_handler_block (window->combo_experiment, window->id_experiment);
+      g_signal_handler_block
+        (window->button_experiment, window->id_experiment_name);
+      gtk_combo_box_text_remove_all (window->combo_experiment);
+      for (i = 0; i < input->nexperiments; ++i)
+        gtk_combo_box_text_append_text (window->combo_experiment,
+                                        input->experiment[i]);
+      g_signal_handler_unblock
+        (window->button_experiment, window->id_experiment_name);
+      g_signal_handler_unblock
+        (window->combo_experiment, window->id_experiment);
+      gtk_combo_box_set_active (GTK_COMBO_BOX (window->combo_experiment), 0);
       window_update ();
     }
   gtk_widget_destroy (GTK_WIDGET (dlg));
@@ -2300,14 +2465,18 @@ window_new (GtkApplication * application)
   char *label_algorithm[NALGORITHMS] = {
     "_Monte-Carlo", gettext ("_Sweep"), gettext ("_Genetic")
   };
+
   // Creating the window
   window->window = (GtkWindow *) gtk_application_window_new (application);
+
   // Setting the window title
   gtk_window_set_title (window->window, PROGRAM_INTERFACE);
+
   // Creating the open button
   window->button_open
     = (GtkButton *) gtk_button_new_with_mnemonic (gettext ("_Open"));
   g_signal_connect (window->button_open, "clicked", window_open, NULL);
+
   // Creating the save button
   window->button_save
     = (GtkButton *) gtk_button_new_with_mnemonic (gettext ("_Save"));
@@ -2316,11 +2485,13 @@ window_new (GtkApplication * application)
   window->button_help
     = (GtkButton *) gtk_button_new_with_mnemonic (gettext ("_Help"));
   g_signal_connect (window->button_help, "clicked", window_help, NULL);
+
   // Creating the exit button
   window->button_exit
     = (GtkButton *) gtk_button_new_with_mnemonic (gettext ("E_xit"));
   g_signal_connect_swapped (window->button_exit, "clicked",
                             (void (*)) gtk_widget_destroy, window->window);
+
   // Creating the simulator program label and entry
   window->label_simulator
     = (GtkLabel *) gtk_label_new (gettext ("Simulator program"));
@@ -2328,6 +2499,7 @@ window_new (GtkApplication * application)
     (GtkFileChooserButton *)
     gtk_file_chooser_button_new (gettext ("Simulator program"),
                                  GTK_FILE_CHOOSER_ACTION_OPEN);
+
   // Creating the evaluator program label and entry
   window->label_evaluator
     = (GtkLabel *) gtk_label_new (gettext ("Evaluator program"));
@@ -2335,6 +2507,7 @@ window_new (GtkApplication * application)
     (GtkFileChooserButton *)
     gtk_file_chooser_button_new (gettext ("Evaluator program"),
                                  GTK_FILE_CHOOSER_ACTION_OPEN);
+
   // Creating the algorithm properties
   window->label_simulations = (GtkLabel *) gtk_label_new
     (gettext ("Simulations number"));
@@ -2370,6 +2543,7 @@ window_new (GtkApplication * application)
     (GtkLabel *) gtk_label_new (gettext ("Adaptation ratio"));
   window->entry_adaptation =
     (GtkSpinButton *) gtk_spin_button_new_with_range (0., 1., 0.001);
+
   // Creating the array of algorithms
   window->grid_algorithm = (GtkGrid *) gtk_grid_new ();
   window->button_algorithm[0] = (GtkRadioButton *)
@@ -2444,6 +2618,7 @@ window_new (GtkApplication * application)
   window->frame_algorithm = (GtkFrame *) gtk_frame_new (gettext ("Algorithm"));
   gtk_container_add (GTK_CONTAINER (window->frame_algorithm),
                      GTK_WIDGET (window->grid_algorithm));
+
   // Creating the variable widgets
   window->combo_variable = (GtkComboBoxText *) gtk_combo_box_text_new ();
   window->button_add_variable =
@@ -2514,29 +2689,37 @@ window_new (GtkApplication * application)
   window->frame_variable = (GtkFrame *) gtk_frame_new (gettext ("Variable"));
   gtk_container_add (GTK_CONTAINER (window->frame_variable),
                      GTK_WIDGET (window->grid_variable));
+
   // Creating the experiment widgets
   window->combo_experiment = (GtkComboBoxText *) gtk_combo_box_text_new ();
+  window->id_experiment = g_signal_connect (window->combo_experiment, "changed",
+                                            window_set_experiment, NULL);
   window->button_add_experiment =
     (GtkButton *) gtk_button_new_from_icon_name ("list-add",
                                                  GTK_ICON_SIZE_BUTTON);
-  gtk_widget_set_tooltip_text (GTK_WIDGET
-                               (window->button_add_experiment),
+  g_signal_connect
+    (window->button_add_experiment, "clicked", window_add_experiment, NULL);
+  gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_add_experiment),
                                gettext ("Add experiment"));
   window->button_remove_experiment =
     (GtkButton *) gtk_button_new_from_icon_name ("list-remove",
                                                  GTK_ICON_SIZE_BUTTON);
-  gtk_widget_set_tooltip_text (GTK_WIDGET
-                               (window->button_remove_experiment),
+  g_signal_connect (window->button_remove_experiment, "clicked",
+                    window_remove_experiment, NULL);
+  gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_remove_experiment),
                                gettext ("Remove experiment"));
   window->label_experiment = (GtkLabel *) gtk_label_new (gettext ("Name"));
-  window->button_experiment =
-    (GtkFileChooserButton *)
-    gtk_file_chooser_button_new (gettext
-                                 ("Experimental data file"),
+  window->button_experiment = (GtkFileChooserButton *)
+    gtk_file_chooser_button_new (gettext ("Experimental data file"),
                                  GTK_FILE_CHOOSER_ACTION_OPEN);
+  window->id_experiment_name
+    = g_signal_connect (window->button_experiment, "selection-changed",
+                        window_name_experiment, NULL);
   window->label_weight = (GtkLabel *) gtk_label_new (gettext ("Weight"));
   window->entry_weight =
     (GtkSpinButton *) gtk_spin_button_new_with_range (0., 1., 0.001);
+  g_signal_connect
+    (window->entry_weight, "value-changed", window_weight_experiment, NULL);
   window->grid_experiment = (GtkGrid *) gtk_grid_new ();
   gtk_grid_attach (window->grid_experiment,
                    GTK_WIDGET (window->combo_experiment), 0, 0, 2, 1);
@@ -2556,6 +2739,7 @@ window_new (GtkApplication * application)
     (GtkFrame *) gtk_frame_new (gettext ("Experiment"));
   gtk_container_add (GTK_CONTAINER (window->frame_experiment),
                      GTK_WIDGET (window->grid_experiment));
+
   // Creating the grid and attaching the widgets to the grid
   window->grid = (GtkGrid *) gtk_grid_new ();
   gtk_grid_attach (window->grid, GTK_WIDGET (window->button_open), 0, 0, 1, 1);
@@ -2577,9 +2761,11 @@ window_new (GtkApplication * application)
   gtk_grid_attach (window->grid,
                    GTK_WIDGET (window->frame_experiment), 4, 2, 2, 1);
   gtk_container_add (GTK_CONTAINER (window->window), GTK_WIDGET (window->grid));
+
   // Setting the window logo
   window->logo = gdk_pixbuf_new_from_xpm_data (logo);
   gtk_window_set_icon (window->window, window->logo);
+
   // Showing the window
   gtk_widget_show_all (GTK_WIDGET (window->window));
   window_update ();
