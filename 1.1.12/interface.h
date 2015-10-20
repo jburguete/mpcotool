@@ -110,6 +110,8 @@ typedef struct
      * \brief GtkButton to remove a experiment.
      * \var button_algorithm
      * \brief Array of GtkButtons to set the algorithm.
+     * \var check_template
+     * \brief Array of GtkCheckButtons to set the input templates.
      * \var label_simulator
      * \brief Simulator program GtkLabel.
      * \var label_evaluator
@@ -239,6 +241,7 @@ typedef struct
     *button_add_variable, *button_remove_variable, *button_add_experiment,
     *button_remove_experiment;
   GtkRadioButton *button_algorithm[NALGORITHMS];
+  GtkCheckButton *check_template[MAX_NINPUTS];
   GtkLabel *label_simulator, *label_evaluator, *label_simulations,
     *label_iterations, *label_tolerance, *label_bests, *label_population,
     *label_generations, *label_mutation, *label_reproduction, *label_adaptation,

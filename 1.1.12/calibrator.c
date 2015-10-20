@@ -1672,8 +1672,9 @@ calibrate_refine ()
             {
               calibrate->rangemin[j] = fmin (calibrate->rangemin[j],
                                              calibrate->value_old[i *
-                                                                  calibrate->nvariables
-                                                                  + j]);
+                                                                  calibrate->
+                                                                  nvariables +
+                                                                  j]);
               calibrate->rangemax[j] =
                 fmax (calibrate->rangemax[j],
                       calibrate->value_old[i * calibrate->nvariables + j]);
@@ -2189,7 +2190,7 @@ window_help ()
                          "authors", authors,
                          "translator-credits",
                          "Javier Burguete Tolosa (jburguete@eead.csic.es)",
-                         "version", "1.1.11", "copyright",
+                         "version", "1.1.12", "copyright",
                          "Copyright 2012-2015 Javier Burguete Tolosa",
                          "logo", window->logo,
                          "website-label", gettext ("Website"),
@@ -2220,6 +2221,7 @@ window_get_algorithm ()
 void
 window_update ()
 {
+  unsigned int i;
   gtk_widget_hide (GTK_WIDGET (window->label_simulations));
   gtk_widget_hide (GTK_WIDGET (window->entry_simulations));
   gtk_widget_hide (GTK_WIDGET (window->label_iterations));
@@ -2282,6 +2284,27 @@ window_update ()
     (GTK_WIDGET (window->button_remove_experiment), input->nexperiments > 1);
   gtk_widget_set_sensitive
     (GTK_WIDGET (window->button_remove_variable), input->nvariables > 1);
+  for (i = 0; i < input->ninputs; ++i)
+	 {
+		 gtk_widget_show (GTK_WIDGET (window->check_template[i]));
+		 gtk_widget_show (GTK_WIDGET (window->button_template[i]));
+		 gtk_widget_set_sensitive (GTK_WIDGET (window->check_template[i]), 0);
+		 gtk_toggle_button_set_active
+		   (GTK_TOGGLE_BUTTON (window->check_template[i]), 1);
+	 }
+  if (i > 0)
+    gtk_widget_set_sensitive (GTK_WIDGET (window->check_template[i - 1]), 1);
+  if (i < MAX_NINPUTS)
+	{
+	  gtk_widget_set_sensitive (GTK_WIDGET (window->check_template[i]), 1);
+	  gtk_widget_show (GTK_WIDGET (window->check_template[i]));
+	  gtk_widget_show (GTK_WIDGET (window->button_template[i]));
+    }
+  while (++i < MAX_NINPUTS)
+	{
+	  gtk_widget_hide (GTK_WIDGET (window->check_template[i]));
+	  gtk_widget_hide (GTK_WIDGET (window->button_template[i]));
+    }
 }
 
 /**
@@ -3163,6 +3186,18 @@ window_new (GtkApplication * application)
                    GTK_WIDGET (window->label_weight), 0, 2, 1, 1);
   gtk_grid_attach (window->grid_experiment,
                    GTK_WIDGET (window->entry_weight), 1, 2, 3, 1);
+  for (i = 0; i < MAX_NINPUTS; ++i)
+    {
+      window->check_template[i] = (GtkCheckButton *)
+        gtk_check_button_new_with_label ((char *) template[i]);
+      gtk_grid_attach (window->grid_experiment,
+                       GTK_WIDGET (window->check_template[i]), 0, 3 + i, 1, 1);
+      window->button_template[i] = (GtkFileChooserButton *)
+        gtk_file_chooser_button_new (gettext ("Input template"),
+                                     GTK_FILE_CHOOSER_ACTION_OPEN);
+      gtk_grid_attach (window->grid_experiment,
+                       GTK_WIDGET (window->button_template[i]), 1, 3 + i, 3, 1);
+    }
   window->frame_experiment =
     (GtkFrame *) gtk_frame_new (gettext ("Experiment"));
   gtk_container_add (GTK_CONTAINER (window->frame_experiment),
@@ -3228,7 +3263,6 @@ int
 main (int argn, char **argc)
 {
 #if HAVE_GTK
-
   int status;
   char *buffer;
   GtkApplication *application;
@@ -3248,7 +3282,6 @@ main (int argn, char **argc)
   g_object_unref (application);
   return status;
 #else
-
 #if HAVE_MPI
   // Starting MPI
   MPI_Init (&argn, &argc);
@@ -3268,7 +3301,6 @@ main (int argn, char **argc)
 #endif
       return 1;
     }
-
   // Getting threads number
   if (argn == 2)
     nthreads = cores_number ();
