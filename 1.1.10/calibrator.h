@@ -234,6 +234,7 @@ typedef struct
 } ParallelData;
 
 // Public functions
+void show_message (char *title, char *msg);
 void show_error (char *msg);
 int xml_node_get_int (xmlNode * node, const xmlChar * prop, int *error_code);
 unsigned int xml_node_get_uint (xmlNode * node, const xmlChar * prop,

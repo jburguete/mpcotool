@@ -188,13 +188,15 @@ Window window[1];
 #endif
 
 /**
- * \fn void show_error(char *msg)
- * \brief Function to show a dialog with an error message.
+ * \fn void show_message(char *title, char *msg)
+ * \brief Function to show a dialog with a message.
+ * \param title
+ * \brief Title.
  * \param msg
- * \brief Error message.
+ * \brief Message.
  */
 void
-show_error (char *msg)
+show_message (char *title, char *msg)
 {
 #if HAVE_GTK
   GtkMessageDialog *dlg;
@@ -205,7 +207,7 @@ show_error (char *msg)
      "%s", msg);
 
   // Setting the dialog title
-  gtk_window_set_title (GTK_WINDOW (dlg), gettext ("ERROR!"));
+  gtk_window_set_title (GTK_WINDOW (dlg), title);
 
   // Showing the dialog and waiting response
   gtk_dialog_run (GTK_DIALOG (dlg));
@@ -214,8 +216,20 @@ show_error (char *msg)
   gtk_widget_destroy (GTK_WIDGET (dlg));
 
 #else
-  printf ("%s: %s\n", gettext ("ERROR!"), msg);
+  printf ("%s: %s\n", title, msg);
 #endif
+}
+
+/**
+ * \fn void show_error(char *msg)
+ * \brief Function to show a dialog with an error message.
+ * \param msg
+ * \brief Error message.
+ */
+void
+show_error (char *msg)
+{
+  show_message (gettext ("ERROR!"), msg);
 }
 
 /**
@@ -1658,9 +1672,8 @@ calibrate_refine ()
             {
               calibrate->rangemin[j] = fmin (calibrate->rangemin[j],
                                              calibrate->value_old[i *
-                                                                  calibrate->
-                                                                  nvariables +
-                                                                  j]);
+                                                                  calibrate->nvariables
+                                                                  + j]);
               calibrate->rangemax[j] =
                 fmax (calibrate->rangemax[j],
                       calibrate->value_old[i * calibrate->nvariables + j]);
@@ -2129,7 +2142,9 @@ window_save ()
 void
 window_run ()
 {
-  char *dir, *program, buffer[1024];
+  size_t n;
+  char *dir, *program, *line, *msg, *msg2, buffer[1024];
+  FILE *file;
   window_save ();
   dir = g_get_current_dir ();
   program = g_build_filename (dir, "calibrator", NULL);
@@ -2139,6 +2154,18 @@ window_run ()
   system (buffer);
   g_free (program);
   g_free (dir);
+  program = g_build_filename (input->directory, "result", NULL);
+  file = fopen (program, "r");
+  g_free (program);
+  for (line = msg = NULL, n = 0; getline (&line, &n, file) > 0;
+       free (line), g_free (msg), line = NULL, msg = msg2, n = 0)
+    if (!msg)
+      msg2 = g_strdup (line);
+    else
+      msg2 = g_strconcat (msg, line, NULL);
+  fclose (file);
+  show_message (gettext ("Best result"), msg2);
+  g_free (msg2);
 }
 
 /**
@@ -2162,7 +2189,7 @@ window_help ()
                          "authors", authors,
                          "translator-credits",
                          "Javier Burguete Tolosa (jburguete@eead.csic.es)",
-                         "version", "1.1.9", "copyright",
+                         "version", "1.1.10", "copyright",
                          "Copyright 2012-2015 Javier Burguete Tolosa",
                          "logo", window->logo,
                          "website-label", gettext ("Website"),
@@ -2209,6 +2236,8 @@ window_update ()
   gtk_widget_hide (GTK_WIDGET (window->entry_mutation));
   gtk_widget_hide (GTK_WIDGET (window->label_reproduction));
   gtk_widget_hide (GTK_WIDGET (window->entry_reproduction));
+  gtk_widget_hide (GTK_WIDGET (window->label_adaptation));
+  gtk_widget_hide (GTK_WIDGET (window->entry_adaptation));
   gtk_widget_hide (GTK_WIDGET (window->label_sweeps));
   gtk_widget_hide (GTK_WIDGET (window->entry_sweeps));
   gtk_widget_hide (GTK_WIDGET (window->label_bits));
