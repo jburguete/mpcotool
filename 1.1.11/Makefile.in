@@ -3,11 +3,14 @@ CFLAGS = -g -Wall -O3 @CPPFLAGS@ @GSL_CFLAGS@ @XML_CFLAGS@ @GLIB_CFLAGS@ \
 	@GTHREAD_CFLAGS@
 LDFLAGS = @LDFLAGS@ @LIBS@ @GSL_LIBS@ @XML_LIBS@ @GLIB_LIBS@ @GTHREAD_LIBS@
 
+SRC = genetic/entity.c genetic/population.c genetic/reproduction.c \
+	genetic/selection.c genetic/evolution.c genetic/genetic.c calibrator.c
 OBJ = genetic/entity.o genetic/population.o genetic/reproduction.o \
 	genetic/selection.o genetic/evolution.o genetic/genetic.o
 DEP = Makefile
+ES = locales/es/LC_MESSAGES/
 
-all: calibrator calibrator_gui
+all: calibrator calibrator_gui $(ES)calibrator_gui.mo
 
 genetic/entity.o: genetic/entity.c genetic/entity.h $(DEP)
 	$(CC) $(CFLAGS) -c genetic/entity.c -o genetic/entity.o
@@ -34,13 +37,27 @@ genetic/genetic.o: genetic/genetic.c genetic/genetic.h genetic/evolution.h \
 	genetic/entity.h genetic/bits.h $(DEP)
 	$(CC) $(CFLAGS) -c genetic/genetic.c -o genetic/genetic.o
 
-calibrator: calibrator.c calibrator.h $(OBJ) config.h Makefile
+calibrator: calibrator.c calibrator.h $(OBJ) config.h
 	$(CC) $(CFLAGS) calibrator.c $(OBJ) $(LDFLAGS) -o calibrator
 
-calibrator_gui: calibrator.c interface.h calibrator.h $(OBJ) config.h Makefile
+calibrator_gui: calibrator.c interface.h calibrator.h $(OBJ) config.h
 	$(CC) $(CFLAGS) @GTK_CFLAGS@ calibrator.c $(LDFLAGS) @GTK_LIBS@ \
 		-o calibrator_gui -DHAVE_GTK=1
 
-doc: calibrator.c config.h README.md Makefile
+locales/calibrator_gui.pot: calibrator_gui
+	xgettext -d calibrator_gui -o locales/calibrator_gui.pot --from-code=UTF-8 \
+		$(SRC)
+
+$(ES)calibrator_gui.po: locales/calibrator_gui.pot
+	test -d $(ES) || mkdir -p $(ES)
+	test -f $(ES)calibrator_gui.po || msginit -l es -o $(ES)calibrator_gui.po \
+		-i locales/calibrator_gui.pot --no-translator
+	msgmerge -U $(ES)calibrator_gui.po locales/calibrator_gui.pot
+	vim -p $(ES)calibrator_gui.po
+
+$(ES)calibrator_gui.mo: $(ES)calibrator_gui.po locales/calibrator_gui.pot
+	msgfmt -c -v -o $(ES)calibrator_gui.mo $(ES)calibrator_gui.po
+
+doc: calibrator.c config.h README.md $(DEP)
 	doxygen
 	cd latex; make

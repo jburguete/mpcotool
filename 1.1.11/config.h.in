@@ -177,7 +177,7 @@ OF SUCH DAMAGE.
  * \def PROGRAM_INTERFACE
  * \brief Name of the interface program.
  */
-#define LOCALE_DIR "locale"
+#define LOCALE_DIR "locales"
 #define PROGRAM_INTERFACE "calibrator_gui"
 
 #endif
