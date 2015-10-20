@@ -1656,8 +1656,9 @@ calibrate_refine ()
             {
               calibrate->rangemin[j] = fmin (calibrate->rangemin[j],
                                              calibrate->value_old[i *
-                                                                  calibrate->nvariables
-                                                                  + j]);
+                                                                  calibrate->
+                                                                  nvariables +
+                                                                  j]);
               calibrate->rangemax[j] =
                 fmax (calibrate->rangemax[j],
                       calibrate->value_old[i * calibrate->nvariables + j]);
@@ -2141,7 +2142,7 @@ window_help ()
                          "translator-credits",
                          gettext
                          ("Javier Burguete Tolosa (jburguete@eead.csic.es)"),
-                         "version", "1.1.7", "copyright",
+                         "version", "1.1.8", "copyright",
                          "Copyright 2012-2015 Javier Burguete Tolosa",
                          "logo", window->logo,
                          "website-label", gettext ("Website"),
@@ -2381,20 +2382,20 @@ window_name_experiment ()
 }
 
 /**
- * \fn void window_update_experiment()
- * \brief Function to update the experiment data in the main window.
+ * \fn void window_weight_experiment()
+ * \brief Function to update the experiment weight in the main window.
  */
 void
-window_update_experiment ()
+window_weight_experiment ()
 {
   unsigned int i;
 #if DEBUG
-  fprintf (stderr, "window_update_experiment: start\n");
+  fprintf (stderr, "window_weight_experiment: start\n");
 #endif
   i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_experiment));
   input->weight[i] = gtk_spin_button_get_value (window->entry_weight);
 #if DEBUG
-  fprintf (stderr, "window_update_experiment: end\n");
+  fprintf (stderr, "window_weight_experiment: end\n");
 #endif
 }
 
@@ -2572,6 +2573,106 @@ window_label_variable ()
 }
 
 /**
+ * \fn void window_format_variable()
+ * \brief Function to update the variable format in the main window.
+ */
+void
+window_format_variable ()
+{
+  unsigned int i;
+  const char *buffer;
+#if DEBUG
+  fprintf (stderr, "window_format_variable: start\n");
+#endif
+  i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_variable));
+  buffer = gtk_entry_get_text (window->entry_format);
+  input->format[i] = (char *) xmlStrdup ((xmlChar *) buffer);
+#if DEBUG
+  fprintf (stderr, "window_format_variable: end\n");
+#endif
+}
+
+/**
+ * \fn void window_rangemin_variable()
+ * \brief Function to update the variable rangemin in the main window.
+ */
+void
+window_rangemin_variable ()
+{
+  unsigned int i;
+  const char *buffer;
+#if DEBUG
+  fprintf (stderr, "window_rangemin_variable: start\n");
+#endif
+  i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_variable));
+  buffer = gtk_entry_get_text (window->entry_min);
+  sscanf (buffer, input->format[i], input->rangemin + i);
+#if DEBUG
+  fprintf (stderr, "window_rangemin_variable: end\n");
+#endif
+}
+
+/**
+ * \fn void window_rangemax_variable()
+ * \brief Function to update the variable rangemax in the main window.
+ */
+void
+window_rangemax_variable ()
+{
+  unsigned int i;
+  const char *buffer;
+#if DEBUG
+  fprintf (stderr, "window_rangemax_variable: start\n");
+#endif
+  i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_variable));
+  buffer = gtk_entry_get_text (window->entry_max);
+  sscanf (buffer, input->format[i], input->rangemax + i);
+#if DEBUG
+  fprintf (stderr, "window_rangemax_variable: end\n");
+#endif
+}
+
+/**
+ * \fn void window_rangeminabs_variable()
+ * \brief Function to update the variable rangeminabs in the main window.
+ */
+void
+window_rangeminabs_variable ()
+{
+  unsigned int i;
+  const char *buffer;
+#if DEBUG
+  fprintf (stderr, "window_rangeminabs_variable: start\n");
+#endif
+  i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_variable));
+  buffer = gtk_entry_get_text (window->entry_minabs);
+  sscanf (buffer, input->format[i], input->rangeminabs + i);
+#if DEBUG
+  fprintf (stderr, "window_rangeminabs_variable: end\n");
+#endif
+}
+
+/**
+ * \fn void window_rangemaxabs_variable()
+ * \brief Function to update the variable rangemaxabs in the main window.
+ */
+void
+window_rangemaxabs_variable ()
+{
+  unsigned int i;
+  const char *buffer;
+#if DEBUG
+  fprintf (stderr, "window_rangemaxabs_variable: start\n");
+#endif
+  i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_variable));
+  buffer = gtk_entry_get_text (window->entry_maxabs);
+  sscanf (buffer, input->format[i], input->rangemaxabs + i);
+#if DEBUG
+  fprintf (stderr, "window_rangemaxabs_variable: end\n");
+#endif
+}
+
+/**
  * \fn void window_update_variable()
  * \brief Function to update the variable data in the main window.
  */
@@ -2579,21 +2680,10 @@ void
 window_update_variable ()
 {
   unsigned int i;
-  const char *buffer;
 #if DEBUG
   fprintf (stderr, "window_update_variable: start\n");
 #endif
   i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_variable));
-  buffer = gtk_entry_get_text (window->entry_format);
-  input->format[i] = (char *) xmlStrdup ((xmlChar *) buffer);
-  buffer = gtk_entry_get_text (window->entry_min);
-  sscanf (buffer, input->format[i], input->rangemin + i);
-  buffer = gtk_entry_get_text (window->entry_max);
-  sscanf (buffer, input->format[i], input->rangemax + i);
-  buffer = gtk_entry_get_text (window->entry_minabs);
-  sscanf (buffer, input->format[i], input->rangeminabs + i);
-  buffer = gtk_entry_get_text (window->entry_maxabs);
-  sscanf (buffer, input->format[i], input->rangemaxabs + i);
   switch (window_get_algorithm ())
     {
     case ALGORITHM_SWEEP:
@@ -2888,24 +2978,26 @@ window_new (GtkApplication * application)
     (window->entry_variable, "changed", window_label_variable, NULL);
   window->label_min = (GtkLabel *) gtk_label_new (gettext ("Minimum"));
   window->entry_min = (GtkEntry *) gtk_entry_new ();
-  g_signal_connect (window->entry_min, "changed", window_update_variable, NULL);
+  g_signal_connect
+    (window->entry_min, "changed", window_rangemin_variable, NULL);
   window->label_max = (GtkLabel *) gtk_label_new (gettext ("Maximum"));
   window->entry_max = (GtkEntry *) gtk_entry_new ();
-  g_signal_connect (window->entry_max, "changed", window_update_variable, NULL);
+  g_signal_connect
+    (window->entry_max, "changed", window_rangemax_variable, NULL);
   window->label_minabs =
     (GtkLabel *) gtk_label_new (gettext ("Absolute minimum"));
   window->entry_minabs = (GtkEntry *) gtk_entry_new ();
   g_signal_connect
-    (window->entry_minabs, "changed", window_update_variable, NULL);
+    (window->entry_minabs, "changed", window_rangeminabs_variable, NULL);
   window->label_maxabs =
     (GtkLabel *) gtk_label_new (gettext ("Absolute maximum"));
   window->entry_maxabs = (GtkEntry *) gtk_entry_new ();
   g_signal_connect
-    (window->entry_maxabs, "changed", window_update_variable, NULL);
+    (window->entry_maxabs, "changed", window_rangemaxabs_variable, NULL);
   window->label_format = (GtkLabel *) gtk_label_new (gettext ("C-format"));
   window->entry_format = (GtkEntry *) gtk_entry_new ();
   g_signal_connect
-    (window->entry_format, "changed", window_update_variable, NULL);
+    (window->entry_format, "changed", window_format_variable, NULL);
   window->label_sweeps = (GtkLabel *) gtk_label_new (gettext ("Sweeps number"));
   window->entry_sweeps =
     (GtkSpinButton *) gtk_spin_button_new_with_range (1., 1.e12, 1.);
@@ -2915,7 +3007,7 @@ window_new (GtkApplication * application)
   window->entry_bits =
     (GtkSpinButton *) gtk_spin_button_new_with_range (1., 64., 1.);
   g_signal_connect
-	(window->entry_bits, "value-changed", window_update_variable, NULL);
+    (window->entry_bits, "value-changed", window_update_variable, NULL);
   window->grid_variable = (GtkGrid *) gtk_grid_new ();
   gtk_grid_attach (window->grid_variable,
                    GTK_WIDGET (window->combo_variable), 0, 0, 2, 1);
@@ -2988,7 +3080,7 @@ window_new (GtkApplication * application)
   window->entry_weight =
     (GtkSpinButton *) gtk_spin_button_new_with_range (0., 1., 0.001);
   g_signal_connect
-    (window->entry_weight, "value-changed", window_update_experiment, NULL);
+    (window->entry_weight, "value-changed", window_weight_experiment, NULL);
   window->grid_experiment = (GtkGrid *) gtk_grid_new ();
   gtk_grid_attach (window->grid_experiment,
                    GTK_WIDGET (window->combo_experiment), 0, 0, 2, 1);
