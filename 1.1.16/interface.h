@@ -112,6 +112,22 @@ typedef struct
 } Options;
 
 /**
+ * \struct Running
+ * \brief Struct to define the running dialog.
+ */
+typedef struct
+{
+	/**
+	 * \var label
+	 * \brief GtkLabel.
+	 * \var dialog
+	 * \brief main GtkDialog.
+	 */
+	GtkLabel *label;
+	GtkDialog *dialog;
+} Running;
+
+/**
  * \struct Window
  * \brief Struct to define the main window.
  */

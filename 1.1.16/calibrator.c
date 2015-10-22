@@ -191,12 +191,15 @@ const char * logo[] = {
 
 #if HAVE_GTK
 /**
- * \var window
- * \brief Window struct to define the main interface window.
  * \var options
  * \brief Options struct to define the options dialog.
+ * \var running
+ * \brief Running struct to define the running dialog.
+ * \var window
+ * \brief Window struct to define the main interface window.
  */
 Options options[1];
+Running running[1];
 Window window[1];
 #endif
 
@@ -2096,6 +2099,25 @@ options_new ()
 }
 
 /**
+ * \fn void running_new ()
+ * \brief Function to open the running dialog.
+ */
+void
+running_new ()
+{
+	running->label = (GtkLabel *) gtk_label_new (gettext ("Calculating ..."));
+	running->dialog = (GtkDialog *)
+	  gtk_dialog_new_with_buttons (gettext ("Calculating"),
+			                       window->window,
+								   GTK_DIALOG_DESTROY_WITH_PARENT,
+								   NULL, NULL);
+	gtk_container_add
+	  (GTK_CONTAINER (gtk_dialog_get_content_area (running->dialog)),
+	   GTK_WIDGET (running->label));
+	gtk_widget_show_all (GTK_WIDGET (running->dialog));
+}
+
+/**
  * \fn void window_save()
  * \brief Function to save the input file.
  */
@@ -2188,6 +2210,9 @@ window_run ()
   char *dir, *program, *line, *msg, *msg2, buffer[1024];
   FILE *file;
   window_save ();
+  running_new ();
+  while (gtk_events_pending ())
+	  gtk_main_iteration_do (FALSE);
   dir = g_get_current_dir ();
   program = g_build_filename (dir, "calibrator", NULL);
   snprintf
@@ -2206,6 +2231,7 @@ window_run ()
     else
       msg2 = g_strconcat (msg, line, NULL);
   fclose (file);
+  gtk_widget_destroy (GTK_WIDGET (running->dialog));
   show_message (gettext ("Best result"), msg2);
   g_free (msg2);
 }
@@ -2231,7 +2257,7 @@ window_help ()
                          "authors", authors,
                          "translator-credits",
                          "Javier Burguete Tolosa (jburguete@eead.csic.es)",
-                         "version", "1.1.15", "copyright",
+                         "version", "1.1.16", "copyright",
                          "Copyright 2012-2015 Javier Burguete Tolosa",
                          "logo", window->logo,
                          "website-label", gettext ("Website"),
@@ -3493,6 +3519,7 @@ main (int argn, char **argc)
   int status;
   char *buffer;
   GtkApplication *application;
+  nthreads = cores_number ();
   xmlKeepBlanksDefault (0);
   setlocale (LC_ALL, "");
   setlocale (LC_NUMERIC, "C");
