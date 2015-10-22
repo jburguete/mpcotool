@@ -55,6 +55,7 @@ $(ES)calibrator_gui.po: locales/calibrator_gui.pot
 		-i locales/calibrator_gui.pot --no-translator
 	msgmerge -U $(ES)calibrator_gui.po locales/calibrator_gui.pot
 	vim -p $(ES)calibrator_gui.po
+	touch $(ES)calibrator_gui.po
 
 $(ES)calibrator_gui.mo: $(ES)calibrator_gui.po locales/calibrator_gui.pot
 	msgfmt -c -v -o $(ES)calibrator_gui.mo $(ES)calibrator_gui.po
@@ -65,6 +66,7 @@ $(FR)calibrator_gui.po: locales/calibrator_gui.pot
 		-i locales/calibrator_gui.pot --no-translator
 	msgmerge -U $(FR)calibrator_gui.po locales/calibrator_gui.pot
 	vim -p $(FR)calibrator_gui.po
+	touch $(FR)calibrator_gui.po
 
 $(FR)calibrator_gui.mo: $(FR)calibrator_gui.po locales/calibrator_gui.pot
 	msgfmt -c -v -o $(FR)calibrator_gui.mo $(FR)calibrator_gui.po

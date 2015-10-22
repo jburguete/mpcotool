@@ -70,8 +70,6 @@ typedef struct
      * \brief Array of experimental data file names.
      * \var label
      * \brief Array of variable names.
-     * \var format
-     * \brief Array of variable formats.
 	 * \var directory
 	 * \brief Working directory.
 	 * \var name
@@ -104,6 +102,8 @@ typedef struct
      * \brief Simulations number per experiment.
      * \var algorithm
      * \brief Algorithm type.
+	 * \var precision
+	 * \brief Array of variable precisions.
      * \var nsweeps
      * \brief Array of sweeps of the sweep algorithm.
 	 * \var nbits
@@ -114,11 +114,11 @@ typedef struct
      * \brief Number of best simulations.
      */
   char *simulator, *evaluator, **experiment, **template[MAX_NINPUTS], **label,
-    **format, *directory, *name;
+    *directory, *name;
   double *rangemin, *rangemax, *rangeminabs, *rangemaxabs, *weight, tolerance,
     mutation_ratio, reproduction_ratio, adaptation_ratio;
   unsigned int nvariables, nexperiments, ninputs, nsimulations, algorithm,
-    *nsweeps, *nbits, niterations, nbest;
+    *precision, *nsweeps, *nbits, niterations, nbest;
 } Input;
 
 /**
@@ -138,8 +138,6 @@ typedef struct
      * \brief Array of experimental data file names.
      * \var label
      * \brief Array of variable names.
-     * \var format
-     * \brief Array of variable formats.
      * \var nvariables
      * \brief Variables number.
      * \var nexperiments
@@ -150,6 +148,8 @@ typedef struct
      * \brief Simulations number per experiment.
      * \var algorithm
      * \brief Algorithm type.
+	 * \var precision
+	 * \brief Array of variable precisions.
      * \var nsweeps
      * \brief Array of sweeps of the sweep algorithm.
      * \var nstart
@@ -203,10 +203,9 @@ typedef struct
      * \var mpi_rank
      * \brief Number of MPI task.
      */
-  char *simulator, *evaluator, **experiment, **template[MAX_NINPUTS], **label,
-    **format;
+  char *simulator, *evaluator, **experiment, **template[MAX_NINPUTS], **label;
   unsigned int nvariables, nexperiments, ninputs, nsimulations, algorithm,
-    *nsweeps, nstart, nend, *thread, niterations, nbest, nsaveds,
+    *precision, *nsweeps, nstart, nend, *thread, niterations, nbest, nsaveds,
     *simulation_best;
   double *value, *rangemin, *rangemax, *rangeminabs, *rangemaxabs, *error_best,
     *weight, *value_old, *error_old, tolerance, mutation_ratio,

@@ -41,22 +41,25 @@ OF SUCH DAMAGE.
  * \brief Maximum number of input files in the simulator program.
  * \def NALGORITHMS
  * \brief Number of algorithms.
+ * \def NPRECISIONS
+ * \brief Number of precisions.
  */
 #define MAX_NINPUTS 8
 #define NALGORITHMS 3
+#define NPRECISIONS 15
 
 // Default choices
 
 /**
  * \def DEFAULT_ALGORITHM
  * \brief Macro to set the default algorithm.
- * \def DEFAULT_FORMAT
- * \brief Macro to set the default floating point numbers printing format.
+ * \def DEFAULT_PRECISION
+ * \brief Macro to set the default precision digits.
  * \def DEFAULT_RANDOM_SEED
  * \brief Macro to set the default pseudo-random numbers seed.
  */
 #define DEFAULT_ALGORITHM "Monte-Carlo"
-#define DEFAULT_FORMAT (const xmlChar*)"%le"
+#define DEFAULT_PRECISION (NPRECISIONS - 1)
 #define DEFAULT_RANDOM_SEED 7007
 
 // XML labels
@@ -76,8 +79,6 @@ OF SUCH DAMAGE.
  * \brief evaluator XML label.
  * \def XML_EXPERIMENT
  * \brief experiment XML label.
- * \def XML_FORMAT
- * \brief format XML label.
  * \def XML_GENETIC
  * \brief genetic XML label.
  * \def XML_MINIMUM
@@ -104,6 +105,8 @@ OF SUCH DAMAGE.
  * \brief nsimulations XML label.
  * \def XML_NSWEEPS
  * \brief nsweeps XML label.
+ * \def XML_PRECISION
+ * \brief precision XML label.
  * \def XML_REPRODUCTION
  * \brief reproduction XML label.
  * \def XML_SIMULATOR
@@ -140,7 +143,6 @@ OF SUCH DAMAGE.
 #define XML_CALIBRATE (const xmlChar*)"calibrate"
 #define XML_EVALUATOR (const xmlChar*)"evaluator"
 #define XML_EXPERIMENT (const xmlChar*)"experiment"
-#define XML_FORMAT (const xmlChar*)"format"
 #define XML_GENETIC (const xmlChar*)"genetic"
 #define XML_MINIMUM (const xmlChar*)"minimum"
 #define XML_MAXIMUM (const xmlChar*)"maximum"
@@ -154,6 +156,7 @@ OF SUCH DAMAGE.
 #define XML_NPOPULATION (const xmlChar*)"npopulation"
 #define XML_NSIMULATIONS (const xmlChar*)"nsimulations"
 #define XML_NSWEEPS (const xmlChar*)"nsweeps"
+#define XML_PRECISION (const xmlChar*)"precision"
 #define XML_REPRODUCTION (const xmlChar*)"reproduction"
 #define XML_SIMULATOR (const xmlChar*)"simulator"
 #define XML_SWEEP (const xmlChar*)"sweep"

@@ -37,6 +37,12 @@ OF SUCH DAMAGE.
 #define INTERFACE__H 1
 
 /**
+ * \def MAX_LENGTH
+ * \brief Max length of texts allowed in GtkSpinButtons.
+ */
+#define MAX_LENGTH (DEFAULT_PRECISION + 8)
+
+/**
  * \struct Experiment
  * \brief Struct to define experiment data.
  */
@@ -63,8 +69,6 @@ typedef struct
     /**
 	 * \var label
 	 * \brief Variable label.
-	 * \var format
-	 * \brief C-string format.
 	 * \var rangemin
 	 * \brief Minimum value.
 	 * \var rangemax
@@ -73,14 +77,16 @@ typedef struct
 	 * \brief Minimum allowed value.
 	 * \var rangemaxabs
 	 * \brief Maximum allowed value.
+	 * \var precision
+	 * \brief Precision digits.
 	 * \var nsweeps
 	 * \brief Sweeps number of the sweep algorithm.
 	 * \var nbits
 	 * \brief Bits number of the genetic algorithm.
 	 */
-  char *label, *format;
+  char *label;
   double rangemin, rangemax, rangeminabs, rangemaxabs;
-  unsigned int nsweeps, nbits;
+  unsigned int precision, nsweeps, nbits;
 } Variable;
 
 /**
@@ -110,12 +116,16 @@ typedef struct
      * \brief GtkButton to remove a experiment.
      * \var button_algorithm
      * \brief Array of GtkButtons to set the algorithm.
+     * \var check_evaluator
+     * \brief Evaluator program GtkCheckButton.
+     * \var check_minabs
+     * \brief Absolute minimum GtkCheckButton.
+     * \var check_maxabs
+     * \brief Absolute maximum GtkCheckButton.
      * \var check_template
      * \brief Array of GtkCheckButtons to set the input templates.
      * \var label_simulator
      * \brief Simulator program GtkLabel.
-     * \var label_evaluator
-     * \brief Evaluator program GtkLabel.
      * \var label_simulations
      * \brief GtkLabel to set the simulations number.
      * \var label_iterations
@@ -140,12 +150,8 @@ typedef struct
      * \brief Minimum GtkLabel.
      * \var label_max
      * \brief Maximum GtkLabel.
-     * \var label_minabs
-     * \brief Absolute minimum GtkLabel.
-     * \var label_maxabs
-     * \brief Absolute maximum GtkLabel.
-     * \var label_format
-     * \brief Format GtkLabel.
+     * \var label_precision
+     * \brief Precision GtkLabel.
      * \var label_sweeps
      * \brief Sweeps number GtkLabel.
      * \var label_bits
@@ -154,16 +160,6 @@ typedef struct
      * \brief Experiment GtkLabel.
      * \var label_weight
      * \brief Weight GtkLabel.
-     * \var entry_min
-     * \brief Minimum GtkEntry.
-     * \var entry_max
-     * \brief Maximum GtkEntry.
-     * \var entry_minabs
-     * \brief Absolute minimum GtkEntry.
-     * \var entry_maxabs
-     * \brief Absolute maximum GtkEntry.
-     * \var entry_format
-     * \brief GtkEntry to set the variable format.
      * \var entry_variable
      * \brief GtkEntry to set the variable name.
      * \var combo_variable
@@ -196,6 +192,16 @@ typedef struct
      * \brief GtkSpinButton to set the reproduction ratio.
      * \var entry_adaptation
      * \brief GtkSpinButton to set the adaptation ratio.
+     * \var entry_min
+     * \brief Minimum GtkSpinButton.
+     * \var entry_max
+     * \brief Maximum GtkSpinButton.
+     * \var entry_minabs
+     * \brief Absolute minimum GtkSpinButton.
+     * \var entry_maxabs
+     * \brief Absolute maximum GtkSpinButton.
+	 * \var entry_precision
+	 * \brief Precision digits GtkSpinButton.
      * \var entry_sweeps
      * \brief Sweeps number GtkSpinButton.
      * \var entry_bits
@@ -220,6 +226,14 @@ typedef struct
      * \brief Experiment GtkFrame.
      * \var logo
      * \brief Logo GdkPixbuf.
+     * \var scrolled_min
+     * \brief Minimum GtkScrolledWindow.
+     * \var scrolled_max
+     * \brief Maximum GtkScrolledWindow.
+     * \var scrolled_minabs
+     * \brief Absolute minimum GtkScrolledWindow.
+     * \var scrolled_maxabs
+     * \brief Absolute maximum GtkScrolledWindow.
      * \var window
      * \brief Main GtkWindow.
 	 * \var experiment
@@ -247,25 +261,28 @@ typedef struct
     *button_add_variable, *button_remove_variable, *button_add_experiment,
     *button_remove_experiment;
   GtkRadioButton *button_algorithm[NALGORITHMS];
-  GtkCheckButton *check_template[MAX_NINPUTS];
-  GtkLabel *label_simulator, *label_evaluator, *label_simulations,
-    *label_iterations, *label_tolerance, *label_bests, *label_population,
-    *label_generations, *label_mutation, *label_reproduction, *label_adaptation,
-    *label_variable, *label_min, *label_max, *label_minabs, *label_maxabs,
-    *label_format, *label_sweeps, *label_bits, *label_experiment, *label_weight;
-  GtkEntry *entry_min, *entry_max, *entry_minabs, *entry_maxabs, *entry_format,
-    *entry_variable;
+  GtkCheckButton *check_evaluator, *check_minabs, *check_maxabs,
+    *check_template[MAX_NINPUTS];
+  GtkLabel *label_simulator, *label_simulations, *label_iterations,
+    *label_tolerance, *label_bests, *label_population, *label_generations,
+	*label_mutation, *label_reproduction, *label_adaptation, *label_variable,
+	*label_min, *label_max, *label_precision, *label_sweeps, *label_bits,
+	*label_experiment, *label_weight;
+  GtkEntry *entry_variable;
   GtkComboBoxText *combo_variable, *combo_experiment;
   GtkFileChooserButton *button_simulator, *button_evaluator, *button_experiment,
     *button_template[MAX_NINPUTS];
-  GtkSpinButton *entry_simulations, *entry_iterations, *entry_tolerance,
-    *entry_bests, *entry_population, *entry_generations, *entry_mutation,
-    *entry_reproduction, *entry_adaptation, *entry_sweeps, *entry_bits,
-    *entry_weight;
+  GtkSpinButton *entry_min, *entry_max, *entry_minabs, *entry_maxabs,
+    *entry_simulations, *entry_iterations, *entry_tolerance, *entry_bests,
+	*entry_population, *entry_generations, *entry_mutation, *entry_reproduction,
+   	*entry_adaptation, *entry_precision, *entry_sweeps, *entry_bits,
+	*entry_weight;
   GtkGrid *grid, *grid_buttons, *grid_algorithm, *grid_variable,
     *grid_experiment;
   GtkFrame *frame_algorithm, *frame_variable, *frame_experiment;
   GdkPixbuf *logo;
+  GtkScrolledWindow *scrolled_min, *scrolled_max, *scrolled_minabs,
+	*scrolled_maxabs;
   GtkWindow *window;
   Experiment *experiment;
   Variable *variable;

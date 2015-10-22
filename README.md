@@ -1,4 +1,4 @@
-CALIBRATOR (1.1.13 version)
+CALIBRATOR (1.1.14 version)
 ===========================
 
 A software to perform calibrations or optimizations of empirical parameters.
@@ -63,7 +63,7 @@ a terminal:
 > $ git clone https://github.com/jburguete/calibrator.git
 
 3. Link the latest genetic version to genetic:
-> $ cd calibrator/1.1.13
+> $ cd calibrator/1.1.14
 >
 > $ ln -s ../../genetic/0.6.1 genetic
 
@@ -97,7 +97,7 @@ MAKING REFERENCE MANUAL INSTRUCTIONS (file latex/refman.pdf)
 On UNIX type systems you need [texlive](https://www.tug.org/texlive) installed.
 On Windows systems you need [MiKTeX](http://miktex.org). Then do in a terminal:
 
-> $ cd calibrator/1.1.13
+> $ cd calibrator/1.1.14
 >
 > $ doxygen
 >
