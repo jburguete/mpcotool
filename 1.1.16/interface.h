@@ -95,7 +95,7 @@ typedef struct
  */
 typedef struct
 {
-	/**
+        /**
 	 * \var label_processors
 	 * \brief Processors number GtkLabel.
 	 * \var entry_processors
@@ -105,10 +105,10 @@ typedef struct
 	 * \var dialog
 	 * \brief main GtkDialog.
 	 */
-	GtkLabel *label_processors;
-	GtkSpinButton *entry_processors;
-	GtkGrid *grid;
-	GtkDialog *dialog;
+  GtkLabel *label_processors;
+  GtkSpinButton *entry_processors;
+  GtkGrid *grid;
+  GtkDialog *dialog;
 } Options;
 
 /**
@@ -117,14 +117,14 @@ typedef struct
  */
 typedef struct
 {
-	/**
+        /**
 	 * \var label
 	 * \brief GtkLabel.
 	 * \var dialog
 	 * \brief main GtkDialog.
 	 */
-	GtkLabel *label;
-	GtkDialog *dialog;
+  GtkLabel *label;
+  GtkDialog *dialog;
 } Running;
 
 /**
@@ -298,31 +298,31 @@ typedef struct
 	 * \brief Number of variables.
      */
   GtkButton *button_open, *button_save, *button_run, *button_options,
-	*button_help, *button_exit, *button_add_variable, *button_remove_variable,
-	*button_add_experiment, *button_remove_experiment;
+    *button_help, *button_exit, *button_add_variable, *button_remove_variable,
+    *button_add_experiment, *button_remove_experiment;
   GtkRadioButton *button_algorithm[NALGORITHMS];
   GtkCheckButton *check_evaluator, *check_minabs, *check_maxabs,
     *check_template[MAX_NINPUTS];
   GtkLabel *label_simulator, *label_simulations, *label_iterations,
     *label_tolerance, *label_bests, *label_population, *label_generations,
-	*label_mutation, *label_reproduction, *label_adaptation, *label_variable,
-	*label_min, *label_max, *label_precision, *label_sweeps, *label_bits,
-	*label_experiment, *label_weight;
+    *label_mutation, *label_reproduction, *label_adaptation, *label_variable,
+    *label_min, *label_max, *label_precision, *label_sweeps, *label_bits,
+    *label_experiment, *label_weight;
   GtkEntry *entry_variable;
   GtkComboBoxText *combo_variable, *combo_experiment;
   GtkFileChooserButton *button_simulator, *button_evaluator, *button_experiment,
     *button_template[MAX_NINPUTS];
   GtkSpinButton *entry_min, *entry_max, *entry_minabs, *entry_maxabs,
     *entry_simulations, *entry_iterations, *entry_tolerance, *entry_bests,
-	*entry_population, *entry_generations, *entry_mutation, *entry_reproduction,
-   	*entry_adaptation, *entry_precision, *entry_sweeps, *entry_bits,
-	*entry_weight;
+    *entry_population, *entry_generations, *entry_mutation, *entry_reproduction,
+    *entry_adaptation, *entry_precision, *entry_sweeps, *entry_bits,
+    *entry_weight;
   GtkGrid *grid, *grid_buttons, *grid_algorithm, *grid_variable,
     *grid_experiment;
   GtkFrame *frame_algorithm, *frame_variable, *frame_experiment;
   GdkPixbuf *logo;
   GtkScrolledWindow *scrolled_min, *scrolled_max, *scrolled_minabs,
-	*scrolled_maxabs;
+    *scrolled_maxabs;
   GtkWindow *window;
   Experiment *experiment;
   Variable *variable;
