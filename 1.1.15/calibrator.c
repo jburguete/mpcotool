@@ -193,7 +193,10 @@ const char * logo[] = {
 /**
  * \var window
  * \brief Window struct to define the main interface window.
+ * \var options
+ * \brief Options struct to define the options dialog.
  */
+Options options[1];
 Window window[1];
 #endif
 
@@ -2060,6 +2063,39 @@ input_save (char *filename)
 }
 
 /**
+ * \fn void options_new ()
+ * \brief Function to open the options dialog.
+ */
+void
+options_new ()
+{
+	options->label_processors
+		= (GtkLabel *) gtk_label_new (gettext ("Processors number"));
+	options->entry_processors
+		= (GtkSpinButton *) gtk_spin_button_new_with_range (1., 64., 1.);
+	gtk_spin_button_set_value (options->entry_processors, (gdouble)nthreads);
+	options->grid = (GtkGrid *) gtk_grid_new ();
+	gtk_grid_attach (options->grid, GTK_WIDGET (options->label_processors),
+		0, 0, 1, 1);
+	gtk_grid_attach (options->grid, GTK_WIDGET (options->entry_processors),
+		1, 0, 1, 1);
+	gtk_widget_show_all (GTK_WIDGET (options->grid));
+	options->dialog = (GtkDialog *)
+	  gtk_dialog_new_with_buttons (gettext ("Options"),
+			                       window->window,
+								   GTK_DIALOG_MODAL,
+								   gettext("_OK"), GTK_RESPONSE_OK,
+								   gettext("_Cancel"), GTK_RESPONSE_CANCEL,
+								   NULL);
+	gtk_container_add
+	  (GTK_CONTAINER (gtk_dialog_get_content_area (options->dialog)),
+	   GTK_WIDGET (options->grid));
+	if (gtk_dialog_run (options->dialog) == GTK_RESPONSE_OK)
+		nthreads = gtk_spin_button_get_value_as_int (options->entry_processors);
+	gtk_widget_destroy (GTK_WIDGET (options->dialog));
+}
+
+/**
  * \fn void window_save()
  * \brief Function to save the input file.
  */
@@ -2155,7 +2191,7 @@ window_run ()
   dir = g_get_current_dir ();
   program = g_build_filename (dir, "calibrator", NULL);
   snprintf
-    (buffer, 1024, "cd %s; %s %s", input->directory, program, input->name);
+    (buffer, 1024, "cd %s; %s -nthreads %d %s", input->directory, program, nthreads, input->name);
   printf ("%s\n", buffer);
   system (buffer);
   g_free (program);
@@ -2195,7 +2231,7 @@ window_help ()
                          "authors", authors,
                          "translator-credits",
                          "Javier Burguete Tolosa (jburguete@eead.csic.es)",
-                         "version", "1.1.14", "copyright",
+                         "version", "1.1.15", "copyright",
                          "Copyright 2012-2015 Javier Burguete Tolosa",
                          "logo", window->logo,
                          "website-label", gettext ("Website"),
@@ -3038,6 +3074,11 @@ window_new (GtkApplication * application)
     = (GtkButton *) gtk_button_new_with_mnemonic (gettext ("_Run"));
   g_signal_connect (window->button_run, "clicked", window_run, NULL);
 
+  // Creating the options button
+  window->button_options
+    = (GtkButton *) gtk_button_new_with_mnemonic (gettext ("_Options"));
+  g_signal_connect (window->button_options, "clicked", options_new, NULL);
+
   // Creating the help button
   window->button_help
     = (GtkButton *) gtk_button_new_with_mnemonic (gettext ("_Help"));
@@ -3056,10 +3097,12 @@ window_new (GtkApplication * application)
                    1, 0, 1, 1);
   gtk_grid_attach (window->grid_buttons, GTK_WIDGET (window->button_run),
                    2, 0, 1, 1);
-  gtk_grid_attach (window->grid_buttons, GTK_WIDGET (window->button_help),
+  gtk_grid_attach (window->grid_buttons, GTK_WIDGET (window->button_options),
                    3, 0, 1, 1);
-  gtk_grid_attach (window->grid_buttons, GTK_WIDGET (window->button_exit),
+  gtk_grid_attach (window->grid_buttons, GTK_WIDGET (window->button_help),
                    4, 0, 1, 1);
+  gtk_grid_attach (window->grid_buttons, GTK_WIDGET (window->button_exit),
+                   5, 0, 1, 1);
 
   // Creating the simulator program label and entry
   window->label_simulator

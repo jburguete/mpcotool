@@ -90,6 +90,28 @@ typedef struct
 } Variable;
 
 /**
+ * \struct Options
+ * \brief Struct to define the options dialog.
+ */
+typedef struct
+{
+	/**
+	 * \var label_processors
+	 * \brief Processors number GtkLabel.
+	 * \var entry_processors
+	 * \brief Processors number GtkSpinButton.
+	 * \var grid
+	 * \brief main GtkGrid.
+	 * \var dialog
+	 * \brief main GtkDialog.
+	 */
+	GtkLabel *label_processors;
+	GtkSpinButton *entry_processors;
+	GtkGrid *grid;
+	GtkDialog *dialog;
+} Options;
+
+/**
  * \struct Window
  * \brief Struct to define the main window.
  */
@@ -102,6 +124,8 @@ typedef struct
      * \brief Save GtkButton.
 	 * \var button_run
 	 * \brief Run GtkButton.
+	 * \var button_options
+	 * \brief Options GtkButton.
      * \var button_help
      * \brief Help GtkButton.
      * \var button_exit
@@ -257,9 +281,9 @@ typedef struct
 	 * \var nvariables
 	 * \brief Number of variables.
      */
-  GtkButton *button_open, *button_save, *button_run, *button_help, *button_exit,
-    *button_add_variable, *button_remove_variable, *button_add_experiment,
-    *button_remove_experiment;
+  GtkButton *button_open, *button_save, *button_run, *button_options,
+	*button_help, *button_exit, *button_add_variable, *button_remove_variable,
+	*button_add_experiment, *button_remove_experiment;
   GtkRadioButton *button_algorithm[NALGORITHMS];
   GtkCheckButton *check_evaluator, *check_minabs, *check_maxabs,
     *check_template[MAX_NINPUTS];
@@ -293,6 +317,7 @@ typedef struct
 
 // Public functions
 void input_save (char *filename);
+void options_new ();
 void window_help ();
 int window_get_algorithm ();
 void window_update ();
