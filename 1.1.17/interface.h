@@ -95,7 +95,7 @@ typedef struct
  */
 typedef struct
 {
-        /**
+    /**
 	 * \var label_processors
 	 * \brief Processors number GtkLabel.
 	 * \var entry_processors
@@ -117,7 +117,7 @@ typedef struct
  */
 typedef struct
 {
-        /**
+    /**
 	 * \var label
 	 * \brief GtkLabel.
 	 * \var dialog
@@ -297,8 +297,9 @@ typedef struct
 	 * \var nvariables
 	 * \brief Number of variables.
      */
-  GtkButton *button_open, *button_save, *button_run, *button_options,
-    *button_help, *button_exit, *button_add_variable, *button_remove_variable,
+  GtkToolButton *button_open, *button_save, *button_run, *button_options,
+    *button_help, *button_exit;
+  GtkButton *button_add_variable, *button_remove_variable,
     *button_add_experiment, *button_remove_experiment;
   GtkRadioButton *button_algorithm[NALGORITHMS];
   GtkCheckButton *check_evaluator, *check_minabs, *check_maxabs,
@@ -317,8 +318,8 @@ typedef struct
     *entry_population, *entry_generations, *entry_mutation, *entry_reproduction,
     *entry_adaptation, *entry_precision, *entry_sweeps, *entry_bits,
     *entry_weight;
-  GtkGrid *grid, *grid_buttons, *grid_algorithm, *grid_variable,
-    *grid_experiment;
+  GtkToolbar *bar_buttons;
+  GtkGrid *grid, *grid_algorithm, *grid_variable, *grid_experiment;
   GtkFrame *frame_algorithm, *frame_variable, *frame_experiment;
   GdkPixbuf *logo;
   GtkScrolledWindow *scrolled_min, *scrolled_max, *scrolled_minabs,
@@ -334,10 +335,33 @@ typedef struct
 // Public functions
 void input_save (char *filename);
 void options_new ();
+void running_new ();
+void window_save ();
+void window_run ();
 void window_help ();
 int window_get_algorithm ();
 void window_update ();
+void window_set_algorithm ();
+void window_set_experiment ();
+void window_remove_experiment ();
+void window_add_experiment ();
+void window_name_experiment ();
+void window_weight_experiment ();
+void window_inputs_experiment ();
+void window_template_experiment (void *data);
+void window_set_variable ();
+void window_remove_variable ();
+void window_add_variable ();
+void window_label_variable ();
+void window_precision_variable ();
+void window_rangemin_variable ();
+void window_rangemax_variable ();
+void window_rangeminabs_variable ();
+void window_rangemaxabs_variable ();
+void window_update_variable ();
+void window_read (char *filename);
 void window_open ();
 void window_new (GtkApplication * application);
+int cores_number ();
 
 #endif

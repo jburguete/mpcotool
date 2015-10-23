@@ -64,8 +64,19 @@ OF SUCH DAMAGE.
 /**
  * \def DEBUG
  * \brief Macro to debug.
+ * \def ERROR_TYPE
+ * \brief Macro to define the error message type
+ * \def INFO_TYPE
+ * \brief Macro to define the information message type
  */
 #define DEBUG 0
+#if HAVE_GTK
+#define ERROR_TYPE GTK_MESSAGE_ERROR
+#define INFO_TYPE GTK_MESSAGE_INFO
+#else
+#define ERROR_TYPE 0
+#define INFO_TYPE 0
+#endif
 
 /**
  * \var ntasks
@@ -99,17 +110,18 @@ GMutex *mutex;
 void (*calibrate_step) ();
 Input input[1];
 Calibrate calibrate[1];
+
 const xmlChar *template[MAX_NINPUTS] = {
   XML_TEMPLATE1, XML_TEMPLATE2, XML_TEMPLATE3, XML_TEMPLATE4,
   XML_TEMPLATE5, XML_TEMPLATE6, XML_TEMPLATE7, XML_TEMPLATE8
 };
 
 const char *format[NPRECISIONS] = {
-  "%d", "%.1lg", "%.2lg", "%.3lg", "%.4lg", "%.5lg", "%.6lg", "%.7lg", "%.8lg",
-  "%.9lg", "%.10lg", "%.11lg", "%.12lg", "%.13lg", "%.14lg"
+  "%.1lg", "%.2lg", "%.3lg", "%.4lg", "%.5lg", "%.6lg", "%.7lg", "%.8lg",
+  "%.9lg", "%.10lg", "%.11lg", "%.12lg", "%.13lg", "%.14lg", "%.15lg"
 };
 
-double precision[NPRECISIONS] = {
+const double precision[NPRECISIONS] = {
   1., 0.1, 0.01, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8, 1e-9, 1e-10, 1e-11, 1e-12,
   1e-13, 1e-14
 };
@@ -208,23 +220,24 @@ Window window[1];
 #endif
 
 /**
- * \fn void show_message(char *title, char *msg)
+ * \fn void show_message(char *title, char *msg, int type)
  * \brief Function to show a dialog with a message.
  * \param title
  * \brief Title.
  * \param msg
  * \brief Message.
+ * \param type
+ * \brief Message type.
  */
 void
-show_message (char *title, char *msg)
+show_message (char *title, char *msg, int type)
 {
 #if HAVE_GTK
   GtkMessageDialog *dlg;
 
   // Creating the dialog
   dlg = (GtkMessageDialog *) gtk_message_dialog_new
-    (window->window, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK,
-     "%s", msg);
+    (window->window, GTK_DIALOG_MODAL, type, GTK_BUTTONS_OK, "%s", msg);
 
   // Setting the dialog title
   gtk_window_set_title (GTK_WINDOW (dlg), title);
@@ -249,7 +262,7 @@ show_message (char *title, char *msg)
 void
 show_error (char *msg)
 {
-  show_message (gettext ("ERROR!"), msg);
+  show_message (gettext ("ERROR!"), msg, ERROR_TYPE);
 }
 
 /**
@@ -1684,9 +1697,8 @@ calibrate_refine ()
             {
               calibrate->rangemin[j] = fmin (calibrate->rangemin[j],
                                              calibrate->value_old[i *
-                                                                  calibrate->
-                                                                  nvariables +
-                                                                  j]);
+                                                                  calibrate->nvariables
+                                                                  + j]);
               calibrate->rangemax[j] =
                 fmax (calibrate->rangemax[j],
                       calibrate->value_old[i * calibrate->nvariables + j]);
@@ -1971,6 +1983,7 @@ input_save (char *filename)
   GFile *file, *file2;
 
   // Getting the input file directory
+  input->name = g_path_get_basename (filename);
   input->directory = g_path_get_dirname (filename);
   file = g_file_new_for_path (input->directory);
 
@@ -1999,6 +2012,7 @@ input_save (char *filename)
   switch (input->algorithm)
     {
     case ALGORITHM_MONTE_CARLO:
+      xmlSetProp (node, XML_ALGORITHM, XML_MONTE_CARLO);
       snprintf (buffer, 64, "%u", input->nsimulations);
       xmlSetProp (node, XML_NSIMULATIONS, (xmlChar *) buffer);
       snprintf (buffer, 64, "%u", input->niterations);
@@ -2237,7 +2251,7 @@ window_run ()
       msg2 = g_strconcat (msg, line, NULL);
   fclose (file);
   gtk_widget_destroy (GTK_WIDGET (running->dialog));
-  show_message (gettext ("Best result"), msg2);
+  show_message (gettext ("Best result"), msg2, INFO_TYPE);
   g_free (msg2);
 }
 
@@ -2262,7 +2276,7 @@ window_help ()
                          "authors", authors,
                          "translator-credits",
                          "Javier Burguete Tolosa (jburguete@eead.csic.es)",
-                         "version", "1.1.16", "copyright",
+                         "version", "1.1.17", "copyright",
                          "Copyright 2012-2015 Javier Burguete Tolosa",
                          "logo", window->logo,
                          "website-label", gettext ("Website"),
@@ -2365,6 +2379,7 @@ window_update ()
       gtk_widget_show (GTK_WIDGET (window->check_template[i]));
       gtk_widget_show (GTK_WIDGET (window->button_template[i]));
       gtk_widget_set_sensitive (GTK_WIDGET (window->check_template[i]), 0);
+      gtk_widget_set_sensitive (GTK_WIDGET (window->button_template[i]), 1);
       g_signal_handler_block
         (window->check_template[i], window->id_template[i]);
       g_signal_handler_block (window->button_template[i], window->id_input[i]);
@@ -2376,12 +2391,22 @@ window_update ()
         (window->check_template[i], window->id_template[i]);
     }
   if (i > 0)
-    gtk_widget_set_sensitive (GTK_WIDGET (window->check_template[i - 1]), 1);
+    {
+      gtk_widget_set_sensitive (GTK_WIDGET (window->check_template[i - 1]), 1);
+      gtk_widget_set_sensitive
+        (GTK_WIDGET (window->button_template[i - 1]),
+         gtk_toggle_button_get_active
+         GTK_TOGGLE_BUTTON (window->check_template[i - 1]));
+    }
   if (i < MAX_NINPUTS)
     {
       gtk_widget_show (GTK_WIDGET (window->check_template[i]));
       gtk_widget_show (GTK_WIDGET (window->button_template[i]));
       gtk_widget_set_sensitive (GTK_WIDGET (window->check_template[i]), 1);
+      gtk_widget_set_sensitive
+        (GTK_WIDGET (window->button_template[i]),
+         gtk_toggle_button_get_active
+         GTK_TOGGLE_BUTTON (window->check_template[i]));
       g_signal_handler_block
         (window->check_template[i], window->id_template[i]);
       g_signal_handler_block (window->button_template[i], window->id_input[i]);
@@ -3086,49 +3111,63 @@ window_new (GtkApplication * application)
   gtk_window_set_title (window->window, PROGRAM_INTERFACE);
 
   // Creating the open button
-  window->button_open
-    = (GtkButton *) gtk_button_new_with_mnemonic (gettext ("_Open"));
+  window->button_open = (GtkToolButton *)
+    gtk_tool_button_new (gtk_image_new_from_icon_name ("document-open",
+                                                       GTK_ICON_SIZE_LARGE_TOOLBAR),
+                         gettext ("Open"));
   g_signal_connect (window->button_open, "clicked", window_open, NULL);
 
   // Creating the save button
-  window->button_save
-    = (GtkButton *) gtk_button_new_with_mnemonic (gettext ("_Save"));
+  window->button_save = (GtkToolButton *)
+    gtk_tool_button_new (gtk_image_new_from_icon_name ("document-save",
+                                                       GTK_ICON_SIZE_LARGE_TOOLBAR),
+                         gettext ("Save"));
   g_signal_connect (window->button_save, "clicked", window_save, NULL);
 
   // Creating the run button
-  window->button_run
-    = (GtkButton *) gtk_button_new_with_mnemonic (gettext ("_Run"));
+  window->button_run = (GtkToolButton *)
+    gtk_tool_button_new (gtk_image_new_from_icon_name ("system-run",
+                                                       GTK_ICON_SIZE_LARGE_TOOLBAR),
+                         gettext ("Run"));
   g_signal_connect (window->button_run, "clicked", window_run, NULL);
 
   // Creating the options button
-  window->button_options
-    = (GtkButton *) gtk_button_new_with_mnemonic (gettext ("_Options"));
+  window->button_options = (GtkToolButton *)
+    gtk_tool_button_new (gtk_image_new_from_icon_name ("preferences-system",
+                                                       GTK_ICON_SIZE_LARGE_TOOLBAR),
+                         gettext ("Options"));
   g_signal_connect (window->button_options, "clicked", options_new, NULL);
 
   // Creating the help button
-  window->button_help
-    = (GtkButton *) gtk_button_new_with_mnemonic (gettext ("_Help"));
+  window->button_help = (GtkToolButton *)
+    gtk_tool_button_new (gtk_image_new_from_icon_name ("help-about",
+                                                       GTK_ICON_SIZE_LARGE_TOOLBAR),
+                         gettext ("Help"));
   g_signal_connect (window->button_help, "clicked", window_help, NULL);
 
   // Creating the exit button
-  window->button_exit
-    = (GtkButton *) gtk_button_new_with_mnemonic (gettext ("E_xit"));
+  window->button_exit = (GtkToolButton *)
+    gtk_tool_button_new (gtk_image_new_from_icon_name ("application-exit",
+                                                       GTK_ICON_SIZE_LARGE_TOOLBAR),
+                         gettext ("Exit"));
   g_signal_connect_swapped (window->button_exit, "clicked",
                             (void (*)) gtk_widget_destroy, window->window);
 
-  window->grid_buttons = (GtkGrid *) gtk_grid_new ();
-  gtk_grid_attach (window->grid_buttons, GTK_WIDGET (window->button_open),
-                   0, 0, 1, 1);
-  gtk_grid_attach (window->grid_buttons, GTK_WIDGET (window->button_save),
-                   1, 0, 1, 1);
-  gtk_grid_attach (window->grid_buttons, GTK_WIDGET (window->button_run),
-                   2, 0, 1, 1);
-  gtk_grid_attach (window->grid_buttons, GTK_WIDGET (window->button_options),
-                   3, 0, 1, 1);
-  gtk_grid_attach (window->grid_buttons, GTK_WIDGET (window->button_help),
-                   4, 0, 1, 1);
-  gtk_grid_attach (window->grid_buttons, GTK_WIDGET (window->button_exit),
-                   5, 0, 1, 1);
+  // Creating the buttons bar
+  window->bar_buttons = (GtkToolbar *) gtk_toolbar_new ();
+  gtk_toolbar_insert
+    (window->bar_buttons, GTK_TOOL_ITEM (window->button_open), 0);
+  gtk_toolbar_insert
+    (window->bar_buttons, GTK_TOOL_ITEM (window->button_save), 1);
+  gtk_toolbar_insert
+    (window->bar_buttons, GTK_TOOL_ITEM (window->button_run), 2);
+  gtk_toolbar_insert
+    (window->bar_buttons, GTK_TOOL_ITEM (window->button_options), 3);
+  gtk_toolbar_insert
+    (window->bar_buttons, GTK_TOOL_ITEM (window->button_help), 4);
+  gtk_toolbar_insert
+    (window->bar_buttons, GTK_TOOL_ITEM (window->button_exit), 5);
+  gtk_toolbar_set_style (window->bar_buttons, GTK_TOOLBAR_BOTH);
 
   // Creating the simulator program label and entry
   window->label_simulator
@@ -3466,7 +3505,7 @@ window_new (GtkApplication * application)
 
   // Creating the grid and attaching the widgets to the grid
   window->grid = (GtkGrid *) gtk_grid_new ();
-  gtk_grid_attach (window->grid, GTK_WIDGET (window->grid_buttons), 0, 0, 6, 1);
+  gtk_grid_attach (window->grid, GTK_WIDGET (window->bar_buttons), 0, 0, 6, 1);
   gtk_grid_attach (window->grid,
                    GTK_WIDGET (window->label_simulator), 0, 1, 1, 1);
   gtk_grid_attach (window->grid,
