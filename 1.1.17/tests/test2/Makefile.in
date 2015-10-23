@@ -1,0 +1,15 @@
+CFLAGS = -Wall -O3 @CPPFLAGS@ @GSL_CFLAGS@ @XML_CFLAGS@ @GLIB_CFLAGS@ \
+	@GTHREAD_CFLAGS@
+LIBS = @LDFLAGS@ @LIBS@ @GSL_LIBS@ @XML_LIBS@ @GLIB_LIBS@ @GTHREAD_LIBS@
+OBJS = ../../genetic/genetic.o ../../genetic/evolution.o \
+	../../genetic/selection.o ../../genetic/reproduction.o \
+	../../genetic/population.o ../../genetic/entity.o
+CC = @CC@ @ARCH@ @LTO@ @STD@ @MPI_DEFINE@ #-pg 
+
+all: simulator evaluator
+
+simulator: simulator.c Makefile
+	$(CC) $(CFLAGS) simulator.c $(OBJS) $(LIBS) -o simulator
+
+evaluator: evaluator.c Makefile
+	$(CC) $(CFLAGS) evaluator.c $(OBJS) $(LIBS) -o evaluator

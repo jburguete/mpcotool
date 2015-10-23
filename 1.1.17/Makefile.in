@@ -10,8 +10,15 @@ OBJ = genetic/entity.o genetic/population.o genetic/reproduction.o \
 DEP = Makefile
 ES = locales/es/LC_MESSAGES/
 FR = locales/fr/LC_MESSAGES/
+T1 = tests/test1/
+T2 = tests/test2/
+T3 = tests/test3/
+T4 = tests/test4/
+TESTS = $(T1)simulator $(T1)evaluator $(T2)simulator $(T2)evaluator \
+	$(T3)simulator $(T3)evaluator $(T4)simulator
 
-all: calibrator calibrator_gui $(ES)calibrator_gui.mo $(FR)calibrator_gui.mo
+all: calibrator calibrator_gui $(ES)calibrator_gui.mo $(FR)calibrator_gui.mo \
+	$(TESTS)
 
 genetic/entity.o: genetic/entity.c genetic/entity.h $(DEP)
 	$(CC) $(CFLAGS) -c genetic/entity.c -o genetic/entity.o
@@ -70,6 +77,27 @@ $(FR)calibrator_gui.po: locales/calibrator_gui.pot
 
 $(FR)calibrator_gui.mo: $(FR)calibrator_gui.po locales/calibrator_gui.pot
 	msgfmt -c -v -o $(FR)calibrator_gui.mo $(FR)calibrator_gui.po
+
+$(T1)simulator: $(T1)simulator.c $(T1)Makefile
+	cd $(T1); make
+
+$(T1)evaluator: $(T1)evaluator.c $(T1)Makefile
+	cd $(T1); make
+
+$(T2)simulator: $(T2)simulator.c $(T2)Makefile
+	cd $(T2); make
+
+$(T2)evaluator: $(T2)evaluator.c $(T2)Makefile
+	cd $(T2); make
+
+$(T3)simulator: $(T3)simulator.c $(T3)Makefile
+	cd $(T3); make
+
+$(T3)evaluator: $(T3)evaluator.c $(T3)Makefile
+	cd $(T3); make
+
+$(T4)simulator: $(T4)simulator.c $(T4)Makefile
+	cd $(T4); make
 
 doc: calibrator.c config.h README.md $(DEP)
 	doxygen

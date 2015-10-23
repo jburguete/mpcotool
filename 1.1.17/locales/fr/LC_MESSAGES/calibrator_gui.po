@@ -203,7 +203,7 @@ msgstr "Enregistrer"
 
 #: calibrator.c:3131
 msgid "Run"
-msgstr "Procéder"
+msgstr "Commencer"
 
 #: calibrator.c:3145
 msgid "Help"
