@@ -1,24 +1,27 @@
 AC_PREREQ([2.67])
-AC_INIT([calibrator], [1.1.17], [https://github.com/jburguete/calibrator])
+AC_INIT([calibrator], [1.1.18], [https://github.com/jburguete/calibrator])
 
 # Checks for operative systems
 AC_CANONICAL_SYSTEM
 AM_INIT_AUTOMAKE
 AC_MSG_NOTICE([Build: $build])
 AC_MSG_NOTICE([Host: $host])
-if test $host = "x86_64-w64-mingw32"; then
-	AC_MSG_NOTICE([Microsoft Windows 64 bits])
-	CPPFLAGS="$CPPFLAGS -I/mingw/include"
-	AC_SUBST(PREFIX, "/mingw")
-elif test $host = "x86_64-pc-mingw64"; then
+win=0
+if test $host = "x86_64-pc-mingw64"; then
 	AC_MSG_NOTICE([Microsoft Windows 64 bits])
 	AC_SUBST(PREFIX, "/mingw64")
+	AC_SUBST(ICON, "logo.o")
+	win=1
 elif test $host = "x86_64-pc-mingw32"; then
 	AC_MSG_NOTICE([Microsoft Windows 32 bits])
 	AC_SUBST(PREFIX, "/mingw32")
+	AC_SUBST(ICON, "logo.o")
+	win=1
 elif test $host = "i686-pc-mingw32"; then
 	AC_MSG_NOTICE([Microsoft Windows 32 bits])
 	AC_SUBST(PREFIX, "/mingw32")
+	AC_SUBST(ICON, "logo.o")
+	win=1
 elif test `uname -s` = "NetBSD"; then
 	AC_MSG_NOTICE([NetBSD])
 	AC_SUBST(PREFIX,"/usr/pkg")
@@ -40,6 +43,9 @@ AC_MSG_NOTICE([Compiler: $CC])
 AC_PROG_MAKE_SET
 AC_LANG([C])
 PKG_PROG_PKG_CONFIG
+if test $win = 1; then
+	AC_CHECK_TOOL(WINDRES, windres)
+fi
 
 # Checking MPI
 if test $CC = "mpicc"; then

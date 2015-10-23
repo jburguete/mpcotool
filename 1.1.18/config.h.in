@@ -62,6 +62,17 @@ OF SUCH DAMAGE.
 #define DEFAULT_PRECISION (NPRECISIONS - 1)
 #define DEFAULT_RANDOM_SEED 7007
 
+// Interface labels
+
+/**
+ * \def LOCALE_DIR
+ * \brief Locales directory.
+ * \def PROGRAM_INTERFACE
+ * \brief Name of the interface program.
+ */
+#define LOCALE_DIR "locales"
+#define PROGRAM_INTERFACE "calibrator"
+
 // XML labels
 
 /**
@@ -171,16 +182,5 @@ OF SUCH DAMAGE.
 #define XML_TOLERANCE (const xmlChar*)"tolerance"
 #define XML_VARIABLE (const xmlChar*)"variable"
 #define XML_WEIGHT (const xmlChar*)"weight"
-
-// Interface labels
-
-/**
- * \def LOCALE_DIR
- * \brief Locales directory.
- * \def PROGRAM_INTERFACE
- * \brief Name of the interface program.
- */
-#define LOCALE_DIR "locales"
-#define PROGRAM_INTERFACE "calibrator_gui"
 
 #endif

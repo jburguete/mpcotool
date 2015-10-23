@@ -2232,11 +2232,10 @@ window_run ()
   while (gtk_events_pending ())
     gtk_main_iteration_do (FALSE);
   dir = g_get_current_dir ();
-  program = g_build_filename (dir, "calibrator", NULL);
+  program = g_build_filename (dir, "calibratorbin", NULL);
   snprintf
     (buffer, 1024, "cd %s; %s -nthreads %d %s", input->directory, program,
      nthreads, input->name);
-  printf ("%s\n", buffer);
   system (buffer);
   g_free (program);
   g_free (dir);
@@ -2276,7 +2275,7 @@ window_help ()
                          "authors", authors,
                          "translator-credits",
                          "Javier Burguete Tolosa (jburguete@eead.csic.es)",
-                         "version", "1.1.17", "copyright",
+                         "version", "1.1.18", "copyright",
                          "Copyright 2012-2015 Javier Burguete Tolosa",
                          "logo", window->logo,
                          "website-label", gettext ("Website"),

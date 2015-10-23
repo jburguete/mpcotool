@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 1.1.17\n"
+"Project-Id-Version: 1.1.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-23 08:48+0200\n"
+"POT-Creation-Date: 2015-10-24 01:30+0200\n"
 "PO-Revision-Date: 2015-10-20 18:47+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -145,15 +145,15 @@ msgstr "Variables de calibrage indéfinies"
 msgid "Processors number"
 msgstr "Numéro de processeurs"
 
-#: calibrator.c:2106 calibrator.c:3138
+#: calibrator.c:2106 calibrator.c:3137
 msgid "Options"
 msgstr "Options"
 
-#: calibrator.c:2109 calibrator.c:2155 calibrator.c:3081
+#: calibrator.c:2109 calibrator.c:2155 calibrator.c:3080
 msgid "_OK"
 msgstr "_Accepter"
 
-#: calibrator.c:2110 calibrator.c:2153 calibrator.c:3079
+#: calibrator.c:2110 calibrator.c:2153 calibrator.c:3078
 msgid "_Cancel"
 msgstr "_Annuler"
 
@@ -169,167 +169,167 @@ msgstr "En calculant"
 msgid "Save file"
 msgstr "Enregistrer fichier"
 
-#: calibrator.c:2254
+#: calibrator.c:2253
 msgid "Best result"
 msgstr "Meilleur résultat"
 
-#: calibrator.c:2275
+#: calibrator.c:2274
 msgid "A software to make calibrations of empirical parameters"
 msgstr "Un programme pour faire calibrages de paramètres empiriques"
 
-#: calibrator.c:2282
+#: calibrator.c:2281
 msgid "Website"
 msgstr "Page web"
 
-#: calibrator.c:3076
+#: calibrator.c:3075
 msgid "Open input file"
 msgstr "Ouvrir fichier d'entrée"
 
-#: calibrator.c:3104
+#: calibrator.c:3103
 msgid "_Sweep"
 msgstr "_Balayage"
 
-#: calibrator.c:3104
+#: calibrator.c:3103
 msgid "_Genetic"
 msgstr "_Génétique"
 
-#: calibrator.c:3117
+#: calibrator.c:3116
 msgid "Open"
 msgstr "Ouvrir"
 
-#: calibrator.c:3124
+#: calibrator.c:3123
 msgid "Save"
 msgstr "Enregistrer"
 
-#: calibrator.c:3131
+#: calibrator.c:3130
 msgid "Run"
 msgstr "Commencer"
 
-#: calibrator.c:3145
+#: calibrator.c:3144
 msgid "Help"
 msgstr "Aide"
 
-#: calibrator.c:3152
+#: calibrator.c:3151
 msgid "Exit"
 msgstr "Quitter"
 
-#: calibrator.c:3174 calibrator.c:3177
+#: calibrator.c:3173 calibrator.c:3176
 msgid "Simulator program"
 msgstr "Programme simulateur"
 
-#: calibrator.c:3182
+#: calibrator.c:3181
 msgid "_Evaluator program"
 msgstr "_Programme évaluateur"
 
-#: calibrator.c:3185
+#: calibrator.c:3184
 msgid "Evaluator program"
 msgstr "Programme évaluateur"
 
-#: calibrator.c:3190
+#: calibrator.c:3189
 msgid "Simulations number"
 msgstr "Numérdo de simulations"
 
-#: calibrator.c:3194
+#: calibrator.c:3193
 msgid "Iterations number"
 msgstr "Numéro d'iterations"
 
-#: calibrator.c:3197
+#: calibrator.c:3196
 msgid "Tolerance"
 msgstr "Tolérance"
 
-#: calibrator.c:3200
+#: calibrator.c:3199
 msgid "Bests number"
 msgstr "Numéro des meilleurs"
 
-#: calibrator.c:3204
+#: calibrator.c:3203
 msgid "Population number"
 msgstr "Numéro de population"
 
-#: calibrator.c:3208
+#: calibrator.c:3207
 msgid "Generations number"
 msgstr "Numéro de générations"
 
-#: calibrator.c:3212
+#: calibrator.c:3211
 msgid "Mutation ratio"
 msgstr "Ratio de mutation"
 
-#: calibrator.c:3216
+#: calibrator.c:3215
 msgid "Reproduction ratio"
 msgstr "Ratio de reproduction"
 
-#: calibrator.c:3220
+#: calibrator.c:3219
 msgid "Adaptation ratio"
 msgstr "Ratio d'adaptation"
 
-#: calibrator.c:3295
+#: calibrator.c:3294
 msgid "Algorithm"
 msgstr "Algorithme"
 
-#: calibrator.c:3310
+#: calibrator.c:3309
 msgid "Add variable"
 msgstr "Ajouter variable"
 
-#: calibrator.c:3318
+#: calibrator.c:3317
 msgid "Remove variable"
 msgstr "Éraser variable"
 
-#: calibrator.c:3319 calibrator.c:3454
+#: calibrator.c:3318 calibrator.c:3453
 msgid "Name"
 msgstr "Nom"
 
-#: calibrator.c:3323
+#: calibrator.c:3322
 msgid "Minimum"
 msgstr "Minimum"
 
-#: calibrator.c:3334
+#: calibrator.c:3333
 msgid "Maximum"
 msgstr "Maximum"
 
-#: calibrator.c:3347
+#: calibrator.c:3346
 msgid "_Absolute minimum"
 msgstr "_Mimumum absolu"
 
-#: calibrator.c:3362
+#: calibrator.c:3361
 msgid "_Absolute maximum"
 msgstr "_Maximum absolu"
 
-#: calibrator.c:3376
+#: calibrator.c:3375
 msgid "Precision digits"
 msgstr "Chiffres de precision"
 
-#: calibrator.c:3383
+#: calibrator.c:3382
 msgid "Sweeps number"
 msgstr "Numéro de balayages"
 
-#: calibrator.c:3388
+#: calibrator.c:3387
 msgid "Bits number"
 msgstr "Numéro de bits"
 
-#: calibrator.c:3432
+#: calibrator.c:3431
 msgid "Variable"
 msgstr "Variable"
 
-#: calibrator.c:3446
+#: calibrator.c:3445
 msgid "Add experiment"
 msgstr "Ajouter expérience"
 
-#: calibrator.c:3453
+#: calibrator.c:3452
 msgid "Remove experiment"
 msgstr "Éraser expérience"
 
-#: calibrator.c:3456
+#: calibrator.c:3455
 msgid "Experimental data file"
 msgstr "Fichier de données expérimentales"
 
-#: calibrator.c:3461
+#: calibrator.c:3460
 msgid "Weight"
 msgstr "Poids"
 
-#: calibrator.c:3491
+#: calibrator.c:3490
 msgid "Input template"
 msgstr "Modèle d'entrée"
 
-#: calibrator.c:3502
+#: calibrator.c:3501
 msgid "Experiment"
 msgstr "Expérience"
 
