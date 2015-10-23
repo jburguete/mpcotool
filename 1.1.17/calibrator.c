@@ -3111,45 +3111,45 @@ window_new (GtkApplication * application)
   gtk_window_set_title (window->window, PROGRAM_INTERFACE);
 
   // Creating the open button
-  window->button_open = (GtkToolButton *)
-    gtk_tool_button_new (gtk_image_new_from_icon_name ("document-open",
-                                                       GTK_ICON_SIZE_LARGE_TOOLBAR),
-                         gettext ("Open"));
+  window->button_open = (GtkToolButton *) gtk_tool_button_new
+    (gtk_image_new_from_icon_name ("document-open",
+                                   GTK_ICON_SIZE_LARGE_TOOLBAR),
+     gettext ("Open"));
   g_signal_connect (window->button_open, "clicked", window_open, NULL);
 
   // Creating the save button
-  window->button_save = (GtkToolButton *)
-    gtk_tool_button_new (gtk_image_new_from_icon_name ("document-save",
-                                                       GTK_ICON_SIZE_LARGE_TOOLBAR),
-                         gettext ("Save"));
+  window->button_save = (GtkToolButton *) gtk_tool_button_new
+    (gtk_image_new_from_icon_name ("document-save",
+                                   GTK_ICON_SIZE_LARGE_TOOLBAR),
+     gettext ("Save"));
   g_signal_connect (window->button_save, "clicked", window_save, NULL);
 
   // Creating the run button
-  window->button_run = (GtkToolButton *)
-    gtk_tool_button_new (gtk_image_new_from_icon_name ("system-run",
-                                                       GTK_ICON_SIZE_LARGE_TOOLBAR),
-                         gettext ("Run"));
+  window->button_run = (GtkToolButton *) gtk_tool_button_new
+    (gtk_image_new_from_icon_name ("system-run",
+                                   GTK_ICON_SIZE_LARGE_TOOLBAR),
+     gettext ("Run"));
   g_signal_connect (window->button_run, "clicked", window_run, NULL);
 
   // Creating the options button
-  window->button_options = (GtkToolButton *)
-    gtk_tool_button_new (gtk_image_new_from_icon_name ("preferences-system",
-                                                       GTK_ICON_SIZE_LARGE_TOOLBAR),
-                         gettext ("Options"));
+  window->button_options = (GtkToolButton *) gtk_tool_button_new
+    (gtk_image_new_from_icon_name ("preferences-system",
+                                   GTK_ICON_SIZE_LARGE_TOOLBAR),
+     gettext ("Options"));
   g_signal_connect (window->button_options, "clicked", options_new, NULL);
 
   // Creating the help button
-  window->button_help = (GtkToolButton *)
-    gtk_tool_button_new (gtk_image_new_from_icon_name ("help-about",
-                                                       GTK_ICON_SIZE_LARGE_TOOLBAR),
-                         gettext ("Help"));
+  window->button_help = (GtkToolButton *) gtk_tool_button_new
+    (gtk_image_new_from_icon_name ("help-about",
+                                   GTK_ICON_SIZE_LARGE_TOOLBAR),
+     gettext ("Help"));
   g_signal_connect (window->button_help, "clicked", window_help, NULL);
 
   // Creating the exit button
-  window->button_exit = (GtkToolButton *)
-    gtk_tool_button_new (gtk_image_new_from_icon_name ("application-exit",
-                                                       GTK_ICON_SIZE_LARGE_TOOLBAR),
-                         gettext ("Exit"));
+  window->button_exit = (GtkToolButton *) gtk_tool_button_new
+    (gtk_image_new_from_icon_name ("application-exit",
+                                   GTK_ICON_SIZE_LARGE_TOOLBAR),
+     gettext ("Exit"));
   g_signal_connect_swapped (window->button_exit, "clicked",
                             (void (*)) gtk_widget_destroy, window->window);
 
