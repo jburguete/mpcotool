@@ -248,10 +248,10 @@ typedef struct
      * \brief Bits number GtkSpinButton.
      * \var entry_weight
      * \brief Weight GtkSpinButton.
+     * \var bar_buttons
+     * \brief GtkToolbar to store the main buttons.
      * \var grid
      * \brief Main GtkGrid.
-     * \var grid_buttons
-     * \brief GtkGrid to store the main buttons.
      * \var grid_algorithm
      * \brief GtkGrid to set the algorithm.
      * \var grid_variable
