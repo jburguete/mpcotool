@@ -1040,7 +1040,7 @@ calibrate_parse (unsigned int simulation, unsigned int experiment)
   unsigned int i;
   double e;
   char buffer[512], input[MAX_NINPUTS][32], output[32], result[32], *buffer2,
-    *buffer3;
+    *buffer3, *buffer4;
   FILE *file_result;
 
 #if DEBUG
@@ -1067,15 +1067,13 @@ calibrate_parse (unsigned int simulation, unsigned int experiment)
 
   // Performing the simulation
   snprintf (output, 32, "output-%u-%u", simulation, experiment);
-  buffer2 = g_path_get_dirname (calibrate->simulator),
-    buffer3 = g_path_get_basename (calibrate->simulator),
-    snprintf (buffer, 512, "%s/%s %s %s %s %s %s %s %s %s %s",
-              buffer2,
-              buffer3,
-              input[0],
-              input[1],
-              input[2],
-              input[3], input[4], input[5], input[6], input[7], output);
+  buffer2 = g_path_get_dirname (calibrate->simulator);
+  buffer3 = g_path_get_basename (calibrate->simulator);
+  buffer4 = g_build_filename (buffer2, buffer3, NULL);
+  snprintf (buffer, 512, "%s %s %s %s %s %s %s %s %s %s",
+            buffer4, input[0], input[1], input[2], input[3], input[4], input[5],
+            input[6], input[7], output);
+  g_free (buffer4);
   g_free (buffer3);
   g_free (buffer2);
 #if DEBUG
@@ -1087,11 +1085,12 @@ calibrate_parse (unsigned int simulation, unsigned int experiment)
   if (calibrate->evaluator)
     {
       snprintf (result, 32, "result-%u-%u", simulation, experiment);
-      buffer2 = g_path_get_dirname (calibrate->evaluator),
-        buffer3 = g_path_get_basename (calibrate->evaluator),
-        snprintf (buffer, 512, "%s/%s %s %s %s",
-                  buffer2,
-                  buffer3, output, calibrate->experiment[experiment], result);
+      buffer2 = g_path_get_dirname (calibrate->evaluator);
+      buffer3 = g_path_get_basename (calibrate->evaluator);
+      buffer4 = g_build_filename (buffer2, buffer3, NULL);
+      snprintf (buffer, 512, "%s %s %s %s",
+                buffer4, output, calibrate->experiment[experiment], result);
+      g_free (buffer4);
       g_free (buffer3);
       g_free (buffer2);
 #if DEBUG
@@ -1705,9 +1704,8 @@ calibrate_refine ()
             {
               calibrate->rangemin[j] = fmin (calibrate->rangemin[j],
                                              calibrate->value_old[i *
-                                                                  calibrate->
-                                                                  nvariables +
-                                                                  j]);
+                                                                  calibrate->nvariables
+                                                                  + j]);
               calibrate->rangemax[j] =
                 fmax (calibrate->rangemax[j],
                       calibrate->value_old[i * calibrate->nvariables + j]);
