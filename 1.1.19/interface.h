@@ -276,6 +276,8 @@ typedef struct
      * \brief Absolute maximum GtkScrolledWindow.
      * \var window
      * \brief Main GtkWindow.
+	 * \var application
+	 * \brief Main GtkApplication.
 	 * \var experiment
 	 * \brief Array of experiments data.
 	 * \var variable
@@ -325,6 +327,7 @@ typedef struct
   GtkScrolledWindow *scrolled_min, *scrolled_max, *scrolled_minabs,
     *scrolled_maxabs;
   GtkWindow *window;
+  GtkApplication *application;
   Experiment *experiment;
   Variable *variable;
   gulong id_experiment, id_experiment_name, id_variable, id_variable_label,
@@ -359,9 +362,9 @@ void window_rangemax_variable ();
 void window_rangeminabs_variable ();
 void window_rangemaxabs_variable ();
 void window_update_variable ();
-void window_read (char *filename);
+int window_read (char *filename);
 void window_open ();
-void window_new (GtkApplication * application);
+void window_new ();
 int cores_number ();
 
 #endif

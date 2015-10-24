@@ -596,8 +596,9 @@ input_open (char *filename)
       i += input->adaptation_ratio * input->nsimulations;
       if (i > input->nsimulations - 2)
         {
-          show_error (gettext
-                      ("No enough survival entities to reproduce the population"));
+          show_error
+            (gettext
+             ("No enough survival entities to reproduce the population"));
           return 0;
         }
     }
@@ -2275,7 +2276,7 @@ window_help ()
                          "authors", authors,
                          "translator-credits",
                          "Javier Burguete Tolosa (jburguete@eead.csic.es)",
-                         "version", "1.1.18", "copyright",
+                         "version", "1.1.19", "copyright",
                          "Copyright 2012-2015 Javier Burguete Tolosa",
                          "logo", window->logo,
                          "website-label", gettext ("Website"),
@@ -2989,18 +2990,20 @@ window_update_variable ()
 }
 
 /**
- * \fn void window_read (char *filename)
+ * \fn int window_read (char *filename)
  * \brief Function to read the input data of a file.
  * \param filename
  * \brief File name.
+ * \return 1 on succes, 0 on error.
  */
-void
+int
 window_read (char *filename)
 {
   unsigned int i;
   char *buffer;
   input_free ();
-  input_open (filename);
+  if (!input_open (filename))
+    return 0;
   buffer = g_build_filename (input->directory, input->simulator, NULL);
   gtk_file_chooser_set_filename (GTK_FILE_CHOOSER
                                  (window->button_simulator), buffer);
@@ -3060,6 +3063,7 @@ window_read (char *filename)
   gtk_combo_box_set_active (GTK_COMBO_BOX (window->combo_variable), 0);
   window_set_variable ();
   window_update ();
+  return 1;
 }
 
 /**
@@ -3075,26 +3079,24 @@ window_open ()
     gtk_file_chooser_dialog_new (gettext ("Open input file"),
                                  window->window,
                                  GTK_FILE_CHOOSER_ACTION_OPEN,
-                                 gettext ("_Cancel"),
-                                 GTK_RESPONSE_CANCEL,
+                                 gettext ("_Cancel"), GTK_RESPONSE_CANCEL,
                                  gettext ("_OK"), GTK_RESPONSE_OK, NULL);
   if (gtk_dialog_run (GTK_DIALOG (dlg)) == GTK_RESPONSE_OK)
     {
       buffer = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dlg));
-      window_read (buffer);
+      if (!window_read (buffer))
+        g_application_quit (G_APPLICATION (window->application));
       g_free (buffer);
     }
   gtk_widget_destroy (GTK_WIDGET (dlg));
 }
 
 /**
- * \fn void window_new(GtkApplication *application)
+ * \fn void window_new()
  * \brief Function to open the main window.
- * \param application
- * \brief Main GtkApplication.
  */
 void
-window_new (GtkApplication * application)
+window_new ()
 {
   unsigned int i;
   char *buffer, *buffer2;
@@ -3104,7 +3106,8 @@ window_new (GtkApplication * application)
   };
 
   // Creating the window
-  window->window = (GtkWindow *) gtk_application_window_new (application);
+  window->window
+    = (GtkWindow *) gtk_application_window_new (window->application);
 
   // Setting the window title
   gtk_window_set_title (window->window, PROGRAM_INTERFACE);
@@ -3570,7 +3573,6 @@ main (int argn, char **argc)
 #if HAVE_GTK
   int status;
   char *buffer;
-  GtkApplication *application;
   nthreads = cores_number ();
   xmlKeepBlanksDefault (0);
   setlocale (LC_ALL, "");
@@ -3581,11 +3583,11 @@ main (int argn, char **argc)
   bind_textdomain_codeset (PROGRAM_INTERFACE, "UTF-8");
   textdomain (PROGRAM_INTERFACE);
   gtk_disable_setlocale ();
-  application =
+  window->application =
     gtk_application_new ("git.jburguete.calibrator", G_APPLICATION_FLAGS_NONE);
-  g_signal_connect (application, "activate", (void (*)) window_new, NULL);
-  status = g_application_run (G_APPLICATION (application), argn, argc);
-  g_object_unref (application);
+  g_signal_connect (window->application, "activate", window_new, NULL);
+  status = g_application_run (G_APPLICATION (window->application), argn, argc);
+  g_object_unref (window->application);
   return status;
 #else
 #if HAVE_MPI
