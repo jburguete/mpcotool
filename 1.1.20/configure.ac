@@ -1,5 +1,5 @@
 AC_PREREQ([2.67])
-AC_INIT([calibrator], [1.1.19], [https://github.com/jburguete/calibrator])
+AC_INIT([calibrator], [1.1.20], [https://github.com/jburguete/calibrator])
 
 # Checks for operative systems
 AC_CANONICAL_SYSTEM
@@ -67,6 +67,11 @@ else
 fi
 	
 # Checks for libraries
+if test -d "genetic"; then
+	AC_MSG_NOTICE([genetic library installed])
+else
+	AC_MSG_ERROR([genetic library not installed])
+fi
 AC_SEARCH_LIBS([sqrt], [m])
 PKG_CHECK_MODULES([GSL], [gsl])
 PKG_CHECK_MODULES([XML], [libxml-2.0])

@@ -49,7 +49,7 @@ calibratorbin: calibrator.c calibrator.h $(OBJ) config.h
 	$(CC) $(CFLAGS) calibrator.c $(OBJ) $(LDFLAGS) -o calibratorbin
 
 calibrator: calibrator.c interface.h calibrator.h $(OBJ) config.h
-	$(CC) $(CFLAGS) @GTK_CFLAGS@ calibrator.c $(LDFLAGS) @GTK_LIBS@ \
+	$(CC) $(CFLAGS) @GTK_CFLAGS@ calibrator.c $(OBJ) $(LDFLAGS) @GTK_LIBS@ \
 		-o calibrator -DHAVE_GTK=1
 
 locales/calibrator.pot: calibrator

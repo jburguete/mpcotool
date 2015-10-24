@@ -250,6 +250,7 @@ void input_free ();
 void calibrate_input (unsigned int simulation, char *input,
                       GMappedFile * template);
 double calibrate_parse (unsigned int simulation, unsigned int experiment);
+void calibrate_print ();
 void calibrate_best_thread (unsigned int simulation, double value);
 void calibrate_best_sequential (unsigned int simulation, double value);
 void *calibrate_thread (ParallelData * data);
@@ -263,11 +264,10 @@ void calibrate_sweep ();
 void calibrate_MonteCarlo ();
 double calibrate_genetic_objective (Entity * entity);
 void calibrate_genetic ();
-void calibrate_print ();
 void calibrate_save_old ();
 void calibrate_merge_old ();
 void calibrate_refine ();
 void calibrate_iterate ();
-int calibrate_new (char *filename);
+void calibrate_new ();
 
 #endif

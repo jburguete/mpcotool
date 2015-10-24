@@ -1039,7 +1039,8 @@ calibrate_parse (unsigned int simulation, unsigned int experiment)
 {
   unsigned int i;
   double e;
-  char buffer[512], input[MAX_NINPUTS][32], output[32], result[32];
+  char buffer[512], input[MAX_NINPUTS][32], output[32], result[32], *buffer2,
+    *buffer3;
   FILE *file_result;
 
 #if DEBUG
@@ -1066,10 +1067,17 @@ calibrate_parse (unsigned int simulation, unsigned int experiment)
 
   // Performing the simulation
   snprintf (output, 32, "output-%u-%u", simulation, experiment);
-  snprintf (buffer, 512, "./%s %s %s %s %s %s %s %s %s %s",
-            calibrate->simulator,
-            &input[0][0], &input[1][0], &input[2][0], &input[3][0],
-            &input[4][0], &input[5][0], &input[6][0], &input[7][0], output);
+  buffer2 = g_path_get_dirname (calibrate->simulator),
+    buffer3 = g_path_get_basename (calibrate->simulator),
+    snprintf (buffer, 512, "%s/%s %s %s %s %s %s %s %s %s %s",
+              buffer2,
+              buffer3,
+              input[0],
+              input[1],
+              input[2],
+              input[3], input[4], input[5], input[6], input[7], output);
+  g_free (buffer3);
+  g_free (buffer2);
 #if DEBUG
   fprintf (stderr, "calibrate_parse: %s\n", buffer);
 #endif
@@ -1079,8 +1087,13 @@ calibrate_parse (unsigned int simulation, unsigned int experiment)
   if (calibrate->evaluator)
     {
       snprintf (result, 32, "result-%u-%u", simulation, experiment);
-      snprintf (buffer, 512, "./%s %s %s %s", calibrate->evaluator, output,
-                calibrate->experiment[experiment], result);
+      buffer2 = g_path_get_dirname (calibrate->evaluator),
+        buffer3 = g_path_get_basename (calibrate->evaluator),
+        snprintf (buffer, 512, "%s/%s %s %s %s",
+                  buffer2,
+                  buffer3, output, calibrate->experiment[experiment], result);
+      g_free (buffer3);
+      g_free (buffer2);
 #if DEBUG
       fprintf (stderr, "calibrate_parse: %s\n", buffer);
 #endif
@@ -1117,6 +1130,36 @@ calibrate_parse (unsigned int simulation, unsigned int experiment)
 
   // Returning the objective function
   return e * calibrate->weight[experiment];
+}
+
+/**
+ * \fn void calibrate_print()
+ * \brief Function to print the results.
+ */
+void
+calibrate_print ()
+{
+  unsigned int i;
+  char buffer[512];
+#if HAVE_MPI
+  if (!calibrate->mpi_rank)
+    {
+#endif
+      printf ("THE BEST IS\n");
+      fprintf (calibrate->result, "THE BEST IS\n");
+      printf ("error=%.15le\n", calibrate->error_old[0]);
+      fprintf (calibrate->result, "error=%.15le\n", calibrate->error_old[0]);
+      for (i = 0; i < calibrate->nvariables; ++i)
+        {
+          snprintf (buffer, 512, "%s=%s\n",
+                    calibrate->label[i], format[calibrate->precision[i]]);
+          printf (buffer, calibrate->value_old[i]);
+          fprintf (calibrate->result, buffer, calibrate->value_old[i]);
+        }
+      fflush (calibrate->result);
+#if HAVE_MPI
+    }
+#endif
 }
 
 /**
@@ -1513,8 +1556,7 @@ calibrate_genetic_objective (Entity * entity)
 void
 calibrate_genetic ()
 {
-  unsigned int i;
-  char buffer[512], *best_genome;
+  char *best_genome;
   double best_objective, *best_variable;
 #if DEBUG
   fprintf (stderr, "calibrate_genetic: start\n");
@@ -1541,52 +1583,17 @@ calibrate_genetic ()
 #if DEBUG
   fprintf (stderr, "calibrate_genetic: the best\n");
 #endif
-  printf ("THE BEST IS\n");
-  fprintf (calibrate->result, "THE BEST IS\n");
-  printf ("error=%le\n", best_objective);
-  fprintf (calibrate->result, "error=%le\n", best_objective);
-  for (i = 0; i < calibrate->nvariables; ++i)
-    {
-      snprintf (buffer, 512, "%s=%s\n",
-                calibrate->label[i], format[calibrate->precision[i]]);
-      printf (buffer, best_variable[i]);
-      fprintf (calibrate->result, buffer, best_variable[i]);
-    }
-  fflush (calibrate->result);
+  calibrate->error_old = (double *) g_malloc (sizeof (double));
+  calibrate->value_old
+    = (double *) g_malloc (calibrate->nvariables * sizeof (double));
+  calibrate->error_old[0] = best_objective;
+  memcpy (calibrate->value_old, best_variable,
+          calibrate->nvariables * sizeof (double));
   g_free (best_genome);
   g_free (best_variable);
+  calibrate_print ();
 #if DEBUG
   fprintf (stderr, "calibrate_genetic: start\n");
-#endif
-}
-
-/**
- * \fn void calibrate_print()
- * \brief Function to print the results.
- */
-void
-calibrate_print ()
-{
-  unsigned int i;
-  char buffer[512];
-#if HAVE_MPI
-  if (!calibrate->mpi_rank)
-    {
-#endif
-      printf ("THE BEST IS\n");
-      fprintf (calibrate->result, "THE BEST IS\n");
-      printf ("error=%le\n", calibrate->error_old[0]);
-      fprintf (calibrate->result, "error=%le\n", calibrate->error_old[0]);
-      for (i = 0; i < calibrate->nvariables; ++i)
-        {
-          snprintf (buffer, 512, "%s=%s\n",
-                    calibrate->label[i], format[calibrate->precision[i]]);
-          printf (buffer, calibrate->value_old[i]);
-          fprintf (calibrate->result, buffer, calibrate->value_old[i]);
-        }
-      fflush (calibrate->result);
-#if HAVE_MPI
-    }
 #endif
 }
 
@@ -1698,8 +1705,9 @@ calibrate_refine ()
             {
               calibrate->rangemin[j] = fmin (calibrate->rangemin[j],
                                              calibrate->value_old[i *
-                                                                  calibrate->nvariables
-                                                                  + j]);
+                                                                  calibrate->
+                                                                  nvariables +
+                                                                  j]);
               calibrate->rangemax[j] =
                 fmax (calibrate->rangemax[j],
                       calibrate->value_old[i * calibrate->nvariables + j]);
@@ -1769,22 +1777,45 @@ calibrate_iterate ()
       calibrate_refine ();
       calibrate_print ();
     }
-  g_free (calibrate->error_old);
-  g_free (calibrate->value_old);
 #if DEBUG
   fprintf (stderr, "calibrate_iterate: end\n");
 #endif
 }
 
 /**
- * \fn int calibrate_new(char *filename)
- * \brief Function to open and perform a calibration.
- * \param filename
- * \brief Input data file name.
- * \return 1 on success, 0 on error.
+ * \fn void calibrate_free ()
+ * \brief Function to free the memory used by Calibrate struct.
  */
-int
-calibrate_new (char *filename)
+void
+calibrate_free ()
+{
+  unsigned int i, j;
+#if DEBUG
+  fprintf (stderr, "calibrate_free: start\n");
+#endif
+  input_free ();
+  for (i = 0; i < calibrate->nexperiments; ++i)
+    {
+      for (j = 0; j < calibrate->ninputs; ++j)
+        g_mapped_file_unref (calibrate->file[j][i]);
+    }
+  for (i = 0; i < calibrate->ninputs; ++i)
+    g_free (calibrate->file[i]);
+  g_free (calibrate->error_old);
+  g_free (calibrate->value_old);
+  g_free (calibrate->value);
+  g_free (calibrate->genetic_variable);
+#if DEBUG
+  fprintf (stderr, "calibrate_free: end\n");
+#endif
+}
+
+/**
+ * \fn void calibrate_new()
+ * \brief Function to open and perform a calibration.
+ */
+void
+calibrate_new ()
 {
   unsigned int i, j, *nbits;
 
@@ -1792,9 +1823,8 @@ calibrate_new (char *filename)
   fprintf (stderr, "calibrate_new: start\n");
 #endif
 
-  // Parsing the XML data file
-  if (!input_open (filename))
-    return 0;
+  // Replacing the working dir
+  chdir (input->directory);
 
   // Obtaining the simulator file
   calibrate->simulator = input->simulator;
@@ -1829,6 +1859,10 @@ calibrate_new (char *filename)
     (double *) alloca (calibrate->nbest * sizeof (double));
 
   // Reading the experimental data
+#if DEBUG
+  fprintf (stderr, "calibrate_new: current directory=%s\n",
+           g_get_current_dir ());
+#endif
   calibrate->nexperiments = input->nexperiments;
   calibrate->ninputs = input->ninputs;
   calibrate->experiment = input->experiment;
@@ -1860,6 +1894,9 @@ calibrate_new (char *filename)
     }
 
   // Reading the variables data
+#if DEBUG
+  fprintf (stderr, "calibrate_new: reading variables\n");
+#endif
   calibrate->nvariables = input->nvariables;
   calibrate->label = input->label;
   calibrate->rangemin = input->rangemin;
@@ -1885,6 +1922,10 @@ calibrate_new (char *filename)
       }
 
   // Allocating values
+#if DEBUG
+  fprintf (stderr, "calibrate_new: allocating variables\n");
+  fprintf (stderr, "calibrate_new: nvariables=%u\n", calibrate->nvariables);
+#endif
   calibrate->genetic_variable = NULL;
   if (calibrate->algorithm == ALGORITHM_GENETIC)
     {
@@ -1892,17 +1933,29 @@ calibrate_new (char *filename)
         g_malloc (calibrate->nvariables * sizeof (GeneticVariable));
       for (i = 0; i < calibrate->nvariables; ++i)
         {
-          calibrate->genetic_variable[i].maximum = calibrate->rangemax[i];
+#if DEBUG
+          fprintf (stderr, "calibrate_new: i=%u min=%lg max=%lg nbits=%u\n",
+                   i, calibrate->rangemin[i], calibrate->rangemax[i], nbits[i]);
+#endif
           calibrate->genetic_variable[i].minimum = calibrate->rangemin[i];
+          calibrate->genetic_variable[i].maximum = calibrate->rangemax[i];
           calibrate->genetic_variable[i].nbits = nbits[i];
         }
     }
+#if DEBUG
+  fprintf (stderr, "calibrate_new: nvariables=%u nsimulations=%u\n",
+           calibrate->nvariables, calibrate->nsimulations);
+#endif
   calibrate->value = (double *) g_malloc (calibrate->nsimulations *
                                           calibrate->nvariables *
                                           sizeof (double));
 
   // Calculating simulations to perform on each task
 #if HAVE_MPI
+#if DEBUG
+  fprintf (stderr, "calibrate_new: rank=%u ntasks=%u\n",
+           calibrate->mpi_rank, ntasks);
+#endif
   calibrate->nstart = calibrate->mpi_rank * calibrate->nsimulations / ntasks;
   calibrate->nend = (1 + calibrate->mpi_rank) * calibrate->nsimulations
     / ntasks;
@@ -1947,23 +2000,9 @@ calibrate_new (char *filename)
   // Closing result file
   fclose (calibrate->result);
 
-  // Freeing memory
-  input_free ();
-  for (i = 0; i < calibrate->nexperiments; ++i)
-    {
-      for (j = 0; j < calibrate->ninputs; ++j)
-        g_mapped_file_unref (calibrate->file[j][i]);
-    }
-  for (i = 0; i < calibrate->ninputs; ++i)
-    g_free (calibrate->file[i]);
-  g_free (calibrate->value);
-  g_free (calibrate->genetic_variable);
-
 #if DEBUG
   fprintf (stderr, "calibrate_new: end\n");
 #endif
-
-  return 1;
 }
 
 #if HAVE_GTK
@@ -2225,34 +2264,27 @@ window_save ()
 void
 window_run ()
 {
-  size_t n;
-  char *dir, *program, *line, *msg, *msg2, buffer[1024];
-  FILE *file;
+  unsigned int i;
+  char *msg, *msg2, buffer[64], buffer2[64];
   window_save ();
   running_new ();
-  while (gtk_events_pending ())
-    gtk_main_iteration_do (FALSE);
-  dir = g_get_current_dir ();
-  program = g_build_filename (dir, "calibratorbin", NULL);
-  snprintf
-    (buffer, 1024, "cd %s; %s -nthreads %d %s", input->directory, program,
-     nthreads, input->name);
-  system (buffer);
-  g_free (program);
-  g_free (dir);
-  program = g_build_filename (input->directory, "result", NULL);
-  file = fopen (program, "r");
-  g_free (program);
-  for (line = msg = NULL, n = 0; getline (&line, &n, file) > 0;
-       free (line), g_free (msg), line = NULL, msg = msg2, n = 0)
-    if (!msg)
-      msg2 = g_strdup (line);
-    else
-      msg2 = g_strconcat (msg, line, NULL);
-  fclose (file);
+  while (g_main_context_pending (NULL))
+    g_main_context_iteration (NULL, FALSE);
+  calibrate_new ();
   gtk_widget_destroy (GTK_WIDGET (running->dialog));
+  snprintf (buffer, 64, "error=%.15le\n", calibrate->error_old[0]);
+  msg2 = g_strdup (buffer);
+  for (i = 0; i < calibrate->nvariables; ++i, msg2 = msg)
+    {
+      snprintf (buffer, 64, "%s=%s\n",
+                calibrate->label[i], format[calibrate->precision[i]]);
+      snprintf (buffer2, 64, buffer, calibrate->value_old[i]);
+      msg = g_strconcat (msg2, buffer2, NULL);
+      g_free (msg2);
+    }
   show_message (gettext ("Best result"), msg2, INFO_TYPE);
   g_free (msg2);
+  calibrate_free ();
 }
 
 /**
@@ -2276,7 +2308,7 @@ window_help ()
                          "authors", authors,
                          "translator-credits",
                          "Javier Burguete Tolosa (jburguete@eead.csic.es)",
-                         "version", "1.1.19", "copyright",
+                         "version", "1.1.20", "copyright",
                          "Copyright 2012-2015 Javier Burguete Tolosa",
                          "logo", window->logo,
                          "website-label", gettext ("Website"),
@@ -3573,8 +3605,32 @@ main (int argn, char **argc)
 #if HAVE_GTK
   int status;
   char *buffer;
-  nthreads = cores_number ();
+#endif
+
+#if HAVE_MPI
+  // Starting MPI
+  MPI_Init (&argn, &argc);
+  MPI_Comm_size (MPI_COMM_WORLD, &ntasks);
+  MPI_Comm_rank (MPI_COMM_WORLD, &calibrate->mpi_rank);
+  printf ("rank=%d tasks=%d\n", calibrate->mpi_rank, ntasks);
+#else
+  ntasks = 1;
+#endif
+  // Initing thread in old GLib versions
+#if GLIB_MINOR_VERSION < 32
+  g_thread_init (NULL);
+  if (nthreads > 1)
+    mutex = g_mutex_new ();
+#endif
+  // Starting pseudo-random numbers generator
+  calibrate->rng = gsl_rng_alloc (gsl_rng_taus2);
+  gsl_rng_set (calibrate->rng, DEFAULT_RANDOM_SEED);
+  // Allowing spaces in the XML data file
   xmlKeepBlanksDefault (0);
+
+#if HAVE_GTK
+
+  nthreads = cores_number ();
   setlocale (LC_ALL, "");
   setlocale (LC_NUMERIC, "C");
   buffer = g_get_current_dir ();
@@ -3588,17 +3644,9 @@ main (int argn, char **argc)
   g_signal_connect (window->application, "activate", window_new, NULL);
   status = g_application_run (G_APPLICATION (window->application), argn, argc);
   g_object_unref (window->application);
-  return status;
+
 #else
-#if HAVE_MPI
-  // Starting MPI
-  MPI_Init (&argn, &argc);
-  MPI_Comm_size (MPI_COMM_WORLD, &ntasks);
-  MPI_Comm_rank (MPI_COMM_WORLD, &calibrate->mpi_rank);
-  printf ("rank=%d tasks=%d\n", calibrate->mpi_rank, ntasks);
-#else
-  ntasks = 1;
-#endif
+
   // Checking syntax
   if (!(argn == 2 || (argn == 4 && !strcmp (argc[1], "-nthreads"))))
     {
@@ -3615,24 +3663,24 @@ main (int argn, char **argc)
   else
     nthreads = atoi (argc[2]);
   printf ("nthreads=%u\n", nthreads);
-#if GLIB_MINOR_VERSION < 32
-  g_thread_init (NULL);
-  if (nthreads > 1)
-    mutex = g_mutex_new ();
-#endif
-  // Starting pseudo-random numbers generator
-  calibrate->rng = gsl_rng_alloc (gsl_rng_taus2);
-  gsl_rng_set (calibrate->rng, DEFAULT_RANDOM_SEED);
-  // Allowing spaces in the XML data file
-  xmlKeepBlanksDefault (0);
   // Making calibration
-  calibrate_new (argc[argn - 1]);
+  if (input_open (argc[argn - 1]))
+    calibrate_new ();
+  // Freeing memory
+  calibrate_free ();
+
+#endif
+
   // Freeing memory
   gsl_rng_free (calibrate->rng);
 #if HAVE_MPI
   // Closing MPI
   MPI_Finalize ();
 #endif
+
+#if HAVE_GTK
+  return status;
+#else
   return 0;
 #endif
 }
