@@ -3563,7 +3563,7 @@ window_new ()
 
   // Reading initial example
   buffer2 = g_get_current_dir ();
-  buffer = g_build_filename (buffer2, "tests/test1/test-ga.xml", NULL);
+  buffer = g_build_filename (buffer2, "tests", "test1", "test-ga.xml", NULL);
   g_free (buffer2);
   window_read (buffer);
   g_free (buffer);
