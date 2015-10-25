@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<calibrate simulator="simulator.exe" evaluator="evaluator.exe" algorithm="genetic" npopulation="31" ngenerations="31" mutation="0.3" reproduction="0.3" adaptation="0.2">
+  <experiment name="test.exp" template1="test.tmp"/>
+  <variable name="var1" minimum="1" maximum="2" nbits="7"/>
+  <variable name="var2" minimum="1" maximum="2" nbits="7"/>
+</calibrate>

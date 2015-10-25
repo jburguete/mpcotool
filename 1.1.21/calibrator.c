@@ -65,9 +65,11 @@ OF SUCH DAMAGE.
  * \def DEBUG
  * \brief Macro to debug.
  * \def ERROR_TYPE
- * \brief Macro to define the error message type
+ * \brief Macro to define the error message type.
  * \def INFO_TYPE
- * \brief Macro to define the information message type
+ * \brief Macro to define the information message type.
+ * \def INPUT_FILE
+ * \brief Initial input file.
  */
 #define DEBUG 0
 #if HAVE_GTK
@@ -76,6 +78,11 @@ OF SUCH DAMAGE.
 #else
 #define ERROR_TYPE 0
 #define INFO_TYPE 0
+#endif
+#ifdef G_OS_WIN32
+#define INPUT_FILE "test-ga-win.xml"
+#else
+#define INPUT_FILE "test-ga.xml"
 #endif
 
 /**
@@ -2306,7 +2313,7 @@ window_help ()
                          "authors", authors,
                          "translator-credits",
                          "Javier Burguete Tolosa (jburguete@eead.csic.es)",
-                         "version", "1.1.20", "copyright",
+                         "version", "1.1.21", "copyright",
                          "Copyright 2012-2015 Javier Burguete Tolosa",
                          "logo", window->logo,
                          "website-label", gettext ("Website"),
@@ -3035,6 +3042,7 @@ window_read (char *filename)
   if (!input_open (filename))
     return 0;
   buffer = g_build_filename (input->directory, input->simulator, NULL);
+puts (buffer);
   gtk_file_chooser_set_filename (GTK_FILE_CHOOSER
                                  (window->button_simulator), buffer);
   g_free (buffer);
@@ -3561,9 +3569,17 @@ window_new ()
   // Showing the window
   gtk_widget_show_all (GTK_WIDGET (window->window));
 
+  // In Windows the default scrolled size is wrong
+#ifdef G_OS_WIN32
+  gtk_widget_set_size_request (GTK_WIDGET (window->scrolled_min), -1, 40);
+  gtk_widget_set_size_request (GTK_WIDGET (window->scrolled_max), -1, 40);
+  gtk_widget_set_size_request (GTK_WIDGET (window->scrolled_minabs), -1, 40);
+  gtk_widget_set_size_request (GTK_WIDGET (window->scrolled_maxabs), -1, 40);
+#endif
+
   // Reading initial example
   buffer2 = g_get_current_dir ();
-  buffer = g_build_filename (buffer2, "tests", "test1", "test-ga.xml", NULL);
+  buffer = g_build_filename (buffer2, "tests", "test1", INPUT_FILE, NULL);
   g_free (buffer2);
   window_read (buffer);
   g_free (buffer);
@@ -3604,7 +3620,6 @@ main (int argn, char **argc)
   int status;
   char *buffer;
 #endif
-
 #if HAVE_MPI
   // Starting MPI
   MPI_Init (&argn, &argc);

@@ -6,7 +6,7 @@ LDFLAGS = @LDFLAGS@ @LIBS@ @GSL_LIBS@ @XML_LIBS@ @GLIB_LIBS@ @GTHREAD_LIBS@
 SRC = genetic/entity.c genetic/population.c genetic/reproduction.c \
 	genetic/selection.c genetic/evolution.c genetic/genetic.c calibrator.c
 OBJ = genetic/entity.o genetic/population.o genetic/reproduction.o \
-	genetic/selection.o genetic/evolution.o genetic/genetic.o @ICON@
+	genetic/selection.o genetic/evolution.o genetic/genetic.o
 DEP = Makefile
 ES = locales/es/LC_MESSAGES/
 FR = locales/fr/LC_MESSAGES/
@@ -48,9 +48,9 @@ genetic/genetic.o: genetic/genetic.c genetic/genetic.h genetic/evolution.h \
 calibratorbin: calibrator.c calibrator.h $(OBJ) config.h
 	$(CC) $(CFLAGS) calibrator.c $(OBJ) $(LDFLAGS) -o calibratorbin
 
-calibrator: calibrator.c interface.h calibrator.h $(OBJ) config.h
-	$(CC) $(CFLAGS) @GTK_CFLAGS@ calibrator.c $(OBJ) $(LDFLAGS) @GTK_LIBS@ \
-		-o calibrator -DHAVE_GTK=1
+calibrator: calibrator.c interface.h calibrator.h $(OBJ) @ICON@ config.h
+	$(CC) $(CFLAGS) @GTK_CFLAGS@ calibrator.c $(OBJ) @ICON@ $(LDFLAGS) \
+		@GTK_LIBS@ -o calibrator -DHAVE_GTK=1
 
 locales/calibrator.pot: calibrator
 	xgettext -d calibrator -o locales/calibrator.pot --from-code=UTF-8 \
