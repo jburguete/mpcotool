@@ -1122,11 +1122,19 @@ calibrate_parse (unsigned int simulation, unsigned int experiment)
     {
       if (calibrate->file[i][0])
         {
+#ifdef G_OS_WIN32
+          snprintf (buffer, 512, "del %s", &input[i][0]);
+#else
           snprintf (buffer, 512, "rm %s", &input[i][0]);
+#endif
           system (buffer);
         }
     }
+#ifdef G_OS_WIN32
+  snprintf (buffer, 512, "del %s %s", output, result);
+#else
   snprintf (buffer, 512, "rm %s %s", output, result);
+#endif
   system (buffer);
 #endif
 

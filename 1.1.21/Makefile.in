@@ -60,7 +60,7 @@ locales/calibrator.pot: calibrator
 	xgettext -d calibrator -o locales/calibrator.pot --from-code=UTF-8 \
 		$(SRC)
 
-$(ES)calibrator.po: locales/calibrator.pot
+locales/$(ES)calibrator.po: locales/calibrator.pot
 	test -d locales/$(ES) || mkdir -p locales/$(ES)
 	test -f locales/$(ES)calibrator.po || \
 		msginit -l es -o locales/$(ES)calibrator.po -i locales/calibrator.pot \
