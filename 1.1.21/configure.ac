@@ -11,16 +11,19 @@ if test $host = "x86_64-pc-mingw64"; then
 	AC_MSG_NOTICE([Microsoft Windows 64 bits])
 	AC_SUBST(PREFIX, "/mingw64")
 	AC_SUBST(ICON, "logo.o")
+	AC_SUBST(WINCFLAGS, "-mwindows")
 	win=1
 elif test $host = "x86_64-pc-mingw32"; then
 	AC_MSG_NOTICE([Microsoft Windows 32 bits])
 	AC_SUBST(PREFIX, "/mingw32")
 	AC_SUBST(ICON, "logo.o")
+	AC_SUBST(WINCFLAGS, "-mwindows")
 	win=1
 elif test $host = "i686-pc-mingw32"; then
 	AC_MSG_NOTICE([Microsoft Windows 32 bits])
 	AC_SUBST(PREFIX, "/mingw32")
 	AC_SUBST(ICON, "logo.o")
+	AC_SUBST(WINCFLAGS, "-mwindows")
 	win=1
 elif test `uname -s` = "NetBSD"; then
 	AC_MSG_NOTICE([NetBSD])
