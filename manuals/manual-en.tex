@@ -6,6 +6,7 @@
 \usepackage{multido}
 \usepackage{amsfonts}
 \usepackage{natbib}
+\usepackage{graphicx}
 
 \newcommand{\EQ}[2]
 {\begin{equation}#1\label{#2}\end{equation}}
@@ -99,11 +100,11 @@ required in simulation models}
 The source code in Calibrator is written in C language. This software has
 been built and tested in the following operative systems:
 \begin{itemize}
-\item Debian kFreeBSD and Linux 8.2,
-\item DragonFly BSD 4.2.4,
-\item FreeBSD 10.1,
-\item NetBSD 6.1.5,
-\item OpenBSD 5.7,
+\item Debian kFreeBSD and Linux 8,
+\item DragonFly BSD 4.2,
+\item FreeBSD 10,
+\item NetBSD 7.0,
+\item OpenBSD 5.8,
 \item Windows 7\footnotemark[1],
 \item and Windows 8.1\footnotemark[1].
 \end{itemize}
@@ -117,12 +118,13 @@ In order to build the executable file from the source code, a C compiler (\citet
 \item\citet{libxml}: Library required to read the main input file in XML format.
 \item\citet{gsl}: Scientific library required to generate the pseudo-random numbers used by the genetic and the Monte-Carlo algorithms.
 \item\citet{glib}: Library required to parse the input file templates and to implement some data types and the routines used to parallelize the usage of the computer's processors.
+\item\citet{gtk}: Optional library to build the interactive GUI application.
 \item\citet{openmpi} or \citet{mpich}: Optional libraries. When installed, one
 of them is used to allow parallelization in multiple computers.
 \end{itemize}
 The indications provided in \citet{install-unix} can be followed in order to install all these utilities.
 
-On OpenBSD 5.7, prior to build the code, you have to select adequate version of Autoconf and Automake doing on a terminal:
+On OpenBSD 5.8, prior to build the code, you have to select adequate version of Autoconf and Automake doing on a terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 $ export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.15
 \end{lstlisting}
@@ -146,7 +148,7 @@ $ make
 The following step is to download the source code Calibrator, to link it with Genetic and compile together by means of:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 $ git clone https://github.com/jburguete/calibrator.git
-$ cd calibrator/1.1.22
+$ cd calibrator/1.1.23
 $ ln -s ../../genetic/0.6.1 genetic
 $ aclocal
 $ autoconf
@@ -155,20 +157,22 @@ $ ./configure
 $ make
 \end{lstlisting}
 
-\chapter{Command line format}
+\chapter{Interface}
+
+\section{Command line format}
 
 \begin{itemize}
 
 \item Command line in sequential mode (where X is the number of threads to
 execute):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ ./calibrator [-nthreads X] input_file.xml
+$ ./calibratorbin [-nthreads X] input_file.xml
 \end{lstlisting}
 
 \item Command line in parallelized mode (where X is the number of threads to
 open in every node):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ mpirun [MPI options] ./calibrator [-nthreads X] input_file.xml
+$ mpirun [MPI options] ./calibratorbin [-nthreads X] input_file.xml
 \end{lstlisting}
 
 \item The syntax of the simulator has to be:
@@ -188,6 +192,14 @@ $ ./evaluator_name simulated_file experimental_file results_file
 \end{lstlisting}
 
 \end{itemize}
+
+\section{GUI application}
+
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=\textwidth]{calibrator-en.eps}
+	\caption{Main window of Calibrator GUI application.\label{FigWindow}}
+\end{figure}
 
 \chapter{Organization of Calibrator}
 
@@ -450,8 +462,7 @@ optimization algorithm.
 On iterative methods, the tolerance can increase initial \emph{minimum} or
 \emph{maximum} values in each iteration. These values are the allowed extreme values
 compatible with the model parameter limits.
-\item[format]: standard C-format string to set the format to save the variable
-in the simulation input files.
+\item[precision]: number of decimal digits of precision. 0 apply for integer numbers.
 \end{description}
 
 \section{Template files}
@@ -1383,6 +1394,12 @@ figure~\ref{FigGeneticParallelization}.
 	\psframe(-55,-175)(55,-185)
 }{Flowchart of the parallelization scheme implemented in Genetic for the genetic
 method}{FigGeneticParallelization}
+
+\chapter{Output files}
+
+\section{Results file}
+
+\section{Variables file}
 
 \bibliography{bib}
 

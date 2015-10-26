@@ -1,0 +1,4 @@
+CC = @CC@ @ARCH@ @LTO@ @STD@ @WINCFLAGS@ -O3 -lm #-pg 
+
+simulator: simulator.c Makefile
+	$(CC) simulator.c -lm -o simulator

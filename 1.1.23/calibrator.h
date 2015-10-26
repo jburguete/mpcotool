@@ -192,8 +192,10 @@ typedef struct
      * \brief Reproduction probability.
      * \var adaptation_ratio
      * \brief Adaptation probability.
-     * \var result
+     * \var file_result
      * \brief Result file.
+     * \var file_variables
+     * \brief Variables file.
      * \var rng
      * \brief GSL random number generator.
      * \var file
@@ -210,7 +212,7 @@ typedef struct
   double *value, *rangemin, *rangemax, *rangeminabs, *rangemaxabs, *error_best,
     *weight, *value_old, *error_old, tolerance, mutation_ratio,
     reproduction_ratio, adaptation_ratio;
-  FILE *result;
+  FILE *file_result, *file_variables;
   gsl_rng *rng;
   GMappedFile **file[MAX_NINPUTS];
   GeneticVariable *genetic_variable;
@@ -251,6 +253,7 @@ void calibrate_input (unsigned int simulation, char *input,
                       GMappedFile * template);
 double calibrate_parse (unsigned int simulation, unsigned int experiment);
 void calibrate_print ();
+void calibrate_save_variables (unsigned int simulation, double error);
 void calibrate_best_thread (unsigned int simulation, double value);
 void calibrate_best_sequential (unsigned int simulation, double value);
 void *calibrate_thread (ParallelData * data);

@@ -98,7 +98,7 @@ typedef struct
     /**
 	 * \var label_processors
 	 * \brief Processors number GtkLabel.
-	 * \var entry_processors
+	 * \var spin_processors
 	 * \brief Processors number GtkSpinButton.
 	 * \var grid
 	 * \brief main GtkGrid.
@@ -106,7 +106,7 @@ typedef struct
 	 * \brief main GtkDialog.
 	 */
   GtkLabel *label_processors;
-  GtkSpinButton *entry_processors;
+  GtkSpinButton *spin_processors;
   GtkGrid *grid;
   GtkDialog *dialog;
 } Options;
@@ -214,39 +214,39 @@ typedef struct
      * \brief GtkFileChooserButton to set the experimental data file.
      * \var button_template
      * \brief Array of GtkFileChooserButtons to set the input templates.
-     * \var entry_simulations
+     * \var spin_simulations
      * \brief GtkSpinButton to set the simulations number.
-     * \var entry_iterations
+     * \var spin_iterations
      * \brief GtkSpinButton to set the iterations number.
-     * \var entry_tolerance
+     * \var spin_tolerance
      * \brief GtkSpinButton to set the tolerance.
-     * \var entry_bests
+     * \var spin_bests
      * \brief GtkSpinButton to set the best number.
-     * \var entry_population
+     * \var spin_population
      * \brief GtkSpinButton to set the population number.
-     * \var entry_generations
+     * \var spin_generations
      * \brief GtkSpinButton to set the generations number.
-     * \var entry_mutation
+     * \var spin_mutation
      * \brief GtkSpinButton to set the mutation ratio.
-     * \var entry_reproduction
+     * \var spin_reproduction
      * \brief GtkSpinButton to set the reproduction ratio.
-     * \var entry_adaptation
+     * \var spin_adaptation
      * \brief GtkSpinButton to set the adaptation ratio.
-     * \var entry_min
+     * \var spin_min
      * \brief Minimum GtkSpinButton.
-     * \var entry_max
+     * \var spin_max
      * \brief Maximum GtkSpinButton.
-     * \var entry_minabs
+     * \var spin_minabs
      * \brief Absolute minimum GtkSpinButton.
-     * \var entry_maxabs
+     * \var spin_maxabs
      * \brief Absolute maximum GtkSpinButton.
-	 * \var entry_precision
+	 * \var spin_precision
 	 * \brief Precision digits GtkSpinButton.
-     * \var entry_sweeps
+     * \var spin_sweeps
      * \brief Sweeps number GtkSpinButton.
-     * \var entry_bits
+     * \var spin_bits
      * \brief Bits number GtkSpinButton.
-     * \var entry_weight
+     * \var spin_weight
      * \brief Weight GtkSpinButton.
      * \var bar_buttons
      * \brief GtkToolbar to store the main buttons.
@@ -315,11 +315,10 @@ typedef struct
   GtkComboBoxText *combo_variable, *combo_experiment;
   GtkFileChooserButton *button_simulator, *button_evaluator, *button_experiment,
     *button_template[MAX_NINPUTS];
-  GtkSpinButton *entry_min, *entry_max, *entry_minabs, *entry_maxabs,
-    *entry_simulations, *entry_iterations, *entry_tolerance, *entry_bests,
-    *entry_population, *entry_generations, *entry_mutation, *entry_reproduction,
-    *entry_adaptation, *entry_precision, *entry_sweeps, *entry_bits,
-    *entry_weight;
+  GtkSpinButton *spin_min, *spin_max, *spin_minabs, *spin_maxabs,
+    *spin_simulations, *spin_iterations, *spin_tolerance, *spin_bests,
+    *spin_population, *spin_generations, *spin_mutation, *spin_reproduction,
+    *spin_adaptation, *spin_precision, *spin_sweeps, *spin_bits, *spin_weight;
   GtkToolbar *bar_buttons;
   GtkGrid *grid, *grid_algorithm, *grid_variable, *grid_experiment;
   GtkFrame *frame_algorithm, *frame_variable, *frame_experiment;
@@ -339,7 +338,7 @@ typedef struct
 void input_save (char *filename);
 void options_new ();
 void running_new ();
-void window_save ();
+int window_save ();
 void window_run ();
 void window_help ();
 int window_get_algorithm ();

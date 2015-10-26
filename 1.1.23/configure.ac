@@ -1,5 +1,5 @@
 AC_PREREQ([2.67])
-AC_INIT([calibrator], [1.1.22], [https://github.com/jburguete/calibrator])
+AC_INIT([calibrator], [1.1.23], [https://github.com/jburguete/calibrator])
 
 # Checks for operative systems
 AC_CANONICAL_SYSTEM
@@ -152,5 +152,5 @@ AC_CHECK_FUNCS([strtoul])
 # Final output
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([Makefile tests/test1/Makefile tests/test2/Makefile
-	tests/test3/Makefile tests/test4/Makefile])
+	tests/test3/Makefile tests/test4/Makefile tests/test5/Makefile])
 AC_OUTPUT

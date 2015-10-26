@@ -15,8 +15,9 @@ T1 = tests/test1/
 T2 = tests/test2/
 T3 = tests/test3/
 T4 = tests/test4/
+T5 = tests/test5/
 TESTS = $(T1)simulator $(T1)evaluator $(T2)simulator $(T2)evaluator \
-	$(T3)simulator $(T3)evaluator $(T4)simulator
+	$(T3)simulator $(T3)evaluator $(T4)simulator $(T5)simulator
 
 all: calibratorbin \
 	calibrator \
@@ -104,6 +105,9 @@ $(T3)evaluator: $(T3)evaluator.c $(T3)Makefile
 
 $(T4)simulator: $(T4)simulator.c $(T4)Makefile
 	cd $(T4); make
+
+$(T5)simulator: $(T5)simulator.c $(T5)Makefile
+	cd $(T5); make
 
 @ICON@: calibrator.rc logo.png
 	convert logo.png calibrator.ico
