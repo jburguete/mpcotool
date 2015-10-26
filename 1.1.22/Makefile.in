@@ -53,7 +53,7 @@ calibratorbin: calibrator.c calibrator.h $(OBJ) config.h
 	$(CC) $(CFLAGS) calibrator.c $(OBJ) $(LDFLAGS) -o calibratorbin
 
 calibrator: calibrator.c interface.h calibrator.h $(OBJ) @ICON@ config.h
-	$(CC) $(CFLAGS) @GTK_CFLAGS@ @WINCFLAGS@ calibrator.c $(OBJ) @ICON@ \
+	$(CC) $(CFLAGS) @GTK_CFLAGS@ calibrator.c $(OBJ) @ICON@ \
 		$(LDFLAGS) @GTK_LIBS@ -o calibrator -DHAVE_GTK=1
 
 locales/calibrator.pot: calibrator
@@ -160,9 +160,9 @@ windist: calibrator.exe $(DLL) $(MO)
 		win/share/locale/{en_GB,es,fr}/LC_MESSAGES \
 		win/share/glib-2.0/schemas
 	cp *.exe $(DLL) win/bin
-	strip win/bin/*.{exe,dll}
+	cp --parents tests/*/*{.exe,.exp,.tmp,win.xml} win/bin
+	strip win/bin/*.{exe,dll} win/bin/tests/*/*.exe
 	cd locales; cp --parents {$(ES),$(FR)}calibrator.mo ../win/bin/locales
-	cp --parents tests/test1/*{.exe,.exp,.tmp,win.xml} win/bin
 	cp $(SHARE)glib-2.0/schemas/gschema{.dtd,s.compiled} \
 		win/share/glib-2.0/schemas
 	cd win/share; cp -r $(SHARE)icons .

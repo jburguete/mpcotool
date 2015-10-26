@@ -1077,7 +1077,7 @@ calibrate_parse (unsigned int simulation, unsigned int experiment)
   buffer2 = g_path_get_dirname (calibrate->simulator);
   buffer3 = g_path_get_basename (calibrate->simulator);
   buffer4 = g_build_filename (buffer2, buffer3, NULL);
-  snprintf (buffer, 512, "'%s' %s %s %s %s %s %s %s %s %s",
+  snprintf (buffer, 512, "\"%s\" %s %s %s %s %s %s %s %s %s",
             buffer4, input[0], input[1], input[2], input[3], input[4], input[5],
             input[6], input[7], output);
   g_free (buffer4);
@@ -1095,7 +1095,7 @@ calibrate_parse (unsigned int simulation, unsigned int experiment)
       buffer2 = g_path_get_dirname (calibrate->evaluator);
       buffer3 = g_path_get_basename (calibrate->evaluator);
       buffer4 = g_build_filename (buffer2, buffer3, NULL);
-      snprintf (buffer, 512, "'%s' %s '%s' %s",
+      snprintf (buffer, 512, "\"%s\" %s %s %s",
                 buffer4, output, calibrate->experiment[experiment], result);
       g_free (buffer4);
       g_free (buffer3);

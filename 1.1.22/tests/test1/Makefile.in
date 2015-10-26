@@ -1,4 +1,4 @@
-CC = @CC@ @ARCH@ @LTO@ @STD@ -O3 -lm #-pg 
+CC = @CC@ @ARCH@ @LTO@ @STD@ @WINCFLAGS@ -O3 -lm #-pg 
 
 all: simulator evaluator
 

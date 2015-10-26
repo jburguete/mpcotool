@@ -4,7 +4,7 @@ LIBS = @LDFLAGS@ @LIBS@ @GSL_LIBS@ @XML_LIBS@ @GLIB_LIBS@ @GTHREAD_LIBS@
 OBJS = ../../genetic/genetic.o ../../genetic/evolution.o \
 	../../genetic/selection.o ../../genetic/reproduction.o \
 	../../genetic/population.o ../../genetic/entity.o
-CC = @CC@ @ARCH@ @LTO@ @STD@ @MPI_DEFINE@ #-pg 
+CC = @CC@ @ARCH@ @LTO@ @STD@ @MPI_DEFINE@ @WINCFLAGS@ #-pg 
 
 all: simulator evaluator
 
