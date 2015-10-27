@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 1.1.23\n"
+"Project-Id-Version: 1.1.24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-26 14:32+0100\n"
+"POT-Creation-Date: 2015-10-27 15:30+0100\n"
 "PO-Revision-Date: 2015-10-20 07:33+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -229,118 +229,142 @@ msgstr "Salir"
 msgid "Simulator program"
 msgstr "Programa simulador"
 
-#: calibrator.c:3313
+#: calibrator.c:3311
+msgid "Simulator program executable file"
+msgstr "Fichero ejecutable del programa simulador"
+
+#: calibrator.c:3315
 msgid "_Evaluator program"
 msgstr "_Programa evaluador"
 
-#: calibrator.c:3316
+#: calibrator.c:3318
 msgid "Evaluator program"
 msgstr "Programa evaluador"
 
-#: calibrator.c:3321
+#: calibrator.c:3322
+msgid "Optional evaluator program executable file"
+msgstr "Opcional: fichero ejecutable del programa simulador"
+
+#: calibrator.c:3326
 msgid "Simulations number"
 msgstr "Número de simulaciones"
 
-#: calibrator.c:3325
+#: calibrator.c:3330
 msgid "Iterations number"
 msgstr "Número de iteraciones"
 
-#: calibrator.c:3330
+#: calibrator.c:3335
 msgid "Tolerance"
 msgstr "Tolerancia"
 
-#: calibrator.c:3333
+#: calibrator.c:3338
 msgid "Bests number"
 msgstr "Número de los mejores"
 
-#: calibrator.c:3337
+#: calibrator.c:3342
 msgid "Population number"
 msgstr "Número de población"
 
-#: calibrator.c:3341
+#: calibrator.c:3346
 msgid "Generations number"
 msgstr "Número de generaciones"
 
-#: calibrator.c:3345
+#: calibrator.c:3350
 msgid "Mutation ratio"
 msgstr "Ratio de mutación"
 
-#: calibrator.c:3349
+#: calibrator.c:3354
 msgid "Reproduction ratio"
 msgstr "Ratio de reproducción"
 
-#: calibrator.c:3353
+#: calibrator.c:3358
 msgid "Adaptation ratio"
 msgstr "Ratio de adaptación"
 
-#: calibrator.c:3427
+#: calibrator.c:3432
 msgid "Algorithm"
 msgstr "Algoritmo"
 
-#: calibrator.c:3442
+#: calibrator.c:3439
+msgid "Variables selector"
+msgstr "Seleccionador de variables"
+
+#: calibrator.c:3449
 msgid "Add variable"
 msgstr "Añadir variable"
 
-#: calibrator.c:3450
+#: calibrator.c:3457
 msgid "Remove variable"
 msgstr "Eliminar variable"
 
-#: calibrator.c:3451 calibrator.c:3582
+#: calibrator.c:3458
 msgid "Name"
 msgstr "Nombre"
 
-#: calibrator.c:3455
+#: calibrator.c:3462
 msgid "Minimum"
 msgstr "Mínimo"
 
-#: calibrator.c:3466
+#: calibrator.c:3473
 msgid "Maximum"
 msgstr "Máximo"
 
-#: calibrator.c:3478
+#: calibrator.c:3485
 msgid "_Absolute minimum"
 msgstr "_Mínimo absoluto"
 
-#: calibrator.c:3492
+#: calibrator.c:3499
 msgid "_Absolute maximum"
 msgstr "_Máximo absoluto"
 
-#: calibrator.c:3506
+#: calibrator.c:3513
 msgid "Precision digits"
 msgstr "Dígitos de precisión"
 
-#: calibrator.c:3511
+#: calibrator.c:3518
 msgid "Sweeps number"
 msgstr "Número de barridos"
 
-#: calibrator.c:3516
+#: calibrator.c:3523
 msgid "Bits number"
 msgstr "Número de bits"
 
-#: calibrator.c:3560
+#: calibrator.c:3567
 msgid "Variable"
 msgstr "Variable"
 
 #: calibrator.c:3574
+msgid "Experiment selector"
+msgstr "Seleccionador de experimentos"
+
+#: calibrator.c:3583
 msgid "Add experiment"
 msgstr "Añadir experimento"
 
-#: calibrator.c:3581
+#: calibrator.c:3590
 msgid "Remove experiment"
 msgstr "Eliminar experimento"
 
-#: calibrator.c:3584
+#: calibrator.c:3592 calibrator.c:3594 calibrator.c:3597
 msgid "Experimental data file"
 msgstr "Fichero de datos experimentales"
 
-#: calibrator.c:3589
+#: calibrator.c:3601
 msgid "Weight"
 msgstr "Peso"
 
-#: calibrator.c:3611 calibrator.c:3620
+#: calibrator.c:3606
+msgid "Weight factor to build the objective function"
+msgstr "Factor de peso para construir la función objetivo"
+
+#: calibrator.c:3626 calibrator.c:3635
 msgid "Input template"
 msgstr "Plantilla de entrada"
 
-#: calibrator.c:3631
+#: calibrator.c:3639
+msgid "Experimental input template file"
+msgstr "Fichero plantilla de entrada experimental"
+
+#: calibrator.c:3649
 msgid "Experiment"
 msgstr "Experimento"

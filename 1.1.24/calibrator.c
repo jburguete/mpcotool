@@ -2385,7 +2385,7 @@ window_help ()
                          "authors", authors,
                          "translator-credits",
                          "Javier Burguete Tolosa (jburguete@eead.csic.es)",
-                         "version", "1.1.23", "copyright",
+                         "version", "1.1.24", "copyright",
                          "Copyright 2012-2015 Javier Burguete Tolosa",
                          "logo", window->logo,
                          "website-label", gettext ("Website"),
@@ -3307,6 +3307,8 @@ window_new ()
   window->button_simulator = (GtkFileChooserButton *)
     gtk_file_chooser_button_new (gettext ("Simulator program"),
                                  GTK_FILE_CHOOSER_ACTION_OPEN);
+  gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_simulator),
+                               gettext ("Simulator program executable file"));
 
   // Creating the evaluator program label and entry
   window->check_evaluator = (GtkCheckButton *)
@@ -3315,6 +3317,9 @@ window_new ()
   window->button_evaluator = (GtkFileChooserButton *)
     gtk_file_chooser_button_new (gettext ("Evaluator program"),
                                  GTK_FILE_CHOOSER_ACTION_OPEN);
+  gtk_widget_set_tooltip_text
+    (GTK_WIDGET (window->button_evaluator),
+     gettext ("Optional evaluator program executable file"));
 
   // Creating the algorithm properties
   window->label_simulations = (GtkLabel *) gtk_label_new
@@ -3430,6 +3435,8 @@ window_new ()
 
   // Creating the variable widgets
   window->combo_variable = (GtkComboBoxText *) gtk_combo_box_text_new ();
+  gtk_widget_set_tooltip_text (GTK_WIDGET (window->combo_variable),
+                               gettext ("Variables selector"));
   window->id_variable = g_signal_connect
     (window->combo_variable, "changed", window_set_variable, NULL);
   window->button_add_variable
@@ -3563,6 +3570,8 @@ window_new ()
 
   // Creating the experiment widgets
   window->combo_experiment = (GtkComboBoxText *) gtk_combo_box_text_new ();
+  gtk_widget_set_tooltip_text (GTK_WIDGET (window->combo_experiment),
+                               gettext ("Experiment selector"));
   window->id_experiment = g_signal_connect
     (window->combo_experiment, "changed", window_set_experiment, NULL);
   window->button_add_experiment
@@ -3579,16 +3588,22 @@ window_new ()
                     window_remove_experiment, NULL);
   gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_remove_experiment),
                                gettext ("Remove experiment"));
-  window->label_experiment = (GtkLabel *) gtk_label_new (gettext ("Name"));
+  window->label_experiment
+    = (GtkLabel *) gtk_label_new (gettext ("Experimental data file"));
   window->button_experiment = (GtkFileChooserButton *)
     gtk_file_chooser_button_new (gettext ("Experimental data file"),
                                  GTK_FILE_CHOOSER_ACTION_OPEN);
+  gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_experiment),
+                               gettext ("Experimental data file"));
   window->id_experiment_name
     = g_signal_connect (window->button_experiment, "selection-changed",
                         window_name_experiment, NULL);
   window->label_weight = (GtkLabel *) gtk_label_new (gettext ("Weight"));
   window->spin_weight
     = (GtkSpinButton *) gtk_spin_button_new_with_range (0., 1., 0.001);
+  gtk_widget_set_tooltip_text
+    (GTK_WIDGET (window->spin_weight),
+     gettext ("Weight factor to build the objective function"));
   g_signal_connect
     (window->spin_weight, "value-changed", window_weight_experiment, NULL);
   window->grid_experiment = (GtkGrid *) gtk_grid_new ();
@@ -3619,6 +3634,9 @@ window_new ()
       window->button_template[i] = (GtkFileChooserButton *)
         gtk_file_chooser_button_new (gettext ("Input template"),
                                      GTK_FILE_CHOOSER_ACTION_OPEN);
+      gtk_widget_set_tooltip_text
+        (GTK_WIDGET (window->button_template[i]),
+         gettext ("Experimental input template file"));
       window->id_input[i]
         = g_signal_connect_swapped (window->button_template[i],
                                     "selection-changed",
