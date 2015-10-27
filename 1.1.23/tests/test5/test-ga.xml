@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<calibrate simulator="simulator" algorithm="genetic" npopulation="100" ngenerations="46" mutation="0.3" reproduction="0.3" adaptation="0.2">
+<calibrate simulator="simulator" algorithm="genetic" npopulation="500" ngenerations="6" mutation="0.3" reproduction="0.3" adaptation="0.2">
   <experiment name="test.exp" template1="test.tmp"/>
-  <variable name="var1" minimum="-10" maximum="10" nbits="7" precision="14"/>
-  <variable name="var2" minimum="-10" maximum="10" nbits="7" precision="14"/>
+  <variable name="var1" minimum="-10" maximum="10" nbits="10" precision="14"/>
+  <variable name="var2" minimum="-10" maximum="10" nbits="10" precision="14"/>
 </calibrate>

@@ -3,9 +3,7 @@
 
 double objective(double x, double y)
 {
-	double k;
-	k = x - 0.5;
-	return 1. + 0.001 * k * k + sin(M_PI * y);
+	return 1. + 0.001 * x * x + sin(10. * M_PI * y);
 }
 
 int main(int argn, char **argc)
