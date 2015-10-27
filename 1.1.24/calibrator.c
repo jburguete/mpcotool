@@ -832,7 +832,7 @@ input_open (char *filename)
             = xml_node_get_float (child, XML_MAXIMUM, &error_code);
           if (xmlHasProp (child, XML_ABSOLUTE_MAXIMUM))
             input->rangemaxabs[input->nvariables]
-              = xml_node_get_float (child, XML_ABSOLUTE_MINIMUM, &error_code);
+              = xml_node_get_float (child, XML_ABSOLUTE_MAXIMUM, &error_code);
           else
             input->rangemaxabs[input->nvariables] = G_MAXDOUBLE;
         }
