@@ -141,8 +141,11 @@ INPUT FILE FORMAT
         <variable name="variable_M" minimum="min_value" maximum="max_value" precision="precision_digits" sweeps="sweeps_number" nbits="bits_number"/>
     </calibrate>
 
-* *"weight"* associated to every experiment multiplies the objective value
-obtained for every experiment in the final objective function value.
+* *"precision"* defined for each variable. Number of precision digits to
+evaluate the variable. 0 apply for integer numbers.
+
+* *"weight"* defined for each experiment. Multiplies the objective value
+obtained for each experiment in the final objective function value.
 
 Implemented algorithms are:
 
