@@ -2375,10 +2375,9 @@ void
 window_help ()
 {
   char *buffer, *buffer2;
-  buffer2 = g_build_filename (current_directory, "..", "manuals",
-		              "manual-en.pdf", NULL);
+  buffer2 = g_build_filename (current_directory, "manuals",
+                              "user-manual.pdf", NULL);
   buffer = g_filename_to_uri (buffer2, NULL, NULL);
-puts(buffer);
   g_free (buffer2);
   gtk_show_uri (NULL, buffer, GDK_CURRENT_TIME, NULL);
   g_free (buffer);
