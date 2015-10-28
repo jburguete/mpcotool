@@ -94,6 +94,8 @@ OF SUCH DAMAGE.
  * \brief Number of tasks.
  * \var nthreads
  * \brief Number of threads.
+ * \var current_directory
+ * \brief Application directory.
  * \var mutex
  * \brief Mutex struct.
  * \var void (*calibrate_step)()
@@ -113,6 +115,7 @@ OF SUCH DAMAGE.
  */
 int ntasks;
 unsigned int nthreads;
+char *current_directory;
 GMutex mutex[1];
 void (*calibrate_step) ();
 Input input[1];
@@ -2371,6 +2374,19 @@ window_run ()
 void
 window_help ()
 {
+  char buffer[512];
+  snprintf (buffer, 512, "file:///%s/../manuals/manual-en.pdf",
+            current_directory);
+  gtk_show_uri (NULL, buffer, GDK_CURRENT_TIME, NULL);
+}
+
+/**
+ * \fn void window_about()
+ * \brief Function to show an about dialog.
+ */
+void
+window_about ()
+{
   gchar *authors[] = {
     "Javier Burguete Tolosa (jburguete@eead.csic.es)",
     "Borja Latorre Garcés (borja.latorre@csic.es)",
@@ -2385,7 +2401,7 @@ window_help ()
                          "authors", authors,
                          "translator-credits",
                          "Javier Burguete Tolosa (jburguete@eead.csic.es)",
-                         "version", "1.1.24", "copyright",
+                         "version", "1.1.25", "copyright",
                          "Copyright 2012-2015 Javier Burguete Tolosa",
                          "logo", window->logo,
                          "website-label", gettext ("Website"),
@@ -3272,10 +3288,17 @@ window_new ()
 
   // Creating the help button
   window->button_help = (GtkToolButton *) gtk_tool_button_new
-    (gtk_image_new_from_icon_name ("help-about",
+    (gtk_image_new_from_icon_name ("help-browser",
                                    GTK_ICON_SIZE_LARGE_TOOLBAR),
      gettext ("Help"));
   g_signal_connect (window->button_help, "clicked", window_help, NULL);
+
+  // Creating the about button
+  window->button_about = (GtkToolButton *) gtk_tool_button_new
+    (gtk_image_new_from_icon_name ("help-about",
+                                   GTK_ICON_SIZE_LARGE_TOOLBAR),
+     gettext ("About"));
+  g_signal_connect (window->button_about, "clicked", window_about, NULL);
 
   // Creating the exit button
   window->button_exit = (GtkToolButton *) gtk_tool_button_new
@@ -3298,7 +3321,9 @@ window_new ()
   gtk_toolbar_insert
     (window->bar_buttons, GTK_TOOL_ITEM (window->button_help), 4);
   gtk_toolbar_insert
-    (window->bar_buttons, GTK_TOOL_ITEM (window->button_exit), 5);
+    (window->bar_buttons, GTK_TOOL_ITEM (window->button_about), 5);
+  gtk_toolbar_insert
+    (window->bar_buttons, GTK_TOOL_ITEM (window->button_exit), 6);
   gtk_toolbar_set_style (window->bar_buttons, GTK_TOOLBAR_BOTH);
 
   // Creating the simulator program label and entry
@@ -3725,7 +3750,6 @@ main (int argn, char **argc)
 {
 #if HAVE_GTK
   int status;
-  char *buffer;
 #endif
 #if HAVE_MPI
   // Starting MPI
@@ -3747,9 +3771,9 @@ main (int argn, char **argc)
   nthreads = cores_number ();
   setlocale (LC_ALL, "");
   setlocale (LC_NUMERIC, "C");
-  buffer = g_get_current_dir ();
+  current_directory = g_get_current_dir ();
   bindtextdomain
-    (PROGRAM_INTERFACE, g_build_filename (buffer, LOCALE_DIR, NULL));
+    (PROGRAM_INTERFACE, g_build_filename (current_directory, LOCALE_DIR, NULL));
   bind_textdomain_codeset (PROGRAM_INTERFACE, "UTF-8");
   textdomain (PROGRAM_INTERFACE);
   gtk_disable_setlocale ();
@@ -3793,6 +3817,7 @@ main (int argn, char **argc)
 #endif
 
 #if HAVE_GTK
+  g_free (current_directory);
   return status;
 #else
   return 0;

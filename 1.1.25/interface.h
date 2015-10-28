@@ -135,17 +135,19 @@ typedef struct
 {
     /**
      * \var button_open
-     * \brief Open GtkButton.
+     * \brief Open GtkToolButton.
      * \var button_save
-     * \brief Save GtkButton.
+     * \brief Save GtkToolButton.
 	 * \var button_run
-	 * \brief Run GtkButton.
+	 * \brief Run GtkToolButton.
 	 * \var button_options
-	 * \brief Options GtkButton.
+	 * \brief Options GtkToolButton.
      * \var button_help
-     * \brief Help GtkButton.
+     * \brief Help GtkToolButton.
+     * \var button_about
+     * \brief Help GtkToolButton.
      * \var button_exit
-     * \brief Exit GtkButton.
+     * \brief Exit GtkToolButton.
      * \var button_add_variable
      * \brief GtkButton to add a variable.
      * \var button_remove_variable
@@ -300,7 +302,7 @@ typedef struct
 	 * \brief Number of variables.
      */
   GtkToolButton *button_open, *button_save, *button_run, *button_options,
-    *button_help, *button_exit;
+    *button_help, *button_about, *button_exit;
   GtkButton *button_add_variable, *button_remove_variable,
     *button_add_experiment, *button_remove_experiment;
   GtkRadioButton *button_algorithm[NALGORITHMS];
