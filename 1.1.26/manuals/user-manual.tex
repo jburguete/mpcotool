@@ -185,139 +185,9 @@ $ ./evaluator_name simulated_file experimental_file results_file
 
 \end{itemize}
 
-\section{GUI application}
+\section{Input files}
 
-\begin{figure}[ht!]
-	\centering
-	\includegraphics[width=\textwidth]{calibrator-en.eps}
-	\caption{Main window of Calibrator GUI application.\label{FigWindow}}
-\end{figure}
-
-\chapter{Organization of Calibrator}
-
-Let us assume that $N_{parameters}$ empirical parameters are sought desired so
-that the results from a simulation model are the best fit to $N_{experiments}$
-experimental data and that the simulator requires $N_{inputs}$ input files. The
-structure followed by Calibrator is summarized in \emph{main input file},
-where both $N_{experiments}$ and $N_{inputs}$ are specified. Furthermore, it
-contains the extreme values of the empirical parameters and the chosen
-optimization algorithm. Then, Calibrator reads the
-$N_{experiments}\times N_{inputs}$ templates to build the simulator input files
-replacing key labels by empirical parameter values created by the optimization
-algorithm. There are two options: either the simulator compares directly the
-simulation results with the \emph{experimental data file}, hence generating a
-file with the value of the error, or an external program called \emph{evaluator}
-is invoked to compare with the \emph{experimental data file} and to produce the
-error value. In both cases this error value is saved in an
-\emph{objective value file}. Then for each experiment, an objective value $o_i$
-is obtained. The final value of the objective function associated with the
-experiments is calculated by means of:
-\EQ
-{
-	J=\sqrt{\frac{1}{N_{experiments}}
-	\,\sum_{i=1}^{N_{experiments}}\ABS{w_i\,o_i}^2},
-}{EqObjectiveFunction}
-with $w_i$ the weight associated to the $i$-th experiment, specified in the
-\emph{main input file}. Figure~\ref{FigStructure} is a sketch of the
-structure.
-\psset{xunit=0.4mm,yunit=0.4mm}
-\PSPICTURE{-20}{-95}{280}{55}
-{
-	\tiny
-	\rput(15,50){Main input file}
-	\psframe(-20,45)(50,55)
-	\psline{->}(50,50)(60,50)
-	\rput(15,25){1st template file}
-	\psframe(-20,20)(50,30)
-	\psline{->}(50,25)(60,25)
-	\psline[linestyle=dotted,dotsep=1pt]{->}(60,25)(90,25)
-	\rput(15,15){$\cdots$}
-	\rput(15,5){$n$-th template file}
-	\psframe(-20,0)(50,10)
-	\psline{->}(50,5)(60,5)
-	\psline[linestyle=dotted,dotsep=1pt]{->}(60,5)(90,5)
-	\rput(15,-35){$\cdots$}
-	\rput(15,-75){$(N\times n)$-th template file}
-	\psframe(-20,-70)(50,-80)
-	\psline{->}(50,-75)(60,-75)
-	\psline[linestyle=dotted,dotsep=1pt]{->}(60,-75)(90,-75)
-	\rput(75,50){Calibrator}
-	\psframe(60,-95)(90,55)
-	\psline{->}(90,25)(100,25)
-	\psline{->}(90,5)(100,5)
-	\psline{->}(90,-55)(100,-55)
-	\psline{->}(90,-75)(100,-75)
-	\rput(120,5){$n$-th input file}
-	\psframe(100,0)(140,10)
-	\psline{->}(140,5)(150,5)
-	\rput(120,15){$\cdots$}
-	\rput(120,25){1st input file}
-	\psframe(100,20)(140,30)
-	\psline{->}(140,25)(145,25)(145,5)
-	\rput(185,5){Simulator}
-	\psframe(150,0)(220,10)
-	\psline[linestyle=dashed,dash=2pt 1pt]{->}(185,10)(185,20)
-	\psline[linestyle=dashed,dash=2pt 1pt]{->}(220,5)(230,7.5)
-	\rput(185,25){Results file}
-	\psframe[linestyle=dashed,dash=3pt 1pt](150,20)(220,30)
-	\psline[linestyle=dashed,dash=2pt 1pt]{->}(220,25)(230,30)
-	\rput(185,45){Experimental data file}
-	\psframe(150,40)(220,50)
-	\psline[linestyle=dashed,dash=2pt 1pt]{->}(220,45)(230,30)
-	\psline[linestyle=dashed,dash=2pt 1pt]{->}(150,45)(145,45)(145,25)
-	\rput(250,30){Evaluator}
-	\psline[linestyle=dashed,dash=2pt 1pt]{->}(250,25)(250,15)
-	\psframe[linestyle=dashed,dash=3pt 1pt](230,25)(270,35)
-	\rput(250,10){Objective}
-	\rput(250,5){value file}
-	\psframe(230,0)(270,15)
-	\psline{->}(270,7.5)(280,7.5)(280,-90)(90,-90)
-	\rput(15,-90){Objective function value}
-	\psframe(-20,-95)(50,-85)
-	\psline{->}(60,-90)(50,-90)
-	\psline[linestyle=dotted,dotsep=1pt]{->}(90,-90)(60,-90)
-	\rput(120,50){1st experiment}
-	\psframe[linestyle=dotted](95,-5)(275,55)
-	\rput(185,-15){$\cdots$}
-	\rput(120,-75){$n$-th input file}
-	\psframe(100,-80)(140,-70)
-	\psline{->}(140,-75)(150,-75)
-	\rput(120,-65){$\cdots$}
-	\rput(120,-55){1st input file}
-	\psframe(100,-60)(140,-50)
-	\psline{->}(140,-55)(145,-55)(145,-75)
-	\rput(185,-75){Simulator}
-	\psframe(150,-80)(220,-70)
-	\psline[linestyle=dashed,dash=2pt 1pt]{->}(185,-70)(185,-60)
-	\psline[linestyle=dashed,dash=2pt 1pt]{->}(220,-75)(230,-72.5)
-	\rput(185,-55){Results file}
-	\psframe[linestyle=dashed,dash=3pt 1pt](150,-60)(220,-50)
-	\psline[linestyle=dashed,dash=2pt 1pt]{->}(220,-55)(230,-50)
-	\rput(185,-35){Experimental data file}
-	\psframe(150,-40)(220,-30)
-	\psline[linestyle=dashed,dash=2pt 1pt]{->}(220,-35)(230,-50)
-	\psline[linestyle=dashed,dash=2pt 1pt]{->}(150,-35)(145,-35)(145,-55)
-	\rput(250,-50){Evaluator}
-	\psline[linestyle=dashed,dash=2pt 1pt]{->}(250,-55)(250,-65)
-	\psframe[linestyle=dashed,dash=3pt 1pt](230,-55)(270,-45)
-	\rput(250,-70){Objective}
-	\rput(250,-75){value file}
-	\psframe(230,-80)(270,-65)
-	\psline(270,-72.5)(280,-72.5)
-	\rput(120,-30){$N$-th experiment}
-	\psframe[linestyle=dotted](95,-85)(275,-25)
-}{Flowchart of the interactions among Calibrator, the input files and the
-simulation and evaluation programs to produce an objective function value for
-each empirical parameters combination generated by the optimization algorithm}
-{FigStructure}
-
-The whole process is repeated for each combination of empirical parameters generated by the optimization algorithm. Furthermore, Calibrator automatically parallelizes the simulations using all the available computing resources.
-
-The required format for the \emph{main input file} and the \emph{template files} are described in next section.
-
-\chapter{Input files}
-
-\section{Main input file}
+\subsection{Main input file}
 
 This file has to be in XML format with a tree type structure as the
 represented in figure~\ref{FigMainFile}.
@@ -457,7 +327,7 @@ compatible with the model parameter limits.
 \item[precision]: number of decimal digits of precision. 0 apply for integer numbers.
 \end{description}
 
-\section{Template files}
+\subsection{Template files}
 
 $N_{experiments}\times N_{inputs}$
 template files must be written to reproduce every input file associated to every experiment (see figure~\ref{FigStructure}). All the template files are syntactically analyzed by Calibrator to replace the labels as follows in order to generate the simulation program input files:
@@ -465,6 +335,153 @@ template files must be written to reproduce every input file associated to every
 \item[@variableX@]: is replaced by the label associated to the $X$-th empirical parameter defined in \emph{main input file};
 \item[@valueX@]: is replaced by the value associated to the $X$-th empirical parameter calculated by the optimization algorithm using the format defined in \emph{main input file};
 \end{description}
+
+\section{Interactive GUI application}
+
+An alternative form to execute the software is to perform the interactive GUI
+application, called \emph{Calibrator}. In the figure~\ref{FigWindow} a plot of
+the main window of this tool is represented. The main windows enable us to
+access to every variable, coefficient, algorithm and simulation softwares.
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=\textwidth]{calibrator-en.eps}
+	\caption{Main window of Calibrator GUI application.\label{FigWindow}}
+\end{figure}
+
+\section{Output files}
+
+\subsection{Results file}
+
+Calibrator generates a file named \emph{result} where the best combination of
+variables and the corresponding calculated error are saved.
+
+\subsection{Variables file}
+
+The program generates also a file named \emph{variables} where all combinations
+of variables checked in the calibration are saved in columns being the last
+column the associated error.
+
+\chapter{Organization of Calibrator}
+
+Let us assume that $N_{parameters}$ empirical parameters are sought desired so
+that the results from a simulation model are the best fit to $N_{experiments}$
+experimental data and that the simulator requires $N_{inputs}$ input files. The
+structure followed by Calibrator is summarized in \emph{main input file},
+where both $N_{experiments}$ and $N_{inputs}$ are specified. Furthermore, it
+contains the extreme values of the empirical parameters and the chosen
+optimization algorithm. Then, Calibrator reads the
+$N_{experiments}\times N_{inputs}$ templates to build the simulator input files
+replacing key labels by empirical parameter values created by the optimization
+algorithm. There are two options: either the simulator compares directly the
+simulation results with the \emph{experimental data file}, hence generating a
+file with the value of the error, or an external program called \emph{evaluator}
+is invoked to compare with the \emph{experimental data file} and to produce the
+error value. In both cases this error value is saved in an
+\emph{objective value file}. Then for each experiment, an objective value $o_i$
+is obtained. The final value of the objective function associated with the
+experiments is calculated by means of:
+\EQ
+{
+	J=\sqrt{\frac{1}{N_{experiments}}
+	\,\sum_{i=1}^{N_{experiments}}\ABS{w_i\,o_i}^2},
+}{EqObjectiveFunction}
+with $w_i$ the weight associated to the $i$-th experiment, specified in the
+\emph{main input file}. Figure~\ref{FigStructure} is a sketch of the
+structure.
+\psset{xunit=0.4mm,yunit=0.4mm}
+\PSPICTURE{-20}{-95}{280}{55}
+{
+	\tiny
+	\rput(15,50){Main input file}
+	\psframe(-20,45)(50,55)
+	\psline{->}(50,50)(60,50)
+	\rput(15,25){1st template file}
+	\psframe(-20,20)(50,30)
+	\psline{->}(50,25)(60,25)
+	\psline[linestyle=dotted,dotsep=1pt]{->}(60,25)(90,25)
+	\rput(15,15){$\cdots$}
+	\rput(15,5){$n$-th template file}
+	\psframe(-20,0)(50,10)
+	\psline{->}(50,5)(60,5)
+	\psline[linestyle=dotted,dotsep=1pt]{->}(60,5)(90,5)
+	\rput(15,-35){$\cdots$}
+	\rput(15,-75){$(N\times n)$-th template file}
+	\psframe(-20,-70)(50,-80)
+	\psline{->}(50,-75)(60,-75)
+	\psline[linestyle=dotted,dotsep=1pt]{->}(60,-75)(90,-75)
+	\rput(75,50){Calibrator}
+	\psframe(60,-95)(90,55)
+	\psline{->}(90,25)(100,25)
+	\psline{->}(90,5)(100,5)
+	\psline{->}(90,-55)(100,-55)
+	\psline{->}(90,-75)(100,-75)
+	\rput(120,5){$n$-th input file}
+	\psframe(100,0)(140,10)
+	\psline{->}(140,5)(150,5)
+	\rput(120,15){$\cdots$}
+	\rput(120,25){1st input file}
+	\psframe(100,20)(140,30)
+	\psline{->}(140,25)(145,25)(145,5)
+	\rput(185,5){Simulator}
+	\psframe(150,0)(220,10)
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(185,10)(185,20)
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(220,5)(230,7.5)
+	\rput(185,25){Results file}
+	\psframe[linestyle=dashed,dash=3pt 1pt](150,20)(220,30)
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(220,25)(230,30)
+	\rput(185,45){Experimental data file}
+	\psframe(150,40)(220,50)
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(220,45)(230,30)
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(150,45)(145,45)(145,25)
+	\rput(250,30){Evaluator}
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(250,25)(250,15)
+	\psframe[linestyle=dashed,dash=3pt 1pt](230,25)(270,35)
+	\rput(250,10){Objective}
+	\rput(250,5){value file}
+	\psframe(230,0)(270,15)
+	\psline{->}(270,7.5)(280,7.5)(280,-90)(90,-90)
+	\rput(15,-90){Objective function value}
+	\psframe(-20,-95)(50,-85)
+	\psline{->}(60,-90)(50,-90)
+	\psline[linestyle=dotted,dotsep=1pt]{->}(90,-90)(60,-90)
+	\rput(120,50){1st experiment}
+	\psframe[linestyle=dotted](95,-5)(275,55)
+	\rput(185,-15){$\cdots$}
+	\rput(120,-75){$n$-th input file}
+	\psframe(100,-80)(140,-70)
+	\psline{->}(140,-75)(150,-75)
+	\rput(120,-65){$\cdots$}
+	\rput(120,-55){1st input file}
+	\psframe(100,-60)(140,-50)
+	\psline{->}(140,-55)(145,-55)(145,-75)
+	\rput(185,-75){Simulator}
+	\psframe(150,-80)(220,-70)
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(185,-70)(185,-60)
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(220,-75)(230,-72.5)
+	\rput(185,-55){Results file}
+	\psframe[linestyle=dashed,dash=3pt 1pt](150,-60)(220,-50)
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(220,-55)(230,-50)
+	\rput(185,-35){Experimental data file}
+	\psframe(150,-40)(220,-30)
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(220,-35)(230,-50)
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(150,-35)(145,-35)(145,-55)
+	\rput(250,-50){Evaluator}
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(250,-55)(250,-65)
+	\psframe[linestyle=dashed,dash=3pt 1pt](230,-55)(270,-45)
+	\rput(250,-70){Objective}
+	\rput(250,-75){value file}
+	\psframe(230,-80)(270,-65)
+	\psline(270,-72.5)(280,-72.5)
+	\rput(120,-30){$N$-th experiment}
+	\psframe[linestyle=dotted](95,-85)(275,-25)
+}{Flowchart of the interactions among Calibrator, the input files and the
+simulation and evaluation programs to produce an objective function value for
+each empirical parameters combination generated by the optimization algorithm}
+{FigStructure}
+
+The whole process is repeated for each combination of empirical parameters generated by the optimization algorithm. Furthermore, Calibrator automatically parallelizes the simulations using all the available computing resources.
+
+The required format for the \emph{main input file} and the \emph{template files} are described in next section.
 
 \chapter{Optimization methods}
 
@@ -1386,12 +1403,6 @@ figure~\ref{FigGeneticParallelization}.
 	\psframe(-55,-175)(55,-185)
 }{Flowchart of the parallelization scheme implemented in Genetic for the genetic
 method}{FigGeneticParallelization}
-
-\chapter{Output files}
-
-\section{Results file}
-
-\section{Variables file}
 
 \bibliography{bib}
 

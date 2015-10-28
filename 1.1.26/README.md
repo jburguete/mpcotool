@@ -9,8 +9,8 @@ AUTHORS
 * Javier Burguete Tolosa (jburguete@eead.csic.es)
 * Borja Latorre Garcés (borja.latorre@csic.es)
 
-REQUIRED
---------
+TOOLS AND LIBRARIES REQUIRED TO BUILD THE EXECUTABLE
+----------------------------------------------------
 
 * mpicc, gcc or clang (to compile the source code)
 * make (to build the executable file)
@@ -23,9 +23,14 @@ REQUIRED
 * glib (extended utilities of C to work with data, lists, mapped files, regular
 	expressions, ...)
 * [genetic](https://github.com/jburguete/genetic) (genetic algorithm)
-* openmpi or mpich (optional: to run in parallelized tasks)
-* doxygen (optional: standard comments format to generate documentation)
-* latex (optional: to build the PDF manuals)
+
+OPTIONAL TOOLS AND LIBRARIES
+----------------------------
+
+* gtk+ (to create the interactive GUI tool)
+* openmpi or mpich (to run in parallelized tasks)
+* doxygen (standard comments format to generate documentation)
+* latex (to build the PDF manuals)
 
 FILES
 -----
@@ -33,11 +38,20 @@ FILES
 * configure.ac: configure generator.
 * Makefile.in: Makefile generator.
 * config.h.in: config header generator.
-* calibrator.c: source code.
+* calibrator.c: main source code.
+* calibrator.h: main header code.
+* interface.h: interface header code.
+* build: script to build all.
+* logo.png: logo figure.
+* logo2.png: alternative logo figure.
 * Doxyfile: configuration file to generate doxygen documentation.
 * TODO: tasks to do.
 * README.md: this file.
 * tests/testX/*: several tests to check the program working.
+* locales/*/LC_MESSAGES/calibrator.po: translation files.
+* manuals/*.png: manual figures.
+* manuals/*.tex: documentation source files.
+* applications/*/*: several practical application cases.
 
 BUILDING INSTRUCTIONS
 ---------------------
@@ -46,14 +60,14 @@ This software has been built and tested in the following operative systems.
 Probably, it can be built in other systems, distributions, or versions but it
 has not been tested.
 
-Debian 8.2 (Linux, kFreeBSD or Hurd)
-____________________________________
-DragonFly BSD 4.2.4
-___________________
+Debian 8 (Linux, kFreeBSD or Hurd)
+__________________________________
+DragonFly BSD 4.2
+_________________
 FreeBSD 10.2
 ____________
-NetBSD 6.1.5
-____________
+NetBSD 7.0
+__________
 
 1. Download the latest [genetic](https://github.com/jburguete/genetic) doing on
 a terminal:
@@ -70,13 +84,13 @@ a terminal:
 4. Build doing on a terminal:
 > $ ./build
 
-OpenBSD 5.7
+OpenBSD 5.8
 ___________
 
 1. Select adequate versions:
 > $ export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.15
 
-2. Then, in a terminal, follow steps 1 to 4 of the previous Debian 8.2 section.
+2. Then, in a terminal, follow steps 1 to 4 of the previous Debian 8 section.
 
 Microsoft Windows 7 (with MSYS2)
 ________________________________
@@ -88,22 +102,14 @@ libraries and utilities. You can follow detailed instructions in
 [install-unix]
 (https://github.com/jburguete/install-unix/blob/master/tutorial.pdf)
 
-2. Then, in a MSYS2 terminal, follow steps 1 to 4 of the previous Debian 8.2
+2. Then, in a MSYS2 terminal, follow steps 1 to 4 of the previous Debian 8
 section.
 
 MAKING REFERENCE MANUAL INSTRUCTIONS (file latex/refman.pdf)
 ------------------------------------------------------------
 
 On UNIX type systems you need [texlive](https://www.tug.org/texlive) installed.
-On Windows systems you need [MiKTeX](http://miktex.org). Then do in a terminal:
-
-> $ cd calibrator/1.1.26
->
-> $ doxygen
->
-> $ cd latex
->
-> $ make
+On Windows systems you need [MiKTeX](http://miktex.org).
 
 USER INSTRUCTIONS
 -----------------
@@ -130,9 +136,9 @@ INPUT FILE FORMAT
         <experiment name="data_file_1" template1="template_1_1" template2="template_1_2" ... weight="weight_1"/>
         ...
         <experiment name="data_file_N" template1="template_N_1" template2="template_N_2" ... weight="weight_N"/>
-        <variable name="variable_1" minimum="min_value" maximum="max_value" format="c_string_format" sweeps="sweeps_number" nbits="bits_number"/>
+        <variable name="variable_1" minimum="min_value" maximum="max_value" precision="precision_digits" sweeps="sweeps_number" nbits="bits_number"/>
         ...
-        <variable name="variable_M" minimum="min_value" maximum="max_value" format="c_string_format" sweeps="sweeps_number" nbits="bits_number"/>
+        <variable name="variable_M" minimum="min_value" maximum="max_value" precision="precision_digits" sweeps="sweeps_number" nbits="bits_number"/>
     </calibrate>
 
 * *"weight"* associated to every experiment multiplies the objective value
