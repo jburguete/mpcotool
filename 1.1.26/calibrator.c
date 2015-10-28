@@ -2374,10 +2374,14 @@ window_run ()
 void
 window_help ()
 {
-  char buffer[512];
-  snprintf (buffer, 512, "file:///%s/../manuals/manual-en.pdf",
-            current_directory);
+  char *buffer, *buffer2;
+  buffer2 = g_build_filename (current_directory, "..", "manuals",
+		              "manual-en.pdf", NULL);
+  buffer = g_filename_to_uri (buffer2, NULL, NULL);
+puts(buffer);
+  g_free (buffer2);
   gtk_show_uri (NULL, buffer, GDK_CURRENT_TIME, NULL);
+  g_free (buffer);
 }
 
 /**
@@ -2401,7 +2405,7 @@ window_about ()
                          "authors", authors,
                          "translator-credits",
                          "Javier Burguete Tolosa (jburguete@eead.csic.es)",
-                         "version", "1.1.25", "copyright",
+                         "version", "1.1.26", "copyright",
                          "Copyright 2012-2015 Javier Burguete Tolosa",
                          "logo", window->logo,
                          "website-label", gettext ("Website"),

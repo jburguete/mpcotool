@@ -18,12 +18,15 @@ T4 = tests/test4/
 T5 = tests/test5/
 TESTS = $(T1)simulator $(T1)evaluator $(T2)simulator $(T2)evaluator \
 	$(T3)simulator $(T3)evaluator $(T4)simulator $(T5)simulator
+M1 = manuals/user-manual.pdf
+MANUALS = $(M1) manuals/reference-manual.pdf
 
 all: calibratorbin \
 	calibrator \
 	locales/$(ES)calibrator.mo \
 	locales/$(FR)calibrator.mo \
-	$(TESTS)
+	$(TESTS) \
+	$(MANUALS)
 
 genetic/entity.o: genetic/entity.c genetic/entity.h $(DEP)
 	$(CC) $(CFLAGS) -c genetic/entity.c -o genetic/entity.o
@@ -113,9 +116,17 @@ $(T5)simulator: $(T5)simulator.c $(T5)Makefile
 	convert logo.png calibrator.ico
 	@WINDRES@ calibrator.rc -o @ICON@
 
-doc: calibrator.c config.h README.md $(DEP)
+manuals/calibrator-en.eps: manuals/calibrator-en.png
+	convert manuals/calibrator-en.png manuals/calibrator-en.eps
+
+$(M1): manuals/user-manual.tex manuals/bib.bib manuals/calibrator-en.eps \
+	Makefile
+	cd manuals; latex user-manual; bibtex user-manual; latex user-manual; \
+		latex user-manual; dvipdf user-manual
+
+manuals/reference-manual.pdf: calibrator README.md Doxyfile
 	doxygen
-	cd latex; make
+	cd latex; make; mv refman.pdf ../manuals/reference-manual.pdf
 
 BIN = @PREFIX@/bin/
 DLL = $(BIN)libatk-1.0-0.dll\
@@ -165,9 +176,11 @@ windist: calibrator.exe $(DLL) $(MO)
 		win/share/glib-2.0/schemas
 	cp *.exe $(DLL) win/bin
 	cp --parents tests/*/*{.exe,.exp,.tmp,win.xml} win/bin
+	cp --parents manuals/*.pdf win/bin
 	strip win/bin/*.{exe,dll} win/bin/tests/*/*.exe
 	cd locales; cp --parents {$(ES),$(FR)}calibrator.mo ../win/bin/locales
 	cp $(SHARE)glib-2.0/schemas/gschema{.dtd,s.compiled} \
 		win/share/glib-2.0/schemas
 	cd win/share; cp -r $(SHARE)icons .
-	cd win/share/locale; cp $(MOGB) $(GB); cp $(MOES) $(ES); cp $(MOFR) $(FR)
+	cd win/share/locale; cp $(MOGB) $(GB); cp $(MOES) $(ES); cp $(MOFR) $(FR); \
+		ln -s es es_ES@UTF8; ln -s fr fr_FR@UTF8

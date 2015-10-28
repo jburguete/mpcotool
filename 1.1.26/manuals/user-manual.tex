@@ -138,11 +138,7 @@ Once all the tools installed, the Genetic source code must be downloaded and it 
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 $ git clone https://github.com/jburguete/genetic.git
 $ cd genetic/0.6.1
-$ aclocal
-$ autoconf
-$ automake --add-missing
-$ ./configure
-$ make
+$ ./build
 \end{lstlisting}
 
 The following step is to download the source code Calibrator, to link it with Genetic and compile together by means of:
@@ -150,11 +146,7 @@ The following step is to download the source code Calibrator, to link it with Ge
 $ git clone https://github.com/jburguete/calibrator.git
 $ cd calibrator/1.1.25
 $ ln -s ../../genetic/0.6.1 genetic
-$ aclocal
-$ autoconf
-$ automake --add-missing
-$ ./configure
-$ make
+$ ./build
 \end{lstlisting}
 
 \chapter{Interface}
