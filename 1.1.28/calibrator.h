@@ -112,6 +112,8 @@ typedef struct
      * \brief Number of algorithm iterations
      * \var nbest
      * \brief Number of best simulations.
+	 * \var seed
+	 * \brief Seed of the pseudo-random numbers generator.
      */
   char *simulator, *evaluator, **experiment, **template[MAX_NINPUTS], **label,
     *directory, *name;
@@ -119,6 +121,7 @@ typedef struct
     mutation_ratio, reproduction_ratio, adaptation_ratio;
   unsigned int nvariables, nexperiments, ninputs, nsimulations, algorithm,
     *precision, *nsweeps, *nbits, niterations, nbest;
+  unsigned long int seed;
 } Input;
 
 /**
@@ -166,6 +169,8 @@ typedef struct
      * \brief Number of saved simulations.
      * \var simulation_best
      * \brief Array of best simulation numbers.
+	 * \var seed
+	 * \brief Seed of the pseudo-random numbers generator.
      * \var value
      * \brief Array of variable values.
      * \var rangemin
@@ -209,6 +214,7 @@ typedef struct
   unsigned int nvariables, nexperiments, ninputs, nsimulations, algorithm,
     *precision, *nsweeps, nstart, nend, *thread, niterations, nbest, nsaveds,
     *simulation_best;
+  unsigned long int seed;
   double *value, *rangemin, *rangemax, *rangeminabs, *rangemaxabs, *error_best,
     *weight, *value_old, *error_old, tolerance, mutation_ratio,
     reproduction_ratio, adaptation_ratio;

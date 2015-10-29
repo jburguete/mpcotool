@@ -98,15 +98,19 @@ typedef struct
     /**
 	 * \var label_processors
 	 * \brief Processors number GtkLabel.
+	 * \var label_seed
+	 * \brief Pseudo-random numbers generator seed GtkLabel.
 	 * \var spin_processors
 	 * \brief Processors number GtkSpinButton.
+	 * \var spin_seed
+	 * \brief Pseudo-random numbers generator seed GtkSpinButton.
 	 * \var grid
 	 * \brief main GtkGrid.
 	 * \var dialog
 	 * \brief main GtkDialog.
 	 */
-  GtkLabel *label_processors;
-  GtkSpinButton *spin_processors;
+  GtkLabel *label_processors, *label_seed;
+  GtkSpinButton *spin_processors, *spin_seed;
   GtkGrid *grid;
   GtkDialog *dialog;
 } Options;

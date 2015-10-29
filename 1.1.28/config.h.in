@@ -122,6 +122,8 @@ OF SUCH DAMAGE.
  * \brief reproduction XML label.
  * \def XML_SIMULATOR
  * \brief simulator XML label.
+ * \def XML_SEED
+ * \brief seed XML label.
  * \def XML_SWEEP
  * \brief sweep XML label.
  * \def XML_TEMPLATE1
@@ -170,6 +172,7 @@ OF SUCH DAMAGE.
 #define XML_PRECISION (const xmlChar*)"precision"
 #define XML_REPRODUCTION (const xmlChar*)"reproduction"
 #define XML_SIMULATOR (const xmlChar*)"simulator"
+#define XML_SEED (const xmlChar*)"seed"
 #define XML_SWEEP (const xmlChar*)"sweep"
 #define XML_TEMPLATE1 (const xmlChar*)"template1"
 #define XML_TEMPLATE2 (const xmlChar*)"template2"

@@ -498,6 +498,19 @@ input_open (char *filename)
   // Opening evaluator program name
   input->evaluator = (char *) xmlGetProp (node, XML_EVALUATOR);
 
+  // Obtaining pseudo-random numbers generator seed
+  if (!xmlHasProp (node, XML_SEED))
+    input->seed = DEFAULT_RANDOM_SEED;
+  else
+    {
+      input->seed = xml_node_get_uint (node, XML_SEED, &error_code);
+      if (error_code)
+        {
+          show_error (gettext ("Bad pseudo-random numbers generator seed"));
+          return 0;
+        }
+    }
+
   // Opening algorithm
   buffer = xmlGetProp (node, XML_ALGORITHM);
   if (!xmlStrcmp (buffer, XML_MONTE_CARLO))
@@ -1874,6 +1887,9 @@ calibrate_new ()
   fprintf (stderr, "calibrate_new: start\n");
 #endif
 
+  // Initing pseudo-random numbers generator
+  gsl_rng_set (calibrate->rng, calibrate->seed);
+
   // Replacing the working dir
   chdir (input->directory);
 
@@ -1882,6 +1898,9 @@ calibrate_new ()
 
   // Obtaining the evaluator file
   calibrate->evaluator = input->evaluator;
+
+  // Obtaining the pseudo-random numbers generator seed
+  calibrate->seed = input->seed;
 
   // Reading the algorithm
   calibrate->algorithm = input->algorithm;
@@ -2102,6 +2121,8 @@ input_save (char *filename)
         xmlSetProp (node, XML_EVALUATOR, (xmlChar *) buffer);
       g_free (buffer);
     }
+  if (input->seed != DEFAULT_RANDOM_SEED)
+    xml_node_set_uint (node, XML_SEED, input->seed);
 
   // Setting the algorithm
   buffer = (char *) g_malloc (64);
@@ -2192,11 +2213,18 @@ options_new ()
   options->spin_processors
     = (GtkSpinButton *) gtk_spin_button_new_with_range (1., 64., 1.);
   gtk_spin_button_set_value (options->spin_processors, (gdouble) nthreads);
+  options->label_seed = (GtkLabel *)
+    gtk_label_new (gettext ("Pseudo-random numbers generator seed"));
+  options->spin_seed = (GtkSpinButton *)
+    gtk_spin_button_new_with_range (0., (gdouble) G_MAXULONG, 1.);
+  gtk_spin_button_set_value (options->spin_seed, (gdouble) input->seed);
   options->grid = (GtkGrid *) gtk_grid_new ();
   gtk_grid_attach (options->grid, GTK_WIDGET (options->label_processors),
                    0, 0, 1, 1);
   gtk_grid_attach (options->grid, GTK_WIDGET (options->spin_processors),
                    1, 0, 1, 1);
+  gtk_grid_attach (options->grid, GTK_WIDGET (options->label_seed), 0, 1, 1, 1);
+  gtk_grid_attach (options->grid, GTK_WIDGET (options->spin_seed), 1, 1, 1, 1);
   gtk_widget_show_all (GTK_WIDGET (options->grid));
   options->dialog = (GtkDialog *)
     gtk_dialog_new_with_buttons (gettext ("Options"),
@@ -2209,7 +2237,11 @@ options_new ()
     (GTK_CONTAINER (gtk_dialog_get_content_area (options->dialog)),
      GTK_WIDGET (options->grid));
   if (gtk_dialog_run (options->dialog) == GTK_RESPONSE_OK)
-    nthreads = gtk_spin_button_get_value_as_int (options->spin_processors);
+    {
+      nthreads = gtk_spin_button_get_value_as_int (options->spin_processors);
+      input->seed
+        = (unsigned long int) gtk_spin_button_get_value (options->spin_seed);
+    }
   gtk_widget_destroy (GTK_WIDGET (options->dialog));
 }
 
@@ -2404,7 +2436,7 @@ window_about ()
                          "authors", authors,
                          "translator-credits",
                          "Javier Burguete Tolosa (jburguete@eead.csic.es)",
-                         "version", "1.1.27", "copyright",
+                         "version", "1.1.28", "copyright",
                          "Copyright 2012-2015 Javier Burguete Tolosa",
                          "logo", window->logo,
                          "website-label", gettext ("Website"),
@@ -3765,7 +3797,7 @@ main (int argn, char **argc)
 #endif
   // Starting pseudo-random numbers generator
   calibrate->rng = gsl_rng_alloc (gsl_rng_taus2);
-  gsl_rng_set (calibrate->rng, DEFAULT_RANDOM_SEED);
+  calibrate->seed = DEFAULT_RANDOM_SEED;
   // Allowing spaces in the XML data file
   xmlKeepBlanksDefault (0);
 

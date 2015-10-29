@@ -282,8 +282,7 @@ be seen in the user manual provided with the software.
 
 \subsection{Sweep brute force method}
 
-The sweep brute force method finds the optimal set of parameters within a solution region by dividing it into regular subdomains. To find the optimal solution, the domain interval $x_i \in \PA{x_{i,min},\,x_{i,max}}$ is first defined for each variable $x_i$. Then, a regular partition in  $N_{x,i}$ subintervals is made.
-Note that the computational cost increases strongly as the number of variables grow.
+The sweep brute force method finds the optimal set of parameters within a solution region by dividing it into regular subdomains. To find the optimal solution, the domain interval $x_i \in \PA{x_{i,min},\,x_{i,max}}$ is first defined for each variable $x_i$. Then, a regular partition in  $N_{x,i}$ subintervals is made. This method is the most obvious and simplest algorithm of optimization. Moreover, it is so old that it is difficult to find references of first applications. Note that the computational cost increases strongly as the number of variables grow.
 
 Brute force algorithms present low convergence rates but they are strongly
 parallelizable because every simulation is completely independent. If the
@@ -295,8 +294,9 @@ rounding effects (every task has to perform a natural number of simulations).
 
 Monte-Carlo based methods run simulations using aleatory values of the
 variables assuming  uniform probability within the extreme values range. This is
-an old brute force method attributed to different authors. In
+another old brute force method attributed to different authors. In
 \citet{AtanassovDimov08} an interesting analysis of this method is presented.
+The algorithm is parallelizable in the same way as sweep algorithm.
 
 \subsection{Iterative algorithm applied to brute force methods}
 
@@ -396,8 +396,12 @@ genome with the selected bit inverted.
 
 This algorithm is rather similar to the mutation algorithm previously described but, since the probability to affect bits less significant is larger, so is the probability to produce smaller changes.
 
+\subsubsection{Parallelization}
+
 This method is also easily parallelizable following a similar scheme to the
-iterative algorithm.
+iterative algorithm although, in the same way, pure brute force methods allow
+better parallelization because genetic algorithm requires one for each
+generation.
 
 \section{Implementation}
 
@@ -555,6 +559,11 @@ evaluate the objective function has to be (where the results file has to begin
 with the objective function value):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 $ ./evaluator_name simulated_file experimental_file results_file
+\end{lstlisting}
+
+\item On UNIX type systems the GUI application can be open doing on a terminal:
+\begin{lstlisting}[language=bash,basicstyle=\scriptsize]
+$ ./calibrator
 \end{lstlisting}
 
 \end{itemize}
