@@ -31,14 +31,17 @@ memory machines, ...)
 OPTIONAL TOOLS AND LIBRARIES
 ----------------------------
 
-* gtk+ (to create the interactive GUI tool)
-* openmpi or mpich (to run in parallelized tasks)
-* doxygen (standard comments format to generate documentation)
-* latex (to build the PDF manuals)
+* [gtk+](http://www.gtk.org) (to create the interactive GUI tool)
+* [openmpi](http://www.open-mpi.org) or [mpich](http://www.mpich.org) (to run in
+parallelized tasks on multiple computers)
+* [doxygen](http://www.stack.nl/~dimitri/doxygen) (standard comments format to
+generate documentation)
+* [latex](https://www.latex-project.org/) (to build the PDF manuals)
 
 FILES
 -----
 
+The source code has to have the following files:
 * configure.ac: configure generator.
 * Makefile.in: Makefile generator.
 * config.h.in: config header generator.
@@ -109,8 +112,8 @@ libraries and utilities. You can follow detailed instructions in
 2. Then, in a MSYS2 terminal, follow steps 1 to 4 of the previous Debian 8
 section.
 
-MAKING REFERENCE MANUAL INSTRUCTIONS (file latex/refman.pdf)
-------------------------------------------------------------
+MAKING REFERENCE MANUAL INSTRUCTIONS
+------------------------------------
 
 On UNIX type systems you need [texlive](https://www.tug.org/texlive) installed.
 On Windows systems you need [MiKTeX](http://miktex.org).
@@ -119,11 +122,11 @@ USER INSTRUCTIONS
 -----------------
 
 * Command line in sequential mode:
-> $ ./calibrator [-nthreads X] input_file.xml
+> $ ./calibratorbin [-nthreads X] input_file.xml
 
 * Command line in parallelized mode (where X is the number of threads to open in
 every node):
-> $ mpirun [MPI options] ./calibrator [-nthreads X] input_file.xml
+> $ mpirun [MPI options] ./calibratorbin [-nthreads X] input_file.xml
 
 * The syntax of the simulator has to be:
 > $ ./simulator_name input_file_1 [input_file_2] [input_file_3] [input_file_4] output_file
@@ -131,6 +134,9 @@ every node):
 * The syntax of the program to evaluate the objetive function has to be (where
 the first data in the results file has to be the objective function value):
 > $ ./evaluator_name simulated_file data_file results_file
+
+* On UNIX type systems the GUI application can be open doing on a terminal:
+> $ ./calibrator
 
 INPUT FILE FORMAT
 -----------------
