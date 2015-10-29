@@ -1,4 +1,4 @@
-CALIBRATOR (1.1.26 version)
+CALIBRATOR (1.1.27 version)
 ===========================
 
 A software to perform calibrations or optimizations of empirical parameters.
@@ -77,7 +77,7 @@ a terminal:
 > $ git clone https://github.com/jburguete/calibrator.git
 
 3. Link the latest genetic version to genetic:
-> $ cd calibrator/1.1.26
+> $ cd calibrator/1.1.27
 >
 > $ ln -s ../../genetic/0.6.1 genetic
 

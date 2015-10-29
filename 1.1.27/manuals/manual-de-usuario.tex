@@ -7,6 +7,7 @@
 \usepackage{amsfonts}
 \usepackage{natbib}
 \usepackage{graphicx}
+\usepackage[spanish]{babel}
 
 \newcommand{\EQ}[2]
 {\begin{equation}#1\label{#2}\end{equation}}
@@ -88,19 +89,19 @@
 
 \begin{document}
 
-\title{Calibrator: an open source software to supply empirical parameters
-required in simulation models}
+\title{Calibrator: un software libre para obtener parámetros empíricos
+necesarios en modelos de simulación}
 
-\author{J. Burguete}
+\author{Javier Burguete}
 
 \maketitle
 
-\chapter{Building the executable file from the source code}
+\chapter{Generando el fichero ejecutable a partir del código fuente}
 
-The source code in Calibrator is written in C language. This software has
-been built and tested in the following operative systems:
+El código fuente en Calibrator está escrito en lenguaje C. El programa ha sido
+compilado y probado en los siguientes sistemas operativos:
 \begin{itemize}
-\item Debian kFreeBSD and Linux 8,
+\item Debian kFreeBSD y Linux 8,
 \item DragonFly BSD 4.2,
 \item FreeBSD 10,
 \item NetBSD 7.0,
@@ -108,84 +109,99 @@ been built and tested in the following operative systems:
 \item Windows 7\footnotemark[1],
 \item and Windows 8.1\footnotemark[1].
 \end{itemize}
-Probably, this software can be built and it works in other operative systems,
-software distributions or versions but it has not been tested.
-\footnotetext[1]{Windows 7 and Windows 8.1 are trademarks of Microsoft
+Es probable que también puede compilarse y funcione en otros sistemas
+operativos, otras distribuciones de software y otras versiones pero no ha sido
+probado.
+\footnotetext[1]{Windows 7 y Windows 8.1 son marcas registradas de Microsoft
 Corporation.}
 
-In order to build the executable file from the source code, a C compiler (\citet{gcc} or \citet{clang}), the configuration systems \citet{autoconf} and \citet{automake}, the executable creation control program \citet{gnumake} and the following open source external libraries are required:
+Para generar el fichero ejecutable a partir de código fuente, un compilador de C
+(\citet{gcc} o \citet{clang}), los sistemas de configuración \citet{autoconf}
+y \citet{automake}, el programa de control de la creación de ejecutables
+\citet{gnumake} and las siguienres librerías de software libre son necesarias:
 \begin{itemize}
-\item\citet{libxml}: Library required to read the main input file in XML format.
-\item\citet{gsl}: Scientific library required to generate the pseudo-random numbers used by the genetic and the Monte-Carlo algorithms.
-\item\citet{glib}: Library required to parse the input file templates and to implement some data types and the routines used to parallelize the usage of the computer's processors.
-\item\citet{gtk}: Optional library to build the interactive GUI application.
-\item\citet{openmpi} or \citet{mpich}: Optional libraries. When installed, one
-of them is used to allow parallelization in multiple computers.
+\item\citet{libxml}: Librería requerida para leer el fichero principal de
+entrada en formato XML.
+\item\citet{gsl}: Librería científica usada para generar los números
+pseudo-aleatorios usados por los algoritmos genético y de Monte-Carlo.
+\item\citet{glib}: Librería requerida para analizar las plantillas de los
+ficheros de entrada y para implementar algunos tipos de datos, funciones útiles
+y rutinas usadas para paralelizar la carga computacional en los diferentes
+procesadores de la máquina.
+\item\citet{gtk}: Librería opcional usada para dibujar la interfaz gráfica
+interactiva.
+\item\citet{openmpi} o \citet{mpich}: Librerías opcionales. Cuando están
+instaladas en el sistema una de ellas es usada para permitir la paralelización
+del cálculo en múltiples computadoras.
 \end{itemize}
-The indications provided in \citet{install-unix} can be followed in order to install all these utilities.
+Las indicaciones proporcionadas en \citet{install-unix} pueden seguirse para
+instalar todas estas utilidades.
 
-On OpenBSD 5.8, prior to build the code, you have to select adequate version of Autoconf and Automake doing on a terminal:
+En OpenBSD 5.8, antes de generar el código, deben seleccionarse versiones
+adecuadas de Autoconf y Automake haciendo en un terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 $ export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.15
 \end{lstlisting}
 
-On Window systems, you have to install MSYS2
-(http://sourceforge.net/projects/msys2) and the required libraries and
-utilities. You can follow detailed instructions in
+En sistemas Windows hay que instalar MSYS2
+(http://sourceforge.net/projects/msys2) y las librerías y utilidades requeridas.
+Para ello se pueden seguir las instrucciones detalladas en
 https://github.com/jburguete/install-unix.
 
-Once all the tools installed, the Genetic source code must be downloaded and it must be compiled following on a terminal:
+Una vez que todas las utilidades necesarias han sido instaladas, hay que
+descargar el código de Genetic. Luego puede compilarse haciendo en un terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 $ git clone https://github.com/jburguete/genetic.git
 $ cd genetic/0.6.1
 $ ./build
 \end{lstlisting}
 
-The following step is to download the source code Calibrator, to link it with Genetic and compile together by means of:
+El siguiente paso es descargar el código fuente de Calibrator, enlazarlo con el
+de Genetic y compilar todo junto haciendo:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 $ git clone https://github.com/jburguete/calibrator.git
-$ cd calibrator/1.1.25
+$ cd calibrator/1.1.27
 $ ln -s ../../genetic/0.6.1 genetic
 $ ./build
 \end{lstlisting}
 
-\chapter{Interface}
+\chapter{Interfaz}
 
-\section{Command line format}
+\section{Formato en línea de comandos}
 
 \begin{itemize}
 
-\item Command line in sequential mode (where X is the number of threads to
-execute):
+\item La línea de comandos en modo secuencial es (donde X es el número de tareas
+a ejecutar paralelamente):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 $ ./calibratorbin [-nthreads X] input_file.xml
 \end{lstlisting}
 
-\item Command line in parallelized mode (where X is the number of threads to
-open in every node):
+\item La línea de comandos en modo paralelizado en diferentes computadoras con
+MPI es (donde X es el número de tareas a ejecutar en cada nodo):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 $ mpirun [MPI options] ./calibratorbin [-nthreads X] input_file.xml
 \end{lstlisting}
 
-\item The syntax of the simulator has to be:
+\item La sintaxis del programa simulador ha de ser:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 $ ./simulator_name input_file_1 [input_file_2] [...] output_file
 \end{lstlisting}
-There are two options for the output file. It can begin with a number indicating
-the objective function value or it can be a results file that has to be
-evaluated by an external program (the evaluator) comparing with an experimental
-file.
+Hay dos opciones para el fichero de salida. Puede comenzar con un número que
+indique el valor de la función objetivo o puede ser un fichero de resultados que
+tiene que ser evaluado por un programa externo (el evaluador) comparando con un
+fichero de datos experimentales.
 
-\item In the last option of the former point, the syntax of the program to
-evaluate the objective function has to be (where the results file has to begin
-with the objective function value):
+\item En caso de la última opción del punto anterior, la sintaxis del programa
+para evaluar la función objetivo tiene que ser (donde el fichero de resultados
+debe comenzar con el valor de la función objetivo):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 $ ./evaluator_name simulated_file experimental_file results_file
 \end{lstlisting}
 
 \end{itemize}
 
-\section{Input files}
+\section{Ficheros de entrada}
 
 \subsection{Main input file}
 
@@ -344,7 +360,7 @@ the main window of this tool is represented. The main windows enable us to
 access to every variable, coefficient, algorithm and simulation softwares.
 \begin{figure}[ht!]
 	\centering
-	\includegraphics[width=\textwidth]{calibrator-en.eps}
+	\includegraphics[width=\textwidth]{calibrator-es.eps}
 	\caption{Main window of Calibrator GUI application.\label{FigWindow}}
 \end{figure}
 

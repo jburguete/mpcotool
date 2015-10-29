@@ -2376,7 +2376,7 @@ window_help ()
 {
   char *buffer, *buffer2;
   buffer2 = g_build_filename (current_directory, "manuals",
-                              "user-manual.pdf", NULL);
+                              gettext ("user-manual.pdf"), NULL);
   buffer = g_filename_to_uri (buffer2, NULL, NULL);
   g_free (buffer2);
   gtk_show_uri (NULL, buffer, GDK_CURRENT_TIME, NULL);
@@ -2404,7 +2404,7 @@ window_about ()
                          "authors", authors,
                          "translator-credits",
                          "Javier Burguete Tolosa (jburguete@eead.csic.es)",
-                         "version", "1.1.26", "copyright",
+                         "version", "1.1.27", "copyright",
                          "Copyright 2012-2015 Javier Burguete Tolosa",
                          "logo", window->logo,
                          "website-label", gettext ("Website"),

@@ -19,7 +19,8 @@ T5 = tests/test5/
 TESTS = $(T1)simulator $(T1)evaluator $(T2)simulator $(T2)evaluator \
 	$(T3)simulator $(T3)evaluator $(T4)simulator $(T5)simulator
 M1 = manuals/user-manual.pdf
-MANUALS = $(M1) manuals/reference-manual.pdf
+M2 = manuals/manual-de-usuario.pdf
+MANUALS = $(M1) $(M2) manuals/reference-manual.pdf
 
 all: calibratorbin \
 	calibrator \
@@ -123,6 +124,15 @@ $(M1): manuals/user-manual.tex manuals/bib.bib manuals/calibrator-en.eps \
 	Makefile
 	cd manuals; latex user-manual; bibtex user-manual; latex user-manual; \
 		latex user-manual; dvipdf user-manual
+
+manuals/calibrator-es.eps: manuals/calibrator-es.png
+	convert manuals/calibrator-es.png manuals/calibrator-es.eps
+
+$(M2): manuals/manual-de-usuario.tex manuals/bib.bib manuals/calibrator-es.eps \
+	Makefile
+	cd manuals; latex manual-de-usuario; bibtex manual-de-usuario; \
+		latex manual-de-usuario; latex manual-de-usuario; \
+		dvipdf manual-de-usuario
 
 manuals/reference-manual.pdf: calibrator README.md Doxyfile
 	doxygen

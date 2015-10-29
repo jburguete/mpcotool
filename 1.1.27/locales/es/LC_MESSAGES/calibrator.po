@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 1.1.26\n"
+"Project-Id-Version: 1.1.27\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-28 16:37+0100\n"
+"POT-Creation-Date: 2015-10-29 01:02+0100\n"
 "PO-Revision-Date: 2015-10-20 07:33+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -184,6 +184,10 @@ msgstr "Guardar fichero"
 #: calibrator.c:2362
 msgid "Best result"
 msgstr "Mejor resultado"
+
+#: calibrator.c:2379
+msgid "user-manual.pdf"
+msgstr "manual-de-usuario.pdf"
 
 #: calibrator.c:2402
 msgid "A software to make calibrations of empirical parameters"
