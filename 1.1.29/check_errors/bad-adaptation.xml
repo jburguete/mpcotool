@@ -1,0 +1,2 @@
+<?xml version="1.0"?>
+<calibrate simulator="a" algorithm="genetic" npopulation="10" ngenerations="3" mutation="0.1" reproduction="0.1" adaptation="2"/>
