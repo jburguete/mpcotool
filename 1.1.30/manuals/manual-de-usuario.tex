@@ -7,6 +7,7 @@
 \usepackage{amsfonts}
 \usepackage{natbib}
 \usepackage{graphicx}
+\usepackage[spanish]{babel}
 
 \newcommand{\EQ}[2]
 {\begin{equation}#1\label{#2}\end{equation}}
@@ -88,19 +89,19 @@
 
 \begin{document}
 
-\title{Calibrator: an open source software to supply empirical parameters
-required in simulation models}
+\title{Calibrator: un software libre para obtener parámetros empíricos
+necesarios en modelos de simulación}
 
 \author{Javier Burguete}
 
 \maketitle
 
-\chapter{Building the executable file from the source code}
+\chapter{Generando el fichero ejecutable a partir del código fuente}
 
-The source code in Calibrator is written in C language. This software has
-been built and tested in the following operative systems:
+El código fuente en Calibrator está escrito en lenguaje C. El programa ha sido
+compilado y probado en los siguientes sistemas operativos:
 \begin{itemize}
-\item Debian kFreeBSD and Linux 8,
+\item Debian kFreeBSD y Linux 8,
 \item DragonFly BSD 4.2,
 \item FreeBSD 10,
 \item NetBSD 7.0,
@@ -108,94 +109,111 @@ been built and tested in the following operative systems:
 \item Windows 7\footnotemark[1],
 \item and Windows 8.1\footnotemark[1].
 \end{itemize}
-Probably, this software can be built and it works in other operative systems,
-software distributions or versions but it has not been tested.
-\footnotetext[1]{Windows 7 and Windows 8.1 are trademarks of Microsoft
+Es probable que también puede compilarse y funcione en otros sistemas
+operativos, otras distribuciones de software y otras versiones pero no ha sido
+probado.
+\footnotetext[1]{Windows 7 y Windows 8.1 son marcas registradas de Microsoft
 Corporation.}
 
-In order to build the executable file from the source code, a C compiler (\citet{gcc} or \citet{clang}), the configuration systems \citet{autoconf}, \citet{automake} and \citet{pkgconfig}, the executable creation control program \citet{gnumake} and the following open source external libraries are required:
+Para generar el fichero ejecutable a partir de código fuente, un compilador de C
+(\citet{gcc} o \citet{clang}), los sistemas de configuración \citet{autoconf},
+\citet{automake} y \citet{pkgconfig}, el programa de control de la creación de
+ejecutables \citet{gnumake} and las siguienres librerías de software libre son
+necesarias:
 \begin{itemize}
-\item\citet{libxml}: Library required to read the main input file in XML format.
-\item\citet{gsl}: Scientific library required to generate the pseudo-random numbers used by the genetic and the Monte-Carlo algorithms.
-\item\citet{glib}: Library required to parse the input file templates and to implement some data types and the routines used to parallelize the usage of the computer's processors.
-\item\citet{gtk}: Optional library to build the interactive GUI application.
-\item\citet{openmpi} or \citet{mpich}: Optional libraries. When installed, one
-of them is used to allow parallelization in multiple computers.
+\item\citet{libxml}: Librería requerida para leer el fichero principal de
+entrada en formato XML.
+\item\citet{gsl}: Librería científica usada para generar los números
+pseudo-aleatorios usados por los algoritmos genético y de Monte-Carlo.
+\item\citet{glib}: Librería requerida para analizar las plantillas de los
+ficheros de entrada y para implementar algunos tipos de datos, funciones útiles
+y rutinas usadas para paralelizar la carga computacional en los diferentes
+procesadores de la máquina.
+\item\citet{gtk}: Librería opcional usada para dibujar la interfaz gráfica
+interactiva.
+\item\citet{openmpi} o \citet{mpich}: Librerías opcionales. Cuando están
+instaladas en el sistema una de ellas es usada para permitir la paralelización
+del cálculo en múltiples computadoras.
 \end{itemize}
-The indications provided in \citet{install-unix} can be followed in order to install all these utilities.
+Las indicaciones proporcionadas en \citet{install-unix} pueden seguirse para
+instalar todas estas utilidades.
 
-On OpenBSD 5.8, prior to build the code, you have to select adequate version of Autoconf and Automake doing on a terminal:
+En OpenBSD 5.8, antes de generar el código, deben seleccionarse versiones
+adecuadas de Autoconf y Automake haciendo en un terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 $ export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.15
 \end{lstlisting}
 
-On Window systems, you have to install MSYS2
-(http://sourceforge.net/projects/msys2) and the required libraries and
-utilities. You can follow detailed instructions in
+En sistemas Windows hay que instalar MSYS2
+(http://sourceforge.net/projects/msys2) y las librerías y utilidades requeridas.
+Para ello se pueden seguir las instrucciones detalladas en
 https://github.com/jburguete/install-unix.
 
-Once all the tools installed, the Genetic source code must be downloaded and it must be compiled following on a terminal:
+Una vez que todas las utilidades necesarias han sido instaladas, hay que
+descargar el código de Genetic. Luego puede compilarse haciendo en un terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 $ git clone https://github.com/jburguete/genetic.git
 $ cd genetic/0.6.1
 $ ./build
 \end{lstlisting}
 
-The following step is to download the source code Calibrator, to link it with Genetic and compile together by means of:
+El siguiente paso es descargar el código fuente de Calibrator, enlazarlo con el
+de Genetic y compilar todo junto haciendo:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 $ git clone https://github.com/jburguete/calibrator.git
-$ cd calibrator/1.1.29
+$ cd calibrator/1.1.30
 $ ln -s ../../genetic/0.6.1 genetic
 $ ./build
 \end{lstlisting}
 
-\chapter{Interface}
+\chapter{Interfaz}
 
-\section{Command line format}
+\section{Formato en línea de comandos}
 
 \begin{itemize}
 
-\item Command line in sequential mode (where X is the number of threads to
-execute):
+\item La línea de comandos en modo secuencial es (donde X es el número de tareas
+a ejecutar paralelamente):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 $ ./calibratorbin [-nthreads X] input_file.xml
 \end{lstlisting}
 
-\item Command line in parallelized mode (where X is the number of threads to
-open for every node):
+\item La línea de comandos en modo paralelizado en diferentes computadoras con
+MPI es (donde X es el número de tareas a ejecutar en cada nodo):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 $ mpirun [MPI options] ./calibratorbin [-nthreads X] input_file.xml
 \end{lstlisting}
 
-\item The syntax of the simulator has to be:
+\item La sintaxis del programa simulador ha de ser:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 $ ./simulator_name input_file_1 [input_file_2] [...] output_file
 \end{lstlisting}
-There are two options for the output file. It can begin with a number indicating
-the objective function value or it can be a results file that has to be
-evaluated by an external program (the evaluator) comparing with an experimental
-data file.
+Hay dos opciones para el fichero de salida. Puede comenzar con un número que
+indique el valor de la función objetivo o puede ser un fichero de resultados que
+tiene que ser evaluado por un programa externo (el evaluador) comparando con un
+fichero de datos experimentales.
 
-\item In the last option of the former point, the syntax of the program to
-evaluate the objective function has to be (where the results file has to begin
-with the objective function value):
+\item En caso de la última opción del punto anterior, la sintaxis del programa
+para evaluar la función objetivo tiene que ser (donde el fichero de resultados
+debe comenzar con el valor de la función objetivo):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 $ ./evaluator_name simulated_file experimental_file results_file
 \end{lstlisting}
 
-\item On UNIX type systems the GUI application can be open doing on a terminal:
+\item En systemas de tipo UNIX, la aplicación interactiva puede abrirse haciendo
+en un terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 $ ./calibrator
 \end{lstlisting}
 
 \end{itemize}
 
-\section{Input files}
+\section{Ficheros de entrada}
 
-\subsection{Main input file}
+\subsection{Fichero de entrada principal}
 
-This file has to be in XML format with a tree type structure as the
-represented in figure~\ref{FigMainFile}.
+Este fichero tiene que estar en formato XML con una estructura arbórea como la
+representada en la figura~\ref{FigMainFile}.
 \psset{xunit=0.4mm,yunit=0.4mm}
 \PSPICTURE{0}{-115}{280}{15}
 {
@@ -263,60 +281,68 @@ represented in figure~\ref{FigMainFile}.
 	\rput(160,-110){format}
 	\rput(200,-110){nsweeps}
 	\rput(240,-110){nbits}
-}{Structure of the main input file. Mandatory nodes and properties are in bold.
-Others properties can be also mandatory depending on the selected optimization
-algorithm}{FigMainFile}
+}{Estructura del fichero principal de entrada. Nodos y propiedades
+imprescindibles están en negrita. No obstante, otras propiedades también pueden
+ser necesarias en función del algoritmo de optimización seleccionado}
+{FigMainFile}
 
-The main XML node has to begin with the key label \emph{"calibrate"}. The
-available properties are:
+El nodo XML principal tiene que comenzar con la etiqueta ``\emph{calibrate}''.
+Las propiedades que se pueden definir son:
 \begin{description}
-	\item[simulator]: to indicate the simulator program.
-	\item[evaluator]: optional. It specifies the evaluator program if required.
-	\item[algorithm]: to set the optimization algorithm. Three value are currently available:
+	\item[simulator]: indica el programa simulador.
+	\item[evaluator]: opcional. Especifica el programa de evaluación en caso de
+		ser requerido.
+	\item[algorithm]: fija el algoritmo de optimización. Actualmente tres
+		métodos están disponibles:
 	\begin{description}
-		\item[sweep]: sweep brute force algorithm. It requires for each variable:
+		\item[sweep]: algoritmo de fuerza bruta de barrido. Requiere definir en
+			cada variable:
 		\begin{description}
-			\item[nsweeps]: number of sweeps to generate each variable in every
-			experiment.
+			\item[nsweeps]: número de barridos para la variable en cada
+				experimento.
 		\end{description}
-	\item[Monte-Carlo]: Monte-Carlo brute force algorithm. It requires on the main
-		XML node:
+	\item[Monte-Carlo]: algoritmo de fuerza bruta de Monte-Carlo. Requiere
+		definir en el nodo XML principal:
 		\begin{description}
-			\item[nsimulations]: number of simulations to run for each iteration in
-			every experiment.
+			\item[nsimulations]: número de simulaciones a ejecutar en cada
+				iteración y en cada experimento.
 		\end{description}
-	\item[genetic]: genetic algorithm. It requires the following parameters in the
-		main XML node:
+	\item[genetic]: algoritmo genético. Necesita definir los siguientes
+		parámetros en el nodo XML principal:
 		\begin{description}
-			\item[npopulation]: number of population entities.
-			\item[ngenerations]: number of generations.
-			\item[mutation]: mutation ratio.
-			\item[reproduction]: reproduction ratio.
-			\item[adaptation]: adaptation ratio.
+			\item[npopulation]: número de individuos de la población.
+			\item[ngenerations]: número de generaciones.
+			\item[mutation]: ratio de mutación.
+			\item[reproduction]: ratio de reproducción.
+			\item[adaptation]: ratio de adaptación.
 		\end{description}
-	And for each variable:
+	Además para cada variable:
 		\begin{description}
-			\item[nbits]: number of bits to encode each variable.
+			\item[nbits]: número de bits para codificar la variable.
 		\end{description}
 	\end{description}
-\item[niterations]: number of iterations (default 1) to perform the iterative
-algorithm.
-\item[nbest]: number of best simulations to calculate convergence interval on
-next iteration for the iterative algorithm (default 1).
-\item[tolerance]: tolerance parameter to relax the convergence interval of the
-iterative algorithm (default 0).
+\item[niterations]: número de iteraciones (valor por defecto: 1) para realizar
+	el algoritmo iterativo.
+\item[nbest]: número de mejores simulaciones con las que calcular el siguiente
+	intervalo de convergencia en la siguiente iteración del algoritmo iterativo
+	(valor por defecto: 1).
+\item[tolerance]: parámetro de tolerancia para relajar el intervalo de
+	convergencia del algoritmo iterativo (valor por defecto: 0)
 \end{description}
 
-The first type of child XML nodes has to begin with the key label
-\emph{"experiment"}. It details the experimental data and it contains the properties:
+El primer tipo de nodos XML hijos tiene que comenzar con la etiqueta
+``\emph{experiment}''. Especifica los datos experimentales. Contiene las
+propiedades:
 \begin{description}
-	\item[name]: name of the input data file with experimental results to calibrate.
-	\item[templateX]: $X$-th input data file template for the simulation program.
-	\item[weight]: weight (default 1) to apply in the objective function (see (\ref{EqObjectiveFunction})).
+	\item[name]: nombre del fichero de datos experimentales a calibrar.
+	\item[templateX]: $X$-ésima plantilla del fichero de datos experimentales
+		del programa de simulación.
+	\item[weight]: peso (valor por defecto: 1) para aplicar en la función
+		objetivo (véase (\ref{EqObjectiveFunction})).
 \end{description}
 
 The second type of child XML nodes has to begin with the key label
-\emph{"variable"}. It specifies the variables data and it has the properties:
+``\emph{variable}''. It specifies the variables data and it has the properties:
 \begin{description}
 	\item[name]: variable label. On the $X$-th variable, the program parse all input
 file templates creating the input simulation files by replacing all
@@ -349,7 +375,7 @@ the main window of this tool is represented. The main windows enable us to
 access to every variable, coefficient, algorithm and simulation softwares.
 \begin{figure}[ht!]
 	\centering
-	\includegraphics[width=\textwidth]{calibrator-en.eps}
+	\includegraphics[width=\textwidth]{calibrator-es.eps}
 	\caption{Main window of Calibrator GUI application.\label{FigWindow}}
 \end{figure}
 
@@ -1205,7 +1231,7 @@ reproduction in the Genetic default algorithm. Note that the identical bits in b
 
 \subsection{Adaptation algorithm}
 
-Another algorithm is included in Genetic called "adaptation" although, in the
+Another algorithm is included in Genetic called ``adaptation'' although, in the
 biological sense, it would be rather be a smooth mutation. First, one of the
 variables codified in the genome is randomly selected with uniform probability.
 Then, a bit is randomly chosen assuming a probability linearly decreasing with

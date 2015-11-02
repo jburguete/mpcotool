@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-01 19:28+0100\n"
+"POT-Creation-Date: 2015-11-02 02:18+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,372 +17,381 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: calibrator.c:247
+#: calibrator.c:248
 msgid "ERROR!"
 msgstr ""
 
-#: calibrator.c:492
+#: calibrator.c:493
 msgid "Unable to parse the input file"
 msgstr ""
 
-#: calibrator.c:500
+#: calibrator.c:501
 msgid "Bad root XML node"
 msgstr ""
 
-#: calibrator.c:508
+#: calibrator.c:509
 msgid "Bad simulator program"
 msgstr ""
 
-#: calibrator.c:523
+#: calibrator.c:524
 msgid "Bad pseudo-random numbers generator seed"
 msgstr ""
 
-#: calibrator.c:539
+#: calibrator.c:540
 msgid "Bad simulations number"
 msgstr ""
 
-#: calibrator.c:556
+#: calibrator.c:557
 msgid "Invalid population number"
 msgstr ""
 
-#: calibrator.c:562
+#: calibrator.c:563
 msgid "No population number"
 msgstr ""
 
-#: calibrator.c:573
+#: calibrator.c:574
 msgid "Invalid generations number"
 msgstr ""
 
-#: calibrator.c:579
+#: calibrator.c:580
 msgid "No generations number"
 msgstr ""
 
-#: calibrator.c:591
+#: calibrator.c:592
 msgid "Invalid mutation probability"
 msgstr ""
 
-#: calibrator.c:597
+#: calibrator.c:598
 msgid "No mutation probability"
 msgstr ""
 
-#: calibrator.c:609
+#: calibrator.c:610
 msgid "Invalid reproduction probability"
 msgstr ""
 
-#: calibrator.c:615
+#: calibrator.c:616
 msgid "No reproduction probability"
 msgstr ""
 
-#: calibrator.c:627
+#: calibrator.c:628
 msgid "Invalid adaptation probability"
 msgstr ""
 
-#: calibrator.c:633
+#: calibrator.c:634
 msgid "No adaptation probability"
 msgstr ""
 
-#: calibrator.c:644
+#: calibrator.c:645
 msgid "No enough survival entities to reproduce the population"
 msgstr ""
 
-#: calibrator.c:650
+#: calibrator.c:651
 msgid "Unknown algorithm"
 msgstr ""
 
-#: calibrator.c:665
+#: calibrator.c:666
 msgid "Bad iterations number"
 msgstr ""
 
-#: calibrator.c:675
+#: calibrator.c:676
 msgid "Invalid best number"
 msgstr ""
 
-#: calibrator.c:689
+#: calibrator.c:690
 msgid "Invalid tolerance"
 msgstr ""
 
-#: calibrator.c:715
-msgid "No experiment file name"
+#: calibrator.c:717 calibrator.c:735 calibrator.c:773 calibrator.c:788
+#: calibrator.c:813 calibrator.c:3797
+msgid "Experiment"
 msgstr ""
 
-#: calibrator.c:730
-msgid "Bad weight"
+#: calibrator.c:718
+msgid "no data file name"
 msgstr ""
 
-#: calibrator.c:765
-msgid "No experiment template"
+#: calibrator.c:736
+msgid "bad weight"
 msgstr ""
 
-#: calibrator.c:778
-#, c-format
-msgid "Experiment %u: bad templates number"
+#: calibrator.c:774 calibrator.c:815
+msgid "no template"
 msgstr ""
 
-#: calibrator.c:801
-#, c-format
-msgid "No experiment %u template%u"
+#: calibrator.c:790
+msgid "bad templates number"
 msgstr ""
 
-#: calibrator.c:816
+#: calibrator.c:829
 msgid "No calibration experiments"
 msgstr ""
 
-#: calibrator.c:825
-msgid "Bad XML node"
-msgstr ""
-
-#: calibrator.c:837
-msgid "No variable name"
-msgstr ""
-
-#: calibrator.c:858
-msgid "No minimum range"
-msgstr ""
-
-#: calibrator.c:877
-msgid "No maximum range"
-msgstr ""
-
-#: calibrator.c:899
-msgid "No sweeps number"
-msgstr ""
-
-#: calibrator.c:918
-msgid "Invalid bit number"
-msgstr ""
-
-#: calibrator.c:925
-msgid "No bits number"
-msgstr ""
-
-#: calibrator.c:933
-msgid "No calibration variables"
-msgstr ""
-
-#: calibrator.c:2198
-msgid "Processors number"
-msgstr ""
-
-#: calibrator.c:2203
-msgid "Pseudo-random numbers generator seed"
-msgstr ""
-
-#: calibrator.c:2216 calibrator.c:3333
-msgid "Options"
-msgstr ""
-
-#: calibrator.c:2219 calibrator.c:2279 calibrator.c:3273
-msgid "_OK"
-msgstr ""
-
-#: calibrator.c:2220 calibrator.c:2277 calibrator.c:3272
-msgid "_Cancel"
-msgstr ""
-
-#: calibrator.c:2244
-msgid "Calculating ..."
-msgstr ""
-
-#: calibrator.c:2246
-msgid "Calculating"
-msgstr ""
-
-#: calibrator.c:2274
-msgid "Save file"
-msgstr ""
-
-#: calibrator.c:2385
-msgid "Best result"
-msgstr ""
-
-#: calibrator.c:2402
-msgid "user-manual.pdf"
-msgstr ""
-
-#: calibrator.c:2425
-msgid "A software to make calibrations of empirical parameters"
-msgstr ""
-
-#: calibrator.c:2433
-msgid "Website"
-msgstr ""
-
-#: calibrator.c:3269
-msgid "Open input file"
-msgstr ""
-
-#: calibrator.c:3295
-msgid "_Sweep"
-msgstr ""
-
-#: calibrator.c:3295
-msgid "_Genetic"
-msgstr ""
-
-#: calibrator.c:3311
-msgid "Open"
-msgstr ""
-
-#: calibrator.c:3318
-msgid "Save"
-msgstr ""
-
-#: calibrator.c:3326
-msgid "Run"
-msgstr ""
-
-#: calibrator.c:3340
-msgid "Help"
-msgstr ""
-
-#: calibrator.c:3347
-msgid "About"
-msgstr ""
-
-#: calibrator.c:3354
-msgid "Exit"
-msgstr ""
-
-#: calibrator.c:3377 calibrator.c:3379
-msgid "Simulator program"
-msgstr ""
-
-#: calibrator.c:3382
-msgid "Simulator program executable file"
-msgstr ""
-
-#: calibrator.c:3386
-msgid "_Evaluator program"
-msgstr ""
-
-#: calibrator.c:3389
-msgid "Evaluator program"
-msgstr ""
-
-#: calibrator.c:3393
-msgid "Optional evaluator program executable file"
-msgstr ""
-
-#: calibrator.c:3397
-msgid "Simulations number"
-msgstr ""
-
-#: calibrator.c:3401
-msgid "Iterations number"
-msgstr ""
-
-#: calibrator.c:3406
-msgid "Tolerance"
-msgstr ""
-
-#: calibrator.c:3409
-msgid "Bests number"
-msgstr ""
-
-#: calibrator.c:3413
-msgid "Population number"
-msgstr ""
-
-#: calibrator.c:3417
-msgid "Generations number"
-msgstr ""
-
-#: calibrator.c:3421
-msgid "Mutation ratio"
-msgstr ""
-
-#: calibrator.c:3425
-msgid "Reproduction ratio"
-msgstr ""
-
-#: calibrator.c:3429
-msgid "Adaptation ratio"
-msgstr ""
-
-#: calibrator.c:3503
-msgid "Algorithm"
-msgstr ""
-
-#: calibrator.c:3510
-msgid "Variables selector"
-msgstr ""
-
-#: calibrator.c:3520
-msgid "Add variable"
-msgstr ""
-
-#: calibrator.c:3528
-msgid "Remove variable"
-msgstr ""
-
-#: calibrator.c:3529
-msgid "Name"
-msgstr ""
-
-#: calibrator.c:3533
-msgid "Minimum"
-msgstr ""
-
-#: calibrator.c:3544
-msgid "Maximum"
-msgstr ""
-
-#: calibrator.c:3556
-msgid "_Absolute minimum"
-msgstr ""
-
-#: calibrator.c:3570
-msgid "_Absolute maximum"
-msgstr ""
-
-#: calibrator.c:3584
-msgid "Precision digits"
-msgstr ""
-
-#: calibrator.c:3589
-msgid "Sweeps number"
-msgstr ""
-
-#: calibrator.c:3594
-msgid "Bits number"
-msgstr ""
-
-#: calibrator.c:3638
+#: calibrator.c:839 calibrator.c:854 calibrator.c:878 calibrator.c:888
+#: calibrator.c:910 calibrator.c:920 calibrator.c:929 calibrator.c:955
+#: calibrator.c:977 calibrator.c:988 calibrator.c:3715
 msgid "Variable"
 msgstr ""
 
-#: calibrator.c:3645
-msgid "Experiment selector"
+#: calibrator.c:840
+msgid "bad XML node"
 msgstr ""
 
-#: calibrator.c:3654
-msgid "Add experiment"
+#: calibrator.c:855
+msgid "no name"
+msgstr ""
+
+#: calibrator.c:880
+msgid "minimum range not allowed"
+msgstr ""
+
+#: calibrator.c:889
+msgid "no minimum range"
+msgstr ""
+
+#: calibrator.c:912
+msgid "maximum range not allowed"
+msgstr ""
+
+#: calibrator.c:921
+msgid "no maximum range"
+msgstr ""
+
+#: calibrator.c:931
+msgid "bad range"
+msgstr ""
+
+#: calibrator.c:956
+msgid "no sweeps number"
+msgstr ""
+
+#: calibrator.c:979
+msgid "invalid bits number"
+msgstr ""
+
+#: calibrator.c:989
+msgid "no bits number"
+msgstr ""
+
+#: calibrator.c:998
+msgid "No calibration variables"
+msgstr ""
+
+#: calibrator.c:2263
+msgid "Processors number"
+msgstr ""
+
+#: calibrator.c:2268
+msgid "Pseudo-random numbers generator seed"
+msgstr ""
+
+#: calibrator.c:2281 calibrator.c:3410
+msgid "Options"
+msgstr ""
+
+#: calibrator.c:2284 calibrator.c:2344 calibrator.c:3350
+msgid "_OK"
+msgstr ""
+
+#: calibrator.c:2285 calibrator.c:2342 calibrator.c:3349
+msgid "_Cancel"
+msgstr ""
+
+#: calibrator.c:2309
+msgid "Calculating ..."
+msgstr ""
+
+#: calibrator.c:2311
+msgid "Calculating"
+msgstr ""
+
+#: calibrator.c:2339
+msgid "Save file"
+msgstr ""
+
+#: calibrator.c:2450
+msgid "Best result"
+msgstr ""
+
+#: calibrator.c:2467
+msgid "user-manual.pdf"
+msgstr ""
+
+#: calibrator.c:2490
+msgid "A software to make calibrations of empirical parameters"
+msgstr ""
+
+#: calibrator.c:2498
+msgid "Website"
+msgstr ""
+
+#: calibrator.c:3346
+msgid "Open input file"
+msgstr ""
+
+#: calibrator.c:3372
+msgid "_Sweep"
+msgstr ""
+
+#: calibrator.c:3372
+msgid "_Genetic"
+msgstr ""
+
+#: calibrator.c:3388
+msgid "Open"
+msgstr ""
+
+#: calibrator.c:3395
+msgid "Save"
+msgstr ""
+
+#: calibrator.c:3403
+msgid "Run"
+msgstr ""
+
+#: calibrator.c:3417
+msgid "Help"
+msgstr ""
+
+#: calibrator.c:3424
+msgid "About"
+msgstr ""
+
+#: calibrator.c:3431
+msgid "Exit"
+msgstr ""
+
+#: calibrator.c:3454 calibrator.c:3456
+msgid "Simulator program"
+msgstr ""
+
+#: calibrator.c:3459
+msgid "Simulator program executable file"
+msgstr ""
+
+#: calibrator.c:3463
+msgid "_Evaluator program"
+msgstr ""
+
+#: calibrator.c:3466
+msgid "Evaluator program"
+msgstr ""
+
+#: calibrator.c:3470
+msgid "Optional evaluator program executable file"
+msgstr ""
+
+#: calibrator.c:3474
+msgid "Simulations number"
+msgstr ""
+
+#: calibrator.c:3478
+msgid "Iterations number"
+msgstr ""
+
+#: calibrator.c:3483
+msgid "Tolerance"
+msgstr ""
+
+#: calibrator.c:3486
+msgid "Bests number"
+msgstr ""
+
+#: calibrator.c:3490
+msgid "Population number"
+msgstr ""
+
+#: calibrator.c:3494
+msgid "Generations number"
+msgstr ""
+
+#: calibrator.c:3498
+msgid "Mutation ratio"
+msgstr ""
+
+#: calibrator.c:3502
+msgid "Reproduction ratio"
+msgstr ""
+
+#: calibrator.c:3506
+msgid "Adaptation ratio"
+msgstr ""
+
+#: calibrator.c:3580
+msgid "Algorithm"
+msgstr ""
+
+#: calibrator.c:3587
+msgid "Variables selector"
+msgstr ""
+
+#: calibrator.c:3597
+msgid "Add variable"
+msgstr ""
+
+#: calibrator.c:3605
+msgid "Remove variable"
+msgstr ""
+
+#: calibrator.c:3606
+msgid "Name"
+msgstr ""
+
+#: calibrator.c:3610
+msgid "Minimum"
+msgstr ""
+
+#: calibrator.c:3621
+msgid "Maximum"
+msgstr ""
+
+#: calibrator.c:3633
+msgid "_Absolute minimum"
+msgstr ""
+
+#: calibrator.c:3647
+msgid "_Absolute maximum"
 msgstr ""
 
 #: calibrator.c:3661
+msgid "Precision digits"
+msgstr ""
+
+#: calibrator.c:3666
+msgid "Sweeps number"
+msgstr ""
+
+#: calibrator.c:3671
+msgid "Bits number"
+msgstr ""
+
+#: calibrator.c:3722
+msgid "Experiment selector"
+msgstr ""
+
+#: calibrator.c:3731
+msgid "Add experiment"
+msgstr ""
+
+#: calibrator.c:3738
 msgid "Remove experiment"
 msgstr ""
 
-#: calibrator.c:3663 calibrator.c:3665 calibrator.c:3668
+#: calibrator.c:3740 calibrator.c:3742 calibrator.c:3745
 msgid "Experimental data file"
 msgstr ""
 
-#: calibrator.c:3672
+#: calibrator.c:3749
 msgid "Weight"
 msgstr ""
 
-#: calibrator.c:3677
+#: calibrator.c:3754
 msgid "Weight factor to build the objective function"
 msgstr ""
 
-#: calibrator.c:3697 calibrator.c:3706
+#: calibrator.c:3774 calibrator.c:3783
 msgid "Input template"
 msgstr ""
 
-#: calibrator.c:3710
+#: calibrator.c:3787
 msgid "Experimental input template file"
-msgstr ""
-
-#: calibrator.c:3720
-msgid "Experiment"
 msgstr ""

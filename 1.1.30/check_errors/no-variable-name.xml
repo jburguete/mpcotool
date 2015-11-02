@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<calibrate simulator="a" algorithm="Monte-Carlo" nsimulations="1">
+	<experiment name="a" template1="a"/>
+	<variable/>
+</calibrate>

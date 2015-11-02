@@ -45,6 +45,7 @@ OF SUCH DAMAGE.
 #include <libxml/parser.h>
 #include <libintl.h>
 #include <glib.h>
+#include <glib/gstdio.h>
 #ifdef G_OS_WIN32
 #include <windows.h>
 #elif (!__BSD_VISIBLE)
@@ -479,7 +480,7 @@ input_open (char *filename)
   unsigned int i;
 
 #if DEBUG
-  fprintf (stderr, "input_new: start\n");
+  fprintf (stderr, "input_open: start\n");
 #endif
 
   // Resetting input data
@@ -700,7 +701,7 @@ input_open (char *filename)
       if (xmlStrcmp (child->name, XML_EXPERIMENT))
         break;
 #if DEBUG
-      fprintf (stderr, "input_new: nexperiments=%u\n", input->nexperiments);
+      fprintf (stderr, "input_open: nexperiments=%u\n", input->nexperiments);
 #endif
       if (xmlHasProp (child, XML_NAME))
         {
@@ -712,11 +713,14 @@ input_open (char *filename)
         }
       else
         {
-          msg = gettext ("No experiment file name");
+          snprintf (buffer2, 64, "%s %u: %s",
+                    gettext ("Experiment"),
+                    input->nexperiments + 1, gettext ("no data file name"));
+          msg = buffer2;
           goto exit_on_error;
         }
 #if DEBUG
-      fprintf (stderr, "input_new: experiment=%s\n",
+      fprintf (stderr, "input_open: experiment=%s\n",
                input->experiment[input->nexperiments]);
 #endif
       input->weight = g_realloc (input->weight,
@@ -727,20 +731,23 @@ input_open (char *filename)
             = xml_node_get_float (child, XML_WEIGHT, &error_code);
           if (error_code)
             {
-              msg = gettext ("Bad weight");
+              snprintf (buffer2, 64, "%s %u: %s",
+                        gettext ("Experiment"),
+                        input->nexperiments + 1, gettext ("bad weight"));
+              msg = buffer2;
               goto exit_on_error;
             }
         }
       else
         input->weight[input->nexperiments] = 1.;
 #if DEBUG
-      fprintf (stderr, "input_new: weight=%lg\n",
+      fprintf (stderr, "input_open: weight=%lg\n",
                input->weight[input->nexperiments]);
 #endif
       if (!input->nexperiments)
         input->ninputs = 0;
 #if DEBUG
-      fprintf (stderr, "input_new: template[0]\n");
+      fprintf (stderr, "input_open: template[0]\n");
 #endif
       if (xmlHasProp (child, XML_TEMPLATE1))
         {
@@ -750,33 +757,37 @@ input_open (char *filename)
           input->template[0][input->nexperiments]
             = (char *) xmlGetProp (child, template[0]);
 #if DEBUG
-          fprintf (stderr, "input_new: experiment=%u template1=%s\n",
+          fprintf (stderr, "input_open: experiment=%u template1=%s\n",
                    input->nexperiments,
                    input->template[0][input->nexperiments]);
 #endif
           if (!input->nexperiments)
             ++input->ninputs;
 #if DEBUG
-          fprintf (stderr, "input_new: ninputs=%u\n", input->ninputs);
+          fprintf (stderr, "input_open: ninputs=%u\n", input->ninputs);
 #endif
         }
       else
         {
-          msg = gettext ("No experiment template");
+          snprintf (buffer2, 64, "%s %u: %s",
+                    gettext ("Experiment"),
+                    input->nexperiments + 1, gettext ("no template"));
+          msg = buffer2;
           goto exit_on_error;
         }
       for (i = 1; i < MAX_NINPUTS; ++i)
         {
 #if DEBUG
-          fprintf (stderr, "input_new: template%u\n", i + 1);
+          fprintf (stderr, "input_open: template%u\n", i + 1);
 #endif
           if (xmlHasProp (child, template[i]))
             {
-              if (input->nexperiments && input->ninputs < 2)
+              if (input->nexperiments && input->ninputs <= i)
                 {
-                  snprintf (buffer2, 64,
-                            gettext ("Experiment %u: bad templates number"),
-                            input->nexperiments + 1);
+                  snprintf (buffer2, 64, "%s %u: %s",
+                            gettext ("Experiment"),
+                            input->nexperiments + 1,
+                            gettext ("bad templates number"));
                   msg = buffer2;
                   goto exit_on_error;
                 }
@@ -786,20 +797,22 @@ input_open (char *filename)
               input->template[i][input->nexperiments]
                 = (char *) xmlGetProp (child, template[i]);
 #if DEBUG
-              fprintf (stderr, "input_new: experiment=%u template%u=%s\n",
+              fprintf (stderr, "input_open: experiment=%u template%u=%s\n",
                        input->nexperiments, i + 1,
                        input->template[i][input->nexperiments]);
 #endif
               if (!input->nexperiments)
                 ++input->ninputs;
 #if DEBUG
-              fprintf (stderr, "input_new: ninputs=%u\n", input->ninputs);
+              fprintf (stderr, "input_open: ninputs=%u\n", input->ninputs);
 #endif
             }
-          else if (input->nexperiments && input->ninputs > 1)
+          else if (input->nexperiments && input->ninputs >= i)
             {
-              snprintf (buffer2, 64, gettext ("No experiment %u template%u"),
-                        input->nexperiments + 1, i + 1);
+              snprintf (buffer2, 64, "%s %u: %s%u",
+                        gettext ("Experiment"),
+                        input->nexperiments + 1,
+                        gettext ("no template"), i + 1);
               msg = buffer2;
               goto exit_on_error;
             }
@@ -808,7 +821,7 @@ input_open (char *filename)
         }
       ++input->nexperiments;
 #if DEBUG
-      fprintf (stderr, "input_new: nexperiments=%u\n", input->nexperiments);
+      fprintf (stderr, "input_open: nexperiments=%u\n", input->nexperiments);
 #endif
     }
   if (!input->nexperiments)
@@ -822,7 +835,10 @@ input_open (char *filename)
     {
       if (xmlStrcmp (child->name, XML_VARIABLE))
         {
-          msg = gettext ("Bad XML node");
+          snprintf (buffer2, 64, "%s %u: %s",
+                    gettext ("Variable"),
+                    input->nvariables + 1, gettext ("bad XML node"));
+          msg = buffer2;
           goto exit_on_error;
         }
       if (xmlHasProp (child, XML_NAME))
@@ -834,7 +850,10 @@ input_open (char *filename)
         }
       else
         {
-          msg = gettext ("No variable name");
+          snprintf (buffer2, 64, "%s %u: %s",
+                    gettext ("Variable"),
+                    input->nvariables + 1, gettext ("no name"));
+          msg = buffer2;
           goto exit_on_error;
         }
       if (xmlHasProp (child, XML_MINIMUM))
@@ -852,10 +871,23 @@ input_open (char *filename)
             }
           else
             input->rangeminabs[input->nvariables] = -G_MAXDOUBLE;
+          if (input->rangemin[input->nvariables]
+              < input->rangeminabs[input->nvariables])
+            {
+              snprintf (buffer2, 64, "%s %u: %s",
+                        gettext ("Variable"),
+                        input->nvariables + 1,
+                        gettext ("minimum range not allowed"));
+              msg = buffer2;
+              goto exit_on_error;
+            }
         }
       else
         {
-          msg = gettext ("No minimum range");
+          snprintf (buffer2, 64, "%s %u: %s",
+                    gettext ("Variable"),
+                    input->nvariables + 1, gettext ("no minimum range"));
+          msg = buffer2;
           goto exit_on_error;
         }
       if (xmlHasProp (child, XML_MAXIMUM))
@@ -871,10 +903,32 @@ input_open (char *filename)
               = xml_node_get_float (child, XML_ABSOLUTE_MAXIMUM, &error_code);
           else
             input->rangemaxabs[input->nvariables] = G_MAXDOUBLE;
+          if (input->rangemax[input->nvariables]
+              > input->rangemaxabs[input->nvariables])
+            {
+              snprintf (buffer2, 64, "%s %u: %s",
+                        gettext ("Variable"),
+                        input->nvariables + 1,
+                        gettext ("maximum range not allowed"));
+              msg = buffer2;
+              goto exit_on_error;
+            }
         }
       else
         {
-          msg = gettext ("No maximum range");
+          snprintf (buffer2, 64, "%s %u: %s",
+                    gettext ("Variable"),
+                    input->nvariables + 1, gettext ("no maximum range"));
+          msg = buffer2;
+          goto exit_on_error;
+        }
+      if (input->rangemax[input->nvariables]
+          < input->rangemin[input->nvariables])
+        {
+          snprintf (buffer2, 64, "%s %u: %s",
+                    gettext ("Variable"),
+                    input->nvariables + 1, gettext ("bad range"));
+          msg = buffer2;
           goto exit_on_error;
         }
       input->precision = g_realloc
@@ -896,11 +950,14 @@ input_open (char *filename)
             }
           else
             {
-              msg = gettext ("No sweeps number");
+              snprintf (buffer2, 64, "%s %u: %s",
+                        gettext ("Variable"),
+                        input->nvariables + 1, gettext ("no sweeps number"));
+              msg = buffer2;
               goto exit_on_error;
             }
 #if DEBUG
-          fprintf (stderr, "input_new: nsweeps=%u nsimulations=%u\n",
+          fprintf (stderr, "input_open: nsweeps=%u nsimulations=%u\n",
                    input->nsweeps[input->nvariables], input->nsimulations);
 #endif
         }
@@ -915,14 +972,21 @@ input_open (char *filename)
               i = xml_node_get_uint (child, XML_NBITS, &error_code);
               if (error_code || !i)
                 {
-                  msg = gettext ("Invalid bit number");
+                  snprintf (buffer2, 64, "%s %u: %s",
+                            gettext ("Variable"),
+                            input->nvariables + 1,
+                            gettext ("invalid bits number"));
+                  msg = buffer2;
                   goto exit_on_error;
                 }
               input->nbits[input->nvariables] = i;
             }
           else
             {
-              msg = gettext ("No bits number");
+              snprintf (buffer2, 64, "%s %u: %s",
+                        gettext ("Variable"),
+                        input->nvariables + 1, gettext ("no bits number"));
+              msg = buffer2;
               goto exit_on_error;
             }
         }
@@ -942,7 +1006,7 @@ input_open (char *filename)
   xmlFreeDoc (doc);
 
 #if DEBUG
-  fprintf (stderr, "input_new: end\n");
+  fprintf (stderr, "input_open: end\n");
 #endif
   return 1;
 
@@ -950,7 +1014,7 @@ exit_on_error:
   show_error (msg);
   input_free ();
 #if DEBUG
-  fprintf (stderr, "input_new: end\n");
+  fprintf (stderr, "input_open: end\n");
 #endif
   return 0;
 }
@@ -2427,7 +2491,7 @@ window_about ()
                          "authors", authors,
                          "translator-credits",
                          "Javier Burguete Tolosa (jburguete@eead.csic.es)",
-                         "version", "1.1.29", "copyright",
+                         "version", "1.1.30", "copyright",
                          "Copyright 2012-2015 Javier Burguete Tolosa",
                          "logo", window->logo,
                          "website-label", gettext ("Website"),
