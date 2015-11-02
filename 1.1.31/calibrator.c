@@ -8,12 +8,12 @@ Copyright 2012-2015, AUTHORS.
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
 
-	1. Redistributions of source code must retain the above copyright notice,
-		this list of conditions and the following disclaimer.
+    1. Redistributions of source code must retain the above copyright notice,
+        this list of conditions and the following disclaimer.
 
-	2. Redistributions in binary form must reproduce the above copyright notice,
-		this list of conditions and the following disclaimer in the
-		documentation and/or other materials provided with the distribution.
+    2. Redistributions in binary form must reproduce the above copyright notice,
+        this list of conditions and the following disclaimer in the
+        documentation and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY AUTHORS ``AS IS'' AND ANY EXPRESS OR IMPLIED
 WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
@@ -116,9 +116,9 @@ const double precision[NPRECISIONS] = {
 
 const char *logo[] = {
   "32 32 3 1",
-  " 	c None",
-  ".	c #0000FF",
-  "+	c #FF0000",
+  "     c None",
+  ".    c #0000FF",
+  "+    c #FF0000",
   "                                ",
   "                                ",
   "                                ",
@@ -156,9 +156,9 @@ const char *logo[] = {
 /*
 const char * logo[] = {
 "32 32 3 1",
-" 	c #FFFFFFFFFFFF",
-".	c #00000000FFFF",
-"X	c #FFFF00000000",
+"     c #FFFFFFFFFFFF",
+".    c #00000000FFFF",
+"X    c #FFFF00000000",
 "                                ",
 "                                ",
 "                                ",
@@ -2491,7 +2491,7 @@ window_about ()
                          "authors", authors,
                          "translator-credits",
                          "Javier Burguete Tolosa (jburguete@eead.csic.es)",
-                         "version", "1.1.30", "copyright",
+                         "version", "1.1.31", "copyright",
                          "Copyright 2012-2015 Javier Burguete Tolosa",
                          "logo", window->logo,
                          "website-label", gettext ("Website"),
@@ -3224,47 +3224,15 @@ int
 window_read (char *filename)
 {
   unsigned int i;
-  char *buffer, *directory, *name;
+  char *buffer;
 #if DEBUG
   fprintf (stderr, "window_read: start\n");
 #endif
 
-  // Saving a backup of the current input file
-  directory = name = NULL;
-  if (input->directory)
-    directory = g_strdup (input->directory);
-  if (input->name)
-    name = g_strdup (input->name);
-
   // Reading new input file
   input_free ();
   if (!input_open (filename))
-    {
-
-      // Reading backup file on error
-#if DEBUG
-      fprintf (stderr, "window_read: error reading input file\n");
-#endif
-      buffer = g_build_filename (directory, name, NULL);
-      if (!input_open (buffer))
-        {
-
-          // Closing on backup file reading error
-#if DEBUG
-          fprintf (stderr, "window_read: error reading backup file\n");
-#endif
-          g_free (buffer);
-          g_free (name);
-          g_free (directory);
-#if DEBUG
-          fprintf (stderr, "window_read: end\n");
-#endif
-          return 0;
-        }
-      g_free (buffer);
-    }
-  g_free (name);
-  g_free (directory);
+    return 0;
 
   // Setting GTK+ widgets data
   buffer = g_build_filename (input->directory, input->simulator, NULL);
@@ -3339,22 +3307,65 @@ window_read (char *filename)
 void
 window_open ()
 {
-  char *buffer;
+  char *buffer, *directory, *name;
   GtkFileChooserDialog *dlg;
+
+#if DEBUG
+  fprintf (stderr, "window_open: start\n");
+#endif
+
+  // Saving a backup of the current input file
+  directory = g_strdup (input->directory);
+  name = g_strdup (input->name);
+
+  // Opening dialog
   dlg = (GtkFileChooserDialog *)
     gtk_file_chooser_dialog_new (gettext ("Open input file"),
                                  window->window,
                                  GTK_FILE_CHOOSER_ACTION_OPEN,
                                  gettext ("_Cancel"), GTK_RESPONSE_CANCEL,
                                  gettext ("_OK"), GTK_RESPONSE_OK, NULL);
-  if (gtk_dialog_run (GTK_DIALOG (dlg)) == GTK_RESPONSE_OK)
+  while (gtk_dialog_run (GTK_DIALOG (dlg)) == GTK_RESPONSE_OK)
     {
+
+      // Traying to open the input file
       buffer = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dlg));
       if (!window_read (buffer))
-        gtk_main_quit ();
-      g_free (buffer);
+        {
+#if DEBUG
+          fprintf (stderr, "window_open: error reading input file\n");
+#endif
+
+          // Reading backup file on error
+          buffer = g_build_filename (directory, name, NULL);
+          if (!input_open (buffer))
+            {
+
+              // Closing on backup file reading error
+#if DEBUG
+              fprintf (stderr, "window_read: error reading backup file\n");
+#endif
+              g_free (buffer);
+              g_free (name);
+              g_free (directory);
+#if DEBUG
+              fprintf (stderr, "window_open: end\n");
+#endif
+              gtk_main_quit ();
+            }
+          g_free (buffer);
+        }
+      else
+        break;
     }
+
+  // Freeing and closing
+  g_free (name);
+  g_free (directory);
   gtk_widget_destroy (GTK_WIDGET (dlg));
+#if DEBUG
+  fprintf (stderr, "window_open: end\n");
+#endif
 }
 
 /**

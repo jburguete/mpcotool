@@ -1,4 +1,4 @@
-CALIBRATOR (1.1.30 version)
+CALIBRATOR (1.1.31 version)
 ===========================
 
 A software to perform calibrations or optimizations of empirical parameters.
@@ -85,7 +85,7 @@ a terminal:
 > $ git clone https://github.com/jburguete/calibrator.git
 
 3. Link the latest genetic version to genetic:
-> $ cd calibrator/1.1.30
+> $ cd calibrator/1.1.31
 >
 > $ ln -s ../../genetic/0.6.1 genetic
 
@@ -116,11 +116,13 @@ section.
 3. Optional Windows binary package can be built doing in the terminal:
 > $ make windist
 
-MAKING REFERENCE MANUAL INSTRUCTIONS
-------------------------------------
+MAKING MANUALS INSTRUCTIONS
+---------------------------
 
 On UNIX type systems you need [texlive](https://www.tug.org/texlive) installed.
-On Windows systems you need [MiKTeX](http://miktex.org).
+On Windows systems you need [MiKTeX](http://miktex.org). In order to compile the
+manuals you can type on a terminal:
+> $ make manuals
 
 USER INSTRUCTIONS
 -----------------
@@ -146,7 +148,7 @@ INPUT FILE FORMAT
 -----------------
 
     <?xml version="1.0"/>
-    <calibrate simulator="simulator_name" evaluator="evaluator_name" algorithm="algorithm_type" nsimulations="simulations_number" niterations="iterations_number" tolerance="tolerance_value" nbest="best_number" npopulation="population_number" ngenerations="generations_number" mutation="mutation_ratio" reproduction="reproduction_ratio" adaptation="adaptation_ratio">
+    <calibrate simulator="simulator_name" evaluator="evaluator_name" algorithm="algorithm_type" nsimulations="simulations_number" niterations="iterations_number" tolerance="tolerance_value" nbest="best_number" npopulation="population_number" ngenerations="generations_number" mutation="mutation_ratio" reproduction="reproduction_ratio" adaptation="adaptation_ratio" seed="random_seed">
         <experiment name="data_file_1" template1="template_1_1" template2="template_1_2" ... weight="weight_1"/>
         ...
         <experiment name="data_file_N" template1="template_N_1" template2="template_N_2" ... weight="weight_N"/>
@@ -160,6 +162,8 @@ evaluate the variable. 0 apply for integer numbers.
 
 * *"weight"* defined for each experiment. Multiplies the objective value
 obtained for each experiment in the final objective function value.
+
+* *"seed"*: Seed of the pseudo-random numbers generator.
 
 Implemented algorithms are:
 
