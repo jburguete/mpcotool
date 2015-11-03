@@ -12,4 +12,4 @@ simulator: simulator.c Makefile
 	$(CC) $(CFLAGS) simulator.c $(OBJS) $(LIBS) -o simulator
 
 evaluator: evaluator.c Makefile
-	$(CC) $(CFLAGS) evaluator.c $(OBJS) $(LIBS) -o evaluator
+	$(CC) $(CFLAGS) evaluator.c $(LIBS) -o evaluator
