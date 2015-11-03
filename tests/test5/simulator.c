@@ -3,7 +3,7 @@ This is a test case to check the performance of optimization algorithms in an
 ill-conditioned problem
 
 The objective function is:
-f = 1 + (x - pi)^2 / 100 + (y - pi)^2 / 100 + sin(pi * (y - 0.5))
+f = 1 + (x - pi)^2 / 1000 + (y - pi)^2 / 1000 + sin(pi * (y - 0.5))
 
 The problem has 10 local minimums, located in very flat regions, on the interval
 x \in [-10, 10] and y \in [-10, 10]

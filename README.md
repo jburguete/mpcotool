@@ -7,7 +7,7 @@ VERSIONS
 --------
 
 * 1.0.0: Stable and recommended version.
-* 1.1.33: Developing version to do new features.
+* 1.1.34: Developing version to do new features.
 
 AUTHORS
 -------
@@ -99,7 +99,7 @@ a terminal:
 > $ git clone https://github.com/jburguete/calibrator.git
 
 3. Link the latest genetic version to genetic:
-> $ cd calibrator/1.1.33
+> $ cd calibrator/1.1.34
 >
 > $ ln -s ../../genetic/0.6.1 genetic
 

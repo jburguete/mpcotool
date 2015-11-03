@@ -1939,7 +1939,8 @@ calibrate_new ()
   fprintf (stderr, "calibrate_new: start\n");
 #endif
 
-  // Initing pseudo-random numbers generator
+  // Obtaining and initing the pseudo-random numbers generator seed
+  calibrate->seed = input->seed;
   gsl_rng_set (calibrate->rng, calibrate->seed);
 
   // Replacing the working dir
@@ -1950,9 +1951,6 @@ calibrate_new ()
 
   // Obtaining the evaluator file
   calibrate->evaluator = input->evaluator;
-
-  // Obtaining the pseudo-random numbers generator seed
-  calibrate->seed = input->seed;
 
   // Reading the algorithm
   calibrate->algorithm = input->algorithm;
@@ -2499,7 +2497,7 @@ window_about ()
                          "authors", authors,
                          "translator-credits",
                          "Javier Burguete Tolosa (jburguete@eead.csic.es)",
-                         "version", "1.1.33", 
+                         "version", "1.1.34", 
                          "copyright",
                          "Copyright 2012-2015 Javier Burguete Tolosa",
                          "logo", window->logo,
