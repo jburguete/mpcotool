@@ -1,4 +1,3 @@
 #!/bin/bash
-sed -i "s/"$1"\."$2"\."$3"/"$4"\."$5"\."$6"/g" $1.$2.$3/{configure.ac,Doxyfile,README.md,calibrator.c,locales/*/*/*.po} */*.tex */*/*.tex
-cp $1.$2.$3/README.md .
+sed -i "s/"$1"\."$2"\."$3"/"$4"\."$5"\."$6"/g" README.md $1.$2.$3/{configure.ac,Doxyfile,calibrator.c,locales/*/*/*.po} */*.tex */*/*.tex
 git mv $1.$2.$3 $4.$5.$6

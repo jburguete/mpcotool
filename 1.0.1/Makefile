@@ -120,11 +120,11 @@ $(T5)simulator: $(T5)simulator.c $(T5)Makefile
 	 calibrator.rc -o 
 
 $(MDIR)calibrator-en.eps: $(MDIR)calibrator-en.png
-	convert manuals/calibrator-en.png manuals/calibrator-en.eps
+	convert $(MDIR)calibrator-en.png $(MDIR)calibrator-en.eps
 
 $(M1): $(MDIR)user-manual.tex $(MDIR)bib.bib \
 	$(MDIR)calibrator-en.eps Makefile
-	cd ../manuals; latex user-manual; bibtex user-manual; latex user-manual; \
+	cd $(MDIR); latex user-manual; bibtex user-manual; latex user-manual; \
 		latex user-manual; dvipdf user-manual
 
 $(MDIR)calibrator-es.eps: $(MDIR)calibrator-es.png
@@ -132,7 +132,7 @@ $(MDIR)calibrator-es.eps: $(MDIR)calibrator-es.png
 
 $(M2): $(MDIR)manual-de-usuario.tex $(MDIR)bib.bib \
 	$(MDIR)calibrator-es.eps Makefile
-	cd ../manuals; latex manual-de-usuario; bibtex manual-de-usuario; \
+	cd $(MDIR); latex manual-de-usuario; bibtex manual-de-usuario; \
 		latex manual-de-usuario; latex manual-de-usuario; \
 		dvipdf manual-de-usuario
 
