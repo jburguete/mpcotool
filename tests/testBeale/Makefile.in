@@ -1,0 +1,4 @@
+CC = @CC@ @ARCH@ @LTO@ @STD@ @WINCFLAGS@ -O3 -lm #-pg 
+
+Beale: Beale.c Makefile
+	$(CC) Beale.c -lm -o Beale

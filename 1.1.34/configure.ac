@@ -155,5 +155,5 @@ AC_CONFIG_FILES([Makefile ../tests/test1/Makefile ../tests/test2/Makefile
 	../tests/test3/Makefile ../tests/test4/Makefile ../tests/test5/Makefile
 	../tests/testAckley/Makefile ../tests/testSphere/Makefile
 	../tests/testBooth/Makefile ../tests/testRosenbrock/Makefile
-	../tests/testEasom/Makefile])
+	../tests/testEasom/Makefile ../tests/testBeale/Makefile])
 AC_OUTPUT
