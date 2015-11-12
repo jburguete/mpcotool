@@ -6,7 +6,7 @@ A software to perform calibrations or optimizations of empirical parameters.
 VERSIONS
 --------
 
-* 1.0.0: Stable and recommended version.
+* 1.0.2: Stable and recommended version.
 * 1.1.34: Developing version to do new features.
 
 AUTHORS
@@ -80,8 +80,6 @@ DragonFly BSD 4.2
 _________________
 Dyson Illumos
 _____________
-Fedora Linux 23
-_______________
 FreeBSD 10.2
 ____________
 NetBSD 7.0
@@ -99,7 +97,7 @@ a terminal:
 > $ git clone https://github.com/jburguete/calibrator.git
 
 3. Link the latest genetic version to genetic:
-> $ cd calibrator/1.1.34
+> $ cd calibrator/1.0.2
 >
 > $ ln -s ../../genetic/0.6.1 genetic
 
@@ -129,6 +127,14 @@ section.
 
 3. Optional Windows binary package can be built doing in the terminal:
 > $ make windist
+
+Fedora Linux 23
+_______________
+
+1. In order to use OpenMPI compilation do in a terminal (in 64 bits version):
+> $ export PATH=$PATH:/usr/lib64/openmpi/bin
+
+2. Then, follow steps 1 to 4 of the previous Debian 8 section.
 
 MAKING MANUALS INSTRUCTIONS
 ---------------------------
