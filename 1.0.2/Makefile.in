@@ -18,9 +18,11 @@ T4 = ../tests/test4/
 T5 = ../tests/test5/
 ACKLEY = ../tests/testAckley/
 SPHERE = ../tests/testSphere/
+BOOTH = ../tests/testBooth/
+ROSENBROCK = ../tests/testRosenbrock/
 TESTS = $(T1)simulator $(T1)evaluator $(T2)simulator $(T2)evaluator \
 	$(T3)simulator $(T3)evaluator $(T4)simulator $(T5)simulator \
-	$(ACKLEY)Ackley $(SPHERE)Sphere
+	$(ACKLEY)Ackley $(SPHERE)Sphere $(BOOTH)Booth $(ROSENBROCK)Rosenbrock
 MDIR = ../manuals/
 M1 = $(MDIR)user-manual.pdf
 M2 = $(MDIR)manual-de-usuario.pdf
@@ -124,6 +126,12 @@ $(ACKLEY)Ackley: $(ACKLEY)Ackley.c $(ACKLEY)Makefile
 
 $(SPHERE)Sphere: $(SPHERE)Sphere.c $(SPHERE)Makefile
 	cd $(SPHERE); make
+
+$(BOOTH)Booth: $(BOOTH)Booth.c $(BOOTH)Makefile
+	cd $(BOOTH); make
+
+$(ROSENBROCK)Rosenbrock: $(ROSENBROCK)Rosenbrock.c $(ROSENBROCK)Makefile
+	cd $(ROSENBROCK); make
 
 @ICON@: calibrator.rc logo.png
 	convert logo.png calibrator.ico
