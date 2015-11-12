@@ -16,10 +16,11 @@ T2 = ../tests/test2/
 T3 = ../tests/test3/
 T4 = ../tests/test4/
 T5 = ../tests/test5/
-ACKLEY = ../tests/Ackley/
+ACKLEY = ../tests/testAckley/
+SPHERE = ../tests/testSphere/
 TESTS = $(T1)simulator $(T1)evaluator $(T2)simulator $(T2)evaluator \
 	$(T3)simulator $(T3)evaluator $(T4)simulator $(T5)simulator \
-	$(ACKLEY)Ackley
+	$(ACKLEY)Ackley $(SPHERE)Sphere
 MDIR = ../manuals/
 M1 = $(MDIR)user-manual.pdf
 M2 = $(MDIR)manual-de-usuario.pdf
@@ -28,10 +29,11 @@ MANUALS = $(M1) $(M2) $(MDIR)reference-manual.pdf
 all: calibratorbin \
 	calibrator \
 	locales/$(ES)calibrator.mo \
-	locales/$(FR)calibrator.mo \
-	$(TESTS)
+	locales/$(FR)calibrator.mo
 
 manuals: $(MANUALS)
+
+tests: $(TESTS)
 
 genetic/entity.o: genetic/entity.c genetic/entity.h $(DEP)
 	$(CC) $(CFLAGS) -c genetic/entity.c -o genetic/entity.o
@@ -119,6 +121,9 @@ $(T5)simulator: $(T5)simulator.c $(T5)Makefile
 
 $(ACKLEY)Ackley: $(ACKLEY)Ackley.c $(ACKLEY)Makefile
 	cd $(ACKLEY); make
+
+$(SPHERE)Sphere: $(SPHERE)Sphere.c $(SPHERE)Makefile
+	cd $(SPHERE); make
 
 @ICON@: calibrator.rc logo.png
 	convert logo.png calibrator.ico
