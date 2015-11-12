@@ -16,8 +16,10 @@ T2 = ../tests/test2/
 T3 = ../tests/test3/
 T4 = ../tests/test4/
 T5 = ../tests/test5/
+ACKLEY = ../tests/Ackley/
 TESTS = $(T1)simulator $(T1)evaluator $(T2)simulator $(T2)evaluator \
-	$(T3)simulator $(T3)evaluator $(T4)simulator $(T5)simulator
+	$(T3)simulator $(T3)evaluator $(T4)simulator $(T5)simulator \
+	$(ACKLEY)Ackley
 MDIR = ../manuals/
 M1 = $(MDIR)user-manual.pdf
 M2 = $(MDIR)manual-de-usuario.pdf
@@ -114,6 +116,9 @@ $(T4)simulator: $(T4)simulator.c $(T4)Makefile
 
 $(T5)simulator: $(T5)simulator.c $(T5)Makefile
 	cd $(T5); make
+
+$(ACKLEY)Ackley: $(ACKLEY)Ackley.c $(ACKLEY)Makefile
+	cd $(ACKLEY); make
 
 @ICON@: calibrator.rc logo.png
 	convert logo.png calibrator.ico

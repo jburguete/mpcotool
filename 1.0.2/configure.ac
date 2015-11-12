@@ -152,5 +152,6 @@ AC_CHECK_FUNCS([strtoul])
 # Final output
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([Makefile ../tests/test1/Makefile ../tests/test2/Makefile
-	../tests/test3/Makefile ../tests/test4/Makefile ../tests/test5/Makefile])
+	../tests/test3/Makefile ../tests/test4/Makefile ../tests/test5/Makefile
+	../tests/Ackley/Makefile])
 AC_OUTPUT
