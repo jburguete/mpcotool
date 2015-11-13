@@ -10,6 +10,8 @@
 \usepackage{lineno}
 \linenumbers
 
+\newcommand{\CALIBRATOR}{Calibrator}
+
 \newcommand{\EQ}[2]
 {\begin{equation}#1\label{#2}\end{equation}}
 
@@ -100,7 +102,7 @@
 
 \begin{document}
 
-\title{Calibrator: an open source software to supply empirical parameters
+\title{\CALIBRATOR: an open source software to supply empirical parameters
 required in simulation models}
 
 \author[eead,bifi]{J. Burguete\corref{cor1}}
@@ -144,7 +146,7 @@ furrow, canal
 \end{keyword}
 
 \begin{abstract}
-The present work describes Calibrator, a new software program to perform
+The present work describes \CALIBRATOR, a new software program to perform
 optimization or calibration of empirical parameters required in the
 formulation of numerical simulation models. The structure is such that it can be
 easily adapted to different external simulation codes.
@@ -154,7 +156,7 @@ included as alternative methods.
 Parallel computations are enabled in a simple way so that the work load can be
 distributed among the different processors available in one computer or in
 multiple computers of a cluster.
-The Calibrator usage and possibilities are illustrated by showing four practical
+The \CALIBRATOR usage and possibilities are illustrated by showing four practical
 applications in agriculture: optimization of a canal management; calibration of
 the empirical coefficients in a surface irrigation model; calibration in a
 ballistic sprinkler irrigation model and calibration in an irrigation engines
@@ -220,7 +222,7 @@ these methods are easily parallelizable increasing the performance when executed
 on machines with multiple processors. In \cite{Lacasta15} a deeper comparison of
 both, gradient based and stochastic optimization methods can be found.
 
-In this work Calibrator \citep{CalibratorGit}, a software to perform
+In this work \CALIBRATOR \citep{CalibratorGit}, a software to perform
 optimization or calibration of empirical parameters required in simulation
 models, is presented. It is open source with a BSD type license. All input data
 files used in the manuscript are also free and they can be downloaded in the
@@ -228,7 +230,7 @@ cited web page.
 
 The present paper is organized as follows: First, the concepts of calibration
 and optimization are presented as the main goal. Then the methods used to
-achieve them in Calibrator are described. The tool structure and organization
+achieve them in \CALIBRATOR are described. The tool structure and organization
 are next presented in detail. After, the performance is demonstrated using
 four different applications of interest in agriculture. Finally, the conclusions
 are drawn.
@@ -277,13 +279,13 @@ defined as:
 	\mathbf{y}_o=\arg\min_{\mathbf{y}}J\PA{\mathbf{x}\PA{\mathbf{y}}},
 }{EqParametersOptimal}
 being $\mathbf{y}_o$ the optimum set of parameters obtained by the model.
-Calibrator allows to achieve them by means of different methods. In addition,
+\CALIBRATOR allows to achieve them by means of different methods. In addition,
 the metric used to evaluate the functional is open and may be defined by the
 user.
 
 \section{Methods}
 
-The optimization methods implemented in Calibrator are next presented.
+The optimization methods implemented in \CALIBRATOR are next presented.
 Details of the algorithm and parallelization characteristics, as well as
 flowcharts, examples and diagrams of all methods described in this section can
 be seen in the user manual provided with the software.
@@ -308,7 +310,7 @@ The algorithm is parallelizable in the same way as sweep algorithm.
 
 \subsection{Iterative algorithm applied to brute force methods}
 
-Calibrator allows to iterate both sweep or Monte-Carlo brute force methods in
+\CALIBRATOR allows to iterate both sweep or Monte-Carlo brute force methods in
 order to seek convergence. In this case, the best results from the previous
 iteration are used to force new intervals in the variables for the following
 iteration. Then for $N_{best}^j$, the subset of the best simulation results in
@@ -342,7 +344,7 @@ has to be performed for each iteration.
 
 \subsection{Genetic method}
 
-Calibrator also offers the use of a genetic method Genetic \citep{genetic} with its default algorithms.
+\CALIBRATOR also offers the use of a genetic method Genetic \citep{genetic} with its default algorithms.
 It is inspired on the ideas in \citet{gaul}, but it has been fully reprogrammed involving more modern external libraries.
 The code in Genetic is also open source under BSD license.
 
@@ -380,7 +382,7 @@ The individuals of the former population that obtained lower values in the evalu
 }{EqSurvival}
 Furthermore, the ancestors to generate new individuals are chosen among the surviving population. Obviously, to have survival population, the following condition has to be enforced:
 \EQ{R_{mutation}+R_{reproduction}+R_{adaptation}<1}{EqSurvivalCondition}
-Calibrator uses a default aleatory criterion in Genetic, with a probability linearly decreasing with the ordinal in the ordered set of surviving individuals.
+\CALIBRATOR uses a default aleatory criterion in Genetic, with a probability linearly decreasing with the ordinal in the ordered set of surviving individuals.
 
 \subsubsection{Mutation algorithm}
 
@@ -413,15 +415,15 @@ generation.
 
 \section{Implementation}
 
-\subsection{Organization of Calibrator}
+\subsection{Organization of \CALIBRATOR}
 
 Let us assume that $N_{parameters}$ empirical parameters are sought desired so
 that the results from a simulation model are the best fit to $N_{experiments}$
 experimental data and that the simulator requires $N_{inputs}$ input files. The
-structure followed by Calibrator is summarized in \emph{main input file},
+structure followed by \CALIBRATOR is summarized in \emph{main input file},
 where both $N_{experiments}$ and $N_{inputs}$ are specified. Furthermore, it
 contains the extreme values of the empirical parameters and the chosen
-optimization algorithm. Then, Calibrator reads the
+optimization algorithm. Then, \CALIBRATOR reads the
 $N_{experiments}\times N_{inputs}$ templates to build the simulator input files
 replacing key labels by empirical parameter values created by the optimization
 algorithm. There are two options: either the simulator compares directly the
@@ -461,7 +463,7 @@ structure.
 	\psframe(-20,-70)(50,-80)
 	\psline{->}(50,-75)(60,-75)
 	\psline[linestyle=dotted,dotsep=1pt]{->}(60,-75)(90,-75)
-	\rput(75,50){Calibrator}
+	\rput(75,50){\CALIBRATOR}
 	\psframe(60,-95)(90,55)
 	\psline{->}(90,25)(100,25)
 	\psline{->}(90,5)(100,5)
@@ -526,18 +528,18 @@ structure.
 	\psline(270,-72.5)(280,-72.5)
 	\rput(120,-30){$N$-th experiment}
 	\psframe[linestyle=dotted](95,-85)(275,-25)
-}{Flowchart of the interactions among Calibrator, the input files and the
+}{Flowchart of the interactions among \CALIBRATOR, the input files and the
 simulation and evaluation programs to produce an objective function value for
 each empirical parameters combination generated by the optimization algorithm}
 {FigStructure}
 
-The whole process is repeated for each combination of empirical parameters generated by the optimization algorithm. Furthermore, Calibrator automatically parallelizes the simulations using all the available computing resources.
+The whole process is repeated for each combination of empirical parameters generated by the optimization algorithm. Furthermore, \CALIBRATOR automatically parallelizes the simulations using all the available computing resources.
 
 The required format for the main input file and the template files are described in the provided user manual.
 
 \subsection{Command line format}
 
-The code of Calibrator is written in C code using standard open source libraries. The software can be compiled in the most widely used operative systems (Windows, Linux, FreeBSD, ...). Instructions to build the executable can be read in the user manual.
+The code of \CALIBRATOR is written in C code using standard open source libraries. The software can be compiled in the most widely used operative systems (Windows, Linux, FreeBSD, ...). Instructions to build the executable can be read in the user manual.
 
 \begin{itemize}
 
@@ -579,7 +581,7 @@ $ ./calibrator
 \subsection{Graphical user interface application}
 
 A more user friendly application with an interactive graphical user interface is
-named as \emph{Calibrator}. This application plots a window as the represented
+named as \emph{\CALIBRATOR}. This application plots a window as the represented
 in the figure~\ref{FigWindow}. The main window enable us to fit all algorithms,
 parameters, data and executable files required in the simulation.
 \FIG{calibrator-en.eps}{Main window of the interactive graphical user interface
@@ -671,7 +673,7 @@ $y\in[-10,10]$.
 
 \subsection{Practical applications}
 
-In what follows, a few cases of practical application of Calibrator in combination with
+In what follows, a few cases of practical application of \CALIBRATOR in combination with
 different simulation codes are presented. They deal with the optimization
 or calibration 
 of variables in models used for open channel flow, surface irrigation, sprinkler irrigation and irrigation
@@ -825,7 +827,7 @@ spillways of the canal.
 	\\ & $R_{reproduction}=0.25$
 	\\ & $R_{adaptation}=0.25$
 	\\ \hline
-}{Optimal empirical parameters and value of the evaluation function in the simulation of the Canal de Violada using program SWIGS and several optimization algorithms in Calibrator with the same total number of simulations ($N_{total}=1024$)}
+}{Optimal empirical parameters and value of the evaluation function in the simulation of the Canal de Violada using program SWIGS and several optimization algorithms in \CALIBRATOR with the same total number of simulations ($N_{total}=1024$)}
 {TabSwigs}
 
 Figure~\ref{FigSwigs} shows the supplied discharges at the inlet and at the different
@@ -842,10 +844,10 @@ opening times obtained in this work}{FigSwigs}
 
 \subsubsection{Calibration of empirical parameters on surface irrigation}
 
-Calibrator has also been used to find out the empirical parameters required by the friction and infiltration
+\CALIBRATOR has also been used to find out the empirical parameters required by the friction and infiltration
 models used in the open source software SURCOS \citep{Surcos,SurcosGit,JaviSurcos3} for the simulation of the four furrow fertigation experiments published in \citet{JaviSurcos2}. The furrows were $100$ m long and they were simulated using 100 computational cells per furrow. The furrows were close together, they had the same geometry and the experiments were almost simultaneous, hence the soil properties were assumed uniform. 
 
-The friction model used in SURCOS is the Gauckler-Manning model. The infiltration model is the Kostiakov-Lewis model. They require calibration of three coefficients: the Gauckler-Manning number $n$ and the infiltration parameters $K$ and $a$. In the original paper, a brute force method using 3000 simulations was applied, each of them including the four experiments. In the present work, the same number of simulations has been used with the calibration methods implemented in Calibrator. The execution of 3000 simulations in the laptop computer took about 1h20m.  
+The friction model used in SURCOS is the Gauckler-Manning model. The infiltration model is the Kostiakov-Lewis model. They require calibration of three coefficients: the Gauckler-Manning number $n$ and the infiltration parameters $K$ and $a$. In the original paper, a brute force method using 3000 simulations was applied, each of them including the four experiments. In the present work, the same number of simulations has been used with the calibration methods implemented in \CALIBRATOR. The execution of 3000 simulations in the laptop computer took about 1h20m.  
 
 Table~\ref{TabSurcos} displays the results obtained for the optimal coefficient values and the corresponding
 value of the evaluation function, where the error norm is the same as in \citet{JaviSurcos2}. The results are similar among the different methods and also similar to those in the original paper. This is due to the existence of a relatively large region of combinations of the empirical parameters producing similar values in the evaluation function, thus preventing from an accurate convergence to the optimum set. However, it can be noticed that both the iterative method and the genetic methods produce better results than the Monte-Carlo method without iterations with the same total number of simulations.
@@ -876,7 +878,7 @@ value of the evaluation function, where the error norm is the same as in \citet{
 	\\ & $R_{reproduction}=0.1$
 	\\ & $R_{adaptation}=0.1$
 	\\ \hline
-}{Optimal empirical parameters and value of the evaluation function in the simulation of the furrow irrigation cases in \citet{JaviSurcos2} using program SURCOS and several optimization algorithms in Calibrator with the same total number of simulations ($N_{total}=3000$)}{TabSurcos}
+}{Optimal empirical parameters and value of the evaluation function in the simulation of the furrow irrigation cases in \citet{JaviSurcos2} using program SURCOS and several optimization algorithms in \CALIBRATOR with the same total number of simulations ($N_{total}=3000$)}{TabSurcos}
 
 Figure~\ref{FigSurcos} shows the results of the water depths and solute concentration from the simulation using the coefficients obtained by the Monte-Carlo method with $N_{iterations}=6$, compared with the experimental values.
 
@@ -935,9 +937,9 @@ Table~\ref{TabSprinklerI} shows the results from the calibration of parameters $
 	\\ & $R_{adaptation}=0.1$
 	\\ \hline
 }{Optimal empirical parameters and value of the evaluation function in the case of the sprinkler irrigation
-using different optimization algorithms in Calibrator with the same number of total simulations ($N_{total}=1000$)}{TabSprinklerI}
+using different optimization algorithms in \CALIBRATOR with the same number of total simulations ($N_{total}=1000$)}{TabSprinklerI}
 
-Next, using the optimal $D_{50}=3.06$ mm, $n=20.878$ and $P=0.388$ obtained by the Monte-Carlo method (Monte-Carlo with 8 iterations, see table~\ref{TabSprinklerI}) the values of $k_1$ and $k_2$ were calibrated in an experiment with medium wind velocity of 2.84 m/s. The different algorithms in Calibrator were used with a total number of 400 simulations in all cases. Their computational time was around 4 minutes in the laptop computer. In this case, the genetic algorithms provided the best results  (note that they provided identical results in two different configurations), although the rest of the methods reached similar values.
+Next, using the optimal $D_{50}=3.06$ mm, $n=20.878$ and $P=0.388$ obtained by the Monte-Carlo method (Monte-Carlo with 8 iterations, see table~\ref{TabSprinklerI}) the values of $k_1$ and $k_2$ were calibrated in an experiment with medium wind velocity of 2.84 m/s. The different algorithms in \CALIBRATOR were used with a total number of 400 simulations in all cases. Their computational time was around 4 minutes in the laptop computer. In this case, the genetic algorithms provided the best results  (note that they provided identical results in two different configurations), although the rest of the methods reached similar values.
 
 \TABLE{\scriptsize}{cccc}
 {
@@ -972,7 +974,7 @@ Next, using the optimal $D_{50}=3.06$ mm, $n=20.878$ and $P=0.388$ obtained by t
 	\\ & $R_{reproduction}=0.1$
 	\\ & $R_{adaptation}=0.1$
 	\\ \hline
-}{Optimal parameters and values of the evaluations function in the experiment of the sprinkler irrigation under wind conditions of 2.84 m/s using different optimization algorithms implemented in Calibrator with the same total number of simulations ($N_{total}=400$)}{TabSprinklerII}
+}{Optimal parameters and values of the evaluations function in the experiment of the sprinkler irrigation under wind conditions of 2.84 m/s using different optimization algorithms implemented in \CALIBRATOR with the same total number of simulations ($N_{total}=400$)}{TabSprinklerII}
 
 Finally, figure~\ref{FigSprinkler} shows the measured (in pluviometers) and simulated water distribution using the optimal parameters in windless and wind conditions of average velocity 2.84 m/s.
 
@@ -1097,7 +1099,7 @@ The best results where obtained with the genetic algorithms. Note that in this c
 	\\ & $R_{reproduction}=0.1$ & $\tau=3.32$s
 	\\ & $R_{adaptation}=0.1$
 	\\ \hline
-}{Optimal parameters and values of the evaluation function in the four towers pivot case in \citet{Ouazaa15} using different optimization algorithms implemented in Calibrator with the same number of total simulations ($N_{total}=10000$)}{TabPivot}
+}{Optimal parameters and values of the evaluation function in the four towers pivot case in \citet{Ouazaa15} using different optimization algorithms implemented in \CALIBRATOR with the same number of total simulations ($N_{total}=10000$)}{TabPivot}
 
 In figures \ref{FigPivot100} to \ref{FigPivot27} the histograms of the number
 of measured and simulated starts and stops are represented for the different
@@ -1132,13 +1134,13 @@ simulated starts and (bottom right)simulated stops for the pivot towers working 
 
 \section{Conclusions}
 
-The features and design of Calibrator, a new open source software tool to enable efficient calibration and optimization of empirical coefficients present in simulation models, has been presented. The program includes the option of two classic brute force models, the sweep and the Monte-Carlo method, both supplied with the option of an iterative procedure to improve convergence. Also, Calibrator offers the alternative of a genetic algorithm as implemented in Genetic.
+The features and design of \CALIBRATOR, a new open source software tool to enable efficient calibration and optimization of empirical coefficients present in simulation models, has been presented. The program includes the option of two classic brute force models, the sweep and the Monte-Carlo method, both supplied with the option of an iterative procedure to improve convergence. Also, \CALIBRATOR offers the alternative of a genetic algorithm as implemented in Genetic.
 
 The new tool allows an efficient performance, making the most of the processors present in a single computer and allowing an easy extension to parallelization distributed among different computers. In whole, a considerable data capacity and computational speed are achieved with independence of the physical problem under study or the algorithm chosen.
 
 For the analyzed cases, all the implemented optimization algorithms have reached similar results with the same total number of simulations. However, the iterative algorithm applied in combination with the Monte-Carlo method and the genetic algorithm leads to slightly better results than the pure brute force techniques. On the other hand, the iterative algorithm does not improve significantly the sweep method results. It is important to stress that the genetic algorithm provides always the best results with the lowest values of the ratio coefficients. This indicates that the efficiency of the genetic algorithm depends on the values of that coefficients and requires further research. 
 
-Calibrator has proved to be flexible in the adaptation to the syntax of diverse simulation codes and useful in the calibration and optimization of parameters involved in rather different irrigation problems. In the present work it has been shown successful for practical applications such as open channel flow management, furrow fertigation, sprinkler irrigation and sprinkler tower movement design.
+\CALIBRATOR has proved to be flexible in the adaptation to the syntax of diverse simulation codes and useful in the calibration and optimization of parameters involved in rather different irrigation problems. In the present work it has been shown successful for practical applications such as open channel flow management, furrow fertigation, sprinkler irrigation and sprinkler tower movement design.
 
 \section*{Acknowledgements}
 
