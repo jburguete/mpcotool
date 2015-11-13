@@ -5,6 +5,7 @@
 \usepackage{pstricks}
 \usepackage{multido}
 \usepackage{amsfonts}
+\usepackage{url}
 
 \usepackage{lineno}
 \linenumbers
@@ -92,6 +93,7 @@
 }
 
 \newcommand{\ABS}[1]{\left|#1\right|}
+\newcommand{\C}[1]{\left[#1\right]}
 \newcommand{\PA}[1]{\left(#1\right)}
 
 \bibliographystyle{elsarticle-harv}
@@ -205,7 +207,13 @@ convergences, they are more difficult to implement in general purpose software.
 Nonetheless, when calibration is understood as the adjustment of empirical
 values, gradient-based methods may fail due to the location of local minimums.
 Stochastic based optimization algorithms (as sweep, Monte-Carlo or genetic) are
-not affected by local minimum presence. Applications of these methods in
+not affected by local minimum presence. 
+%%%%%%%%%%%%%
+Detailed analysis of the properties and performance of several stochastic
+optimization algorithms can be seen, for instance, in \citet{Back96} or in
+\citet{HauptHaupt04}.
+%%%%%%%%%%%%%
+Applications of these methods in
 agriculture can be seen for instance in \citet{JaviSurcos2} (sweep),
 \citet{Ouazaa15} (Monte-Carlo) or \citet{Ebrahimiam13} (genetic). Moreover,
 these methods are easily parallelizable increasing the performance when executed
@@ -579,7 +587,87 @@ application}{FigWindow}
 
 \section{Results}
 
-\subsection{Standard optimization tests}
+\subsection{Optimization analytical tests}
+
+A continuación se presentan unos tests muy comunes (como puede comprobarse en
+Wikipedia
+\url{https://en.wikipedia.org/wiki/Test_functions_for_optimization}),
+para probar el rendimiento de los
+diferentes algoritmos de optimización. En todos los casos se trata de
+optimizar dos parámetros que minimizan una función analítica, teniendo el
+problema asimismo solución analítica. Los tests han sido extraídos de
+\citet{SurjanovicBingam15}, que los clasifican dentro de los siguientes tipos:
+\begin{itemize}
+\item Bowl-shaped function: Sphere function.
+\item Many local minima function: Ackley's function.
+\item Plate-shaped function: Booth's function.
+\item Valley-shaped function: Rosenbrock's function.
+\item Step ridges/drops function: Easom's function.
+\item Other type function: Beale's function.
+\end{itemize}
+
+Los algoritmos basados en el método de barrido, al recorrer los espacios de las
+variables en intervalos regulares, tienen
+muchas posiblidades de caer exactamente en el mínimo de la función cuando los
+parámetros que la minimizan son números enteros o racionales. En esos casos
+hemos decido modificar la función para que el mínimo se obtenga siempre con
+parámetros irracionales.
+
+\subsubsection{Sphere function}
+
+Esta se trata de la siguiente función cóncava de dos variables:
+\EQ{f_{Sphere}(x,\,y)=x^2+y^2,}{EqFSphere}
+cuyo mínimo se obtiene para:
+\EQ{f_{Sphere}(0,\,0)=0.}{EqFSphereM}
+Para evitar que el mínimo se obtenga en dos parámetros enteros usaremos la
+siguiente función modificada:
+\EQ{g_{Sphere}(x,\,y)=f_{Sphere}\PA{x-\frac{\pi}{4},\,y-\frac{\pi}{4}},}
+{EqGSphere}
+cuyo mínimo se obtiene para:
+\EQ{g_{Sphere}\PA{\frac{\pi}{4},\,\frac{\pi}{4}}=0.}{EqGSphereM}
+Trataremos de minimizar esta función en el intervalo $x\in[-5,5]$, $y\in[-5,5]$.
+
+\subsubsection{Ackley's function}
+
+Esta se trata de la siguiente función con un gran número de mínimos locales, lo
+que supone una de las mayores dificultades para los algoritmos de optimización:
+\EQ
+{
+	f_{Ackley}(x,\,y)=20\,\C{1-\exp\PA{-\frac15\,\sqrt{\frac{x^2+y^2}{2}}}}
+	+e-\exp\C{\frac{\cos(2\,\pi\,x)+\cos(2\,\pi\,y)}{2}},
+}{EqFAckley}
+cuyo mínimo se obtiene para:
+\EQ{f_{Ackley}(0,\,0)=0.}{EqFAckleyM}
+Para evitar que el mínimo se obtenga en dos parámetros enteros usaremos la
+siguiente función modificada:
+\EQ{g_{Ackley}(x,\,y)=f_{Ackley}\PA{x-\frac{\pi}{4},\,y-\frac{\pi}{4}},}
+{EqGAckley}
+cuyo mínimo se obtiene para:
+\EQ{g_{Ackley}\PA{\frac{\pi}{4},\,\frac{\pi}{4}}=0.}{EqGAckleyM}
+Trataremos de minimizar esta función en el intervalo $x\in[-40,40]$,
+$y\in[-40,40]$.
+
+\subsubsection{Booth's function}
+
+Esta se trata de la siguiente función con un gran número de mínimos locales, lo
+que supone una de las mayores dificultades para los algoritmos de optimización:
+\EQ{f_{Booth}(x,\,y)=(x+2\,y-7)^2+(2\,x+y-5)^2,}{EqFBooth}
+cuyo mínimo se obtiene para:
+\EQ{f_{Booth}(1,\,3)=0.}{EqFBoothM}
+Para evitar que el mínimo se obtenga en dos parámetros enteros usaremos la
+siguiente función modificada:
+\EQ{g_{Booth}(x,\,y)=f_{Booth}\PA{x-\frac{\pi}{4},\,y-\frac{\pi}{4}},}
+{EqGBooth}
+cuyo mínimo se obtiene para:
+\EQ{g_{Booth}\PA{1+\frac{\pi}{4},\,3+\frac{\pi}{4}}=0.}{EqGBoothM}
+Trataremos de minimizar esta función en el intervalo $x\in[-10,10]$,
+$y\in[-10,10]$.
+
+\subsubsection{Rosenbrock's function}
+
+\subsubsection{Easom's function}
+
+\subsubsection{Beale's function} 
 
 \subsection{Practical applications}
 

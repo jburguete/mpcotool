@@ -4,11 +4,10 @@
 double
 Beale (double x, double y)
 {
-  double xy, k1, k2, k3;
-  xy = x * y;
-  k1 = 1.5 - x + xy;
-  k2 = 2.25 - x + xy * xy;
-  k3 = 2.625 - x + xy * xy * xy;
+  double k1, k2, k3;
+  k1 = 1.5 - x + x * y;
+  k2 = 2.25 - x + x * y * y;
+  k3 = 2.625 - x + x * y * y * y;
   return k1 * k1 + k2 * k2 + k3 * k3;
 }
 
