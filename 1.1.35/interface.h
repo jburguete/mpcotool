@@ -109,12 +109,17 @@ typedef struct
   GtkToolButton *button_help;   ///< Help GtkToolButton.
   GtkToolButton *button_about;  ///< Help GtkToolButton.
   GtkToolButton *button_exit;   ///< Exit GtkToolButton.
+  GtkGrid *grid_files;          ///< Files GtkGrid.
   GtkLabel *label_simulator;    ///< Simulator program GtkLabel.
   GtkFileChooserButton *button_simulator;
   ///< Simulator program GtkFileChooserButton.
   GtkCheckButton *check_evaluator;      ///< Evaluator program GtkCheckButton.
   GtkFileChooserButton *button_evaluator;
   ///< Evaluator program GtkFileChooserButton.
+  GtkLabel *label_result;       ///< Result file GtkLabel.
+  GtkEntry *entry_result;       ///< Result file GtkEntry.
+  GtkLabel *label_variables;    ///< Variables file GtkLabel.
+  GtkEntry *entry_variables;    ///< Variables file GtkEntry.
   GtkFrame *frame_algorithm;    ///< GtkFrame to set the algorithm.
   GtkGrid *grid_algorithm;      ///< GtkGrid to set the algorithm.
   GtkRadioButton *button_algorithm[NALGORITHMS];

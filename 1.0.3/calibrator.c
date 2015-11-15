@@ -97,6 +97,11 @@ Input input[1];
   ///< Input struct to define the input file to calibrator.
 Calibrate calibrate[1];         ///< Calibration data.
 
+const xmlChar *result_name = (xmlChar *) "result";
+  ///< Name of the result file.
+const xmlChar *variables_name = (xmlChar *) "variables";
+  ///< Name of the variables file.
+
 const xmlChar *template[MAX_NINPUTS] = {
   XML_TEMPLATE1, XML_TEMPLATE2, XML_TEMPLATE3, XML_TEMPLATE4,
   XML_TEMPLATE5, XML_TEMPLATE6, XML_TEMPLATE7, XML_TEMPLATE8
@@ -455,6 +460,8 @@ input_free ()
   g_free (input->nbits);
   xmlFree (input->evaluator);
   xmlFree (input->simulator);
+  xmlFree (input->result);
+  xmlFree (input->variables);
   input->nexperiments = input->ninputs = input->nvariables = 0;
 #if DEBUG
   fprintf (stderr, "input_free: end\n");
@@ -501,6 +508,14 @@ input_open (char *filename)
       msg = gettext ("Bad root XML node");
       goto exit_on_error;
     }
+
+  // Getting results file names
+  input->result = (char *) xmlGetProp (node, XML_RESULT);
+  if (!input->result)
+    input->result = (char *) xmlStrdup (result_name);
+  input->variables = (char *) xmlGetProp (node, XML_VARIABLES);
+  if (!input->variables)
+    input->variables = (char *) xmlStrdup (variables_name);
 
   // Opening simulator program name
   input->simulator = (char *) xmlGetProp (node, XML_SIMULATOR);
@@ -1946,6 +1961,10 @@ calibrate_new ()
   // Replacing the working dir
   g_chdir (input->directory);
 
+  // Getting results file names
+  calibrate->result = input->result;
+  calibrate->variables = input->variables;
+
   // Obtaining the simulator file
   calibrate->simulator = input->simulator;
 
@@ -2105,8 +2124,8 @@ calibrate_new ()
     }
 
   // Opening result files
-  calibrate->file_result = g_fopen ("result", "w");
-  calibrate->file_variables = g_fopen ("variables", "w");
+  calibrate->file_result = g_fopen (calibrate->result, "w");
+  calibrate->file_variables = g_fopen (calibrate->variables, "w");
 
   // Performing the algorithm
   switch (calibrate->algorithm)
@@ -2160,6 +2179,10 @@ input_save (char *filename)
   xmlDocSetRootElement (doc, node);
 
   // Adding properties to the root XML node
+  if (xmlStrcmp ((const xmlChar *) input->result, result_name))
+    xmlSetProp (node, XML_RESULT, (xmlChar *) input->result);
+  if (xmlStrcmp ((const xmlChar *) input->variables, variables_name))
+    xmlSetProp (node, XML_VARIABLES, (xmlChar *) input->variables);
   file2 = g_file_new_for_path (input->simulator);
   buffer = g_file_get_relative_path (file, file2);
   g_object_unref (file2);
@@ -2362,6 +2385,12 @@ window_save ()
           (GTK_FILE_CHOOSER (window->button_evaluator));
       else
         input->evaluator = NULL;
+      input->result
+        = (char *) xmlStrdup ((const xmlChar *)
+                              gtk_entry_get_text (window->entry_result));
+      input->variables
+        = (char *) xmlStrdup ((const xmlChar *)
+                              gtk_entry_get_text (window->entry_variables));
 
       // Setting the algorithm
       switch (window_get_algorithm ())
@@ -2497,7 +2526,7 @@ window_about ()
                          "authors", authors,
                          "translator-credits",
                          "Javier Burguete Tolosa (jburguete@eead.csic.es)",
-                         "version", "1.1.34", 
+                         "version", "1.0.3",
                          "copyright",
                          "Copyright 2012-2015 Javier Burguete Tolosa",
                          "logo", window->logo,
@@ -3277,6 +3306,8 @@ window_read (char *filename)
     return 0;
 
   // Setting GTK+ widgets data
+  gtk_entry_set_text (window->entry_result, input->result);
+  gtk_entry_set_text (window->entry_variables, input->variables);
   buffer = g_build_filename (input->directory, input->simulator, NULL);
   gtk_file_chooser_set_filename (GTK_FILE_CHOOSER
                                  (window->button_simulator), buffer);
@@ -3520,6 +3551,32 @@ window_new ()
   gtk_widget_set_tooltip_text
     (GTK_WIDGET (window->button_evaluator),
      gettext ("Optional evaluator program executable file"));
+
+  // Creating the results files labels and entries
+  window->label_result = (GtkLabel *) gtk_label_new (gettext ("Result file"));
+  window->entry_result = (GtkEntry *) gtk_entry_new ();
+  window->label_variables
+    = (GtkLabel *) gtk_label_new (gettext ("Variables file"));
+  window->entry_variables = (GtkEntry *) gtk_entry_new ();
+
+  // Creating the files grid and attaching widgets
+  window->grid_files = (GtkGrid *) gtk_grid_new ();
+  gtk_grid_attach (window->grid_files, GTK_WIDGET (window->label_simulator),
+                   0, 0, 1, 1);
+  gtk_grid_attach (window->grid_files, GTK_WIDGET (window->button_simulator),
+                   1, 0, 1, 1);
+  gtk_grid_attach (window->grid_files, GTK_WIDGET (window->check_evaluator),
+                   2, 0, 1, 1);
+  gtk_grid_attach (window->grid_files, GTK_WIDGET (window->button_evaluator),
+                   3, 0, 1, 1);
+  gtk_grid_attach (window->grid_files, GTK_WIDGET (window->label_result),
+                   4, 0, 1, 1);
+  gtk_grid_attach (window->grid_files, GTK_WIDGET (window->entry_result),
+                   5, 0, 1, 1);
+  gtk_grid_attach (window->grid_files, GTK_WIDGET (window->label_variables),
+                   6, 0, 1, 1);
+  gtk_grid_attach (window->grid_files, GTK_WIDGET (window->entry_variables),
+                   7, 0, 1, 1);
 
   // Creating the algorithm properties
   window->label_simulations = (GtkLabel *) gtk_label_new
@@ -3852,21 +3909,14 @@ window_new ()
 
   // Creating the grid and attaching the widgets to the grid
   window->grid = (GtkGrid *) gtk_grid_new ();
-  gtk_grid_attach (window->grid, GTK_WIDGET (window->bar_buttons), 0, 0, 6, 1);
+  gtk_grid_attach (window->grid, GTK_WIDGET (window->bar_buttons), 0, 0, 3, 1);
+  gtk_grid_attach (window->grid, GTK_WIDGET (window->grid_files), 0, 1, 3, 1);
   gtk_grid_attach (window->grid,
-                   GTK_WIDGET (window->label_simulator), 0, 1, 1, 1);
+                   GTK_WIDGET (window->frame_algorithm), 0, 2, 1, 1);
   gtk_grid_attach (window->grid,
-                   GTK_WIDGET (window->button_simulator), 1, 1, 1, 1);
+                   GTK_WIDGET (window->frame_variable), 1, 2, 1, 1);
   gtk_grid_attach (window->grid,
-                   GTK_WIDGET (window->check_evaluator), 2, 1, 1, 1);
-  gtk_grid_attach (window->grid,
-                   GTK_WIDGET (window->button_evaluator), 3, 1, 1, 1);
-  gtk_grid_attach (window->grid,
-                   GTK_WIDGET (window->frame_algorithm), 0, 2, 2, 1);
-  gtk_grid_attach (window->grid,
-                   GTK_WIDGET (window->frame_variable), 2, 2, 2, 1);
-  gtk_grid_attach (window->grid,
-                   GTK_WIDGET (window->frame_experiment), 4, 2, 2, 1);
+                   GTK_WIDGET (window->frame_experiment), 2, 2, 1, 1);
   gtk_container_add (GTK_CONTAINER (window->window), GTK_WIDGET (window->grid));
 
   // Setting the window logo

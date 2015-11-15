@@ -53,6 +53,8 @@ enum Algorithm
  */
 typedef struct
 {
+  char *result;                 ///< Name of the result file.
+  char *variables;              ///< Name of the variables file.
   char *simulator;              ///< Name of the simulator program.
   char *evaluator;
   ///< Name of the program to evaluate the objective function.
@@ -91,6 +93,8 @@ typedef struct
  */
 typedef struct
 {
+  char *result;                 ///< Name of the result file.
+  char *variables;              ///< Name of the variables file.
   char *simulator;              ///< Name of the simulator program.
   char *evaluator;
   ///< Name of the program to evaluate the objective function.

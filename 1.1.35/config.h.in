@@ -91,6 +91,7 @@ OF SUCH DAMAGE.
   ///< precision XML label.
 #define XML_REPRODUCTION (const xmlChar*)"reproduction"
   ///< reproduction XML label.
+#define XML_RESULT (const xmlChar*)"result"     ///< result XML label.
 #define XML_SIMULATOR (const xmlChar*)"simulator"
   ///< simulator XML label.
 #define XML_SEED (const xmlChar*)"seed" ///< seed XML label.
@@ -114,6 +115,8 @@ OF SUCH DAMAGE.
 #define XML_TOLERANCE (const xmlChar*)"tolerance"
   ///< tolerance XML label.
 #define XML_VARIABLE (const xmlChar*)"variable" ///< variable XML label.
+#define XML_VARIABLES (const xmlChar*)"variables"
+  ///< variables XML label.
 #define XML_WEIGHT (const xmlChar*)"weight"     ///< weight XML label.
 
 #endif
