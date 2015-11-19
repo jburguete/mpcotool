@@ -373,7 +373,7 @@ _________
     }
 ```
 
-* Produce simulator input files to reproduce the experimental data file
+* produce simulator input files to reproduce the experimental data file
 *27-48.txt* as:
 
 ```json
