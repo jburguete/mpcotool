@@ -152,14 +152,20 @@ In order to build the tests follow the next instructions:
 
 1. Link some tests that needs genetic library doing in a terminal:
 > $ cd tests/test2
+>
 > $ ln -s ../../../genetic/0.6.1 genetic
+>
 > $ cd ../test3
+>
 > $ ln -s ../../../genetic/0.6.1 genetic
+>
 > $ cd ../test4
+>
 > $ ln -s ../../../genetic/0.6.1 genetic
 
 2. Build all tests doing in the same terminal:
 > $ cd ../1.0.6
+>
 > $ make tests
 
 USER INSTRUCTIONS
