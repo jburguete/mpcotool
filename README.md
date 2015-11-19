@@ -329,8 +329,7 @@ _________
 
 * A template file as *template1.js*:
 
-_
-
+```json
     {
       "towers" :
       [
@@ -372,6 +371,7 @@ _
       "comp-time-step": 0.1,
       "active-percent" : 27.48
     }
+```
 
 * Produce simulator input files to reproduce the experimental data file
 *27-48.txt* as:
