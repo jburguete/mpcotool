@@ -193,7 +193,7 @@ INPUT FILE FORMAT
 The format of the main input file is as:
 
 ```xml
-<?xml version="1.0"/>
+<?xml version="1.0"?>
 <calibrate simulator="simulator_name" evaluator="evaluator_name" algorithm="algorithm_type" nsimulations="simulations_number" niterations="iterations_number" tolerance="tolerance_value" nbest="best_number" npopulation="population_number" ngenerations="generations_number" mutation="mutation_ratio" reproduction="reproduction_ratio" adaptation="adaptation_ratio" seed="random_seed" result="result_file" variables="variables_file">
     <experiment name="data_file_1" template1="template_1_1" template2="template_1_2" ... weight="weight_1"/>
     ...
@@ -313,20 +313,19 @@ _________
 
 * The input file is:
 
-_
-
-    <?xml version="1.0"?>
-    <calibrate simulator="pivot" evaluator="compare" algorithm="sweep">
-        <experiment name="27-48.txt" template1="template1.js"/>
-        <experiment name="42.txt" template1="template2.js"/>
-        <experiment name="52.txt" template1="template3.js"/>
-        <experiment name="100.txt" template1="template4.js"/>
-        <variable name="alpha1" minimum="179.70" maximum="180.20" format="%.2lf" nsweeps="5"/>
-        <variable name="alpha2" minimum="179.30" maximum="179.60" format="%.2lf" nsweeps="5"/>
-        <variable name="random" minimum="0.00" maximum="0.20" format="%.2lf" nsweeps="5"/>
-        <variable name="boot-time" minimum="0.0" maximum="3.0" format="%.1lf" nsweeps="5"/>
-    </calibrate>
-
+```xml
+<?xml version="1.0"?>
+<calibrate simulator="pivot" evaluator="compare" algorithm="sweep">
+    <experiment name="27-48.txt" template1="template1.js"/>
+    <experiment name="42.txt" template1="template2.js"/>
+    <experiment name="52.txt" template1="template3.js"/>
+    <experiment name="100.txt" template1="template4.js"/>
+    <variable name="alpha1" minimum="179.70" maximum="180.20" format="%.2lf" nsweeps="5"/>
+    <variable name="alpha2" minimum="179.30" maximum="179.60" format="%.2lf" nsweeps="5"/>
+    <variable name="random" minimum="0.00" maximum="0.20" format="%.2lf" nsweeps="5"/>
+    <variable name="boot-time" minimum="0.0" maximum="3.0" format="%.1lf" nsweeps="5"/>
+</calibrate>
+```
 
 * A template file as *template1.js*:
 
