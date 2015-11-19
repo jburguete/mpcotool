@@ -149,8 +149,9 @@ MAKING TESTS INSTRUCTIONS
 
 In order to build the tests follow the next instructions:
 
-1. Link some tests that needs genetic library doing in a terminal:
-> $ cd tests/test2
+1. Link some tests that needs genetic library doing in a terminal (assuming that
+you are in the directory calibrator/1.0.6):
+> $ cd ../tests/test2
 >
 > $ ln -s ../../../genetic/0.6.1 genetic
 >
