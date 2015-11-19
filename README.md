@@ -59,13 +59,13 @@ The source code has to have the following files:
 * 1.0.6/Doxyfile: configuration file to generate doxygen documentation.
 * TODO: tasks to do.
 * README.md: this file.
-* tests/testX/*: several tests to check the program working.
-* locales/*/LC_MESSAGES/calibrator.po: translation files.
-* manuals/*.eps: manual figures in EPS format.
-* manuals/*.png: manual figures in PNG format.
-* manuals/*.tex: documentation source files.
+* tests/testX/\*: several tests to check the program working.
+* locales/\*/LC_MESSAGES/calibrator.po: translation files.
+* manuals/\*.eps: manual figures in EPS format.
+* manuals/\*.png: manual figures in PNG format.
+* manuals/\*.tex: documentation source files.
 * applications/\*/\*: several practical application cases.
-* check_errors/*.xml: several mistaken files to check error handling.
+* check_errors/\*.xml: several mistaken files to check error handling.
 
 BUILDING INSTRUCTIONS
 ---------------------
@@ -192,15 +192,17 @@ INPUT FILE FORMAT
 
 The format of the main input file is as:
 
-    <?xml version="1.0"/>
-    <calibrate simulator="simulator_name" evaluator="evaluator_name" algorithm="algorithm_type" nsimulations="simulations_number" niterations="iterations_number" tolerance="tolerance_value" nbest="best_number" npopulation="population_number" ngenerations="generations_number" mutation="mutation_ratio" reproduction="reproduction_ratio" adaptation="adaptation_ratio" seed="random_seed" result="result_file" variables="variables_file">
-        <experiment name="data_file_1" template1="template_1_1" template2="template_1_2" ... weight="weight_1"/>
-        ...
-        <experiment name="data_file_N" template1="template_N_1" template2="template_N_2" ... weight="weight_N"/>
-        <variable name="variable_1" minimum="min_value" maximum="max_value" precision="precision_digits" sweeps="sweeps_number" nbits="bits_number"/>
-        ...
-        <variable name="variable_M" minimum="min_value" maximum="max_value" precision="precision_digits" sweeps="sweeps_number" nbits="bits_number"/>
-    </calibrate>
+```
+<?xml version="1.0"/>
+<calibrate simulator="simulator_name" evaluator="evaluator_name" algorithm="algorithm_type" nsimulations="simulations_number" niterations="iterations_number" tolerance="tolerance_value" nbest="best_number" npopulation="population_number" ngenerations="generations_number" mutation="mutation_ratio" reproduction="reproduction_ratio" adaptation="adaptation_ratio" seed="random_seed" result="result_file" variables="variables_file">
+    <experiment name="data_file_1" template1="template_1_1" template2="template_1_2" ... weight="weight_1"/>
+    ...
+    <experiment name="data_file_N" template1="template_N_1" template2="template_N_2" ... weight="weight_N"/>
+    <variable name="variable_1" minimum="min_value" maximum="max_value" precision="precision_digits" sweeps="sweeps_number" nbits="bits_number"/>
+    ...
+    <variable name="variable_M" minimum="min_value" maximum="max_value" precision="precision_digits" sweeps="sweeps_number" nbits="bits_number"/>
+</calibrate>
+```
 
 with:
 
