@@ -1239,25 +1239,21 @@ calibrate_print ()
   unsigned int i;
   char buffer[512];
 #if HAVE_MPI
-  if (!calibrate->mpi_rank)
+  if (calibrate->mpi_rank)
+    return;
+#endif
+  printf ("%s\n", gettext ("Best result"));
+  fprintf (calibrate->file_result, "%s\n", gettext ("Best result"));
+  printf ("error = %.15le\n", calibrate->error_old[0]);
+  fprintf (calibrate->file_result, "error = %.15le\n", calibrate->error_old[0]);
+  for (i = 0; i < calibrate->nvariables; ++i)
     {
-#endif
-      printf ("THE BEST IS\n");
-      fprintf (calibrate->file_result, "THE BEST IS\n");
-      printf ("error=%.15le\n", calibrate->error_old[0]);
-      fprintf (calibrate->file_result, "error=%.15le\n",
-               calibrate->error_old[0]);
-      for (i = 0; i < calibrate->nvariables; ++i)
-        {
-          snprintf (buffer, 512, "%s=%s\n",
-                    calibrate->label[i], format[calibrate->precision[i]]);
-          printf (buffer, calibrate->value_old[i]);
-          fprintf (calibrate->file_result, buffer, calibrate->value_old[i]);
-        }
-      fflush (calibrate->file_result);
-#if HAVE_MPI
+      snprintf (buffer, 512, "%s = %s\n",
+                calibrate->label[i], format[calibrate->precision[i]]);
+      printf (buffer, calibrate->value_old[i]);
+      fprintf (calibrate->file_result, buffer, calibrate->value_old[i]);
     }
-#endif
+  fflush (calibrate->file_result);
 }
 
 /**
@@ -1948,17 +1944,32 @@ calibrate_free ()
 void
 calibrate_new ()
 {
+  GTimeZone *tz;
+  GDateTime *t0, *t;
   unsigned int i, j, *nbits;
 
 #if DEBUG
   fprintf (stderr, "calibrate_new: start\n");
 #endif
 
+  // Getting initial time
+#if DEBUG
+  fprintf (stderr, "calibrate_new: getting initial time\n");
+#endif
+  tz = g_time_zone_new_utc ();
+  t0 = g_date_time_new_now (tz);
+
   // Obtaining and initing the pseudo-random numbers generator seed
+#if DEBUG
+  fprintf (stderr, "calibrate_new: getting initial seed\n");
+#endif
   calibrate->seed = input->seed;
   gsl_rng_set (calibrate->rng, calibrate->seed);
 
-  // Replacing the working dir
+  // Replacing the working directory
+#if DEBUG
+  fprintf (stderr, "calibrate_new: replacing the working directory\n");
+#endif
   g_chdir (input->directory);
 
   // Getting results file names
@@ -2140,6 +2151,17 @@ calibrate_new ()
       calibrate_iterate ();
     }
 
+  // Getting calculation time
+  t = g_date_time_new_now (tz);
+  calibrate->calculation_time = 0.000001 * g_date_time_difference (t, t0);
+  g_date_time_unref (t);
+  g_date_time_unref (t0);
+  g_time_zone_unref (tz);
+  printf ("%s = %.6lg s\n",
+          gettext ("Calculation time"), calibrate->calculation_time);
+  fprintf (calibrate->file_result, "%s = %.6lg s\n",
+           gettext ("Calculation time"), calibrate->calculation_time);
+
   // Closing result files
   fclose (calibrate->file_variables);
   fclose (calibrate->file_result);
@@ -2288,11 +2310,17 @@ options_new ()
     = (GtkLabel *) gtk_label_new (gettext ("Processors number"));
   options->spin_processors
     = (GtkSpinButton *) gtk_spin_button_new_with_range (1., 64., 1.);
+  gtk_widget_set_tooltip_text
+    (GTK_WIDGET (options->spin_processors),
+     gettext ("Number of threads to perform the calibration/optimization"));
   gtk_spin_button_set_value (options->spin_processors, (gdouble) nthreads);
   options->label_seed = (GtkLabel *)
     gtk_label_new (gettext ("Pseudo-random numbers generator seed"));
   options->spin_seed = (GtkSpinButton *)
     gtk_spin_button_new_with_range (0., (gdouble) G_MAXULONG, 1.);
+  gtk_widget_set_tooltip_text
+    (GTK_WIDGET (options->spin_seed),
+     gettext ("Seed to init the pseudo-random numbers generator"));
   gtk_spin_button_set_value (options->spin_seed, (gdouble) input->seed);
   options->grid = (GtkGrid *) gtk_grid_new ();
   gtk_grid_attach (options->grid, GTK_WIDGET (options->label_processors),
@@ -2471,18 +2499,22 @@ window_run ()
     gtk_main_iteration ();
   calibrate_new ();
   gtk_widget_destroy (GTK_WIDGET (running->dialog));
-  snprintf (buffer, 64, "error=%.15le\n", calibrate->error_old[0]);
+  snprintf (buffer, 64, "error = %.15le\n", calibrate->error_old[0]);
   msg2 = g_strdup (buffer);
   for (i = 0; i < calibrate->nvariables; ++i, msg2 = msg)
     {
-      snprintf (buffer, 64, "%s=%s\n",
+      snprintf (buffer, 64, "%s = %s\n",
                 calibrate->label[i], format[calibrate->precision[i]]);
       snprintf (buffer2, 64, buffer, calibrate->value_old[i]);
       msg = g_strconcat (msg2, buffer2, NULL);
       g_free (msg2);
     }
-  show_message (gettext ("Best result"), msg2, INFO_TYPE);
+  snprintf (buffer, 64, "%s = %.6lg s", gettext ("Calculation time"),
+            calibrate->calculation_time);
+  msg = g_strconcat (msg2, buffer, NULL);
   g_free (msg2);
+  show_message (gettext ("Best result"), msg, INFO_TYPE);
+  g_free (msg);
   calibrate_free ();
 #if DEBUG
   fprintf (stderr, "window_run: end\n");
@@ -2517,21 +2549,19 @@ window_about ()
     "Borja Latorre Garcés <borja.latorre@csic.es>",
     NULL
   };
-  gtk_show_about_dialog (window->window,
-                         "program_name",
-                         "Calibrator",
-                         "comments",
-                         gettext ("A software to make calibrations of "
-                                  "empirical parameters"),
-                         "authors", authors,
-                         "translator-credits",
-                         "Javier Burguete Tolosa <jburguete@eead.csic.es>",
-                         "version", "1.0.4",
-                         "copyright",
-                         "Copyright 2012-2015 Javier Burguete Tolosa",
-                         "logo", window->logo,
-                         "website", "https://github.com/jburguete/calibrator",
-                         "license-type", GTK_LICENSE_BSD, NULL);
+  gtk_show_about_dialog
+    (window->window,
+     "program_name", "Calibrator",
+     "comments",
+     gettext ("A software to perform calibrations/optimizations of empirical "
+              "parameters"),
+     "authors", authors,
+     "translator-credits", "Javier Burguete Tolosa <jburguete@eead.csic.es>",
+     "version", "1.1.38",
+     "copyright", "Copyright 2012-2015 Javier Burguete Tolosa",
+     "logo", window->logo,
+     "website", "https://github.com/jburguete/calibrator",
+     "license-type", GTK_LICENSE_BSD, NULL);
 }
 
 /**
@@ -3453,6 +3483,11 @@ window_new ()
   char *label_algorithm[NALGORITHMS] = {
     "_Monte-Carlo", gettext ("_Sweep"), gettext ("_Genetic")
   };
+  char *tip_algorithm[NALGORITHMS] = {
+    gettext ("Monte-Carlo brute force algorithm"),
+    gettext ("Sweep brute force algorithm"),
+    gettext ("Genetic algorithm")
+  };
 
   // Creating the window
   window->window = (GtkWindow *) gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -3554,9 +3589,14 @@ window_new ()
   // Creating the results files labels and entries
   window->label_result = (GtkLabel *) gtk_label_new (gettext ("Result file"));
   window->entry_result = (GtkEntry *) gtk_entry_new ();
+  gtk_widget_set_tooltip_text
+    (GTK_WIDGET (window->entry_result), gettext ("Best results file"));
   window->label_variables
     = (GtkLabel *) gtk_label_new (gettext ("Variables file"));
   window->entry_variables = (GtkEntry *) gtk_entry_new ();
+  gtk_widget_set_tooltip_text
+    (GTK_WIDGET (window->entry_variables),
+     gettext ("All simulated results file"));
 
   // Creating the files grid and attaching widgets
   window->grid_files = (GtkGrid *) gtk_grid_new ();
@@ -3569,56 +3609,85 @@ window_new ()
   gtk_grid_attach (window->grid_files, GTK_WIDGET (window->button_evaluator),
                    3, 0, 1, 1);
   gtk_grid_attach (window->grid_files, GTK_WIDGET (window->label_result),
-                   4, 0, 1, 1);
+                   0, 1, 1, 1);
   gtk_grid_attach (window->grid_files, GTK_WIDGET (window->entry_result),
-                   5, 0, 1, 1);
+                   1, 1, 1, 1);
   gtk_grid_attach (window->grid_files, GTK_WIDGET (window->label_variables),
-                   6, 0, 1, 1);
+                   2, 1, 1, 1);
   gtk_grid_attach (window->grid_files, GTK_WIDGET (window->entry_variables),
-                   7, 0, 1, 1);
+                   3, 1, 1, 1);
 
   // Creating the algorithm properties
   window->label_simulations = (GtkLabel *) gtk_label_new
     (gettext ("Simulations number"));
   window->spin_simulations
     = (GtkSpinButton *) gtk_spin_button_new_with_range (1., 1.e12, 1.);
+  gtk_widget_set_tooltip_text
+    (GTK_WIDGET (window->spin_simulations),
+     gettext ("Number of simulations to perform for each iteration"));
   window->label_iterations = (GtkLabel *)
     gtk_label_new (gettext ("Iterations number"));
   window->spin_iterations
     = (GtkSpinButton *) gtk_spin_button_new_with_range (1., 1.e6, 1.);
+  gtk_widget_set_tooltip_text
+    (GTK_WIDGET (window->spin_iterations), gettext ("Number of iterations"));
   g_signal_connect
     (window->spin_iterations, "value-changed", window_update, NULL);
   window->label_tolerance = (GtkLabel *) gtk_label_new (gettext ("Tolerance"));
   window->spin_tolerance
     = (GtkSpinButton *) gtk_spin_button_new_with_range (0., 1., 0.001);
+  gtk_widget_set_tooltip_text
+    (GTK_WIDGET (window->spin_tolerance),
+     gettext ("Tolerance to set the variable interval on the next iteration"));
   window->label_bests = (GtkLabel *) gtk_label_new (gettext ("Bests number"));
   window->spin_bests
     = (GtkSpinButton *) gtk_spin_button_new_with_range (1., 1.e6, 1.);
+  gtk_widget_set_tooltip_text
+    (GTK_WIDGET (window->spin_tolerance),
+     gettext ("Number of best simulations used to set the variable interval "
+              "on the next iteration"));
   window->label_population
     = (GtkLabel *) gtk_label_new (gettext ("Population number"));
   window->spin_population
     = (GtkSpinButton *) gtk_spin_button_new_with_range (1., 1.e12, 1.);
+  gtk_widget_set_tooltip_text
+    (GTK_WIDGET (window->spin_population),
+     gettext ("Number of population for the genetic algorithm"));
   window->label_generations
     = (GtkLabel *) gtk_label_new (gettext ("Generations number"));
   window->spin_generations
     = (GtkSpinButton *) gtk_spin_button_new_with_range (1., 1.e6, 1.);
+  gtk_widget_set_tooltip_text
+    (GTK_WIDGET (window->spin_generations),
+     gettext ("Number of generations for the genetic algorithm"));
   window->label_mutation
     = (GtkLabel *) gtk_label_new (gettext ("Mutation ratio"));
   window->spin_mutation
     = (GtkSpinButton *) gtk_spin_button_new_with_range (0., 1., 0.001);
+  gtk_widget_set_tooltip_text
+    (GTK_WIDGET (window->spin_mutation),
+     gettext ("Ratio of mutation for the genetic algorithm"));
   window->label_reproduction
     = (GtkLabel *) gtk_label_new (gettext ("Reproduction ratio"));
   window->spin_reproduction
     = (GtkSpinButton *) gtk_spin_button_new_with_range (0., 1., 0.001);
+  gtk_widget_set_tooltip_text
+    (GTK_WIDGET (window->spin_reproduction),
+     gettext ("Ratio of reproduction for the genetic algorithm"));
   window->label_adaptation
     = (GtkLabel *) gtk_label_new (gettext ("Adaptation ratio"));
   window->spin_adaptation
     = (GtkSpinButton *) gtk_spin_button_new_with_range (0., 1., 0.001);
+  gtk_widget_set_tooltip_text
+    (GTK_WIDGET (window->spin_adaptation),
+     gettext ("Ratio of adaptation for the genetic algorithm"));
 
   // Creating the array of algorithms
   window->grid_algorithm = (GtkGrid *) gtk_grid_new ();
   window->button_algorithm[0] = (GtkRadioButton *)
     gtk_radio_button_new_with_mnemonic (NULL, label_algorithm[0]);
+  gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_algorithm[0]),
+                               tip_algorithm[0]);
   gtk_grid_attach (window->grid_algorithm,
                    GTK_WIDGET (window->button_algorithm[0]), 0, 0, 1, 1);
   g_signal_connect (window->button_algorithm[0], "clicked",
@@ -3629,6 +3698,8 @@ window_new ()
         gtk_radio_button_new_with_mnemonic
         (gtk_radio_button_get_group (window->button_algorithm[0]),
          label_algorithm[i]);
+      gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_algorithm[i]),
+                                   tip_algorithm[i]);
       gtk_grid_attach (window->grid_algorithm,
                        GTK_WIDGET (window->button_algorithm[i]), 0, i, 1, 1);
       g_signal_connect (window->button_algorithm[i], "clicked",
@@ -3691,8 +3762,8 @@ window_new ()
 
   // Creating the variable widgets
   window->combo_variable = (GtkComboBoxText *) gtk_combo_box_text_new ();
-  gtk_widget_set_tooltip_text (GTK_WIDGET (window->combo_variable),
-                               gettext ("Variables selector"));
+  gtk_widget_set_tooltip_text
+    (GTK_WIDGET (window->combo_variable), gettext ("Variables selector"));
   window->id_variable = g_signal_connect
     (window->combo_variable, "changed", window_set_variable, NULL);
   window->button_add_variable
@@ -3700,24 +3771,27 @@ window_new ()
                                                    GTK_ICON_SIZE_BUTTON);
   g_signal_connect
     (window->button_add_variable, "clicked", window_add_variable, NULL);
-  gtk_widget_set_tooltip_text (GTK_WIDGET
-                               (window->button_add_variable),
-                               gettext ("Add variable"));
+  gtk_widget_set_tooltip_text
+    (GTK_WIDGET (window->button_add_variable), gettext ("Add variable"));
   window->button_remove_variable
     = (GtkButton *) gtk_button_new_from_icon_name ("list-remove",
                                                    GTK_ICON_SIZE_BUTTON);
   g_signal_connect
     (window->button_remove_variable, "clicked", window_remove_variable, NULL);
-  gtk_widget_set_tooltip_text (GTK_WIDGET
-                               (window->button_remove_variable),
-                               gettext ("Remove variable"));
+  gtk_widget_set_tooltip_text
+    (GTK_WIDGET (window->button_remove_variable), gettext ("Remove variable"));
   window->label_variable = (GtkLabel *) gtk_label_new (gettext ("Name"));
   window->entry_variable = (GtkEntry *) gtk_entry_new ();
+  gtk_widget_set_tooltip_text
+    (GTK_WIDGET (window->entry_variable), gettext ("Variable name"));
   window->id_variable_label = g_signal_connect
     (window->entry_variable, "changed", window_label_variable, NULL);
   window->label_min = (GtkLabel *) gtk_label_new (gettext ("Minimum"));
   window->spin_min = (GtkSpinButton *) gtk_spin_button_new_with_range
     (-G_MAXDOUBLE, G_MAXDOUBLE, precision[DEFAULT_PRECISION]);
+  gtk_widget_set_tooltip_text
+    (GTK_WIDGET (window->spin_min),
+     gettext ("Minimum initial value of the variable"));
   viewport = (GtkViewport *) gtk_viewport_new (NULL, NULL);
   gtk_container_add (GTK_CONTAINER (viewport), GTK_WIDGET (window->spin_min));
   window->scrolled_min
@@ -3729,6 +3803,9 @@ window_new ()
   window->label_max = (GtkLabel *) gtk_label_new (gettext ("Maximum"));
   window->spin_max = (GtkSpinButton *) gtk_spin_button_new_with_range
     (-G_MAXDOUBLE, G_MAXDOUBLE, precision[DEFAULT_PRECISION]);
+  gtk_widget_set_tooltip_text
+    (GTK_WIDGET (window->spin_max),
+     gettext ("Maximum initial value of the variable"));
   viewport = (GtkViewport *) gtk_viewport_new (NULL, NULL);
   gtk_container_add (GTK_CONTAINER (viewport), GTK_WIDGET (window->spin_max));
   window->scrolled_max
@@ -3742,6 +3819,9 @@ window_new ()
   g_signal_connect (window->check_minabs, "toggled", window_update, NULL);
   window->spin_minabs = (GtkSpinButton *) gtk_spin_button_new_with_range
     (-G_MAXDOUBLE, G_MAXDOUBLE, precision[DEFAULT_PRECISION]);
+  gtk_widget_set_tooltip_text
+    (GTK_WIDGET (window->spin_minabs),
+     gettext ("Minimum allowed value of the variable"));
   viewport = (GtkViewport *) gtk_viewport_new (NULL, NULL);
   gtk_container_add (GTK_CONTAINER (viewport),
                      GTK_WIDGET (window->spin_minabs));
@@ -3756,6 +3836,9 @@ window_new ()
   g_signal_connect (window->check_maxabs, "toggled", window_update, NULL);
   window->spin_maxabs = (GtkSpinButton *) gtk_spin_button_new_with_range
     (-G_MAXDOUBLE, G_MAXDOUBLE, precision[DEFAULT_PRECISION]);
+  gtk_widget_set_tooltip_text
+    (GTK_WIDGET (window->spin_maxabs),
+     gettext ("Maximum allowed value of the variable"));
   viewport = (GtkViewport *) gtk_viewport_new (NULL, NULL);
   gtk_container_add (GTK_CONTAINER (viewport),
                      GTK_WIDGET (window->spin_maxabs));
@@ -3769,16 +3852,26 @@ window_new ()
     = (GtkLabel *) gtk_label_new (gettext ("Precision digits"));
   window->spin_precision = (GtkSpinButton *)
     gtk_spin_button_new_with_range (0., (gdouble) DEFAULT_PRECISION, 1.);
+  gtk_widget_set_tooltip_text
+    (GTK_WIDGET (window->spin_precision),
+     gettext ("Number of precision floating point digits\n"
+              "0 is for integer numbers"));
   g_signal_connect (window->spin_precision, "value-changed",
                     window_precision_variable, NULL);
   window->label_sweeps = (GtkLabel *) gtk_label_new (gettext ("Sweeps number"));
   window->spin_sweeps
     = (GtkSpinButton *) gtk_spin_button_new_with_range (1., 1.e12, 1.);
+  gtk_widget_set_tooltip_text
+    (GTK_WIDGET (window->spin_sweeps),
+     gettext ("Number of steps sweeping the variable"));
   g_signal_connect
     (window->spin_sweeps, "value-changed", window_update_variable, NULL);
   window->label_bits = (GtkLabel *) gtk_label_new (gettext ("Bits number"));
   window->spin_bits
     = (GtkSpinButton *) gtk_spin_button_new_with_range (1., 64., 1.);
+  gtk_widget_set_tooltip_text
+    (GTK_WIDGET (window->spin_bits),
+     gettext ("Number of bits to encode the variable"));
   g_signal_connect
     (window->spin_bits, "value-changed", window_update_variable, NULL);
   window->grid_variable = (GtkGrid *) gtk_grid_new ();

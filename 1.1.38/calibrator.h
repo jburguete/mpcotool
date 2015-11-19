@@ -133,6 +133,7 @@ typedef struct
   double mutation_ratio;        ///< Mutation probability.
   double reproduction_ratio;    ///< Reproduction probability.
   double adaptation_ratio;      ///< Adaptation probability.
+  double calculation_time;      ///< Calculation time.
   FILE *file_result;            ///< Result file.
   FILE *file_variables;         ///< Variables file.
   gsl_rng *rng;                 ///< GSL random number generator.

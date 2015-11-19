@@ -6,8 +6,8 @@ A software to perform calibrations or optimizations of empirical parameters.
 VERSIONS
 --------
 
-* 1.0.4: Stable and recommended version.
-* 1.1.36: Developing version to do new features.
+* 1.0.5: Stable and recommended version.
+* 1.1.38: Developing version to do new features.
 
 AUTHORS
 -------
@@ -97,7 +97,7 @@ a terminal:
 > $ git clone https://github.com/jburguete/calibrator.git
 
 3. Link the latest genetic version to genetic:
-> $ cd calibrator/1.0.4
+> $ cd calibrator/1.0.5
 >
 > $ ln -s ../../genetic/0.6.1 genetic
 
