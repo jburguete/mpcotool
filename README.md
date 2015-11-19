@@ -48,17 +48,16 @@ FILES
 -----
 
 The source code has to have the following files:
-* configure.ac: configure generator.
-* Makefile.in: Makefile generator.
-* config.h.in: config header generator.
-* calibrator.c: main source code.
-* calibrator.h: main header code.
-* interface.h: interface header code.
-* build: script to build all.
-* logo.png: logo figure.
-* logo2.png: alternative logo figure.
-* Doxyfile: configuration file to generate doxygen documentation.
-* TODO: tasks to do.
+* 1.0.6/configure.ac: configure generator.
+* 1.0.6/Makefile.in: Makefile generator.
+* 1.0.6/config.h.in: config header generator.
+* 1.0.6/calibrator.c: main source code.
+* 1.0.6/calibrator.h: main header code.
+* 1.0.6/interface.h: interface header code.
+* 1.0.6/build: script to build all.
+* 1.0.6/logo.png: logo figure.
+* 1.0.6/Doxyfile: configuration file to generate doxygen documentation.
+* 1.0.6/TODO: tasks to do.
 * README.md: this file.
 * tests/testX/*: several tests to check the program working.
 * locales/*/LC_MESSAGES/calibrator.po: translation files.
@@ -164,7 +163,7 @@ In order to build the tests follow the next instructions:
 > $ ln -s ../../../genetic/0.6.1 genetic
 
 2. Build all tests doing in the same terminal:
-> $ cd ../1.0.6
+> $ cd ../../1.0.6
 >
 > $ make tests
 
