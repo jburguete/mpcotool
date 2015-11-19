@@ -57,14 +57,14 @@ The source code has to have the following files:
 * 1.0.6/build: script to build all.
 * 1.0.6/logo.png: logo figure.
 * 1.0.6/Doxyfile: configuration file to generate doxygen documentation.
-* 1.0.6/TODO: tasks to do.
+* TODO: tasks to do.
 * README.md: this file.
 * tests/testX/*: several tests to check the program working.
 * locales/*/LC_MESSAGES/calibrator.po: translation files.
 * manuals/*.eps: manual figures in EPS format.
 * manuals/*.png: manual figures in PNG format.
 * manuals/*.tex: documentation source files.
-* applications/*/*: several practical application cases.
+* applications/\*/\*: several practical application cases.
 * check_errors/*.xml: several mistaken files to check error handling.
 
 BUILDING INSTRUCTIONS
@@ -204,15 +204,14 @@ The format of the main input file is as:
 
 with:
 
-* *"simulator_name"* simulator executable file name.
+* *"simulator"* simulator executable file name.
 
-* *"evaluator_name"*: Optional. When needed is the evaluator executable file
-name.
+* *"evaluator"*: Optional. When needed is the evaluator executable file name.
 
-* *"result_file"*: Optional. Is the name of the optime result file (default is
+* *"result"*: Optional. Is the name of the optime result file (default is
 "result").
  
-* *"variables_file"*: Optional. Is the name of all simulated variables file
+* *"variables"*: Optional. Is the name of all simulated variables file
 (default is "variables").
  
 * *"precision"* defined for each variable. Number of precision digits to
