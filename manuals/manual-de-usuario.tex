@@ -165,7 +165,7 @@ El siguiente paso es descargar el código fuente de Calibrator, enlazarlo con el
 de Genetic y compilar todo junto haciendo:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 $ git clone https://github.com/jburguete/calibrator.git
-$ cd calibrator/1.1.38
+$ cd calibrator/1.0.6
 $ ln -s ../../genetic/0.6.1 genetic
 $ ./build
 \end{lstlisting}
@@ -224,27 +224,27 @@ $ ./calibrator
 Este fichero tiene que estar en formato XML con una estructura arbórea como la
 representada en la figura~\ref{FigMainFile}.
 \psset{xunit=0.4mm,yunit=0.4mm}
-\PSPICTURE{0}{-115}{280}{15}
+\PSPICTURE{0}{-115}{280}{25}
 {
 	\tiny
-	\psframe(0,-5)(280,15)
-	\psline(40,-5)(40,15)
-	\rput(20,10){\bf calibrate}
-	\rput(60,10){\bf simulator}
-	\rput(100,10){\bf algorithm}
-	\rput(140,10){evaluator}
-	\rput(180,10){nsimulations}
-	\rput(220,10){niterations}
-	\rput(260,10){tolerance}
-	\rput(55,0){nbest}
-	\rput(85,0){npopulation}
-	\rput(125,0){ngenerations}
-	\rput(160,0){mutation}
-	\rput(195,0){reproduction}
-	\rput(235,0){adaptation}
-	\rput(265,0){seed}
-	\psline(20,-5)(20,-15)(40,-15)
-	\psframe(40,-20)(280,-10)
+	\psframe(0,-5)(280,25)
+	\psline(40,-5)(40,25)
+	\rput(20,20){\bf calibrate}
+	\rput(60,20){\bf simulator}
+	\rput(100,20){\bf algorithm}
+	\rput(140,20){evaluator}
+	\rput(180,20){nsimulations}
+	\rput(220,20){niterations}
+	\rput(260,20){tolerance}
+	\rput(55,10){nbest}
+	\rput(85,10){npopulation}
+	\rput(125,10){ngenerations}
+	\rput(160,10){mutation}
+	\rput(195,10){reproduction}
+	\rput(235,10){adaptation}
+	\rput(265,10){seed}
+	\rput(55,0){result}
+	\rput(80,0){variables}
 	\psline(80,-20)(80,-10)
 	\rput(60,-15){\bf experiment}
 	\rput(95,-15){\bf name}
@@ -299,6 +299,11 @@ ser necesarias en función del algoritmo de optimización seleccionado}
 El nodo XML principal tiene que comenzar con la etiqueta ``\emph{calibrate}''.
 Las propiedades que se pueden definir son:
 \begin{description}
+	\item[result]: define el nombre del fichero de resultados óptimos. Es
+		opcional, si no se especifica se guarda con el nombre ``\emph{result}''.
+	\item[variables]: define el nombre del fichero donde se guardan todas
+		las combinaciones de variables simuladas. Es opcional, si no se
+		especifica se guarda con el nombre ``\emph{variables}''.
 	\item[simulator]: indica el programa simulador.
 	\item[evaluator]: opcional. Especifica el programa de evaluación en caso de
 		ser requerido.
@@ -400,6 +405,15 @@ algoritmo y programa de simulación requerido.
 	\includegraphics[width=\textwidth]{calibrator-es.eps}
 	\caption{Ventana principal de la aplicación con interfaz gráfica de usuario
 		interactiva de Calibrator.\label{FigWindow}}
+\end{figure}
+
+Los resultados óptimos se presentan finalmente en un cuadro de diálogo como el
+mostrado en la figura~\ref{FigResult}.
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=2.87cm]{result-es.eps}
+	\caption{Cuadro de diálogo de los resultados óptimos de la aplicación con
+		interfaz gráfica de usuario interactiva de Calibrator.\label{FigResult}}
 \end{figure}
 
 \section{Ficheros de salida}

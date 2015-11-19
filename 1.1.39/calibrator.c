@@ -2557,7 +2557,7 @@ window_about ()
               "parameters"),
      "authors", authors,
      "translator-credits", "Javier Burguete Tolosa <jburguete@eead.csic.es>",
-     "version", "1.1.38",
+     "version", "1.1.39",
      "copyright", "Copyright 2012-2015 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/calibrator",
@@ -3643,7 +3643,7 @@ window_new ()
   window->spin_bests
     = (GtkSpinButton *) gtk_spin_button_new_with_range (1., 1.e6, 1.);
   gtk_widget_set_tooltip_text
-    (GTK_WIDGET (window->spin_tolerance),
+    (GTK_WIDGET (window->spin_bests),
      gettext ("Number of best simulations used to set the variable interval "
               "on the next iteration"));
   window->label_population
