@@ -2512,9 +2512,9 @@ window_help ()
 void
 window_about ()
 {
-  gchar *authors[] = {
-    "Javier Burguete Tolosa (jburguete@eead.csic.es)",
-    "Borja Latorre Garcés (borja.latorre@csic.es)",
+  static const gchar *authors[] = {
+    "Javier Burguete Tolosa <jburguete@eead.csic.es>",
+    "Borja Latorre Garcés <borja.latorre@csic.es>",
     NULL
   };
   gtk_show_about_dialog (window->window,
@@ -2525,14 +2525,13 @@ window_about ()
                                   "empirical parameters"),
                          "authors", authors,
                          "translator-credits",
-                         "Javier Burguete Tolosa (jburguete@eead.csic.es)",
-                         "version", "1.1.35",
+                         "Javier Burguete Tolosa <jburguete@eead.csic.es>",
+                         "version", "1.0.4",
                          "copyright",
                          "Copyright 2012-2015 Javier Burguete Tolosa",
                          "logo", window->logo,
-                         "website-label", gettext ("Website"),
-                         "website",
-                         "https://github.com/jburguete/calibrator", NULL);
+                         "website", "https://github.com/jburguete/calibrator",
+                         "license-type", GTK_LICENSE_BSD, NULL);
 }
 
 /**
@@ -3926,8 +3925,8 @@ window_new ()
   // Showing the window
   gtk_widget_show_all (GTK_WIDGET (window->window));
 
-  // In Windows the default scrolled size is wrong
-#ifdef G_OS_WIN32
+  // In GTK+ 3.18 the default scrolled size is wrong
+#if GTK_MINOR_VERSION >= 18
   gtk_widget_set_size_request (GTK_WIDGET (window->scrolled_min), -1, 40);
   gtk_widget_set_size_request (GTK_WIDGET (window->scrolled_max), -1, 40);
   gtk_widget_set_size_request (GTK_WIDGET (window->scrolled_minabs), -1, 40);
