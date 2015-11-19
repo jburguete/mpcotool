@@ -62,7 +62,8 @@ The source code has to have the following files:
 * README.md: this file.
 * tests/testX/*: several tests to check the program working.
 * locales/*/LC_MESSAGES/calibrator.po: translation files.
-* manuals/*.png: manual figures.
+* manuals/*.eps: manual figures in EPS format.
+* manuals/*.png: manual figures in PNG format.
 * manuals/*.tex: documentation source files.
 * applications/*/*: several practical application cases.
 * check_errors/*.xml: several mistaken files to check error handling.
@@ -144,6 +145,23 @@ On Windows systems you need [MiKTeX](http://miktex.org). In order to compile the
 manuals you can type on a terminal:
 > $ make manuals
 
+MAKING TESTS INSTRUCTIONS
+-------------------------
+
+In order to build the tests follow the next instructions:
+
+1. Link some tests that needs genetic library doing in a terminal:
+> $ cd tests/test2
+> $ ln -s ../../../genetic/0.6.1 genetic
+> $ cd ../test3
+> $ ln -s ../../../genetic/0.6.1 genetic
+> $ cd ../test4
+> $ ln -s ../../../genetic/0.6.1 genetic
+
+2. Build all tests doing in the same terminal:
+> $ cd ../1.0.6
+> $ make tests
+
 USER INSTRUCTIONS
 -----------------
 
@@ -167,8 +185,10 @@ the first data in the results file has to be the objective function value):
 INPUT FILE FORMAT
 -----------------
 
+The format of the main input file is as:
+
     <?xml version="1.0"/>
-    <calibrate simulator="simulator_name" evaluator="evaluator_name" algorithm="algorithm_type" nsimulations="simulations_number" niterations="iterations_number" tolerance="tolerance_value" nbest="best_number" npopulation="population_number" ngenerations="generations_number" mutation="mutation_ratio" reproduction="reproduction_ratio" adaptation="adaptation_ratio" seed="random_seed">
+    <calibrate simulator="simulator_name" evaluator="evaluator_name" algorithm="algorithm_type" nsimulations="simulations_number" niterations="iterations_number" tolerance="tolerance_value" nbest="best_number" npopulation="population_number" ngenerations="generations_number" mutation="mutation_ratio" reproduction="reproduction_ratio" adaptation="adaptation_ratio" seed="random_seed" result="result_file" variables="variables_file">
         <experiment name="data_file_1" template1="template_1_1" template2="template_1_2" ... weight="weight_1"/>
         ...
         <experiment name="data_file_N" template1="template_N_1" template2="template_N_2" ... weight="weight_N"/>
@@ -177,6 +197,19 @@ INPUT FILE FORMAT
         <variable name="variable_M" minimum="min_value" maximum="max_value" precision="precision_digits" sweeps="sweeps_number" nbits="bits_number"/>
     </calibrate>
 
+with:
+
+* *"simulator_name"* simulator executable file name.
+
+* *"evaluator_name"*: Optional. When needed is the evaluator executable file
+name.
+
+* *"result_file"*: Optional. Is the name of the optime result file (default is
+"result").
+ 
+* *"variables_file"*: Optional. Is the name of all simulated variables file
+(default is "variables").
+ 
 * *"precision"* defined for each variable. Number of precision digits to
 evaluate the variable. 0 apply for integer numbers.
 
@@ -187,20 +220,20 @@ obtained for each experiment in the final objective function value.
 
 Implemented algorithms are:
 
-* *"sweep"*: Sweep brutal force algorithm. Requires for each variable:
+* *"sweep"*: Sweep brute force algorithm. Requires for each variable:
 > sweeps: number of sweeps to generate for each variable in every experiment. 
 
   The total number of simulations to run is:
 > (number of experiments) x (variable 1 number of sweeps) x ... x
 > (variable n number of sweeps) x (number of iterations)
 
-* *"Monte-Carlo"*: Monte-Carlo brutal force algorithm. Requires on calibrate:
+* *"Monte-Carlo"*: Monte-Carlo brute force algorithm. Requires on calibrate:
 > nsimulations: number of simulations to run in every experiment.
 
   The total number of simulations to run is:
 > (number of experiments) x (number of simulations) x (number of iterations)
 
-* Both brutal force algorithms can be iterated to improve convergence by using
+* Both brute force algorithms can be iterated to improve convergence by using
 the following parameters:
 > nbest: number of best simulations to calculate convergence interval on next
 > iteration (default 1).
@@ -241,7 +274,7 @@ _________
 * The syntax is:
 > $ ./compare simulated_file data_file result_file
 
-* The calibration is performed with a *sweep brutal force algorithm*.
+* The calibration is performed with a *sweep brute force algorithm*.
 
 * The experimental data files are:
 > 27-48.txt
