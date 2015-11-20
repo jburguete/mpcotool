@@ -4018,8 +4018,8 @@ window_new ()
   // Showing the window
   gtk_widget_show_all (GTK_WIDGET (window->window));
 
-  // In GTK+ 3.18 the default scrolled size is wrong
-#if GTK_MINOR_VERSION >= 18
+  // In GTK+ 3.16 and 3.18 the default scrolled size is wrong
+#if GTK_MINOR_VERSION >= 16
   gtk_widget_set_size_request (GTK_WIDGET (window->scrolled_min), -1, 40);
   gtk_widget_set_size_request (GTK_WIDGET (window->scrolled_max), -1, 40);
   gtk_widget_set_size_request (GTK_WIDGET (window->scrolled_minabs), -1, 40);
