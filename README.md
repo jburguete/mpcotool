@@ -303,14 +303,15 @@ _________
 >
 > template4.js
 
-* The variables to calibrate, ranges, c-string format and sweeps number to perform are:
-> alpha1, [179.70, 180.20], %.2lf, 5
+* The variables to calibrate, ranges, precision and sweeps number to perform
+are:
+> alpha1, [179.70, 180.20], 2, 5
 >
-> alpha2, [179.30, 179.60], %.2lf, 5
+> alpha2, [179.30, 179.60], 2, 5
 >
-> random, [0.00, 0.20], %.2lf, 5
+> random, [0.00, 0.20], 2, 5
 >
-> boot-time, [0.0, 3.0], %.1lf, 5
+> boot-time, [0.0, 3.0], 1, 5
 
 * Then, the number of simulations to run is: 4x5x5x5x5=2500.
 
@@ -323,10 +324,10 @@ _________
     <experiment name="42.txt" template1="template2.js"/>
     <experiment name="52.txt" template1="template3.js"/>
     <experiment name="100.txt" template1="template4.js"/>
-    <variable name="alpha1" minimum="179.70" maximum="180.20" format="%.2lf" nsweeps="5"/>
-    <variable name="alpha2" minimum="179.30" maximum="179.60" format="%.2lf" nsweeps="5"/>
-    <variable name="random" minimum="0.00" maximum="0.20" format="%.2lf" nsweeps="5"/>
-    <variable name="boot-time" minimum="0.0" maximum="3.0" format="%.1lf" nsweeps="5"/>
+    <variable name="alpha1" minimum="179.70" maximum="180.20" precision="2" nsweeps="5"/>
+    <variable name="alpha2" minimum="179.30" maximum="179.60" precision="2" nsweeps="5"/>
+    <variable name="random" minimum="0.00" maximum="0.20" precision="2" nsweeps="5"/>
+    <variable name="boot-time" minimum="0.0" maximum="3.0" precision="1" nsweeps="5"/>
 </calibrate>
 ```
 
