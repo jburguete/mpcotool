@@ -710,27 +710,27 @@ input_open (char *filename)
       else
         input->tolerance = 0.;
 
-	  // Getting gradient ratio
-	  if (xmlHasProp (node, XML_GRADIENT))
-		{
-		  input->gradient_ratio
-		    = xml_node_get_float (node, XML_GRADIENT, &error_code);
+      // Getting gradient ratio
+      if (xmlHasProp (node, XML_GRADIENT))
+        {
+          input->gradient_ratio
+            = xml_node_get_float (node, XML_GRADIENT, &error_code);
           if (error_code || input->gradient_ratio < 0.
-			  || input->gradient_ratio > 1.)
+              || input->gradient_ratio > 1.)
             {
               msg = gettext ("Invalid gradient ratio");
               goto exit_on_error;
             }
-	      input->nestimates
-			= xml_node_get_uint (node, XML_NESTIMATES, &error_code);
+          input->nestimates
+            = xml_node_get_uint (node, XML_NESTIMATES, &error_code);
           if (error_code || !input->nestimates)
             {
               msg = gettext ("Invalid estimates number");
               goto exit_on_error;
             }
-		}
-	  else
-		input->gradient_ratio = 0.;
+        }
+      else
+        input->gradient_ratio = 0.;
     }
 
   // Reading the experimental data
@@ -902,28 +902,28 @@ input_open (char *filename)
             (input->rangeminabs, (1 + input->nvariables) * sizeof (double));
           input->rangemin[input->nvariables]
             = xml_node_get_float (child, XML_MINIMUM, &error_code);
-		  if (error_code)
-			{
+          if (error_code)
+            {
               snprintf (buffer2, 64, "%s %s: %s",
                         gettext ("Variable"),
                         input->label[input->nvariables],
-						gettext ("bad minimum"));
+                        gettext ("bad minimum"));
               msg = buffer2;
-			  goto exit_on_error;
-			}
+              goto exit_on_error;
+            }
           if (xmlHasProp (child, XML_ABSOLUTE_MINIMUM))
             {
               input->rangeminabs[input->nvariables]
                 = xml_node_get_float (child, XML_ABSOLUTE_MINIMUM, &error_code);
-			  if (error_code)
-				{
+              if (error_code)
+                {
                   snprintf (buffer2, 64, "%s %s: %s",
                             gettext ("Variable"),
                             input->label[input->nvariables],
-    						gettext ("bad absolute minimum"));
+                            gettext ("bad absolute minimum"));
                   msg = buffer2;
-    			  goto exit_on_error;
-				}
+                  goto exit_on_error;
+                }
             }
           else
             input->rangeminabs[input->nvariables] = -G_MAXDOUBLE;
@@ -943,7 +943,7 @@ input_open (char *filename)
           snprintf (buffer2, 64, "%s %s: %s",
                     gettext ("Variable"),
                     input->label[input->nvariables],
-					gettext ("no minimum range"));
+                    gettext ("no minimum range"));
           msg = buffer2;
           goto exit_on_error;
         }
@@ -955,29 +955,29 @@ input_open (char *filename)
             (input->rangemaxabs, (1 + input->nvariables) * sizeof (double));
           input->rangemax[input->nvariables]
             = xml_node_get_float (child, XML_MAXIMUM, &error_code);
-		  if (error_code)
-			{
+          if (error_code)
+            {
               snprintf (buffer2, 64, "%s %s: %s",
                         gettext ("Variable"),
                         input->label[input->nvariables],
-						gettext ("bad maximum"));
+                        gettext ("bad maximum"));
               msg = buffer2;
-			  goto exit_on_error;
-			}
+              goto exit_on_error;
+            }
           if (xmlHasProp (child, XML_ABSOLUTE_MAXIMUM))
-			{
+            {
               input->rangemaxabs[input->nvariables]
                 = xml_node_get_float (child, XML_ABSOLUTE_MAXIMUM, &error_code);
-			  if (error_code)
-				{
+              if (error_code)
+                {
                   snprintf (buffer2, 64, "%s %s: %s",
                             gettext ("Variable"),
                             input->label[input->nvariables],
-    						gettext ("bad absolute maximum"));
+                            gettext ("bad absolute maximum"));
                   msg = buffer2;
-    			  goto exit_on_error;
-				}
-			}
+                  goto exit_on_error;
+                }
+            }
           else
             input->rangemaxabs[input->nvariables] = G_MAXDOUBLE;
           if (input->rangemax[input->nvariables]
@@ -996,7 +996,7 @@ input_open (char *filename)
           snprintf (buffer2, 64, "%s %s: %s",
                     gettext ("Variable"),
                     input->label[input->nvariables],
-					gettext ("no maximum range"));
+                    gettext ("no maximum range"));
           msg = buffer2;
           goto exit_on_error;
         }
@@ -1005,27 +1005,26 @@ input_open (char *filename)
         {
           snprintf (buffer2, 64, "%s %s: %s",
                     gettext ("Variable"),
-                    input->label[input->nvariables],
-					gettext ("bad range"));
+                    input->label[input->nvariables], gettext ("bad range"));
           msg = buffer2;
           goto exit_on_error;
         }
       input->precision = g_realloc
         (input->precision, (1 + input->nvariables) * sizeof (unsigned int));
       if (xmlHasProp (child, XML_PRECISION))
-		{
+        {
           input->precision[input->nvariables]
             = xml_node_get_uint (child, XML_PRECISION, &error_code);
-		  if (error_code || input->precision[input->nvariables] >= NPRECISIONS)
-			{
+          if (error_code || input->precision[input->nvariables] >= NPRECISIONS)
+            {
               snprintf (buffer2, 64, "%s %s: %s",
                         gettext ("Variable"),
                         input->label[input->nvariables],
-    					gettext ("bad precision"));
+                        gettext ("bad precision"));
               msg = buffer2;
               goto exit_on_error;
-			}
-		}
+            }
+        }
       else
         input->precision[input->nvariables] = DEFAULT_PRECISION;
       if (input->algorithm == ALGORITHM_SWEEP)
@@ -1037,22 +1036,22 @@ input_open (char *filename)
                            (1 + input->nvariables) * sizeof (unsigned int));
               input->nsweeps[input->nvariables]
                 = xml_node_get_uint (child, XML_NSWEEPS, &error_code);
-    		  if (error_code || !input->nsweeps[input->nvariables])
-    			{
+              if (error_code || !input->nsweeps[input->nvariables])
+                {
                   snprintf (buffer2, 64, "%s %s: %s",
                             gettext ("Variable"),
                             input->label[input->nvariables],
-        					gettext ("bad sweeps"));
+                            gettext ("bad sweeps"));
                   msg = buffer2;
                   goto exit_on_error;
-    			}
+                }
             }
           else
             {
               snprintf (buffer2, 64, "%s %s: %s",
                         gettext ("Variable"),
                         input->label[input->nvariables],
-						gettext ("no sweeps number"));
+                        gettext ("no sweeps number"));
               msg = buffer2;
               goto exit_on_error;
             }
@@ -1086,27 +1085,27 @@ input_open (char *filename)
               snprintf (buffer2, 64, "%s %s: %s",
                         gettext ("Variable"),
                         input->label[input->nvariables],
-						gettext ("no bits number"));
+                        gettext ("no bits number"));
               msg = buffer2;
               goto exit_on_error;
             }
         }
-	  else if (input->nestimates)
-		{
-		  input->step = (double *)
-			g_realloc (input->step, (1 + input->nvariables) * sizeof (double));
+      else if (input->nestimates)
+        {
+          input->step = (double *)
+            g_realloc (input->step, (1 + input->nvariables) * sizeof (double));
           input->step[input->nvariables]
             = xml_node_get_float (child, XML_STEP, &error_code);
-		  if (error_code || input->step[input->nvariables] < 0.)
-			{
+          if (error_code || input->step[input->nvariables] < 0.)
+            {
               snprintf (buffer2, 64, "%s %s: %s",
                         gettext ("Variable"),
                         input->label[input->nvariables],
-						gettext ("bad step size"));
+                        gettext ("bad step size"));
               msg = buffer2;
               goto exit_on_error;
-			}
-		}
+            }
+        }
       ++input->nvariables;
     }
   if (!input->nvariables)
