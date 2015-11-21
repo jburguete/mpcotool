@@ -56,12 +56,32 @@
 	\end{figure}
 }
 
+\newcommand{\PLOT}[3]
+{
+	\begin{figure}[ht!]
+		\centering
+		\includegraphics{#1}
+		\caption{#2.\label{#3}}
+	\end{figure}
+}
+
 \newcommand{\FIGII}[4]
 {
 	\begin{figure}[ht!]
 		\centering
 		\begin{tabular}{c}
 			\includegraphics{#1} \\ \includegraphics{#2}
+		\end{tabular}
+		\caption{#3.\label{#4}}
+	\end{figure}
+}
+
+\newcommand{\PLOTII}[4]
+{
+	\begin{figure}[ht!]
+		\centering
+		\begin{tabular}{cc}
+			\includegraphics{#1} & \includegraphics{#2}
 		\end{tabular}
 		\caption{#3.\label{#4}}
 	\end{figure}
@@ -636,6 +656,9 @@ siguiente función modificada:
 cuyo mínimo se obtiene para:
 \EQ{g_{Sphere}\PA{\frac{\pi}{4},\,\frac{\pi}{4}}=0.}{EqGSphereM}
 Trataremos de minimizar esta función en el intervalo $x\in[-5,5]$, $y\in[-5,5]$.
+En la figura~\ref{FigSphere} se muestra una representación del valor de esta
+función en el plano $x-y$.
+\PLOT{Sphere.eps}{}{FigSphere}
 
 \subsection{Ackley's function}
 
@@ -656,6 +679,9 @@ cuyo mínimo se obtiene para:
 \EQ{g_{Ackley}\PA{\frac{\pi}{4},\,\frac{\pi}{4}}=0.}{EqGAckleyM}
 Trataremos de minimizar esta función en el intervalo $x\in[-40,40]$,
 $y\in[-40,40]$.
+En la figura~\ref{FigAckley} se muestra una representación del valor de esta
+función en el plano $x-y$.
+\PLOTII{Ackley.eps}{Ackley2.eps}{}{FigAckley}
 
 \subsection{Booth's function}
 
@@ -672,6 +698,9 @@ cuyo mínimo se obtiene para:
 \EQ{g_{Booth}\PA{1+\frac{\pi}{4},\,3+\frac{\pi}{4}}=0.}{EqGBoothM}
 Trataremos de minimizar esta función en el intervalo $x\in[-10,10]$,
 $y\in[-10,10]$.
+En la figura~\ref{FigBooth} se muestra una representación del valor de esta
+función en el plano $x-y$.
+\PLOT{Booth.eps}{}{FigBooth}
 
 \subsection{Rosenbrock's function}
 
@@ -688,6 +717,9 @@ cuyo mínimo se obtiene para:
 \EQ{g_{Rosenbrock}\PA{1+\frac{\pi}{4},\,1+\frac{\pi}{4}}=0.}{EqGRosenbrockM}
 Trataremos de minimizar esta función en el intervalo $x\in[-5,10]$,
 $y\in[-5,10]$.
+En la figura~\ref{FigRosenbrock} se muestra una representación del valor de esta
+función en el plano $x-y$.
+\PLOTII{Rosenbrock.eps}{Rosenbrock2.eps}{}{FigRosenbrock}
 
 \subsection{Easom's function}
 
@@ -699,6 +731,9 @@ motivos muy difícil de optimizar.
 cuyo mínimo se obtiene para:
 \EQ{f_{Easom}(\pi,\,\pi)=-1.}{EqFEasomM}
 Trataremos de minimizarla en el intervalo $x\in[-100,100]$, $y\in[-100,100]$.
+En la figura~\ref{FigEasom} se muestra una representación del valor de esta
+función en el plano $x-y$.
+\PLOTII{Easom.eps}{Easom2.eps}{}{FigEasom}
 
 \subsection{Beale's function} 
 
@@ -713,6 +748,9 @@ siguiente función modificada:
 cuyo mínimo se obtiene para:
 \EQ{g_{Beale}\PA{3+\frac{\pi}{4},\,\frac12+\frac{\pi}{4}}=0.}{EqGBealeM}
 Trataremos de minimizar esta función en el intervalo $x\in[-5,5]$, $y\in[-5,5]$.
+En la figura~\ref{FigBeale} se muestra una representación del valor de esta
+función en el plano $x-y$.
+\PLOT{Beale.eps}{}{FigBeale}
 
 \section{Practical applications}
 

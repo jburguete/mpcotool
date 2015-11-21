@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 1.1.39\n"
+"Project-Id-Version: 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-19 06:18+0100\n"
+"POT-Creation-Date: 2015-11-21 09:03+0100\n"
 "PO-Revision-Date: 2015-10-20 18:47+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -21,333 +21,371 @@ msgstr ""
 msgid "ERROR!"
 msgstr "ERREUR!"
 
-#: calibrator.c:500
+#: calibrator.c:501
 msgid "Unable to parse the input file"
 msgstr "On ne peut pas analyser le fichier d'entrée"
 
-#: calibrator.c:508
+#: calibrator.c:509
 msgid "Bad root XML node"
 msgstr "Node XML source incorrect"
 
-#: calibrator.c:524
+#: calibrator.c:525
 msgid "Bad simulator program"
 msgstr "Programme simulateur incorrect"
 
-#: calibrator.c:539
+#: calibrator.c:540
 msgid "Bad pseudo-random numbers generator seed"
 msgstr "Grain du générateur de nombres pseudo-aléatoires incorrect"
 
-#: calibrator.c:555
+#: calibrator.c:556
 msgid "Bad simulations number"
 msgstr "Nombre de simulations incorrect"
 
-#: calibrator.c:572
+#: calibrator.c:573
 msgid "Invalid population number"
 msgstr "Nombre de population incorrect"
 
-#: calibrator.c:578
+#: calibrator.c:579
 msgid "No population number"
 msgstr "Nombre de population indéfini"
 
-#: calibrator.c:589
+#: calibrator.c:590
 msgid "Invalid generations number"
 msgstr "Nombre de générations incorrect"
 
-#: calibrator.c:595
+#: calibrator.c:596
 msgid "No generations number"
 msgstr "Nombre de générations indéfini"
 
-#: calibrator.c:607
+#: calibrator.c:608
 msgid "Invalid mutation probability"
 msgstr "Probabilité de mutation incorrecte"
 
-#: calibrator.c:613
+#: calibrator.c:614
 msgid "No mutation probability"
 msgstr "Probabilité de mutation indéfinie"
 
-#: calibrator.c:625
+#: calibrator.c:626
 msgid "Invalid reproduction probability"
 msgstr "Probabilité de reproduction incorrecte"
 
-#: calibrator.c:631
+#: calibrator.c:632
 msgid "No reproduction probability"
 msgstr "Probabilité de reproduction indéfinie"
 
-#: calibrator.c:643
+#: calibrator.c:644
 msgid "Invalid adaptation probability"
 msgstr "Probabilité d'adaptation incorrecte"
 
-#: calibrator.c:649
+#: calibrator.c:650
 msgid "No adaptation probability"
 msgstr "Probabilité d'adaptation indéfinie"
 
-#: calibrator.c:660
+#: calibrator.c:661
 msgid "No enough survival entities to reproduce the population"
 msgstr "Número de survivants insuffisante pour reproduire la population"
 
-#: calibrator.c:666
+#: calibrator.c:667
 msgid "Unknown algorithm"
 msgstr "Algorithme inconnu"
 
-#: calibrator.c:681
+#: calibrator.c:682
 msgid "Bad iterations number"
 msgstr "Nombre d'iterations incorrect"
 
-#: calibrator.c:691
+#: calibrator.c:692
 msgid "Invalid best number"
 msgstr "Nombre des meilleurs incorrect"
 
-#: calibrator.c:705
+#: calibrator.c:706
 msgid "Invalid tolerance"
 msgstr "Tolérance incorrecte"
 
-#: calibrator.c:732 calibrator.c:750 calibrator.c:788 calibrator.c:803
-#: calibrator.c:828 calibrator.c:3998
+#: calibrator.c:721
+msgid "Invalid gradient ratio"
+msgstr "Ratio de gradient incorrect"
+
+#: calibrator.c:728
+msgid "Invalid estimates number"
+msgstr "Nombre d'estimations incorrect"
+
+#: calibrator.c:755 calibrator.c:773 calibrator.c:811 calibrator.c:826
+#: calibrator.c:851 calibrator.c:4100
 msgid "Experiment"
 msgstr "Expérience"
 
-#: calibrator.c:733
+#: calibrator.c:756
 msgid "no data file name"
 msgstr "nom de fichier de données indéfini"
 
-#: calibrator.c:751
+#: calibrator.c:774
 msgid "bad weight"
 msgstr "poids incorrect"
 
-#: calibrator.c:789 calibrator.c:830
+#: calibrator.c:812 calibrator.c:853
 msgid "no template"
 msgstr "modèle d'entrée indéfini"
 
-#: calibrator.c:805
+#: calibrator.c:828
 msgid "bad templates number"
 msgstr "nombre de modèles incorrect"
 
-#: calibrator.c:844
+#: calibrator.c:867
 msgid "No calibration experiments"
 msgstr "Expériences de calibrage indéfinis"
 
-#: calibrator.c:854 calibrator.c:869 calibrator.c:893 calibrator.c:903
-#: calibrator.c:925 calibrator.c:935 calibrator.c:944 calibrator.c:969
-#: calibrator.c:991 calibrator.c:1002 calibrator.c:3916
+#: calibrator.c:877 calibrator.c:892 calibrator.c:908 calibrator.c:921
+#: calibrator.c:934 calibrator.c:944 calibrator.c:961 calibrator.c:974
+#: calibrator.c:987 calibrator.c:997 calibrator.c:1007 calibrator.c:1022
+#: calibrator.c:1043 calibrator.c:1053 calibrator.c:1076 calibrator.c:1087
+#: calibrator.c:1103 calibrator.c:4018
 msgid "Variable"
 msgstr "Variable"
 
-#: calibrator.c:855
+#: calibrator.c:878
 msgid "bad XML node"
 msgstr "noeud XML incorrect"
 
-#: calibrator.c:870
+#: calibrator.c:893
 msgid "no name"
 msgstr "nom indéfini"
 
-#: calibrator.c:895
+#: calibrator.c:910
+msgid "bad minimum"
+msgstr "minimum incorrect"
+
+#: calibrator.c:923
+msgid "bad absolute minimum"
+msgstr "minimum absolu incorrect"
+
+#: calibrator.c:936
 msgid "minimum range not allowed"
 msgstr "gamme minimum interdite"
 
-#: calibrator.c:904
+#: calibrator.c:946
 msgid "no minimum range"
 msgstr "gamme minimum indéfinie"
 
-#: calibrator.c:927
+#: calibrator.c:963
+msgid "bad maximum"
+msgstr "maximum incorrect"
+
+#: calibrator.c:976
+msgid "bad absolute maximum"
+msgstr "maximum absolu incorrect"
+
+#: calibrator.c:989
 msgid "maximum range not allowed"
 msgstr "gamme maximum interdite"
 
-#: calibrator.c:936
+#: calibrator.c:999
 msgid "no maximum range"
 msgstr "gamme maximum indéfinie"
 
-#: calibrator.c:945
+#: calibrator.c:1009
 msgid "bad range"
 msgstr "gamme incorrecte"
 
-#: calibrator.c:970
+#: calibrator.c:1024
+msgid "bad precision"
+msgstr ""
+
+#: calibrator.c:1045
+msgid "bad sweeps"
+msgstr "nombre de balayages incorrect"
+
+#: calibrator.c:1055
 msgid "no sweeps number"
 msgstr "nombre de balayages indéfini"
 
-#: calibrator.c:993
+#: calibrator.c:1078
 msgid "invalid bits number"
 msgstr "nombre de bits incorrect"
 
-#: calibrator.c:1003
+#: calibrator.c:1089
 msgid "no bits number"
 msgstr "nombre de bits indéfini"
 
-#: calibrator.c:1012
+#: calibrator.c:1105
+msgid "bad step size"
+msgstr "grandeur de pas incorrect"
+
+#: calibrator.c:1114
 msgid "No calibration variables"
 msgstr "Variables de calibrage indéfinies"
 
-#: calibrator.c:1245 calibrator.c:1246 calibrator.c:2516
+#: calibrator.c:1347 calibrator.c:1348 calibrator.c:2618
 msgid "Best result"
 msgstr "Meilleur résultat"
 
-#: calibrator.c:2161 calibrator.c:2163 calibrator.c:2512
+#: calibrator.c:2263 calibrator.c:2265 calibrator.c:2614
 msgid "Calculation time"
 msgstr "Temps de calcul"
 
-#: calibrator.c:2310
+#: calibrator.c:2412
 msgid "Processors number"
 msgstr "Nombre de processeurs"
 
-#: calibrator.c:2315
+#: calibrator.c:2417
 msgid "Number of threads to perform the calibration/optimization"
 msgstr "Nombre de fils pour exécuter le calibrage ou la optimisation"
 
-#: calibrator.c:2318
+#: calibrator.c:2420
 msgid "Pseudo-random numbers generator seed"
 msgstr "Grain du générateur de nombres pseudo-aléatoires"
 
-#: calibrator.c:2323
+#: calibrator.c:2425
 msgid "Seed to init the pseudo-random numbers generator"
 msgstr "Grain pour initier le générateur de nombres pseudo-aléatoires"
 
-#: calibrator.c:2334 calibrator.c:3527
+#: calibrator.c:2436 calibrator.c:3629
 msgid "Options"
 msgstr "Options"
 
-#: calibrator.c:2337 calibrator.c:2397 calibrator.c:3429
+#: calibrator.c:2439 calibrator.c:2499 calibrator.c:3531
 msgid "_OK"
 msgstr "_Accepter"
 
-#: calibrator.c:2338 calibrator.c:2395 calibrator.c:3428
+#: calibrator.c:2440 calibrator.c:2497 calibrator.c:3530
 msgid "_Cancel"
 msgstr "_Annuler"
 
-#: calibrator.c:2362
+#: calibrator.c:2464
 msgid "Calculating ..."
 msgstr "En calculant ..."
 
-#: calibrator.c:2364
+#: calibrator.c:2466
 msgid "Calculating"
 msgstr "En calculant"
 
-#: calibrator.c:2392
+#: calibrator.c:2494
 msgid "Save file"
 msgstr "Enregistrer fichier"
 
-#: calibrator.c:2533
+#: calibrator.c:2635
 msgid "user-manual.pdf"
 msgstr "user-manual.pdf"
 
-#: calibrator.c:2556
+#: calibrator.c:2658
 msgid ""
 "A software to perform calibrations/optimizations of empirical parameters"
 msgstr ""
 "Un programme pour faire calibrages/optimisations de paramètres empiriques"
 
-#: calibrator.c:3425
+#: calibrator.c:3527
 msgid "Open input file"
 msgstr "Ouvrir fichier d'entrée"
 
-#: calibrator.c:3484
+#: calibrator.c:3586
 msgid "_Sweep"
 msgstr "_Balayage"
 
-#: calibrator.c:3484
+#: calibrator.c:3586
 msgid "_Genetic"
 msgstr "_Génétique"
 
-#: calibrator.c:3487
+#: calibrator.c:3589
 msgid "Monte-Carlo brute force algorithm"
 msgstr "Algorithme de force brute de Monte-Carlo"
 
-#: calibrator.c:3488
+#: calibrator.c:3590
 msgid "Sweep brute force algorithm"
 msgstr "Algorithme de force brute de balayage"
 
-#: calibrator.c:3489
+#: calibrator.c:3591
 msgid "Genetic algorithm"
 msgstr "Algorithme génétique"
 
-#: calibrator.c:3505
+#: calibrator.c:3607
 msgid "Open"
 msgstr "Ouvrir"
 
-#: calibrator.c:3512
+#: calibrator.c:3614
 msgid "Save"
 msgstr "Enregistrer"
 
-#: calibrator.c:3520
+#: calibrator.c:3622
 msgid "Run"
 msgstr "Commencer"
 
-#: calibrator.c:3534
+#: calibrator.c:3636
 msgid "Help"
 msgstr "Aide"
 
-#: calibrator.c:3541
+#: calibrator.c:3643
 msgid "About"
 msgstr "À propos"
 
-#: calibrator.c:3548
+#: calibrator.c:3650
 msgid "Exit"
 msgstr "Quitter"
 
-#: calibrator.c:3571 calibrator.c:3573
+#: calibrator.c:3673 calibrator.c:3675
 msgid "Simulator program"
 msgstr "Programme simulateur"
 
-#: calibrator.c:3576
+#: calibrator.c:3678
 msgid "Simulator program executable file"
 msgstr "Fichier exécutable du programme simulateur"
 
-#: calibrator.c:3580
+#: calibrator.c:3682
 msgid "_Evaluator program"
 msgstr "_Programme évaluateur"
 
-#: calibrator.c:3583
+#: calibrator.c:3685
 msgid "Evaluator program"
 msgstr "Programme évaluateur"
 
-#: calibrator.c:3587
+#: calibrator.c:3689
 msgid "Optional evaluator program executable file"
 msgstr "Optionnel: fichier exécutable du programme évaluateur"
 
-#: calibrator.c:3590
+#: calibrator.c:3692
 msgid "Result file"
 msgstr "Fichier de résultat"
 
-#: calibrator.c:3593
+#: calibrator.c:3695
 msgid "Best results file"
 msgstr "Fichier de meilleurs résultats"
 
-#: calibrator.c:3595
+#: calibrator.c:3697
 msgid "Variables file"
 msgstr "Fichier de variables"
 
-#: calibrator.c:3599
+#: calibrator.c:3701
 msgid "All simulated results file"
 msgstr "Fichier avec tous les résultats simulés"
 
-#: calibrator.c:3622
+#: calibrator.c:3724
 msgid "Simulations number"
 msgstr "Nombre de simulations"
 
-#: calibrator.c:3627
+#: calibrator.c:3729
 msgid "Number of simulations to perform for each iteration"
 msgstr "Nombre de simulations pour exécuter en chaque iteration"
 
-#: calibrator.c:3629
+#: calibrator.c:3731
 msgid "Iterations number"
 msgstr "Nombre d'iterations"
 
-#: calibrator.c:3633
+#: calibrator.c:3735
 msgid "Number of iterations"
 msgstr "Nombre d'iterations"
 
-#: calibrator.c:3636
+#: calibrator.c:3738
 msgid "Tolerance"
 msgstr "Tolérance"
 
-#: calibrator.c:3641
+#: calibrator.c:3743
 msgid "Tolerance to set the variable interval on the next iteration"
 msgstr ""
 "Tolerance pour fixer l'intervalle de la variable à l'iteration suivante"
 
-#: calibrator.c:3642
+#: calibrator.c:3744
 msgid "Bests number"
 msgstr "Nombre des meilleurs"
 
-#: calibrator.c:3647
+#: calibrator.c:3749
 msgid ""
 "Number of best simulations used to set the variable interval on the next "
 "iteration"
@@ -355,107 +393,107 @@ msgstr ""
 "Nombre des meilleures simulations utilisées pour fixer l'intervalle de la "
 "variable à l'iteration suivante"
 
-#: calibrator.c:3650
+#: calibrator.c:3752
 msgid "Population number"
 msgstr "Nombre de population"
 
-#: calibrator.c:3655
+#: calibrator.c:3757
 msgid "Number of population for the genetic algorithm"
 msgstr "Nombre de population pour l'algorithme génétique"
 
-#: calibrator.c:3657
+#: calibrator.c:3759
 msgid "Generations number"
 msgstr "Nombre de générations"
 
-#: calibrator.c:3662
+#: calibrator.c:3764
 msgid "Number of generations for the genetic algorithm"
 msgstr "Nombre de génerations pour l'algorithme génétique"
 
-#: calibrator.c:3664
+#: calibrator.c:3766
 msgid "Mutation ratio"
 msgstr "Ratio de mutation"
 
-#: calibrator.c:3669
+#: calibrator.c:3771
 msgid "Ratio of mutation for the genetic algorithm"
 msgstr "Ratio de mutation pour l'algorithme génétique"
 
-#: calibrator.c:3671
+#: calibrator.c:3773
 msgid "Reproduction ratio"
 msgstr "Ratio de reproduction"
 
-#: calibrator.c:3676
+#: calibrator.c:3778
 msgid "Ratio of reproduction for the genetic algorithm"
 msgstr "Ratio de reproduction pour l'algorithme génétique"
 
-#: calibrator.c:3678
+#: calibrator.c:3780
 msgid "Adaptation ratio"
 msgstr "Ratio d'adaptation"
 
-#: calibrator.c:3683
+#: calibrator.c:3785
 msgid "Ratio of adaptation for the genetic algorithm"
 msgstr "Ratio d'adaptation pour l'algorithme génétique"
 
-#: calibrator.c:3759
+#: calibrator.c:3861
 msgid "Algorithm"
 msgstr "Algorithme"
 
-#: calibrator.c:3766
+#: calibrator.c:3868
 msgid "Variables selector"
 msgstr "Sélecteur de variables"
 
-#: calibrator.c:3775
+#: calibrator.c:3877
 msgid "Add variable"
 msgstr "Ajouter variable"
 
-#: calibrator.c:3782
+#: calibrator.c:3884
 msgid "Remove variable"
 msgstr "Éraser variable"
 
-#: calibrator.c:3783
+#: calibrator.c:3885
 msgid "Name"
 msgstr "Nom"
 
-#: calibrator.c:3786
+#: calibrator.c:3888
 msgid "Variable name"
 msgstr "Nom de la variable"
 
-#: calibrator.c:3789
+#: calibrator.c:3891
 msgid "Minimum"
 msgstr "Minimum"
 
-#: calibrator.c:3794
+#: calibrator.c:3896
 msgid "Minimum initial value of the variable"
 msgstr "Minimum valeur initial de la variable"
 
-#: calibrator.c:3803
+#: calibrator.c:3905
 msgid "Maximum"
 msgstr "Maximum"
 
-#: calibrator.c:3808
+#: calibrator.c:3910
 msgid "Maximum initial value of the variable"
 msgstr "Maximum valeur initial de la variable"
 
-#: calibrator.c:3818
+#: calibrator.c:3920
 msgid "_Absolute minimum"
 msgstr "_Mimumum absolu"
 
-#: calibrator.c:3824
+#: calibrator.c:3926
 msgid "Minimum allowed value of the variable"
 msgstr "Minimum valeur loisible de la variable"
 
-#: calibrator.c:3835
+#: calibrator.c:3937
 msgid "_Absolute maximum"
 msgstr "_Maximum absolu"
 
-#: calibrator.c:3841
+#: calibrator.c:3943
 msgid "Maximum allowed value of the variable"
 msgstr "Maximum valeur loisible de la variable"
 
-#: calibrator.c:3852
+#: calibrator.c:3954
 msgid "Precision digits"
 msgstr "Chiffres de precision"
 
-#: calibrator.c:3857
+#: calibrator.c:3959
 msgid ""
 "Number of precision floating point digits\n"
 "0 is for integer numbers"
@@ -463,50 +501,50 @@ msgstr ""
 "Nombre de chiffres décimales de precision\n"
 "0 est pour numéros entiers"
 
-#: calibrator.c:3861
+#: calibrator.c:3963
 msgid "Sweeps number"
 msgstr "Nombre de balayages"
 
-#: calibrator.c:3866
+#: calibrator.c:3968
 msgid "Number of steps sweeping the variable"
 msgstr "Nombre de pas pour balayager la variable"
 
-#: calibrator.c:3869
+#: calibrator.c:3971
 msgid "Bits number"
 msgstr "Nombre de bits"
 
-#: calibrator.c:3874
+#: calibrator.c:3976
 msgid "Number of bits to encode the variable"
 msgstr "Nombre de bits pour codifier la variable"
 
-#: calibrator.c:3923
+#: calibrator.c:4025
 msgid "Experiment selector"
 msgstr "Selecteur d'expériences"
 
-#: calibrator.c:3932
+#: calibrator.c:4034
 msgid "Add experiment"
 msgstr "Ajouter expérience"
 
-#: calibrator.c:3939
+#: calibrator.c:4041
 msgid "Remove experiment"
 msgstr "Éraser expérience"
 
-#: calibrator.c:3941 calibrator.c:3943 calibrator.c:3946
+#: calibrator.c:4043 calibrator.c:4045 calibrator.c:4048
 msgid "Experimental data file"
 msgstr "Fichier de données expérimentales"
 
-#: calibrator.c:3950
+#: calibrator.c:4052
 msgid "Weight"
 msgstr "Poids"
 
-#: calibrator.c:3955
+#: calibrator.c:4057
 msgid "Weight factor to build the objective function"
 msgstr "Facteur de poids pour faire la fonction objectif"
 
-#: calibrator.c:3975 calibrator.c:3984
+#: calibrator.c:4077 calibrator.c:4086
 msgid "Input template"
 msgstr "Modèle d'entrée"
 
-#: calibrator.c:3988
+#: calibrator.c:4090
 msgid "Experimental input template file"
 msgstr "Fichier de modèle d'entrée expérimental"

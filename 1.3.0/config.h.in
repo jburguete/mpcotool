@@ -70,6 +70,7 @@ OF SUCH DAMAGE.
 #define XML_EXPERIMENT (const xmlChar*)"experiment"
   ///< experiment XML label.
 #define XML_GENETIC (const xmlChar*)"genetic"   ///< genetic XML label.
+#define XML_GRADIENT (const xmlChar*)"gradient" ///< gradient XML label.
 #define XML_MINIMUM (const xmlChar*)"minimum"   ///< minimum XML label.
 #define XML_MAXIMUM (const xmlChar*)"maximum"   ///< maximum XML label.
 #define XML_MONTE_CARLO (const xmlChar*)"Monte-Carlo"
@@ -78,6 +79,8 @@ OF SUCH DAMAGE.
 #define XML_NAME (const xmlChar*)"name" ///< name XML label.
 #define XML_NBEST (const xmlChar*)"nbest"       ///< nbest XML label.
 #define XML_NBITS (const xmlChar*)"nbits"       ///< nbits XML label.
+#define XML_NESTIMATES (const xmlChar*)"nestimates"
+  ///< nestimates XML label.
 #define XML_NGENERATIONS (const xmlChar*)"ngenerations"
   ///< ngenerations XML label.
 #define XML_NITERATIONS (const xmlChar*)"niterations"
@@ -95,6 +98,7 @@ OF SUCH DAMAGE.
 #define XML_SIMULATOR (const xmlChar*)"simulator"
   ///< simulator XML label.
 #define XML_SEED (const xmlChar*)"seed" ///< seed XML label.
+#define XML_STEP (const xmlChar*)"step" ///< step XML label.
 #define XML_SWEEP (const xmlChar*)"sweep"       ///< sweep XML label.
 #define XML_TEMPLATE1 (const xmlChar*)"template1"
   ///< template1 XML label.

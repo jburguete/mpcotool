@@ -410,18 +410,18 @@ input_new ()
 {
   unsigned int i;
 #if DEBUG
-  fprintf (stderr, "input_init: start\n");
+  fprintf (stderr, "input_new: start\n");
 #endif
   input->nvariables = input->nexperiments = input->ninputs = 0;
   input->simulator = input->evaluator = input->directory = input->name = NULL;
   input->experiment = input->label = NULL;
   input->precision = input->nsweeps = input->nbits = NULL;
   input->rangemin = input->rangemax = input->rangeminabs = input->rangemaxabs
-    = input->weight = NULL;
+    = input->weight = input->step = NULL;
   for (i = 0; i < MAX_NINPUTS; ++i)
     input->template[i] = NULL;
 #if DEBUG
-  fprintf (stderr, "input_init: end\n");
+  fprintf (stderr, "input_new: end\n");
 #endif
 }
 
@@ -456,6 +456,7 @@ input_free ()
   g_free (input->rangeminabs);
   g_free (input->rangemaxabs);
   g_free (input->weight);
+  g_free (input->step);
   g_free (input->nsweeps);
   g_free (input->nbits);
   xmlFree (input->evaluator);
@@ -673,7 +674,7 @@ input_open (char *filename)
 
       // Obtaining iterations number
       input->niterations
-        = xml_node_get_int (node, XML_NITERATIONS, &error_code);
+        = xml_node_get_uint (node, XML_NITERATIONS, &error_code);
       if (error_code == 1)
         input->niterations = 1;
       else if (error_code)
@@ -708,6 +709,28 @@ input_open (char *filename)
         }
       else
         input->tolerance = 0.;
+
+	  // Getting gradient ratio
+	  if (xmlHasProp (node, XML_GRADIENT))
+		{
+		  input->gradient_ratio
+		    = xml_node_get_float (node, XML_GRADIENT, &error_code);
+          if (error_code || input->gradient_ratio < 0.
+			  || input->gradient_ratio > 1.)
+            {
+              msg = gettext ("Invalid gradient ratio");
+              goto exit_on_error;
+            }
+	      input->nestimates
+			= xml_node_get_uint (node, XML_NESTIMATES, &error_code);
+          if (error_code || !input->nestimates)
+            {
+              msg = gettext ("Invalid estimates number");
+              goto exit_on_error;
+            }
+		}
+	  else
+		input->gradient_ratio = 0.;
     }
 
   // Reading the experimental data
@@ -879,19 +902,37 @@ input_open (char *filename)
             (input->rangeminabs, (1 + input->nvariables) * sizeof (double));
           input->rangemin[input->nvariables]
             = xml_node_get_float (child, XML_MINIMUM, &error_code);
+		  if (error_code)
+			{
+              snprintf (buffer2, 64, "%s %s: %s",
+                        gettext ("Variable"),
+                        input->label[input->nvariables],
+						gettext ("bad minimum"));
+              msg = buffer2;
+			  goto exit_on_error;
+			}
           if (xmlHasProp (child, XML_ABSOLUTE_MINIMUM))
             {
               input->rangeminabs[input->nvariables]
                 = xml_node_get_float (child, XML_ABSOLUTE_MINIMUM, &error_code);
+			  if (error_code)
+				{
+                  snprintf (buffer2, 64, "%s %s: %s",
+                            gettext ("Variable"),
+                            input->label[input->nvariables],
+    						gettext ("bad absolute minimum"));
+                  msg = buffer2;
+    			  goto exit_on_error;
+				}
             }
           else
             input->rangeminabs[input->nvariables] = -G_MAXDOUBLE;
           if (input->rangemin[input->nvariables]
               < input->rangeminabs[input->nvariables])
             {
-              snprintf (buffer2, 64, "%s %u: %s",
+              snprintf (buffer2, 64, "%s %s: %s",
                         gettext ("Variable"),
-                        input->nvariables + 1,
+                        input->label[input->nvariables],
                         gettext ("minimum range not allowed"));
               msg = buffer2;
               goto exit_on_error;
@@ -899,9 +940,10 @@ input_open (char *filename)
         }
       else
         {
-          snprintf (buffer2, 64, "%s %u: %s",
+          snprintf (buffer2, 64, "%s %s: %s",
                     gettext ("Variable"),
-                    input->nvariables + 1, gettext ("no minimum range"));
+                    input->label[input->nvariables],
+					gettext ("no minimum range"));
           msg = buffer2;
           goto exit_on_error;
         }
@@ -913,17 +955,37 @@ input_open (char *filename)
             (input->rangemaxabs, (1 + input->nvariables) * sizeof (double));
           input->rangemax[input->nvariables]
             = xml_node_get_float (child, XML_MAXIMUM, &error_code);
+		  if (error_code)
+			{
+              snprintf (buffer2, 64, "%s %s: %s",
+                        gettext ("Variable"),
+                        input->label[input->nvariables],
+						gettext ("bad maximum"));
+              msg = buffer2;
+			  goto exit_on_error;
+			}
           if (xmlHasProp (child, XML_ABSOLUTE_MAXIMUM))
-            input->rangemaxabs[input->nvariables]
-              = xml_node_get_float (child, XML_ABSOLUTE_MAXIMUM, &error_code);
+			{
+              input->rangemaxabs[input->nvariables]
+                = xml_node_get_float (child, XML_ABSOLUTE_MAXIMUM, &error_code);
+			  if (error_code)
+				{
+                  snprintf (buffer2, 64, "%s %s: %s",
+                            gettext ("Variable"),
+                            input->label[input->nvariables],
+    						gettext ("bad absolute maximum"));
+                  msg = buffer2;
+    			  goto exit_on_error;
+				}
+			}
           else
             input->rangemaxabs[input->nvariables] = G_MAXDOUBLE;
           if (input->rangemax[input->nvariables]
               > input->rangemaxabs[input->nvariables])
             {
-              snprintf (buffer2, 64, "%s %u: %s",
+              snprintf (buffer2, 64, "%s %s: %s",
                         gettext ("Variable"),
-                        input->nvariables + 1,
+                        input->label[input->nvariables],
                         gettext ("maximum range not allowed"));
               msg = buffer2;
               goto exit_on_error;
@@ -931,26 +993,39 @@ input_open (char *filename)
         }
       else
         {
-          snprintf (buffer2, 64, "%s %u: %s",
+          snprintf (buffer2, 64, "%s %s: %s",
                     gettext ("Variable"),
-                    input->nvariables + 1, gettext ("no maximum range"));
+                    input->label[input->nvariables],
+					gettext ("no maximum range"));
           msg = buffer2;
           goto exit_on_error;
         }
       if (input->rangemax[input->nvariables]
           < input->rangemin[input->nvariables])
         {
-          snprintf (buffer2, 64, "%s %u: %s",
+          snprintf (buffer2, 64, "%s %s: %s",
                     gettext ("Variable"),
-                    input->nvariables + 1, gettext ("bad range"));
+                    input->label[input->nvariables],
+					gettext ("bad range"));
           msg = buffer2;
           goto exit_on_error;
         }
       input->precision = g_realloc
         (input->precision, (1 + input->nvariables) * sizeof (unsigned int));
       if (xmlHasProp (child, XML_PRECISION))
-        input->precision[input->nvariables]
-          = xml_node_get_uint (child, XML_PRECISION, &error_code);
+		{
+          input->precision[input->nvariables]
+            = xml_node_get_uint (child, XML_PRECISION, &error_code);
+		  if (error_code || input->precision[input->nvariables] >= NPRECISIONS)
+			{
+              snprintf (buffer2, 64, "%s %s: %s",
+                        gettext ("Variable"),
+                        input->label[input->nvariables],
+    					gettext ("bad precision"));
+              msg = buffer2;
+              goto exit_on_error;
+			}
+		}
       else
         input->precision[input->nvariables] = DEFAULT_PRECISION;
       if (input->algorithm == ALGORITHM_SWEEP)
@@ -962,12 +1037,22 @@ input_open (char *filename)
                            (1 + input->nvariables) * sizeof (unsigned int));
               input->nsweeps[input->nvariables]
                 = xml_node_get_uint (child, XML_NSWEEPS, &error_code);
+    		  if (error_code || !input->nsweeps[input->nvariables])
+    			{
+                  snprintf (buffer2, 64, "%s %s: %s",
+                            gettext ("Variable"),
+                            input->label[input->nvariables],
+        					gettext ("bad sweeps"));
+                  msg = buffer2;
+                  goto exit_on_error;
+    			}
             }
           else
             {
-              snprintf (buffer2, 64, "%s %u: %s",
+              snprintf (buffer2, 64, "%s %s: %s",
                         gettext ("Variable"),
-                        input->nvariables + 1, gettext ("no sweeps number"));
+                        input->label[input->nvariables],
+						gettext ("no sweeps number"));
               msg = buffer2;
               goto exit_on_error;
             }
@@ -987,9 +1072,9 @@ input_open (char *filename)
               i = xml_node_get_uint (child, XML_NBITS, &error_code);
               if (error_code || !i)
                 {
-                  snprintf (buffer2, 64, "%s %u: %s",
+                  snprintf (buffer2, 64, "%s %s: %s",
                             gettext ("Variable"),
-                            input->nvariables + 1,
+                            input->label[input->nvariables],
                             gettext ("invalid bits number"));
                   msg = buffer2;
                   goto exit_on_error;
@@ -998,13 +1083,30 @@ input_open (char *filename)
             }
           else
             {
-              snprintf (buffer2, 64, "%s %u: %s",
+              snprintf (buffer2, 64, "%s %s: %s",
                         gettext ("Variable"),
-                        input->nvariables + 1, gettext ("no bits number"));
+                        input->label[input->nvariables],
+						gettext ("no bits number"));
               msg = buffer2;
               goto exit_on_error;
             }
         }
+	  else if (input->nestimates)
+		{
+		  input->step = (double *)
+			g_realloc (input->step, (1 + input->nvariables) * sizeof (double));
+          input->step[input->nvariables]
+            = xml_node_get_float (child, XML_STEP, &error_code);
+		  if (error_code || input->step[input->nvariables] < 0.)
+			{
+              snprintf (buffer2, 64, "%s %s: %s",
+                        gettext ("Variable"),
+                        input->label[input->nvariables],
+						gettext ("bad step size"));
+              msg = buffer2;
+              goto exit_on_error;
+			}
+		}
       ++input->nvariables;
     }
   if (!input->nvariables)
@@ -2557,7 +2659,7 @@ window_about ()
               "parameters"),
      "authors", authors,
      "translator-credits", "Javier Burguete Tolosa <jburguete@eead.csic.es>",
-     "version", "1.1.39",
+     "version", "1.3.0",
      "copyright", "Copyright 2012-2015 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/calibrator",

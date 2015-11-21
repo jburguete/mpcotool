@@ -11,9 +11,14 @@ figs = surcos-advance.eps surcos-depth.eps surcos-solute-q1.eps \
 	pivot-measured-starts-27,48.eps pivot-measured-stops-27,48.eps \
 	Violada-contributions.eps Violada-optimized-contributions.eps
 
-calibrator.pdf: calibrator.tex bib.bib makefile $(figs)
+plots = Beale.eps
+
+calibrator.pdf: calibrator.tex bib.bib makefile $(figs) $(plots)
 	latex calibrator
 	bibtex calibrator
 	latex calibrator
 	latex calibrator
 	dvipdf calibrator
+
+Beale.eps: plot
+	gnuplot plot

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
 <calibrate simulator="a" algorithm="Monte-Carlo" nsimulations="1">
 	<experiment name="a" template1="a"/>
-	<variable name="a" minimum="0" maximum="a"/>
+	<variable name="a" minimum="0" maximum="1" absolute_maximum="0"/>
 </calibrate>
