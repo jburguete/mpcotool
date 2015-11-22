@@ -90,8 +90,10 @@ OF SUCH DAMAGE.
 
 int ntasks;                     ///< Number of tasks.
 unsigned int nthreads;          ///< Number of threads.
+unsigned int nthreads_gradient;
+  ///< Number of threads for the gradient based method.
 GMutex mutex[1];                ///< Mutex struct.
-void (*calibrate_step) ();
+void (*calibrate_algorithm) ();
   ///< Pointer to the function to perform a calibration algorithm step.
 Input input[1];
   ///< Input struct to define the input file to calibrator.
@@ -1400,74 +1402,30 @@ calibrate_best (unsigned int simulation, double value)
 #if DEBUG
   fprintf (stderr, "calibrate_best: start\n");
 #endif
-  if (calibrate->nsaveds < calibrate->nbest)
-    ++calibrate->nsaveds;
-  calibrate->error_best[calibrate->nsaveds - 1] = value;
-  calibrate->simulation_best[calibrate->nsaveds - 1] = simulation;
-  for (i = calibrate->nsaveds; --i;)
+  if (calibrate->nsaveds < calibrate->nbest
+      || value < calibrate->error_best[calibrate->nsaveds - 1])
     {
-      if (calibrate->error_best[i] < calibrate->error_best[i - 1])
+      if (calibrate->nsaveds < calibrate->nbest)
+        ++calibrate->nsaveds;
+      calibrate->error_best[calibrate->nsaveds - 1] = value;
+      calibrate->simulation_best[calibrate->nsaveds - 1] = simulation;
+      for (i = calibrate->nsaveds; --i;)
         {
-          j = calibrate->simulation_best[i];
-          e = calibrate->error_best[i];
-          calibrate->simulation_best[i] = calibrate->simulation_best[i - 1];
-          calibrate->error_best[i] = calibrate->error_best[i - 1];
-          calibrate->simulation_best[i - 1] = j;
-          calibrate->error_best[i - 1] = e;
+          if (calibrate->error_best[i] < calibrate->error_best[i - 1])
+            {
+              j = calibrate->simulation_best[i];
+              e = calibrate->error_best[i];
+              calibrate->simulation_best[i] = calibrate->simulation_best[i - 1];
+              calibrate->error_best[i] = calibrate->error_best[i - 1];
+              calibrate->simulation_best[i - 1] = j;
+              calibrate->error_best[i - 1] = e;
+            }
+          else
+            break;
         }
-      else
-        break;
     }
 #if DEBUG
   fprintf (stderr, "calibrate_best: end\n");
-#endif
-}
-
-/**
- * \fn void calibrate_best_sequential (unsigned int simulation, double value)
- * \brief Function to save the best simulations in sequential mode.
- * \param simulation
- * \brief Simulation number.
- * \param value
- * \brief Objective function value.
- */
-void
-calibrate_best_sequential (unsigned int simulation, double value)
-{
-#if DEBUG
-  fprintf (stderr, "calibrate_best_sequential: start\n");
-#endif
-  if (calibrate->nsaveds < calibrate->nbest
-      || value < calibrate->error_best[calibrate->nsaveds - 1])
-    calibrate_best (simulation, value);
-#if DEBUG
-  fprintf (stderr, "calibrate_best_sequential: end\n");
-#endif
-}
-
-/**
- * \fn void calibrate_best_thread (unsigned int simulation, double value)
- * \brief Function to save the best simulations of a thread.
- * \param simulation
- * \brief Simulation number.
- * \param value
- * \brief Objective function value.
- */
-void
-calibrate_best_thread (unsigned int simulation, double value)
-{
-#if DEBUG
-  fprintf (stderr, "calibrate_best_thread: start\n");
-#endif
-  if (calibrate->nsaveds < calibrate->nbest
-      || value < calibrate->error_best[calibrate->nsaveds - 1])
-    {
-      g_mutex_lock (mutex);
-      calibrate_best (simulation, value);
-      g_mutex_unlock (mutex);
-    }
-#if DEBUG
-  fprintf (stderr, "calibrate_best_thread: end\n");
 #endif
 }
 
@@ -1490,7 +1448,7 @@ calibrate_sequential ()
       e = 0.;
       for (j = 0; j < calibrate->nexperiments; ++j)
         e += calibrate_parse (i, j);
-      calibrate_best_sequential (i, e);
+      calibrate_best (i, e);
       calibrate_save_variables (i, e);
 #if DEBUG
       fprintf (stderr, "calibrate_sequential: i=%u e=%lg\n", i, e);
@@ -1526,8 +1484,8 @@ calibrate_thread (ParallelData * data)
       e = 0.;
       for (j = 0; j < calibrate->nexperiments; ++j)
         e += calibrate_parse (i, j);
-      calibrate_best_thread (i, e);
       g_mutex_lock (mutex);
+      calibrate_best (i, e);
       calibrate_save_variables (i, e);
       g_mutex_unlock (mutex);
 #if DEBUG
@@ -1794,38 +1752,120 @@ calibrate_gradient_sequential ()
 #endif
 }
 
+/**
+ * \fn void* calibrate_gradient_thread (ParallelData *data)
+ * \brief Function to estimate the gradient on a thread.
+ * \param data
+ * \brief Function data.
+ * \return NULL
+ */
+void *
+calibrate_gradient_thread (ParallelData * data)
+{
+  unsigned int i, j, thread;
+  double e;
+#if DEBUG
+  fprintf (stderr, "calibrate_gradient_thread: start\n");
+#endif
+  thread = data->thread;
+#if DEBUG
+  fprintf (stderr, "calibrate_gradient_thread: thread=%u start=%u end=%u\n",
+           thread,
+           calibrate->thread_gradient[thread],
+           calibrate->thread_gradient[thread + 1]);
+#endif
+  for (i = calibrate->thread_gradient[thread];
+       i < calibrate->thread_gradient[thread + 1]; ++i)
+    {
+      e = 0.;
+      for (j = 0; j < calibrate->nexperiments; ++j)
+        e += calibrate_parse (i, j);
+      g_mutex_lock (mutex);
+      calibrate_best_gradient (i, e);
+      calibrate_save_variables (i, e);
+      g_mutex_unlock (mutex);
+#if DEBUG
+      fprintf (stderr, "calibrate_gradient_thread: i=%u e=%lg\n", i, e);
+#endif
+    }
+#if DEBUG
+  fprintf (stderr, "calibrate_gradient_thread: end\n");
+#endif
+  g_thread_exit (NULL);
+  return NULL;
+}
+
+/**
+ * \fn double calibrate_variable_step_gradient (unsigned int variable)
+ * \brief Function to estimate a component of the gradient vector.
+ * \param variable
+ * \brief Variable number.
+ */
 double
 calibrate_variable_step_gradient (unsigned int variable)
 {
   double x;
-  x = (2. - 4. * gsl_rng_uniform (calibrate->rng)) * calibrate->step[variable];
+  x = calibrate->gradient[variable]
+    + (1. - 2. * gsl_rng_uniform (calibrate->rng)) * calibrate->step[variable];
   x = fmin (fmax (x, calibrate->rangeminabs[variable]),
             calibrate->rangemaxabs[variable]);
   return x;
 }
 
+/**
+ * \fn void calibrate_step_gradient (unsigned int simulation)
+ * \brief Function to do a step of the gradient based method.
+ * \param simulation
+ * \brief Simulation number.
+ */
 void
-calibrate_step_gradient_sequential (unsigned int simulation)
+calibrate_step_gradient (unsigned int simulation)
 {
+  GThread *thread[nthreads_gradient];
+  ParallelData data[nthreads_gradient];
   unsigned int i, j, k, b;
   for (i = 0; i < calibrate->nestimates; ++i)
     {
       k = (simulation + i) * calibrate->nvariables;
       b = calibrate->simulation_best[0] * calibrate->nvariables;
       for (j = 0; j < calibrate->nvariables; ++j)
-        calibrate->value[k + j]
-          = calibrate->value[b + j] + calibrate_variable_step_gradient (j);
+        calibrate->value[k++]
+          = calibrate->value[b++] + calibrate_variable_step_gradient (j);
     }
-  if (nthreads == 1)
+  if (nthreads_gradient == 1)
     calibrate_gradient_sequential ();
+  else
+    {
+      for (i = 0; i < nthreads_gradient; ++i)
+        {
+          data[i].thread = i;
+          thread[i] = g_thread_new
+            (NULL, (void (*)) calibrate_gradient_thread, &data[i]);
+        }
+      for (i = 0; i < nthreads_gradient; ++i)
+        g_thread_join (thread[i]);
+    }
 }
 
+/**
+ * \fn void calibrate_gradient ()
+ * \brief Function to calibrate with a gradient based method.
+ */
 void
 calibrate_gradient ()
 {
-  unsigned int i;
-  for (i = 0; i < calibrate->nsteps; ++i)
+  unsigned int i, j, k, b, s;
+  for (i = 0; i < calibrate->nvariables; ++i)
+    calibrate->gradient[i] = 0.;
+  b = calibrate->simulation_best[0] * calibrate->nvariables;
+  s = calibrate->nsimulations;
+  for (i = 0; i < calibrate->nsteps; ++i, s += calibrate->nestimates, b = k)
     {
+      calibrate_step_gradient (s);
+      k = s * calibrate->nvariables;
+      for (j = 0; j < calibrate->nvariables; ++j)
+        calibrate->gradient[j]
+          = calibrate->value[k + j] - calibrate->value[b + j];
     }
 }
 
@@ -2068,6 +2108,18 @@ calibrate_refine ()
 }
 
 /**
+ * \fn void calibrate_step ()
+ * \brief Function to do a step of the iterative algorithm.
+ */
+void
+calibrate_step ()
+{
+  calibrate_algorithm ();
+  if (calibrate->nsteps)
+    calibrate_gradient ();
+}
+
+/**
  * \fn void calibrate_iterate ()
  * \brief Function to iterate the algorithm.
  */
@@ -2177,13 +2229,13 @@ calibrate_new ()
   switch (calibrate->algorithm)
     {
     case ALGORITHM_MONTE_CARLO:
-      calibrate_step = calibrate_MonteCarlo;
+      calibrate_algorithm = calibrate_MonteCarlo;
       break;
     case ALGORITHM_SWEEP:
-      calibrate_step = calibrate_sweep;
+      calibrate_algorithm = calibrate_sweep;
       break;
     default:
-      calibrate_step = calibrate_genetic;
+      calibrate_algorithm = calibrate_genetic;
       calibrate->mutation_ratio = input->mutation_ratio;
       calibrate->reproduction_ratio = input->reproduction_ratio;
       calibrate->adaptation_ratio = input->adaptation_ratio;
@@ -2192,6 +2244,8 @@ calibrate_new ()
   calibrate->niterations = input->niterations;
   calibrate->nbest = input->nbest;
   calibrate->tolerance = input->tolerance;
+  calibrate->nsteps = input->nsteps;
+  calibrate->nestimates = input->nestimates;
 
   calibrate->simulation_best
     = (unsigned int *) alloca (calibrate->nbest * sizeof (unsigned int));
@@ -2248,6 +2302,7 @@ calibrate_new ()
   calibrate->rangemaxabs = input->rangemaxabs;
   calibrate->precision = input->precision;
   calibrate->nsweeps = input->nsweeps;
+  calibrate->step = input->step;
   nbits = input->nbits;
   if (input->algorithm == ALGORITHM_SWEEP)
     calibrate->nsimulations = 1;
@@ -2263,6 +2318,9 @@ calibrate_new ()
 #endif
           }
       }
+  if (calibrate->nsteps)
+    calibrate->gradient
+      = (double *) alloca (calibrate->nvariables * sizeof (double));
 
   // Allocating values
 #if DEBUG
@@ -2289,9 +2347,9 @@ calibrate_new ()
   fprintf (stderr, "calibrate_new: nvariables=%u nsimulations=%u\n",
            calibrate->nvariables, calibrate->nsimulations);
 #endif
-  calibrate->value = (double *) g_malloc (calibrate->nsimulations *
-                                          calibrate->nvariables *
-                                          sizeof (double));
+  calibrate->value = (double *)
+    g_malloc ((calibrate->nsimulations + calibrate->nestimates)
+              * calibrate->nvariables * sizeof (double));
 
   // Calculating simulations to perform on each task
 #if HAVE_MPI
@@ -2300,18 +2358,30 @@ calibrate_new ()
            calibrate->mpi_rank, ntasks);
 #endif
   calibrate->nstart = calibrate->mpi_rank * calibrate->nsimulations / ntasks;
-  calibrate->nend = (1 + calibrate->mpi_rank) * calibrate->nsimulations
-    / ntasks;
+  calibrate->nend
+    = (1 + calibrate->mpi_rank) * calibrate->nsimulations / ntasks;
+  if (calibrate->nsteps)
+    {
+      calibrate->nstart_gradient
+        = calibrate->mpi_rank * calibrate->nestimates / ntasks;
+      calibrate->nend_gradient
+        = (1 + calibrate->mpi_rank) * calibrate->nestimates / ntasks;
+    }
 #else
   calibrate->nstart = 0;
   calibrate->nend = calibrate->nsimulations;
+  if (calibrate->nsteps)
+    {
+      calibrate->nstart = 0;
+      calibrate->nend_gradient = calibrate->nestimates;
+    }
 #endif
 #if DEBUG
   fprintf (stderr, "calibrate_new: nstart=%u nend=%u\n", calibrate->nstart,
            calibrate->nend);
 #endif
 
-  // Calculating simulations to perform on each thread
+  // Calculating simulations to perform for each thread
   calibrate->thread
     = (unsigned int *) alloca ((1 + nthreads) * sizeof (unsigned int));
   for (i = 0; i <= nthreads; ++i)
@@ -2322,6 +2392,21 @@ calibrate_new ()
       fprintf (stderr, "calibrate_new: i=%u thread=%u\n", i,
                calibrate->thread[i]);
 #endif
+    }
+  if (calibrate->nsteps)
+    {
+      calibrate->thread_gradient = (unsigned int *)
+        alloca ((1 + nthreads_gradient) * sizeof (unsigned int));
+      for (i = 0; i <= nthreads_gradient; ++i)
+        {
+          calibrate->thread_gradient[i] = calibrate->nstart_gradient
+            + i * (calibrate->nend_gradient - calibrate->nstart_gradient)
+            / nthreads_gradient;
+#if DEBUG
+          fprintf (stderr, "calibrate_new: i=%u thread_gradient=%u\n", i,
+                   calibrate->thread_gradient[i]);
+#endif
+        }
     }
 
   // Opening result files
@@ -2747,7 +2832,7 @@ window_about ()
               "parameters"),
      "authors", authors,
      "translator-credits", "Javier Burguete Tolosa <jburguete@eead.csic.es>",
-     "version", "1.3.1",
+     "version", "1.3.2",
      "copyright", "Copyright 2012-2015 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/calibrator",
@@ -4276,7 +4361,7 @@ main (int argn, char **argc)
 #if HAVE_GTK
 
   // Getting threads number
-  nthreads = cores_number ();
+  nthreads_gradient = nthreads = cores_number ();
 
   // Setting local language and international floating point numbers notation
   setlocale (LC_ALL, "");
@@ -4311,10 +4396,10 @@ main (int argn, char **argc)
 
   // Getting threads number
   if (argn == 2)
-    nthreads = cores_number ();
+    nthreads_gradient = nthreads = cores_number ();
   else
     {
-      nthreads = atoi (argc[2]);
+      nthreads_gradient = nthreads = atoi (argc[2]);
       if (!nthreads)
         {
           printf ("Bad threads number\n");

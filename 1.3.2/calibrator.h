@@ -120,6 +120,7 @@ typedef struct
   double *error_best;           ///< Array of the best minimum errors.
   double *weight;               ///< Array of the experiment weights.
   double *step;                 ///< Array of gradient based method step sizes.
+  double *gradient;             ///< Vector of gradient estimation.
   double *value_old;
   ///< Array of the best variable values on the previous step.
   double *error_old;
@@ -192,8 +193,6 @@ double calibrate_parse (unsigned int simulation, unsigned int experiment);
 void calibrate_print ();
 void calibrate_save_variables (unsigned int simulation, double error);
 void calibrate_best (unsigned int simulation, double value);
-void calibrate_best_sequential (unsigned int simulation, double value);
-void calibrate_best_thread (unsigned int simulation, double value);
 void calibrate_sequential ();
 void *calibrate_thread (ParallelData * data);
 void calibrate_merge (unsigned int nsaveds, unsigned int *simulation_best,
@@ -203,11 +202,18 @@ void calibrate_synchronise ();
 #endif
 void calibrate_sweep ();
 void calibrate_MonteCarlo ();
+void calibrate_best_gradient (unsigned int simulation, double value);
+void calibrate_gradient_sequential ();
+void *calibrate_gradient_thread (ParallelData * data);
+double calibrate_variable_step_gradient (unsigned int variable);
+void calibrate_step_gradient (unsigned int simulation);
+void calibrate_gradient ();
 double calibrate_genetic_objective (Entity * entity);
 void calibrate_genetic ();
 void calibrate_save_old ();
 void calibrate_merge_old ();
 void calibrate_refine ();
+void calibrate_step ();
 void calibrate_iterate ();
 void calibrate_new ();
 
