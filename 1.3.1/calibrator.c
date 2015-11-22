@@ -208,7 +208,7 @@ Window window[1];
 #endif
 
 /**
- * \fn void show_message(char *title, char *msg, int type)
+ * \fn void show_message (char *title, char *msg, int type)
  * \brief Function to show a dialog with a message.
  * \param title
  * \brief Title.
@@ -242,7 +242,7 @@ show_message (char *title, char *msg, int type)
 }
 
 /**
- * \fn void show_error(char *msg)
+ * \fn void show_error (char *msg)
  * \brief Function to show a dialog with an error message.
  * \param msg
  * \brief Error message.
@@ -254,7 +254,8 @@ show_error (char *msg)
 }
 
 /**
- * \fn int xml_node_get_int(xmlNode *node, const xmlChar *prop, int *error_code)
+ * \fn int xml_node_get_int (xmlNode *node, const xmlChar *prop, \
+ *   int *error_code)
  * \brief Function to get an integer number of a XML node property.
  * \param node
  * \brief XML node.
@@ -284,7 +285,7 @@ xml_node_get_int (xmlNode * node, const xmlChar * prop, int *error_code)
 }
 
 /**
- * \fn int xml_node_get_uint(xmlNode *node, const xmlChar *prop, \
+ * \fn int xml_node_get_uint (xmlNode *node, const xmlChar *prop, \
  *   int *error_code)
  * \brief Function to get an unsigned integer number of a XML node property.
  * \param node
@@ -315,7 +316,7 @@ xml_node_get_uint (xmlNode * node, const xmlChar * prop, int *error_code)
 }
 
 /**
- * \fn double xml_node_get_float(xmlNode *node, const xmlChar *prop, \
+ * \fn double xml_node_get_float (xmlNode *node, const xmlChar *prop, \
  *   int *error_code)
  * \brief Function to get a floating point number of a XML node property.
  * \param node
@@ -346,7 +347,7 @@ xml_node_get_float (xmlNode * node, const xmlChar * prop, int *error_code)
 }
 
 /**
- * \fn void xml_node_set_int(xmlNode *node, const xmlChar *prop, int value)
+ * \fn void xml_node_set_int (xmlNode *node, const xmlChar *prop, int value)
  * \brief Function to set an integer number in a XML node property.
  * \param node
  * \brief XML node.
@@ -364,7 +365,7 @@ xml_node_set_int (xmlNode * node, const xmlChar * prop, int value)
 }
 
 /**
- * \fn void xml_node_set_uint(xmlNode *node, const xmlChar *prop, \
+ * \fn void xml_node_set_uint (xmlNode *node, const xmlChar *prop, \
  *   unsigned int value)
  * \brief Function to set an unsigned integer number in a XML node property.
  * \param node
@@ -383,7 +384,7 @@ xml_node_set_uint (xmlNode * node, const xmlChar * prop, unsigned int value)
 }
 
 /**
- * \fn void xml_node_set_float(xmlNode *node, const xmlChar *prop, \
+ * \fn void xml_node_set_float (xmlNode *node, const xmlChar *prop, \
  *   double value)
  * \brief Function to set a floating point number in a XML node property.
  * \param node
@@ -402,7 +403,7 @@ xml_node_set_float (xmlNode * node, const xmlChar * prop, double value)
 }
 
 /**
- * \fn void input_new()
+ * \fn void input_new ()
  * \brief Function to create a new Input struct.
  */
 void
@@ -426,7 +427,7 @@ input_new ()
 }
 
 /**
- * \fn void input_free()
+ * \fn void input_free ()
  * \brief Function to free the memory of the input file data.
  */
 void
@@ -470,7 +471,7 @@ input_free ()
 }
 
 /**
- * \fn int input_open(char *filename)
+ * \fn int input_open (char *filename)
  * \brief Function to open the input file.
  * \param filename
  * \brief Input data file name.
@@ -710,15 +711,13 @@ input_open (char *filename)
       else
         input->tolerance = 0.;
 
-      // Getting gradient ratio
-      if (xmlHasProp (node, XML_GRADIENT))
+      // Getting gradient method parameters
+      if (xmlHasProp (node, XML_NSTEPS))
         {
-          input->gradient_ratio
-            = xml_node_get_float (node, XML_GRADIENT, &error_code);
-          if (error_code || input->gradient_ratio < 0.
-              || input->gradient_ratio > 1.)
+          input->nsteps = xml_node_get_uint (node, XML_NSTEPS, &error_code);
+          if (error_code || !input->nsteps)
             {
-              msg = gettext ("Invalid gradient ratio");
+              msg = gettext ("Invalid steps number");
               goto exit_on_error;
             }
           input->nestimates
@@ -730,7 +729,7 @@ input_open (char *filename)
             }
         }
       else
-        input->gradient_ratio = 0.;
+        input->nsteps = 0;
     }
 
   // Reading the experimental data
@@ -1090,7 +1089,7 @@ input_open (char *filename)
               goto exit_on_error;
             }
         }
-      else if (input->nestimates)
+      else if (input->nsteps)
         {
           input->step = (double *)
             g_realloc (input->step, (1 + input->nvariables) * sizeof (double));
@@ -1136,7 +1135,7 @@ exit_on_error:
 }
 
 /**
- * \fn void calibrate_input(unsigned int simulation, char *input, \
+ * \fn void calibrate_input (unsigned int simulation, char *input, \
  *   GMappedFile *template)
  * \brief Function to write the simulation input file.
  * \param simulation
@@ -1224,7 +1223,7 @@ calibrate_input_end:
 }
 
 /**
- * \fn double calibrate_parse(unsigned int simulation, unsigned int experiment)
+ * \fn double calibrate_parse (unsigned int simulation, unsigned int experiment)
  * \brief Function to parse input files, simulating and calculating the \
  *   objective function.
  * \param simulation
@@ -1331,7 +1330,7 @@ calibrate_parse (unsigned int simulation, unsigned int experiment)
 }
 
 /**
- * \fn void calibrate_print()
+ * \fn void calibrate_print ()
  * \brief Function to print the results.
  */
 void
@@ -1386,7 +1385,68 @@ calibrate_save_variables (unsigned int simulation, double error)
 }
 
 /**
- * \fn void calibrate_best_thread(unsigned int simulation, double value)
+ * \fn void calibrate_best (unsigned int simulation, double value)
+ * \brief Function to save the best simulations.
+ * \param simulation
+ * \brief Simulation number.
+ * \param value
+ * \brief Objective function value.
+ */
+void
+calibrate_best (unsigned int simulation, double value)
+{
+  unsigned int i, j;
+  double e;
+#if DEBUG
+  fprintf (stderr, "calibrate_best: start\n");
+#endif
+  if (calibrate->nsaveds < calibrate->nbest)
+    ++calibrate->nsaveds;
+  calibrate->error_best[calibrate->nsaveds - 1] = value;
+  calibrate->simulation_best[calibrate->nsaveds - 1] = simulation;
+  for (i = calibrate->nsaveds; --i;)
+    {
+      if (calibrate->error_best[i] < calibrate->error_best[i - 1])
+        {
+          j = calibrate->simulation_best[i];
+          e = calibrate->error_best[i];
+          calibrate->simulation_best[i] = calibrate->simulation_best[i - 1];
+          calibrate->error_best[i] = calibrate->error_best[i - 1];
+          calibrate->simulation_best[i - 1] = j;
+          calibrate->error_best[i - 1] = e;
+        }
+      else
+        break;
+    }
+#if DEBUG
+  fprintf (stderr, "calibrate_best: end\n");
+#endif
+}
+
+/**
+ * \fn void calibrate_best_sequential (unsigned int simulation, double value)
+ * \brief Function to save the best simulations in sequential mode.
+ * \param simulation
+ * \brief Simulation number.
+ * \param value
+ * \brief Objective function value.
+ */
+void
+calibrate_best_sequential (unsigned int simulation, double value)
+{
+#if DEBUG
+  fprintf (stderr, "calibrate_best_sequential: start\n");
+#endif
+  if (calibrate->nsaveds < calibrate->nbest
+      || value < calibrate->error_best[calibrate->nsaveds - 1])
+    calibrate_best (simulation, value);
+#if DEBUG
+  fprintf (stderr, "calibrate_best_sequential: end\n");
+#endif
+}
+
+/**
+ * \fn void calibrate_best_thread (unsigned int simulation, double value)
  * \brief Function to save the best simulations of a thread.
  * \param simulation
  * \brief Simulation number.
@@ -1396,8 +1456,6 @@ calibrate_save_variables (unsigned int simulation, double error)
 void
 calibrate_best_thread (unsigned int simulation, double value)
 {
-  unsigned int i, j;
-  double e;
 #if DEBUG
   fprintf (stderr, "calibrate_best_thread: start\n");
 #endif
@@ -1405,24 +1463,7 @@ calibrate_best_thread (unsigned int simulation, double value)
       || value < calibrate->error_best[calibrate->nsaveds - 1])
     {
       g_mutex_lock (mutex);
-      if (calibrate->nsaveds < calibrate->nbest)
-        ++calibrate->nsaveds;
-      calibrate->error_best[calibrate->nsaveds - 1] = value;
-      calibrate->simulation_best[calibrate->nsaveds - 1] = simulation;
-      for (i = calibrate->nsaveds; --i;)
-        {
-          if (calibrate->error_best[i] < calibrate->error_best[i - 1])
-            {
-              j = calibrate->simulation_best[i];
-              e = calibrate->error_best[i];
-              calibrate->simulation_best[i] = calibrate->simulation_best[i - 1];
-              calibrate->error_best[i] = calibrate->error_best[i - 1];
-              calibrate->simulation_best[i - 1] = j;
-              calibrate->error_best[i - 1] = e;
-            }
-          else
-            break;
-        }
+      calibrate_best (simulation, value);
       g_mutex_unlock (mutex);
     }
 #if DEBUG
@@ -1431,50 +1472,37 @@ calibrate_best_thread (unsigned int simulation, double value)
 }
 
 /**
- * \fn void calibrate_best_sequential(unsigned int simulation, double value)
- * \brief Function to save the best simulations.
- * \param simulation
- * \brief Simulation number.
- * \param value
- * \brief Objective function value.
+ * \fn void calibrate_sequential ()
+ * \brief Function to calibrate sequentially.
  */
 void
-calibrate_best_sequential (unsigned int simulation, double value)
+calibrate_sequential ()
 {
   unsigned int i, j;
   double e;
 #if DEBUG
-  fprintf (stderr, "calibrate_best_sequential: start\n");
+  fprintf (stderr, "calibrate_sequential: start\n");
+  fprintf (stderr, "calibrate_sequential: nstart=%u nend=%u\n",
+           calibrate->nstart, calibrate->nend);
 #endif
-  if (calibrate->nsaveds < calibrate->nbest
-      || value < calibrate->error_best[calibrate->nsaveds - 1])
+  for (i = calibrate->nstart; i < calibrate->nend; ++i)
     {
-      if (calibrate->nsaveds < calibrate->nbest)
-        ++calibrate->nsaveds;
-      calibrate->error_best[calibrate->nsaveds - 1] = value;
-      calibrate->simulation_best[calibrate->nsaveds - 1] = simulation;
-      for (i = calibrate->nsaveds; --i;)
-        {
-          if (calibrate->error_best[i] < calibrate->error_best[i - 1])
-            {
-              j = calibrate->simulation_best[i];
-              e = calibrate->error_best[i];
-              calibrate->simulation_best[i] = calibrate->simulation_best[i - 1];
-              calibrate->error_best[i] = calibrate->error_best[i - 1];
-              calibrate->simulation_best[i - 1] = j;
-              calibrate->error_best[i - 1] = e;
-            }
-          else
-            break;
-        }
+      e = 0.;
+      for (j = 0; j < calibrate->nexperiments; ++j)
+        e += calibrate_parse (i, j);
+      calibrate_best_sequential (i, e);
+      calibrate_save_variables (i, e);
+#if DEBUG
+      fprintf (stderr, "calibrate_sequential: i=%u e=%lg\n", i, e);
+#endif
     }
 #if DEBUG
-  fprintf (stderr, "calibrate_best_sequential: end\n");
+  fprintf (stderr, "calibrate_sequential: end\n");
 #endif
 }
 
 /**
- * \fn void* calibrate_thread(ParallelData *data)
+ * \fn void* calibrate_thread (ParallelData *data)
  * \brief Function to calibrate on a thread.
  * \param data
  * \brief Function data.
@@ -1514,37 +1542,7 @@ calibrate_thread (ParallelData * data)
 }
 
 /**
- * \fn void calibrate_sequential()
- * \brief Function to calibrate sequentially.
- */
-void
-calibrate_sequential ()
-{
-  unsigned int i, j;
-  double e;
-#if DEBUG
-  fprintf (stderr, "calibrate_sequential: start\n");
-  fprintf (stderr, "calibrate_sequential: nstart=%u nend=%u\n",
-           calibrate->nstart, calibrate->nend);
-#endif
-  for (i = calibrate->nstart; i < calibrate->nend; ++i)
-    {
-      e = 0.;
-      for (j = 0; j < calibrate->nexperiments; ++j)
-        e += calibrate_parse (i, j);
-      calibrate_best_sequential (i, e);
-      calibrate_save_variables (i, e);
-#if DEBUG
-      fprintf (stderr, "calibrate_sequential: i=%u e=%lg\n", i, e);
-#endif
-    }
-#if DEBUG
-  fprintf (stderr, "calibrate_sequential: end\n");
-#endif
-}
-
-/**
- * \fn void calibrate_merge(unsigned int nsaveds, \
+ * \fn void calibrate_merge (unsigned int nsaveds, \
  *   unsigned int *simulation_best, double *error_best)
  * \brief Function to merge the 2 calibration results.
  * \param nsaveds
@@ -1609,7 +1607,7 @@ calibrate_merge (unsigned int nsaveds, unsigned int *simulation_best,
 }
 
 /**
- * \fn void calibrate_synchronise()
+ * \fn void calibrate_synchronise ()
  * \brief Function to synchronise the calibration results of MPI tasks.
  */
 #if HAVE_MPI
@@ -1649,7 +1647,7 @@ calibrate_synchronise ()
 #endif
 
 /**
- * \fn void calibrate_sweep()
+ * \fn void calibrate_sweep ()
  * \brief Function to calibrate with the sweep algorithm.
  */
 void
@@ -1700,7 +1698,7 @@ calibrate_sweep ()
 }
 
 /**
- * \fn void calibrate_MonteCarlo()
+ * \fn void calibrate_MonteCarlo ()
  * \brief Function to calibrate with the Monte-Carlo algorithm.
  */
 void
@@ -1741,7 +1739,98 @@ calibrate_MonteCarlo ()
 }
 
 /**
- * \fn double calibrate_genetic_objective(Entity *entity)
+ * \fn void calibrate_best_gradient (unsigned int simulation, \
+ *   double value)
+ * \brief Function to save the best simulation in a gradient based method.
+ * \param simulation
+ * \brief Simulation number.
+ * \param value
+ * \brief Objective function value.
+ */
+void
+calibrate_best_gradient (unsigned int simulation, double value)
+{
+#if DEBUG
+  fprintf (stderr, "calibrate_best_gradient: start\n");
+#endif
+  if (value < calibrate->error_best[0])
+    {
+      calibrate->error_best[0] = value;
+      calibrate->simulation_best[0] = simulation;
+    }
+#if DEBUG
+  fprintf (stderr, "calibrate_best_gradient: end\n");
+#endif
+}
+
+/**
+ * \fn void calibrate_gradient_sequential ()
+ * \brief Function to estimate the gradient sequentially.
+ */
+void
+calibrate_gradient_sequential ()
+{
+  unsigned int i, j;
+  double e;
+#if DEBUG
+  fprintf (stderr, "calibrate_gradient_sequential: start\n");
+  fprintf (stderr, "calibrate_gradient_sequential: nstart_gradient=%u "
+           "nend_gradient=%u\n",
+           calibrate->nstart_gradient, calibrate->nend_gradient);
+#endif
+  for (i = calibrate->nstart_gradient; i < calibrate->nend_gradient; ++i)
+    {
+      e = 0.;
+      for (j = 0; j < calibrate->nexperiments; ++j)
+        e += calibrate_parse (i, j);
+      calibrate_best_gradient (i, e);
+      calibrate_save_variables (i, e);
+#if DEBUG
+      fprintf (stderr, "calibrate_gradient_sequential: i=%u e=%lg\n", i, e);
+#endif
+    }
+#if DEBUG
+  fprintf (stderr, "calibrate_gradient_sequential: end\n");
+#endif
+}
+
+double
+calibrate_variable_step_gradient (unsigned int variable)
+{
+  double x;
+  x = (2. - 4. * gsl_rng_uniform (calibrate->rng)) * calibrate->step[variable];
+  x = fmin (fmax (x, calibrate->rangeminabs[variable]),
+            calibrate->rangemaxabs[variable]);
+  return x;
+}
+
+void
+calibrate_step_gradient_sequential (unsigned int simulation)
+{
+  unsigned int i, j, k, b;
+  for (i = 0; i < calibrate->nestimates; ++i)
+    {
+      k = (simulation + i) * calibrate->nvariables;
+      b = calibrate->simulation_best[0] * calibrate->nvariables;
+      for (j = 0; j < calibrate->nvariables; ++j)
+        calibrate->value[k + j]
+          = calibrate->value[b + j] + calibrate_variable_step_gradient (j);
+    }
+  if (nthreads == 1)
+    calibrate_gradient_sequential ();
+}
+
+void
+calibrate_gradient ()
+{
+  unsigned int i;
+  for (i = 0; i < calibrate->nsteps; ++i)
+    {
+    }
+}
+
+/**
+ * \fn double calibrate_genetic_objective (Entity *entity)
  * \brief Function to calculate the objective function of an entity.
  * \param entity
  * \brief entity data.
@@ -1779,7 +1868,7 @@ calibrate_genetic_objective (Entity * entity)
 }
 
 /**
- * \fn void calibrate_genetic()
+ * \fn void calibrate_genetic ()
  * \brief Function to calibrate with the genetic algorithm.
  */
 void
@@ -1827,7 +1916,7 @@ calibrate_genetic ()
 }
 
 /**
- * \fn void calibrate_save_old()
+ * \fn void calibrate_save_old ()
  * \brief Function to save the best results on iterative methods.
  */
 void
@@ -1855,7 +1944,7 @@ calibrate_save_old ()
 }
 
 /**
- * \fn void calibrate_merge_old()
+ * \fn void calibrate_merge_old ()
  * \brief Function to merge the best results with the previous step best results
  *   on iterative methods.
  */
@@ -1904,7 +1993,7 @@ calibrate_merge_old ()
 }
 
 /**
- * \fn void calibrate_refine()
+ * \fn void calibrate_refine ()
  * \brief Function to refine the search ranges of the variables in iterative
  *   algorithms.
  */
@@ -1979,7 +2068,7 @@ calibrate_refine ()
 }
 
 /**
- * \fn void calibrate_iterate()
+ * \fn void calibrate_iterate ()
  * \brief Function to iterate the algorithm.
  */
 void
@@ -2039,7 +2128,7 @@ calibrate_free ()
 }
 
 /**
- * \fn void calibrate_new()
+ * \fn void calibrate_new ()
  * \brief Function to open and perform a calibration.
  */
 void
@@ -2275,7 +2364,7 @@ calibrate_new ()
 #if HAVE_GTK
 
 /**
- * \fn void input_save(char *filename)
+ * \fn void input_save (char *filename)
  * \brief Function to save the input file.
  * \param filename
  * \brief Input file name.
@@ -2474,7 +2563,7 @@ running_new ()
 }
 
 /**
- * \fn int window_save()
+ * \fn int window_save ()
  * \brief Function to save the input file.
  * \return 1 on OK, 0 on Cancel.
  */
@@ -2577,7 +2666,7 @@ window_save ()
 }
 
 /**
- * \fn void window_run()
+ * \fn void window_run ()
  * \brief Function to run a calibration.
  */
 void
@@ -2623,7 +2712,7 @@ window_run ()
 }
 
 /**
- * \fn void window_help()
+ * \fn void window_help ()
  * \brief Function to show a help dialog.
  */
 void
@@ -2639,7 +2728,7 @@ window_help ()
 }
 
 /**
- * \fn void window_about()
+ * \fn void window_about ()
  * \brief Function to show an about dialog.
  */
 void
@@ -2658,7 +2747,7 @@ window_about ()
               "parameters"),
      "authors", authors,
      "translator-credits", "Javier Burguete Tolosa <jburguete@eead.csic.es>",
-     "version", "1.3.0",
+     "version", "1.3.1",
      "copyright", "Copyright 2012-2015 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/calibrator",
@@ -2666,7 +2755,7 @@ window_about ()
 }
 
 /**
- * \fn int window_get_algorithm()
+ * \fn int window_get_algorithm ()
  * \brief Function to get the algorithm number.
  * \return Algorithm number.
  */
@@ -2682,7 +2771,7 @@ window_get_algorithm ()
 }
 
 /**
- * \fn void window_update()
+ * \fn void window_update ()
  * \brief Function to update the main window view.
  */
 void
@@ -2819,7 +2908,7 @@ window_update ()
 }
 
 /**
- * \fn void window_set_algorithm()
+ * \fn void window_set_algorithm ()
  * \brief Function to avoid memory errors changing the algorithm.
  */
 void
@@ -2856,7 +2945,7 @@ window_set_algorithm ()
 }
 
 /**
- * \fn void window_set_experiment()
+ * \fn void window_set_experiment ()
  * \brief Function to set the experiment data in the main window.
  */
 void
@@ -2896,7 +2985,7 @@ window_set_experiment ()
 }
 
 /**
- * \fn void window_remove_experiment()
+ * \fn void window_remove_experiment ()
  * \brief Function to remove an experiment in the main window.
  */
 void
@@ -2930,7 +3019,7 @@ window_remove_experiment ()
 }
 
 /**
- * \fn void window_add_experiment()
+ * \fn void window_add_experiment ()
  * \brief Function to add an experiment in the main window.
  */
 void
@@ -2968,7 +3057,7 @@ window_add_experiment ()
 }
 
 /**
- * \fn void window_name_experiment()
+ * \fn void window_name_experiment ()
  * \brief Function to set the experiment name in the main window.
  */
 void
@@ -2999,7 +3088,7 @@ window_name_experiment ()
 }
 
 /**
- * \fn void window_weight_experiment()
+ * \fn void window_weight_experiment ()
  * \brief Function to update the experiment weight in the main window.
  */
 void
@@ -3017,7 +3106,7 @@ window_weight_experiment ()
 }
 
 /**
- * \fn void window_inputs_experiment()
+ * \fn void window_inputs_experiment ()
  * \brief Function to update the experiment input templates number in the main
  *   window.
  */
@@ -3051,7 +3140,7 @@ window_inputs_experiment ()
 }
 
 /**
- * \fn void window_template_experiment(void *data)
+ * \fn void window_template_experiment (void *data)
  * \brief Function to update the experiment i-th input template in the main
  *   window.
  * \param data
@@ -3082,7 +3171,7 @@ window_template_experiment (void *data)
 }
 
 /**
- * \fn void window_set_variable()
+ * \fn void window_set_variable ()
  * \brief Function to set the variable data in the main window.
  */
 void
@@ -3152,7 +3241,7 @@ window_set_variable ()
 }
 
 /**
- * \fn void window_remove_variable()
+ * \fn void window_remove_variable ()
  * \brief Function to remove a variable in the main window.
  */
 void
@@ -3192,7 +3281,7 @@ window_remove_variable ()
 }
 
 /**
- * \fn void window_add_variable()
+ * \fn void window_add_variable ()
  * \brief Function to add a variable in the main window.
  */
 void
@@ -3260,7 +3349,7 @@ window_add_variable ()
 }
 
 /**
- * \fn void window_label_variable()
+ * \fn void window_label_variable ()
  * \brief Function to set the variable label in the main window.
  */
 void
@@ -3284,7 +3373,7 @@ window_label_variable ()
 }
 
 /**
- * \fn void window_precision_variable()
+ * \fn void window_precision_variable ()
  * \brief Function to update the variable precision in the main window.
  */
 void
@@ -3307,7 +3396,7 @@ window_precision_variable ()
 }
 
 /**
- * \fn void window_rangemin_variable()
+ * \fn void window_rangemin_variable ()
  * \brief Function to update the variable rangemin in the main window.
  */
 void
@@ -3325,7 +3414,7 @@ window_rangemin_variable ()
 }
 
 /**
- * \fn void window_rangemax_variable()
+ * \fn void window_rangemax_variable ()
  * \brief Function to update the variable rangemax in the main window.
  */
 void
@@ -3343,7 +3432,7 @@ window_rangemax_variable ()
 }
 
 /**
- * \fn void window_rangeminabs_variable()
+ * \fn void window_rangeminabs_variable ()
  * \brief Function to update the variable rangeminabs in the main window.
  */
 void
@@ -3361,7 +3450,7 @@ window_rangeminabs_variable ()
 }
 
 /**
- * \fn void window_rangemaxabs_variable()
+ * \fn void window_rangemaxabs_variable ()
  * \brief Function to update the variable rangemaxabs in the main window.
  */
 void
@@ -3379,7 +3468,7 @@ window_rangemaxabs_variable ()
 }
 
 /**
- * \fn void window_update_variable()
+ * \fn void window_update_variable ()
  * \brief Function to update the variable data in the main window.
  */
 void
@@ -3504,7 +3593,7 @@ window_read (char *filename)
 }
 
 /**
- * \fn void window_open()
+ * \fn void window_open ()
  * \brief Function to open the input data.
  */
 void
@@ -3572,7 +3661,7 @@ window_open ()
 }
 
 /**
- * \fn void window_new()
+ * \fn void window_new ()
  * \brief Function to open the main window.
  */
 void
@@ -4139,7 +4228,7 @@ window_new ()
 #endif
 
 /**
- * \fn int cores_number()
+ * \fn int cores_number ()
  * \brief Function to obtain the cores number.
  * \return Cores number.
  */
@@ -4156,7 +4245,7 @@ cores_number ()
 }
 
 /**
- * \fn int main(int argn, char **argc)
+ * \fn int main (int argn, char **argc)
  * \brief Main function.
  * \param argn
  * \brief Arguments number.
@@ -4224,7 +4313,14 @@ main (int argn, char **argc)
   if (argn == 2)
     nthreads = cores_number ();
   else
-    nthreads = atoi (argc[2]);
+    {
+      nthreads = atoi (argc[2]);
+      if (!nthreads)
+        {
+          printf ("Bad threads number\n");
+          return 2;
+        }
+    }
   printf ("nthreads=%u\n", nthreads);
 
   // Making calibration
