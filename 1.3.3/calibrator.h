@@ -48,6 +48,16 @@ enum Algorithm
 };
 
 /**
+ * \enum GradientMethod
+ * \brief Enum to define the methods to estimate the gradient.
+ */
+enum GradientMethod
+{
+	GRADIENT_METHOD_COORDINATES = 0, ///< Coordinates descent method.
+	GRADIENT_METHOD_RANDOM = 1,      ///< Random method.
+};
+
+/**
  * \struct Input
  * \brief Struct to define the calibration input file.
  */
@@ -84,10 +94,11 @@ typedef struct
   unsigned int ninputs;         ///< Number of input files to the simulator.
   unsigned int nsimulations;    ///< Simulations number per experiment.
   unsigned int algorithm;       ///< Algorithm type.
-  unsigned int nestimates;
-  ///< Number of simulations to estimate the gradient.
   unsigned int nsteps;
   ///< Number of steps to do the gradient based method.
+  unsigned int gradient_method; ///< Method to estimate the gradient.
+  unsigned int nestimates;
+  ///< Number of simulations to estimate the gradient.
   unsigned int niterations;     ///< Number of algorithm iterations
   unsigned int nbest;           ///< Number of best simulations.
 } Input;
@@ -144,10 +155,11 @@ typedef struct
   unsigned int nexperiments;    ///< Experiments number.
   unsigned int ninputs;         ///< Number of input files to the simulator.
   unsigned int nsimulations;    ///< Simulations number per experiment.
-  unsigned int nestimates;
-  ///< Number of simulations to estimate the gradient.
+  unsigned int gradient_method; ///< Method to estimate the gradient.
   unsigned int nsteps;
   ///< Number of steps for the gradient based method.
+  unsigned int nestimates;
+  ///< Number of simulations to estimate the gradient.
   unsigned int algorithm;       ///< Algorithm type.
   unsigned int nstart;          ///< Beginning simulation number of the task.
   unsigned int nend;            ///< Ending simulation number of the task.
@@ -215,6 +227,6 @@ void calibrate_merge_old ();
 void calibrate_refine ();
 void calibrate_step ();
 void calibrate_iterate ();
-void calibrate_new ();
+void calibrate_open ();
 
 #endif

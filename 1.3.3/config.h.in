@@ -65,11 +65,15 @@ OF SUCH DAMAGE.
   ///< algoritm XML label.
 #define XML_CALIBRATE (const xmlChar*)"calibrate"
   ///< calibrate XML label.
+#define XML_COORDINATES (const xmlChar*)"coordinates"
+  ///< coordinates XML label.
 #define XML_EVALUATOR (const xmlChar*)"evaluator"
   ///< evaluator XML label.
 #define XML_EXPERIMENT (const xmlChar*)"experiment"
   ///< experiment XML label.
 #define XML_GENETIC (const xmlChar*)"genetic"   ///< genetic XML label.
+#define XML_GRADIENT_METHOD (const xmlChar*)"gradient_method"
+  ///< gradient_method XML label.
 #define XML_MINIMUM (const xmlChar*)"minimum"   ///< minimum XML label.
 #define XML_MAXIMUM (const xmlChar*)"maximum"   ///< maximum XML label.
 #define XML_MONTE_CARLO (const xmlChar*)"Monte-Carlo"
@@ -92,6 +96,7 @@ OF SUCH DAMAGE.
 #define XML_NSWEEPS (const xmlChar*)"nsweeps"   ///< nsweeps XML label.
 #define XML_PRECISION (const xmlChar*)"precision"
   ///< precision XML label.
+#define XML_RANDOM (const xmlChar*)"random"     ///< random XML label.
 #define XML_REPRODUCTION (const xmlChar*)"reproduction"
   ///< reproduction XML label.
 #define XML_RESULT (const xmlChar*)"result"     ///< result XML label.

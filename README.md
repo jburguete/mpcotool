@@ -7,7 +7,7 @@ VERSIONS
 --------
 
 * 1.0.6: Stable and recommended version.
-* 1.3.2: Developing version to do new features.
+* 1.3.3: Developing version to do new features.
 
 AUTHORS
 -------

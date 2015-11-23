@@ -95,6 +95,9 @@ unsigned int nthreads_gradient;
 GMutex mutex[1];                ///< Mutex struct.
 void (*calibrate_algorithm) ();
   ///< Pointer to the function to perform a calibration algorithm step.
+double (*calibrate_estimate_gradient) (unsigned int variable,
+                                       unsigned int estimate);
+  ///< Pointer to the function to estimate the gradient.
 Input input[1];
   ///< Input struct to define the input file to calibrator.
 Calibrate calibrate[1];         ///< Calibration data.
@@ -415,7 +418,7 @@ input_new ()
 #if DEBUG
   fprintf (stderr, "input_new: start\n");
 #endif
-  input->nvariables = input->nexperiments = input->ninputs = 0;
+  input->nvariables = input->nexperiments = input->ninputs = input->nsteps = 0;
   input->simulator = input->evaluator = input->directory = input->name = NULL;
   input->experiment = input->label = NULL;
   input->precision = input->nsweeps = input->nbits = NULL;
@@ -466,7 +469,7 @@ input_free ()
   xmlFree (input->simulator);
   xmlFree (input->result);
   xmlFree (input->variables);
-  input->nexperiments = input->ninputs = input->nvariables = 0;
+  input->nexperiments = input->ninputs = input->nvariables = input->nsteps = 0;
 #if DEBUG
   fprintf (stderr, "input_free: end\n");
 #endif
@@ -495,9 +498,13 @@ input_open (char *filename)
 #endif
 
   // Resetting input data
+  buffer = NULL;
   input_new ();
 
   // Parsing the input file
+#if DEBUG
+  fprintf (stderr, "input_open: parsing the input file\n");
+#endif
   doc = xmlParseFile (filename);
   if (!doc)
     {
@@ -506,6 +513,9 @@ input_open (char *filename)
     }
 
   // Getting the root node
+#if DEBUG
+  fprintf (stderr, "input_open: getting the root node\n");
+#endif
   node = xmlDocGetRootElement (doc);
   if (xmlStrcmp (node->name, XML_CALIBRATE))
     {
@@ -561,7 +571,9 @@ input_open (char *filename)
         }
     }
   else if (!xmlStrcmp (buffer, XML_SWEEP))
-    input->algorithm = ALGORITHM_SWEEP;
+    {
+      input->algorithm = ALGORITHM_SWEEP;
+    }
   else if (!xmlStrcmp (buffer, XML_GENETIC))
     {
       input->algorithm = ALGORITHM_GENETIC;
@@ -670,6 +682,8 @@ input_open (char *filename)
       msg = gettext ("Unknown algorithm");
       goto exit_on_error;
     }
+  xmlFree (buffer);
+  buffer = NULL;
 
   if (input->algorithm == ALGORITHM_MONTE_CARLO
       || input->algorithm == ALGORITHM_SWEEP)
@@ -722,13 +736,27 @@ input_open (char *filename)
               msg = gettext ("Invalid steps number");
               goto exit_on_error;
             }
-          input->nestimates
-            = xml_node_get_uint (node, XML_NESTIMATES, &error_code);
-          if (error_code || !input->nestimates)
+          buffer = xmlGetProp (node, XML_GRADIENT_METHOD);
+          if (!xmlStrcmp (buffer, XML_COORDINATES))
+            input->gradient_method = GRADIENT_METHOD_COORDINATES;
+          else if (!xmlStrcmp (buffer, XML_RANDOM))
             {
-              msg = gettext ("Invalid estimates number");
+              input->gradient_method = GRADIENT_METHOD_RANDOM;
+              input->nestimates
+                = xml_node_get_uint (node, XML_NESTIMATES, &error_code);
+              if (error_code || !input->nestimates)
+                {
+                  msg = gettext ("Invalid estimates number");
+                  goto exit_on_error;
+                }
+            }
+          else
+            {
+              msg = gettext ("Unknown method to estimate the gradient");
               goto exit_on_error;
             }
+          xmlFree (buffer);
+          buffer = NULL;
         }
       else
         input->nsteps = 0;
@@ -743,13 +771,7 @@ input_open (char *filename)
       fprintf (stderr, "input_open: nexperiments=%u\n", input->nexperiments);
 #endif
       if (xmlHasProp (child, XML_NAME))
-        {
-          input->experiment
-            = g_realloc (input->experiment,
-                         (1 + input->nexperiments) * sizeof (char *));
-          input->experiment[input->nexperiments]
-            = (char *) xmlGetProp (child, XML_NAME);
-        }
+        buffer = xmlGetProp (child, XML_NAME);
       else
         {
           snprintf (buffer2, 64, "%s %u: %s",
@@ -759,8 +781,7 @@ input_open (char *filename)
           goto exit_on_error;
         }
 #if DEBUG
-      fprintf (stderr, "input_open: experiment=%s\n",
-               input->experiment[input->nexperiments]);
+      fprintf (stderr, "input_open: experiment=%s\n", buffer);
 #endif
       input->weight = g_realloc (input->weight,
                                  (1 + input->nexperiments) * sizeof (double));
@@ -770,9 +791,8 @@ input_open (char *filename)
             = xml_node_get_float (child, XML_WEIGHT, &error_code);
           if (error_code)
             {
-              snprintf (buffer2, 64, "%s %u: %s",
-                        gettext ("Experiment"),
-                        input->nexperiments + 1, gettext ("bad weight"));
+              snprintf (buffer2, 64, "%s %s: %s",
+                        gettext ("Experiment"), buffer, gettext ("bad weight"));
               msg = buffer2;
               goto exit_on_error;
             }
@@ -808,9 +828,8 @@ input_open (char *filename)
         }
       else
         {
-          snprintf (buffer2, 64, "%s %u: %s",
-                    gettext ("Experiment"),
-                    input->nexperiments + 1, gettext ("no template"));
+          snprintf (buffer2, 64, "%s %s: %s",
+                    gettext ("Experiment"), buffer, gettext ("no template"));
           msg = buffer2;
           goto exit_on_error;
         }
@@ -823,10 +842,9 @@ input_open (char *filename)
             {
               if (input->nexperiments && input->ninputs <= i)
                 {
-                  snprintf (buffer2, 64, "%s %u: %s",
+                  snprintf (buffer2, 64, "%s %s: %s",
                             gettext ("Experiment"),
-                            input->nexperiments + 1,
-                            gettext ("bad templates number"));
+                            buffer, gettext ("bad templates number"));
                   msg = buffer2;
                   goto exit_on_error;
                 }
@@ -848,16 +866,19 @@ input_open (char *filename)
             }
           else if (input->nexperiments && input->ninputs >= i)
             {
-              snprintf (buffer2, 64, "%s %u: %s%u",
+              snprintf (buffer2, 64, "%s %s: %s%u",
                         gettext ("Experiment"),
-                        input->nexperiments + 1,
-                        gettext ("no template"), i + 1);
+                        buffer, gettext ("no template"), i + 1);
               msg = buffer2;
               goto exit_on_error;
             }
           else
             break;
         }
+      input->experiment
+        = g_realloc (input->experiment,
+                     (1 + input->nexperiments) * sizeof (char *));
+      input->experiment[input->nexperiments] = (char *) buffer;
       ++input->nexperiments;
 #if DEBUG
       fprintf (stderr, "input_open: nexperiments=%u\n", input->nexperiments);
@@ -868,6 +889,7 @@ input_open (char *filename)
       msg = gettext ("No calibration experiments");
       goto exit_on_error;
     }
+  buffer = NULL;
 
   // Reading the variables data
   for (; child; child = child->next)
@@ -881,12 +903,7 @@ input_open (char *filename)
           goto exit_on_error;
         }
       if (xmlHasProp (child, XML_NAME))
-        {
-          input->label = g_realloc
-            (input->label, (1 + input->nvariables) * sizeof (char *));
-          input->label[input->nvariables]
-            = (char *) xmlGetProp (child, XML_NAME);
-        }
+        buffer = xmlGetProp (child, XML_NAME);
       else
         {
           snprintf (buffer2, 64, "%s %u: %s",
@@ -906,9 +923,7 @@ input_open (char *filename)
           if (error_code)
             {
               snprintf (buffer2, 64, "%s %s: %s",
-                        gettext ("Variable"),
-                        input->label[input->nvariables],
-                        gettext ("bad minimum"));
+                        gettext ("Variable"), buffer, gettext ("bad minimum"));
               msg = buffer2;
               goto exit_on_error;
             }
@@ -920,8 +935,7 @@ input_open (char *filename)
                 {
                   snprintf (buffer2, 64, "%s %s: %s",
                             gettext ("Variable"),
-                            input->label[input->nvariables],
-                            gettext ("bad absolute minimum"));
+                            buffer, gettext ("bad absolute minimum"));
                   msg = buffer2;
                   goto exit_on_error;
                 }
@@ -933,8 +947,7 @@ input_open (char *filename)
             {
               snprintf (buffer2, 64, "%s %s: %s",
                         gettext ("Variable"),
-                        input->label[input->nvariables],
-                        gettext ("minimum range not allowed"));
+                        buffer, gettext ("minimum range not allowed"));
               msg = buffer2;
               goto exit_on_error;
             }
@@ -942,9 +955,7 @@ input_open (char *filename)
       else
         {
           snprintf (buffer2, 64, "%s %s: %s",
-                    gettext ("Variable"),
-                    input->label[input->nvariables],
-                    gettext ("no minimum range"));
+                    gettext ("Variable"), buffer, gettext ("no minimum range"));
           msg = buffer2;
           goto exit_on_error;
         }
@@ -959,9 +970,7 @@ input_open (char *filename)
           if (error_code)
             {
               snprintf (buffer2, 64, "%s %s: %s",
-                        gettext ("Variable"),
-                        input->label[input->nvariables],
-                        gettext ("bad maximum"));
+                        gettext ("Variable"), buffer, gettext ("bad maximum"));
               msg = buffer2;
               goto exit_on_error;
             }
@@ -973,8 +982,7 @@ input_open (char *filename)
                 {
                   snprintf (buffer2, 64, "%s %s: %s",
                             gettext ("Variable"),
-                            input->label[input->nvariables],
-                            gettext ("bad absolute maximum"));
+                            buffer, gettext ("bad absolute maximum"));
                   msg = buffer2;
                   goto exit_on_error;
                 }
@@ -986,8 +994,7 @@ input_open (char *filename)
             {
               snprintf (buffer2, 64, "%s %s: %s",
                         gettext ("Variable"),
-                        input->label[input->nvariables],
-                        gettext ("maximum range not allowed"));
+                        buffer, gettext ("maximum range not allowed"));
               msg = buffer2;
               goto exit_on_error;
             }
@@ -995,9 +1002,7 @@ input_open (char *filename)
       else
         {
           snprintf (buffer2, 64, "%s %s: %s",
-                    gettext ("Variable"),
-                    input->label[input->nvariables],
-                    gettext ("no maximum range"));
+                    gettext ("Variable"), buffer, gettext ("no maximum range"));
           msg = buffer2;
           goto exit_on_error;
         }
@@ -1005,8 +1010,7 @@ input_open (char *filename)
           < input->rangemin[input->nvariables])
         {
           snprintf (buffer2, 64, "%s %s: %s",
-                    gettext ("Variable"),
-                    input->label[input->nvariables], gettext ("bad range"));
+                    gettext ("Variable"), buffer, gettext ("bad range"));
           msg = buffer2;
           goto exit_on_error;
         }
@@ -1020,8 +1024,7 @@ input_open (char *filename)
             {
               snprintf (buffer2, 64, "%s %s: %s",
                         gettext ("Variable"),
-                        input->label[input->nvariables],
-                        gettext ("bad precision"));
+                        buffer, gettext ("bad precision"));
               msg = buffer2;
               goto exit_on_error;
             }
@@ -1041,8 +1044,7 @@ input_open (char *filename)
                 {
                   snprintf (buffer2, 64, "%s %s: %s",
                             gettext ("Variable"),
-                            input->label[input->nvariables],
-                            gettext ("bad sweeps"));
+                            buffer, gettext ("bad sweeps"));
                   msg = buffer2;
                   goto exit_on_error;
                 }
@@ -1051,8 +1053,7 @@ input_open (char *filename)
             {
               snprintf (buffer2, 64, "%s %s: %s",
                         gettext ("Variable"),
-                        input->label[input->nvariables],
-                        gettext ("no sweeps number"));
+                        buffer, gettext ("no sweeps number"));
               msg = buffer2;
               goto exit_on_error;
             }
@@ -1074,8 +1075,7 @@ input_open (char *filename)
                 {
                   snprintf (buffer2, 64, "%s %s: %s",
                             gettext ("Variable"),
-                            input->label[input->nvariables],
-                            gettext ("invalid bits number"));
+                            buffer, gettext ("invalid bits number"));
                   msg = buffer2;
                   goto exit_on_error;
                 }
@@ -1085,8 +1085,7 @@ input_open (char *filename)
             {
               snprintf (buffer2, 64, "%s %s: %s",
                         gettext ("Variable"),
-                        input->label[input->nvariables],
-                        gettext ("no bits number"));
+                        buffer, gettext ("no bits number"));
               msg = buffer2;
               goto exit_on_error;
             }
@@ -1101,12 +1100,14 @@ input_open (char *filename)
             {
               snprintf (buffer2, 64, "%s %s: %s",
                         gettext ("Variable"),
-                        input->label[input->nvariables],
-                        gettext ("bad step size"));
+                        buffer, gettext ("bad step size"));
               msg = buffer2;
               goto exit_on_error;
             }
         }
+      input->label = g_realloc
+        (input->label, (1 + input->nvariables) * sizeof (char *));
+      input->label[input->nvariables] = (char *) buffer;
       ++input->nvariables;
     }
   if (!input->nvariables)
@@ -1114,6 +1115,7 @@ input_open (char *filename)
       msg = gettext ("No calibration variables");
       goto exit_on_error;
     }
+  buffer = NULL;
 
   // Getting the working directory
   input->directory = g_path_get_dirname (filename);
@@ -1128,6 +1130,8 @@ input_open (char *filename)
   return 1;
 
 exit_on_error:
+  xmlFree (buffer);
+  xmlFreeDoc (doc);
   show_error (msg);
   input_free ();
 #if DEBUG
@@ -1796,19 +1800,42 @@ calibrate_gradient_thread (ParallelData * data)
 }
 
 /**
- * \fn double calibrate_variable_step_gradient (unsigned int variable)
+ * \fn double calibrate_estimate_gradient_random (unsigned int variable, \
+ *   unsigned int estimate)
  * \brief Function to estimate a component of the gradient vector.
  * \param variable
  * \brief Variable number.
+ * \param estimate
+ * \brief Estimate number.
  */
 double
-calibrate_variable_step_gradient (unsigned int variable)
+calibrate_estimate_gradient_random (unsigned int variable,
+                                    unsigned int estimate)
 {
   double x;
   x = calibrate->gradient[variable]
     + (1. - 2. * gsl_rng_uniform (calibrate->rng)) * calibrate->step[variable];
-  x = fmin (fmax (x, calibrate->rangeminabs[variable]),
-            calibrate->rangemaxabs[variable]);
+  return x;
+}
+
+/**
+ * \fn double calibrate_estimate_gradient_coordinates (unsigned int variable, \
+ *   unsigned int estimate)
+ * \brief Function to estimate a component of the gradient vector.
+ * \param variable
+ * \brief Variable number.
+ * \param estimate
+ * \brief Estimate number.
+ */
+double
+calibrate_estimate_gradient_coordinates (unsigned int variable,
+                                         unsigned int estimate)
+{
+  double x;
+  if (estimate & 1)
+    x = calibrate->gradient[variable] + calibrate->step[variable];
+  else
+    x = calibrate->gradient[variable] - calibrate->step[variable];
   return x;
 }
 
@@ -1828,9 +1855,14 @@ calibrate_step_gradient (unsigned int simulation)
     {
       k = (simulation + i) * calibrate->nvariables;
       b = calibrate->simulation_best[0] * calibrate->nvariables;
-      for (j = 0; j < calibrate->nvariables; ++j)
-        calibrate->value[k++]
-          = calibrate->value[b++] + calibrate_variable_step_gradient (j);
+      for (j = 0; j < calibrate->nvariables; ++j, ++k, ++b)
+        {
+          calibrate->value[k]
+            = calibrate->value[b] + calibrate_estimate_gradient (j, i);
+          calibrate->value[k] = fmin (fmax (calibrate->value[k],
+                                            calibrate->rangeminabs[j]),
+                                      calibrate->rangemaxabs[j]);
+        }
     }
   if (nthreads_gradient == 1)
     calibrate_gradient_sequential ();
@@ -1862,10 +1894,10 @@ calibrate_gradient ()
   for (i = 0; i < calibrate->nsteps; ++i, s += calibrate->nestimates, b = k)
     {
       calibrate_step_gradient (s);
-      k = s * calibrate->nvariables;
+      k = calibrate->simulation_best[0] * calibrate->nvariables;
       for (j = 0; j < calibrate->nvariables; ++j)
-        calibrate->gradient[j]
-          = calibrate->value[k + j] - calibrate->value[b + j];
+        calibrate->gradient[j] =
+          calibrate->value[k + j] - calibrate->value[b + j];
     }
 }
 
@@ -2114,9 +2146,15 @@ calibrate_refine ()
 void
 calibrate_step ()
 {
+#if DEBUG
+  fprintf (stderr, "calibrate_algorithm: start\n");
+#endif
   calibrate_algorithm ();
   if (calibrate->nsteps)
     calibrate_gradient ();
+#if DEBUG
+  fprintf (stderr, "calibrate_gradient: end\n");
+#endif
 }
 
 /**
@@ -2161,13 +2199,12 @@ calibrate_free ()
 #if DEBUG
   fprintf (stderr, "calibrate_free: start\n");
 #endif
-  for (i = 0; i < calibrate->nexperiments; ++i)
+  for (j = 0; j < calibrate->ninputs; ++j)
     {
-      for (j = 0; j < calibrate->ninputs; ++j)
+      for (i = 0; i < calibrate->nexperiments; ++i)
         g_mapped_file_unref (calibrate->file[j][i]);
+      g_free (calibrate->file[j]);
     }
-  for (i = 0; i < calibrate->ninputs; ++i)
-    g_free (calibrate->file[i]);
   g_free (calibrate->error_old);
   g_free (calibrate->value_old);
   g_free (calibrate->value);
@@ -2180,37 +2217,37 @@ calibrate_free ()
 }
 
 /**
- * \fn void calibrate_new ()
+ * \fn void calibrate_open ()
  * \brief Function to open and perform a calibration.
  */
 void
-calibrate_new ()
+calibrate_open ()
 {
   GTimeZone *tz;
   GDateTime *t0, *t;
   unsigned int i, j, *nbits;
 
 #if DEBUG
-  fprintf (stderr, "calibrate_new: start\n");
+  fprintf (stderr, "calibrate_open: start\n");
 #endif
 
   // Getting initial time
 #if DEBUG
-  fprintf (stderr, "calibrate_new: getting initial time\n");
+  fprintf (stderr, "calibrate_open: getting initial time\n");
 #endif
   tz = g_time_zone_new_utc ();
   t0 = g_date_time_new_now (tz);
 
   // Obtaining and initing the pseudo-random numbers generator seed
 #if DEBUG
-  fprintf (stderr, "calibrate_new: getting initial seed\n");
+  fprintf (stderr, "calibrate_open: getting initial seed\n");
 #endif
   calibrate->seed = input->seed;
   gsl_rng_set (calibrate->rng, calibrate->seed);
 
   // Replacing the working directory
 #if DEBUG
-  fprintf (stderr, "calibrate_new: replacing the working directory\n");
+  fprintf (stderr, "calibrate_open: replacing the working directory\n");
 #endif
   g_chdir (input->directory);
 
@@ -2245,7 +2282,20 @@ calibrate_new ()
   calibrate->nbest = input->nbest;
   calibrate->tolerance = input->tolerance;
   calibrate->nsteps = input->nsteps;
-  calibrate->nestimates = input->nestimates;
+  if (input->nsteps)
+    {
+      calibrate->gradient_method = input->gradient_method;
+      switch (input->gradient_method)
+        {
+        case GRADIENT_METHOD_COORDINATES:
+          calibrate->nestimates = 2 * calibrate->nvariables;
+		  calibrate_estimate_gradient = calibrate_estimate_gradient_coordinates;
+          break;
+        default:
+          calibrate->nestimates = input->nestimates;
+		  calibrate_estimate_gradient = calibrate_estimate_gradient_random;
+        }
+    }
 
   calibrate->simulation_best
     = (unsigned int *) alloca (calibrate->nbest * sizeof (unsigned int));
@@ -2254,7 +2304,7 @@ calibrate_new ()
 
   // Reading the experimental data
 #if DEBUG
-  fprintf (stderr, "calibrate_new: current directory=%s\n",
+  fprintf (stderr, "calibrate_open: current directory=%s\n",
            g_get_current_dir ());
 #endif
   calibrate->nexperiments = input->nexperiments;
@@ -2270,16 +2320,16 @@ calibrate_new ()
   for (i = 0; i < input->nexperiments; ++i)
     {
 #if DEBUG
-      fprintf (stderr, "calibrate_new: i=%u\n", i);
-      fprintf (stderr, "calibrate_new: experiment=%s\n",
+      fprintf (stderr, "calibrate_open: i=%u\n", i);
+      fprintf (stderr, "calibrate_open: experiment=%s\n",
                calibrate->experiment[i]);
-      fprintf (stderr, "calibrate_new: weight=%lg\n", calibrate->weight[i]);
+      fprintf (stderr, "calibrate_open: weight=%lg\n", calibrate->weight[i]);
 #endif
       for (j = 0; j < input->ninputs; ++j)
         {
 #if DEBUG
-          fprintf (stderr, "calibrate_new: template%u\n", j + 1);
-          fprintf (stderr, "calibrate_new: experiment=%u template%u=%s\n",
+          fprintf (stderr, "calibrate_open: template%u\n", j + 1);
+          fprintf (stderr, "calibrate_open: experiment=%u template%u=%s\n",
                    i, j + 1, calibrate->template[j][i]);
 #endif
           calibrate->file[j][i]
@@ -2289,7 +2339,7 @@ calibrate_new ()
 
   // Reading the variables data
 #if DEBUG
-  fprintf (stderr, "calibrate_new: reading variables\n");
+  fprintf (stderr, "calibrate_open: reading variables\n");
 #endif
   calibrate->nvariables = input->nvariables;
   calibrate->label = input->label;
@@ -2313,7 +2363,7 @@ calibrate_new ()
           {
             calibrate->nsimulations *= input->nsweeps[i];
 #if DEBUG
-            fprintf (stderr, "calibrate_new: nsweeps=%u nsimulations=%u\n",
+            fprintf (stderr, "calibrate_open: nsweeps=%u nsimulations=%u\n",
                      calibrate->nsweeps[i], calibrate->nsimulations);
 #endif
           }
@@ -2324,8 +2374,8 @@ calibrate_new ()
 
   // Allocating values
 #if DEBUG
-  fprintf (stderr, "calibrate_new: allocating variables\n");
-  fprintf (stderr, "calibrate_new: nvariables=%u\n", calibrate->nvariables);
+  fprintf (stderr, "calibrate_open: allocating variables\n");
+  fprintf (stderr, "calibrate_open: nvariables=%u\n", calibrate->nvariables);
 #endif
   calibrate->genetic_variable = NULL;
   if (calibrate->algorithm == ALGORITHM_GENETIC)
@@ -2335,7 +2385,7 @@ calibrate_new ()
       for (i = 0; i < calibrate->nvariables; ++i)
         {
 #if DEBUG
-          fprintf (stderr, "calibrate_new: i=%u min=%lg max=%lg nbits=%u\n",
+          fprintf (stderr, "calibrate_open: i=%u min=%lg max=%lg nbits=%u\n",
                    i, calibrate->rangemin[i], calibrate->rangemax[i], nbits[i]);
 #endif
           calibrate->genetic_variable[i].minimum = calibrate->rangemin[i];
@@ -2344,7 +2394,7 @@ calibrate_new ()
         }
     }
 #if DEBUG
-  fprintf (stderr, "calibrate_new: nvariables=%u nsimulations=%u\n",
+  fprintf (stderr, "calibrate_open: nvariables=%u nsimulations=%u\n",
            calibrate->nvariables, calibrate->nsimulations);
 #endif
   calibrate->value = (double *)
@@ -2354,7 +2404,7 @@ calibrate_new ()
   // Calculating simulations to perform on each task
 #if HAVE_MPI
 #if DEBUG
-  fprintf (stderr, "calibrate_new: rank=%u ntasks=%u\n",
+  fprintf (stderr, "calibrate_open: rank=%u ntasks=%u\n",
            calibrate->mpi_rank, ntasks);
 #endif
   calibrate->nstart = calibrate->mpi_rank * calibrate->nsimulations / ntasks;
@@ -2377,7 +2427,7 @@ calibrate_new ()
     }
 #endif
 #if DEBUG
-  fprintf (stderr, "calibrate_new: nstart=%u nend=%u\n", calibrate->nstart,
+  fprintf (stderr, "calibrate_open: nstart=%u nend=%u\n", calibrate->nstart,
            calibrate->nend);
 #endif
 
@@ -2389,7 +2439,7 @@ calibrate_new ()
       calibrate->thread[i] = calibrate->nstart
         + i * (calibrate->nend - calibrate->nstart) / nthreads;
 #if DEBUG
-      fprintf (stderr, "calibrate_new: i=%u thread=%u\n", i,
+      fprintf (stderr, "calibrate_open: i=%u thread=%u\n", i,
                calibrate->thread[i]);
 #endif
     }
@@ -2403,7 +2453,7 @@ calibrate_new ()
             + i * (calibrate->nend_gradient - calibrate->nstart_gradient)
             / nthreads_gradient;
 #if DEBUG
-          fprintf (stderr, "calibrate_new: i=%u thread_gradient=%u\n", i,
+          fprintf (stderr, "calibrate_open: i=%u thread_gradient=%u\n", i,
                    calibrate->thread_gradient[i]);
 #endif
         }
@@ -2442,7 +2492,7 @@ calibrate_new ()
   fclose (calibrate->file_result);
 
 #if DEBUG
-  fprintf (stderr, "calibrate_new: end\n");
+  fprintf (stderr, "calibrate_open: end\n");
 #endif
 }
 
@@ -2772,7 +2822,7 @@ window_run ()
   running_new ();
   while (gtk_events_pending ())
     gtk_main_iteration ();
-  calibrate_new ();
+  calibrate_open ();
   gtk_widget_destroy (GTK_WIDGET (running->dialog));
   snprintf (buffer, 64, "error = %.15le\n", calibrate->error_old[0]);
   msg2 = g_strdup (buffer);
@@ -2832,7 +2882,7 @@ window_about ()
               "parameters"),
      "authors", authors,
      "translator-credits", "Javier Burguete Tolosa <jburguete@eead.csic.es>",
-     "version", "1.3.2",
+     "version", "1.3.3",
      "copyright", "Copyright 2012-2015 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/calibrator",
@@ -3730,7 +3780,8 @@ window_open ()
 #endif
               gtk_main_quit ();
             }
-          g_free (buffer);
+          else
+            g_free (buffer);
         }
       else
         break;
@@ -4411,7 +4462,7 @@ main (int argn, char **argc)
   // Making calibration
   input_new ();
   if (input_open (argc[argn - 1]))
-    calibrate_new ();
+    calibrate_open ();
 
   // Freeing memory
   calibrate_free ();

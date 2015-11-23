@@ -1,0 +1,2 @@
+<?xml version="1.0"?>
+<calibrate simulator="a" algorithm="sweep" niterations="2" nbest="1" tolerance="0" nsteps="1" gradient_method="a"/>
