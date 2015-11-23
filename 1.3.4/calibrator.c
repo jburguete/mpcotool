@@ -1714,11 +1714,19 @@ calibrate_best_gradient (unsigned int simulation, double value)
 {
 #if DEBUG
   fprintf (stderr, "calibrate_best_gradient: start\n");
+  fprintf (stderr,
+           "calibrate_best_gradient: simulation=%u value=%.14le best=%.14le\n",
+           simulation, value, calibrate->error_best[0]);
 #endif
   if (value < calibrate->error_best[0])
     {
       calibrate->error_best[0] = value;
       calibrate->simulation_best[0] = simulation;
+#if DEBUG
+      fprintf (stderr,
+               "calibrate_best_gradient: BEST simulation=%u value=%.14le\n",
+               simulation, value);
+#endif
     }
 #if DEBUG
   fprintf (stderr, "calibrate_best_gradient: end\n");
@@ -1726,13 +1734,15 @@ calibrate_best_gradient (unsigned int simulation, double value)
 }
 
 /**
- * \fn void calibrate_gradient_sequential ()
+ * \fn void calibrate_gradient_sequential (unsigned int simulation)
  * \brief Function to estimate the gradient sequentially.
+ * \param simulation
+ * \brief Simulation number.
  */
 void
-calibrate_gradient_sequential ()
+calibrate_gradient_sequential (unsigned int simulation)
 {
-  unsigned int i, j;
+  unsigned int i, j, k;
   double e;
 #if DEBUG
   fprintf (stderr, "calibrate_gradient_sequential: start\n");
@@ -1742,11 +1752,12 @@ calibrate_gradient_sequential ()
 #endif
   for (i = calibrate->nstart_gradient; i < calibrate->nend_gradient; ++i)
     {
+      k = simulation + i;
       e = 0.;
       for (j = 0; j < calibrate->nexperiments; ++j)
-        e += calibrate_parse (i, j);
-      calibrate_best_gradient (i, e);
-      calibrate_save_variables (i, e);
+        e += calibrate_parse (k, j);
+      calibrate_best_gradient (k, e);
+      calibrate_save_variables (k, e);
 #if DEBUG
       fprintf (stderr, "calibrate_gradient_sequential: i=%u e=%lg\n", i, e);
 #endif
@@ -1813,8 +1824,16 @@ calibrate_estimate_gradient_random (unsigned int variable,
                                     unsigned int estimate)
 {
   double x;
+#if DEBUG
+  fprintf (stderr, "calibrate_estimate_gradient_random: start\n");
+#endif
   x = calibrate->gradient[variable]
     + (1. - 2. * gsl_rng_uniform (calibrate->rng)) * calibrate->step[variable];
+#if DEBUG
+  fprintf (stderr, "calibrate_estimate_gradient_random: gradient%u=%lg\n",
+           variable, x);
+  fprintf (stderr, "calibrate_estimate_gradient_random: end\n");
+#endif
   return x;
 }
 
@@ -1832,10 +1851,18 @@ calibrate_estimate_gradient_coordinates (unsigned int variable,
                                          unsigned int estimate)
 {
   double x;
+#if DEBUG
+  fprintf (stderr, "calibrate_estimate_gradient_coordinates: start\n");
+#endif
   if (estimate & 1)
     x = calibrate->gradient[variable] + calibrate->step[variable];
   else
     x = calibrate->gradient[variable] - calibrate->step[variable];
+#if DEBUG
+  fprintf (stderr, "calibrate_estimate_gradient_coordinates: gradient%u=%lg\n",
+           variable, x);
+  fprintf (stderr, "calibrate_estimate_gradient_coordinates: end\n");
+#endif
   return x;
 }
 
@@ -1851,25 +1878,51 @@ calibrate_step_gradient (unsigned int simulation)
   GThread *thread[nthreads_gradient];
   ParallelData data[nthreads_gradient];
   unsigned int i, j, k, b;
+#if DEBUG
+  fprintf (stderr, "calibrate_step_gradient: start\n");
+#endif
   for (i = 0; i < calibrate->nestimates; ++i)
     {
       k = (simulation + i) * calibrate->nvariables;
       b = calibrate->simulation_best[0] * calibrate->nvariables;
+#if DEBUG
+      fprintf (stderr, "calibrate_step_gradient: simulation=%u best=%u\n",
+               simulation + i, calibrate->simulation_best[0]);
+#endif
       for (j = 0; j < calibrate->nvariables; ++j, ++k, ++b)
         {
+#if DEBUG
+          fprintf (stderr,
+                   "calibrate_step_gradient: estimate=%u best%u=%.14le\n",
+                   i, j, calibrate->value[b]);
+#endif
           calibrate->value[k]
             = calibrate->value[b] + calibrate_estimate_gradient (j, i);
           calibrate->value[k] = fmin (fmax (calibrate->value[k],
                                             calibrate->rangeminabs[j]),
                                       calibrate->rangemaxabs[j]);
+#if DEBUG
+          fprintf (stderr,
+                   "calibrate_step_gradient: estimate=%u variable%u=%.14le\n",
+                   i, j, calibrate->value[k]);
+#endif
         }
     }
   if (nthreads_gradient == 1)
-    calibrate_gradient_sequential ();
+    calibrate_gradient_sequential (simulation);
   else
     {
       for (i = 0; i < nthreads_gradient; ++i)
         {
+          calibrate->thread_gradient[i]
+            = simulation + calibrate->nstart_gradient
+            + i * (calibrate->nend_gradient - calibrate->nstart_gradient)
+            / nthreads_gradient;
+#if DEBUG
+          fprintf (stderr,
+                   "calibrate_step_gradient: i=%u thread_gradient=%u\n",
+                   i, calibrate->thread_gradient[i]);
+#endif
           data[i].thread = i;
           thread[i] = g_thread_new
             (NULL, (void (*)) calibrate_gradient_thread, &data[i]);
@@ -1877,6 +1930,9 @@ calibrate_step_gradient (unsigned int simulation)
       for (i = 0; i < nthreads_gradient; ++i)
         g_thread_join (thread[i]);
     }
+#if DEBUG
+  fprintf (stderr, "calibrate_step_gradient: end\n");
+#endif
 }
 
 /**
@@ -1887,18 +1943,43 @@ void
 calibrate_gradient ()
 {
   unsigned int i, j, k, b, s;
+#if DEBUG
+  fprintf (stderr, "calibrate_step_gradient: start\n");
+#endif
   for (i = 0; i < calibrate->nvariables; ++i)
     calibrate->gradient[i] = 0.;
   b = calibrate->simulation_best[0] * calibrate->nvariables;
   s = calibrate->nsimulations;
   for (i = 0; i < calibrate->nsteps; ++i, s += calibrate->nestimates, b = k)
     {
+#if DEBUG
+      fprintf (stderr, "calibrate_step_gradient: step=%u old_best=%u\n",
+               i, calibrate->simulation_best[0]);
+#endif
       calibrate_step_gradient (s);
       k = calibrate->simulation_best[0] * calibrate->nvariables;
+#if DEBUG
+      fprintf (stderr, "calibrate_step_gradient: step=%u best=%u\n",
+               i, calibrate->simulation_best[0]);
+#endif
       for (j = 0; j < calibrate->nvariables; ++j)
-        calibrate->gradient[j] =
-          calibrate->value[k + j] - calibrate->value[b + j];
+        {
+#if DEBUG
+          fprintf (stderr,
+                   "calibrate_step_gradient: best%u=%.14le old%u=%.14le\n",
+                   j, calibrate->value[k + j], j, calibrate->value[b + j]);
+#endif
+          calibrate->gradient[j] =
+            calibrate->value[k + j] - calibrate->value[b + j];
+#if DEBUG
+          fprintf (stderr, "calibrate_step_gradient: gradient%u=%.14le\n",
+                   j, calibrate->gradient[j]);
+#endif
+        }
     }
+#if DEBUG
+  fprintf (stderr, "calibrate_step_gradient: end\n");
+#endif
 }
 
 /**
@@ -2282,6 +2363,7 @@ calibrate_open ()
   calibrate->nbest = input->nbest;
   calibrate->tolerance = input->tolerance;
   calibrate->nsteps = input->nsteps;
+  calibrate->nestimates = 0;
   if (input->nsteps)
     {
       calibrate->gradient_method = input->gradient_method;
@@ -2289,11 +2371,11 @@ calibrate_open ()
         {
         case GRADIENT_METHOD_COORDINATES:
           calibrate->nestimates = 2 * calibrate->nvariables;
-		  calibrate_estimate_gradient = calibrate_estimate_gradient_coordinates;
+          calibrate_estimate_gradient = calibrate_estimate_gradient_coordinates;
           break;
         default:
           calibrate->nestimates = input->nestimates;
-		  calibrate_estimate_gradient = calibrate_estimate_gradient_random;
+          calibrate_estimate_gradient = calibrate_estimate_gradient_random;
         }
     }
 
@@ -2398,7 +2480,8 @@ calibrate_open ()
            calibrate->nvariables, calibrate->nsimulations);
 #endif
   calibrate->value = (double *)
-    g_malloc ((calibrate->nsimulations + calibrate->nestimates)
+    g_malloc ((calibrate->nsimulations
+               + calibrate->nestimates * calibrate->nsteps)
               * calibrate->nvariables * sizeof (double));
 
   // Calculating simulations to perform on each task
@@ -2422,7 +2505,7 @@ calibrate_open ()
   calibrate->nend = calibrate->nsimulations;
   if (calibrate->nsteps)
     {
-      calibrate->nstart = 0;
+      calibrate->nstart_gradient = 0;
       calibrate->nend_gradient = calibrate->nestimates;
     }
 #endif
@@ -2447,16 +2530,6 @@ calibrate_open ()
     {
       calibrate->thread_gradient = (unsigned int *)
         alloca ((1 + nthreads_gradient) * sizeof (unsigned int));
-      for (i = 0; i <= nthreads_gradient; ++i)
-        {
-          calibrate->thread_gradient[i] = calibrate->nstart_gradient
-            + i * (calibrate->nend_gradient - calibrate->nstart_gradient)
-            / nthreads_gradient;
-#if DEBUG
-          fprintf (stderr, "calibrate_open: i=%u thread_gradient=%u\n", i,
-                   calibrate->thread_gradient[i]);
-#endif
-        }
     }
 
   // Opening result files
@@ -2882,7 +2955,7 @@ window_about ()
               "parameters"),
      "authors", authors,
      "translator-credits", "Javier Burguete Tolosa <jburguete@eead.csic.es>",
-     "version", "1.3.3",
+     "version", "1.3.4",
      "copyright", "Copyright 2012-2015 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/calibrator",
