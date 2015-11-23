@@ -40,13 +40,15 @@ OF SUCH DAMAGE.
 
 #define MAX_NINPUTS 8
   ///< Maximum number of input files in the simulator program.
-#define NALGORITHMS 3           ///< Number of algorithms.
+#define NALGORITHMS 3           ///< Number of stochastic algorithms.
+#define NGRADIENTS 2            ///< Number of gradient estimate methods.
 #define NPRECISIONS 15          ///< Number of precisions.
 
 // Default choices
 
 #define DEFAULT_PRECISION (NPRECISIONS - 1)     ///< Default precision digits.
 #define DEFAULT_RANDOM_SEED 7007        ///< Default pseudo-random numbers seed.
+#define DEFAULT_RELAXATION 1.   ///< Default relaxation parameter.
 
 // Interface labels
 
@@ -92,11 +94,13 @@ OF SUCH DAMAGE.
   ///< npopulation XML label.
 #define XML_NSIMULATIONS (const xmlChar*)"nsimulations"
   ///< nsimulations XML label.
-#define XML_NSTEPS (const xmlChar*)"nsteps"    ///< nsteps XML label.
+#define XML_NSTEPS (const xmlChar*)"nsteps"     ///< nsteps XML label.
 #define XML_NSWEEPS (const xmlChar*)"nsweeps"   ///< nsweeps XML label.
 #define XML_PRECISION (const xmlChar*)"precision"
   ///< precision XML label.
 #define XML_RANDOM (const xmlChar*)"random"     ///< random XML label.
+#define XML_RELAXATION (const xmlChar*)"relaxation"
+  ///< relaxation XML label.
 #define XML_REPRODUCTION (const xmlChar*)"reproduction"
   ///< reproduction XML label.
 #define XML_RESULT (const xmlChar*)"result"     ///< result XML label.

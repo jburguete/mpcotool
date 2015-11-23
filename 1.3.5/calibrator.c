@@ -757,6 +757,19 @@ input_open (char *filename)
             }
           xmlFree (buffer);
           buffer = NULL;
+          if (xmlHasProp (node, XML_RELAXATION))
+            {
+              input->relaxation
+                = xml_node_get_float (node, XML_RELAXATION, &error_code);
+              if (error_code || input->relaxation < 0.
+                  || input->relaxation > 2.)
+                {
+                  msg = gettext ("Invalid relaxation parameter");
+                  goto exit_on_error;
+                }
+            }
+          else
+            input->relaxation = DEFAULT_RELAXATION;
         }
       else
         input->nsteps = 0;
@@ -1854,10 +1867,14 @@ calibrate_estimate_gradient_coordinates (unsigned int variable,
 #if DEBUG
   fprintf (stderr, "calibrate_estimate_gradient_coordinates: start\n");
 #endif
-  if (estimate & 1)
-    x = calibrate->gradient[variable] + calibrate->step[variable];
-  else
-    x = calibrate->gradient[variable] - calibrate->step[variable];
+  x = calibrate->gradient[variable];
+  if (estimate >= (2 * variable) && estimate < (2 * variable + 2))
+    {
+      if (estimate & 1)
+        x += calibrate->step[variable];
+      else
+        x -= calibrate->step[variable];
+    }
 #if DEBUG
   fprintf (stderr, "calibrate_estimate_gradient_coordinates: gradient%u=%lg\n",
            variable, x);
@@ -1912,7 +1929,7 @@ calibrate_step_gradient (unsigned int simulation)
     calibrate_gradient_sequential (simulation);
   else
     {
-      for (i = 0; i < nthreads_gradient; ++i)
+      for (i = 0; i <= nthreads_gradient; ++i)
         {
           calibrate->thread_gradient[i]
             = simulation + calibrate->nstart_gradient
@@ -1923,6 +1940,9 @@ calibrate_step_gradient (unsigned int simulation)
                    "calibrate_step_gradient: i=%u thread_gradient=%u\n",
                    i, calibrate->thread_gradient[i]);
 #endif
+        }
+      for (i = 0; i < nthreads_gradient; ++i)
+        {
           data[i].thread = i;
           thread[i] = g_thread_new
             (NULL, (void (*)) calibrate_gradient_thread, &data[i]);
@@ -1969,8 +1989,10 @@ calibrate_gradient ()
                    "calibrate_step_gradient: best%u=%.14le old%u=%.14le\n",
                    j, calibrate->value[k + j], j, calibrate->value[b + j]);
 #endif
-          calibrate->gradient[j] =
-            calibrate->value[k + j] - calibrate->value[b + j];
+          calibrate->gradient[j]
+            = (1. - calibrate->relaxation) * calibrate->gradient[j]
+            + calibrate->relaxation
+            * (calibrate->value[k + j] - calibrate->value[b + j]);
 #if DEBUG
           fprintf (stderr, "calibrate_step_gradient: gradient%u=%.14le\n",
                    j, calibrate->gradient[j]);
@@ -2358,6 +2380,7 @@ calibrate_open ()
       calibrate->reproduction_ratio = input->reproduction_ratio;
       calibrate->adaptation_ratio = input->adaptation_ratio;
     }
+  calibrate->nvariables = input->nvariables;
   calibrate->nsimulations = input->nsimulations;
   calibrate->niterations = input->niterations;
   calibrate->nbest = input->nbest;
@@ -2423,7 +2446,6 @@ calibrate_open ()
 #if DEBUG
   fprintf (stderr, "calibrate_open: reading variables\n");
 #endif
-  calibrate->nvariables = input->nvariables;
   calibrate->label = input->label;
   j = input->nvariables * sizeof (double);
   calibrate->rangemin = (double *) g_malloc (j);
@@ -2572,6 +2594,32 @@ calibrate_open ()
 #if HAVE_GTK
 
 /**
+ * \fn void input_save_gradient (xmlNode *node)
+ * \brief Function to save the gradient based method data in a XML node.
+ * \param node
+ * \brief XML node.
+ */
+void
+input_save_gradient (xmlNode * node)
+{
+  if (input->nsteps)
+    {
+      xml_node_set_uint (node, XML_NSTEPS, input->nsteps);
+      if (input->relaxation != DEFAULT_RELAXATION)
+        xml_node_set_float (node, XML_RELAXATION, input->relaxation);
+      switch (input->gradient_method)
+        {
+        case GRADIENT_METHOD_COORDINATES:
+          xmlSetProp (node, XML_GRADIENT_METHOD, XML_COORDINATES);
+          break;
+        default:
+          xmlSetProp (node, XML_GRADIENT_METHOD, XML_RANDOM);
+          xml_node_set_uint (node, XML_NESTIMATES, input->nestimates);
+        }
+    }
+}
+
+/**
  * \fn void input_save (char *filename)
  * \brief Function to save the input file.
  * \param filename
@@ -2634,6 +2682,7 @@ input_save (char *filename)
       xmlSetProp (node, XML_TOLERANCE, (xmlChar *) buffer);
       snprintf (buffer, 64, "%u", input->nbest);
       xmlSetProp (node, XML_NBEST, (xmlChar *) buffer);
+      input_save_gradient (node);
       break;
     case ALGORITHM_SWEEP:
       xmlSetProp (node, XML_ALGORITHM, XML_SWEEP);
@@ -2643,6 +2692,7 @@ input_save (char *filename)
       xmlSetProp (node, XML_TOLERANCE, (xmlChar *) buffer);
       snprintf (buffer, 64, "%u", input->nbest);
       xmlSetProp (node, XML_NBEST, (xmlChar *) buffer);
+      input_save_gradient (node);
       break;
     default:
       xmlSetProp (node, XML_ALGORITHM, XML_GENETIC);
@@ -2704,14 +2754,6 @@ input_save (char *filename)
 void
 options_new ()
 {
-  options->label_processors
-    = (GtkLabel *) gtk_label_new (gettext ("Processors number"));
-  options->spin_processors
-    = (GtkSpinButton *) gtk_spin_button_new_with_range (1., 64., 1.);
-  gtk_widget_set_tooltip_text
-    (GTK_WIDGET (options->spin_processors),
-     gettext ("Number of threads to perform the calibration/optimization"));
-  gtk_spin_button_set_value (options->spin_processors, (gdouble) nthreads);
   options->label_seed = (GtkLabel *)
     gtk_label_new (gettext ("Pseudo-random numbers generator seed"));
   options->spin_seed = (GtkSpinButton *)
@@ -2720,13 +2762,36 @@ options_new ()
     (GTK_WIDGET (options->spin_seed),
      gettext ("Seed to init the pseudo-random numbers generator"));
   gtk_spin_button_set_value (options->spin_seed, (gdouble) input->seed);
+  options->label_threads = (GtkLabel *)
+    gtk_label_new (gettext ("Threads number for the stochastic algorithm"));
+  options->spin_threads
+    = (GtkSpinButton *) gtk_spin_button_new_with_range (1., 64., 1.);
+  gtk_widget_set_tooltip_text
+    (GTK_WIDGET (options->spin_threads),
+     gettext ("Number of threads to perform the calibration/optimization for "
+              "the stochastic algorithm"));
+  gtk_spin_button_set_value (options->spin_threads, (gdouble) nthreads);
+  options->label_gradient = (GtkLabel *)
+    gtk_label_new (gettext ("Threads number for the gradient based method"));
+  options->spin_gradient
+    = (GtkSpinButton *) gtk_spin_button_new_with_range (1., 64., 1.);
+  gtk_widget_set_tooltip_text
+    (GTK_WIDGET (options->spin_gradient),
+     gettext ("Number of threads to perform the calibration/optimization for "
+              "the gradient based method"));
+  gtk_spin_button_set_value (options->spin_gradient,
+                             (gdouble) nthreads_gradient);
   options->grid = (GtkGrid *) gtk_grid_new ();
-  gtk_grid_attach (options->grid, GTK_WIDGET (options->label_processors),
-                   0, 0, 1, 1);
-  gtk_grid_attach (options->grid, GTK_WIDGET (options->spin_processors),
-                   1, 0, 1, 1);
-  gtk_grid_attach (options->grid, GTK_WIDGET (options->label_seed), 0, 1, 1, 1);
-  gtk_grid_attach (options->grid, GTK_WIDGET (options->spin_seed), 1, 1, 1, 1);
+  gtk_grid_attach (options->grid, GTK_WIDGET (options->label_seed), 0, 0, 1, 1);
+  gtk_grid_attach (options->grid, GTK_WIDGET (options->spin_seed), 1, 0, 1, 1);
+  gtk_grid_attach (options->grid, GTK_WIDGET (options->label_threads),
+                   0, 1, 1, 1);
+  gtk_grid_attach (options->grid, GTK_WIDGET (options->spin_threads),
+                   1, 1, 1, 1);
+  gtk_grid_attach (options->grid, GTK_WIDGET (options->label_gradient),
+                   0, 2, 1, 1);
+  gtk_grid_attach (options->grid, GTK_WIDGET (options->spin_gradient),
+                   1, 2, 1, 1);
   gtk_widget_show_all (GTK_WIDGET (options->grid));
   options->dialog = (GtkDialog *)
     gtk_dialog_new_with_buttons (gettext ("Options"),
@@ -2740,9 +2805,11 @@ options_new ()
      GTK_WIDGET (options->grid));
   if (gtk_dialog_run (options->dialog) == GTK_RESPONSE_OK)
     {
-      nthreads = gtk_spin_button_get_value_as_int (options->spin_processors);
       input->seed
         = (unsigned long int) gtk_spin_button_get_value (options->spin_seed);
+      nthreads = gtk_spin_button_get_value_as_int (options->spin_threads);
+      nthreads_gradient
+        = gtk_spin_button_get_value_as_int (options->spin_gradient);
     }
   gtk_widget_destroy (GTK_WIDGET (options->dialog));
 }
@@ -2767,6 +2834,70 @@ running_new ()
   gtk_widget_show_all (GTK_WIDGET (running->dialog));
 #if DEBUG
   fprintf (stderr, "running_new: end\n");
+#endif
+}
+
+/**
+ * \fn int window_get_algorithm ()
+ * \brief Function to get the stochastic algorithm number.
+ * \return Stochastic algorithm number.
+ */
+int
+window_get_algorithm ()
+{
+  unsigned int i;
+  for (i = 0; i < NALGORITHMS; ++i)
+    if (gtk_toggle_button_get_active
+        (GTK_TOGGLE_BUTTON (window->button_algorithm[i])))
+      break;
+  return i;
+}
+
+/**
+ * \fn int window_get_gradient ()
+ * \brief Function to get the gradient base method number.
+ * \return Gradient base method number.
+ */
+int
+window_get_gradient ()
+{
+  unsigned int i;
+  for (i = 0; i < NGRADIENTS; ++i)
+    if (gtk_toggle_button_get_active
+        (GTK_TOGGLE_BUTTON (window->button_gradient[i])))
+      break;
+  return i;
+}
+
+/**
+ * \fn void window_save_gradient ()
+ * \brief Function to save the gradient based method data in the input file.
+ */
+void
+window_save_gradient ()
+{
+#if DEBUG
+  fprintf (stderr, "window_save_gradient: start\n");
+#endif
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (window->check_gradient)))
+    {
+      input->nsteps = gtk_spin_button_get_value_as_int (window->spin_steps);
+      input->relaxation = gtk_spin_button_get_value (window->spin_relaxation);
+      switch (window_get_gradient ())
+        {
+        case GRADIENT_METHOD_COORDINATES:
+          input->gradient_method = GRADIENT_METHOD_COORDINATES;
+          break;
+        default:
+          input->gradient_method = GRADIENT_METHOD_RANDOM;
+          input->nestimates
+            = gtk_spin_button_get_value_as_int (window->spin_estimates);
+        }
+    }
+  else
+    input->nsteps = 0;
+#if DEBUG
+  fprintf (stderr, "window_save_gradient: end\n");
 #endif
 }
 
@@ -2829,6 +2960,7 @@ window_save ()
             = gtk_spin_button_get_value_as_int (window->spin_iterations);
           input->tolerance = gtk_spin_button_get_value (window->spin_tolerance);
           input->nbest = gtk_spin_button_get_value_as_int (window->spin_bests);
+          window_save_gradient ();
           break;
         case ALGORITHM_SWEEP:
           input->algorithm = ALGORITHM_SWEEP;
@@ -2836,6 +2968,7 @@ window_save ()
             = gtk_spin_button_get_value_as_int (window->spin_iterations);
           input->tolerance = gtk_spin_button_get_value (window->spin_tolerance);
           input->nbest = gtk_spin_button_get_value_as_int (window->spin_bests);
+          window_save_gradient ();
           break;
         default:
           input->algorithm = ALGORITHM_GENETIC;
@@ -2955,7 +3088,7 @@ window_about ()
               "parameters"),
      "authors", authors,
      "translator-credits", "Javier Burguete Tolosa <jburguete@eead.csic.es>",
-     "version", "1.3.4",
+     "version", "1.3.5",
      "copyright", "Copyright 2012-2015 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/calibrator",
@@ -2963,19 +3096,26 @@ window_about ()
 }
 
 /**
- * \fn int window_get_algorithm ()
- * \brief Function to get the algorithm number.
- * \return Algorithm number.
+ * \fn void window_update_gradient ()
+ * \brief Function to update gradient based method widgets view in the main
+ *   window.
  */
-int
-window_get_algorithm ()
+void
+window_update_gradient ()
 {
-  unsigned int i;
-  for (i = 0; i < NALGORITHMS; ++i)
-    if (gtk_toggle_button_get_active
-        (GTK_TOGGLE_BUTTON (window->button_algorithm[i])))
+  gtk_widget_show (GTK_WIDGET (window->check_gradient));
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (window->check_gradient)))
+    gtk_widget_show (GTK_WIDGET (window->grid_gradient));
+  switch (window_get_gradient ())
+    {
+    case GRADIENT_METHOD_COORDINATES:
+      gtk_widget_hide (GTK_WIDGET (window->label_estimates));
+      gtk_widget_hide (GTK_WIDGET (window->spin_estimates));
       break;
-  return i;
+    default:
+      gtk_widget_show (GTK_WIDGET (window->label_estimates));
+      gtk_widget_show (GTK_WIDGET (window->spin_estimates));
+    }
 }
 
 /**
@@ -3012,6 +3152,8 @@ window_update ()
   gtk_widget_hide (GTK_WIDGET (window->spin_sweeps));
   gtk_widget_hide (GTK_WIDGET (window->label_bits));
   gtk_widget_hide (GTK_WIDGET (window->spin_bits));
+  gtk_widget_hide (GTK_WIDGET (window->check_gradient));
+  gtk_widget_hide (GTK_WIDGET (window->grid_gradient));
   i = gtk_spin_button_get_value_as_int (window->spin_iterations);
   switch (window_get_algorithm ())
     {
@@ -3027,6 +3169,7 @@ window_update ()
           gtk_widget_show (GTK_WIDGET (window->label_bests));
           gtk_widget_show (GTK_WIDGET (window->spin_bests));
         }
+      window_update_gradient ();
       break;
     case ALGORITHM_SWEEP:
       gtk_widget_show (GTK_WIDGET (window->label_iterations));
@@ -3040,6 +3183,8 @@ window_update ()
         }
       gtk_widget_show (GTK_WIDGET (window->label_sweeps));
       gtk_widget_show (GTK_WIDGET (window->spin_sweeps));
+      gtk_widget_show (GTK_WIDGET (window->check_gradient));
+      window_update_gradient ();
       break;
     default:
       gtk_widget_show (GTK_WIDGET (window->label_population));
@@ -3760,6 +3905,24 @@ window_read (char *filename)
                                  (gdouble) input->niterations);
       gtk_spin_button_set_value (window->spin_bests, (gdouble) input->nbest);
       gtk_spin_button_set_value (window->spin_tolerance, input->tolerance);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (window->check_gradient),
+                                    input->nsteps);
+      if (input->nsteps)
+        {
+          gtk_toggle_button_set_active
+            (GTK_TOGGLE_BUTTON (window->button_gradient
+                                [input->gradient_method]), TRUE);
+          gtk_spin_button_set_value (window->spin_steps,
+                                     (gdouble) input->nsteps);
+          gtk_spin_button_set_value (window->spin_relaxation,
+                                     (gdouble) input->relaxation);
+          switch (input->gradient_method)
+            {
+            case GRADIENT_METHOD_RANDOM:
+              gtk_spin_button_set_value (window->spin_estimates,
+                                         (gdouble) input->nestimates);
+            }
+        }
       break;
     default:
       gtk_spin_button_set_value (window->spin_population,
@@ -3886,6 +4049,13 @@ window_new ()
     gettext ("Monte-Carlo brute force algorithm"),
     gettext ("Sweep brute force algorithm"),
     gettext ("Genetic algorithm")
+  };
+  char *label_gradient[NGRADIENTS] = {
+    gettext ("_Coordinates descent"), gettext ("_Random")
+  };
+  char *tip_gradient[NGRADIENTS] = {
+    gettext ("Coordinates descent gradient estimate method"),
+    gettext ("Random gradient estimate method")
   };
 
   // Creating the window
@@ -4081,6 +4251,53 @@ window_new ()
     (GTK_WIDGET (window->spin_adaptation),
      gettext ("Ratio of adaptation for the genetic algorithm"));
 
+  // Creating the gradient based method properties
+  window->check_gradient = (GtkCheckButton *)
+    gtk_check_button_new_with_mnemonic (gettext ("_Gradient based method"));
+  g_signal_connect (window->check_gradient, "clicked", window_update, NULL);
+  window->grid_gradient = (GtkGrid *) gtk_grid_new ();
+  window->button_gradient[0] = (GtkRadioButton *)
+    gtk_radio_button_new_with_mnemonic (NULL, label_gradient[0]);
+  gtk_grid_attach (window->grid_gradient,
+                   GTK_WIDGET (window->button_gradient[0]), 0, 0, 1, 1);
+  g_signal_connect (window->button_gradient[0], "clicked", window_update, NULL);
+  for (i = 0; ++i < NGRADIENTS;)
+    {
+      window->button_gradient[i] = (GtkRadioButton *)
+        gtk_radio_button_new_with_mnemonic
+        (gtk_radio_button_get_group (window->button_gradient[0]),
+         label_gradient[i]);
+      gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_gradient[i]),
+                                   tip_gradient[i]);
+      gtk_grid_attach (window->grid_gradient,
+                       GTK_WIDGET (window->button_gradient[i]), 0, i, 1, 1);
+      g_signal_connect (window->button_gradient[i], "clicked",
+                        window_update, NULL);
+    }
+  window->label_steps = (GtkLabel *) gtk_label_new (gettext ("Steps number"));
+  window->spin_steps = (GtkSpinButton *)
+    gtk_spin_button_new_with_range (1., 1.e12, 1.);
+  window->label_estimates
+    = (GtkLabel *) gtk_label_new (gettext ("Gradient estimates number"));
+  window->spin_estimates = (GtkSpinButton *)
+    gtk_spin_button_new_with_range (1., 1.e3, 1.);
+  window->label_relaxation
+    = (GtkLabel *) gtk_label_new (gettext ("Relaxation parameter"));
+  window->spin_relaxation = (GtkSpinButton *)
+    gtk_spin_button_new_with_range (0., 2., 0.001);
+  gtk_grid_attach (window->grid_gradient, GTK_WIDGET (window->label_steps),
+                   0, NGRADIENTS, 1, 1);
+  gtk_grid_attach (window->grid_gradient, GTK_WIDGET (window->spin_steps),
+                   1, NGRADIENTS, 1, 1);
+  gtk_grid_attach (window->grid_gradient, GTK_WIDGET (window->label_estimates),
+                   0, NGRADIENTS + 1, 1, 1);
+  gtk_grid_attach (window->grid_gradient, GTK_WIDGET (window->spin_estimates),
+                   1, NGRADIENTS + 1, 1, 1);
+  gtk_grid_attach (window->grid_gradient, GTK_WIDGET (window->label_relaxation),
+                   0, NGRADIENTS + 2, 1, 1);
+  gtk_grid_attach (window->grid_gradient, GTK_WIDGET (window->spin_relaxation),
+                   1, NGRADIENTS + 2, 1, 1);
+
   // Creating the array of algorithms
   window->grid_algorithm = (GtkGrid *) gtk_grid_new ();
   window->button_algorithm[0] = (GtkRadioButton *)
@@ -4155,6 +4372,12 @@ window_new ()
   gtk_grid_attach (window->grid_algorithm,
                    GTK_WIDGET (window->spin_adaptation), 1,
                    NALGORITHMS + 8, 1, 1);
+  gtk_grid_attach (window->grid_algorithm,
+                   GTK_WIDGET (window->check_gradient), 0,
+                   NALGORITHMS + 9, 2, 1);
+  gtk_grid_attach (window->grid_algorithm,
+                   GTK_WIDGET (window->grid_gradient), 0,
+                   NALGORITHMS + 10, 2, 1);
   window->frame_algorithm = (GtkFrame *) gtk_frame_new (gettext ("Algorithm"));
   gtk_container_add (GTK_CONTAINER (window->frame_algorithm),
                      GTK_WIDGET (window->grid_algorithm));

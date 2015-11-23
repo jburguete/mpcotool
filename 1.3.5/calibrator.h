@@ -53,8 +53,8 @@ enum Algorithm
  */
 enum GradientMethod
 {
-	GRADIENT_METHOD_COORDINATES = 0, ///< Coordinates descent method.
-	GRADIENT_METHOD_RANDOM = 1,      ///< Random method.
+  GRADIENT_METHOD_COORDINATES = 0,      ///< Coordinates descent method.
+  GRADIENT_METHOD_RANDOM = 1,   ///< Random method.
 };
 
 /**
@@ -87,6 +87,7 @@ typedef struct
   double mutation_ratio;        ///< Mutation probability.
   double reproduction_ratio;    ///< Reproduction probability.
   double adaptation_ratio;      ///< Adaptation probability.
+  double relaxation;            ///< Relaxation parameter.
   unsigned long int seed;
   ///< Seed of the pseudo-random numbers generator.
   unsigned int nvariables;      ///< Variables number.
@@ -148,6 +149,7 @@ typedef struct
   double mutation_ratio;        ///< Mutation probability.
   double reproduction_ratio;    ///< Reproduction probability.
   double adaptation_ratio;      ///< Adaptation probability.
+  double relaxation;            ///< Relaxation parameter.
   double calculation_time;      ///< Calculation time.
   unsigned long int seed;
   ///< Seed of the pseudo-random numbers generator.
