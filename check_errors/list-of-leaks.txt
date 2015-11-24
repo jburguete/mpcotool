@@ -1,6 +1,0 @@
-Registred with valgrind --leak-check=yes
-
-bad-ntemplates.xml
-bad-ntemplates-2.xml
-bad-ntemplates-3.xml
-bad-ntemplates-4.xml

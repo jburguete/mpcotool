@@ -419,7 +419,8 @@ input_new ()
   fprintf (stderr, "input_new: start\n");
 #endif
   input->nvariables = input->nexperiments = input->ninputs = input->nsteps = 0;
-  input->simulator = input->evaluator = input->directory = input->name = NULL;
+  input->simulator = input->evaluator = input->directory = input->name
+	  = input->result = input->variables = NULL;
   input->experiment = input->label = NULL;
   input->precision = input->nsweeps = input->nbits = NULL;
   input->rangemin = input->rangemax = input->rangeminabs = input->rangemaxabs
@@ -449,6 +450,7 @@ input_free ()
       xmlFree (input->experiment[i]);
       for (j = 0; j < input->ninputs; ++j)
         xmlFree (input->template[j][i]);
+	  g_free (input->template[j]);
     }
   g_free (input->experiment);
   for (i = 0; i < input->ninputs; ++i)
@@ -486,6 +488,7 @@ int
 input_open (char *filename)
 {
   char buffer2[64];
+  char *buffert[MAX_NINPUTS] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
   xmlDoc *doc;
   xmlNode *node, *child;
   xmlChar *buffer;
@@ -503,7 +506,7 @@ input_open (char *filename)
 
   // Parsing the input file
 #if DEBUG
-  fprintf (stderr, "input_open: parsing the input file\n");
+  fprintf (stderr, "input_open: parsing the input file %s\n", filename);
 #endif
   doc = xmlParseFile (filename);
   if (!doc)
@@ -826,8 +829,7 @@ input_open (char *filename)
           input->template[0]
             = (char **) g_realloc (input->template[0],
                                    (1 + input->nexperiments) * sizeof (char *));
-          input->template[0][input->nexperiments]
-            = (char *) xmlGetProp (child, template[0]);
+          buffert[0] = (char *) xmlGetProp (child, template[0]);
 #if DEBUG
           fprintf (stderr, "input_open: experiment=%u template1=%s\n",
                    input->nexperiments,
@@ -859,13 +861,14 @@ input_open (char *filename)
                             gettext ("Experiment"),
                             buffer, gettext ("bad templates number"));
                   msg = buffer2;
+                  while (i-- > 0)
+					xmlFree (buffert[i]);
                   goto exit_on_error;
                 }
               input->template[i] = (char **)
                 g_realloc (input->template[i],
                            (1 + input->nexperiments) * sizeof (char *));
-              input->template[i][input->nexperiments]
-                = (char *) xmlGetProp (child, template[i]);
+              buffert[i] = (char *) xmlGetProp (child, template[i]);
 #if DEBUG
               fprintf (stderr, "input_open: experiment=%u template%u=%s\n",
                        input->nexperiments, i + 1,
@@ -883,6 +886,8 @@ input_open (char *filename)
                         gettext ("Experiment"),
                         buffer, gettext ("no template"), i + 1);
               msg = buffer2;
+              while (i-- > 0)
+			    xmlFree (buffert[i]);
               goto exit_on_error;
             }
           else
@@ -892,6 +897,8 @@ input_open (char *filename)
         = g_realloc (input->experiment,
                      (1 + input->nexperiments) * sizeof (char *));
       input->experiment[input->nexperiments] = (char *) buffer;
+	  for (i = 0; i < input->ninputs; ++i)
+        input->template[i][input->nexperiments] = buffert[i];
       ++input->nexperiments;
 #if DEBUG
       fprintf (stderr, "input_open: nexperiments=%u\n", input->nexperiments);
@@ -3088,7 +3095,7 @@ window_about ()
               "parameters"),
      "authors", authors,
      "translator-credits", "Javier Burguete Tolosa <jburguete@eead.csic.es>",
-     "version", "1.3.5",
+     "version", "1.3.6",
      "copyright", "Copyright 2012-2015 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/calibrator",
@@ -3998,6 +4005,7 @@ window_open ()
 #if DEBUG
           fprintf (stderr, "window_open: error reading input file\n");
 #endif
+		  g_free (buffer);
 
           // Reading backup file on error
           buffer = g_build_filename (directory, name, NULL);
@@ -4009,18 +4017,15 @@ window_open ()
               fprintf (stderr, "window_read: error reading backup file\n");
 #endif
               g_free (buffer);
-              g_free (name);
-              g_free (directory);
-#if DEBUG
-              fprintf (stderr, "window_open: end\n");
-#endif
-              gtk_main_quit ();
+              break;
             }
-          else
-            g_free (buffer);
+          g_free (buffer);
         }
       else
-        break;
+		{
+		  g_free (buffer);
+          break;
+		}
     }
 
   // Freeing and closing
@@ -4688,6 +4693,10 @@ cores_number ()
 int
 main (int argn, char **argc)
 {
+#if HAVE_GTK
+  char *buffer;
+#endif
+
   // Starting pseudo-random numbers generator
   calibrate->rng = gsl_rng_alloc (gsl_rng_taus2);
   calibrate->seed = DEFAULT_RANDOM_SEED;
@@ -4714,9 +4723,8 @@ main (int argn, char **argc)
   setlocale (LC_ALL, "");
   setlocale (LC_NUMERIC, "C");
   window->application_directory = g_get_current_dir ();
-  bindtextdomain (PROGRAM_INTERFACE,
-                  g_build_filename (window->application_directory,
-                                    LOCALE_DIR, NULL));
+  buffer = g_build_filename (window->application_directory, LOCALE_DIR, NULL);
+  bindtextdomain (PROGRAM_INTERFACE, buffer);
   bind_textdomain_codeset (PROGRAM_INTERFACE, "UTF-8");
   textdomain (PROGRAM_INTERFACE);
 
@@ -4729,6 +4737,8 @@ main (int argn, char **argc)
   gtk_main ();
 
   // Freeing memory
+  input_free ();
+  g_free (buffer);
   gtk_widget_destroy (GTK_WIDGET (window->window));
   g_free (window->application_directory);
 
@@ -4756,7 +4766,6 @@ main (int argn, char **argc)
   printf ("nthreads=%u\n", nthreads);
 
   // Making calibration
-  input_new ();
   if (input_open (argc[argn - 1]))
     calibrate_open ();
 
