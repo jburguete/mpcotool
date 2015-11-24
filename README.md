@@ -84,6 +84,8 @@ Dyson Illumos
 _____________
 FreeBSD 10.2
 ____________
+Linux Mint DE 2
+_______________
 NetBSD 7.0
 __________
 OpenSUSE Linux 13
