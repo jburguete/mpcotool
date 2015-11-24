@@ -420,7 +420,7 @@ input_new ()
 #endif
   input->nvariables = input->nexperiments = input->ninputs = input->nsteps = 0;
   input->simulator = input->evaluator = input->directory = input->name
-	  = input->result = input->variables = NULL;
+    = input->result = input->variables = NULL;
   input->experiment = input->label = NULL;
   input->precision = input->nsweeps = input->nbits = NULL;
   input->rangemin = input->rangemax = input->rangeminabs = input->rangemaxabs
@@ -450,7 +450,7 @@ input_free ()
       xmlFree (input->experiment[i]);
       for (j = 0; j < input->ninputs; ++j)
         xmlFree (input->template[j][i]);
-	  g_free (input->template[j]);
+      g_free (input->template[j]);
     }
   g_free (input->experiment);
   for (i = 0; i < input->ninputs; ++i)
@@ -488,7 +488,8 @@ int
 input_open (char *filename)
 {
   char buffer2[64];
-  char *buffert[MAX_NINPUTS] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+  char *buffert[MAX_NINPUTS] =
+    { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
   xmlDoc *doc;
   xmlNode *node, *child;
   xmlChar *buffer;
@@ -862,7 +863,7 @@ input_open (char *filename)
                             buffer, gettext ("bad templates number"));
                   msg = buffer2;
                   while (i-- > 0)
-					xmlFree (buffert[i]);
+                    xmlFree (buffert[i]);
                   goto exit_on_error;
                 }
               input->template[i] = (char **)
@@ -887,7 +888,7 @@ input_open (char *filename)
                         buffer, gettext ("no template"), i + 1);
               msg = buffer2;
               while (i-- > 0)
-			    xmlFree (buffert[i]);
+                xmlFree (buffert[i]);
               goto exit_on_error;
             }
           else
@@ -897,7 +898,7 @@ input_open (char *filename)
         = g_realloc (input->experiment,
                      (1 + input->nexperiments) * sizeof (char *));
       input->experiment[input->nexperiments] = (char *) buffer;
-	  for (i = 0; i < input->ninputs; ++i)
+      for (i = 0; i < input->ninputs; ++i)
         input->template[i][input->nexperiments] = buffert[i];
       ++input->nexperiments;
 #if DEBUG
@@ -4005,7 +4006,7 @@ window_open ()
 #if DEBUG
           fprintf (stderr, "window_open: error reading input file\n");
 #endif
-		  g_free (buffer);
+          g_free (buffer);
 
           // Reading backup file on error
           buffer = g_build_filename (directory, name, NULL);
@@ -4022,10 +4023,10 @@ window_open ()
           g_free (buffer);
         }
       else
-		{
-		  g_free (buffer);
+        {
+          g_free (buffer);
           break;
-		}
+        }
     }
 
   // Freeing and closing
