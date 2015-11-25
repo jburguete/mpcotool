@@ -253,6 +253,20 @@ the following parameters:
 >
 > niterations: number of iterations (default 1).
 
+* Moreover, both brute force algorithms can be coupled with a gradient base
+method by using:
+> gradient_type:
+>
+>> coordinates:
+>>
+>> random:
+>>
+>>> nestimates:
+>
+> nsteps:
+>
+> relaxation:
+
 * *"genetic"*: Genetic algorithm. Requires the following parameters:
 > npopulation: number of population.
 >
