@@ -211,75 +211,70 @@ The format of the main input file is as:
 
 with:
 
-* *"simulator"* simulator executable file name.
-
-* *"evaluator"*: Optional. When needed is the evaluator executable file name.
-
-* *"result"*: Optional. Is the name of the optime result file (default is
+* **"simulator"** simulator executable file name.
+* **"evaluator"**: Optional. When needed is the evaluator executable file name.
+* **"result"**: Optional. Is the name of the optime result file (default is
 "result").
- 
-* *"variables"*: Optional. Is the name of all simulated variables file
+* **"variables"**: Optional. Is the name of all simulated variables file
 (default is "variables").
- 
-* *"precision"* defined for each variable. Number of precision digits to
+* **"precision"** defined for each variable. Number of precision digits to
 evaluate the variable. 0 apply for integer numbers.
-
-* *"weight"* defined for each experiment. Multiplies the objective value
+* **"weight"** defined for each experiment. Multiplies the objective value
 obtained for each experiment in the final objective function value.
-
-* *"seed"*: Seed of the pseudo-random numbers generator.
+* **"seed"**: Seed of the pseudo-random numbers generator.
 
 Implemented algorithms are:
 
-* *"sweep"*: Sweep brute force algorithm. Requires for each variable:
-> sweeps: number of sweeps to generate for each variable in every experiment. 
+* **"sweep"**: Sweep brute force algorithm. Requires for each variable:
+  * *sweeps*: number of sweeps to generate for each variable in every
+  experiment. 
 
   The total number of simulations to run is:
 > (number of experiments) x (variable 1 number of sweeps) x ... x
 > (variable n number of sweeps) x (number of iterations)
 
-* *"Monte-Carlo"*: Monte-Carlo brute force algorithm. Requires on calibrate:
-> nsimulations: number of simulations to run in every experiment.
+* **"Monte-Carlo"**: Monte-Carlo brute force algorithm. Requires on calibrate:
+  * *nsimulations*: number of simulations to run in every experiment.
 
   The total number of simulations to run is:
 > (number of experiments) x (number of simulations) x (number of iterations)
 
 * Both brute force algorithms can be iterated to improve convergence by using
 the following parameters:
-> nbest: number of best simulations to calculate convergence interval on next
-> iteration (default 1).
->
-> tolerance: tolerance parameter to increase convergence interval (default 0).
->
-> niterations: number of iterations (default 1).
+  * *nbest*: number of best simulations to calculate convergence interval on
+  next iteration (default 1).
+
+  * *tolerance*: tolerance parameter to increase convergence interval (default
+  0).
+
+  * *niterations*: number of iterations (default 1).
 
 * Moreover, both brute force algorithms can be coupled with a gradient base
 method by using:
-> gradient_type:
->
->> coordinates:
->>
->> random:
->>
->>> nestimates:
->
-> nsteps:
->
-> relaxation:
+  * *gradient_type*: method to estimate the gradient. Two options are currently
+  available:
+    * coordinates: coordinates descent method.
+    * random: random method.
 
-* *"genetic"*: Genetic algorithm. Requires the following parameters:
-> npopulation: number of population.
->
-> ngenerations: number of generations.
->
-> mutation: mutation ratio.
->
-> reproduction: reproduction ratio.
->
-> adaptation: adaptation ratio.
+It requires:
+
+    - nestimates: number of random checks to estimate the gradient.
+
+  Both methods require also:
+
+    * nsteps: number of steps to perform the gradient based method.
+    * relaxation: relaxation parameter.
+
+* **"genetic"**: Genetic algorithm. Requires the following parameters:
+  * *npopulation*: number of population.
+  * *ngenerations*: number of generations.
+  * *mutation*: mutation ratio.
+  * *reproduction*: reproduction ratio.
+  * *adaptation*: adaptation ratio.
 
   and for each variable:
-> nbits: number of bits to encode each variable.
+
+  * *nbits*: number of bits to encode each variable.
 
   The total number of simulations to run is:
 > (number of experiments) x (npopulation) x [1 + (ngenerations - 1)
