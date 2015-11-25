@@ -225,8 +225,12 @@ represented in figure~\ref{FigMainFile}.
 	\rput(195,10){reproduction}
 	\rput(235,10){adaptation}
 	\rput(265,10){seed}
-	\rput(55,0){result}
-	\rput(80,0){variables}
+	\rput(55,0){nsteps}
+	\rput(90,0){gradient\_method}
+	\rput(135,0){nestimates}
+	\rput(170,0){relaxation}
+	\rput(200,0){result}
+	\rput(230,0){variables}
 	\psline(20,-5)(20,-15)(40,-15)
 	\psframe(40,-20)(280,-10)
 	\psline(80,-20)(80,-10)
@@ -253,28 +257,30 @@ represented in figure~\ref{FigMainFile}.
 	\psframe(40,-75)(280,-55)
 	\psline(80,-75)(80,-55)
 	\rput(60,-60){\bf variable}
-	\rput(100,-60){\bf name}
-	\rput(140,-60){\bf minimum}
-	\rput(180,-60){\bf maximum}
-	\rput(230,-60){absolute\_minimum}
-	\rput(110,-70){absolute\_maximum}
-	\rput(160,-70){format}
-	\rput(200,-70){nsweeps}
-	\rput(240,-70){nbits}
+	\rput(95,-60){\bf name}
+	\rput(120,-60){\bf minimum}
+	\rput(152.5,-60){\bf maximum}
+	\rput(195,-60){absolute\_minimum}
+	\rput(250,-60){absolute\_maximum}
+	\rput(100,-70){precision}
+	\rput(130,-70){nsweeps}
+	\rput(155,-70){nbits}
+	\rput(175,-70){step}
 	\psline(20,-65)(20,-80)
 	\rput(140,-85){$\cdots$}
 	\psline(20,-90)(20,-105)(40,-105)
 	\psframe(40,-115)(280,-95)
 	\psline(80,-115)(80,-95)
 	\rput(60,-100){\bf variable}
-	\rput(100,-100){\bf name}
-	\rput(140,-100){\bf minimum}
-	\rput(180,-100){\bf maximum}
-	\rput(230,-100){absolute\_minimum}
-	\rput(110,-110){absolute\_maximum}
-	\rput(160,-110){format}
-	\rput(200,-110){nsweeps}
-	\rput(240,-110){nbits}
+	\rput(95,-100){\bf name}
+	\rput(120,-100){\bf minimum}
+	\rput(152.5,-100){\bf maximum}
+	\rput(195,-100){absolute\_minimum}
+	\rput(250,-100){absolute\_maximum}
+	\rput(100,-110){precision}
+	\rput(130,-110){nsweeps}
+	\rput(155,-110){nbits}
+	\rput(175,-110){step}
 }{Structure of the main input file. Mandatory nodes and properties are in bold.
 Others properties can be also mandatory depending on the selected optimization
 algorithm}{FigMainFile}
@@ -282,27 +288,25 @@ algorithm}{FigMainFile}
 The main XML node has to begin with the key label \emph{"calibrate"}. The
 available properties are:
 \begin{description}
-	\item[result]: to set the result file name. Optional, the default file name
-		is \emph{"result"}.
-	\item[variables]: to set the variables file name. Optional, the default file
-		name is \emph{"variables"}.
 	\item[simulator]: to indicate the simulator program.
 	\item[evaluator]: optional. It specifies the evaluator program if required.
-	\item[algorithm]: to set the optimization algorithm. Three value are currently available:
+	\item[algorithm]: to set the optimization algorithm. Three values are
+		currently available:
 	\begin{description}
-		\item[sweep]: sweep brute force algorithm. It requires for each variable:
+		\item[sweep]: sweep brute force algorithm. It requires for each
+			variable:
 		\begin{description}
 			\item[nsweeps]: number of sweeps to generate each variable in every
 			experiment.
 		\end{description}
-	\item[Monte-Carlo]: Monte-Carlo brute force algorithm. It requires on the main
-		XML node:
-		\begin{description}
-			\item[nsimulations]: number of simulations to run for each iteration in
-			every experiment.
-		\end{description}
-	\item[genetic]: genetic algorithm. It requires the following parameters in the
+	\item[Monte-Carlo]: Monte-Carlo brute force algorithm. It requires on the
 		main XML node:
+		\begin{description}
+			\item[nsimulations]: number of simulations to run for each iteration
+				in every experiment.
+		\end{description}
+	\item[genetic]: genetic algorithm. It requires the following parameters in
+		the main XML node:
 		\begin{description}
 			\item[npopulation]: number of population entities.
 			\item[ngenerations]: number of generations.
@@ -315,13 +319,35 @@ available properties are:
 			\item[nbits]: number of bits to encode each variable.
 		\end{description}
 	\end{description}
-\item[niterations]: number of iterations (default 1) to perform the iterative
-algorithm.
-\item[nbest]: number of best simulations to calculate convergence interval on
-next iteration for the iterative algorithm (default 1).
-\item[tolerance]: tolerance parameter to relax the convergence interval of the
-iterative algorithm (default 0).
-\item[seed]: seed of the pseudo-random numbers generator (default 7007).
+	\item[niterations]: number of iterations (default 1) to perform the
+		iterative algorithm.
+	\item[nbest]: number of best simulations to calculate convergence interval
+		on next iteration for the iterative algorithm (default 1).
+	\item[tolerance]: tolerance parameter to relax the convergence interval of
+		the iterative algorithm (default 0).
+	\item[seed]: seed of the pseudo-random numbers generator (default 7007).
+	\item[gradient\_method]: method to estimate the gradient (optional for sweep
+		and Monte-Carlo algorithms). Two values are currently available:
+	\begin{description}
+		\item[coordinates]: coordinates descent estimate.
+		\item[random]: random estimate. It requieres:
+		\begin{description}
+			\item[nestimates]: number of random checks to estimate the gradient.
+		\end{description}
+	\end{description}
+	Both methods requires the following parameters:
+	\begin{description}
+		\item[nsteps]: number of steps to perform the gradient based method,
+		\item[relaxation]: relaxation parameter for the gradient based method,
+	\end{description}
+	and for each variable:
+	\begin{description}
+		\item[step]: initial step size for the gradient based method.
+	\end{description}
+	\item[result]: to set the result file name. Optional, the default file name
+		is \emph{"result"}.
+	\item[variables]: to set the variables file name. Optional, the default file
+		name is \emph{"variables"}.
 \end{description}
 
 The first type of child XML nodes has to begin with the key label

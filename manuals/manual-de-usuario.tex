@@ -243,8 +243,14 @@ representada en la figura~\ref{FigMainFile}.
 	\rput(195,10){reproduction}
 	\rput(235,10){adaptation}
 	\rput(265,10){seed}
-	\rput(55,0){result}
-	\rput(80,0){variables}
+	\rput(55,0){nsteps}
+	\rput(90,0){gradient\_method}
+	\rput(135,0){nestimates}
+	\rput(170,0){relaxation}
+	\rput(200,0){result}
+	\rput(230,0){variables}
+	\psline(20,-5)(20,-15)(40,-15)
+	\psframe(40,-20)(280,-10)
 	\psline(80,-20)(80,-10)
 	\rput(60,-15){\bf experiment}
 	\rput(95,-15){\bf name}
@@ -269,28 +275,30 @@ representada en la figura~\ref{FigMainFile}.
 	\psframe(40,-75)(280,-55)
 	\psline(80,-75)(80,-55)
 	\rput(60,-60){\bf variable}
-	\rput(100,-60){\bf name}
-	\rput(140,-60){\bf minimum}
-	\rput(180,-60){\bf maximum}
-	\rput(230,-60){absolute\_minimum}
-	\rput(110,-70){absolute\_maximum}
-	\rput(160,-70){format}
-	\rput(200,-70){nsweeps}
-	\rput(240,-70){nbits}
+	\rput(95,-60){\bf name}
+	\rput(120,-60){\bf minimum}
+	\rput(152.5,-60){\bf maximum}
+	\rput(195,-60){absolute\_minimum}
+	\rput(250,-60){absolute\_maximum}
+	\rput(100,-70){precision}
+	\rput(130,-70){nsweeps}
+	\rput(155,-70){nbits}
+	\rput(175,-70){step}
 	\psline(20,-65)(20,-80)
 	\rput(140,-85){$\cdots$}
 	\psline(20,-90)(20,-105)(40,-105)
 	\psframe(40,-115)(280,-95)
 	\psline(80,-115)(80,-95)
 	\rput(60,-100){\bf variable}
-	\rput(100,-100){\bf name}
-	\rput(140,-100){\bf minimum}
-	\rput(180,-100){\bf maximum}
-	\rput(230,-100){absolute\_minimum}
-	\rput(110,-110){absolute\_maximum}
-	\rput(160,-110){format}
-	\rput(200,-110){nsweeps}
-	\rput(240,-110){nbits}
+	\rput(95,-100){\bf name}
+	\rput(120,-100){\bf minimum}
+	\rput(152.5,-100){\bf maximum}
+	\rput(195,-100){absolute\_minimum}
+	\rput(250,-100){absolute\_maximum}
+	\rput(100,-110){precision}
+	\rput(130,-110){nsweeps}
+	\rput(155,-110){nbits}
+	\rput(175,-110){step}
 }{Estructura del fichero principal de entrada. Nodos y propiedades
 imprescindibles están en negrita. No obstante, otras propiedades también pueden
 ser necesarias en función del algoritmo de optimización seleccionado}
@@ -299,11 +307,6 @@ ser necesarias en función del algoritmo de optimización seleccionado}
 El nodo XML principal tiene que comenzar con la etiqueta ``\emph{calibrate}''.
 Las propiedades que se pueden definir son:
 \begin{description}
-	\item[result]: define el nombre del fichero de resultados óptimos. Es
-		opcional, si no se especifica se guarda con el nombre ``\emph{result}''.
-	\item[variables]: define el nombre del fichero donde se guardan todas
-		las combinaciones de variables simuladas. Es opcional, si no se
-		especifica se guarda con el nombre ``\emph{variables}''.
 	\item[simulator]: indica el programa simulador.
 	\item[evaluator]: opcional. Especifica el programa de evaluación en caso de
 		ser requerido.
@@ -336,15 +339,43 @@ Las propiedades que se pueden definir son:
 			\item[nbits]: número de bits para codificar la variable.
 		\end{description}
 	\end{description}
-\item[niterations]: número de iteraciones (valor por defecto: 1) para realizar
-	el algoritmo iterativo.
-\item[nbest]: número de mejores simulaciones con las que calcular el siguiente
-	intervalo de convergencia en la siguiente iteración del algoritmo iterativo
-	(valor por defecto: 1).
-\item[tolerance]: parámetro de tolerancia para relajar el intervalo de
-	convergencia del algoritmo iterativo (valor por defecto: 0)
-\item[seed]: semilla del generador de números pseudo-aleatorios (valor por
-	defecto 7007).
+	\item[niterations]: número de iteraciones (valor por defecto: 1) para
+		realizar el algoritmo iterativo.
+	\item[nbest]: número de mejores simulaciones con las que calcular el
+		siguiente intervalo de convergencia en la siguiente iteración del
+		algoritmo iterativo (valor por defecto: 1).
+	\item[tolerance]: parámetro de tolerancia para relajar el intervalo de
+		convergencia del algoritmo iterativo (valor por defecto: 0)
+	\item[seed]: semilla del generador de números pseudo-aleatorios (valor por
+		defecto 7007).
+	\item[gradient\_method]: método de estimar el gradiente (opcional para los
+		algoritmos de barrido y de Monte-Carlo). Dos valores están disponibles
+		actualmente:
+	\begin{description}
+		\item[coordinates]: estimación por descenso de coordenadas.
+		\item[random]: estimación aleatoria. Requiere:
+		\begin{description}
+			\item[nestimates]: número de pruebas aleatorias para estimar el
+				gradiente.
+		\end{description}
+	\end{description}
+	Ambos métodos requieren además los siguientes parámetros:
+	\begin{description}
+		\item[nsteps]: número de pasos para ejecutar el método basado en el
+			gradiente,
+		\item[relaxation]: parámetro de relajación para el método basado en el
+			gradiente,
+	\end{description}
+	y para cada variable:
+	\begin{description}
+		\item[step]: tamaño de paso inicial para el método basado en el
+			gradiente.
+	\end{description}
+	\item[result]: define el nombre del fichero de resultados óptimos. Es
+		opcional, si no se especifica se guarda con el nombre ``\emph{result}''.
+	\item[variables]: define el nombre del fichero donde se guardan todas
+		las combinaciones de variables simuladas. Es opcional, si no se
+		especifica se guarda con el nombre ``\emph{variables}''.
 \end{description}
 
 El primer tipo de nodos XML hijos tiene que comenzar con la etiqueta
