@@ -257,7 +257,7 @@ method by using:
     * random: random method.
 
     It requires:
-    - nestimates: number of random checks to estimate the gradient.
+      - nestimates: number of random checks to estimate the gradient.
 
   Both methods require also:
     * nsteps: number of steps to perform the gradient based method.
