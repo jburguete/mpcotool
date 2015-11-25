@@ -1974,7 +1974,7 @@ calibrate_gradient ()
 {
   unsigned int i, j, k, b, s;
 #if DEBUG
-  fprintf (stderr, "calibrate_step_gradient: start\n");
+  fprintf (stderr, "calibrate_gradient: start\n");
 #endif
   for (i = 0; i < calibrate->nvariables; ++i)
     calibrate->gradient[i] = 0.;
@@ -1983,34 +1983,37 @@ calibrate_gradient ()
   for (i = 0; i < calibrate->nsteps; ++i, s += calibrate->nestimates, b = k)
     {
 #if DEBUG
-      fprintf (stderr, "calibrate_step_gradient: step=%u old_best=%u\n",
+      fprintf (stderr, "calibrate_gradient: step=%u old_best=%u\n",
                i, calibrate->simulation_best[0]);
 #endif
       calibrate_step_gradient (s);
       k = calibrate->simulation_best[0] * calibrate->nvariables;
 #if DEBUG
-      fprintf (stderr, "calibrate_step_gradient: step=%u best=%u\n",
+      fprintf (stderr, "calibrate_gradient: step=%u best=%u\n",
                i, calibrate->simulation_best[0]);
 #endif
-      for (j = 0; j < calibrate->nvariables; ++j)
-        {
+	  if (k == b)
+		for (j = 0; j < calibrate->nvariables; ++j)
+		  calibrate->gradient[j] = 0.;
+	  else
+        for (j = 0; j < calibrate->nvariables; ++j)
+          {
 #if DEBUG
-          fprintf (stderr,
-                   "calibrate_step_gradient: best%u=%.14le old%u=%.14le\n",
-                   j, calibrate->value[k + j], j, calibrate->value[b + j]);
+            fprintf (stderr, "calibrate_gradient: best%u=%.14le old%u=%.14le\n",
+                     j, calibrate->value[k + j], j, calibrate->value[b + j]);
 #endif
-          calibrate->gradient[j]
-            = (1. - calibrate->relaxation) * calibrate->gradient[j]
-            + calibrate->relaxation
-            * (calibrate->value[k + j] - calibrate->value[b + j]);
+            calibrate->gradient[j]
+              = (1. - calibrate->relaxation) * calibrate->gradient[j]
+              + calibrate->relaxation
+              * (calibrate->value[k + j] - calibrate->value[b + j]);
 #if DEBUG
-          fprintf (stderr, "calibrate_step_gradient: gradient%u=%.14le\n",
-                   j, calibrate->gradient[j]);
+            fprintf (stderr, "calibrate_gradient: gradient%u=%.14le\n",
+                     j, calibrate->gradient[j]);
 #endif
-        }
+          }
     }
 #if DEBUG
-  fprintf (stderr, "calibrate_step_gradient: end\n");
+  fprintf (stderr, "calibrate_gradient: end\n");
 #endif
 }
 
@@ -2416,6 +2419,7 @@ calibrate_open ()
   if (input->nsteps)
     {
       calibrate->gradient_method = input->gradient_method;
+	  calibrate->relaxation = input->relaxation;
       switch (input->gradient_method)
         {
         case GRADIENT_METHOD_COORDINATES:
