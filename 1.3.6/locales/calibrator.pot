@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-24 11:11+0100\n"
+"POT-Creation-Date: 2015-11-25 02:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -118,7 +118,7 @@ msgid "Invalid relaxation parameter"
 msgstr ""
 
 #: calibrator.c:795 calibrator.c:812 calibrator.c:848 calibrator.c:862
-#: calibrator.c:887 calibrator.c:4626
+#: calibrator.c:887 calibrator.c:4647
 msgid "Experiment"
 msgstr ""
 
@@ -146,7 +146,7 @@ msgstr ""
 #: calibrator.c:970 calibrator.c:979 calibrator.c:994 calibrator.c:1005
 #: calibrator.c:1017 calibrator.c:1026 calibrator.c:1034 calibrator.c:1047
 #: calibrator.c:1067 calibrator.c:1076 calibrator.c:1098 calibrator.c:1108
-#: calibrator.c:1123 calibrator.c:4544
+#: calibrator.c:1123 calibrator.c:4565
 msgid "Variable"
 msgstr ""
 
@@ -222,375 +222,375 @@ msgstr ""
 msgid "No calibration variables"
 msgstr ""
 
-#: calibrator.c:1372 calibrator.c:1373 calibrator.c:3055
+#: calibrator.c:1372 calibrator.c:1373 calibrator.c:3076
 msgid "Best result"
 msgstr ""
 
-#: calibrator.c:2589 calibrator.c:2591 calibrator.c:3051
+#: calibrator.c:2610 calibrator.c:2612 calibrator.c:3072
 msgid "Calculation time"
 msgstr ""
 
-#: calibrator.c:2766
+#: calibrator.c:2787
 msgid "Pseudo-random numbers generator seed"
 msgstr ""
 
-#: calibrator.c:2771
+#: calibrator.c:2792
 msgid "Seed to init the pseudo-random numbers generator"
 msgstr ""
 
-#: calibrator.c:2774
+#: calibrator.c:2795
 msgid "Threads number for the stochastic algorithm"
 msgstr ""
 
-#: calibrator.c:2779
+#: calibrator.c:2800
 msgid ""
 "Number of threads to perform the calibration/optimization for the stochastic "
 "algorithm"
 msgstr ""
 
-#: calibrator.c:2783
+#: calibrator.c:2804
 msgid "Threads number for the gradient based method"
 msgstr ""
 
-#: calibrator.c:2788
+#: calibrator.c:2809
 msgid ""
 "Number of threads to perform the calibration/optimization for the gradient "
 "based method"
 msgstr ""
 
-#: calibrator.c:2805 calibrator.c:4102
+#: calibrator.c:2826 calibrator.c:4123
 msgid "Options"
 msgstr ""
 
-#: calibrator.c:2808 calibrator.c:2934 calibrator.c:3998
+#: calibrator.c:2829 calibrator.c:2955 calibrator.c:4019
 msgid "_OK"
 msgstr ""
 
-#: calibrator.c:2809 calibrator.c:2932 calibrator.c:3997
+#: calibrator.c:2830 calibrator.c:2953 calibrator.c:4018
 msgid "_Cancel"
 msgstr ""
 
-#: calibrator.c:2835
+#: calibrator.c:2856
 msgid "Calculating ..."
 msgstr ""
 
-#: calibrator.c:2837
+#: calibrator.c:2858
 msgid "Calculating"
 msgstr ""
 
-#: calibrator.c:2929
+#: calibrator.c:2950
 msgid "Save file"
 msgstr ""
 
-#: calibrator.c:3072
+#: calibrator.c:3093
 msgid "user-manual.pdf"
 msgstr ""
 
-#: calibrator.c:3095
+#: calibrator.c:3116
 msgid ""
 "A software to perform calibrations/optimizations of empirical parameters"
 msgstr ""
 
-#: calibrator.c:3994
+#: calibrator.c:4015
 msgid "Open input file"
 msgstr ""
 
-#: calibrator.c:4052
+#: calibrator.c:4073
 msgid "_Sweep"
 msgstr ""
 
-#: calibrator.c:4052
+#: calibrator.c:4073
 msgid "_Genetic"
 msgstr ""
 
-#: calibrator.c:4055
+#: calibrator.c:4076
 msgid "Monte-Carlo brute force algorithm"
 msgstr ""
 
-#: calibrator.c:4056
+#: calibrator.c:4077
 msgid "Sweep brute force algorithm"
 msgstr ""
 
-#: calibrator.c:4057
+#: calibrator.c:4078
 msgid "Genetic algorithm"
 msgstr ""
 
-#: calibrator.c:4060
+#: calibrator.c:4081
 msgid "_Coordinates descent"
 msgstr ""
 
-#: calibrator.c:4060
+#: calibrator.c:4081
 msgid "_Random"
 msgstr ""
 
-#: calibrator.c:4063
+#: calibrator.c:4084
 msgid "Coordinates descent gradient estimate method"
 msgstr ""
 
-#: calibrator.c:4064
+#: calibrator.c:4085
 msgid "Random gradient estimate method"
 msgstr ""
 
-#: calibrator.c:4080
+#: calibrator.c:4101
 msgid "Open"
 msgstr ""
 
-#: calibrator.c:4087
+#: calibrator.c:4108
 msgid "Save"
 msgstr ""
 
-#: calibrator.c:4095
+#: calibrator.c:4116
 msgid "Run"
 msgstr ""
 
-#: calibrator.c:4109
+#: calibrator.c:4130
 msgid "Help"
 msgstr ""
 
-#: calibrator.c:4116
+#: calibrator.c:4137
 msgid "About"
 msgstr ""
 
-#: calibrator.c:4123
+#: calibrator.c:4144
 msgid "Exit"
 msgstr ""
 
-#: calibrator.c:4146 calibrator.c:4148
+#: calibrator.c:4167 calibrator.c:4169
 msgid "Simulator program"
 msgstr ""
 
-#: calibrator.c:4151
+#: calibrator.c:4172
 msgid "Simulator program executable file"
 msgstr ""
 
-#: calibrator.c:4155
+#: calibrator.c:4176
 msgid "_Evaluator program"
 msgstr ""
 
-#: calibrator.c:4158
+#: calibrator.c:4179
 msgid "Evaluator program"
 msgstr ""
 
-#: calibrator.c:4162
+#: calibrator.c:4183
 msgid "Optional evaluator program executable file"
 msgstr ""
 
-#: calibrator.c:4165
+#: calibrator.c:4186
 msgid "Result file"
 msgstr ""
 
-#: calibrator.c:4168
+#: calibrator.c:4189
 msgid "Best results file"
 msgstr ""
 
-#: calibrator.c:4170
+#: calibrator.c:4191
 msgid "Variables file"
 msgstr ""
 
-#: calibrator.c:4174
+#: calibrator.c:4195
 msgid "All simulated results file"
 msgstr ""
 
-#: calibrator.c:4197
+#: calibrator.c:4218
 msgid "Simulations number"
 msgstr ""
 
-#: calibrator.c:4202
+#: calibrator.c:4223
 msgid "Number of simulations to perform for each iteration"
 msgstr ""
 
-#: calibrator.c:4204
+#: calibrator.c:4225
 msgid "Iterations number"
 msgstr ""
 
-#: calibrator.c:4208
+#: calibrator.c:4229
 msgid "Number of iterations"
 msgstr ""
 
-#: calibrator.c:4211
+#: calibrator.c:4232
 msgid "Tolerance"
 msgstr ""
 
-#: calibrator.c:4216
+#: calibrator.c:4237
 msgid "Tolerance to set the variable interval on the next iteration"
 msgstr ""
 
-#: calibrator.c:4217
+#: calibrator.c:4238
 msgid "Bests number"
 msgstr ""
 
-#: calibrator.c:4222
+#: calibrator.c:4243
 msgid ""
 "Number of best simulations used to set the variable interval on the next "
 "iteration"
 msgstr ""
 
-#: calibrator.c:4225
+#: calibrator.c:4246
 msgid "Population number"
 msgstr ""
 
-#: calibrator.c:4230
+#: calibrator.c:4251
 msgid "Number of population for the genetic algorithm"
 msgstr ""
 
-#: calibrator.c:4232
+#: calibrator.c:4253
 msgid "Generations number"
 msgstr ""
 
-#: calibrator.c:4237
+#: calibrator.c:4258
 msgid "Number of generations for the genetic algorithm"
 msgstr ""
 
-#: calibrator.c:4239
+#: calibrator.c:4260
 msgid "Mutation ratio"
 msgstr ""
 
-#: calibrator.c:4244
+#: calibrator.c:4265
 msgid "Ratio of mutation for the genetic algorithm"
 msgstr ""
 
-#: calibrator.c:4246
+#: calibrator.c:4267
 msgid "Reproduction ratio"
 msgstr ""
 
-#: calibrator.c:4251
+#: calibrator.c:4272
 msgid "Ratio of reproduction for the genetic algorithm"
 msgstr ""
 
-#: calibrator.c:4253
+#: calibrator.c:4274
 msgid "Adaptation ratio"
 msgstr ""
 
-#: calibrator.c:4258
+#: calibrator.c:4279
 msgid "Ratio of adaptation for the genetic algorithm"
 msgstr ""
 
-#: calibrator.c:4262
+#: calibrator.c:4283
 msgid "_Gradient based method"
 msgstr ""
 
-#: calibrator.c:4283
+#: calibrator.c:4304
 msgid "Steps number"
 msgstr ""
 
-#: calibrator.c:4287
+#: calibrator.c:4308
 msgid "Gradient estimates number"
 msgstr ""
 
-#: calibrator.c:4291
+#: calibrator.c:4312
 msgid "Relaxation parameter"
 msgstr ""
 
-#: calibrator.c:4387
+#: calibrator.c:4408
 msgid "Algorithm"
 msgstr ""
 
-#: calibrator.c:4394
+#: calibrator.c:4415
 msgid "Variables selector"
 msgstr ""
 
-#: calibrator.c:4403
+#: calibrator.c:4424
 msgid "Add variable"
 msgstr ""
 
-#: calibrator.c:4410
+#: calibrator.c:4431
 msgid "Remove variable"
 msgstr ""
 
-#: calibrator.c:4411
+#: calibrator.c:4432
 msgid "Name"
 msgstr ""
 
-#: calibrator.c:4414
+#: calibrator.c:4435
 msgid "Variable name"
 msgstr ""
 
-#: calibrator.c:4417
+#: calibrator.c:4438
 msgid "Minimum"
 msgstr ""
 
-#: calibrator.c:4422
+#: calibrator.c:4443
 msgid "Minimum initial value of the variable"
 msgstr ""
 
-#: calibrator.c:4431
+#: calibrator.c:4452
 msgid "Maximum"
 msgstr ""
 
-#: calibrator.c:4436
+#: calibrator.c:4457
 msgid "Maximum initial value of the variable"
 msgstr ""
 
-#: calibrator.c:4446
+#: calibrator.c:4467
 msgid "_Absolute minimum"
 msgstr ""
 
-#: calibrator.c:4452
+#: calibrator.c:4473
 msgid "Minimum allowed value of the variable"
 msgstr ""
 
-#: calibrator.c:4463
+#: calibrator.c:4484
 msgid "_Absolute maximum"
 msgstr ""
 
-#: calibrator.c:4469
+#: calibrator.c:4490
 msgid "Maximum allowed value of the variable"
 msgstr ""
 
-#: calibrator.c:4480
+#: calibrator.c:4501
 msgid "Precision digits"
 msgstr ""
 
-#: calibrator.c:4485
+#: calibrator.c:4506
 msgid ""
 "Number of precision floating point digits\n"
 "0 is for integer numbers"
 msgstr ""
 
-#: calibrator.c:4489
+#: calibrator.c:4510
 msgid "Sweeps number"
 msgstr ""
 
-#: calibrator.c:4494
+#: calibrator.c:4515
 msgid "Number of steps sweeping the variable"
 msgstr ""
 
-#: calibrator.c:4497
+#: calibrator.c:4518
 msgid "Bits number"
 msgstr ""
 
-#: calibrator.c:4502
+#: calibrator.c:4523
 msgid "Number of bits to encode the variable"
 msgstr ""
 
-#: calibrator.c:4551
+#: calibrator.c:4572
 msgid "Experiment selector"
 msgstr ""
 
-#: calibrator.c:4560
+#: calibrator.c:4581
 msgid "Add experiment"
 msgstr ""
 
-#: calibrator.c:4567
+#: calibrator.c:4588
 msgid "Remove experiment"
 msgstr ""
 
-#: calibrator.c:4569 calibrator.c:4571 calibrator.c:4574
+#: calibrator.c:4590 calibrator.c:4592 calibrator.c:4595
 msgid "Experimental data file"
 msgstr ""
 
-#: calibrator.c:4578
+#: calibrator.c:4599
 msgid "Weight"
 msgstr ""
 
-#: calibrator.c:4583
+#: calibrator.c:4604
 msgid "Weight factor to build the objective function"
 msgstr ""
 
-#: calibrator.c:4603 calibrator.c:4612
+#: calibrator.c:4624 calibrator.c:4633
 msgid "Input template"
 msgstr ""
 
-#: calibrator.c:4616
+#: calibrator.c:4637
 msgid "Experimental input template file"
 msgstr ""

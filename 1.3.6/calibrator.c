@@ -834,7 +834,7 @@ input_open (char *filename)
 #if DEBUG
           fprintf (stderr, "input_open: experiment=%u template1=%s\n",
                    input->nexperiments,
-                   input->template[0][input->nexperiments]);
+                   buffert[0]);
 #endif
           if (!input->nexperiments)
             ++input->ninputs;
@@ -1426,6 +1426,8 @@ calibrate_best (unsigned int simulation, double value)
   double e;
 #if DEBUG
   fprintf (stderr, "calibrate_best: start\n");
+  fprintf (stderr, "calibrate_best: nsaveds=%u nbest=%u\n",
+		   calibrate->nsaveds, calibrate->nbest);
 #endif
   if (calibrate->nsaveds < calibrate->nbest
       || value < calibrate->error_best[calibrate->nsaveds - 1])
@@ -2108,12 +2110,16 @@ calibrate_save_old ()
   unsigned int i, j;
 #if DEBUG
   fprintf (stderr, "calibrate_save_old: start\n");
+  fprintf (stderr, "calibrate_save_old: nsaveds=%u\n", calibrate->nsaveds);
 #endif
   memcpy (calibrate->error_old, calibrate->error_best,
           calibrate->nbest * sizeof (double));
   for (i = 0; i < calibrate->nbest; ++i)
     {
       j = calibrate->simulation_best[i];
+#if DEBUG
+      fprintf (stderr, "calibrate_save_old: i=%u j=%u\n", i, j);
+#endif
       memcpy (calibrate->value_old + i * calibrate->nvariables,
               calibrate->value + j * calibrate->nvariables,
               calibrate->nvariables * sizeof (double));
@@ -2214,8 +2220,19 @@ calibrate_refine ()
         }
       for (j = 0; j < calibrate->nvariables; ++j)
         {
-          d = 0.5 * calibrate->tolerance
+          d = calibrate->tolerance
             * (calibrate->rangemax[j] - calibrate->rangemin[j]);
+          switch (calibrate->algorithm)
+            {
+            case ALGORITHM_MONTE_CARLO:
+              d *= 0.5;
+              break;
+            default:
+              if (calibrate->nsweeps[j] > 1)
+                d /= calibrate->nsweeps[j] - 1;
+              else
+                d = 0.;
+            }
           calibrate->rangemin[j] -= d;
           calibrate->rangemin[j]
             = fmax (calibrate->rangemin[j], calibrate->rangeminabs[j]);
@@ -2339,6 +2356,7 @@ calibrate_open ()
   unsigned int i, j, *nbits;
 
 #if DEBUG
+  char *buffer;
   fprintf (stderr, "calibrate_open: start\n");
 #endif
 
@@ -2410,6 +2428,9 @@ calibrate_open ()
         }
     }
 
+#if DEBUG
+  fprintf (stderr, "calibrate_open: nbest=%u\n", calibrate->nbest);
+#endif
   calibrate->simulation_best
     = (unsigned int *) alloca (calibrate->nbest * sizeof (unsigned int));
   calibrate->error_best
@@ -2417,8 +2438,9 @@ calibrate_open ()
 
   // Reading the experimental data
 #if DEBUG
-  fprintf (stderr, "calibrate_open: current directory=%s\n",
-           g_get_current_dir ());
+  buffer = g_get_current_dir ();
+  fprintf (stderr, "calibrate_open: current directory=%s\n", buffer);
+  g_free (buffer);
 #endif
   calibrate->nexperiments = input->nexperiments;
   calibrate->ninputs = input->ninputs;
@@ -2467,19 +2489,20 @@ calibrate_open ()
   calibrate->step = input->step;
   nbits = input->nbits;
   if (input->algorithm == ALGORITHM_SWEEP)
-    calibrate->nsimulations = 1;
-  else if (input->algorithm == ALGORITHM_GENETIC)
-    for (i = 0; i < input->nvariables; ++i)
-      {
-        if (calibrate->algorithm == ALGORITHM_SWEEP)
-          {
-            calibrate->nsimulations *= input->nsweeps[i];
+	{
+      calibrate->nsimulations = 1;
+      for (i = 0; i < input->nvariables; ++i)
+        {
+          if (input->algorithm == ALGORITHM_SWEEP)
+            {
+              calibrate->nsimulations *= input->nsweeps[i];
 #if DEBUG
-            fprintf (stderr, "calibrate_open: nsweeps=%u nsimulations=%u\n",
-                     calibrate->nsweeps[i], calibrate->nsimulations);
+              fprintf (stderr, "calibrate_open: nsweeps=%u nsimulations=%u\n",
+                       calibrate->nsweeps[i], calibrate->nsimulations);
 #endif
-          }
-      }
+			}
+        }
+    }
   if (calibrate->nsteps)
     calibrate->gradient
       = (double *) alloca (calibrate->nvariables * sizeof (double));
@@ -2557,10 +2580,8 @@ calibrate_open ()
 #endif
     }
   if (calibrate->nsteps)
-    {
       calibrate->thread_gradient = (unsigned int *)
         alloca ((1 + nthreads_gradient) * sizeof (unsigned int));
-    }
 
   // Opening result files
   calibrate->file_result = g_fopen (calibrate->result, "w");
