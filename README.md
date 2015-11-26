@@ -199,29 +199,31 @@ The format of the main input file is as:
 
 ```xml
 <?xml version="1.0"?>
-<calibrate simulator="simulator_name" evaluator="evaluator_name" algorithm="algorithm_type" nsimulations="simulations_number" niterations="iterations_number" tolerance="tolerance_value" nbest="best_number" npopulation="population_number" ngenerations="generations_number" mutation="mutation_ratio" reproduction="reproduction_ratio" adaptation="adaptation_ratio" seed="random_seed" result="result_file" variables="variables_file">
+<calibrate simulator="simulator_name" evaluator="evaluator_name" algorithm="algorithm_type" nsimulations="simulations_number" niterations="iterations_number" tolerance="tolerance_value" nbest="best_number" npopulation="population_number" ngenerations="generations_number" mutation="mutation_ratio" reproduction="reproduction_ratio" adaptation="adaptation_ratio" gradient_type="gradient_method_type" nsteps="steps_number" relaxation="relaxation_paramter" nestimates="estimates_number" seed="random_seed" result="result_file" variables="variables_file">
     <experiment name="data_file_1" template1="template_1_1" template2="template_1_2" ... weight="weight_1"/>
     ...
     <experiment name="data_file_N" template1="template_N_1" template2="template_N_2" ... weight="weight_N"/>
-    <variable name="variable_1" minimum="min_value" maximum="max_value" precision="precision_digits" sweeps="sweeps_number" nbits="bits_number"/>
+    <variable name="variable_1" minimum="min_value" maximum="max_value" precision="precision_digits" sweeps="sweeps_number" nbits="bits_number" step="step_size"/>
     ...
-    <variable name="variable_M" minimum="min_value" maximum="max_value" precision="precision_digits" sweeps="sweeps_number" nbits="bits_number"/>
+    <variable name="variable_M" minimum="min_value" maximum="max_value" precision="precision_digits" sweeps="sweeps_number" nbits="bits_number" step="step_size"/>
 </calibrate>
 ```
 
 with:
 
-* **simulator** simulator executable file name.
+* **simulator**: simulator executable file name.
 * **evaluator**: Optional. When needed is the evaluator executable file name.
-* **result**: Optional. Is the name of the optime result file (default is
-result).
+* **seed**: Optional. Seed of the pseudo-random numbers generator (default value
+is 7007).
+* **result**: Optional. Is the name of the optime result file (default name is
+"result").
 * **variables**: Optional. Is the name of all simulated variables file
-(default is variables).
-* **precision** defined for each variable. Number of precision digits to
-evaluate the variable. 0 apply for integer numbers.
-* **weight** defined for each experiment. Multiplies the objective value
-obtained for each experiment in the final objective function value.
-* **seed**: Seed of the pseudo-random numbers generator.
+(default name is "variables").
+* **precision**: Optional, defined for each variable. Number of precision digits
+to evaluate the variable. 0 apply for integer numbers (default value is 14).
+* **weight** Optional, defined for each experiment. Multiplies the objective
+value obtained for each experiment in the final objective function value
+(default value is 1).
 
 Implemented algorithms are:
 
@@ -243,10 +245,8 @@ Implemented algorithms are:
 the following parameters:
   * *nbest*: number of best simulations to calculate convergence interval on
   next iteration (default 1).
-
   * *tolerance*: tolerance parameter to increase convergence interval (default
   0).
-
   * *niterations*: number of iterations (default 1).
 
 * Moreover, both brute force algorithms can be coupled with a gradient base
@@ -260,8 +260,11 @@ method by using:
       - nestimates: number of random checks to estimate the gradient.
 
   Both methods require also:
-    * nsteps: number of steps to perform the gradient based method.
-    * relaxation: relaxation parameter.
+    * nsteps: number of steps to perform the gradient based method,
+    * relaxation: relaxation parameter,
+
+  and for each variable:
+    * step: initial step size for the gradient based method.
 
 * **genetic**: Genetic algorithm. Requires the following parameters:
   * *npopulation*: number of population.
