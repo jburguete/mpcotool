@@ -1,0 +1,34 @@
+set term pos eps enh
+
+set xlabel 'x'
+set ylabel 'y'
+set xrange [-5:5]
+set yrange [-5:5]
+
+set out 'sphere-variables-mc-2500-1.eps'
+plot 'variables-mc-2500-1-14' not w d
+
+set out 'sphere-variables-mc-100-25-10-0.1.eps'
+plot 'variables-mc-100-25-10-0.1-14' not w d
+
+set out 'sphere-variables-sw-50-50-1.eps'
+plot 'variables-sw-50-50-1-14' not w d
+
+set out 'sphere-variables-sw-10-10-25-10-0.5.eps'
+plot 'variables-sw-10-10-25-10-0.5-14' not w d
+
+set out 'sphere-variables-mc-r-100-1-240-10-0.0001-1.5.eps'
+plot 'variables-mc-r-100-1-240-10-0.0001-1.5-14' not w d
+
+set xlabel 'Number of simulations'
+set ylabel 'Best distance'
+set logscale y
+set xrange [0:2500]
+set yrange [1e-15:100]
+
+set out 'sphere-evolution-mc.eps'
+plot 'evolution-mc-c-100-1-600-0.0001-1-14' u 1:5 w l,\
+	'evolution-mc-c-100-1-600-0.0001-1.5-14' u 1:5 w l,\
+	'evolution-mc-r-100-1-240-10-0.0001-1-14' u 1:5 w l,\
+	'evolution-mc-r-100-1-240-10-0.0001-1.5-14' u 1:5 w l,\
+	'evolution-mc-100-25-10-0.1-14' u 1:5 w l
