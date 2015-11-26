@@ -275,7 +275,7 @@ method by using:
   and for each variable:
     * step: initial step size for the gradient based method.
 
-* **genetic**: Genetic algorithm. Requires the following parameters:
+* **genetic**: Genetic algorithm. It requires the following parameters:
   * *npopulation*: number of population.
   * *ngenerations*: number of generations.
   * *mutation*: mutation ratio.
