@@ -226,55 +226,55 @@ obtained for each experiment in the final objective function value.
 Implemented algorithms are:
 
 * **sweep**: Sweep brute force algorithm. Requires for each variable:
-	* *sweeps*: number of sweeps to generate for each variable in every
-	experiment. 
+  * *sweeps*: number of sweeps to generate for each variable in every
+  experiment. 
 
-  	The total number of simulations to run is:
+    The total number of simulations to run is:
 > (number of experiments) x (variable 1 number of sweeps) x ... x
 > (variable n number of sweeps) x (number of iterations)
 
 * **Monte-Carlo**: Monte-Carlo brute force algorithm. Requires on calibrate:
-	* *nsimulations*: number of simulations to run in every experiment.
+  * *nsimulations*: number of simulations to run in every experiment.
 
-  	The total number of simulations to run is:
+    The total number of simulations to run is:
 > (number of experiments) x (number of simulations) x (number of iterations)
 
 * Both brute force algorithms can be iterated to improve convergence by using
 the following parameters:
-	* *nbest*: number of best simulations to calculate convergence interval on
-	next iteration (default 1).
+  * *nbest*: number of best simulations to calculate convergence interval on
+  next iteration (default 1).
 
-	* *tolerance*: tolerance parameter to increase convergence interval (default
-	0).
+  * *tolerance*: tolerance parameter to increase convergence interval (default
+  0).
 
-	* *niterations*: number of iterations (default 1).
+  * *niterations*: number of iterations (default 1).
 
 * Moreover, both brute force algorithms can be coupled with a gradient base
 method by using:
-	* *gradient_type*: method to estimate the gradient. Two options are
-	currently available:
-		* coordinates: coordinates descent method.
-		* random: random method.
+  * *gradient_type*: method to estimate the gradient. Two options are
+  currently available:
+    * coordinates: coordinates descent method.
+    * random: random method.
 
-		It requires:
-			- nestimates: number of random checks to estimate the gradient.
+    It requires:
+      - nestimates: number of random checks to estimate the gradient.
 
-	Both methods require also:
-		* nsteps: number of steps to perform the gradient based method.
-		* relaxation: relaxation parameter.
+  Both methods require also:
+    * nsteps: number of steps to perform the gradient based method.
+    * relaxation: relaxation parameter.
 
 * **genetic**: Genetic algorithm. Requires the following parameters:
-	* *npopulation*: number of population.
-	* *ngenerations*: number of generations.
-	* *mutation*: mutation ratio.
-	* *reproduction*: reproduction ratio.
-	* *adaptation*: adaptation ratio.
+  * *npopulation*: number of population.
+  * *ngenerations*: number of generations.
+  * *mutation*: mutation ratio.
+  * *reproduction*: reproduction ratio.
+  * *adaptation*: adaptation ratio.
 
-	and for each variable:
+  and for each variable:
 
-	* *nbits*: number of bits to encode each variable.
+  * *nbits*: number of bits to encode each variable.
 
-	The total number of simulations to run is:
+  The total number of simulations to run is:
 > (number of experiments) x (npopulation) x [1 + (ngenerations - 1)
 > x (mutation + reproduction + adaptation)]
 
