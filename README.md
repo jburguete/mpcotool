@@ -249,7 +249,7 @@ the following parameters:
   0).
   * *niterations*: number of iterations (default 1).
 
-  It multiplies the total number of simulations:
+     It multiplies the total number of simulations:
 > x (number of iterations)
 
 * Moreover, both brute force algorithms can be coupled with a gradient based
@@ -258,13 +258,13 @@ method by using:
   currently available:
     * coordinates: coordinates descent method.
 
-    It increases the total number of simulations by:
+      It increases the total number of simulations by:
 > (number of experiments) x (number of iterations) x (number of steps) x 2
 > x (number of variables)
     * random: random method. It requires:
     * nestimates: number of random checks to estimate the gradient.
 
-    It increases the total number of simulations by:
+      It increases the total number of simulations by:
 > (number of experiments) x (number of iterations) x (number of steps)
 > x (number of estimates)
 
