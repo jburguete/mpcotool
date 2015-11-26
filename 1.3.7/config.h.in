@@ -40,13 +40,15 @@ OF SUCH DAMAGE.
 
 #define MAX_NINPUTS 8
   ///< Maximum number of input files in the simulator program.
-#define NALGORITHMS 3           ///< Number of algorithms.
+#define NALGORITHMS 3           ///< Number of stochastic algorithms.
+#define NGRADIENTS 2            ///< Number of gradient estimate methods.
 #define NPRECISIONS 15          ///< Number of precisions.
 
 // Default choices
 
 #define DEFAULT_PRECISION (NPRECISIONS - 1)     ///< Default precision digits.
 #define DEFAULT_RANDOM_SEED 7007        ///< Default pseudo-random numbers seed.
+#define DEFAULT_RELAXATION 1.   ///< Default relaxation parameter.
 
 // Interface labels
 
@@ -65,11 +67,15 @@ OF SUCH DAMAGE.
   ///< algoritm XML label.
 #define XML_CALIBRATE (const xmlChar*)"calibrate"
   ///< calibrate XML label.
+#define XML_COORDINATES (const xmlChar*)"coordinates"
+  ///< coordinates XML label.
 #define XML_EVALUATOR (const xmlChar*)"evaluator"
   ///< evaluator XML label.
 #define XML_EXPERIMENT (const xmlChar*)"experiment"
   ///< experiment XML label.
 #define XML_GENETIC (const xmlChar*)"genetic"   ///< genetic XML label.
+#define XML_GRADIENT_METHOD (const xmlChar*)"gradient_method"
+  ///< gradient_method XML label.
 #define XML_MINIMUM (const xmlChar*)"minimum"   ///< minimum XML label.
 #define XML_MAXIMUM (const xmlChar*)"maximum"   ///< maximum XML label.
 #define XML_MONTE_CARLO (const xmlChar*)"Monte-Carlo"
@@ -78,6 +84,8 @@ OF SUCH DAMAGE.
 #define XML_NAME (const xmlChar*)"name" ///< name XML label.
 #define XML_NBEST (const xmlChar*)"nbest"       ///< nbest XML label.
 #define XML_NBITS (const xmlChar*)"nbits"       ///< nbits XML label.
+#define XML_NESTIMATES (const xmlChar*)"nestimates"
+  ///< nestimates XML label.
 #define XML_NGENERATIONS (const xmlChar*)"ngenerations"
   ///< ngenerations XML label.
 #define XML_NITERATIONS (const xmlChar*)"niterations"
@@ -86,15 +94,20 @@ OF SUCH DAMAGE.
   ///< npopulation XML label.
 #define XML_NSIMULATIONS (const xmlChar*)"nsimulations"
   ///< nsimulations XML label.
+#define XML_NSTEPS (const xmlChar*)"nsteps"     ///< nsteps XML label.
 #define XML_NSWEEPS (const xmlChar*)"nsweeps"   ///< nsweeps XML label.
 #define XML_PRECISION (const xmlChar*)"precision"
   ///< precision XML label.
+#define XML_RANDOM (const xmlChar*)"random"     ///< random XML label.
+#define XML_RELAXATION (const xmlChar*)"relaxation"
+  ///< relaxation XML label.
 #define XML_REPRODUCTION (const xmlChar*)"reproduction"
   ///< reproduction XML label.
 #define XML_RESULT (const xmlChar*)"result"     ///< result XML label.
 #define XML_SIMULATOR (const xmlChar*)"simulator"
   ///< simulator XML label.
 #define XML_SEED (const xmlChar*)"seed" ///< seed XML label.
+#define XML_STEP (const xmlChar*)"step" ///< step XML label.
 #define XML_SWEEP (const xmlChar*)"sweep"       ///< sweep XML label.
 #define XML_TEMPLATE1 (const xmlChar*)"template1"
   ///< template1 XML label.

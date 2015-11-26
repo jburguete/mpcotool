@@ -1,5 +1,5 @@
 AC_PREREQ([2.67])
-AC_INIT([calibrator], [1.0.6], [https://github.com/jburguete/calibrator])
+AC_INIT([calibrator], [1.2.1], [https://github.com/jburguete/calibrator])
 
 # Checks for operative systems
 AC_CANONICAL_SYSTEM
@@ -84,14 +84,6 @@ PKG_CHECK_MODULES([GTK], [gtk+-3.0])
 
 # Checks for header files
 AC_CHECK_HEADERS([stdlib.h string.h unistd.h pthread.h])
-
-# Checking MPI
-if test -x "$PREFIX/bin/mpicc"; then
-	MPI_DEFINE="-DHAVE_MPI=1"
-else
-	MPI_DEFINE=""
-fi
-AC_SUBST(MPI_DEFINE, $MPI_DEFINE)
 
 # Checking -march=native compiler flag
 compiler=$CC

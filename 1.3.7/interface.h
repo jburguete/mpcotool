@@ -75,12 +75,14 @@ typedef struct
 {
   GtkDialog *dialog;            ///< Main GtkDialog.
   GtkGrid *grid;                ///< Main GtkGrid.
-  GtkLabel *label_processors;   ///< Processors number GtkLabel.
-  GtkSpinButton *spin_processors;       ///< Processors number GtkSpinButton.
   GtkLabel *label_seed;
   ///< Pseudo-random numbers generator seed GtkLabel.
   GtkSpinButton *spin_seed;
   ///< Pseudo-random numbers generator seed GtkSpinButton.
+  GtkLabel *label_threads;      ///< Threads number GtkLabel.
+  GtkSpinButton *spin_threads;  ///< Threads number GtkSpinButton.
+  GtkLabel *label_gradient;     ///< Gradient threads number GtkLabel.
+  GtkSpinButton *spin_gradient; ///< Gradient threads number GtkSpinButton.
 } Options;
 
 /**
@@ -148,6 +150,21 @@ typedef struct
   GtkLabel *label_adaptation;   ///< GtkLabel to set the adaptation ratio.
   GtkSpinButton *spin_adaptation;
   ///< GtkSpinButton to set the adaptation ratio.
+  GtkCheckButton *check_gradient;
+  ///< GtkCheckButton to check running the gradient based method.
+  GtkGrid *grid_gradient;
+  ///< GtkGrid to pack the gradient based method widgets.
+  GtkRadioButton *button_gradient[NGRADIENTS];
+  ///< GtkRadioButtons array to set the gradient estimate method.
+  GtkLabel *label_steps;        ///< GtkLabel to set the steps number.
+  GtkSpinButton *spin_steps;    ///< GtkSpinButton to set the steps number.
+  GtkLabel *label_estimates;    ///< GtkLabel to set the estimates number.
+  GtkSpinButton *spin_estimates;
+  ///< GtkSpinButton to set the estimates number.
+  GtkLabel *label_relaxation;
+  ///< GtkLabel to set the relaxation parameter.
+  GtkSpinButton *spin_relaxation;
+  ///< GtkSpinButton to set the relaxation parameter.
   GtkFrame *frame_variable;     ///< Variable GtkFrame.
   GtkGrid *grid_variable;       ///< Variable GtkGrid.
   GtkComboBoxText *combo_variable;
@@ -208,10 +225,13 @@ typedef struct
 void input_save (char *filename);
 void options_new ();
 void running_new ();
+int window_get_algorithm ();
+int window_get_gradient ();
+void window_save_gradient ();
 int window_save ();
 void window_run ();
 void window_help ();
-int window_get_algorithm ();
+void window_update_gradient ();
 void window_update ();
 void window_set_algorithm ();
 void window_set_experiment ();

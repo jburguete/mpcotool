@@ -48,19 +48,29 @@ enum Algorithm
 };
 
 /**
+ * \enum GradientMethod
+ * \brief Enum to define the methods to estimate the gradient.
+ */
+enum GradientMethod
+{
+  GRADIENT_METHOD_COORDINATES = 0,      ///< Coordinates descent method.
+  GRADIENT_METHOD_RANDOM = 1,   ///< Random method.
+};
+
+/**
  * \struct Input
  * \brief Struct to define the calibration input file.
  */
 typedef struct
 {
+  char **template[MAX_NINPUTS]; ///< Matrix of template names of input files.
+  char **experiment;            ///< Array of experimental data file names.
+  char **label;                 ///< Array of variable names.
   char *result;                 ///< Name of the result file.
   char *variables;              ///< Name of the variables file.
   char *simulator;              ///< Name of the simulator program.
   char *evaluator;
   ///< Name of the program to evaluate the objective function.
-  char **experiment;            ///< Array of experimental data file names.
-  char **template[MAX_NINPUTS]; ///< Matrix of template names of input files.
-  char **label;                 ///< Array of variable names.
   char *directory;              ///< Working directory.
   char *name;                   ///< Input data file name.
   double *rangemin;             ///< Array of minimum variable values.
@@ -68,10 +78,16 @@ typedef struct
   double *rangeminabs;          ///< Array of absolute minimum variable values.
   double *rangemaxabs;          ///< Array of absolute maximum variable values.
   double *weight;               ///< Array of the experiment weights.
+  double *step;                 ///< Array of gradient based method step sizes.
+  unsigned int *precision;      ///< Array of variable precisions.
+  unsigned int *nsweeps;        ///< Array of sweeps of the sweep algorithm.
+  unsigned int *nbits;
+  ///< Array of bits numbers of the genetic algorithm.
   double tolerance;             ///< Algorithm tolerance.
   double mutation_ratio;        ///< Mutation probability.
   double reproduction_ratio;    ///< Reproduction probability.
   double adaptation_ratio;      ///< Adaptation probability.
+  double relaxation;            ///< Relaxation parameter.
   unsigned long int seed;
   ///< Seed of the pseudo-random numbers generator.
   unsigned int nvariables;      ///< Variables number.
@@ -79,10 +95,11 @@ typedef struct
   unsigned int ninputs;         ///< Number of input files to the simulator.
   unsigned int nsimulations;    ///< Simulations number per experiment.
   unsigned int algorithm;       ///< Algorithm type.
-  unsigned int *precision;      ///< Array of variable precisions.
-  unsigned int *nsweeps;        ///< Array of sweeps of the sweep algorithm.
-  unsigned int *nbits;
-  ///< Array of bits numbers of the genetic algorithm.
+  unsigned int nsteps;
+  ///< Number of steps to do the gradient based method.
+  unsigned int gradient_method; ///< Method to estimate the gradient.
+  unsigned int nestimates;
+  ///< Number of simulations to estimate the gradient.
   unsigned int niterations;     ///< Number of algorithm iterations
   unsigned int nbest;           ///< Number of best simulations.
 } Input;
@@ -93,31 +110,20 @@ typedef struct
  */
 typedef struct
 {
+  GMappedFile **file[MAX_NINPUTS];      ///< Matrix of input template files.
+  char **template[MAX_NINPUTS]; ///< Matrix of template names of input files.
+  char **experiment;            ///< Array of experimental data file names.
+  char **label;                 ///< Array of variable names.
+  gsl_rng *rng;                 ///< GSL random number generator.
+  GeneticVariable *genetic_variable;
+  ///< Array of variables for the genetic algorithm.
+  FILE *file_result;            ///< Result file.
+  FILE *file_variables;         ///< Variables file.
   char *result;                 ///< Name of the result file.
   char *variables;              ///< Name of the variables file.
   char *simulator;              ///< Name of the simulator program.
   char *evaluator;
   ///< Name of the program to evaluate the objective function.
-  char **experiment;            ///< Array of experimental data file names.
-  char **template[MAX_NINPUTS]; ///< Matrix of template names of input files.
-  char **label;                 ///< Array of variable names.
-  unsigned int nvariables;      ///< Variables number.
-  unsigned int nexperiments;    ///< Experiments number.
-  unsigned int ninputs;         ///< Number of input files to the simulator.
-  unsigned int nsimulations;    ///< Simulations number per experiment.
-  unsigned int algorithm;       ///< Algorithm type.
-  unsigned int *precision;      ///< Array of variable precisions.
-  unsigned int *nsweeps;        ///< Array of sweeps of the sweep algorithm.
-  unsigned int nstart;          ///< Beginning simulation number of the task.
-  unsigned int nend;            ///< Ending simulation number of the task.
-  unsigned int *thread;
-  ///< Array of simulation numbers to calculate on the thread.
-  unsigned int niterations;     ///< Number of algorithm iterations
-  unsigned int nbest;           ///< Number of best simulations.
-  unsigned int nsaveds;         ///< Number of saved simulations.
-  unsigned int *simulation_best;        ///< Array of best simulation numbers.
-  unsigned long int seed;
-  ///< Seed of the pseudo-random numbers generator.
   double *value;                ///< Array of variable values.
   double *rangemin;             ///< Array of minimum variable values.
   double *rangemax;             ///< Array of maximum variable values.
@@ -125,21 +131,47 @@ typedef struct
   double *rangemaxabs;          ///< Array of absolute maximum variable values.
   double *error_best;           ///< Array of the best minimum errors.
   double *weight;               ///< Array of the experiment weights.
+  double *step;                 ///< Array of gradient based method step sizes.
+  double *gradient;             ///< Vector of gradient estimation.
   double *value_old;
   ///< Array of the best variable values on the previous step.
   double *error_old;
   ///< Array of the best minimum errors on the previous step.
+  unsigned int *precision;      ///< Array of variable precisions.
+  unsigned int *nsweeps;        ///< Array of sweeps of the sweep algorithm.
+  unsigned int *thread;
+  ///< Array of simulation numbers to calculate on the thread.
+  unsigned int *thread_gradient;
+  ///< Array of simulation numbers to calculate on the thread for the gradient
+  ///< based method.
+  unsigned int *simulation_best;        ///< Array of best simulation numbers.
   double tolerance;             ///< Algorithm tolerance.
   double mutation_ratio;        ///< Mutation probability.
   double reproduction_ratio;    ///< Reproduction probability.
   double adaptation_ratio;      ///< Adaptation probability.
+  double relaxation;            ///< Relaxation parameter.
   double calculation_time;      ///< Calculation time.
-  FILE *file_result;            ///< Result file.
-  FILE *file_variables;         ///< Variables file.
-  gsl_rng *rng;                 ///< GSL random number generator.
-  GMappedFile **file[MAX_NINPUTS];      ///< Matrix of input template files.
-  GeneticVariable *genetic_variable;
-  ///< Array of variables for the genetic algorithm.
+  unsigned long int seed;
+  ///< Seed of the pseudo-random numbers generator.
+  unsigned int nvariables;      ///< Variables number.
+  unsigned int nexperiments;    ///< Experiments number.
+  unsigned int ninputs;         ///< Number of input files to the simulator.
+  unsigned int nsimulations;    ///< Simulations number per experiment.
+  unsigned int gradient_method; ///< Method to estimate the gradient.
+  unsigned int nsteps;
+  ///< Number of steps for the gradient based method.
+  unsigned int nestimates;
+  ///< Number of simulations to estimate the gradient.
+  unsigned int algorithm;       ///< Algorithm type.
+  unsigned int nstart;          ///< Beginning simulation number of the task.
+  unsigned int nend;            ///< Ending simulation number of the task.
+  unsigned int nstart_gradient;
+  ///< Beginning simulation number of the task for the gradient based method.
+  unsigned int nend_gradient;
+  ///< Ending simulation number of the task for the gradient based method.
+  unsigned int niterations;     ///< Number of algorithm iterations
+  unsigned int nbest;           ///< Number of best simulations.
+  unsigned int nsaveds;         ///< Number of saved simulations.
 #if HAVE_MPI
   int mpi_rank;                 ///< Number of MPI task.
 #endif
@@ -174,10 +206,9 @@ void calibrate_input (unsigned int simulation, char *input,
 double calibrate_parse (unsigned int simulation, unsigned int experiment);
 void calibrate_print ();
 void calibrate_save_variables (unsigned int simulation, double error);
-void calibrate_best_thread (unsigned int simulation, double value);
-void calibrate_best_sequential (unsigned int simulation, double value);
-void *calibrate_thread (ParallelData * data);
+void calibrate_best (unsigned int simulation, double value);
 void calibrate_sequential ();
+void *calibrate_thread (ParallelData * data);
 void calibrate_merge (unsigned int nsaveds, unsigned int *simulation_best,
                       double *error_best);
 #if HAVE_MPI
@@ -185,12 +216,19 @@ void calibrate_synchronise ();
 #endif
 void calibrate_sweep ();
 void calibrate_MonteCarlo ();
+void calibrate_best_gradient (unsigned int simulation, double value);
+void calibrate_gradient_sequential ();
+void *calibrate_gradient_thread (ParallelData * data);
+double calibrate_variable_step_gradient (unsigned int variable);
+void calibrate_step_gradient (unsigned int simulation);
+void calibrate_gradient ();
 double calibrate_genetic_objective (Entity * entity);
 void calibrate_genetic ();
 void calibrate_save_old ();
 void calibrate_merge_old ();
 void calibrate_refine ();
+void calibrate_step ();
 void calibrate_iterate ();
-void calibrate_new ();
+void calibrate_open ();
 
 #endif

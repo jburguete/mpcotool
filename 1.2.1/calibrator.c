@@ -575,9 +575,7 @@ input_open (char *filename)
         }
     }
   else if (!xmlStrcmp (buffer, XML_SWEEP))
-    {
-      input->algorithm = ALGORITHM_SWEEP;
-    }
+    input->algorithm = ALGORITHM_SWEEP;
   else if (!xmlStrcmp (buffer, XML_GENETIC))
     {
       input->algorithm = ALGORITHM_GENETIC;
@@ -833,8 +831,7 @@ input_open (char *filename)
           buffert[0] = (char *) xmlGetProp (child, template[0]);
 #if DEBUG
           fprintf (stderr, "input_open: experiment=%u template1=%s\n",
-                   input->nexperiments,
-                   buffert[0]);
+                   input->nexperiments, buffert[0]);
 #endif
           if (!input->nexperiments)
             ++input->ninputs;
@@ -1427,7 +1424,7 @@ calibrate_best (unsigned int simulation, double value)
 #if DEBUG
   fprintf (stderr, "calibrate_best: start\n");
   fprintf (stderr, "calibrate_best: nsaveds=%u nbest=%u\n",
-		   calibrate->nsaveds, calibrate->nbest);
+           calibrate->nsaveds, calibrate->nbest);
 #endif
   if (calibrate->nsaveds < calibrate->nbest
       || value < calibrate->error_best[calibrate->nsaveds - 1])
@@ -1972,7 +1969,7 @@ calibrate_step_gradient (unsigned int simulation)
 void
 calibrate_gradient ()
 {
-  unsigned int i, j, k, b, s;
+  unsigned int i, j, k, b, s, adjust;
 #if DEBUG
   fprintf (stderr, "calibrate_gradient: start\n");
 #endif
@@ -1980,6 +1977,7 @@ calibrate_gradient ()
     calibrate->gradient[i] = 0.;
   b = calibrate->simulation_best[0] * calibrate->nvariables;
   s = calibrate->nsimulations;
+  adjust = 1;
   for (i = 0; i < calibrate->nsteps; ++i, s += calibrate->nestimates, b = k)
     {
 #if DEBUG
@@ -1992,25 +1990,35 @@ calibrate_gradient ()
       fprintf (stderr, "calibrate_gradient: step=%u best=%u\n",
                i, calibrate->simulation_best[0]);
 #endif
-	  if (k == b)
-		for (j = 0; j < calibrate->nvariables; ++j)
-		  calibrate->gradient[j] = 0.;
-	  else
-        for (j = 0; j < calibrate->nvariables; ++j)
-          {
+      if (k == b)
+        {
+          if (adjust)
+            for (j = 0; j < calibrate->nvariables; ++j)
+              calibrate->step[j] *= 0.5;
+          for (j = 0; j < calibrate->nvariables; ++j)
+            calibrate->gradient[j] = 0.;
+          adjust = 1;
+        }
+      else
+        {
+          for (j = 0; j < calibrate->nvariables; ++j)
+            {
 #if DEBUG
-            fprintf (stderr, "calibrate_gradient: best%u=%.14le old%u=%.14le\n",
-                     j, calibrate->value[k + j], j, calibrate->value[b + j]);
+              fprintf (stderr,
+                       "calibrate_gradient: best%u=%.14le old%u=%.14le\n",
+                       j, calibrate->value[k + j], j, calibrate->value[b + j]);
 #endif
-            calibrate->gradient[j]
-              = (1. - calibrate->relaxation) * calibrate->gradient[j]
-              + calibrate->relaxation
-              * (calibrate->value[k + j] - calibrate->value[b + j]);
+              calibrate->gradient[j]
+                = (1. - calibrate->relaxation) * calibrate->gradient[j]
+                + calibrate->relaxation
+                * (calibrate->value[k + j] - calibrate->value[b + j]);
 #if DEBUG
-            fprintf (stderr, "calibrate_gradient: gradient%u=%.14le\n",
-                     j, calibrate->gradient[j]);
+              fprintf (stderr, "calibrate_gradient: gradient%u=%.14le\n",
+                       j, calibrate->gradient[j]);
 #endif
-          }
+            }
+          adjust = 0;
+        }
     }
 #if DEBUG
   fprintf (stderr, "calibrate_gradient: end\n");
@@ -2278,13 +2286,13 @@ void
 calibrate_step ()
 {
 #if DEBUG
-  fprintf (stderr, "calibrate_algorithm: start\n");
+  fprintf (stderr, "calibrate_step: start\n");
 #endif
   calibrate_algorithm ();
   if (calibrate->nsteps)
     calibrate_gradient ();
 #if DEBUG
-  fprintf (stderr, "calibrate_gradient: end\n");
+  fprintf (stderr, "calibrate_step: end\n");
 #endif
 }
 
@@ -2419,7 +2427,7 @@ calibrate_open ()
   if (input->nsteps)
     {
       calibrate->gradient_method = input->gradient_method;
-	  calibrate->relaxation = input->relaxation;
+      calibrate->relaxation = input->relaxation;
       switch (input->gradient_method)
         {
         case GRADIENT_METHOD_COORDINATES:
@@ -2493,7 +2501,7 @@ calibrate_open ()
   calibrate->step = input->step;
   nbits = input->nbits;
   if (input->algorithm == ALGORITHM_SWEEP)
-	{
+    {
       calibrate->nsimulations = 1;
       for (i = 0; i < input->nvariables; ++i)
         {
@@ -2504,7 +2512,7 @@ calibrate_open ()
               fprintf (stderr, "calibrate_open: nsweeps=%u nsimulations=%u\n",
                        calibrate->nsweeps[i], calibrate->nsimulations);
 #endif
-			}
+            }
         }
     }
   if (calibrate->nsteps)
@@ -2584,8 +2592,8 @@ calibrate_open ()
 #endif
     }
   if (calibrate->nsteps)
-      calibrate->thread_gradient = (unsigned int *)
-        alloca ((1 + nthreads_gradient) * sizeof (unsigned int));
+    calibrate->thread_gradient = (unsigned int *)
+      alloca ((1 + nthreads_gradient) * sizeof (unsigned int));
 
   // Opening result files
   calibrate->file_result = g_fopen (calibrate->result, "w");
@@ -3121,7 +3129,7 @@ window_about ()
               "parameters"),
      "authors", authors,
      "translator-credits", "Javier Burguete Tolosa <jburguete@eead.csic.es>",
-     "version", "1.3.6",
+     "version", "1.2.1",
      "copyright", "Copyright 2012-2015 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/calibrator",
@@ -4671,8 +4679,8 @@ window_new ()
   // Showing the window
   gtk_widget_show_all (GTK_WIDGET (window->window));
 
-  // In GTK+ 3.18 the default scrolled size is wrong
-#if GTK_MINOR_VERSION >= 18
+  // In GTK+ 3.16 and 3.18 the default scrolled size is wrong
+#if GTK_MINOR_VERSION >= 16
   gtk_widget_set_size_request (GTK_WIDGET (window->scrolled_min), -1, 40);
   gtk_widget_set_size_request (GTK_WIDGET (window->scrolled_max), -1, 40);
   gtk_widget_set_size_request (GTK_WIDGET (window->scrolled_minabs), -1, 40);

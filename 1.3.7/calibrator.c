@@ -90,9 +90,14 @@ OF SUCH DAMAGE.
 
 int ntasks;                     ///< Number of tasks.
 unsigned int nthreads;          ///< Number of threads.
+unsigned int nthreads_gradient;
+  ///< Number of threads for the gradient based method.
 GMutex mutex[1];                ///< Mutex struct.
-void (*calibrate_step) ();
+void (*calibrate_algorithm) ();
   ///< Pointer to the function to perform a calibration algorithm step.
+double (*calibrate_estimate_gradient) (unsigned int variable,
+                                       unsigned int estimate);
+  ///< Pointer to the function to estimate the gradient.
 Input input[1];
   ///< Input struct to define the input file to calibrator.
 Calibrate calibrate[1];         ///< Calibration data.
@@ -208,7 +213,7 @@ Window window[1];
 #endif
 
 /**
- * \fn void show_message(char *title, char *msg, int type)
+ * \fn void show_message (char *title, char *msg, int type)
  * \brief Function to show a dialog with a message.
  * \param title
  * \brief Title.
@@ -242,7 +247,7 @@ show_message (char *title, char *msg, int type)
 }
 
 /**
- * \fn void show_error(char *msg)
+ * \fn void show_error (char *msg)
  * \brief Function to show a dialog with an error message.
  * \param msg
  * \brief Error message.
@@ -254,7 +259,8 @@ show_error (char *msg)
 }
 
 /**
- * \fn int xml_node_get_int(xmlNode *node, const xmlChar *prop, int *error_code)
+ * \fn int xml_node_get_int (xmlNode *node, const xmlChar *prop, \
+ *   int *error_code)
  * \brief Function to get an integer number of a XML node property.
  * \param node
  * \brief XML node.
@@ -284,7 +290,7 @@ xml_node_get_int (xmlNode * node, const xmlChar * prop, int *error_code)
 }
 
 /**
- * \fn int xml_node_get_uint(xmlNode *node, const xmlChar *prop, \
+ * \fn int xml_node_get_uint (xmlNode *node, const xmlChar *prop, \
  *   int *error_code)
  * \brief Function to get an unsigned integer number of a XML node property.
  * \param node
@@ -315,7 +321,7 @@ xml_node_get_uint (xmlNode * node, const xmlChar * prop, int *error_code)
 }
 
 /**
- * \fn double xml_node_get_float(xmlNode *node, const xmlChar *prop, \
+ * \fn double xml_node_get_float (xmlNode *node, const xmlChar *prop, \
  *   int *error_code)
  * \brief Function to get a floating point number of a XML node property.
  * \param node
@@ -346,7 +352,7 @@ xml_node_get_float (xmlNode * node, const xmlChar * prop, int *error_code)
 }
 
 /**
- * \fn void xml_node_set_int(xmlNode *node, const xmlChar *prop, int value)
+ * \fn void xml_node_set_int (xmlNode *node, const xmlChar *prop, int value)
  * \brief Function to set an integer number in a XML node property.
  * \param node
  * \brief XML node.
@@ -364,7 +370,7 @@ xml_node_set_int (xmlNode * node, const xmlChar * prop, int value)
 }
 
 /**
- * \fn void xml_node_set_uint(xmlNode *node, const xmlChar *prop, \
+ * \fn void xml_node_set_uint (xmlNode *node, const xmlChar *prop, \
  *   unsigned int value)
  * \brief Function to set an unsigned integer number in a XML node property.
  * \param node
@@ -383,7 +389,7 @@ xml_node_set_uint (xmlNode * node, const xmlChar * prop, unsigned int value)
 }
 
 /**
- * \fn void xml_node_set_float(xmlNode *node, const xmlChar *prop, \
+ * \fn void xml_node_set_float (xmlNode *node, const xmlChar *prop, \
  *   double value)
  * \brief Function to set a floating point number in a XML node property.
  * \param node
@@ -402,7 +408,7 @@ xml_node_set_float (xmlNode * node, const xmlChar * prop, double value)
 }
 
 /**
- * \fn void input_new()
+ * \fn void input_new ()
  * \brief Function to create a new Input struct.
  */
 void
@@ -410,23 +416,24 @@ input_new ()
 {
   unsigned int i;
 #if DEBUG
-  fprintf (stderr, "input_init: start\n");
+  fprintf (stderr, "input_new: start\n");
 #endif
-  input->nvariables = input->nexperiments = input->ninputs = 0;
-  input->simulator = input->evaluator = input->directory = input->name = NULL;
+  input->nvariables = input->nexperiments = input->ninputs = input->nsteps = 0;
+  input->simulator = input->evaluator = input->directory = input->name
+    = input->result = input->variables = NULL;
   input->experiment = input->label = NULL;
   input->precision = input->nsweeps = input->nbits = NULL;
   input->rangemin = input->rangemax = input->rangeminabs = input->rangemaxabs
-    = input->weight = NULL;
+    = input->weight = input->step = NULL;
   for (i = 0; i < MAX_NINPUTS; ++i)
     input->template[i] = NULL;
 #if DEBUG
-  fprintf (stderr, "input_init: end\n");
+  fprintf (stderr, "input_new: end\n");
 #endif
 }
 
 /**
- * \fn void input_free()
+ * \fn void input_free ()
  * \brief Function to free the memory of the input file data.
  */
 void
@@ -443,6 +450,7 @@ input_free ()
       xmlFree (input->experiment[i]);
       for (j = 0; j < input->ninputs; ++j)
         xmlFree (input->template[j][i]);
+      g_free (input->template[j]);
     }
   g_free (input->experiment);
   for (i = 0; i < input->ninputs; ++i)
@@ -456,20 +464,21 @@ input_free ()
   g_free (input->rangeminabs);
   g_free (input->rangemaxabs);
   g_free (input->weight);
+  g_free (input->step);
   g_free (input->nsweeps);
   g_free (input->nbits);
   xmlFree (input->evaluator);
   xmlFree (input->simulator);
   xmlFree (input->result);
   xmlFree (input->variables);
-  input->nexperiments = input->ninputs = input->nvariables = 0;
+  input->nexperiments = input->ninputs = input->nvariables = input->nsteps = 0;
 #if DEBUG
   fprintf (stderr, "input_free: end\n");
 #endif
 }
 
 /**
- * \fn int input_open(char *filename)
+ * \fn int input_open (char *filename)
  * \brief Function to open the input file.
  * \param filename
  * \brief Input data file name.
@@ -479,6 +488,8 @@ int
 input_open (char *filename)
 {
   char buffer2[64];
+  char *buffert[MAX_NINPUTS] =
+    { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
   xmlDoc *doc;
   xmlNode *node, *child;
   xmlChar *buffer;
@@ -491,9 +502,13 @@ input_open (char *filename)
 #endif
 
   // Resetting input data
+  buffer = NULL;
   input_new ();
 
   // Parsing the input file
+#if DEBUG
+  fprintf (stderr, "input_open: parsing the input file %s\n", filename);
+#endif
   doc = xmlParseFile (filename);
   if (!doc)
     {
@@ -502,6 +517,9 @@ input_open (char *filename)
     }
 
   // Getting the root node
+#if DEBUG
+  fprintf (stderr, "input_open: getting the root node\n");
+#endif
   node = xmlDocGetRootElement (doc);
   if (xmlStrcmp (node->name, XML_CALIBRATE))
     {
@@ -666,6 +684,8 @@ input_open (char *filename)
       msg = gettext ("Unknown algorithm");
       goto exit_on_error;
     }
+  xmlFree (buffer);
+  buffer = NULL;
 
   if (input->algorithm == ALGORITHM_MONTE_CARLO
       || input->algorithm == ALGORITHM_SWEEP)
@@ -673,7 +693,7 @@ input_open (char *filename)
 
       // Obtaining iterations number
       input->niterations
-        = xml_node_get_int (node, XML_NITERATIONS, &error_code);
+        = xml_node_get_uint (node, XML_NITERATIONS, &error_code);
       if (error_code == 1)
         input->niterations = 1;
       else if (error_code)
@@ -708,6 +728,53 @@ input_open (char *filename)
         }
       else
         input->tolerance = 0.;
+
+      // Getting gradient method parameters
+      if (xmlHasProp (node, XML_NSTEPS))
+        {
+          input->nsteps = xml_node_get_uint (node, XML_NSTEPS, &error_code);
+          if (error_code || !input->nsteps)
+            {
+              msg = gettext ("Invalid steps number");
+              goto exit_on_error;
+            }
+          buffer = xmlGetProp (node, XML_GRADIENT_METHOD);
+          if (!xmlStrcmp (buffer, XML_COORDINATES))
+            input->gradient_method = GRADIENT_METHOD_COORDINATES;
+          else if (!xmlStrcmp (buffer, XML_RANDOM))
+            {
+              input->gradient_method = GRADIENT_METHOD_RANDOM;
+              input->nestimates
+                = xml_node_get_uint (node, XML_NESTIMATES, &error_code);
+              if (error_code || !input->nestimates)
+                {
+                  msg = gettext ("Invalid estimates number");
+                  goto exit_on_error;
+                }
+            }
+          else
+            {
+              msg = gettext ("Unknown method to estimate the gradient");
+              goto exit_on_error;
+            }
+          xmlFree (buffer);
+          buffer = NULL;
+          if (xmlHasProp (node, XML_RELAXATION))
+            {
+              input->relaxation
+                = xml_node_get_float (node, XML_RELAXATION, &error_code);
+              if (error_code || input->relaxation < 0.
+                  || input->relaxation > 2.)
+                {
+                  msg = gettext ("Invalid relaxation parameter");
+                  goto exit_on_error;
+                }
+            }
+          else
+            input->relaxation = DEFAULT_RELAXATION;
+        }
+      else
+        input->nsteps = 0;
     }
 
   // Reading the experimental data
@@ -719,13 +786,7 @@ input_open (char *filename)
       fprintf (stderr, "input_open: nexperiments=%u\n", input->nexperiments);
 #endif
       if (xmlHasProp (child, XML_NAME))
-        {
-          input->experiment
-            = g_realloc (input->experiment,
-                         (1 + input->nexperiments) * sizeof (char *));
-          input->experiment[input->nexperiments]
-            = (char *) xmlGetProp (child, XML_NAME);
-        }
+        buffer = xmlGetProp (child, XML_NAME);
       else
         {
           snprintf (buffer2, 64, "%s %u: %s",
@@ -735,8 +796,7 @@ input_open (char *filename)
           goto exit_on_error;
         }
 #if DEBUG
-      fprintf (stderr, "input_open: experiment=%s\n",
-               input->experiment[input->nexperiments]);
+      fprintf (stderr, "input_open: experiment=%s\n", buffer);
 #endif
       input->weight = g_realloc (input->weight,
                                  (1 + input->nexperiments) * sizeof (double));
@@ -746,9 +806,8 @@ input_open (char *filename)
             = xml_node_get_float (child, XML_WEIGHT, &error_code);
           if (error_code)
             {
-              snprintf (buffer2, 64, "%s %u: %s",
-                        gettext ("Experiment"),
-                        input->nexperiments + 1, gettext ("bad weight"));
+              snprintf (buffer2, 64, "%s %s: %s",
+                        gettext ("Experiment"), buffer, gettext ("bad weight"));
               msg = buffer2;
               goto exit_on_error;
             }
@@ -769,12 +828,10 @@ input_open (char *filename)
           input->template[0]
             = (char **) g_realloc (input->template[0],
                                    (1 + input->nexperiments) * sizeof (char *));
-          input->template[0][input->nexperiments]
-            = (char *) xmlGetProp (child, template[0]);
+          buffert[0] = (char *) xmlGetProp (child, template[0]);
 #if DEBUG
           fprintf (stderr, "input_open: experiment=%u template1=%s\n",
-                   input->nexperiments,
-                   input->template[0][input->nexperiments]);
+                   input->nexperiments, buffert[0]);
 #endif
           if (!input->nexperiments)
             ++input->ninputs;
@@ -784,9 +841,8 @@ input_open (char *filename)
         }
       else
         {
-          snprintf (buffer2, 64, "%s %u: %s",
-                    gettext ("Experiment"),
-                    input->nexperiments + 1, gettext ("no template"));
+          snprintf (buffer2, 64, "%s %s: %s",
+                    gettext ("Experiment"), buffer, gettext ("no template"));
           msg = buffer2;
           goto exit_on_error;
         }
@@ -799,18 +855,18 @@ input_open (char *filename)
             {
               if (input->nexperiments && input->ninputs <= i)
                 {
-                  snprintf (buffer2, 64, "%s %u: %s",
+                  snprintf (buffer2, 64, "%s %s: %s",
                             gettext ("Experiment"),
-                            input->nexperiments + 1,
-                            gettext ("bad templates number"));
+                            buffer, gettext ("bad templates number"));
                   msg = buffer2;
+                  while (i-- > 0)
+                    xmlFree (buffert[i]);
                   goto exit_on_error;
                 }
               input->template[i] = (char **)
                 g_realloc (input->template[i],
                            (1 + input->nexperiments) * sizeof (char *));
-              input->template[i][input->nexperiments]
-                = (char *) xmlGetProp (child, template[i]);
+              buffert[i] = (char *) xmlGetProp (child, template[i]);
 #if DEBUG
               fprintf (stderr, "input_open: experiment=%u template%u=%s\n",
                        input->nexperiments, i + 1,
@@ -824,16 +880,23 @@ input_open (char *filename)
             }
           else if (input->nexperiments && input->ninputs >= i)
             {
-              snprintf (buffer2, 64, "%s %u: %s%u",
+              snprintf (buffer2, 64, "%s %s: %s%u",
                         gettext ("Experiment"),
-                        input->nexperiments + 1,
-                        gettext ("no template"), i + 1);
+                        buffer, gettext ("no template"), i + 1);
               msg = buffer2;
+              while (i-- > 0)
+                xmlFree (buffert[i]);
               goto exit_on_error;
             }
           else
             break;
         }
+      input->experiment
+        = g_realloc (input->experiment,
+                     (1 + input->nexperiments) * sizeof (char *));
+      input->experiment[input->nexperiments] = (char *) buffer;
+      for (i = 0; i < input->ninputs; ++i)
+        input->template[i][input->nexperiments] = buffert[i];
       ++input->nexperiments;
 #if DEBUG
       fprintf (stderr, "input_open: nexperiments=%u\n", input->nexperiments);
@@ -844,6 +907,7 @@ input_open (char *filename)
       msg = gettext ("No calibration experiments");
       goto exit_on_error;
     }
+  buffer = NULL;
 
   // Reading the variables data
   for (; child; child = child->next)
@@ -857,12 +921,7 @@ input_open (char *filename)
           goto exit_on_error;
         }
       if (xmlHasProp (child, XML_NAME))
-        {
-          input->label = g_realloc
-            (input->label, (1 + input->nvariables) * sizeof (char *));
-          input->label[input->nvariables]
-            = (char *) xmlGetProp (child, XML_NAME);
-        }
+        buffer = xmlGetProp (child, XML_NAME);
       else
         {
           snprintf (buffer2, 64, "%s %u: %s",
@@ -879,29 +938,42 @@ input_open (char *filename)
             (input->rangeminabs, (1 + input->nvariables) * sizeof (double));
           input->rangemin[input->nvariables]
             = xml_node_get_float (child, XML_MINIMUM, &error_code);
+          if (error_code)
+            {
+              snprintf (buffer2, 64, "%s %s: %s",
+                        gettext ("Variable"), buffer, gettext ("bad minimum"));
+              msg = buffer2;
+              goto exit_on_error;
+            }
           if (xmlHasProp (child, XML_ABSOLUTE_MINIMUM))
             {
               input->rangeminabs[input->nvariables]
                 = xml_node_get_float (child, XML_ABSOLUTE_MINIMUM, &error_code);
+              if (error_code)
+                {
+                  snprintf (buffer2, 64, "%s %s: %s",
+                            gettext ("Variable"),
+                            buffer, gettext ("bad absolute minimum"));
+                  msg = buffer2;
+                  goto exit_on_error;
+                }
             }
           else
             input->rangeminabs[input->nvariables] = -G_MAXDOUBLE;
           if (input->rangemin[input->nvariables]
               < input->rangeminabs[input->nvariables])
             {
-              snprintf (buffer2, 64, "%s %u: %s",
+              snprintf (buffer2, 64, "%s %s: %s",
                         gettext ("Variable"),
-                        input->nvariables + 1,
-                        gettext ("minimum range not allowed"));
+                        buffer, gettext ("minimum range not allowed"));
               msg = buffer2;
               goto exit_on_error;
             }
         }
       else
         {
-          snprintf (buffer2, 64, "%s %u: %s",
-                    gettext ("Variable"),
-                    input->nvariables + 1, gettext ("no minimum range"));
+          snprintf (buffer2, 64, "%s %s: %s",
+                    gettext ("Variable"), buffer, gettext ("no minimum range"));
           msg = buffer2;
           goto exit_on_error;
         }
@@ -913,44 +985,68 @@ input_open (char *filename)
             (input->rangemaxabs, (1 + input->nvariables) * sizeof (double));
           input->rangemax[input->nvariables]
             = xml_node_get_float (child, XML_MAXIMUM, &error_code);
+          if (error_code)
+            {
+              snprintf (buffer2, 64, "%s %s: %s",
+                        gettext ("Variable"), buffer, gettext ("bad maximum"));
+              msg = buffer2;
+              goto exit_on_error;
+            }
           if (xmlHasProp (child, XML_ABSOLUTE_MAXIMUM))
-            input->rangemaxabs[input->nvariables]
-              = xml_node_get_float (child, XML_ABSOLUTE_MAXIMUM, &error_code);
+            {
+              input->rangemaxabs[input->nvariables]
+                = xml_node_get_float (child, XML_ABSOLUTE_MAXIMUM, &error_code);
+              if (error_code)
+                {
+                  snprintf (buffer2, 64, "%s %s: %s",
+                            gettext ("Variable"),
+                            buffer, gettext ("bad absolute maximum"));
+                  msg = buffer2;
+                  goto exit_on_error;
+                }
+            }
           else
             input->rangemaxabs[input->nvariables] = G_MAXDOUBLE;
           if (input->rangemax[input->nvariables]
               > input->rangemaxabs[input->nvariables])
             {
-              snprintf (buffer2, 64, "%s %u: %s",
+              snprintf (buffer2, 64, "%s %s: %s",
                         gettext ("Variable"),
-                        input->nvariables + 1,
-                        gettext ("maximum range not allowed"));
+                        buffer, gettext ("maximum range not allowed"));
               msg = buffer2;
               goto exit_on_error;
             }
         }
       else
         {
-          snprintf (buffer2, 64, "%s %u: %s",
-                    gettext ("Variable"),
-                    input->nvariables + 1, gettext ("no maximum range"));
+          snprintf (buffer2, 64, "%s %s: %s",
+                    gettext ("Variable"), buffer, gettext ("no maximum range"));
           msg = buffer2;
           goto exit_on_error;
         }
       if (input->rangemax[input->nvariables]
           < input->rangemin[input->nvariables])
         {
-          snprintf (buffer2, 64, "%s %u: %s",
-                    gettext ("Variable"),
-                    input->nvariables + 1, gettext ("bad range"));
+          snprintf (buffer2, 64, "%s %s: %s",
+                    gettext ("Variable"), buffer, gettext ("bad range"));
           msg = buffer2;
           goto exit_on_error;
         }
       input->precision = g_realloc
         (input->precision, (1 + input->nvariables) * sizeof (unsigned int));
       if (xmlHasProp (child, XML_PRECISION))
-        input->precision[input->nvariables]
-          = xml_node_get_uint (child, XML_PRECISION, &error_code);
+        {
+          input->precision[input->nvariables]
+            = xml_node_get_uint (child, XML_PRECISION, &error_code);
+          if (error_code || input->precision[input->nvariables] >= NPRECISIONS)
+            {
+              snprintf (buffer2, 64, "%s %s: %s",
+                        gettext ("Variable"),
+                        buffer, gettext ("bad precision"));
+              msg = buffer2;
+              goto exit_on_error;
+            }
+        }
       else
         input->precision[input->nvariables] = DEFAULT_PRECISION;
       if (input->algorithm == ALGORITHM_SWEEP)
@@ -962,12 +1058,20 @@ input_open (char *filename)
                            (1 + input->nvariables) * sizeof (unsigned int));
               input->nsweeps[input->nvariables]
                 = xml_node_get_uint (child, XML_NSWEEPS, &error_code);
+              if (error_code || !input->nsweeps[input->nvariables])
+                {
+                  snprintf (buffer2, 64, "%s %s: %s",
+                            gettext ("Variable"),
+                            buffer, gettext ("bad sweeps"));
+                  msg = buffer2;
+                  goto exit_on_error;
+                }
             }
           else
             {
-              snprintf (buffer2, 64, "%s %u: %s",
+              snprintf (buffer2, 64, "%s %s: %s",
                         gettext ("Variable"),
-                        input->nvariables + 1, gettext ("no sweeps number"));
+                        buffer, gettext ("no sweeps number"));
               msg = buffer2;
               goto exit_on_error;
             }
@@ -987,10 +1091,9 @@ input_open (char *filename)
               i = xml_node_get_uint (child, XML_NBITS, &error_code);
               if (error_code || !i)
                 {
-                  snprintf (buffer2, 64, "%s %u: %s",
+                  snprintf (buffer2, 64, "%s %s: %s",
                             gettext ("Variable"),
-                            input->nvariables + 1,
-                            gettext ("invalid bits number"));
+                            buffer, gettext ("invalid bits number"));
                   msg = buffer2;
                   goto exit_on_error;
                 }
@@ -998,13 +1101,31 @@ input_open (char *filename)
             }
           else
             {
-              snprintf (buffer2, 64, "%s %u: %s",
+              snprintf (buffer2, 64, "%s %s: %s",
                         gettext ("Variable"),
-                        input->nvariables + 1, gettext ("no bits number"));
+                        buffer, gettext ("no bits number"));
               msg = buffer2;
               goto exit_on_error;
             }
         }
+      else if (input->nsteps)
+        {
+          input->step = (double *)
+            g_realloc (input->step, (1 + input->nvariables) * sizeof (double));
+          input->step[input->nvariables]
+            = xml_node_get_float (child, XML_STEP, &error_code);
+          if (error_code || input->step[input->nvariables] < 0.)
+            {
+              snprintf (buffer2, 64, "%s %s: %s",
+                        gettext ("Variable"),
+                        buffer, gettext ("bad step size"));
+              msg = buffer2;
+              goto exit_on_error;
+            }
+        }
+      input->label = g_realloc
+        (input->label, (1 + input->nvariables) * sizeof (char *));
+      input->label[input->nvariables] = (char *) buffer;
       ++input->nvariables;
     }
   if (!input->nvariables)
@@ -1012,6 +1133,7 @@ input_open (char *filename)
       msg = gettext ("No calibration variables");
       goto exit_on_error;
     }
+  buffer = NULL;
 
   // Getting the working directory
   input->directory = g_path_get_dirname (filename);
@@ -1026,6 +1148,8 @@ input_open (char *filename)
   return 1;
 
 exit_on_error:
+  xmlFree (buffer);
+  xmlFreeDoc (doc);
   show_error (msg);
   input_free ();
 #if DEBUG
@@ -1035,7 +1159,7 @@ exit_on_error:
 }
 
 /**
- * \fn void calibrate_input(unsigned int simulation, char *input, \
+ * \fn void calibrate_input (unsigned int simulation, char *input, \
  *   GMappedFile *template)
  * \brief Function to write the simulation input file.
  * \param simulation
@@ -1123,7 +1247,7 @@ calibrate_input_end:
 }
 
 /**
- * \fn double calibrate_parse(unsigned int simulation, unsigned int experiment)
+ * \fn double calibrate_parse (unsigned int simulation, unsigned int experiment)
  * \brief Function to parse input files, simulating and calculating the \
  *   objective function.
  * \param simulation
@@ -1230,7 +1354,7 @@ calibrate_parse (unsigned int simulation, unsigned int experiment)
 }
 
 /**
- * \fn void calibrate_print()
+ * \fn void calibrate_print ()
  * \brief Function to print the results.
  */
 void
@@ -1285,52 +1409,7 @@ calibrate_save_variables (unsigned int simulation, double error)
 }
 
 /**
- * \fn void calibrate_best_thread(unsigned int simulation, double value)
- * \brief Function to save the best simulations of a thread.
- * \param simulation
- * \brief Simulation number.
- * \param value
- * \brief Objective function value.
- */
-void
-calibrate_best_thread (unsigned int simulation, double value)
-{
-  unsigned int i, j;
-  double e;
-#if DEBUG
-  fprintf (stderr, "calibrate_best_thread: start\n");
-#endif
-  if (calibrate->nsaveds < calibrate->nbest
-      || value < calibrate->error_best[calibrate->nsaveds - 1])
-    {
-      g_mutex_lock (mutex);
-      if (calibrate->nsaveds < calibrate->nbest)
-        ++calibrate->nsaveds;
-      calibrate->error_best[calibrate->nsaveds - 1] = value;
-      calibrate->simulation_best[calibrate->nsaveds - 1] = simulation;
-      for (i = calibrate->nsaveds; --i;)
-        {
-          if (calibrate->error_best[i] < calibrate->error_best[i - 1])
-            {
-              j = calibrate->simulation_best[i];
-              e = calibrate->error_best[i];
-              calibrate->simulation_best[i] = calibrate->simulation_best[i - 1];
-              calibrate->error_best[i] = calibrate->error_best[i - 1];
-              calibrate->simulation_best[i - 1] = j;
-              calibrate->error_best[i - 1] = e;
-            }
-          else
-            break;
-        }
-      g_mutex_unlock (mutex);
-    }
-#if DEBUG
-  fprintf (stderr, "calibrate_best_thread: end\n");
-#endif
-}
-
-/**
- * \fn void calibrate_best_sequential(unsigned int simulation, double value)
+ * \fn void calibrate_best (unsigned int simulation, double value)
  * \brief Function to save the best simulations.
  * \param simulation
  * \brief Simulation number.
@@ -1338,12 +1417,14 @@ calibrate_best_thread (unsigned int simulation, double value)
  * \brief Objective function value.
  */
 void
-calibrate_best_sequential (unsigned int simulation, double value)
+calibrate_best (unsigned int simulation, double value)
 {
   unsigned int i, j;
   double e;
 #if DEBUG
-  fprintf (stderr, "calibrate_best_sequential: start\n");
+  fprintf (stderr, "calibrate_best: start\n");
+  fprintf (stderr, "calibrate_best: nsaveds=%u nbest=%u\n",
+           calibrate->nsaveds, calibrate->nbest);
 #endif
   if (calibrate->nsaveds < calibrate->nbest
       || value < calibrate->error_best[calibrate->nsaveds - 1])
@@ -1368,12 +1449,42 @@ calibrate_best_sequential (unsigned int simulation, double value)
         }
     }
 #if DEBUG
-  fprintf (stderr, "calibrate_best_sequential: end\n");
+  fprintf (stderr, "calibrate_best: end\n");
 #endif
 }
 
 /**
- * \fn void* calibrate_thread(ParallelData *data)
+ * \fn void calibrate_sequential ()
+ * \brief Function to calibrate sequentially.
+ */
+void
+calibrate_sequential ()
+{
+  unsigned int i, j;
+  double e;
+#if DEBUG
+  fprintf (stderr, "calibrate_sequential: start\n");
+  fprintf (stderr, "calibrate_sequential: nstart=%u nend=%u\n",
+           calibrate->nstart, calibrate->nend);
+#endif
+  for (i = calibrate->nstart; i < calibrate->nend; ++i)
+    {
+      e = 0.;
+      for (j = 0; j < calibrate->nexperiments; ++j)
+        e += calibrate_parse (i, j);
+      calibrate_best (i, e);
+      calibrate_save_variables (i, e);
+#if DEBUG
+      fprintf (stderr, "calibrate_sequential: i=%u e=%lg\n", i, e);
+#endif
+    }
+#if DEBUG
+  fprintf (stderr, "calibrate_sequential: end\n");
+#endif
+}
+
+/**
+ * \fn void* calibrate_thread (ParallelData *data)
  * \brief Function to calibrate on a thread.
  * \param data
  * \brief Function data.
@@ -1397,8 +1508,8 @@ calibrate_thread (ParallelData * data)
       e = 0.;
       for (j = 0; j < calibrate->nexperiments; ++j)
         e += calibrate_parse (i, j);
-      calibrate_best_thread (i, e);
       g_mutex_lock (mutex);
+      calibrate_best (i, e);
       calibrate_save_variables (i, e);
       g_mutex_unlock (mutex);
 #if DEBUG
@@ -1413,37 +1524,7 @@ calibrate_thread (ParallelData * data)
 }
 
 /**
- * \fn void calibrate_sequential()
- * \brief Function to calibrate sequentially.
- */
-void
-calibrate_sequential ()
-{
-  unsigned int i, j;
-  double e;
-#if DEBUG
-  fprintf (stderr, "calibrate_sequential: start\n");
-  fprintf (stderr, "calibrate_sequential: nstart=%u nend=%u\n",
-           calibrate->nstart, calibrate->nend);
-#endif
-  for (i = calibrate->nstart; i < calibrate->nend; ++i)
-    {
-      e = 0.;
-      for (j = 0; j < calibrate->nexperiments; ++j)
-        e += calibrate_parse (i, j);
-      calibrate_best_sequential (i, e);
-      calibrate_save_variables (i, e);
-#if DEBUG
-      fprintf (stderr, "calibrate_sequential: i=%u e=%lg\n", i, e);
-#endif
-    }
-#if DEBUG
-  fprintf (stderr, "calibrate_sequential: end\n");
-#endif
-}
-
-/**
- * \fn void calibrate_merge(unsigned int nsaveds, \
+ * \fn void calibrate_merge (unsigned int nsaveds, \
  *   unsigned int *simulation_best, double *error_best)
  * \brief Function to merge the 2 calibration results.
  * \param nsaveds
@@ -1508,7 +1589,7 @@ calibrate_merge (unsigned int nsaveds, unsigned int *simulation_best,
 }
 
 /**
- * \fn void calibrate_synchronise()
+ * \fn void calibrate_synchronise ()
  * \brief Function to synchronise the calibration results of MPI tasks.
  */
 #if HAVE_MPI
@@ -1548,7 +1629,7 @@ calibrate_synchronise ()
 #endif
 
 /**
- * \fn void calibrate_sweep()
+ * \fn void calibrate_sweep ()
  * \brief Function to calibrate with the sweep algorithm.
  */
 void
@@ -1599,7 +1680,7 @@ calibrate_sweep ()
 }
 
 /**
- * \fn void calibrate_MonteCarlo()
+ * \fn void calibrate_MonteCarlo ()
  * \brief Function to calibrate with the Monte-Carlo algorithm.
  */
 void
@@ -1640,7 +1721,312 @@ calibrate_MonteCarlo ()
 }
 
 /**
- * \fn double calibrate_genetic_objective(Entity *entity)
+ * \fn void calibrate_best_gradient (unsigned int simulation, \
+ *   double value)
+ * \brief Function to save the best simulation in a gradient based method.
+ * \param simulation
+ * \brief Simulation number.
+ * \param value
+ * \brief Objective function value.
+ */
+void
+calibrate_best_gradient (unsigned int simulation, double value)
+{
+#if DEBUG
+  fprintf (stderr, "calibrate_best_gradient: start\n");
+  fprintf (stderr,
+           "calibrate_best_gradient: simulation=%u value=%.14le best=%.14le\n",
+           simulation, value, calibrate->error_best[0]);
+#endif
+  if (value < calibrate->error_best[0])
+    {
+      calibrate->error_best[0] = value;
+      calibrate->simulation_best[0] = simulation;
+#if DEBUG
+      fprintf (stderr,
+               "calibrate_best_gradient: BEST simulation=%u value=%.14le\n",
+               simulation, value);
+#endif
+    }
+#if DEBUG
+  fprintf (stderr, "calibrate_best_gradient: end\n");
+#endif
+}
+
+/**
+ * \fn void calibrate_gradient_sequential (unsigned int simulation)
+ * \brief Function to estimate the gradient sequentially.
+ * \param simulation
+ * \brief Simulation number.
+ */
+void
+calibrate_gradient_sequential (unsigned int simulation)
+{
+  unsigned int i, j, k;
+  double e;
+#if DEBUG
+  fprintf (stderr, "calibrate_gradient_sequential: start\n");
+  fprintf (stderr, "calibrate_gradient_sequential: nstart_gradient=%u "
+           "nend_gradient=%u\n",
+           calibrate->nstart_gradient, calibrate->nend_gradient);
+#endif
+  for (i = calibrate->nstart_gradient; i < calibrate->nend_gradient; ++i)
+    {
+      k = simulation + i;
+      e = 0.;
+      for (j = 0; j < calibrate->nexperiments; ++j)
+        e += calibrate_parse (k, j);
+      calibrate_best_gradient (k, e);
+      calibrate_save_variables (k, e);
+#if DEBUG
+      fprintf (stderr, "calibrate_gradient_sequential: i=%u e=%lg\n", i, e);
+#endif
+    }
+#if DEBUG
+  fprintf (stderr, "calibrate_gradient_sequential: end\n");
+#endif
+}
+
+/**
+ * \fn void* calibrate_gradient_thread (ParallelData *data)
+ * \brief Function to estimate the gradient on a thread.
+ * \param data
+ * \brief Function data.
+ * \return NULL
+ */
+void *
+calibrate_gradient_thread (ParallelData * data)
+{
+  unsigned int i, j, thread;
+  double e;
+#if DEBUG
+  fprintf (stderr, "calibrate_gradient_thread: start\n");
+#endif
+  thread = data->thread;
+#if DEBUG
+  fprintf (stderr, "calibrate_gradient_thread: thread=%u start=%u end=%u\n",
+           thread,
+           calibrate->thread_gradient[thread],
+           calibrate->thread_gradient[thread + 1]);
+#endif
+  for (i = calibrate->thread_gradient[thread];
+       i < calibrate->thread_gradient[thread + 1]; ++i)
+    {
+      e = 0.;
+      for (j = 0; j < calibrate->nexperiments; ++j)
+        e += calibrate_parse (i, j);
+      g_mutex_lock (mutex);
+      calibrate_best_gradient (i, e);
+      calibrate_save_variables (i, e);
+      g_mutex_unlock (mutex);
+#if DEBUG
+      fprintf (stderr, "calibrate_gradient_thread: i=%u e=%lg\n", i, e);
+#endif
+    }
+#if DEBUG
+  fprintf (stderr, "calibrate_gradient_thread: end\n");
+#endif
+  g_thread_exit (NULL);
+  return NULL;
+}
+
+/**
+ * \fn double calibrate_estimate_gradient_random (unsigned int variable, \
+ *   unsigned int estimate)
+ * \brief Function to estimate a component of the gradient vector.
+ * \param variable
+ * \brief Variable number.
+ * \param estimate
+ * \brief Estimate number.
+ */
+double
+calibrate_estimate_gradient_random (unsigned int variable,
+                                    unsigned int estimate)
+{
+  double x;
+#if DEBUG
+  fprintf (stderr, "calibrate_estimate_gradient_random: start\n");
+#endif
+  x = calibrate->gradient[variable]
+    + (1. - 2. * gsl_rng_uniform (calibrate->rng)) * calibrate->step[variable];
+#if DEBUG
+  fprintf (stderr, "calibrate_estimate_gradient_random: gradient%u=%lg\n",
+           variable, x);
+  fprintf (stderr, "calibrate_estimate_gradient_random: end\n");
+#endif
+  return x;
+}
+
+/**
+ * \fn double calibrate_estimate_gradient_coordinates (unsigned int variable, \
+ *   unsigned int estimate)
+ * \brief Function to estimate a component of the gradient vector.
+ * \param variable
+ * \brief Variable number.
+ * \param estimate
+ * \brief Estimate number.
+ */
+double
+calibrate_estimate_gradient_coordinates (unsigned int variable,
+                                         unsigned int estimate)
+{
+  double x;
+#if DEBUG
+  fprintf (stderr, "calibrate_estimate_gradient_coordinates: start\n");
+#endif
+  x = calibrate->gradient[variable];
+  if (estimate >= (2 * variable) && estimate < (2 * variable + 2))
+    {
+      if (estimate & 1)
+        x += calibrate->step[variable];
+      else
+        x -= calibrate->step[variable];
+    }
+#if DEBUG
+  fprintf (stderr, "calibrate_estimate_gradient_coordinates: gradient%u=%lg\n",
+           variable, x);
+  fprintf (stderr, "calibrate_estimate_gradient_coordinates: end\n");
+#endif
+  return x;
+}
+
+/**
+ * \fn void calibrate_step_gradient (unsigned int simulation)
+ * \brief Function to do a step of the gradient based method.
+ * \param simulation
+ * \brief Simulation number.
+ */
+void
+calibrate_step_gradient (unsigned int simulation)
+{
+  GThread *thread[nthreads_gradient];
+  ParallelData data[nthreads_gradient];
+  unsigned int i, j, k, b;
+#if DEBUG
+  fprintf (stderr, "calibrate_step_gradient: start\n");
+#endif
+  for (i = 0; i < calibrate->nestimates; ++i)
+    {
+      k = (simulation + i) * calibrate->nvariables;
+      b = calibrate->simulation_best[0] * calibrate->nvariables;
+#if DEBUG
+      fprintf (stderr, "calibrate_step_gradient: simulation=%u best=%u\n",
+               simulation + i, calibrate->simulation_best[0]);
+#endif
+      for (j = 0; j < calibrate->nvariables; ++j, ++k, ++b)
+        {
+#if DEBUG
+          fprintf (stderr,
+                   "calibrate_step_gradient: estimate=%u best%u=%.14le\n",
+                   i, j, calibrate->value[b]);
+#endif
+          calibrate->value[k]
+            = calibrate->value[b] + calibrate_estimate_gradient (j, i);
+          calibrate->value[k] = fmin (fmax (calibrate->value[k],
+                                            calibrate->rangeminabs[j]),
+                                      calibrate->rangemaxabs[j]);
+#if DEBUG
+          fprintf (stderr,
+                   "calibrate_step_gradient: estimate=%u variable%u=%.14le\n",
+                   i, j, calibrate->value[k]);
+#endif
+        }
+    }
+  if (nthreads_gradient == 1)
+    calibrate_gradient_sequential (simulation);
+  else
+    {
+      for (i = 0; i <= nthreads_gradient; ++i)
+        {
+          calibrate->thread_gradient[i]
+            = simulation + calibrate->nstart_gradient
+            + i * (calibrate->nend_gradient - calibrate->nstart_gradient)
+            / nthreads_gradient;
+#if DEBUG
+          fprintf (stderr,
+                   "calibrate_step_gradient: i=%u thread_gradient=%u\n",
+                   i, calibrate->thread_gradient[i]);
+#endif
+        }
+      for (i = 0; i < nthreads_gradient; ++i)
+        {
+          data[i].thread = i;
+          thread[i] = g_thread_new
+            (NULL, (void (*)) calibrate_gradient_thread, &data[i]);
+        }
+      for (i = 0; i < nthreads_gradient; ++i)
+        g_thread_join (thread[i]);
+    }
+#if DEBUG
+  fprintf (stderr, "calibrate_step_gradient: end\n");
+#endif
+}
+
+/**
+ * \fn void calibrate_gradient ()
+ * \brief Function to calibrate with a gradient based method.
+ */
+void
+calibrate_gradient ()
+{
+  unsigned int i, j, k, b, s, adjust;
+#if DEBUG
+  fprintf (stderr, "calibrate_gradient: start\n");
+#endif
+  for (i = 0; i < calibrate->nvariables; ++i)
+    calibrate->gradient[i] = 0.;
+  b = calibrate->simulation_best[0] * calibrate->nvariables;
+  s = calibrate->nsimulations;
+  adjust = 1;
+  for (i = 0; i < calibrate->nsteps; ++i, s += calibrate->nestimates, b = k)
+    {
+#if DEBUG
+      fprintf (stderr, "calibrate_gradient: step=%u old_best=%u\n",
+               i, calibrate->simulation_best[0]);
+#endif
+      calibrate_step_gradient (s);
+      k = calibrate->simulation_best[0] * calibrate->nvariables;
+#if DEBUG
+      fprintf (stderr, "calibrate_gradient: step=%u best=%u\n",
+               i, calibrate->simulation_best[0]);
+#endif
+      if (k == b)
+        {
+          if (adjust)
+            for (j = 0; j < calibrate->nvariables; ++j)
+              calibrate->step[j] *= 0.5;
+          for (j = 0; j < calibrate->nvariables; ++j)
+            calibrate->gradient[j] = 0.;
+          adjust = 1;
+        }
+      else
+        {
+          for (j = 0; j < calibrate->nvariables; ++j)
+            {
+#if DEBUG
+              fprintf (stderr,
+                       "calibrate_gradient: best%u=%.14le old%u=%.14le\n",
+                       j, calibrate->value[k + j], j, calibrate->value[b + j]);
+#endif
+              calibrate->gradient[j]
+                = (1. - calibrate->relaxation) * calibrate->gradient[j]
+                + calibrate->relaxation
+                * (calibrate->value[k + j] - calibrate->value[b + j]);
+#if DEBUG
+              fprintf (stderr, "calibrate_gradient: gradient%u=%.14le\n",
+                       j, calibrate->gradient[j]);
+#endif
+            }
+          adjust = 0;
+        }
+    }
+#if DEBUG
+  fprintf (stderr, "calibrate_gradient: end\n");
+#endif
+}
+
+/**
+ * \fn double calibrate_genetic_objective (Entity *entity)
  * \brief Function to calculate the objective function of an entity.
  * \param entity
  * \brief entity data.
@@ -1678,7 +2064,7 @@ calibrate_genetic_objective (Entity * entity)
 }
 
 /**
- * \fn void calibrate_genetic()
+ * \fn void calibrate_genetic ()
  * \brief Function to calibrate with the genetic algorithm.
  */
 void
@@ -1726,7 +2112,7 @@ calibrate_genetic ()
 }
 
 /**
- * \fn void calibrate_save_old()
+ * \fn void calibrate_save_old ()
  * \brief Function to save the best results on iterative methods.
  */
 void
@@ -1735,12 +2121,16 @@ calibrate_save_old ()
   unsigned int i, j;
 #if DEBUG
   fprintf (stderr, "calibrate_save_old: start\n");
+  fprintf (stderr, "calibrate_save_old: nsaveds=%u\n", calibrate->nsaveds);
 #endif
   memcpy (calibrate->error_old, calibrate->error_best,
           calibrate->nbest * sizeof (double));
   for (i = 0; i < calibrate->nbest; ++i)
     {
       j = calibrate->simulation_best[i];
+#if DEBUG
+      fprintf (stderr, "calibrate_save_old: i=%u j=%u\n", i, j);
+#endif
       memcpy (calibrate->value_old + i * calibrate->nvariables,
               calibrate->value + j * calibrate->nvariables,
               calibrate->nvariables * sizeof (double));
@@ -1754,7 +2144,7 @@ calibrate_save_old ()
 }
 
 /**
- * \fn void calibrate_merge_old()
+ * \fn void calibrate_merge_old ()
  * \brief Function to merge the best results with the previous step best results
  *   on iterative methods.
  */
@@ -1803,7 +2193,7 @@ calibrate_merge_old ()
 }
 
 /**
- * \fn void calibrate_refine()
+ * \fn void calibrate_refine ()
  * \brief Function to refine the search ranges of the variables in iterative
  *   algorithms.
  */
@@ -1841,8 +2231,19 @@ calibrate_refine ()
         }
       for (j = 0; j < calibrate->nvariables; ++j)
         {
-          d = 0.5 * calibrate->tolerance
+          d = calibrate->tolerance
             * (calibrate->rangemax[j] - calibrate->rangemin[j]);
+          switch (calibrate->algorithm)
+            {
+            case ALGORITHM_MONTE_CARLO:
+              d *= 0.5;
+              break;
+            default:
+              if (calibrate->nsweeps[j] > 1)
+                d /= calibrate->nsweeps[j] - 1;
+              else
+                d = 0.;
+            }
           calibrate->rangemin[j] -= d;
           calibrate->rangemin[j]
             = fmax (calibrate->rangemin[j], calibrate->rangeminabs[j]);
@@ -1878,7 +2279,25 @@ calibrate_refine ()
 }
 
 /**
- * \fn void calibrate_iterate()
+ * \fn void calibrate_step ()
+ * \brief Function to do a step of the iterative algorithm.
+ */
+void
+calibrate_step ()
+{
+#if DEBUG
+  fprintf (stderr, "calibrate_step: start\n");
+#endif
+  calibrate_algorithm ();
+  if (calibrate->nsteps)
+    calibrate_gradient ();
+#if DEBUG
+  fprintf (stderr, "calibrate_step: end\n");
+#endif
+}
+
+/**
+ * \fn void calibrate_iterate ()
  * \brief Function to iterate the algorithm.
  */
 void
@@ -1919,13 +2338,12 @@ calibrate_free ()
 #if DEBUG
   fprintf (stderr, "calibrate_free: start\n");
 #endif
-  for (i = 0; i < calibrate->nexperiments; ++i)
+  for (j = 0; j < calibrate->ninputs; ++j)
     {
-      for (j = 0; j < calibrate->ninputs; ++j)
+      for (i = 0; i < calibrate->nexperiments; ++i)
         g_mapped_file_unref (calibrate->file[j][i]);
+      g_free (calibrate->file[j]);
     }
-  for (i = 0; i < calibrate->ninputs; ++i)
-    g_free (calibrate->file[i]);
   g_free (calibrate->error_old);
   g_free (calibrate->value_old);
   g_free (calibrate->value);
@@ -1938,37 +2356,38 @@ calibrate_free ()
 }
 
 /**
- * \fn void calibrate_new()
+ * \fn void calibrate_open ()
  * \brief Function to open and perform a calibration.
  */
 void
-calibrate_new ()
+calibrate_open ()
 {
   GTimeZone *tz;
   GDateTime *t0, *t;
   unsigned int i, j, *nbits;
 
 #if DEBUG
-  fprintf (stderr, "calibrate_new: start\n");
+  char *buffer;
+  fprintf (stderr, "calibrate_open: start\n");
 #endif
 
   // Getting initial time
 #if DEBUG
-  fprintf (stderr, "calibrate_new: getting initial time\n");
+  fprintf (stderr, "calibrate_open: getting initial time\n");
 #endif
   tz = g_time_zone_new_utc ();
   t0 = g_date_time_new_now (tz);
 
   // Obtaining and initing the pseudo-random numbers generator seed
 #if DEBUG
-  fprintf (stderr, "calibrate_new: getting initial seed\n");
+  fprintf (stderr, "calibrate_open: getting initial seed\n");
 #endif
   calibrate->seed = input->seed;
   gsl_rng_set (calibrate->rng, calibrate->seed);
 
   // Replacing the working directory
 #if DEBUG
-  fprintf (stderr, "calibrate_new: replacing the working directory\n");
+  fprintf (stderr, "calibrate_open: replacing the working directory\n");
 #endif
   g_chdir (input->directory);
 
@@ -1987,22 +2406,43 @@ calibrate_new ()
   switch (calibrate->algorithm)
     {
     case ALGORITHM_MONTE_CARLO:
-      calibrate_step = calibrate_MonteCarlo;
+      calibrate_algorithm = calibrate_MonteCarlo;
       break;
     case ALGORITHM_SWEEP:
-      calibrate_step = calibrate_sweep;
+      calibrate_algorithm = calibrate_sweep;
       break;
     default:
-      calibrate_step = calibrate_genetic;
+      calibrate_algorithm = calibrate_genetic;
       calibrate->mutation_ratio = input->mutation_ratio;
       calibrate->reproduction_ratio = input->reproduction_ratio;
       calibrate->adaptation_ratio = input->adaptation_ratio;
     }
+  calibrate->nvariables = input->nvariables;
   calibrate->nsimulations = input->nsimulations;
   calibrate->niterations = input->niterations;
   calibrate->nbest = input->nbest;
   calibrate->tolerance = input->tolerance;
+  calibrate->nsteps = input->nsteps;
+  calibrate->nestimates = 0;
+  if (input->nsteps)
+    {
+      calibrate->gradient_method = input->gradient_method;
+      calibrate->relaxation = input->relaxation;
+      switch (input->gradient_method)
+        {
+        case GRADIENT_METHOD_COORDINATES:
+          calibrate->nestimates = 2 * calibrate->nvariables;
+          calibrate_estimate_gradient = calibrate_estimate_gradient_coordinates;
+          break;
+        default:
+          calibrate->nestimates = input->nestimates;
+          calibrate_estimate_gradient = calibrate_estimate_gradient_random;
+        }
+    }
 
+#if DEBUG
+  fprintf (stderr, "calibrate_open: nbest=%u\n", calibrate->nbest);
+#endif
   calibrate->simulation_best
     = (unsigned int *) alloca (calibrate->nbest * sizeof (unsigned int));
   calibrate->error_best
@@ -2010,8 +2450,9 @@ calibrate_new ()
 
   // Reading the experimental data
 #if DEBUG
-  fprintf (stderr, "calibrate_new: current directory=%s\n",
-           g_get_current_dir ());
+  buffer = g_get_current_dir ();
+  fprintf (stderr, "calibrate_open: current directory=%s\n", buffer);
+  g_free (buffer);
 #endif
   calibrate->nexperiments = input->nexperiments;
   calibrate->ninputs = input->ninputs;
@@ -2026,16 +2467,16 @@ calibrate_new ()
   for (i = 0; i < input->nexperiments; ++i)
     {
 #if DEBUG
-      fprintf (stderr, "calibrate_new: i=%u\n", i);
-      fprintf (stderr, "calibrate_new: experiment=%s\n",
+      fprintf (stderr, "calibrate_open: i=%u\n", i);
+      fprintf (stderr, "calibrate_open: experiment=%s\n",
                calibrate->experiment[i]);
-      fprintf (stderr, "calibrate_new: weight=%lg\n", calibrate->weight[i]);
+      fprintf (stderr, "calibrate_open: weight=%lg\n", calibrate->weight[i]);
 #endif
       for (j = 0; j < input->ninputs; ++j)
         {
 #if DEBUG
-          fprintf (stderr, "calibrate_new: template%u\n", j + 1);
-          fprintf (stderr, "calibrate_new: experiment=%u template%u=%s\n",
+          fprintf (stderr, "calibrate_open: template%u\n", j + 1);
+          fprintf (stderr, "calibrate_open: experiment=%u template%u=%s\n",
                    i, j + 1, calibrate->template[j][i]);
 #endif
           calibrate->file[j][i]
@@ -2045,9 +2486,8 @@ calibrate_new ()
 
   // Reading the variables data
 #if DEBUG
-  fprintf (stderr, "calibrate_new: reading variables\n");
+  fprintf (stderr, "calibrate_open: reading variables\n");
 #endif
-  calibrate->nvariables = input->nvariables;
   calibrate->label = input->label;
   j = input->nvariables * sizeof (double);
   calibrate->rangemin = (double *) g_malloc (j);
@@ -2058,26 +2498,31 @@ calibrate_new ()
   calibrate->rangemaxabs = input->rangemaxabs;
   calibrate->precision = input->precision;
   calibrate->nsweeps = input->nsweeps;
+  calibrate->step = input->step;
   nbits = input->nbits;
   if (input->algorithm == ALGORITHM_SWEEP)
-    calibrate->nsimulations = 1;
-  else if (input->algorithm == ALGORITHM_GENETIC)
-    for (i = 0; i < input->nvariables; ++i)
-      {
-        if (calibrate->algorithm == ALGORITHM_SWEEP)
-          {
-            calibrate->nsimulations *= input->nsweeps[i];
+    {
+      calibrate->nsimulations = 1;
+      for (i = 0; i < input->nvariables; ++i)
+        {
+          if (input->algorithm == ALGORITHM_SWEEP)
+            {
+              calibrate->nsimulations *= input->nsweeps[i];
 #if DEBUG
-            fprintf (stderr, "calibrate_new: nsweeps=%u nsimulations=%u\n",
-                     calibrate->nsweeps[i], calibrate->nsimulations);
+              fprintf (stderr, "calibrate_open: nsweeps=%u nsimulations=%u\n",
+                       calibrate->nsweeps[i], calibrate->nsimulations);
 #endif
-          }
-      }
+            }
+        }
+    }
+  if (calibrate->nsteps)
+    calibrate->gradient
+      = (double *) alloca (calibrate->nvariables * sizeof (double));
 
   // Allocating values
 #if DEBUG
-  fprintf (stderr, "calibrate_new: allocating variables\n");
-  fprintf (stderr, "calibrate_new: nvariables=%u\n", calibrate->nvariables);
+  fprintf (stderr, "calibrate_open: allocating variables\n");
+  fprintf (stderr, "calibrate_open: nvariables=%u\n", calibrate->nvariables);
 #endif
   calibrate->genetic_variable = NULL;
   if (calibrate->algorithm == ALGORITHM_GENETIC)
@@ -2087,7 +2532,7 @@ calibrate_new ()
       for (i = 0; i < calibrate->nvariables; ++i)
         {
 #if DEBUG
-          fprintf (stderr, "calibrate_new: i=%u min=%lg max=%lg nbits=%u\n",
+          fprintf (stderr, "calibrate_open: i=%u min=%lg max=%lg nbits=%u\n",
                    i, calibrate->rangemin[i], calibrate->rangemax[i], nbits[i]);
 #endif
           calibrate->genetic_variable[i].minimum = calibrate->rangemin[i];
@@ -2096,32 +2541,45 @@ calibrate_new ()
         }
     }
 #if DEBUG
-  fprintf (stderr, "calibrate_new: nvariables=%u nsimulations=%u\n",
+  fprintf (stderr, "calibrate_open: nvariables=%u nsimulations=%u\n",
            calibrate->nvariables, calibrate->nsimulations);
 #endif
-  calibrate->value = (double *) g_malloc (calibrate->nsimulations *
-                                          calibrate->nvariables *
-                                          sizeof (double));
+  calibrate->value = (double *)
+    g_malloc ((calibrate->nsimulations
+               + calibrate->nestimates * calibrate->nsteps)
+              * calibrate->nvariables * sizeof (double));
 
   // Calculating simulations to perform on each task
 #if HAVE_MPI
 #if DEBUG
-  fprintf (stderr, "calibrate_new: rank=%u ntasks=%u\n",
+  fprintf (stderr, "calibrate_open: rank=%u ntasks=%u\n",
            calibrate->mpi_rank, ntasks);
 #endif
   calibrate->nstart = calibrate->mpi_rank * calibrate->nsimulations / ntasks;
-  calibrate->nend = (1 + calibrate->mpi_rank) * calibrate->nsimulations
-    / ntasks;
+  calibrate->nend
+    = (1 + calibrate->mpi_rank) * calibrate->nsimulations / ntasks;
+  if (calibrate->nsteps)
+    {
+      calibrate->nstart_gradient
+        = calibrate->mpi_rank * calibrate->nestimates / ntasks;
+      calibrate->nend_gradient
+        = (1 + calibrate->mpi_rank) * calibrate->nestimates / ntasks;
+    }
 #else
   calibrate->nstart = 0;
   calibrate->nend = calibrate->nsimulations;
+  if (calibrate->nsteps)
+    {
+      calibrate->nstart_gradient = 0;
+      calibrate->nend_gradient = calibrate->nestimates;
+    }
 #endif
 #if DEBUG
-  fprintf (stderr, "calibrate_new: nstart=%u nend=%u\n", calibrate->nstart,
+  fprintf (stderr, "calibrate_open: nstart=%u nend=%u\n", calibrate->nstart,
            calibrate->nend);
 #endif
 
-  // Calculating simulations to perform on each thread
+  // Calculating simulations to perform for each thread
   calibrate->thread
     = (unsigned int *) alloca ((1 + nthreads) * sizeof (unsigned int));
   for (i = 0; i <= nthreads; ++i)
@@ -2129,10 +2587,13 @@ calibrate_new ()
       calibrate->thread[i] = calibrate->nstart
         + i * (calibrate->nend - calibrate->nstart) / nthreads;
 #if DEBUG
-      fprintf (stderr, "calibrate_new: i=%u thread=%u\n", i,
+      fprintf (stderr, "calibrate_open: i=%u thread=%u\n", i,
                calibrate->thread[i]);
 #endif
     }
+  if (calibrate->nsteps)
+    calibrate->thread_gradient = (unsigned int *)
+      alloca ((1 + nthreads_gradient) * sizeof (unsigned int));
 
   // Opening result files
   calibrate->file_result = g_fopen (calibrate->result, "w");
@@ -2167,14 +2628,40 @@ calibrate_new ()
   fclose (calibrate->file_result);
 
 #if DEBUG
-  fprintf (stderr, "calibrate_new: end\n");
+  fprintf (stderr, "calibrate_open: end\n");
 #endif
 }
 
 #if HAVE_GTK
 
 /**
- * \fn void input_save(char *filename)
+ * \fn void input_save_gradient (xmlNode *node)
+ * \brief Function to save the gradient based method data in a XML node.
+ * \param node
+ * \brief XML node.
+ */
+void
+input_save_gradient (xmlNode * node)
+{
+  if (input->nsteps)
+    {
+      xml_node_set_uint (node, XML_NSTEPS, input->nsteps);
+      if (input->relaxation != DEFAULT_RELAXATION)
+        xml_node_set_float (node, XML_RELAXATION, input->relaxation);
+      switch (input->gradient_method)
+        {
+        case GRADIENT_METHOD_COORDINATES:
+          xmlSetProp (node, XML_GRADIENT_METHOD, XML_COORDINATES);
+          break;
+        default:
+          xmlSetProp (node, XML_GRADIENT_METHOD, XML_RANDOM);
+          xml_node_set_uint (node, XML_NESTIMATES, input->nestimates);
+        }
+    }
+}
+
+/**
+ * \fn void input_save (char *filename)
  * \brief Function to save the input file.
  * \param filename
  * \brief Input file name.
@@ -2236,6 +2723,7 @@ input_save (char *filename)
       xmlSetProp (node, XML_TOLERANCE, (xmlChar *) buffer);
       snprintf (buffer, 64, "%u", input->nbest);
       xmlSetProp (node, XML_NBEST, (xmlChar *) buffer);
+      input_save_gradient (node);
       break;
     case ALGORITHM_SWEEP:
       xmlSetProp (node, XML_ALGORITHM, XML_SWEEP);
@@ -2245,6 +2733,7 @@ input_save (char *filename)
       xmlSetProp (node, XML_TOLERANCE, (xmlChar *) buffer);
       snprintf (buffer, 64, "%u", input->nbest);
       xmlSetProp (node, XML_NBEST, (xmlChar *) buffer);
+      input_save_gradient (node);
       break;
     default:
       xmlSetProp (node, XML_ALGORITHM, XML_GENETIC);
@@ -2306,14 +2795,6 @@ input_save (char *filename)
 void
 options_new ()
 {
-  options->label_processors
-    = (GtkLabel *) gtk_label_new (gettext ("Processors number"));
-  options->spin_processors
-    = (GtkSpinButton *) gtk_spin_button_new_with_range (1., 64., 1.);
-  gtk_widget_set_tooltip_text
-    (GTK_WIDGET (options->spin_processors),
-     gettext ("Number of threads to perform the calibration/optimization"));
-  gtk_spin_button_set_value (options->spin_processors, (gdouble) nthreads);
   options->label_seed = (GtkLabel *)
     gtk_label_new (gettext ("Pseudo-random numbers generator seed"));
   options->spin_seed = (GtkSpinButton *)
@@ -2322,13 +2803,36 @@ options_new ()
     (GTK_WIDGET (options->spin_seed),
      gettext ("Seed to init the pseudo-random numbers generator"));
   gtk_spin_button_set_value (options->spin_seed, (gdouble) input->seed);
+  options->label_threads = (GtkLabel *)
+    gtk_label_new (gettext ("Threads number for the stochastic algorithm"));
+  options->spin_threads
+    = (GtkSpinButton *) gtk_spin_button_new_with_range (1., 64., 1.);
+  gtk_widget_set_tooltip_text
+    (GTK_WIDGET (options->spin_threads),
+     gettext ("Number of threads to perform the calibration/optimization for "
+              "the stochastic algorithm"));
+  gtk_spin_button_set_value (options->spin_threads, (gdouble) nthreads);
+  options->label_gradient = (GtkLabel *)
+    gtk_label_new (gettext ("Threads number for the gradient based method"));
+  options->spin_gradient
+    = (GtkSpinButton *) gtk_spin_button_new_with_range (1., 64., 1.);
+  gtk_widget_set_tooltip_text
+    (GTK_WIDGET (options->spin_gradient),
+     gettext ("Number of threads to perform the calibration/optimization for "
+              "the gradient based method"));
+  gtk_spin_button_set_value (options->spin_gradient,
+                             (gdouble) nthreads_gradient);
   options->grid = (GtkGrid *) gtk_grid_new ();
-  gtk_grid_attach (options->grid, GTK_WIDGET (options->label_processors),
-                   0, 0, 1, 1);
-  gtk_grid_attach (options->grid, GTK_WIDGET (options->spin_processors),
-                   1, 0, 1, 1);
-  gtk_grid_attach (options->grid, GTK_WIDGET (options->label_seed), 0, 1, 1, 1);
-  gtk_grid_attach (options->grid, GTK_WIDGET (options->spin_seed), 1, 1, 1, 1);
+  gtk_grid_attach (options->grid, GTK_WIDGET (options->label_seed), 0, 0, 1, 1);
+  gtk_grid_attach (options->grid, GTK_WIDGET (options->spin_seed), 1, 0, 1, 1);
+  gtk_grid_attach (options->grid, GTK_WIDGET (options->label_threads),
+                   0, 1, 1, 1);
+  gtk_grid_attach (options->grid, GTK_WIDGET (options->spin_threads),
+                   1, 1, 1, 1);
+  gtk_grid_attach (options->grid, GTK_WIDGET (options->label_gradient),
+                   0, 2, 1, 1);
+  gtk_grid_attach (options->grid, GTK_WIDGET (options->spin_gradient),
+                   1, 2, 1, 1);
   gtk_widget_show_all (GTK_WIDGET (options->grid));
   options->dialog = (GtkDialog *)
     gtk_dialog_new_with_buttons (gettext ("Options"),
@@ -2342,9 +2846,11 @@ options_new ()
      GTK_WIDGET (options->grid));
   if (gtk_dialog_run (options->dialog) == GTK_RESPONSE_OK)
     {
-      nthreads = gtk_spin_button_get_value_as_int (options->spin_processors);
       input->seed
         = (unsigned long int) gtk_spin_button_get_value (options->spin_seed);
+      nthreads = gtk_spin_button_get_value_as_int (options->spin_threads);
+      nthreads_gradient
+        = gtk_spin_button_get_value_as_int (options->spin_gradient);
     }
   gtk_widget_destroy (GTK_WIDGET (options->dialog));
 }
@@ -2373,7 +2879,71 @@ running_new ()
 }
 
 /**
- * \fn int window_save()
+ * \fn int window_get_algorithm ()
+ * \brief Function to get the stochastic algorithm number.
+ * \return Stochastic algorithm number.
+ */
+int
+window_get_algorithm ()
+{
+  unsigned int i;
+  for (i = 0; i < NALGORITHMS; ++i)
+    if (gtk_toggle_button_get_active
+        (GTK_TOGGLE_BUTTON (window->button_algorithm[i])))
+      break;
+  return i;
+}
+
+/**
+ * \fn int window_get_gradient ()
+ * \brief Function to get the gradient base method number.
+ * \return Gradient base method number.
+ */
+int
+window_get_gradient ()
+{
+  unsigned int i;
+  for (i = 0; i < NGRADIENTS; ++i)
+    if (gtk_toggle_button_get_active
+        (GTK_TOGGLE_BUTTON (window->button_gradient[i])))
+      break;
+  return i;
+}
+
+/**
+ * \fn void window_save_gradient ()
+ * \brief Function to save the gradient based method data in the input file.
+ */
+void
+window_save_gradient ()
+{
+#if DEBUG
+  fprintf (stderr, "window_save_gradient: start\n");
+#endif
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (window->check_gradient)))
+    {
+      input->nsteps = gtk_spin_button_get_value_as_int (window->spin_steps);
+      input->relaxation = gtk_spin_button_get_value (window->spin_relaxation);
+      switch (window_get_gradient ())
+        {
+        case GRADIENT_METHOD_COORDINATES:
+          input->gradient_method = GRADIENT_METHOD_COORDINATES;
+          break;
+        default:
+          input->gradient_method = GRADIENT_METHOD_RANDOM;
+          input->nestimates
+            = gtk_spin_button_get_value_as_int (window->spin_estimates);
+        }
+    }
+  else
+    input->nsteps = 0;
+#if DEBUG
+  fprintf (stderr, "window_save_gradient: end\n");
+#endif
+}
+
+/**
+ * \fn int window_save ()
  * \brief Function to save the input file.
  * \return 1 on OK, 0 on Cancel.
  */
@@ -2431,6 +3001,7 @@ window_save ()
             = gtk_spin_button_get_value_as_int (window->spin_iterations);
           input->tolerance = gtk_spin_button_get_value (window->spin_tolerance);
           input->nbest = gtk_spin_button_get_value_as_int (window->spin_bests);
+          window_save_gradient ();
           break;
         case ALGORITHM_SWEEP:
           input->algorithm = ALGORITHM_SWEEP;
@@ -2438,6 +3009,7 @@ window_save ()
             = gtk_spin_button_get_value_as_int (window->spin_iterations);
           input->tolerance = gtk_spin_button_get_value (window->spin_tolerance);
           input->nbest = gtk_spin_button_get_value_as_int (window->spin_bests);
+          window_save_gradient ();
           break;
         default:
           input->algorithm = ALGORITHM_GENETIC;
@@ -2476,7 +3048,7 @@ window_save ()
 }
 
 /**
- * \fn void window_run()
+ * \fn void window_run ()
  * \brief Function to run a calibration.
  */
 void
@@ -2497,7 +3069,7 @@ window_run ()
   running_new ();
   while (gtk_events_pending ())
     gtk_main_iteration ();
-  calibrate_new ();
+  calibrate_open ();
   gtk_widget_destroy (GTK_WIDGET (running->dialog));
   snprintf (buffer, 64, "error = %.15le\n", calibrate->error_old[0]);
   msg2 = g_strdup (buffer);
@@ -2522,7 +3094,7 @@ window_run ()
 }
 
 /**
- * \fn void window_help()
+ * \fn void window_help ()
  * \brief Function to show a help dialog.
  */
 void
@@ -2538,7 +3110,7 @@ window_help ()
 }
 
 /**
- * \fn void window_about()
+ * \fn void window_about ()
  * \brief Function to show an about dialog.
  */
 void
@@ -2557,7 +3129,7 @@ window_about ()
               "parameters"),
      "authors", authors,
      "translator-credits", "Javier Burguete Tolosa <jburguete@eead.csic.es>",
-     "version", "1.0.6",
+     "version", "1.3.7",
      "copyright", "Copyright 2012-2015 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/calibrator",
@@ -2565,23 +3137,30 @@ window_about ()
 }
 
 /**
- * \fn int window_get_algorithm()
- * \brief Function to get the algorithm number.
- * \return Algorithm number.
+ * \fn void window_update_gradient ()
+ * \brief Function to update gradient based method widgets view in the main
+ *   window.
  */
-int
-window_get_algorithm ()
+void
+window_update_gradient ()
 {
-  unsigned int i;
-  for (i = 0; i < NALGORITHMS; ++i)
-    if (gtk_toggle_button_get_active
-        (GTK_TOGGLE_BUTTON (window->button_algorithm[i])))
+  gtk_widget_show (GTK_WIDGET (window->check_gradient));
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (window->check_gradient)))
+    gtk_widget_show (GTK_WIDGET (window->grid_gradient));
+  switch (window_get_gradient ())
+    {
+    case GRADIENT_METHOD_COORDINATES:
+      gtk_widget_hide (GTK_WIDGET (window->label_estimates));
+      gtk_widget_hide (GTK_WIDGET (window->spin_estimates));
       break;
-  return i;
+    default:
+      gtk_widget_show (GTK_WIDGET (window->label_estimates));
+      gtk_widget_show (GTK_WIDGET (window->spin_estimates));
+    }
 }
 
 /**
- * \fn void window_update()
+ * \fn void window_update ()
  * \brief Function to update the main window view.
  */
 void
@@ -2614,6 +3193,8 @@ window_update ()
   gtk_widget_hide (GTK_WIDGET (window->spin_sweeps));
   gtk_widget_hide (GTK_WIDGET (window->label_bits));
   gtk_widget_hide (GTK_WIDGET (window->spin_bits));
+  gtk_widget_hide (GTK_WIDGET (window->check_gradient));
+  gtk_widget_hide (GTK_WIDGET (window->grid_gradient));
   i = gtk_spin_button_get_value_as_int (window->spin_iterations);
   switch (window_get_algorithm ())
     {
@@ -2629,6 +3210,7 @@ window_update ()
           gtk_widget_show (GTK_WIDGET (window->label_bests));
           gtk_widget_show (GTK_WIDGET (window->spin_bests));
         }
+      window_update_gradient ();
       break;
     case ALGORITHM_SWEEP:
       gtk_widget_show (GTK_WIDGET (window->label_iterations));
@@ -2642,6 +3224,8 @@ window_update ()
         }
       gtk_widget_show (GTK_WIDGET (window->label_sweeps));
       gtk_widget_show (GTK_WIDGET (window->spin_sweeps));
+      gtk_widget_show (GTK_WIDGET (window->check_gradient));
+      window_update_gradient ();
       break;
     default:
       gtk_widget_show (GTK_WIDGET (window->label_population));
@@ -2718,7 +3302,7 @@ window_update ()
 }
 
 /**
- * \fn void window_set_algorithm()
+ * \fn void window_set_algorithm ()
  * \brief Function to avoid memory errors changing the algorithm.
  */
 void
@@ -2755,7 +3339,7 @@ window_set_algorithm ()
 }
 
 /**
- * \fn void window_set_experiment()
+ * \fn void window_set_experiment ()
  * \brief Function to set the experiment data in the main window.
  */
 void
@@ -2795,7 +3379,7 @@ window_set_experiment ()
 }
 
 /**
- * \fn void window_remove_experiment()
+ * \fn void window_remove_experiment ()
  * \brief Function to remove an experiment in the main window.
  */
 void
@@ -2829,7 +3413,7 @@ window_remove_experiment ()
 }
 
 /**
- * \fn void window_add_experiment()
+ * \fn void window_add_experiment ()
  * \brief Function to add an experiment in the main window.
  */
 void
@@ -2867,7 +3451,7 @@ window_add_experiment ()
 }
 
 /**
- * \fn void window_name_experiment()
+ * \fn void window_name_experiment ()
  * \brief Function to set the experiment name in the main window.
  */
 void
@@ -2898,7 +3482,7 @@ window_name_experiment ()
 }
 
 /**
- * \fn void window_weight_experiment()
+ * \fn void window_weight_experiment ()
  * \brief Function to update the experiment weight in the main window.
  */
 void
@@ -2916,7 +3500,7 @@ window_weight_experiment ()
 }
 
 /**
- * \fn void window_inputs_experiment()
+ * \fn void window_inputs_experiment ()
  * \brief Function to update the experiment input templates number in the main
  *   window.
  */
@@ -2950,7 +3534,7 @@ window_inputs_experiment ()
 }
 
 /**
- * \fn void window_template_experiment(void *data)
+ * \fn void window_template_experiment (void *data)
  * \brief Function to update the experiment i-th input template in the main
  *   window.
  * \param data
@@ -2981,7 +3565,7 @@ window_template_experiment (void *data)
 }
 
 /**
- * \fn void window_set_variable()
+ * \fn void window_set_variable ()
  * \brief Function to set the variable data in the main window.
  */
 void
@@ -3051,7 +3635,7 @@ window_set_variable ()
 }
 
 /**
- * \fn void window_remove_variable()
+ * \fn void window_remove_variable ()
  * \brief Function to remove a variable in the main window.
  */
 void
@@ -3091,7 +3675,7 @@ window_remove_variable ()
 }
 
 /**
- * \fn void window_add_variable()
+ * \fn void window_add_variable ()
  * \brief Function to add a variable in the main window.
  */
 void
@@ -3159,7 +3743,7 @@ window_add_variable ()
 }
 
 /**
- * \fn void window_label_variable()
+ * \fn void window_label_variable ()
  * \brief Function to set the variable label in the main window.
  */
 void
@@ -3183,7 +3767,7 @@ window_label_variable ()
 }
 
 /**
- * \fn void window_precision_variable()
+ * \fn void window_precision_variable ()
  * \brief Function to update the variable precision in the main window.
  */
 void
@@ -3206,7 +3790,7 @@ window_precision_variable ()
 }
 
 /**
- * \fn void window_rangemin_variable()
+ * \fn void window_rangemin_variable ()
  * \brief Function to update the variable rangemin in the main window.
  */
 void
@@ -3224,7 +3808,7 @@ window_rangemin_variable ()
 }
 
 /**
- * \fn void window_rangemax_variable()
+ * \fn void window_rangemax_variable ()
  * \brief Function to update the variable rangemax in the main window.
  */
 void
@@ -3242,7 +3826,7 @@ window_rangemax_variable ()
 }
 
 /**
- * \fn void window_rangeminabs_variable()
+ * \fn void window_rangeminabs_variable ()
  * \brief Function to update the variable rangeminabs in the main window.
  */
 void
@@ -3260,7 +3844,7 @@ window_rangeminabs_variable ()
 }
 
 /**
- * \fn void window_rangemaxabs_variable()
+ * \fn void window_rangemaxabs_variable ()
  * \brief Function to update the variable rangemaxabs in the main window.
  */
 void
@@ -3278,7 +3862,7 @@ window_rangemaxabs_variable ()
 }
 
 /**
- * \fn void window_update_variable()
+ * \fn void window_update_variable ()
  * \brief Function to update the variable data in the main window.
  */
 void
@@ -3362,6 +3946,24 @@ window_read (char *filename)
                                  (gdouble) input->niterations);
       gtk_spin_button_set_value (window->spin_bests, (gdouble) input->nbest);
       gtk_spin_button_set_value (window->spin_tolerance, input->tolerance);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (window->check_gradient),
+                                    input->nsteps);
+      if (input->nsteps)
+        {
+          gtk_toggle_button_set_active
+            (GTK_TOGGLE_BUTTON (window->button_gradient
+                                [input->gradient_method]), TRUE);
+          gtk_spin_button_set_value (window->spin_steps,
+                                     (gdouble) input->nsteps);
+          gtk_spin_button_set_value (window->spin_relaxation,
+                                     (gdouble) input->relaxation);
+          switch (input->gradient_method)
+            {
+            case GRADIENT_METHOD_RANDOM:
+              gtk_spin_button_set_value (window->spin_estimates,
+                                         (gdouble) input->nestimates);
+            }
+        }
       break;
     default:
       gtk_spin_button_set_value (window->spin_population,
@@ -3403,7 +4005,7 @@ window_read (char *filename)
 }
 
 /**
- * \fn void window_open()
+ * \fn void window_open ()
  * \brief Function to open the input data.
  */
 void
@@ -3437,6 +4039,7 @@ window_open ()
 #if DEBUG
           fprintf (stderr, "window_open: error reading input file\n");
 #endif
+          g_free (buffer);
 
           // Reading backup file on error
           buffer = g_build_filename (directory, name, NULL);
@@ -3448,17 +4051,15 @@ window_open ()
               fprintf (stderr, "window_read: error reading backup file\n");
 #endif
               g_free (buffer);
-              g_free (name);
-              g_free (directory);
-#if DEBUG
-              fprintf (stderr, "window_open: end\n");
-#endif
-              gtk_main_quit ();
+              break;
             }
           g_free (buffer);
         }
       else
-        break;
+        {
+          g_free (buffer);
+          break;
+        }
     }
 
   // Freeing and closing
@@ -3471,7 +4072,7 @@ window_open ()
 }
 
 /**
- * \fn void window_new()
+ * \fn void window_new ()
  * \brief Function to open the main window.
  */
 void
@@ -3487,6 +4088,13 @@ window_new ()
     gettext ("Monte-Carlo brute force algorithm"),
     gettext ("Sweep brute force algorithm"),
     gettext ("Genetic algorithm")
+  };
+  char *label_gradient[NGRADIENTS] = {
+    gettext ("_Coordinates descent"), gettext ("_Random")
+  };
+  char *tip_gradient[NGRADIENTS] = {
+    gettext ("Coordinates descent gradient estimate method"),
+    gettext ("Random gradient estimate method")
   };
 
   // Creating the window
@@ -3682,6 +4290,53 @@ window_new ()
     (GTK_WIDGET (window->spin_adaptation),
      gettext ("Ratio of adaptation for the genetic algorithm"));
 
+  // Creating the gradient based method properties
+  window->check_gradient = (GtkCheckButton *)
+    gtk_check_button_new_with_mnemonic (gettext ("_Gradient based method"));
+  g_signal_connect (window->check_gradient, "clicked", window_update, NULL);
+  window->grid_gradient = (GtkGrid *) gtk_grid_new ();
+  window->button_gradient[0] = (GtkRadioButton *)
+    gtk_radio_button_new_with_mnemonic (NULL, label_gradient[0]);
+  gtk_grid_attach (window->grid_gradient,
+                   GTK_WIDGET (window->button_gradient[0]), 0, 0, 1, 1);
+  g_signal_connect (window->button_gradient[0], "clicked", window_update, NULL);
+  for (i = 0; ++i < NGRADIENTS;)
+    {
+      window->button_gradient[i] = (GtkRadioButton *)
+        gtk_radio_button_new_with_mnemonic
+        (gtk_radio_button_get_group (window->button_gradient[0]),
+         label_gradient[i]);
+      gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_gradient[i]),
+                                   tip_gradient[i]);
+      gtk_grid_attach (window->grid_gradient,
+                       GTK_WIDGET (window->button_gradient[i]), 0, i, 1, 1);
+      g_signal_connect (window->button_gradient[i], "clicked",
+                        window_update, NULL);
+    }
+  window->label_steps = (GtkLabel *) gtk_label_new (gettext ("Steps number"));
+  window->spin_steps = (GtkSpinButton *)
+    gtk_spin_button_new_with_range (1., 1.e12, 1.);
+  window->label_estimates
+    = (GtkLabel *) gtk_label_new (gettext ("Gradient estimates number"));
+  window->spin_estimates = (GtkSpinButton *)
+    gtk_spin_button_new_with_range (1., 1.e3, 1.);
+  window->label_relaxation
+    = (GtkLabel *) gtk_label_new (gettext ("Relaxation parameter"));
+  window->spin_relaxation = (GtkSpinButton *)
+    gtk_spin_button_new_with_range (0., 2., 0.001);
+  gtk_grid_attach (window->grid_gradient, GTK_WIDGET (window->label_steps),
+                   0, NGRADIENTS, 1, 1);
+  gtk_grid_attach (window->grid_gradient, GTK_WIDGET (window->spin_steps),
+                   1, NGRADIENTS, 1, 1);
+  gtk_grid_attach (window->grid_gradient, GTK_WIDGET (window->label_estimates),
+                   0, NGRADIENTS + 1, 1, 1);
+  gtk_grid_attach (window->grid_gradient, GTK_WIDGET (window->spin_estimates),
+                   1, NGRADIENTS + 1, 1, 1);
+  gtk_grid_attach (window->grid_gradient, GTK_WIDGET (window->label_relaxation),
+                   0, NGRADIENTS + 2, 1, 1);
+  gtk_grid_attach (window->grid_gradient, GTK_WIDGET (window->spin_relaxation),
+                   1, NGRADIENTS + 2, 1, 1);
+
   // Creating the array of algorithms
   window->grid_algorithm = (GtkGrid *) gtk_grid_new ();
   window->button_algorithm[0] = (GtkRadioButton *)
@@ -3756,6 +4411,12 @@ window_new ()
   gtk_grid_attach (window->grid_algorithm,
                    GTK_WIDGET (window->spin_adaptation), 1,
                    NALGORITHMS + 8, 1, 1);
+  gtk_grid_attach (window->grid_algorithm,
+                   GTK_WIDGET (window->check_gradient), 0,
+                   NALGORITHMS + 9, 2, 1);
+  gtk_grid_attach (window->grid_algorithm,
+                   GTK_WIDGET (window->grid_gradient), 0,
+                   NALGORITHMS + 10, 2, 1);
   window->frame_algorithm = (GtkFrame *) gtk_frame_new (gettext ("Algorithm"));
   gtk_container_add (GTK_CONTAINER (window->frame_algorithm),
                      GTK_WIDGET (window->grid_algorithm));
@@ -4038,7 +4699,7 @@ window_new ()
 #endif
 
 /**
- * \fn int cores_number()
+ * \fn int cores_number ()
  * \brief Function to obtain the cores number.
  * \return Cores number.
  */
@@ -4055,7 +4716,7 @@ cores_number ()
 }
 
 /**
- * \fn int main(int argn, char **argc)
+ * \fn int main (int argn, char **argc)
  * \brief Main function.
  * \param argn
  * \brief Arguments number.
@@ -4066,6 +4727,10 @@ cores_number ()
 int
 main (int argn, char **argc)
 {
+#if HAVE_GTK
+  char *buffer;
+#endif
+
   // Starting pseudo-random numbers generator
   calibrate->rng = gsl_rng_alloc (gsl_rng_taus2);
   calibrate->seed = DEFAULT_RANDOM_SEED;
@@ -4086,15 +4751,14 @@ main (int argn, char **argc)
 #if HAVE_GTK
 
   // Getting threads number
-  nthreads = cores_number ();
+  nthreads_gradient = nthreads = cores_number ();
 
   // Setting local language and international floating point numbers notation
   setlocale (LC_ALL, "");
   setlocale (LC_NUMERIC, "C");
   window->application_directory = g_get_current_dir ();
-  bindtextdomain (PROGRAM_INTERFACE,
-                  g_build_filename (window->application_directory,
-                                    LOCALE_DIR, NULL));
+  buffer = g_build_filename (window->application_directory, LOCALE_DIR, NULL);
+  bindtextdomain (PROGRAM_INTERFACE, buffer);
   bind_textdomain_codeset (PROGRAM_INTERFACE, "UTF-8");
   textdomain (PROGRAM_INTERFACE);
 
@@ -4107,6 +4771,8 @@ main (int argn, char **argc)
   gtk_main ();
 
   // Freeing memory
+  input_free ();
+  g_free (buffer);
   gtk_widget_destroy (GTK_WIDGET (window->window));
   g_free (window->application_directory);
 
@@ -4121,15 +4787,21 @@ main (int argn, char **argc)
 
   // Getting threads number
   if (argn == 2)
-    nthreads = cores_number ();
+    nthreads_gradient = nthreads = cores_number ();
   else
-    nthreads = atoi (argc[2]);
+    {
+      nthreads_gradient = nthreads = atoi (argc[2]);
+      if (!nthreads)
+        {
+          printf ("Bad threads number\n");
+          return 2;
+        }
+    }
   printf ("nthreads=%u\n", nthreads);
 
   // Making calibration
-  input_new ();
   if (input_open (argc[argn - 1]))
-    calibrate_new ();
+    calibrate_open ();
 
   // Freeing memory
   calibrate_free ();

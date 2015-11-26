@@ -146,11 +146,14 @@ $(BEALE)Beale: $(BEALE)Beale.c $(BEALE)Makefile
 	convert logo.png calibrator.ico
 	@WINDRES@ calibrator.rc -o @ICON@
 
+$(MDIR)result-en.eps: $(MDIR)result-en.png
+	convert $(MDIR)result-en.png $(MDIR)result-en.eps
+
 $(MDIR)calibrator-en.eps: $(MDIR)calibrator-en.png
 	convert $(MDIR)calibrator-en.png $(MDIR)calibrator-en.eps
 
 $(M1): $(MDIR)user-manual.tex $(MDIR)bib.bib \
-	$(MDIR)calibrator-en.eps Makefile
+	$(MDIR)calibrator-en.eps $(MDIR)result-en.eps Makefile
 	cd $(MDIR); latex user-manual; bibtex user-manual; latex user-manual; \
 		latex user-manual; dvipdf user-manual
 
