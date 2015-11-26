@@ -215,9 +215,9 @@ with:
 * **evaluator**: Optional. When needed is the evaluator executable file name.
 * **seed**: Optional. Seed of the pseudo-random numbers generator (default value
 is 7007).
-* **result**: Optional. Is the name of the optime result file (default name is
-"result").
-* **variables**: Optional. Is the name of all simulated variables file
+* **result**: Optional. It is the name of the optime result file (default name
+is "result").
+* **variables**: Optional. It is the name of all simulated variables file
 (default name is "variables").
 * **precision**: Optional, defined for each variable. Number of precision digits
 to evaluate the variable. 0 apply for integer numbers (default value is 14).
@@ -227,7 +227,7 @@ value obtained for each experiment in the final objective function value
 
 Implemented algorithms are:
 
-* **sweep**: Sweep brute force algorithm. Requires for each variable:
+* **sweep**: Sweep brute force algorithm. It requires for each variable:
   * *sweeps*: number of sweeps to generate for each variable in every
   experiment. 
 
@@ -235,7 +235,7 @@ Implemented algorithms are:
 > (number of experiments) x (variable 1 number of sweeps) x ... x
 > (variable n number of sweeps) x (number of iterations)
 
-* **Monte-Carlo**: Monte-Carlo brute force algorithm. Requires on calibrate:
+* **Monte-Carlo**: Monte-Carlo brute force algorithm. It requires on calibrate:
   * *nsimulations*: number of simulations to run in every experiment.
 
     The total number of simulations to run is:
@@ -249,15 +249,19 @@ the following parameters:
   0).
   * *niterations*: number of iterations (default 1).
 
-* Moreover, both brute force algorithms can be coupled with a gradient base
+* Moreover, both brute force algorithms can be coupled with a gradient based
 method by using:
   * *gradient_type*: method to estimate the gradient. Two options are
   currently available:
-    * coordinates: coordinates descent method.
-    * random: random method.
-
-    It requires:
+    * coordinates: coordinates descent method. It increases the total number of
+    simulations by:
+> (number of experiments) x (number of iterations) x (number of steps) x 2 x (number of variables)
+    * random: random method. It requires:
       - nestimates: number of random checks to estimate the gradient.
+
+    It increases the total number of simulations by:
+> (number of experiments) x (number of iterations) x (number of steps)
+> x (number of estimates)
 
   Both methods require also:
     * nsteps: number of steps to perform the gradient based method,
