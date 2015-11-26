@@ -261,6 +261,7 @@ method by using:
       It increases the total number of simulations by:
 > (number of experiments) x (number of iterations) x (number of steps) x 2
 > x (number of variables)
+
     * random: random method. It requires:
     * nestimates: number of random checks to estimate the gradient.
 
