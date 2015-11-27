@@ -206,7 +206,8 @@ estimates initial parameter values for sediment fractions, instream water
 temperature or infiltration rates \citep{Duan04}. Within agriculture, there are
 many phenomena that can be modelled using differential equations that
 participate in conservation laws
-\citep{Playan06,JaviSurcos2,Ebrahimiam13,Ouazaa14,Ouazaa15}. The application of
+\citep{Playan06,JaviSurcos2,Ebrahimiam13,Ouazaa14,Ouazaa15,SedagatdoostEbraimian15}.
+The application of
 mathematical models to describe physical processes is helpful to perform
 simulations of possible scenarios using computational facilities. Despite the
 quality of these mathematical models for predictive purposes, calibration is
@@ -659,6 +660,15 @@ Trataremos de minimizar esta función en el intervalo $x\in[-5,5]$, $y\in[-5,5]$
 En la figura~\ref{FigSphere} se muestra una representación del valor de esta
 función en el plano $x-y$.
 \PLOT{Sphere.eps}{}{FigSphere}
+
+\FIGVI{sphere-variables-sw-50-50-1.eps}{sphere-variables-mc-2500-1.eps}
+{sphere-variables-sw-10-10-25-10-0.5.eps}
+{sphere-variables-mc-100-25-10-0.1.eps}
+{sphere-variables-ga-250-16-0.2-0.2-0.2-32.eps}
+{sphere-variables-ga-100-33-0.25-0.25-0.25-32.eps}
+{
+	Parameters simulated by diferent stochastic algorithms
+}{FigSphereStochasticParameters}
 
 \subsection{Ackley's function}
 

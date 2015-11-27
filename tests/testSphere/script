@@ -14,12 +14,14 @@
 ../../1.2.1/calibratorbin test-mc-100-25-4-0-14.xml
 ../../1.2.1/calibratorbin test-mc-c-1600-1-225-0.001-1-14.xml    
 ../../1.2.1/calibratorbin test-mc-c-1600-1-225-0.001-1.5-14.xml  
-../../1.2.1/calibratorbin test-mc-c-100-1-600-0.0001-1-14.xml    
-../../1.2.1/calibratorbin test-mc-c-100-1-600-0.0001-1.5-14.xml  
+../../1.2.1/calibratorbin test-mc-c-100-1-600-0.1-1-14.xml    
+../../1.2.1/calibratorbin test-mc-c-100-1-600-0.1-1.5-14.xml  
 ../../1.2.1/calibratorbin test-mc-r-1600-1-90-10-0.001-1-14.xml
 ../../1.2.1/calibratorbin test-mc-r-1600-1-90-10-0.001-1.5-14.xml
-../../1.2.1/calibratorbin test-mc-r-100-1-240-10-0.0001-1-14.xml
-../../1.2.1/calibratorbin test-mc-r-100-1-240-10-0.0001-1.5-14.xml
+../../1.2.1/calibratorbin test-mc-r-100-1-240-10-0.1-1-14.xml
+../../1.2.1/calibratorbin test-mc-r-100-1-240-10-0.1-1.5-14.xml
+../../1.2.1/calibratorbin test-mc-r-100-1-600-4-0.1-1-14.xml
+../../1.2.1/calibratorbin test-mc-r-100-1-600-4-0.1-1.5-14.xml
 ../../1.2.1/calibratorbin test-sw-50-50-1-14.xml
 ../../1.2.1/calibratorbin test-sw-10-10-25-10-0.5-14.xml
 ../../1.2.1/calibratorbin test-sw-10-10-25-4-0-14.xml
@@ -47,12 +49,14 @@
 ../process variables-mc-100-25-4-0-14 evolution-mc-100-25-4-0-14
 ../process variables-mc-c-1600-1-225-0.001-1-14 evolution-mc-c-1600-1-225-0.001-1-14
 ../process variables-mc-c-1600-1-225-0.001-1.5-14 evolution-mc-c-1600-1-225-0.001-1.5-14
-../process variables-mc-c-100-1-600-0.0001-1-14 evolution-mc-c-100-1-600-0.0001-1-14
-../process variables-mc-c-100-1-600-0.0001-1.5-14 evolution-mc-c-100-1-600-0.0001-1.5-14
+../process variables-mc-c-100-1-600-0.1-1-14 evolution-mc-c-100-1-600-0.1-1-14
+../process variables-mc-c-100-1-600-0.1-1.5-14 evolution-mc-c-100-1-600-0.1-1.5-14
 ../process variables-mc-r-1600-1-90-10-0.001-1-14 evolution-mc-r-1600-1-90-10-0.001-1-14
 ../process variables-mc-r-1600-1-90-10-0.001-1.5-14 evolution-mc-r-1600-1-90-10-0.001-1.5-14
-../process variables-mc-r-100-1-240-10-0.0001-1-14 evolution-mc-r-100-1-240-10-0.0001-1-14
-../process variables-mc-r-100-1-240-10-0.0001-1.5-14 evolution-mc-r-100-1-240-10-0.0001-1.5-14
+../process variables-mc-r-100-1-240-10-0.1-1-14 evolution-mc-r-100-1-240-10-0.1-1-14
+../process variables-mc-r-100-1-240-10-0.1-1.5-14 evolution-mc-r-100-1-240-10-0.1-1.5-14
+../process variables-mc-r-100-1-600-4-0.1-1-14 evolution-mc-r-100-1-600-4-0.1-1-14
+../process variables-mc-r-100-1-600-4-0.1-1.5-14 evolution-mc-r-100-1-600-4-0.1-1.5-14
 ../process variables-sw-50-50-1-14 evolution-sw-50-50-1-14
 ../process variables-sw-10-10-25-10-0.5-14 evolution-sw-10-10-25-10-0.5-14
 ../process variables-sw-10-10-25-4-0-14 evolution-sw-10-10-25-4-0-14
@@ -64,3 +68,4 @@
 ../process variables-sw-r-1600-1-90-10-0.001-1.5-14 evolution-sw-r-1600-1-90-10-0.001-1.5-14
 ../process variables-sw-r-100-1-240-10-0.0001-1-14 evolution-sw-r-100-1-240-10-0.0001-1-14
 ../process variables-sw-r-100-1-240-10-0.0001-1.5-14 evolution-sw-r-100-1-240-10-0.0001-1.5-14
+gnuplot plot
