@@ -1,3 +1,0 @@
-#include <winver.h>
-
-calibrator ICON "calibrator.ico"

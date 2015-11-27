@@ -20,12 +20,12 @@ figs = surcos-advance.eps surcos-depth.eps surcos-solute-q1.eps \
 
 plots = Beale.eps
 
-calibrator.pdf: calibrator.tex bib.bib makefile $(figs) $(plots)
-	latex calibrator
-	bibtex calibrator
-	latex calibrator
-	latex calibrator
-	dvipdf calibrator
+mpcotool.pdf: mpcotool.tex bib.bib makefile $(figs) $(plots)
+	latex mpcotool
+	bibtex mpcotool
+	latex mpcotool
+	latex mpcotool
+	dvipdf mpcotool
 
 Beale.eps: plot
 	gnuplot plot

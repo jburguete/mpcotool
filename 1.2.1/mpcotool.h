@@ -1,5 +1,5 @@
 /*
-Calibrator: a software to make calibrations of empirical parameters.
+MPCOTool: a software to make calibrations of empirical parameters.
 
 AUTHORS: Javier Burguete and Borja Latorre.
 
@@ -28,8 +28,8 @@ OF SUCH DAMAGE.
 */
 
 /**
- * \file calibrator.h
- * \brief Header file of the calibrator.
+ * \file mpcotool.h
+ * \brief Header file of the mpcotool.
  * \authors Javier Burguete.
  * \copyright Copyright 2012-2015, all rights reserved.
  */

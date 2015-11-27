@@ -1,5 +1,5 @@
 /*
-Calibrator: a software to make calibrations of empirical parameters.
+MPCOTool: a software to make calibrations of empirical parameters.
 
 AUTHORS: Javier Burguete and Borja Latorre.
 
@@ -28,8 +28,8 @@ OF SUCH DAMAGE.
 */
 
 /**
- * \file calibrator.c
- * \brief Source file of the calibrator.
+ * \file mpcotool.c
+ * \brief Source file of the mpcotool.
  * \authors Javier Burguete and Borja Latorre.
  * \copyright Copyright 2012-2015, all rights reserved.
  */
@@ -55,7 +55,7 @@ OF SUCH DAMAGE.
 #include <mpi.h>
 #endif
 #include "genetic/genetic.h"
-#include "calibrator.h"
+#include "mpcotool.h"
 #if HAVE_GTK
 #include <gio/gio.h>
 #include <gtk/gtk.h>
@@ -99,7 +99,7 @@ double (*calibrate_estimate_gradient) (unsigned int variable,
                                        unsigned int estimate);
   ///< Pointer to the function to estimate the gradient.
 Input input[1];
-  ///< Input struct to define the input file to calibrator.
+  ///< Input struct to define the input file to mpcotool.
 Calibrate calibrate[1];         ///< Calibration data.
 
 const xmlChar *result_name = (xmlChar *) "result";
@@ -3123,7 +3123,7 @@ window_about ()
   };
   gtk_show_about_dialog
     (window->window,
-     "program_name", "Calibrator",
+     "program_name", "MPCOTool",
      "comments",
      gettext ("A software to perform calibrations/optimizations of empirical "
               "parameters"),
@@ -3132,7 +3132,7 @@ window_about ()
      "version", "1.2.1",
      "copyright", "Copyright 2012-2015 Javier Burguete Tolosa",
      "logo", window->logo,
-     "website", "https://github.com/jburguete/calibrator",
+     "website", "https://github.com/jburguete/mpcotool",
      "license-type", GTK_LICENSE_BSD, NULL);
 }
 
@@ -4781,7 +4781,7 @@ main (int argn, char **argc)
   // Checking syntax
   if (!(argn == 2 || (argn == 4 && !strcmp (argc[1], "-nthreads"))))
     {
-      printf ("The syntax is:\ncalibratorbin [-nthreads x] data_file\n");
+      printf ("The syntax is:\nmpcotoolbin [-nthreads x] data_file\n");
       return 1;
     }
 

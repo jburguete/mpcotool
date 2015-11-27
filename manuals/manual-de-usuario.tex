@@ -89,7 +89,7 @@
 
 \begin{document}
 
-\title{Calibrator: un software libre para obtener parámetros empíricos
+\title{MPCOTool: un software libre para obtener parámetros empíricos
 necesarios en modelos de simulación}
 
 \author{Javier Burguete}
@@ -98,7 +98,7 @@ necesarios en modelos de simulación}
 
 \chapter{Generando el fichero ejecutable a partir del código fuente}
 
-El código fuente en Calibrator está escrito en lenguaje C. El programa ha sido
+El código fuente en MPCOTool está escrito en lenguaje C. El programa ha sido
 compilado y probado en los siguientes sistemas operativos:
 \begin{itemize}
 \item Debian kFreeBSD y Linux 8,
@@ -161,11 +161,11 @@ $ cd genetic/0.6.1
 $ ./build
 \end{lstlisting}
 
-El siguiente paso es descargar el código fuente de Calibrator, enlazarlo con el
+El siguiente paso es descargar el código fuente de MPCOTool, enlazarlo con el
 de Genetic y compilar todo junto haciendo:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ git clone https://github.com/jburguete/calibrator.git
-$ cd calibrator/1.2.1
+$ git clone https://github.com/jburguete/mpcotool.git
+$ cd mpcotool/1.2.1
 $ ln -s ../../genetic/0.6.1 genetic
 $ ./build
 \end{lstlisting}
@@ -184,13 +184,13 @@ $ make manuals
 \item La línea de comandos en modo secuencial es (donde X es el número de tareas
 a ejecutar paralelamente):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ ./calibratorbin [-nthreads X] input_file.xml
+$ ./mpcotoolbin [-nthreads X] input_file.xml
 \end{lstlisting}
 
 \item La línea de comandos en modo paralelizado en diferentes computadoras con
 MPI es (donde X es el número de tareas a ejecutar en cada nodo):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ mpirun [MPI options] ./calibratorbin [-nthreads X] input_file.xml
+$ mpirun [MPI options] ./mpcotoolbin [-nthreads X] input_file.xml
 \end{lstlisting}
 
 \item La sintaxis del programa simulador ha de ser:
@@ -212,7 +212,7 @@ $ ./evaluator_name simulated_file experimental_file results_file
 \item En systemas de tipo UNIX, la aplicación interactiva puede abrirse haciendo
 en un terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ ./calibrator
+$ ./mpcotool
 \end{lstlisting}
 
 \end{itemize}
@@ -414,7 +414,7 @@ se definen con las propiedades siguientes:
 Hay que generar $N_{experimentos}\times N_{entradas}$ ficheros de plantilla para
 reproducir cada fichero de entrada asociado a cada uno de los experimentos
 (véase la figura~\ref{FigStructure}). Todos estos ficheros de plantilla son
-analizados sintáctimente por Calibrator reemplazándose las siguientes etiquetas
+analizados sintáctimente por MPCOTool reemplazándose las siguientes etiquetas
 clave para generar los ficheros de entrada del programa simulador:
 \begin{description}
 \item[@variableX@]: se reemplaza por la etiqueta asociada al $X$-ésima parámetro
@@ -427,15 +427,15 @@ clave para generar los ficheros de entrada del programa simulador:
 \section{Aplicación con interfaz gráfica de usuario interactiva}
 
 Una forma alternativa de usar el programa consiste en usar la aplicación con
-interfaz gráfica de usuario interactiva, llamada \emph{Calibrator}. En la
+interfaz gráfica de usuario interactiva, llamada \emph{MPCOTool}. En la
 figure~\ref{FigWindow} se muestra una figura con la ventana principal de la
 utilidad. Desde esta ventana podemos acceder a cada variable, coeficiente,
 algoritmo y programa de simulación requerido.
 \begin{figure}[ht!]
 	\centering
-	\includegraphics[width=10.13cm]{calibrator-es.eps}
+	\includegraphics[width=10.13cm]{mpcotool-es.eps}
 	\caption{Ventana principal de la aplicación con interfaz gráfica de usuario
-		interactiva de Calibrator.\label{FigWindow}}
+		interactiva de MPCOTool.\label{FigWindow}}
 \end{figure}
 
 Los resultados óptimos se presentan finalmente en un cuadro de diálogo como el
@@ -444,14 +444,14 @@ mostrado en la figura~\ref{FigResult}.
 	\centering
 	\includegraphics[width=2.87cm]{result-es.eps}
 	\caption{Cuadro de diálogo de los resultados óptimos de la aplicación con
-		interfaz gráfica de usuario interactiva de Calibrator.\label{FigResult}}
+		interfaz gráfica de usuario interactiva de MPCOTool.\label{FigResult}}
 \end{figure}
 
 \section{Ficheros de salida}
 
 \subsection{Fichero de resultados}
 
-Calibrator genera un fichero denominado \emph{result} donde se guarda la mejor
+MPCOTool genera un fichero denominado \emph{result} donde se guarda la mejor
 combinación de variables y su correspondiente norma de error calculada.
 
 \subsection{Fichero de variables}
@@ -461,17 +461,17 @@ cada una de las combinaciones de variables probadas en la calibración. Los
 valores de las variables se guardan en columnas siendo la última columna el
 valor del error correspondiente.
 
-\chapter{Organización de Calibrator}
+\chapter{Organización de MPCOTool}
 
 Supongamos que buscamos un conjunto de $N_{parameters}$ parámetros empíricos 
 requeridos por un modelo de simulación que sea el que mejor ajuste el conjunto
 de $N_{experimentos}$ datos experimentales y que el programa simulador requiere
 además $N_{entradas}$ ficheros de entrada.
-La estructura seguida por Calibrator se resume en el \emph{fichero de entrada
+La estructura seguida por MPCOTool se resume en el \emph{fichero de entrada
 principal}, donde se especifican tanto $N_{experimentos}$ como $N_{entradas}$.
 También contiene los valores extremos de los parámetros empíricos y el algoritmo
 de optimización escogido.
-Then, Calibrator reads the
+Then, MPCOTool reads the
 $N_{experimentos}\times N_{entradas}$ templates to build the simulator input files
 replacing key labels by empirical parameter values created by the optimization
 algorithm. There are two options: either the simulator compares directly the
@@ -511,7 +511,7 @@ structure.
 	\psframe(-20,-70)(50,-80)
 	\psline{->}(50,-75)(60,-75)
 	\psline[linestyle=dotted,dotsep=1pt]{->}(60,-75)(90,-75)
-	\rput(75,50){Calibrator}
+	\rput(75,50){MPCOTool}
 	\psframe(60,-95)(90,55)
 	\psline{->}(90,25)(100,25)
 	\psline{->}(90,5)(100,5)
@@ -576,16 +576,16 @@ structure.
 	\psline(270,-72.5)(280,-72.5)
 	\rput(120,-30){$N$-th experiment}
 	\psframe[linestyle=dotted](95,-85)(275,-25)
-}{Flowchart of the interactions among Calibrator, the input files and the
+}{Flowchart of the interactions among MPCOTool, the input files and the
 simulation and evaluation programs to produce an objective function value for
 each empirical parameters combination generated by the optimization algorithm}
 {FigStructure}
 
-The whole process is repeated for each combination of empirical parameters generated by the optimization algorithm. Furthermore, Calibrator automatically parallelizes the simulations using all the available computing resources.
+The whole process is repeated for each combination of empirical parameters generated by the optimization algorithm. Furthermore, MPCOTool automatically parallelizes the simulations using all the available computing resources.
 
 \chapter{Optimization methods}
 
-The optimization methods implemented in Calibrator are next presented. The following notation will be used:
+The optimization methods implemented in MPCOTool are next presented. The following notation will be used:
 \begin{description}
 	\item[$N_{simulations}$]: number of simulations made for each iteration.
 	\item[$N_{iterations}$]: number of iterations on iterative methods.
@@ -632,7 +632,7 @@ rounding effects (every task has to perform a natural number of simulations).
 In figure~\ref{FigBruteForceParallelization} a flowchart of this parallelization
 scheme is represented. Being independent each task, a distribution on different
 execution threads may be performed exploding the full parallel capabilities of
-the machine where Calibrator is run.
+the machine where MPCOTool is run.
 
 \psset{xunit=0.5mm,yunit=0.5mm}
 \PSPICTURE{-90}{-55}{90}{-15}
@@ -655,7 +655,7 @@ the machine where Calibrator is run.
 	\psline{->}(55,-40)(0,-45)
 	\rput(0,-50){Getting optimal empirical parameters set}
 	\psframe(-50,-45)(50,-55)
-}{Flowchart of the parallelization scheme in Calibrator for brute force methods
+}{Flowchart of the parallelization scheme in MPCOTool for brute force methods
 (sweep and Monte-Carlo)}{FigBruteForceParallelization}
 
 \section{Monte-Carlo method}
@@ -712,7 +712,7 @@ flowchart represented in the figure~\ref{FigBruteForceParallelization}.
 
 \section{Iterative algorithm applied to brute force methods}
 
-Calibrator allows to iterate both sweep or Monte-Carlo brute force methods in
+MPCOTool allows to iterate both sweep or Monte-Carlo brute force methods in
 order to seek convergence. In this case, the best results from the previous
 iteration are used to force new intervals in the variables for the following
 iteration. Then for $N_{best}^j$, the subset of the best simulation results in
@@ -886,12 +886,12 @@ figure~\ref{FigIterativeParallelization}).
 	\psline{->}(60,-115)(0,-120)
 	\rput(0,-125){Getting optimal empirical parameters set}
 	\psframe(-55,-120)(55,-130)
-}{Flowchart of the parallelization scheme in Calibrator for the iterative
+}{Flowchart of the parallelization scheme in MPCOTool for the iterative
 method}{FigIterativeParallelization}
 
 \section{Genetic method}
 
-Calibrator also offers the use of a genetic method Genetic \cite{genetic} with its default algorithms.
+MPCOTool also offers the use of a genetic method Genetic \cite{genetic} with its default algorithms.
 It is inspired on the ideas in \citet{gaul}, but it has been fully reprogrammed involving more modern external libraries.
 The code in Genetic is also open source under BSD license. Figure~\ref{FigGeneticFlow} shows the flowchart of the genetic method implemented in Genetic.
 
@@ -1055,7 +1055,7 @@ The individuals of the former population that obtained lower values in the evalu
 }{EqSurvival}
 Furthermore, the ancestors to generate new individuals are chosen among the surviving population. Obviously, to have survival population, the following condition has to be enforced:
 \EQ{R_{mutation}+R_{reproduction}+R_{adaptation}<1}{EqSurvivalCondition}
-Calibrator uses a default aleatory criterion in Genetic, with a probability linearly decreasing with the ordinal in the ordered set of surviving individuals (see figure~\ref{FigSelection}).
+MPCOTool uses a default aleatory criterion in Genetic, with a probability linearly decreasing with the ordinal in the ordered set of surviving individuals (see figure~\ref{FigSelection}).
 
 \PICTURE{250}{110}
 {

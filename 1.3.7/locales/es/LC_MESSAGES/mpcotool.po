@@ -1,13 +1,13 @@
-# Spanish translations for calibrator package.
-# Copyright (C) 2015 THE calibrator'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the calibrator package.
+# Spanish translations for mpcotool package.
+# Copyright (C) 2015 THE mpcotool'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the mpcotool package.
 # Automatically generated, 2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.3.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-26 05:29+0100\n"
+"POT-Creation-Date: 2015-11-27 06:54+0100\n"
 "PO-Revision-Date: 2015-10-20 07:33+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -17,232 +17,232 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: calibrator.c:258
+#: mpcotool.c:258
 msgid "ERROR!"
 msgstr "¡ERROR!"
 
-#: calibrator.c:515
+#: mpcotool.c:515
 msgid "Unable to parse the input file"
 msgstr "Imposible analizar el fichero de entrada"
 
-#: calibrator.c:526
+#: mpcotool.c:526
 msgid "Bad root XML node"
 msgstr "Nodo XML raíz incorrecto"
 
-#: calibrator.c:542
+#: mpcotool.c:542
 msgid "Bad simulator program"
 msgstr "Programa simulador incorrecto"
 
-#: calibrator.c:557
+#: mpcotool.c:557
 msgid "Bad pseudo-random numbers generator seed"
 msgstr "Semilla del generador de números pseudo-aleatorios incorrecta"
 
-#: calibrator.c:573
+#: mpcotool.c:573
 msgid "Bad simulations number"
 msgstr "Número de simulaciones incorrecto"
 
-#: calibrator.c:590
+#: mpcotool.c:590
 msgid "Invalid population number"
 msgstr "Número de población no válido"
 
-#: calibrator.c:596
+#: mpcotool.c:596
 msgid "No population number"
 msgstr "Falta el número de población"
 
-#: calibrator.c:607
+#: mpcotool.c:607
 msgid "Invalid generations number"
 msgstr "Numéro de generaciones no válido"
 
-#: calibrator.c:613
+#: mpcotool.c:613
 msgid "No generations number"
 msgstr "Falta número de generaciones"
 
-#: calibrator.c:625
+#: mpcotool.c:625
 msgid "Invalid mutation probability"
 msgstr "Probabilidad de mutación no válida"
 
-#: calibrator.c:631
+#: mpcotool.c:631
 msgid "No mutation probability"
 msgstr "Falta probabilidad de mutación"
 
-#: calibrator.c:643
+#: mpcotool.c:643
 msgid "Invalid reproduction probability"
 msgstr "Probabilidad de reproducción no válida"
 
-#: calibrator.c:649
+#: mpcotool.c:649
 msgid "No reproduction probability"
 msgstr "Falta probabilidad de reproducción"
 
-#: calibrator.c:661
+#: mpcotool.c:661
 msgid "Invalid adaptation probability"
 msgstr "Probabilidad de adaptación no válida"
 
-#: calibrator.c:667
+#: mpcotool.c:667
 msgid "No adaptation probability"
 msgstr "Falta probabilidad de adaptación"
 
-#: calibrator.c:678
+#: mpcotool.c:678
 msgid "No enough survival entities to reproduce the population"
 msgstr "Número de supervivientes insuficiente para reproducir la población"
 
-#: calibrator.c:684
+#: mpcotool.c:684
 msgid "Unknown algorithm"
 msgstr "Algoritmo desconocido"
 
-#: calibrator.c:701
+#: mpcotool.c:701
 msgid "Bad iterations number"
 msgstr "Número de iteraciones incorrecto"
 
-#: calibrator.c:711
+#: mpcotool.c:711
 msgid "Invalid best number"
 msgstr "Número de mejores no válido"
 
-#: calibrator.c:725
+#: mpcotool.c:725
 msgid "Invalid tolerance"
 msgstr "Tolerancia no válida"
 
-#: calibrator.c:738
+#: mpcotool.c:738
 msgid "Invalid steps number"
 msgstr "Número de pasos no válido"
 
-#: calibrator.c:751
+#: mpcotool.c:751
 msgid "Invalid estimates number"
 msgstr "Número de estimaciones no válido"
 
-#: calibrator.c:757
+#: mpcotool.c:757
 msgid "Unknown method to estimate the gradient"
 msgstr "Método de estimar el gradiente desconocido"
 
-#: calibrator.c:769
+#: mpcotool.c:769
 msgid "Invalid relaxation parameter"
 msgstr "Parámetro de relajación no válido"
 
-#: calibrator.c:793 calibrator.c:810 calibrator.c:846 calibrator.c:860
-#: calibrator.c:885 calibrator.c:4660
+#: mpcotool.c:793 mpcotool.c:810 mpcotool.c:845 mpcotool.c:859 mpcotool.c:884
+#: mpcotool.c:4659
 msgid "Experiment"
 msgstr "Experimento"
 
-#: calibrator.c:794
+#: mpcotool.c:794
 msgid "no data file name"
 msgstr "falta el nombre del fichero de datos"
 
-#: calibrator.c:810
+#: mpcotool.c:810
 msgid "bad weight"
 msgstr "peso no válido"
 
-#: calibrator.c:846 calibrator.c:886
+#: mpcotool.c:845 mpcotool.c:885
 msgid "no template"
 msgstr "falta plantilla"
 
-#: calibrator.c:861
+#: mpcotool.c:860
 msgid "bad templates number"
 msgstr "número de plantillas incorrecto"
 
-#: calibrator.c:908
+#: mpcotool.c:907
 msgid "No calibration experiments"
 msgstr "Faltan experimentos de calibración"
 
-#: calibrator.c:919 calibrator.c:929 calibrator.c:945 calibrator.c:956
-#: calibrator.c:968 calibrator.c:977 calibrator.c:992 calibrator.c:1003
-#: calibrator.c:1015 calibrator.c:1024 calibrator.c:1032 calibrator.c:1045
-#: calibrator.c:1065 calibrator.c:1074 calibrator.c:1096 calibrator.c:1106
-#: calibrator.c:1121 calibrator.c:4578
+#: mpcotool.c:918 mpcotool.c:928 mpcotool.c:944 mpcotool.c:955 mpcotool.c:967
+#: mpcotool.c:976 mpcotool.c:991 mpcotool.c:1002 mpcotool.c:1014
+#: mpcotool.c:1023 mpcotool.c:1031 mpcotool.c:1044 mpcotool.c:1064
+#: mpcotool.c:1073 mpcotool.c:1095 mpcotool.c:1105 mpcotool.c:1120
+#: mpcotool.c:4577
 msgid "Variable"
 msgstr "Variable"
 
-#: calibrator.c:920
+#: mpcotool.c:919
 msgid "bad XML node"
 msgstr "nodo XML incorrecto"
 
-#: calibrator.c:930
+#: mpcotool.c:929
 msgid "no name"
 msgstr "falta el nombre"
 
-#: calibrator.c:945
+#: mpcotool.c:944
 msgid "bad minimum"
 msgstr "mínimo incorrecto"
 
-#: calibrator.c:957
+#: mpcotool.c:956
 msgid "bad absolute minimum"
 msgstr "mínimo absoluto incorrecto"
 
-#: calibrator.c:969
+#: mpcotool.c:968
 msgid "minimum range not allowed"
 msgstr "rango mínimo no permitido"
 
-#: calibrator.c:977
+#: mpcotool.c:976
 msgid "no minimum range"
 msgstr "falta el rango mínimo"
 
-#: calibrator.c:992
+#: mpcotool.c:991
 msgid "bad maximum"
 msgstr "máximo incorrecto"
 
-#: calibrator.c:1004
+#: mpcotool.c:1003
 msgid "bad absolute maximum"
 msgstr "máximo absoluto incorrecto"
 
-#: calibrator.c:1016
+#: mpcotool.c:1015
 msgid "maximum range not allowed"
 msgstr "rango máximo no permitido"
 
-#: calibrator.c:1024
+#: mpcotool.c:1023
 msgid "no maximum range"
 msgstr "falta el rango máximo"
 
-#: calibrator.c:1032
+#: mpcotool.c:1031
 msgid "bad range"
 msgstr "rango no válido"
 
-#: calibrator.c:1046
+#: mpcotool.c:1045
 msgid "bad precision"
 msgstr "precisión incorrecta"
 
-#: calibrator.c:1066
+#: mpcotool.c:1065
 msgid "bad sweeps"
 msgstr "número de barridos incorrecto"
 
-#: calibrator.c:1075
+#: mpcotool.c:1074
 msgid "no sweeps number"
 msgstr "falta el número de barridos"
 
-#: calibrator.c:1097
+#: mpcotool.c:1096
 msgid "invalid bits number"
 msgstr "número de bits no válido"
 
-#: calibrator.c:1107
+#: mpcotool.c:1106
 msgid "no bits number"
 msgstr "falta el número de bits"
 
-#: calibrator.c:1122
+#: mpcotool.c:1121
 msgid "bad step size"
 msgstr "tamaño de paso incorrecto"
 
-#: calibrator.c:1134
+#: mpcotool.c:1133
 msgid "No calibration variables"
 msgstr "Faltan las variables de calibración"
 
-#: calibrator.c:1370 calibrator.c:1371 calibrator.c:3089
+#: mpcotool.c:1369 mpcotool.c:1370 mpcotool.c:3088
 msgid "Best result"
 msgstr "Mejor resultado"
 
-#: calibrator.c:2623 calibrator.c:2625 calibrator.c:3085
+#: mpcotool.c:2622 mpcotool.c:2624 mpcotool.c:3084
 msgid "Calculation time"
 msgstr "Tiempo de cálculo"
 
-#: calibrator.c:2800
+#: mpcotool.c:2799
 msgid "Pseudo-random numbers generator seed"
 msgstr "Semilla del generador de números pseudo-aleatorios"
 
-#: calibrator.c:2805
+#: mpcotool.c:2804
 msgid "Seed to init the pseudo-random numbers generator"
 msgstr "Semilla para iniciar el generador de números pseudo-aleatorios"
 
-#: calibrator.c:2808
+#: mpcotool.c:2807
 msgid "Threads number for the stochastic algorithm"
 msgstr "Número de hilos para el algoritmo estocástico"
 
-#: calibrator.c:2813
+#: mpcotool.c:2812
 msgid ""
 "Number of threads to perform the calibration/optimization for the stochastic "
 "algorithm"
@@ -250,11 +250,11 @@ msgstr ""
 "Número de hilos para ejecutar la calibración/optimización para el algoritmo "
 "estocástico"
 
-#: calibrator.c:2817
+#: mpcotool.c:2816
 msgid "Threads number for the gradient based method"
 msgstr "Número de hilos para el método basado en el gradiente"
 
-#: calibrator.c:2822
+#: mpcotool.c:2821
 msgid ""
 "Number of threads to perform the calibration/optimization for the gradient "
 "based method"
@@ -262,171 +262,171 @@ msgstr ""
 "Número de hilos para ejecutar la calibración/optimización para el método "
 "basado en el gradiente"
 
-#: calibrator.c:2839 calibrator.c:4136
+#: mpcotool.c:2838 mpcotool.c:4135
 msgid "Options"
 msgstr "Opciones"
 
-#: calibrator.c:2842 calibrator.c:2968 calibrator.c:4032
+#: mpcotool.c:2841 mpcotool.c:2967 mpcotool.c:4031
 msgid "_OK"
 msgstr "_Aceptar"
 
-#: calibrator.c:2843 calibrator.c:2966 calibrator.c:4031
+#: mpcotool.c:2842 mpcotool.c:2965 mpcotool.c:4030
 msgid "_Cancel"
 msgstr "_Cancelar"
 
-#: calibrator.c:2869
+#: mpcotool.c:2868
 msgid "Calculating ..."
 msgstr "Calculando ..."
 
-#: calibrator.c:2871
+#: mpcotool.c:2870
 msgid "Calculating"
 msgstr "Calculando"
 
-#: calibrator.c:2963
+#: mpcotool.c:2962
 msgid "Save file"
 msgstr "Guardar fichero"
 
-#: calibrator.c:3106
+#: mpcotool.c:3105
 msgid "user-manual.pdf"
 msgstr "manual-de-usuario.pdf"
 
-#: calibrator.c:3129
+#: mpcotool.c:3128
 msgid ""
 "A software to perform calibrations/optimizations of empirical parameters"
 msgstr ""
 "Un software para realizar calibraciones/optimizaciones de parámetros "
 "empíricos"
 
-#: calibrator.c:4028
+#: mpcotool.c:4027
 msgid "Open input file"
 msgstr "Abrir fichero de entrada"
 
-#: calibrator.c:4086
+#: mpcotool.c:4085
 msgid "_Sweep"
 msgstr "_Barrido"
 
-#: calibrator.c:4086
+#: mpcotool.c:4085
 msgid "_Genetic"
 msgstr "_Genético"
 
-#: calibrator.c:4089
+#: mpcotool.c:4088
 msgid "Monte-Carlo brute force algorithm"
 msgstr "Algoritmo de fuerza bruta de Monte-Carlo"
 
-#: calibrator.c:4090
+#: mpcotool.c:4089
 msgid "Sweep brute force algorithm"
 msgstr "Algoritmo de fuerza bruta de barrido"
 
-#: calibrator.c:4091
+#: mpcotool.c:4090
 msgid "Genetic algorithm"
 msgstr "Algoritmo genético"
 
-#: calibrator.c:4094
+#: mpcotool.c:4093
 msgid "_Coordinates descent"
 msgstr "_Descenso de coordenadas"
 
-#: calibrator.c:4094
+#: mpcotool.c:4093
 msgid "_Random"
 msgstr "_Aleatorio"
 
-#: calibrator.c:4097
+#: mpcotool.c:4096
 msgid "Coordinates descent gradient estimate method"
 msgstr "Método de estimación del gradiente por descenso de coordenadas"
 
-#: calibrator.c:4098
+#: mpcotool.c:4097
 msgid "Random gradient estimate method"
 msgstr "Método de estimación de gradiente aleatoria"
 
-#: calibrator.c:4114
+#: mpcotool.c:4113
 msgid "Open"
 msgstr "Abrir"
 
-#: calibrator.c:4121
+#: mpcotool.c:4120
 msgid "Save"
 msgstr "Guardar"
 
-#: calibrator.c:4129
+#: mpcotool.c:4128
 msgid "Run"
 msgstr "Ejecutar"
 
-#: calibrator.c:4143
+#: mpcotool.c:4142
 msgid "Help"
 msgstr "Ayuda"
 
-#: calibrator.c:4150
+#: mpcotool.c:4149
 msgid "About"
 msgstr "Acerca de"
 
-#: calibrator.c:4157
+#: mpcotool.c:4156
 msgid "Exit"
 msgstr "Salir"
 
-#: calibrator.c:4180 calibrator.c:4182
+#: mpcotool.c:4179 mpcotool.c:4181
 msgid "Simulator program"
 msgstr "Programa simulador"
 
-#: calibrator.c:4185
+#: mpcotool.c:4184
 msgid "Simulator program executable file"
 msgstr "Fichero ejecutable del programa simulador"
 
-#: calibrator.c:4189
+#: mpcotool.c:4188
 msgid "_Evaluator program"
 msgstr "_Programa evaluador"
 
-#: calibrator.c:4192
+#: mpcotool.c:4191
 msgid "Evaluator program"
 msgstr "Programa evaluador"
 
-#: calibrator.c:4196
+#: mpcotool.c:4195
 msgid "Optional evaluator program executable file"
 msgstr "Opcional: fichero ejecutable del programa simulador"
 
-#: calibrator.c:4199
+#: mpcotool.c:4198
 msgid "Result file"
 msgstr "Fichero de resultados"
 
-#: calibrator.c:4202
+#: mpcotool.c:4201
 msgid "Best results file"
 msgstr "Fichero de mejores resultados"
 
-#: calibrator.c:4204
+#: mpcotool.c:4203
 msgid "Variables file"
 msgstr "Fichero de variables"
 
-#: calibrator.c:4208
+#: mpcotool.c:4207
 msgid "All simulated results file"
 msgstr "Fichero con todos los resultados simulados"
 
-#: calibrator.c:4231
+#: mpcotool.c:4230
 msgid "Simulations number"
 msgstr "Número de simulaciones"
 
-#: calibrator.c:4236
+#: mpcotool.c:4235
 msgid "Number of simulations to perform for each iteration"
 msgstr "Número de simulaciones para ejecutar en cada iteración"
 
-#: calibrator.c:4238
+#: mpcotool.c:4237
 msgid "Iterations number"
 msgstr "Número de iteraciones"
 
-#: calibrator.c:4242
+#: mpcotool.c:4241
 msgid "Number of iterations"
 msgstr "Número de iteraciones"
 
-#: calibrator.c:4245
+#: mpcotool.c:4244
 msgid "Tolerance"
 msgstr "Tolerancia"
 
-#: calibrator.c:4250
+#: mpcotool.c:4249
 msgid "Tolerance to set the variable interval on the next iteration"
 msgstr ""
 "Tolerancia para fijar el intervalo de la variable en la siguiente iteración"
 
-#: calibrator.c:4251
+#: mpcotool.c:4250
 msgid "Bests number"
 msgstr "Número de los mejores"
 
-#: calibrator.c:4256
+#: mpcotool.c:4255
 msgid ""
 "Number of best simulations used to set the variable interval on the next "
 "iteration"
@@ -434,123 +434,123 @@ msgstr ""
 "Número de las mejores simulaciones usadas para fijar el intervalo de la "
 "variable en la siguiente iteración"
 
-#: calibrator.c:4259
+#: mpcotool.c:4258
 msgid "Population number"
 msgstr "Número de población"
 
-#: calibrator.c:4264
+#: mpcotool.c:4263
 msgid "Number of population for the genetic algorithm"
 msgstr "Número de población para el algoritmo genético"
 
-#: calibrator.c:4266
+#: mpcotool.c:4265
 msgid "Generations number"
 msgstr "Número de generaciones"
 
-#: calibrator.c:4271
+#: mpcotool.c:4270
 msgid "Number of generations for the genetic algorithm"
 msgstr "Número de generaciones para el algoritmo genético"
 
-#: calibrator.c:4273
+#: mpcotool.c:4272
 msgid "Mutation ratio"
 msgstr "Ratio de mutación"
 
-#: calibrator.c:4278
+#: mpcotool.c:4277
 msgid "Ratio of mutation for the genetic algorithm"
 msgstr "Ratio de mutación para el algoritmo genético"
 
-#: calibrator.c:4280
+#: mpcotool.c:4279
 msgid "Reproduction ratio"
 msgstr "Ratio de reproducción"
 
-#: calibrator.c:4285
+#: mpcotool.c:4284
 msgid "Ratio of reproduction for the genetic algorithm"
 msgstr "Ratio de reproducción para el algoritmo genético"
 
-#: calibrator.c:4287
+#: mpcotool.c:4286
 msgid "Adaptation ratio"
 msgstr "Ratio de adaptación"
 
-#: calibrator.c:4292
+#: mpcotool.c:4291
 msgid "Ratio of adaptation for the genetic algorithm"
 msgstr "Ratio de adaptación para el algoritmo genético"
 
-#: calibrator.c:4296
+#: mpcotool.c:4295
 msgid "_Gradient based method"
 msgstr "_Método basado en el gradiente"
 
-#: calibrator.c:4317
+#: mpcotool.c:4316
 msgid "Steps number"
 msgstr "Número de pasos"
 
-#: calibrator.c:4321
+#: mpcotool.c:4320
 msgid "Gradient estimates number"
 msgstr "Número de estimaciones del gradiente"
 
-#: calibrator.c:4325
+#: mpcotool.c:4324
 msgid "Relaxation parameter"
 msgstr "Parámetro de relajación"
 
-#: calibrator.c:4421
+#: mpcotool.c:4420
 msgid "Algorithm"
 msgstr "Algoritmo"
 
-#: calibrator.c:4428
+#: mpcotool.c:4427
 msgid "Variables selector"
 msgstr "Seleccionador de variables"
 
-#: calibrator.c:4437
+#: mpcotool.c:4436
 msgid "Add variable"
 msgstr "Añadir variable"
 
-#: calibrator.c:4444
+#: mpcotool.c:4443
 msgid "Remove variable"
 msgstr "Eliminar variable"
 
-#: calibrator.c:4445
+#: mpcotool.c:4444
 msgid "Name"
 msgstr "Nombre"
 
-#: calibrator.c:4448
+#: mpcotool.c:4447
 msgid "Variable name"
 msgstr "Nombre de la variable"
 
-#: calibrator.c:4451
+#: mpcotool.c:4450
 msgid "Minimum"
 msgstr "Mínimo"
 
-#: calibrator.c:4456
+#: mpcotool.c:4455
 msgid "Minimum initial value of the variable"
 msgstr "Valor inicial mínimo de la variable"
 
-#: calibrator.c:4465
+#: mpcotool.c:4464
 msgid "Maximum"
 msgstr "Máximo"
 
-#: calibrator.c:4470
+#: mpcotool.c:4469
 msgid "Maximum initial value of the variable"
 msgstr "Valor inicial máximo de la variable"
 
-#: calibrator.c:4480
+#: mpcotool.c:4479
 msgid "_Absolute minimum"
 msgstr "_Mínimo absoluto"
 
-#: calibrator.c:4486
+#: mpcotool.c:4485
 msgid "Minimum allowed value of the variable"
 msgstr "Valor mínimo permitido de la variable"
 
-#: calibrator.c:4497
+#: mpcotool.c:4496
 msgid "_Absolute maximum"
 msgstr "_Máximo absoluto"
 
-#: calibrator.c:4503
+#: mpcotool.c:4502
 msgid "Maximum allowed value of the variable"
 msgstr "Valor máximo permitido de la variable"
 
-#: calibrator.c:4514
+#: mpcotool.c:4513
 msgid "Precision digits"
 msgstr "Dígitos de precisión"
 
-#: calibrator.c:4519
+#: mpcotool.c:4518
 msgid ""
 "Number of precision floating point digits\n"
 "0 is for integer numbers"
@@ -558,51 +558,51 @@ msgstr ""
 "Número de dígitos decimales de precisión\n"
 "0 es para números enteros"
 
-#: calibrator.c:4523
+#: mpcotool.c:4522
 msgid "Sweeps number"
 msgstr "Número de barridos"
 
-#: calibrator.c:4528
+#: mpcotool.c:4527
 msgid "Number of steps sweeping the variable"
 msgstr "Número de pasos barriendo la variable"
 
-#: calibrator.c:4531
+#: mpcotool.c:4530
 msgid "Bits number"
 msgstr "Número de bits"
 
-#: calibrator.c:4536
+#: mpcotool.c:4535
 msgid "Number of bits to encode the variable"
 msgstr "Número de bits para codificar la variable"
 
-#: calibrator.c:4585
+#: mpcotool.c:4584
 msgid "Experiment selector"
 msgstr "Seleccionador de experimentos"
 
-#: calibrator.c:4594
+#: mpcotool.c:4593
 msgid "Add experiment"
 msgstr "Añadir experimento"
 
-#: calibrator.c:4601
+#: mpcotool.c:4600
 msgid "Remove experiment"
 msgstr "Eliminar experimento"
 
-#: calibrator.c:4603 calibrator.c:4605 calibrator.c:4608
+#: mpcotool.c:4602 mpcotool.c:4604 mpcotool.c:4607
 msgid "Experimental data file"
 msgstr "Fichero de datos experimentales"
 
-#: calibrator.c:4612
+#: mpcotool.c:4611
 msgid "Weight"
 msgstr "Peso"
 
-#: calibrator.c:4617
+#: mpcotool.c:4616
 msgid "Weight factor to build the objective function"
 msgstr "Factor de peso para construir la función objetivo"
 
-#: calibrator.c:4637 calibrator.c:4646
+#: mpcotool.c:4636 mpcotool.c:4645
 msgid "Input template"
 msgstr "Plantilla de entrada"
 
-#: calibrator.c:4650
+#: mpcotool.c:4649
 msgid "Experimental input template file"
 msgstr "Fichero plantilla de entrada experimental"
 

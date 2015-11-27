@@ -1,5 +1,5 @@
 /*
-Calibrator: a software to make calibrations of empirical parameters.
+MPCOTool: a software to make calibrations of empirical parameters.
 
 AUTHORS: Javier Burguete and Borja Latorre.
 

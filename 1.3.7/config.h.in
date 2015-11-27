@@ -1,5 +1,5 @@
 /*
-Calibrator: a software to make calibrations of empirical parameters.
+MPCOTool: a software to make calibrations of empirical parameters.
 
 AUTHORS: Javier Burguete and Borja Latorre.
 
@@ -53,7 +53,7 @@ OF SUCH DAMAGE.
 // Interface labels
 
 #define LOCALE_DIR "locales"    ///< Locales directory.
-#define PROGRAM_INTERFACE "calibrator"  ///< Name of the interface program.
+#define PROGRAM_INTERFACE "mpcotool"  ///< Name of the interface program.
 
 // XML labels
 

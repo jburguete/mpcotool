@@ -1,7 +1,8 @@
-CALIBRATOR
-==========
+MPCOTool
+========
 
-A software to perform calibrations or optimizations of empirical parameters.
+The Multi-Purposes Calibration and Optimization Tool. A software to perform
+calibrations or optimizations of empirical parameters.
 
 VERSIONS
 --------
@@ -53,8 +54,8 @@ The source code has to have the following files:
 * 1.2.1/configure.ac: configure generator.
 * 1.2.1/Makefile.in: Makefile generator.
 * 1.2.1/config.h.in: config header generator.
-* 1.2.1/calibrator.c: main source code.
-* 1.2.1/calibrator.h: main header code.
+* 1.2.1/mpcotool.c: main source code.
+* 1.2.1/mpcotool.h: main header code.
 * 1.2.1/interface.h: interface header code.
 * 1.2.1/build: script to build all.
 * 1.2.1/logo.png: logo figure.
@@ -62,7 +63,7 @@ The source code has to have the following files:
 * TODO: tasks to do.
 * README.md: this file.
 * tests/testX/\*: several tests to check the program working.
-* locales/\*/LC_MESSAGES/calibrator.po: translation files.
+* locales/\*/LC_MESSAGES/mpcotool.po: translation files.
 * manuals/\*.eps: manual figures in EPS format.
 * manuals/\*.png: manual figures in PNG format.
 * manuals/\*.tex: documentation source files.
@@ -98,10 +99,10 @@ a terminal:
 > $ git clone https://github.com/jburguete/genetic.git
 
 2. Download this repository:
-> $ git clone https://github.com/jburguete/calibrator.git
+> $ git clone https://github.com/jburguete/mpcotool.git
 
 3. Link the latest genetic version to genetic:
-> $ cd calibrator/1.2.1
+> $ cd mpcotool/1.2.1
 >
 > $ ln -s ../../genetic/0.6.1 genetic
 
@@ -154,7 +155,7 @@ MAKING TESTS INSTRUCTIONS
 In order to build the tests follow the next instructions:
 
 1. Link some tests that needs genetic library doing in a terminal (assuming that
-you are in the directory calibrator/1.2.1):
+you are in the directory mpcotool/1.2.1):
 > $ cd ../tests/test2
 >
 > $ ln -s ../../../genetic/0.6.1 genetic
@@ -176,11 +177,11 @@ USER INSTRUCTIONS
 -----------------
 
 * Command line in sequential mode:
-> $ ./calibratorbin [-nthreads X] input_file.xml
+> $ ./mpcotoolbin [-nthreads X] input_file.xml
 
 * Command line in parallelized mode (where X is the number of threads to open in
 every node):
-> $ mpirun [MPI options] ./calibratorbin [-nthreads X] input_file.xml
+> $ mpirun [MPI options] ./mpcotoolbin [-nthreads X] input_file.xml
 
 * The syntax of the simulator has to be:
 > $ ./simulator_name input_file_1 [input_file_2] [input_file_3] [input_file_4] output_file
@@ -190,7 +191,7 @@ the first data in the results file has to be the objective function value):
 > $ ./evaluator_name simulated_file data_file results_file
 
 * On UNIX type systems the GUI application can be open doing on a terminal:
-> $ ./calibrator
+> $ ./mpcotool
 
 INPUT FILE FORMAT
 -----------------

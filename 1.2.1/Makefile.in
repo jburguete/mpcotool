@@ -4,7 +4,7 @@ CFLAGS = -g -Wall -O3 @CPPFLAGS@ @GSL_CFLAGS@ @XML_CFLAGS@ @GLIB_CFLAGS@ \
 LDFLAGS = @LDFLAGS@ @LIBS@ @GSL_LIBS@ @XML_LIBS@ @GLIB_LIBS@ @GTHREAD_LIBS@
 
 SRC = genetic/entity.c genetic/population.c genetic/reproduction.c \
-	genetic/selection.c genetic/evolution.c genetic/genetic.c calibrator.c
+	genetic/selection.c genetic/evolution.c genetic/genetic.c mpcotool.c
 OBJ = genetic/entity.o genetic/population.o genetic/reproduction.o \
 	genetic/selection.o genetic/evolution.o genetic/genetic.o
 DEP = Makefile
@@ -31,10 +31,10 @@ M1 = $(MDIR)user-manual.pdf
 M2 = $(MDIR)manual-de-usuario.pdf
 MANUALS = $(M1) $(M2) $(MDIR)reference-manual.pdf
 
-all: calibratorbin \
-	calibrator \
-	locales/$(ES)calibrator.mo \
-	locales/$(FR)calibrator.mo
+all: mpcotoolbin \
+	mpcotool \
+	locales/$(ES)mpcotool.mo \
+	locales/$(FR)mpcotool.mo
 
 manuals: $(MANUALS)
 
@@ -65,40 +65,40 @@ genetic/genetic.o: genetic/genetic.c genetic/genetic.h genetic/evolution.h \
 	genetic/entity.h genetic/bits.h $(DEP)
 	$(CC) $(CFLAGS) -c genetic/genetic.c -o genetic/genetic.o
 
-calibratorbin: calibrator.c calibrator.h $(OBJ) config.h
-	$(CC) $(CFLAGS) calibrator.c $(OBJ) $(LDFLAGS) -o calibratorbin
+mpcotoolbin: mpcotool.c mpcotool.h $(OBJ) config.h
+	$(CC) $(CFLAGS) mpcotool.c $(OBJ) $(LDFLAGS) -o mpcotoolbin
 
-calibrator: calibrator.c interface.h calibrator.h $(OBJ) @ICON@ config.h
-	$(CC) $(CFLAGS) @GTK_CFLAGS@ calibrator.c $(OBJ) @ICON@ \
-		$(LDFLAGS) @GTK_LIBS@ -o calibrator -DHAVE_GTK=1
+mpcotool: mpcotool.c interface.h mpcotool.h $(OBJ) @ICON@ config.h
+	$(CC) $(CFLAGS) @GTK_CFLAGS@ mpcotool.c $(OBJ) @ICON@ \
+		$(LDFLAGS) @GTK_LIBS@ -o mpcotool -DHAVE_GTK=1
 
-locales/calibrator.pot: calibrator
-	xgettext -d calibrator -o locales/calibrator.pot --from-code=UTF-8 \
+locales/mpcotool.pot: mpcotool
+	xgettext -d mpcotool -o locales/mpcotool.pot --from-code=UTF-8 \
 		$(SRC)
 
-locales/$(ES)calibrator.po: locales/calibrator.pot
+locales/$(ES)mpcotool.po: locales/mpcotool.pot
 	test -d locales/$(ES) || mkdir -p locales/$(ES)
-	test -f locales/$(ES)calibrator.po || \
-		msginit -l es -o locales/$(ES)calibrator.po -i locales/calibrator.pot \
+	test -f locales/$(ES)mpcotool.po || \
+		msginit -l es -o locales/$(ES)mpcotool.po -i locales/mpcotool.pot \
 		--no-translator
-	msgmerge -U locales/$(ES)calibrator.po locales/calibrator.pot
-	vim -p locales/$(ES)calibrator.po
-	touch locales/$(ES)calibrator.po
+	msgmerge -U locales/$(ES)mpcotool.po locales/mpcotool.pot
+	vim -p locales/$(ES)mpcotool.po
+	touch locales/$(ES)mpcotool.po
 
-locales/$(ES)calibrator.mo: locales/$(ES)calibrator.po locales/calibrator.pot
-	msgfmt -c -v -o locales/$(ES)calibrator.mo locales/$(ES)calibrator.po
+locales/$(ES)mpcotool.mo: locales/$(ES)mpcotool.po locales/mpcotool.pot
+	msgfmt -c -v -o locales/$(ES)mpcotool.mo locales/$(ES)mpcotool.po
 
-locales/$(FR)calibrator.po: locales/calibrator.pot
+locales/$(FR)mpcotool.po: locales/mpcotool.pot
 	test -d locales/$(FR) || mkdir -p locales/$(FR)
-	test -f locales/$(FR)calibrator.po || \
-		msginit -l fr -o locales/$(FR)calibrator.po -i locales/calibrator.pot \
+	test -f locales/$(FR)mpcotool.po || \
+		msginit -l fr -o locales/$(FR)mpcotool.po -i locales/mpcotool.pot \
 		--no-translator
-	msgmerge -U locales/$(FR)calibrator.po locales/calibrator.pot
-	vim -p locales/$(FR)calibrator.po
-	touch locales/$(FR)calibrator.po
+	msgmerge -U locales/$(FR)mpcotool.po locales/mpcotool.pot
+	vim -p locales/$(FR)mpcotool.po
+	touch locales/$(FR)mpcotool.po
 
-locales/$(FR)calibrator.mo: locales/$(FR)calibrator.po locales/calibrator.pot
-	msgfmt -c -v -o locales/$(FR)calibrator.mo locales/$(FR)calibrator.po
+locales/$(FR)mpcotool.mo: locales/$(FR)mpcotool.po locales/mpcotool.pot
+	msgfmt -c -v -o locales/$(FR)mpcotool.mo locales/$(FR)mpcotool.po
 
 $(T1)simulator: $(T1)simulator.c $(T1)Makefile
 	cd $(T1); make
@@ -142,31 +142,31 @@ $(EASOM)Easom: $(EASOM)Easom.c $(EASOM)Makefile
 $(BEALE)Beale: $(BEALE)Beale.c $(BEALE)Makefile
 	cd $(BEALE); make
 
-@ICON@: calibrator.rc logo.png
-	convert logo.png calibrator.ico
-	@WINDRES@ calibrator.rc -o @ICON@
+@ICON@: mpcotool.rc logo.png
+	convert logo.png mpcotool.ico
+	@WINDRES@ mpcotool.rc -o @ICON@
 
 $(MDIR)result-en.eps: $(MDIR)result-en.png
 	convert $(MDIR)result-en.png $(MDIR)result-en.eps
 
-$(MDIR)calibrator-en.eps: $(MDIR)calibrator-en.png
-	convert $(MDIR)calibrator-en.png $(MDIR)calibrator-en.eps
+$(MDIR)mpcotool-en.eps: $(MDIR)mpcotool-en.png
+	convert $(MDIR)mpcotool-en.png $(MDIR)mpcotool-en.eps
 
 $(M1): $(MDIR)user-manual.tex $(MDIR)bib.bib \
-	$(MDIR)calibrator-en.eps $(MDIR)result-en.eps Makefile
+	$(MDIR)mpcotool-en.eps $(MDIR)result-en.eps Makefile
 	cd $(MDIR); latex user-manual; bibtex user-manual; latex user-manual; \
 		latex user-manual; dvipdf user-manual
 
-$(MDIR)calibrator-es.eps: $(MDIR)calibrator-es.png
-	convert $(MDIR)calibrator-es.png $(MDIR)calibrator-es.eps
+$(MDIR)mpcotool-es.eps: $(MDIR)mpcotool-es.png
+	convert $(MDIR)mpcotool-es.png $(MDIR)mpcotool-es.eps
 
 $(M2): $(MDIR)manual-de-usuario.tex $(MDIR)bib.bib \
-	$(MDIR)calibrator-es.eps Makefile
+	$(MDIR)mpcotool-es.eps Makefile
 	cd $(MDIR); latex manual-de-usuario; bibtex manual-de-usuario; \
 		latex manual-de-usuario; latex manual-de-usuario; \
 		dvipdf manual-de-usuario
 
-$(MDIR)reference-manual.pdf: calibrator README.md Doxyfile
+$(MDIR)reference-manual.pdf: mpcotool README.md Doxyfile
 	doxygen
 	cd latex; make; mv refman.pdf ../$(MDIR)reference-manual.pdf
 
@@ -210,7 +210,7 @@ MOES = $(LOCALE)es/LC_MESSAGES/gtk30.mo
 MOFR = $(LOCALE)fr/LC_MESSAGES/gtk30.mo
 MO = $(MOGB) $(MOES) $(MOFR)
 
-windist: calibrator.exe $(DLL) $(MO)
+windist: mpcotool.exe $(DLL) $(MO)
 	test -d win || rm -rf win
 	mkdir -p win/bin/locales \
 		win/share/locale \
@@ -220,7 +220,7 @@ windist: calibrator.exe $(DLL) $(MO)
 	cp --parents tests/*/*{.exe,.exp,.tmp,win.xml} win
 	cp --parents manuals/*.pdf win
 	strip win/bin/*.{exe,dll} win/tests/*/*.exe
-	cd locales; cp --parents {$(ES),$(FR)}calibrator.mo ../win/bin/locales
+	cd locales; cp --parents {$(ES),$(FR)}mpcotool.mo ../win/bin/locales
 	cp $(SHARE)glib-2.0/schemas/gschema{.dtd,s.compiled} \
 		win/share/glib-2.0/schemas
 	cd win/share; cp -r $(SHARE)icons .
