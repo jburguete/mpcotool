@@ -14,7 +14,7 @@ figs = surcos-advance.eps surcos-depth.eps surcos-solute-q1.eps \
 	sphere-variables-ga-250-16-0.2-0.2-0.2-32.eps \
 	sphere-variables-mc-100-25-10-0.1.eps \
 	sphere-variables-mc-2500-1.eps \
-	sphere-variables-mc-r-100-1-240-10-0.0001-1.5.eps \
+	sphere-variables-mc-r-100-1-240-10-0.1-1.5.eps \
 	sphere-variables-sw-10-10-25-10-0.5.eps \
 	sphere-variables-sw-50-50-1.eps
 
