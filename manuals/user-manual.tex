@@ -95,22 +95,21 @@ required in simulation models}
 
 \maketitle
 
-\chapter{Building the executable file from the source code}
+\chapter{Building from the source code}
 
 The source code in MPCOTool is written in C language. This software has
 been built and tested in the following operative systems:
 \begin{itemize}
-\item Debian kFreeBSD and Linux 8,
-\item DragonFly BSD 4.2,
-\item Dyson Illumos,
-\item Fedora Linux 23,
-\item FreeBSD 10,
-\item NetBSD 7.0,
-\item OpenBSD 5.8,
-\item OpenSUSE Linux 13,
-\item Ubuntu Linux 12, 14 and 15,
-\item Windows 7\footnotemark[1],
-\item and Windows 8.1\footnotemark[1].
+\item Debian Hurd, kFreeBSD and Linux 8;
+\item DragonFly BSD 4.2;
+\item Dyson Illumos;
+\item Fedora Linux 23;
+\item FreeBSD 10;
+\item Microsoft Windows 7\footnotemark[1] and 8.1\footnotemark[1];
+\item NetBSD 7.0;
+\item OpenBSD 5.8;
+\item OpenSUSE Linux 13;
+\item and Ubuntu Linux 12, 14 and 15.
 \end{itemize}
 Probably, this software can be built and it works in other operative systems,
 software distributions or versions but it has not been tested.
@@ -138,6 +137,12 @@ On Window systems, you have to install MSYS2
 utilities. You can follow detailed instructions in
 https://github.com/jburguete/install-unix.
 
+On Fedora Linux 23, in order to use OpenMPI compilation, do in a terminal (in 64
+bits version):
+\begin{lstlisting}[language=bash,basicstyle=\scriptsize]
+$ export PATH=$PATH:/usr/lib64/openmpi/bin
+\end{lstlisting}
+
 Once all the tools installed, the Genetic source code must be downloaded and it must be compiled following on a terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 $ git clone https://github.com/jburguete/genetic.git
@@ -151,6 +156,20 @@ $ git clone https://github.com/jburguete/mpcotool.git
 $ cd mpcotool/1.2.1
 $ ln -s ../../genetic/0.6.1 genetic
 $ ./build
+\end{lstlisting}
+
+Optionally, to compile the tests with the standard analytical optimization
+functions, you have to do (the executable files of test2, test3 and test4 use
+also the \emph{Genetic} library):
+\begin{lstlisting}[language=bash,basicstyle=\scriptsize]
+$ cd ../tests/test2
+$ ln -s ../../../genetic/0.6.1 genetic
+$ cd ../test3
+$ ln -s ../../../genetic/0.6.1 genetic
+$ cd ../test4
+$ ln -s ../../../genetic/0.6.1 genetic
+$ cd ../../1.2.1
+$ make tests
 \end{lstlisting}
 
 Finally, the next optional step build the PDF manuals:
@@ -225,8 +244,8 @@ represented in figure~\ref{FigMainFile}.
 	\rput(195,10){reproduction}
 	\rput(235,10){adaptation}
 	\rput(265,10){seed}
-	\rput(55,0){nsteps}
-	\rput(90,0){gradient\_method}
+	\rput(65,0){gradient\_method}
+	\rput(105,0){nsteps}
 	\rput(135,0){nestimates}
 	\rput(170,0){relaxation}
 	\rput(200,0){result}
@@ -384,10 +403,30 @@ template files must be written to reproduce every input file associated to every
 \item[@valueX@]: is replaced by the value associated to the $X$-th empirical parameter calculated by the optimization algorithm using the data defined in \emph{main input file};
 \end{description}
 
+\section{Output files}
+
+\subsection{Results file}
+
+MPCOTool generates a file where the best combination of variables and the
+corresponding calculated objective function, as well as the calculation time,
+are saved. The file name can be set ih the \emph{result} property of the main
+input file. If not set the default file name is "result".
+
+\subsection{Variables file}
+
+The program generates also a file where all combinations
+of variables checked in the calibration are saved in columns. First columns
+correspond to the variables combination and the last column is the objective
+function value. The file name can be set in the \emph{varaibles} property of the
+main input file. A default name "variables" is used if this property is not
+defined.
+
 \section{Interactive graphical user interface application}
 
 An alternative form to execute the software is to perform the interactive
-graphical user interface application, called \emph{MPCOTool}. In the
+graphical user interface application, called \emph{MPCOTool}. In this
+application the parallalization in multiple computers with OpenMPI or MPICH is
+deactivated, it can be only used in command line execution. In the
 figure~\ref{FigWindow} a plot of the main window of this tool is represented.
 The main windows enable us to access to every variable, coefficient, algorithm
 and simulation softwares.
@@ -407,20 +446,6 @@ figure~\ref{FigResult}.
 		\label{FigResult}}
 \end{figure}
 
-\section{Output files}
-
-\subsection{Results file}
-
-MPCOTool generates a file named \emph{result} where the best combination of
-variables and the corresponding calculated error, as well as the calculation
-time, are saved.
-
-\subsection{Variables file}
-
-The program generates also a file named \emph{variables} where all combinations
-of variables checked in the calibration are saved in columns being the last
-column the associated error.
-
 \chapter{Organization of MPCOTool}
 
 Let us assume that $N_{parameters}$ empirical parameters are sought desired so
@@ -429,17 +454,17 @@ experimental data and that the simulator requires $N_{inputs}$ input files. The
 structure followed by MPCOTool is summarized in \emph{main input file},
 where both $N_{experiments}$ and $N_{inputs}$ are specified. Furthermore, it
 contains the extreme values of the empirical parameters and the chosen
-optimization algorithm. Then, MPCOTool reads the
+optimization algorithm. Then, MPCOTool reads the corresponding
 $N_{experiments}\times N_{inputs}$ templates to build the simulator input files
 replacing key labels by empirical parameter values created by the optimization
 algorithm. There are two options: either the simulator compares directly the
 simulation results with the \emph{experimental data file}, hence generating a
-file with the value of the error, or an external program called \emph{evaluator}
-is invoked to compare with the \emph{experimental data file} and to produce the
-error value. In both cases this error value is saved in an
-\emph{objective value file}. Then for each experiment, an objective value $o_i$
-is obtained. The final value of the objective function associated with the
-experiments is calculated by means of:
+file with the value of the error; or another external program, defined in the
+property \emph{evaluator}, is invoked to compare with the \emph{experimental
+data file} and to produce the error value. In both cases this error value is
+saved in an \emph{objective value file}. Then for each experiment, an objective
+value $o_i$ is obtained. The final value of the objective function associated
+with the experiments set is calculated by means of:
 \EQ
 {
 	J=\sqrt{\frac{1}{N_{experiments}}
@@ -449,28 +474,28 @@ with $w_i$ the weight associated to the $i$-th experiment, specified in the
 \emph{main input file}. Figure~\ref{FigStructure} is a sketch of the
 structure.
 \psset{xunit=0.4mm,yunit=0.4mm}
-\PSPICTURE{-20}{-95}{280}{55}
+\PSPICTURE{-25}{-95}{280}{55}
 {
 	\tiny
-	\rput(15,50){Main input file}
-	\psframe(-20,45)(50,55)
-	\psline{->}(50,50)(60,50)
-	\rput(15,25){1st template file}
-	\psframe(-20,20)(50,30)
-	\psline{->}(50,25)(60,25)
-	\psline[linestyle=dotted,dotsep=1pt]{->}(60,25)(90,25)
-	\rput(15,15){$\cdots$}
-	\rput(15,5){$n$-th template file}
-	\psframe(-20,0)(50,10)
-	\psline{->}(50,5)(60,5)
-	\psline[linestyle=dotted,dotsep=1pt]{->}(60,5)(90,5)
-	\rput(15,-35){$\cdots$}
-	\rput(15,-75){$(N\times n)$-th template file}
-	\psframe(-20,-70)(50,-80)
-	\psline{->}(50,-75)(60,-75)
-	\psline[linestyle=dotted,dotsep=1pt]{->}(60,-75)(90,-75)
-	\rput(75,50){MPCOTool}
-	\psframe(60,-95)(90,55)
+	\rput(10,50){Main input file}
+	\psframe(-25,45)(45,55)
+	\psline{->}(45,50)(55,50)
+	\rput(10,25){1st template file}
+	\psframe(-25,20)(45,30)
+	\psline{->}(45,25)(55,25)
+	\psline[linestyle=dotted,dotsep=1pt]{->}(55,25)(90,25)
+	\rput(10,15){$\cdots$}
+	\rput(10,5){$n$-th template file}
+	\psframe(-25,0)(45,10)
+	\psline{->}(45,5)(55,5)
+	\psline[linestyle=dotted,dotsep=1pt]{->}(55,5)(90,5)
+	\rput(10,-35){$\cdots$}
+	\rput(10,-75){$(N\times n)$-th template file}
+	\psframe(-25,-70)(45,-80)
+	\psline{->}(45,-75)(55,-75)
+	\psline[linestyle=dotted,dotsep=1pt]{->}(55,-75)(90,-75)
+	\rput(72.5,50){MPCOTool}
+	\psframe(55,-95)(90,55)
 	\psline{->}(90,25)(100,25)
 	\psline{->}(90,5)(100,5)
 	\psline{->}(90,-55)(100,-55)
@@ -499,11 +524,6 @@ structure.
 	\rput(250,10){Objective}
 	\rput(250,5){value file}
 	\psframe(230,0)(270,15)
-	\psline{->}(270,7.5)(280,7.5)(280,-90)(90,-90)
-	\rput(15,-90){Objective function value}
-	\psframe(-20,-95)(50,-85)
-	\psline{->}(60,-90)(50,-90)
-	\psline[linestyle=dotted,dotsep=1pt]{->}(90,-90)(60,-90)
 	\rput(120,50){1st experiment}
 	\psframe[linestyle=dotted](95,-5)(275,55)
 	\rput(185,-15){$\cdots$}
@@ -534,6 +554,11 @@ structure.
 	\psline(270,-72.5)(280,-72.5)
 	\rput(120,-30){$N$-th experiment}
 	\psframe[linestyle=dotted](95,-85)(275,-25)
+	\psline{->}(270,7.5)(280,7.5)(280,-90)(90,-90)
+	\psline[linestyle=dotted,dotsep=1pt]{->}(90,-90)(55,-90)
+	\psline{->}(60,-90)(45,-90)
+	\rput(10,-90){Objective function value}
+	\psframe(-25,-95)(45,-85)
 }{Flowchart of the interactions among MPCOTool, the input files and the
 simulation and evaluation programs to produce an objective function value for
 each empirical parameters combination generated by the optimization algorithm}
