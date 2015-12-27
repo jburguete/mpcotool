@@ -1,146 +1,146 @@
-# Spanish translations for mpcotool package.
+# French translations for mpcotool package.
 # Copyright (C) 2015 THE mpcotool'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the mpcotool package.
 # Automatically generated, 2015.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 1.2.1\n"
+"Project-Id-Version: 1.3.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-27 18:44+0100\n"
-"PO-Revision-Date: 2015-10-20 07:33+0200\n"
+"POT-Creation-Date: 2015-12-27 18:53+0100\n"
+"PO-Revision-Date: 2015-10-20 18:47+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
-"Language: es\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: mpcotool.c:259
 msgid "ERROR!"
-msgstr "¡ERROR!"
+msgstr "ERREUR!"
 
 #: mpcotool.c:516
 msgid "Unable to parse the input file"
-msgstr "Imposible analizar el fichero de entrada"
+msgstr "On ne peut pas analyser le fichier d'entrée"
 
 #: mpcotool.c:527
 msgid "Bad root XML node"
-msgstr "Nodo XML raíz incorrecto"
+msgstr "Node XML source incorrect"
 
 #: mpcotool.c:543
 msgid "Bad simulator program"
-msgstr "Programa simulador incorrecto"
+msgstr "Programme simulateur incorrect"
 
 #: mpcotool.c:558
 msgid "Bad pseudo-random numbers generator seed"
-msgstr "Semilla del generador de números pseudo-aleatorios incorrecta"
+msgstr "Grain du générateur de nombres pseudo-aléatoires incorrect"
 
 #: mpcotool.c:574
 msgid "Bad simulations number"
-msgstr "Número de simulaciones incorrecto"
+msgstr "Nombre de simulations incorrect"
 
 #: mpcotool.c:591
 msgid "Invalid population number"
-msgstr "Número de población no válido"
+msgstr "Nombre de population incorrect"
 
 #: mpcotool.c:597
 msgid "No population number"
-msgstr "Falta el número de población"
+msgstr "Nombre de population indéfini"
 
 #: mpcotool.c:608
 msgid "Invalid generations number"
-msgstr "Numéro de generaciones no válido"
+msgstr "Nombre de générations incorrect"
 
 #: mpcotool.c:614
 msgid "No generations number"
-msgstr "Falta número de generaciones"
+msgstr "Nombre de générations indéfini"
 
 #: mpcotool.c:626
 msgid "Invalid mutation probability"
-msgstr "Probabilidad de mutación no válida"
+msgstr "Probabilité de mutation incorrecte"
 
 #: mpcotool.c:632
 msgid "No mutation probability"
-msgstr "Falta probabilidad de mutación"
+msgstr "Probabilité de mutation indéfinie"
 
 #: mpcotool.c:644
 msgid "Invalid reproduction probability"
-msgstr "Probabilidad de reproducción no válida"
+msgstr "Probabilité de reproduction incorrecte"
 
 #: mpcotool.c:650
 msgid "No reproduction probability"
-msgstr "Falta probabilidad de reproducción"
+msgstr "Probabilité de reproduction indéfinie"
 
 #: mpcotool.c:662
 msgid "Invalid adaptation probability"
-msgstr "Probabilidad de adaptación no válida"
+msgstr "Probabilité d'adaptation incorrecte"
 
 #: mpcotool.c:668
 msgid "No adaptation probability"
-msgstr "Falta probabilidad de adaptación"
+msgstr "Probabilité d'adaptation indéfinie"
 
 #: mpcotool.c:679
 msgid "No enough survival entities to reproduce the population"
-msgstr "Número de supervivientes insuficiente para reproducir la población"
+msgstr "Número de survivants insuffisante pour reproduire la population"
 
 #: mpcotool.c:685
 msgid "Unknown algorithm"
-msgstr "Algoritmo desconocido"
+msgstr "Algorithme inconnu"
 
 #: mpcotool.c:702
 msgid "Bad iterations number"
-msgstr "Número de iteraciones incorrecto"
+msgstr "Nombre d'iterations incorrect"
 
 #: mpcotool.c:712
 msgid "Invalid best number"
-msgstr "Número de mejores no válido"
+msgstr "Nombre des meilleurs incorrect"
 
 #: mpcotool.c:726
 msgid "Invalid tolerance"
-msgstr "Tolerancia no válida"
+msgstr "Tolérance incorrecte"
 
 #: mpcotool.c:739
 msgid "Invalid steps number"
-msgstr "Número de pasos no válido"
+msgstr "Nombre de pas incorrect"
 
 #: mpcotool.c:752
 msgid "Invalid estimates number"
-msgstr "Número de estimaciones no válido"
+msgstr "Nombre d'estimations incorrect"
 
 #: mpcotool.c:758
 msgid "Unknown method to estimate the gradient"
-msgstr "Método de estimar el gradiente desconocido"
+msgstr "Méthode d'éstimer le gradient inconnue"
 
 #: mpcotool.c:770
 msgid "Invalid relaxation parameter"
-msgstr "Parámetro de relajación no válido"
+msgstr "Nombre de relaxation incorrect"
 
 #: mpcotool.c:794 mpcotool.c:811 mpcotool.c:846 mpcotool.c:860 mpcotool.c:885
 #: mpcotool.c:4706
 msgid "Experiment"
-msgstr "Experimento"
+msgstr "Expérience"
 
 #: mpcotool.c:795
 msgid "no data file name"
-msgstr "falta el nombre del fichero de datos"
+msgstr "nom de fichier de données indéfini"
 
 #: mpcotool.c:811
 msgid "bad weight"
-msgstr "peso no válido"
+msgstr "poids incorrect"
 
 #: mpcotool.c:846 mpcotool.c:886
 msgid "no template"
-msgstr "falta plantilla"
+msgstr "modèle d'entrée indéfini"
 
 #: mpcotool.c:861
 msgid "bad templates number"
-msgstr "número de plantillas incorrecto"
+msgstr "nombre de modèles incorrect"
 
 #: mpcotool.c:908
 msgid "No calibration experiments"
-msgstr "Faltan experimentos de calibración"
+msgstr "Expériences de calibrage indéfinis"
 
 #: mpcotool.c:919 mpcotool.c:929 mpcotool.c:945 mpcotool.c:956 mpcotool.c:968
 #: mpcotool.c:977 mpcotool.c:992 mpcotool.c:1003 mpcotool.c:1015
@@ -152,467 +152,466 @@ msgstr "Variable"
 
 #: mpcotool.c:920
 msgid "bad XML node"
-msgstr "nodo XML incorrecto"
+msgstr "noeud XML incorrect"
 
 #: mpcotool.c:930
 msgid "no name"
-msgstr "falta el nombre"
+msgstr "nom indéfini"
 
 #: mpcotool.c:945
 msgid "bad minimum"
-msgstr "mínimo incorrecto"
+msgstr "minimum incorrect"
 
 #: mpcotool.c:957
 msgid "bad absolute minimum"
-msgstr "mínimo absoluto incorrecto"
+msgstr "minimum absolu incorrect"
 
 #: mpcotool.c:969
 msgid "minimum range not allowed"
-msgstr "rango mínimo no permitido"
+msgstr "gamme minimum interdite"
 
 #: mpcotool.c:977
 msgid "no minimum range"
-msgstr "falta el rango mínimo"
+msgstr "gamme minimum indéfinie"
 
 #: mpcotool.c:992
 msgid "bad maximum"
-msgstr "máximo incorrecto"
+msgstr "maximum incorrect"
 
 #: mpcotool.c:1004
 msgid "bad absolute maximum"
-msgstr "máximo absoluto incorrecto"
+msgstr "maximum absolu incorrect"
 
 #: mpcotool.c:1016
 msgid "maximum range not allowed"
-msgstr "rango máximo no permitido"
+msgstr "gamme maximum interdite"
 
 #: mpcotool.c:1024
 msgid "no maximum range"
-msgstr "falta el rango máximo"
+msgstr "gamme maximum indéfinie"
 
 #: mpcotool.c:1032
 msgid "bad range"
-msgstr "rango no válido"
+msgstr "gamme incorrecte"
 
 #: mpcotool.c:1046
 msgid "bad precision"
-msgstr "precisión incorrecta"
+msgstr "précision incorrecte"
 
 #: mpcotool.c:1066
 msgid "bad sweeps"
-msgstr "número de barridos incorrecto"
+msgstr "nombre de balayages incorrect"
 
 #: mpcotool.c:1075
 msgid "no sweeps number"
-msgstr "falta el número de barridos"
+msgstr "nombre de balayages indéfini"
 
 #: mpcotool.c:1097
 msgid "invalid bits number"
-msgstr "número de bits no válido"
+msgstr "nombre de bits incorrect"
 
 #: mpcotool.c:1107
 msgid "no bits number"
-msgstr "falta el número de bits"
+msgstr "nombre de bits indéfini"
 
 #: mpcotool.c:1122
 msgid "bad step size"
-msgstr "tamaño de paso incorrecto"
+msgstr "grandeur de pas incorrecte"
 
 #: mpcotool.c:1134
 msgid "No calibration variables"
-msgstr "Faltan las variables de calibración"
+msgstr "Variables de calibrage indéfinies"
 
 #: mpcotool.c:1370 mpcotool.c:1371 mpcotool.c:3091
 msgid "Best result"
-msgstr "Mejor resultado"
+msgstr "Meilleur résultat"
 
 #: mpcotool.c:2623 mpcotool.c:2625 mpcotool.c:3087
 msgid "Calculation time"
-msgstr "Tiempo de cálculo"
+msgstr "Temps de calcul"
 
 #: mpcotool.c:2802
 msgid "Pseudo-random numbers generator seed"
-msgstr "Semilla del generador de números pseudo-aleatorios"
+msgstr "Grain du générateur de nombres pseudo-aléatoires"
 
 #: mpcotool.c:2807
 msgid "Seed to init the pseudo-random numbers generator"
-msgstr "Semilla para iniciar el generador de números pseudo-aleatorios"
+msgstr "Grain pour initier le générateur de nombres pseudo-aléatoires"
 
 #: mpcotool.c:2810
 msgid "Threads number for the stochastic algorithm"
-msgstr "Número de hilos para el algoritmo estocástico"
+msgstr "Nombre de fils pour l'algorithme stochastique"
 
 #: mpcotool.c:2815
 msgid ""
 "Number of threads to perform the calibration/optimization for the stochastic "
 "algorithm"
 msgstr ""
-"Número de hilos para ejecutar la calibración/optimización para el algoritmo "
-"estocástico"
+"Nombre de fils pour exécuter le calibrage ou la optimisation pour "
+"l'algorithme stochastique"
 
 #: mpcotool.c:2819
 msgid "Threads number for the gradient based method"
-msgstr "Número de hilos para el método basado en el gradiente"
+msgstr "Nombre de fils pour la méthode basée au gradient"
 
 #: mpcotool.c:2824
 msgid ""
 "Number of threads to perform the calibration/optimization for the gradient "
 "based method"
 msgstr ""
-"Número de hilos para ejecutar la calibración/optimización para el método "
-"basado en el gradiente"
+"Nombre de fils pour exécuter le calibrage ou la optimisation pour la méthode "
+"basée au gradient"
 
 #: mpcotool.c:2841 mpcotool.c:4170
 msgid "Options"
-msgstr "Opciones"
+msgstr "Options"
 
 #: mpcotool.c:2844 mpcotool.c:2970 mpcotool.c:4066
 msgid "_OK"
-msgstr "_Aceptar"
+msgstr "_Accepter"
 
 #: mpcotool.c:2845 mpcotool.c:2968 mpcotool.c:4065
 msgid "_Cancel"
-msgstr "_Cancelar"
+msgstr "_Annuler"
 
 #: mpcotool.c:2871
 msgid "Calculating ..."
-msgstr "Calculando ..."
+msgstr "En calculant ..."
 
 #: mpcotool.c:2873
 msgid "Calculating"
-msgstr "Calculando"
+msgstr "En calculant"
 
 #: mpcotool.c:2965
 msgid "Save file"
-msgstr "Guardar fichero"
+msgstr "Enregistrer fichier"
 
 #: mpcotool.c:3108
 msgid "user-manual.pdf"
-msgstr "manual-de-usuario.pdf"
+msgstr "user-manual.pdf"
 
 #: mpcotool.c:3131
 msgid ""
 "A software to perform calibrations/optimizations of empirical parameters"
 msgstr ""
-"Un software para realizar calibraciones/optimizaciones de parámetros "
-"empíricos"
+"Un programme pour faire calibrages/optimisations de paramètres empiriques"
 
 #: mpcotool.c:4062
 msgid "Open input file"
-msgstr "Abrir fichero de entrada"
+msgstr "Ouvrir fichier d'entrée"
 
 #: mpcotool.c:4120
 msgid "_Sweep"
-msgstr "_Barrido"
+msgstr "_Balayage"
 
 #: mpcotool.c:4120
 msgid "_Genetic"
-msgstr "_Genético"
+msgstr "_Génétique"
 
 #: mpcotool.c:4123
 msgid "Monte-Carlo brute force algorithm"
-msgstr "Algoritmo de fuerza bruta de Monte-Carlo"
+msgstr "Algorithme de force brute de Monte-Carlo"
 
 #: mpcotool.c:4124
 msgid "Sweep brute force algorithm"
-msgstr "Algoritmo de fuerza bruta de barrido"
+msgstr "Algorithme de force brute de balayage"
 
 #: mpcotool.c:4125
 msgid "Genetic algorithm"
-msgstr "Algoritmo genético"
+msgstr "Algorithme génétique"
 
 #: mpcotool.c:4128
 msgid "_Coordinates descent"
-msgstr "_Descenso de coordenadas"
+msgstr "_Directions de descente"
 
 #: mpcotool.c:4128
 msgid "_Random"
-msgstr "_Aleatorio"
+msgstr "_Aléatoire"
 
 #: mpcotool.c:4131
 msgid "Coordinates descent gradient estimate method"
-msgstr "Método de estimación del gradiente por descenso de coordenadas"
+msgstr "Méthode à directions de descente"
 
 #: mpcotool.c:4132
 msgid "Random gradient estimate method"
-msgstr "Método de estimación de gradiente aleatoria"
+msgstr "Méthode d'estimation du gradient aléatoire"
 
 #: mpcotool.c:4148
 msgid "Open"
-msgstr "Abrir"
+msgstr "Ouvrir"
 
 #: mpcotool.c:4155
 msgid "Save"
-msgstr "Guardar"
+msgstr "Enregistrer"
 
 #: mpcotool.c:4163
 msgid "Run"
-msgstr "Ejecutar"
+msgstr "Commencer"
 
 #: mpcotool.c:4177
 msgid "Help"
-msgstr "Ayuda"
+msgstr "Aide"
 
 #: mpcotool.c:4184
 msgid "About"
-msgstr "Acerca de"
+msgstr "À propos"
 
 #: mpcotool.c:4191
 msgid "Exit"
-msgstr "Salir"
+msgstr "Quitter"
 
 #: mpcotool.c:4214 mpcotool.c:4216
 msgid "Simulator program"
-msgstr "Programa simulador"
+msgstr "Programme simulateur"
 
 #: mpcotool.c:4219
 msgid "Simulator program executable file"
-msgstr "Fichero ejecutable del programa simulador"
+msgstr "Fichier exécutable du programme simulateur"
 
 #: mpcotool.c:4223
 msgid "_Evaluator program"
-msgstr "_Programa evaluador"
+msgstr "_Programme évaluateur"
 
 #: mpcotool.c:4226
 msgid "Evaluator program"
-msgstr "Programa evaluador"
+msgstr "Programme évaluateur"
 
 #: mpcotool.c:4230
 msgid "Optional evaluator program executable file"
-msgstr "Opcional: fichero ejecutable del programa simulador"
+msgstr "Optionnel: fichier exécutable du programme évaluateur"
 
 #: mpcotool.c:4233
 msgid "Result file"
-msgstr "Fichero de resultados"
+msgstr "Fichier de résultat"
 
 #: mpcotool.c:4236
 msgid "Best results file"
-msgstr "Fichero de mejores resultados"
+msgstr "Fichier de meilleurs résultats"
 
 #: mpcotool.c:4238
 msgid "Variables file"
-msgstr "Fichero de variables"
+msgstr "Fichier de variables"
 
 #: mpcotool.c:4242
 msgid "All simulated results file"
-msgstr "Fichero con todos los resultados simulados"
+msgstr "Fichier avec tous les résultats simulés"
 
 #: mpcotool.c:4265
 msgid "Simulations number"
-msgstr "Número de simulaciones"
+msgstr "Nombre de simulations"
 
 #: mpcotool.c:4270
 msgid "Number of simulations to perform for each iteration"
-msgstr "Número de simulaciones para ejecutar en cada iteración"
+msgstr "Nombre de simulations pour exécuter en chaque iteration"
 
 #: mpcotool.c:4272
 msgid "Iterations number"
-msgstr "Número de iteraciones"
+msgstr "Nombre d'iterations"
 
 #: mpcotool.c:4276
 msgid "Number of iterations"
-msgstr "Número de iteraciones"
+msgstr "Nombre d'iterations"
 
 #: mpcotool.c:4279
 msgid "Tolerance"
-msgstr "Tolerancia"
+msgstr "Tolérance"
 
 #: mpcotool.c:4284
 msgid "Tolerance to set the variable interval on the next iteration"
 msgstr ""
-"Tolerancia para fijar el intervalo de la variable en la siguiente iteración"
+"Tolerance pour fixer l'intervalle de la variable à l'iteration suivante"
 
 #: mpcotool.c:4285
 msgid "Bests number"
-msgstr "Número de los mejores"
+msgstr "Nombre des meilleurs"
 
 #: mpcotool.c:4290
 msgid ""
 "Number of best simulations used to set the variable interval on the next "
 "iteration"
 msgstr ""
-"Número de las mejores simulaciones usadas para fijar el intervalo de la "
-"variable en la siguiente iteración"
+"Nombre des meilleures simulations utilisées pour fixer l'intervalle de la "
+"variable à l'iteration suivante"
 
 #: mpcotool.c:4293
 msgid "Population number"
-msgstr "Número de población"
+msgstr "Nombre de population"
 
 #: mpcotool.c:4298
 msgid "Number of population for the genetic algorithm"
-msgstr "Número de población para el algoritmo genético"
+msgstr "Nombre de population pour l'algorithme génétique"
 
 #: mpcotool.c:4300
 msgid "Generations number"
-msgstr "Número de generaciones"
+msgstr "Nombre de générations"
 
 #: mpcotool.c:4305
 msgid "Number of generations for the genetic algorithm"
-msgstr "Número de generaciones para el algoritmo genético"
+msgstr "Nombre de génerations pour l'algorithme génétique"
 
 #: mpcotool.c:4307
 msgid "Mutation ratio"
-msgstr "Ratio de mutación"
+msgstr "Ratio de mutation"
 
 #: mpcotool.c:4312
 msgid "Ratio of mutation for the genetic algorithm"
-msgstr "Ratio de mutación para el algoritmo genético"
+msgstr "Ratio de mutation pour l'algorithme génétique"
 
 #: mpcotool.c:4314
 msgid "Reproduction ratio"
-msgstr "Ratio de reproducción"
+msgstr "Ratio de reproduction"
 
 #: mpcotool.c:4319
 msgid "Ratio of reproduction for the genetic algorithm"
-msgstr "Ratio de reproducción para el algoritmo genético"
+msgstr "Ratio de reproduction pour l'algorithme génétique"
 
 #: mpcotool.c:4321
 msgid "Adaptation ratio"
-msgstr "Ratio de adaptación"
+msgstr "Ratio d'adaptation"
 
 #: mpcotool.c:4326
 msgid "Ratio of adaptation for the genetic algorithm"
-msgstr "Ratio de adaptación para el algoritmo genético"
+msgstr "Ratio d'adaptation pour l'algorithme génétique"
 
 #: mpcotool.c:4330
 msgid "_Gradient based method"
-msgstr "_Método basado en el gradiente"
+msgstr "_Méthode basée au gradient"
 
 #: mpcotool.c:4351
 msgid "Steps number"
-msgstr "Número de pasos"
+msgstr "Nombre de pas"
 
 #: mpcotool.c:4355
 msgid "Gradient estimates number"
-msgstr "Número de estimaciones del gradiente"
+msgstr "Nombre d'estimations du gradient"
 
 #: mpcotool.c:4359
 msgid "Relaxation parameter"
-msgstr "Parámetro de relajación"
+msgstr "Paramètre de relaxation"
 
 #: mpcotool.c:4455
 msgid "Algorithm"
-msgstr "Algoritmo"
+msgstr "Algorithme"
 
 #: mpcotool.c:4462
 msgid "Variables selector"
-msgstr "Seleccionador de variables"
+msgstr "Sélecteur de variables"
 
 #: mpcotool.c:4471
 msgid "Add variable"
-msgstr "Añadir variable"
+msgstr "Ajouter variable"
 
 #: mpcotool.c:4478
 msgid "Remove variable"
-msgstr "Eliminar variable"
+msgstr "Éraser variable"
 
 #: mpcotool.c:4479
 msgid "Name"
-msgstr "Nombre"
+msgstr "Nom"
 
 #: mpcotool.c:4482
 msgid "Variable name"
-msgstr "Nombre de la variable"
+msgstr "Nom de la variable"
 
 #: mpcotool.c:4485
 msgid "Minimum"
-msgstr "Mínimo"
+msgstr "Minimum"
 
 #: mpcotool.c:4490
 msgid "Minimum initial value of the variable"
-msgstr "Valor inicial mínimo de la variable"
+msgstr "Valeur minimum initiale de la variable"
 
 #: mpcotool.c:4499
 msgid "Maximum"
-msgstr "Máximo"
+msgstr "Maximum"
 
 #: mpcotool.c:4504
 msgid "Maximum initial value of the variable"
-msgstr "Valor inicial máximo de la variable"
+msgstr "Valeur maximum initiale de la variable"
 
 #: mpcotool.c:4514
 msgid "_Absolute minimum"
-msgstr "_Mínimo absoluto"
+msgstr "_Mimumum absolu"
 
 #: mpcotool.c:4520
 msgid "Minimum allowed value of the variable"
-msgstr "Valor mínimo permitido de la variable"
+msgstr "Valeur minimum loisible de la variable"
 
 #: mpcotool.c:4531
 msgid "_Absolute maximum"
-msgstr "_Máximo absoluto"
+msgstr "_Maximum absolu"
 
 #: mpcotool.c:4537
 msgid "Maximum allowed value of the variable"
-msgstr "Valor máximo permitido de la variable"
+msgstr "Valeur maximum loisible de la variable"
 
 #: mpcotool.c:4548
 msgid "Precision digits"
-msgstr "Dígitos de precisión"
+msgstr "Chiffres de précision"
 
 #: mpcotool.c:4553
 msgid ""
 "Number of precision floating point digits\n"
 "0 is for integer numbers"
 msgstr ""
-"Número de dígitos decimales de precisión\n"
-"0 es para números enteros"
+"Nombre de chiffres décimales de précision\n"
+"0 est pour numéros entiers"
 
 #: mpcotool.c:4557
 msgid "Sweeps number"
-msgstr "Número de barridos"
+msgstr "Nombre de balayages"
 
 #: mpcotool.c:4562
 msgid "Number of steps sweeping the variable"
-msgstr "Número de pasos barriendo la variable"
+msgstr "Nombre de pas pour balayager la variable"
 
 #: mpcotool.c:4565
 msgid "Bits number"
-msgstr "Número de bits"
+msgstr "Nombre de bits"
 
 #: mpcotool.c:4570
 msgid "Number of bits to encode the variable"
-msgstr "Número de bits para codificar la variable"
+msgstr "Nombre de bits pour codifier la variable"
 
 #: mpcotool.c:4573
 msgid "Step size"
-msgstr "Tamaño de paso"
+msgstr "Grandeur de pas"
 
 #: mpcotool.c:4578
 msgid "Initial step size for the gradient based method"
-msgstr "Tamaño de paso inicial para el método basado en el gradiente"
+msgstr "Grandeur de pas initiale pour la méthode basée au gradient"
 
 #: mpcotool.c:4631
 msgid "Experiment selector"
-msgstr "Seleccionador de experimentos"
+msgstr "Selecteur d'expériences"
 
 #: mpcotool.c:4640
 msgid "Add experiment"
-msgstr "Añadir experimento"
+msgstr "Ajouter expérience"
 
 #: mpcotool.c:4647
 msgid "Remove experiment"
-msgstr "Eliminar experimento"
+msgstr "Éraser expérience"
 
 #: mpcotool.c:4649 mpcotool.c:4651 mpcotool.c:4654
 msgid "Experimental data file"
-msgstr "Fichero de datos experimentales"
+msgstr "Fichier de données expérimentales"
 
 #: mpcotool.c:4658
 msgid "Weight"
-msgstr "Peso"
+msgstr "Poids"
 
 #: mpcotool.c:4663
 msgid "Weight factor to build the objective function"
-msgstr "Factor de peso para construir la función objetivo"
+msgstr "Facteur de poids pour faire la fonction objectif"
 
 #: mpcotool.c:4683 mpcotool.c:4692
 msgid "Input template"
-msgstr "Plantilla de entrada"
+msgstr "Modèle d'entrée"
 
 #: mpcotool.c:4696
 msgid "Experimental input template file"
-msgstr "Fichero plantilla de entrada experimental"
+msgstr "Fichier de modèle d'entrée expérimental"
 
 #~ msgid "Processors number"
-#~ msgstr "Número de procesadores"
+#~ msgstr "Nombre de processeurs"
