@@ -2780,6 +2780,8 @@ input_save (char *filename)
         xml_node_set_uint (child, XML_NSWEEPS, input->nsweeps[i]);
       else if (input->algorithm == ALGORITHM_GENETIC)
         xml_node_set_uint (child, XML_NBITS, input->nbits[i]);
+      if (input->nsteps)
+        xml_node_set_float (child, XML_STEP, input->step[i]);
     }
 
   // Saving the XML file
@@ -3146,10 +3148,12 @@ void
 window_update_gradient ()
 {
   gtk_widget_show (GTK_WIDGET (window->check_gradient));
-  gtk_widget_show (GTK_WIDGET (window->label_step));
-  gtk_widget_show (GTK_WIDGET (window->spin_step));
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (window->check_gradient)))
-    gtk_widget_show (GTK_WIDGET (window->grid_gradient));
+    {
+      gtk_widget_show (GTK_WIDGET (window->grid_gradient));
+      gtk_widget_show (GTK_WIDGET (window->label_step));
+      gtk_widget_show (GTK_WIDGET (window->spin_step));
+    }
   switch (window_get_gradient ())
     {
     case GRADIENT_METHOD_COORDINATES:
@@ -3611,7 +3615,9 @@ window_set_variable ()
         (GTK_TOGGLE_BUTTON (window->check_maxabs), 0);
     }
   gtk_spin_button_set_value (window->spin_precision, input->precision[i]);
-  gtk_spin_button_set_value (window->spin_step, input->step[i]);
+  gtk_spin_button_set_value (window->spin_steps, (gdouble) input->nsteps);
+  if (input->nsteps)
+    gtk_spin_button_set_value (window->spin_step, input->step[i]);
 #if DEBUG
   fprintf (stderr, "window_set_variable: precision[%u]=%u\n", i,
            input->precision[i]);
@@ -3877,16 +3883,16 @@ window_rangemaxabs_variable ()
  * \brief Function to update the variable step in the main window.
  */
 void
-window_rangemin_variable ()
+window_step_variable ()
 {
   unsigned int i;
 #if DEBUG
-  fprintf (stderr, "window_rangemin_variable: start\n");
+  fprintf (stderr, "window_step_variable: start\n");
 #endif
   i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_variable));
   input->step[i] = gtk_spin_button_get_value (window->spin_step);
 #if DEBUG
-  fprintf (stderr, "window_rangemin_variable: end\n");
+  fprintf (stderr, "window_step_variable: end\n");
 #endif
 }
 
@@ -4571,7 +4577,7 @@ window_new ()
     (GTK_WIDGET (window->spin_step),
      gettext ("Initial step size for the gradient based method"));
   g_signal_connect
-    (window->spin_step, "value-changed", window_update_step, NULL);
+    (window->spin_step, "value-changed", window_step_variable, NULL);
   window->grid_variable = (GtkGrid *) gtk_grid_new ();
   gtk_grid_attach (window->grid_variable,
                    GTK_WIDGET (window->combo_variable), 0, 0, 2, 1);
@@ -4611,6 +4617,10 @@ window_new ()
                    GTK_WIDGET (window->label_bits), 0, 8, 1, 1);
   gtk_grid_attach (window->grid_variable,
                    GTK_WIDGET (window->spin_bits), 1, 8, 3, 1);
+  gtk_grid_attach (window->grid_variable,
+                   GTK_WIDGET (window->label_step), 0, 9, 1, 1);
+  gtk_grid_attach (window->grid_variable,
+                   GTK_WIDGET (window->spin_step), 1, 9, 3, 1);
   window->frame_variable = (GtkFrame *) gtk_frame_new (gettext ("Variable"));
   gtk_container_add (GTK_CONTAINER (window->frame_variable),
                      GTK_WIDGET (window->grid_variable));
