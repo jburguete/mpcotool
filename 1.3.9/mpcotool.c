@@ -2644,6 +2644,9 @@ calibrate_open ()
 void
 input_save_gradient (xmlNode * node)
 {
+#if DEBUG
+  fprintf (stderr, "input_save_gradient: start\n");
+#endif
   if (input->nsteps)
     {
       xml_node_set_uint (node, XML_NSTEPS, input->nsteps);
@@ -2659,6 +2662,9 @@ input_save_gradient (xmlNode * node)
           xml_node_set_uint (node, XML_NESTIMATES, input->nestimates);
         }
     }
+#if DEBUG
+  fprintf (stderr, "input_save_gradient: end\n");
+#endif
 }
 
 /**
@@ -2675,6 +2681,10 @@ input_save (char *filename)
   xmlDoc *doc;
   xmlNode *node, *child;
   GFile *file, *file2;
+
+#if DEBUG
+  fprintf (stderr, "input_save: start\n");
+#endif
 
   // Getting the input file directory
   input->name = g_path_get_basename (filename);
@@ -2789,6 +2799,10 @@ input_save (char *filename)
 
   // Freeing memory
   xmlFreeDoc (doc);
+
+#if DEBUG
+  fprintf (stderr, "input_save: end\n");
+#endif
 }
 
 /**
@@ -2798,6 +2812,9 @@ input_save (char *filename)
 void
 options_new ()
 {
+#if DEBUG
+  fprintf (stderr, "options_new: start\n");
+#endif
   options->label_seed = (GtkLabel *)
     gtk_label_new (gettext ("Pseudo-random numbers generator seed"));
   options->spin_seed = (GtkSpinButton *)
@@ -2856,6 +2873,9 @@ options_new ()
         = gtk_spin_button_get_value_as_int (options->spin_gradient);
     }
   gtk_widget_destroy (GTK_WIDGET (options->dialog));
+#if DEBUG
+  fprintf (stderr, "options_new: end\n");
+#endif
 }
 
 /**
@@ -2890,10 +2910,17 @@ int
 window_get_algorithm ()
 {
   unsigned int i;
+#if DEBUG
+  fprintf (stderr, "window_get_algorithm: start\n");
+#endif
   for (i = 0; i < NALGORITHMS; ++i)
     if (gtk_toggle_button_get_active
         (GTK_TOGGLE_BUTTON (window->button_algorithm[i])))
       break;
+#if DEBUG
+  fprintf (stderr, "window_get_algorithm: %u\n", i);
+  fprintf (stderr, "window_get_algorithm: end\n");
+#endif
   return i;
 }
 
@@ -2906,10 +2933,17 @@ int
 window_get_gradient ()
 {
   unsigned int i;
+#if DEBUG
+  fprintf (stderr, "window_get_gradient: start\n");
+#endif
   for (i = 0; i < NGRADIENTS; ++i)
     if (gtk_toggle_button_get_active
         (GTK_TOGGLE_BUTTON (window->button_gradient[i])))
       break;
+#if DEBUG
+  fprintf (stderr, "window_get_gradient: %u\n", i);
+  fprintf (stderr, "window_get_gradient: end\n");
+#endif
   return i;
 }
 
@@ -3104,12 +3138,21 @@ void
 window_help ()
 {
   char *buffer, *buffer2;
+#if DEBUG
+  fprintf (stderr, "window_help: start\n");
+#endif
   buffer2 = g_build_filename (window->application_directory, "..", "manuals",
                               gettext ("user-manual.pdf"), NULL);
   buffer = g_filename_to_uri (buffer2, NULL, NULL);
   g_free (buffer2);
   gtk_show_uri (NULL, buffer, GDK_CURRENT_TIME, NULL);
+#if DEBUG
+  fprintf (stderr, "window_help: uri=%s\n", buffer);
+#endif
   g_free (buffer);
+#if DEBUG
+  fprintf (stderr, "window_help: end\n");
+#endif
 }
 
 /**
@@ -3124,6 +3167,9 @@ window_about ()
     "Borja Latorre Garcés <borja.latorre@csic.es>",
     NULL
   };
+#if DEBUG
+  fprintf (stderr, "window_about: start\n");
+#endif
   gtk_show_about_dialog
     (window->window,
      "program_name", "MPCOTool",
@@ -3132,11 +3178,14 @@ window_about ()
               "parameters"),
      "authors", authors,
      "translator-credits", "Javier Burguete Tolosa <jburguete@eead.csic.es>",
-     "version", "1.3.8",
+     "version", "1.3.9",
      "copyright", "Copyright 2012-2015 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/mpcotool",
      "license-type", GTK_LICENSE_BSD, NULL);
+#if DEBUG
+  fprintf (stderr, "window_about: end\n");
+#endif
 }
 
 /**
@@ -3147,6 +3196,9 @@ window_about ()
 void
 window_update_gradient ()
 {
+#if DEBUG
+  fprintf (stderr, "window_update_gradient: start\n");
+#endif
   gtk_widget_show (GTK_WIDGET (window->check_gradient));
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (window->check_gradient)))
     {
@@ -3164,6 +3216,9 @@ window_update_gradient ()
       gtk_widget_show (GTK_WIDGET (window->label_estimates));
       gtk_widget_show (GTK_WIDGET (window->spin_estimates));
     }
+#if DEBUG
+  fprintf (stderr, "window_update_gradient: end\n");
+#endif
 }
 
 /**
@@ -3174,6 +3229,9 @@ void
 window_update ()
 {
   unsigned int i;
+#if DEBUG
+  fprintf (stderr, "window_update: start\n");
+#endif
   gtk_widget_set_sensitive
     (GTK_WIDGET (window->button_evaluator),
      gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON
@@ -3308,6 +3366,9 @@ window_update ()
   gtk_widget_set_sensitive
     (GTK_WIDGET (window->spin_maxabs),
      gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (window->check_maxabs)));
+#if DEBUG
+  fprintf (stderr, "window_update: end\n");
+#endif
 }
 
 /**
@@ -3395,6 +3456,9 @@ void
 window_remove_experiment ()
 {
   unsigned int i, j;
+#if DEBUG
+  fprintf (stderr, "window_remove_experiment: start\n");
+#endif
   i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_experiment));
   g_signal_handler_block (window->combo_experiment, window->id_experiment);
   gtk_combo_box_text_remove (window->combo_experiment, i);
@@ -3419,6 +3483,9 @@ window_remove_experiment ()
   for (j = 0; j < input->ninputs; ++j)
     g_signal_handler_unblock (window->button_template[j], window->id_input[j]);
   window_update ();
+#if DEBUG
+  fprintf (stderr, "window_remove_experiment: end\n");
+#endif
 }
 
 /**
@@ -3429,6 +3496,9 @@ void
 window_add_experiment ()
 {
   unsigned int i, j;
+#if DEBUG
+  fprintf (stderr, "window_add_experiment: start\n");
+#endif
   i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_experiment));
   g_signal_handler_block (window->combo_experiment, window->id_experiment);
   gtk_combo_box_text_insert_text
@@ -3457,6 +3527,9 @@ window_add_experiment ()
   for (j = 0; j < input->ninputs; ++j)
     g_signal_handler_unblock (window->button_template[j], window->id_input[j]);
   window_update ();
+#if DEBUG
+  fprintf (stderr, "window_add_experiment: end\n");
+#endif
 }
 
 /**
@@ -3654,6 +3727,9 @@ void
 window_remove_variable ()
 {
   unsigned int i, j;
+#if DEBUG
+  fprintf (stderr, "window_remove_variable: start\n");
+#endif
   i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_variable));
   g_signal_handler_block (window->combo_variable, window->id_variable);
   gtk_combo_box_text_remove (window->combo_variable, i);
@@ -3685,6 +3761,9 @@ window_remove_variable ()
   gtk_combo_box_set_active (GTK_COMBO_BOX (window->combo_variable), i);
   g_signal_handler_unblock (window->entry_variable, window->id_variable_label);
   window_update ();
+#if DEBUG
+  fprintf (stderr, "window_remove_variable: end\n");
+#endif
 }
 
 /**
@@ -4115,7 +4194,6 @@ window_new ()
 {
   unsigned int i;
   char *buffer, *buffer2, buffer3[64];
-  GtkViewport *viewport;
   char *label_algorithm[NALGORITHMS] = {
     "_Monte-Carlo", gettext ("_Sweep"), gettext ("_Genetic")
   };
@@ -4131,6 +4209,10 @@ window_new ()
     gettext ("Coordinates descent gradient estimate method"),
     gettext ("Random gradient estimate method")
   };
+
+#if DEBUG
+  fprintf (stderr, "window_new: start\n");
+#endif
 
   // Creating the window
   window->window = (GtkWindow *) gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -4488,12 +4570,10 @@ window_new ()
   gtk_widget_set_tooltip_text
     (GTK_WIDGET (window->spin_min),
      gettext ("Minimum initial value of the variable"));
-  viewport = (GtkViewport *) gtk_viewport_new (NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (viewport), GTK_WIDGET (window->spin_min));
   window->scrolled_min
     = (GtkScrolledWindow *) gtk_scrolled_window_new (NULL, NULL);
   gtk_container_add (GTK_CONTAINER (window->scrolled_min),
-                     GTK_WIDGET (viewport));
+                     GTK_WIDGET (window->spin_min));
   g_signal_connect (window->spin_min, "value-changed",
                     window_rangemin_variable, NULL);
   window->label_max = (GtkLabel *) gtk_label_new (gettext ("Maximum"));
@@ -4502,12 +4582,10 @@ window_new ()
   gtk_widget_set_tooltip_text
     (GTK_WIDGET (window->spin_max),
      gettext ("Maximum initial value of the variable"));
-  viewport = (GtkViewport *) gtk_viewport_new (NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (viewport), GTK_WIDGET (window->spin_max));
   window->scrolled_max
     = (GtkScrolledWindow *) gtk_scrolled_window_new (NULL, NULL);
   gtk_container_add (GTK_CONTAINER (window->scrolled_max),
-                     GTK_WIDGET (viewport));
+                     GTK_WIDGET (window->spin_max));
   g_signal_connect (window->spin_max, "value-changed",
                     window_rangemax_variable, NULL);
   window->check_minabs = (GtkCheckButton *)
@@ -4518,13 +4596,10 @@ window_new ()
   gtk_widget_set_tooltip_text
     (GTK_WIDGET (window->spin_minabs),
      gettext ("Minimum allowed value of the variable"));
-  viewport = (GtkViewport *) gtk_viewport_new (NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (viewport),
-                     GTK_WIDGET (window->spin_minabs));
   window->scrolled_minabs
     = (GtkScrolledWindow *) gtk_scrolled_window_new (NULL, NULL);
   gtk_container_add (GTK_CONTAINER (window->scrolled_minabs),
-                     GTK_WIDGET (viewport));
+                     GTK_WIDGET (window->spin_minabs));
   g_signal_connect (window->spin_minabs, "value-changed",
                     window_rangeminabs_variable, NULL);
   window->check_maxabs = (GtkCheckButton *)
@@ -4535,13 +4610,10 @@ window_new ()
   gtk_widget_set_tooltip_text
     (GTK_WIDGET (window->spin_maxabs),
      gettext ("Maximum allowed value of the variable"));
-  viewport = (GtkViewport *) gtk_viewport_new (NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (viewport),
-                     GTK_WIDGET (window->spin_maxabs));
   window->scrolled_maxabs
     = (GtkScrolledWindow *) gtk_scrolled_window_new (NULL, NULL);
   gtk_container_add (GTK_CONTAINER (window->scrolled_maxabs),
-                     GTK_WIDGET (viewport));
+                     GTK_WIDGET (window->spin_maxabs));
   g_signal_connect (window->spin_maxabs, "value-changed",
                     window_rangemaxabs_variable, NULL);
   window->label_precision
@@ -4576,6 +4648,10 @@ window_new ()
   gtk_widget_set_tooltip_text
     (GTK_WIDGET (window->spin_step),
      gettext ("Initial step size for the gradient based method"));
+  window->scrolled_step
+    = (GtkScrolledWindow *) gtk_scrolled_window_new (NULL, NULL);
+  gtk_container_add (GTK_CONTAINER (window->scrolled_step),
+                     GTK_WIDGET (window->spin_step));
   g_signal_connect
     (window->spin_step, "value-changed", window_step_variable, NULL);
   window->grid_variable = (GtkGrid *) gtk_grid_new ();
@@ -4620,7 +4696,7 @@ window_new ()
   gtk_grid_attach (window->grid_variable,
                    GTK_WIDGET (window->label_step), 0, 9, 1, 1);
   gtk_grid_attach (window->grid_variable,
-                   GTK_WIDGET (window->spin_step), 1, 9, 3, 1);
+                   GTK_WIDGET (window->scrolled_step), 1, 9, 3, 1);
   window->frame_variable = (GtkFrame *) gtk_frame_new (gettext ("Variable"));
   gtk_container_add (GTK_CONTAINER (window->frame_variable),
                      GTK_WIDGET (window->grid_variable));
@@ -4732,6 +4808,7 @@ window_new ()
   gtk_widget_set_size_request (GTK_WIDGET (window->scrolled_max), -1, 40);
   gtk_widget_set_size_request (GTK_WIDGET (window->scrolled_minabs), -1, 40);
   gtk_widget_set_size_request (GTK_WIDGET (window->scrolled_maxabs), -1, 40);
+  gtk_widget_set_size_request (GTK_WIDGET (window->scrolled_step), -1, 40);
 #endif
 
   // Reading initial example
@@ -4741,6 +4818,10 @@ window_new ()
   g_free (buffer2);
   window_read (buffer);
   g_free (buffer);
+
+#if DEBUG
+  fprintf (stderr, "window_new: start\n");
+#endif
 }
 
 #endif

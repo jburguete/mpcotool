@@ -62,7 +62,8 @@ typedef struct
   double rangemax;              ///< Maximum value.
   double rangeminabs;           ///< Minimum allowed value.
   double rangemaxabs;           ///< Maximum allowed value.
-  double step;                  ///< Initial step size for the gradient based method.
+  double step;
+  ///< Initial step size for the gradient based method.
   unsigned int precision;       ///< Precision digits.
   unsigned int nsweeps;         ///< Sweeps number of the sweep algorithm.
   unsigned int nbits;           ///< Bits number of the genetic algorithm.
@@ -192,8 +193,9 @@ typedef struct
   GtkSpinButton *spin_sweeps;   ///< Sweeps number GtkSpinButton.
   GtkLabel *label_bits;         ///< Bits number GtkLabel.
   GtkSpinButton *spin_bits;     ///< Bits number GtkSpinButton.
-  GtkLabel *label_step;         ///< GtkLabel to set the steps number.
-  GtkSpinButton *spin_step;     ///< GtkSpinButton to set the steps number.
+  GtkLabel *label_step;         ///< GtkLabel to set the step.
+  GtkSpinButton *spin_step;     ///< GtkSpinButton to set the step.
+  GtkScrolledWindow *scrolled_step;     ///< step GtkScrolledWindow.
   GtkFrame *frame_experiment;   ///< Experiment GtkFrame.
   GtkGrid *grid_experiment;     ///< Experiment GtkGrid.
   GtkComboBoxText *combo_experiment;    ///< Experiment GtkComboBoxEntry.

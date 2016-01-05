@@ -114,6 +114,7 @@
 
 \newcommand{\ABS}[1]{\left|#1\right|}
 \newcommand{\C}[1]{\left[#1\right]}
+\newcommand{\MATRIX}[2]{\PA{\begin{array}{#1}#2\end{array}}}
 \newcommand{\PA}[1]{\left(#1\right)}
 \newcommand{\LL}[1]{\left\{#1\right\}}
 
@@ -375,6 +376,62 @@ less parallelizable than pure brute force methods because the parallelization
 has to be performed for each iteration.
 
 \subsection{Gradient based method}
+
+Brute force optimization methods, sweep and Monte-Carlo, can be also combined
+with a gradient based algorithm. Defining the vector $\vec{r}_i$ as the optime
+variables combination obtained in the $i$-th step, $\vec{r}_1$ as the optime
+varaibles combination vector obtained by the brute force method and defining
+the vector $\vec{s}_i$ as:
+\EQ
+{
+	\vec{s}_1=\vec{0},\quad
+	\vec{s}_i=(1-relaxation)\,\vec{s}_{i-1}+relaxation\,\Delta\vec{r}_{i-1},
+}{Eqs}
+with $\Delta\vec{r}_{i-1}=\vec{r}_i+\vec{r}_{i-1}$ and $relaxtion$ the
+relaxation parameter, the gradient based method checks $N_{estimates}$ variable
+combinations and choice the optimum as:
+\EQ
+{
+	\vec{r}_{i+1}=\mathrm{optime}\PA{\vec{r}_i,\;\vec{r}_i+\vec{s}_i+\vec{t}_j},
+	\;j=1,\cdots,N_{estimates},
+}{EqGradient}
+If the step does not improve the optimum ($\vec{r}_i=\vec{r}_{i+1}$) then the
+gradient step vectors $\vec{t}_j$ are divided by two and $\vec{s}_{i+1}$ is set
+to zero. The method is iterated $N_{steps}$ times.
+
+Although gradient based method gets the fastest convergence, is the method in
+MPCOTool that obtains the least advantages of parallelization. The method is
+almost sequential and parallelization only can be performed for each step in
+the $N_{estimates}$ simulations to estimate the gradient.
+
+MPCOTool uses two methods to build the $\vec{t}_j$ vectors:
+\begin{description}
+\item[Coordinates descent]: this method builds the $\vec{t}_j$ vectors by
+increasing or decreasing only one variable:
+\[
+	\vec{t}_1=\MATRIX{c}{step_1\\0\\0\\\vdots\\0},\quad
+	\vec{t}_2=\MATRIX{c}{-step_1\\0\\0\\\vdots\\0},\quad
+	\vec{t}_3=\MATRIX{c}{0\\step_2\\0\\\vdots\\0},
+\]
+\EQ
+{
+	\vec{t}_4=\MATRIX{c}{0\\-step_2\\0\\\vdots\\0},\quad\cdots\quad,
+	\vec{t}_{N_{estimates}}=\MATRIX{c}{0\\0\\0\\\vdots\\
+	-step_{N_{variables}}},
+}{EqtDescent}
+being $step_j$ the initial step size for the $j$-th variable defined by the user
+in the main input file. The number of estimates in this method depends on the
+variables number:
+\EQ{N_{estimates}=2\,N_{variables}}{EqNestimatesDescent}
+\item[Random]: the vectors $\vec{t}_j$ are built randomly as:
+\EQ
+{
+	\vec{t}_j=\MATRIX{c}{\PA{1-2\,r_{j,1}}\,step_1\\\vdots\\
+	\PA{1-2\,r_{j,k}}\,step_k\\\vdots\\
+	\PA{1-2\,r_{j,N_{variables}}}\,step_{N_{variables}}},
+}{EqtRandom}
+with $r_{j,k}\in[0,1)$ random numbers.
+\end{description}
 
 \subsection{Genetic method}
 
