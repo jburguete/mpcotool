@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<calibrate simulator="Ackley" algorithm="genetic" npopulation="500" ngenerations="6" mutation="0.3" reproduction="0.3" adaptation="0.2" result="result-ga-500-5-0.3-0.3-0.2-16-14" variables="variables-ga-500-5-0.3-0.3-0.2-16-14">
-  <experiment name="test.exp" template1="test.tmp"/>
-  <variable name="x" minimum="-40" maximum="40" nbits="16" precision="14"/>
-  <variable name="y" minimum="-40" maximum="40" nbits="16" precision="14"/>
-</calibrate>

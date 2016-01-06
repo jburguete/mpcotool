@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<calibrate simulator="Easom" algorithm="genetic" npopulation="500" ngenerations="6" mutation="0.3" reproduction="0.3" adaptation="0.2">
-  <experiment name="test.exp" template1="test.tmp"/>
-  <variable name="x" minimum="-100" maximum="100" nbits="16" precision="14"/>
-  <variable name="y" minimum="-100" maximum="100" nbits="16" precision="14"/>
-</calibrate>

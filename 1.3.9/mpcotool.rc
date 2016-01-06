@@ -1,3 +1,0 @@
-#include <winver.h>
-
-mpcotool ICON "mpcotool.ico"

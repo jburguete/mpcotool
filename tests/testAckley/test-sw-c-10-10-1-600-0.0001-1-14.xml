@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<calibrate simulator="Ackley" algorithm="sweep" nsteps="600" gradient_method="coordinates" relaxation="1" result="result-sw-c-10-10-1-600-0.0001-1-14" variables="variables-sw-c-10-10-1-600-0.0001-1-14">
+  <experiment name="test.exp" template1="test.tmp"/>
+  <variable name="x" minimum="-40" maximum="40" precision="14" nsweeps="10" step="1e-4"/>
+  <variable name="y" minimum="-40" maximum="40" precision="14" nsweeps="10" step="1e-4"/>
+</calibrate>
