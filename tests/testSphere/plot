@@ -29,17 +29,58 @@ plot 'variables-ga-250-16-0.2-0.2-0.2-32-14' not w d
 set out 'sphere-variables-ga-100-33-0.25-0.25-0.25-32.eps'
 plot 'variables-ga-100-33-0.25-0.25-0.25-32-14' not w d
 
-set size 1,1
+set size noratio 0.47,0.47
 set xlabel 'Number of simulations'
 set ylabel 'Best distance'
 set xrange [0:2500]
 set yrange [-16:2]
 
+set key bottom left
+set out 'sphere-evolution-sw.eps'
+plot 'v-sw-50-50-1-14' u 1:(log10($5)) t'SW-1' w l,\
+	'v-sw-10-10-25-10-0.5-14' u 1:(log10($5)) t'SW+IT-1' w l,\
+	'v-sw-10-10-25-4-0-14' u 1:(log10($5)) t'SW+IT-2' w l
+
 set out 'sphere-evolution-mc.eps'
-plot 'evolution-mc-c-100-1-600-0.1-1-14' u 1:(log10($5)) w l,\
-	'evolution-mc-c-100-1-600-0.1-1.5-14' u 1:(log10($5)) w l,\
-	'evolution-mc-r-100-1-240-10-0.1-1-14' u 1:(log10($5)) w l,\
-	'evolution-mc-r-100-1-240-10-0.1-1.5-14' u 1:(log10($5)) w l,\
-	'evolution-mc-r-100-1-600-4-0.1-1-14' u 1:(log10($5)) w l,\
-	'evolution-mc-r-100-1-600-4-0.1-1.5-14' u 1:(log10($5)) w l,\
-	'evolution-mc-100-25-10-0.1-14' u 1:(log10($5)) w l
+plot 'v-mc-2500-1-14' u 1:(log10($5)) t'MC-1' w l,\
+	'v-mc-100-25-10-0.1-14' u 1:(log10($5)) t'MC+IT-1' w l,\
+	'v-mc-100-25-4-0-14' u 1:(log10($5)) t'MC+IT-2' w l
+
+set out 'sphere-evolution-sw-cdr.eps'
+plot 'v-sw-c-10-10-1-600-0.1-1-14' u 1:(log10($5)) t'SW+CD-1' w l,\
+	'v-sw-c-40-40-1-225-0.01-1-14' u 1:(log10($5)) t'SW+CD-2' w l,\
+	'v-sw-r-10-10-1-600-4-0.1-1-14' u 1:(log10($5)) t'SW+R-3' w l,\
+	'v-sw-r-40-40-1-225-4-0.01-1-14' u 1:(log10($5)) t'SW+R-2' w l
+
+set out 'sphere-evolution-mc-cd-r.eps'
+plot [0:700] 'v-mc-c-100-1-600-0.01-0-14' u 1:(log10($5)) t'MC+CD-1' w l,\
+	'v-mc-c-100-1-600-0.01-1-14' u 1:(log10($5)) t'MC+CD-2' w l,\
+	'v-mc-c-100-1-600-0.01-1.5-14' u 1:(log10($5)) t'MC+CD-3' w l,\
+	'v-mc-c-100-1-600-0.01-2-14' u 1:(log10($5)) t'MC+CD-4' w l,\
+
+set out 'sphere-evolution-mc-cd-r2.eps'
+plot [0:700] 'v-mc-c-100-1-600-0.1-0-14' u 1:(log10($5)) t'MC+CD-5' w l,\
+	'v-mc-c-100-1-600-0.1-1-14' u 1:(log10($5)) t'MC+CD-6' w l,\
+	'v-mc-c-100-1-600-0.1-2-14' u 1:(log10($5)) t'MC+CD-7' w l,\
+
+set out 'sphere-evolution-mc-cd-s.eps'
+plot [0:700] 'v-mc-c-100-1-600-0.01-0-14' u 1:(log10($5)) t'MC+CD-8' w l,\
+	'v-mc-c-100-1-600-0.1-0-14' u 1:(log10($5)) t'MC+CD-9' w l,\
+	'v-mc-c-100-1-600-1-0-14' u 1:(log10($5)) t'MC+CD-10' w l,\
+
+set out 'sphere-evolution-ga-1-4.eps'
+plot 'v-ga-100-33-0-0-0.75-32-14' u 1:(log10($5)) t'GA-1' w l,\
+	'v-ga-100-33-0-0.75-0-32-14' u 1:(log10($5)) t'GA-2' w l,\
+	'v-ga-100-33-0.75-0-0-32-14' u 1:(log10($5)) t'GA-3' w l,\
+	'v-ga-100-33-0.25-0.25-0.25-32-14' u 1:(log10($5)) t'GA-4' w l
+
+set out 'sphere-evolution-ga-5-8.eps'
+plot 'v-ga-250-16-0.2-0.2-0.2-32-14' u 1:(log10($5)) t'GA-5' w l,\
+	'v-ga-250-31-0.1-0.1-0.1-32-14' u 1:(log10($5)) t'GA-6' w l,\
+	'v-ga-500-21-0-0-0.2-32-14' u 1:(log10($5)) t'GA-7' w l,\
+	'v-ga-500-21-0-0.2-0-32-14' u 1:(log10($5)) t'GA-8' w l
+
+set out 'sphere-evolution-ga-9-11.eps'
+plot 'v-ga-500-21-0.2-0-0-32-14' u 1:(log10($5)) t'GA-9' w l,\
+	'v-ga-625-11-0.1-0.1-0.1-32-14' u 1:(log10($5)) t'GA-10' w l,\
+	'v-ga-625-6-0.2-0.2-0.2-32-14' u 1:(log10($5)) t'GA-11' w l

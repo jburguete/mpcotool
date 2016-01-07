@@ -1,5 +1,5 @@
 set term pos 12 eps enh
-set size ratio 1 0.45,0.7
+set size ratio 1 0.4,0.6
 set xlabel 'x'
 set ylabel 'y'
 set palette gray

@@ -10,6 +10,9 @@ figs = surcos-advance.eps surcos-depth.eps surcos-solute-q1.eps \
 	pivot-simulated-starts-27,48.eps pivot-simulated-stops-27,48.eps \
 	pivot-measured-starts-27,48.eps pivot-measured-stops-27,48.eps \
 	Violada-contributions.eps Violada-optimized-contributions.eps \
+	sphere-evolution-sw.eps sphere-evolution-mc.eps \
+	sphere-evolution-ga-1-4.eps sphere-evolution-ga-5-8.eps \
+	sphere-evolution-ga-9-11.eps \
 	sphere-variables-ga-100-33-0.25-0.25-0.25-32.eps \
 	sphere-variables-ga-250-16-0.2-0.2-0.2-32.eps \
 	sphere-variables-mc-100-25-10-0.1.eps \
