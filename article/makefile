@@ -1,6 +1,6 @@
-figs = surcos-advance.eps surcos-depth.eps surcos-solute-q1.eps \
-	surcos-solute-q2.eps surcos-solute-q3.eps surcos-solute-q4.eps \
-	sprinkler-0.eps sprinkler-2,84.eps \
+figs = mpcotool-en.eps surcos-advance.eps surcos-depth.eps \
+	surcos-solute-q1.eps surcos-solute-q2.eps surcos-solute-q3.eps \
+	surcos-solute-q4.eps sprinkler-0.eps sprinkler-2,84.eps \
 	pivot-simulated-starts-100.eps pivot-simulated-stops-100.eps \
 	pivot-measured-starts-100.eps pivot-measured-stops-100.eps \
 	pivot-simulated-starts-52.eps pivot-simulated-stops-52.eps \

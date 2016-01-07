@@ -4262,7 +4262,7 @@ window_new ()
   g_signal_connect (window->window, "delete-event", gtk_main_quit, NULL);
 
   // Setting the window title
-  gtk_window_set_title (window->window, PROGRAM_INTERFACE);
+  gtk_window_set_title (window->window, "MPCOTool");
 
   // Creating the open button
   window->button_open = (GtkToolButton *) gtk_tool_button_new
