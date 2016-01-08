@@ -326,7 +326,7 @@ Details of the algorithm and parallelization characteristics, as well as
 flowcharts, examples and diagrams of all methods described in this section can
 be seen in the user manual provided with the software.
 
-\subsection{Sweep brute force method}
+\subsection{Sweep brute force method (SW)}
 
 The sweep brute force method finds the optimal set of parameters within a solution region by dividing it into regular subdomains. To find the optimal solution, the domain interval $x_i \in \PA{x_{i,min},\,x_{i,max}}$ is first defined for each variable $x_i$. Then, a regular partition in  $N_{x,i}$ subintervals is made. This method is the most obvious and simplest algorithm of optimization. Moreover, it is so old that it is difficult to find references of first applications. Note that the computational cost increases exponentially as the number of variables to optimize grows.
 
@@ -336,26 +336,26 @@ computer, or the computers cluster, can execute $N_{tasks}$ parallel tasks
 every task do $N_{total}/N_{tasks}$ simulations, obviously taking into account
 rounding effects (every task has to perform a natural number of simulations).
 
-\subsection{Monte-Carlo method}
+\subsection{Monte-Carlo method (MC)}
 
-Monte-Carlo based methods run simulations using aleatory values of the
+Monte-Carlo based methods run $N_s$ simulations using aleatory values of the
 variables assuming uniform probability within the extreme values range. This is
 another old brute force method attributed to different authors. In
 \citet{AtanassovDimov08} an interesting analysis of this method is presented.
 The algorithm is parallelizable in the same way as sweep algorithm.
 
-\subsection{Iterative algorithm applied to brute force methods}
+\subsection{Iterative algorithm (IT) applied to brute force methods}
 
-MPCOTool allows to iterate both sweep or Monte-Carlo brute force methods in
+MPCOTool allows to iterate both SW or MC brute force methods in
 order to seek convergence. In this case, the best results from the previous
 iteration are used to force new intervals in the variables for the following
-iteration. Then for $N_{best}^j$, the subset of the best simulation results in
+iteration. Then for $N_b^j$, the subset of the best simulation results in
 the $j$-th iteration, the following quantities are defined:
 \begin{description}
-\item[$\displaystyle x_{\max}^b=\max_{i\in N_{best}}x_i^j$]: Maximum value of
+\item[$\displaystyle x_{\max}^b=\max_{i\in N_b}x_i^j$]: Maximum value of
 	variable $x$ in the subset of the best simulation results from the $j$-th
 	iteration.
-\item[$\displaystyle x_{\min}^b=\max_{i\in N_{best}}x_i^j$]: Minimum value of
+\item[$\displaystyle x_{\min}^b=\max_{i\in N_b}x_i^j$]: Minimum value of
 	variable $x$ in the subset of the best simulation results from the $j$-th
 	iteration.
 \end{description}
@@ -364,33 +364,33 @@ A new interval in the variable $x$ is defined to build the optimization values i
 {EqIterationInterval}
 with:
 \[
-	\mathrm{Sweep}\;\Rightarrow\;\left\{\begin{array}{c}
+	\mathrm{SW}\;\Rightarrow\;\left\{\begin{array}{c}
 	\displaystyle
-	x_{\max}^{j+1}=x_{\max}^b+\frac{x_{\max}^j-x_{\min}^j}{N_x-1}\,tolerance,\\
+	x_{\max}^{j+1}=x_{\max}^b+\frac{x_{\max}^j-x_{\min}^j}{N_x-1}\,tol,\\
 	\displaystyle
-	x_{\min}^{j+1}=x_{\min}^b-\frac{x_{\min}^j-x_{\min}^j}{N_x-1}\,tolerance,\\
+	x_{\min}^{j+1}=x_{\min}^b-\frac{x_{\min}^j-x_{\min}^j}{N_x-1}\,tol,\\
 	\end{array}\right.
 \]
 \EQ
 {
-	\mathrm{Monte-Carlo}\;\Rightarrow\;\left\{\begin{array}{c}
+	\mathrm{MC}\;\Rightarrow\;\left\{\begin{array}{c}
 	\displaystyle x_{\max}^{j+1}=\frac{x_{\max}^b+x_{\min}^b
-	+\left(x_{\max}^b-x_{\min}^b\right)(1+tolerance)}{2},\\
+	+\left(x_{\max}^b-x_{\min}^b\right)(1+tol)}{2},\\
 	\displaystyle x_{\min}^{j+1}=\frac{x_{\max}^b+x_{\min}^b
-	-\left(x_{\max}^b-x_{\min}^b\right)(1+tolerance)}{2},
+	-\left(x_{\max}^b-x_{\min}^b\right)(1+tol)}{2},
 	\end{array}\right.
 }{EqIterationTolerance}
-being $tolerance$ a factor increasing the size of the variable intervals to
+being $tol$ a tolerance factor increasing the size of the variable intervals to
 simulate the next iteration. Note that this factor affect in different manner to
-sweep and Monte-Carlo algorithms.
+SW and MC algorithms. The method is repeated $N_i$ times.
 
 The iterative algorithm can be also easily parallelized. However, this method is
 less parallelizable than pure brute force methods because the parallelization
 has to be performed for each iteration.
 
-\subsection{Gradient based method}
+\subsection{Gradient based method (GB)}
 
-Brute force optimization methods, sweep and Monte-Carlo, can be also combined
+Brute force optimization methods, SW and MC, can be also combined
 with a gradient based algorithm. Defining the vector $\vec{r}_i$ as the optime
 variables combination obtained in the $i$-th step, $\vec{r}_1$ as the optime
 varaibles combination vector obtained by the brute force method and defining
@@ -398,55 +398,53 @@ the vector $\vec{s}_i$ as:
 \EQ
 {
 	\vec{s}_1=\vec{0},\quad
-	\vec{s}_i=(1-relaxation)\,\vec{s}_{i-1}+relaxation\,\Delta\vec{r}_{i-1},
+	\vec{s}_i=(1-rel)\,\vec{s}_{i-1}+rel\,\Delta\vec{r}_{i-1},
 }{Eqs}
-with $\Delta\vec{r}_{i-1}=\vec{r}_i+\vec{r}_{i-1}$ and $relaxtion$ the
-relaxation parameter, the gradient based method checks $N_{estimates}$ variable
+with $\Delta\vec{r}_{i-1}=\vec{r}_i+\vec{r}_{i-1}$ and $rel$ the
+relaxation parameter, the gradient based method checks $N_e$ variable
 combinations and choice the optimum as:
 \EQ
 {
 	\vec{r}_{i+1}=\mathrm{optime}\PA{\vec{r}_i,\;\vec{r}_i+\vec{s}_i+\vec{t}_j},
-	\;j=1,\cdots,N_{estimates},
+	\;j=1,\cdots,N_e,
 }{EqGradient}
 If the step does not improve the optimum ($\vec{r}_i=\vec{r}_{i+1}$) then the
 gradient step vectors $\vec{t}_j$ are divided by two and $\vec{s}_{i+1}$ is set
-to zero. The method is iterated $N_{steps}$ times.
+to zero. The method is iterated $N_{st}$ times.
 
 Although gradient based method gets the fastest convergence, is the method in
 MPCOTool that obtains the least advantages of parallelization. The method is
 almost sequential and parallelization only can be performed for each step in
-the $N_{estimates}$ simulations to estimate the gradient.
+the $N_e$ simulations to estimate the gradient.
 
 MPCOTool uses two methods to build the $\vec{t}_j$ vectors:
 \begin{description}
-\item[Coordinates descent]: this method builds the $\vec{t}_j$ vectors by
+\item[Coordinates descent (CD)]: this method builds the $\vec{t}_j$ vectors by
 increasing or decreasing only one variable:
 \[
-	\vec{t}_1=\MATRIX{c}{step_1\\0\\0\\\vdots\\0},\quad
-	\vec{t}_2=\MATRIX{c}{-step_1\\0\\0\\\vdots\\0},\quad
-	\vec{t}_3=\MATRIX{c}{0\\step_2\\0\\\vdots\\0},
+	\vec{t}_1=\MATRIX{c}{st_1\\0\\\vdots\\0},\quad
+	\vec{t}_2=\MATRIX{c}{-st_1\\0\\\vdots\\0},\quad
+	\vec{t}_3=\MATRIX{c}{0\\st_2\\\vdots\\0},\quad
+	\vec{t}_4=\MATRIX{c}{0\\-st_2\\\vdots\\0},
 \]
 \EQ
 {
-	\vec{t}_4=\MATRIX{c}{0\\-step_2\\0\\\vdots\\0},\quad\cdots\quad,
-	\vec{t}_{N_{estimates}}=\MATRIX{c}{0\\0\\0\\\vdots\\
-	-step_{N_{variables}}},
+	\cdots,\quad\vec{t}_{N_e}=\MATRIX{c}{0\\0\\\vdots\\-st_{N_v}},
 }{EqtDescent}
-being $step_j$ the initial step size for the $j$-th variable defined by the user
+being $st_j$ the initial step size for the $j$-th variable defined by the user
 in the main input file. The number of estimates in this method depends on the
-variables number:
-\EQ{N_{estimates}=2\,N_{variables}}{EqNestimatesDescent}
-\item[Random]: the vectors $\vec{t}_j$ are built randomly as:
+variables number $N_v$:
+\EQ{N_e=2\,N_v}{EqNestimatesDescent}
+\item[Random (R)]: the vectors $\vec{t}_j$ are built randomly as:
 \EQ
 {
-	\vec{t}_j=\MATRIX{c}{\PA{1-2\,r_{j,1}}\,step_1\\\vdots\\
-	\PA{1-2\,r_{j,k}}\,step_k\\\vdots\\
-	\PA{1-2\,r_{j,N_{variables}}}\,step_{N_{variables}}},
+	\vec{t}_j=\MATRIX{c}{\PA{1-2\,r_{j,1}}\,st_1\\\vdots\\
+	\PA{1-2\,r_{j,k}}\,st_k\\\vdots\\\PA{1-2\,r_{j,N_v}}\,st_{N_v}},
 }{EqtRandom}
 with $r_{j,k}\in[0,1)$ random numbers.
 \end{description}
 
-\subsection{Genetic method}
+\subsection{Genetic method (GE)}
 
 MPCOTool also offers the use of a genetic method Genetic \citep{genetic} with its default algorithms.
 It is inspired on the ideas in \citet{gaul}, but it has been fully reprogrammed involving more modern external libraries.
@@ -464,28 +462,18 @@ the following formula:
 
 \subsubsection{Survival of the best individuals}
 
-In a population with $N_{population}$ individuals, in the first generation all the cases are simulated. The input variables are
-taken from the genome of each individual. Next, in every generation, $N_{population}\times R_{mutation}$ individuals are generated by mutation, $N_{population}\times R_{reproduction}$ individuals are generated by reproduction and $N_{population}\times R_{adaptation}$ individuals are generated by adaptation, obviously
+In a population with $N_p$ individuals, in the first generation all the cases are simulated. The input variables are
+taken from the genome of each individual. Next, in every generation, $N_p\,R_m$ individuals are generated by mutation, $N_p\,R_r$ individuals are generated by reproduction and $N_p\,R_a$ individuals are generated by adaptation, obviously
 taking into account rounding. On second and further generations only simulations
 associated to this new individuals ($N_{new}$) have to be run:
-\EQ
-{
-	N_{new}=N_{population}
-	\times\left(R_{mutation}+R_{reproduction}+R_{adaptation}\right).
-}{EqNew}
+\EQ{N_{new}=N_p\,\left(R_m+R_r+R_a\right).}{EqNew}
 Then, total number of simulations performed by the genetic algorithm is:
-\EQ
-{
-	N_{total}=N_{population}+\left(N_{generations}-1\right)\times N_{new},
-}{EqGeneticNumber}
-with $N_{generations}$ the number of generations of new entities.
+\EQ{N_{total}=N_p+\left(N_g-1\right)\,N_{new},}{EqGeneticNumber}
+with $N_g$ the number of generations of new entities.
 The individuals of the former population that obtained lower values in the evaluation function are replaced so that the best $N_{survival}$ individuals survive:
-\EQ
-{
-	N_{survival}=N_{population}-N_{new}.
-}{EqSurvival}
+\EQ{N_{survival}=N_p-N_{new}.}{EqSurvival}
 Furthermore, the ancestors to generate new individuals are chosen among the surviving population. Obviously, to have survival population, the following condition has to be enforced:
-\EQ{R_{mutation}+R_{reproduction}+R_{adaptation}<1}{EqSurvivalCondition}
+\EQ{R_m+R_r+R_a<1}{EqSurvivalCondition}
 MPCOTool uses a default aleatory criterion in Genetic, with a probability linearly decreasing with the ordinal in the ordered set of surviving individuals.
 
 \subsubsection{Mutation algorithm}
@@ -521,14 +509,14 @@ generation.
 
 \subsection{Organization of MPCOTool}
 
-Let us assume that $N_{parameters}$ empirical parameters are sought desired so
-that the results from a simulation model are the best fit to $N_{experiments}$
-experimental data and that the simulator requires $N_{inputs}$ input files. The
+Let us assume that $N_{par}$ empirical parameters are sought desired so
+that the results from a simulation model are the best fit to $N_{exp}$
+experimental data and that the simulator requires $N_{in}$ input files. The
 structure followed by MPCOTool is summarized in \emph{main input file},
-where both $N_{experiments}$ and $N_{inputs}$ are specified. Furthermore, it
+where both $N_{exp}$ and $N_{in}$ are specified. Furthermore, it
 contains the extreme values of the empirical parameters and the chosen
 optimization algorithm. Then, MPCOTool reads the
-$N_{experiments}\times N_{inputs}$ templates to build the simulator input files
+$N_{exp}\,N_{in}$ templates to build the simulator input files
 replacing key labels by empirical parameter values created by the optimization
 algorithm. There are two options: either the simulator compares directly the
 simulation results with the \emph{experimental data file}, hence generating a
@@ -538,11 +526,8 @@ error value. In both cases this error value is saved in an
 \emph{objective value file}. Then for each experiment, an objective value $o_i$
 is obtained. The final value of the objective function associated with the
 experiments is calculated by means of:
-\EQ
-{
-	J=\sqrt{\frac{1}{N_{experiments}}
-	\,\sum_{i=1}^{N_{experiments}}\ABS{w_i\,o_i}^2},
-}{EqObjectiveFunction}
+\EQ{J=\sqrt{\frac{1}{N_{exp}}\,\sum_{i=1}^{N_{exp}}\ABS{w_i\,o_i}^2},}
+{EqObjectiveFunction}
 with $w_i$ the weight associated to the $i$-th experiment, specified in the
 \emph{main input file}. Figure~\ref{FigStructure} is a sketch of the
 structure.
@@ -563,7 +548,7 @@ structure.
 	\psline{->}(50,5)(60,5)
 	\psline[linestyle=dotted,dotsep=1pt]{->}(60,5)(90,5)
 	\rput(15,-35){$\cdots$}
-	\rput(15,-75){$(N\times n)$-th template file}
+	\rput(15,-75){$(N\,n)$-th template file}
 	\psframe(-20,-70)(50,-80)
 	\psline{->}(50,-75)(60,-75)
 	\psline[linestyle=dotted,dotsep=1pt]{->}(60,-75)(90,-75)
@@ -650,18 +635,18 @@ The code of MPCOTool is written in C code using standard open source libraries. 
 \item Command line in sequential mode (where X is the number of threads to
 execute):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ ./mpcotoolbin [-nthreads X] input_file.xml
+> ./mpcotoolbin [-nthreads X] input_file.xml
 \end{lstlisting}
 
 \item Command line in parallelized mode (where X is the number of threads to
 open in every node):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ mpirun [MPI options] ./mpcotool [-nthreads X] input_file.xml
+> mpirun [MPI options] ./mpcotool [-nthreads X] input_file.xml
 \end{lstlisting}
 
 \item The syntax of the simulator has to be:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ ./simulator_name input_file_1 [input_file_2] [...] output_file
+> ./simulator_name input_file_1 [input_file_2] [...] output_file
 \end{lstlisting}
 There are two options for the output file. It can begin with a number indicating
 the objective function value or it can be a results file that has to be
@@ -672,12 +657,12 @@ data file.
 evaluate the objective function has to be (where the results file has to begin
 with the objective function value):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ ./evaluator_name simulated_file experimental_file results_file
+> ./evaluator_name simulated_file experimental_file results_file
 \end{lstlisting}
 
 \item On UNIX type systems the GUI application can be open doing on a terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ ./mpcotool
+> ./mpcotool
 \end{lstlisting}
 
 \end{itemize}
@@ -797,19 +782,89 @@ para resaltar sus peculiaridades.
 \PLOTII{Ackley2.eps}{Easom2.eps}{A zoom of (left) Ackley and (right) Easom
 objective functions}{FigTestsZoom}
 
+A continuación vamos a ver la capacidad de los diferentes algoritmos con
+para obtener el óptimo en todos estos tests usando un número fijo de
+simulaciones total de 2500 en cada método. Para simplificar las diferentes
+combinaciones de algoritmos de optimización y parámetros de configuración se van
+a usar las abreviaturas de la tabla~\ref{TabMethods}.
+\TABLE{\scriptsize}{ccc}
+{
+	Abreviaturas & Algorithms & Parameters \\
+	\hline
+	SW-1 & SW & $N_x=N_y=50$ \\
+	SW+IT-1 & SW+IT & $N_x=N_y=10$, $N_i=25$, $N_b=10$, $tol=0.5$ \\
+	SW+IT-2 & SW+IT & $N_x=N_y=10$, $N_i=25$, $N_b=4$, $tol=0$ \\
+	SW+CD-1 & SW+GB+CD & $N_x=N_y=10$, $N_{st}=600$, $st_x=st_y=0.1$, $rel=1$ \\
+	SW+CD-2 & SW+GB+CD & $N_x=N_y=40$, $N_{st}=225$, $st_x=st_y=0.01$,
+		$rel=1$ \\
+	MC-1 & MC & $N_s=2500$ \\
+	MC+IT-1 & MC+IT & $N_s=100$, $N_i=25$, $N_b=10$, $tol=0.1$ \\
+	MC+IT-2 & MC+IT & $N_s=100$, $N_i=25$, $N_b=4$, $tol=0$ \\
+	MC+CD-1 & MC+GB+CD & $N_s=100$, $N_{st}=600$, $st_x=st_y=0.1$, $rel=1$ \\
+	MC+CD-2 & MC+GB+CD & $N_s=1600$, $N_{st}=225$, $st_x=st_y=0.01$, $rel=1$ \\
+	MC+CD-3 & MC+GB+CD & $N_s=100$, $N_{st}=600$, $st_x=st_y=0.01$, $rel=0$ \\
+	MC+CD-4 & MC+GB+CD & $N_s=100$, $N_{st}=600$, $st_x=st_y=0.01$, $rel=1$ \\
+	MC+CD-5 & MC+GB+CD & $N_s=100$, $N_{st}=600$, $st_x=st_y=0.01$, $rel=2$ \\
+}{}{TabMethods}
+
 \subsection{Sphere function}
 
 A continuación examinamos el comportamiento de los diferentes algoritmos de
 optimización en la sphere function, una función simétrica, convexa, sin extremos
 locales y fácil de optimizar.
 
+En la figura~\ref{FigSphereVariables} se representan todas las combinaciones de
+variables simuladas por los distintos algoritmos para ilustrar la forma de
+operar de cada método. Se observa la forma regular de explorar el espacio de
+variables del método de barrido frente a la forma aleatoria del de Monte-Carlo.
+Puede verse también cómo en ambos casos el algoritmo iterativo va reduciendo
+progresivamente el intervalo de búsqueda. El método genético también realiza una
+búsqueda aleatoria pero progresivamente va buscando con mayor probabilidad en
+puntos cercanos al óptimo. En cambio el método basado en gradiente busca
+rápidamente en la dirección del óptimo desde el valor mejor proporcionado por el
+método de fuerza bruta asociado.
+\FIGVI{sphere-variables-sw-50-50-1.eps}{sphere-variables-mc-2500-1.eps}
+{sphere-variables-sw-10-10-25-10-0.5.eps}{sphere-variables-mc-100-25-10-0.1.eps}
+{sphere-variables-ga-250-16-0.2-0.2-0.2-32.eps}
+{sphere-variables-mc-r-100-1-600-4-0.1-1.eps}
+{Variables combination simulated by diferent algorithms}{FigSphereVariables}
+
+En la figura~\ref{FigSphereSWMC} se muestra la convergencia obtenida con los
+algoritmos de fuerza bruta de barrido y de Monte-Carlo y la combinación de ambos
+con el algoritmo iterativo. Se comprueba que cómo la convergencia aumenta
+con el algoritmo iterativo. Aunque teóricamente la convergencia con los métodos
+iterativos aumenta, con bajos $N_b$ y $tol$ el valor óptimo puede caer fuera del
+intervalo de búsqueda y arruinar la convergencia, como sucede con SW+IT-2 y
+MC+IT-2.
 \PLOTII{sphere-evolution-sw.eps}{sphere-evolution-mc.eps}
 {Convergencia de la optimizacion de $g_{Sphere}$ con (left) el algoritmo de
 barrido and (right) Monte-Carlo combinados ambos con el algoritmo iterativo y
 distintos parametros}{FigSphereSWMC}
 
-\FIGIV{sphere-evolution-mc-cd-r.eps}{sphere-evolution-mc-r2.eps}
-{sphere-evolution-mc-cd-s.eps}{sphere-evolution-mc-r.eps}
+En la figura~\ref{FigSphereSWMC} se muestra la convergencia obtenida con los
+algoritmos de fuerza bruta de barrido y de Monte-Carlo acoplados al algoritmo
+basado en gradiente. Se comprueba que el algoritmo basado en gradiente tiene una
+convergencia muy superior, por lo que en esta función la convergencia es mayor
+cuanto menor es el número de casos simulados con el algoritmo de fuerza bruta.
+En cuanto al método de estimar el gradiente, el método aleatorio se muestra
+superior al método de descenso de coordenadas.
+\PLOTII{sphere-evolution-sw-cdr.eps}{sphere-evolution-mc-cdr.eps}
+{Convergencia de la optimizacion de $g_{Sphere}$ con (left) el algoritmo de
+barrido and (right) Monte-Carlo combinados ambos con el algoritmo basado en el
+gradiente y distintos parametros}{FigSphereSWMCGR}
+
+En la figura~\ref{FigSphereMCCDR} se muestra la influencia de los distintos
+parámetros en la convergencia lograda por el método basado en gradiente.
+Arriba a la iquierda se ilustra el efecto del parámetro $rel$. Con un tamaño de
+paso pequeño, valores de $rel$ nulos producen una convergencia menor. Arriba a
+la derecha puede verse el efecto del tamaño de paso. En general, debe escogerse
+un tamaño de paso unas pocas veces menor que la distancia aproximada esperada
+de la distancia entre el óptimo y el mejor punto obtenido por el método de
+fuerza bruta. Finalmente, en la figura de abajo se comprueba que el menor número
+de estimaciones del gradiente ($N_e=2$) proporcionan la convergencia más rápida
+con el método aleatorio de estimar el gradiente.
+\FIGIII{sphere-evolution-mc-cd-r.eps}{sphere-evolution-mc-cd-s.eps}
+{sphere-evolution-mc-r.eps}
 {Convergencia de la optimizacion de $g_{Sphere}$ con el algoritmo de Monte-Carlo
 y el método basado en gradiente configurado con diferentes combinaciones de
 parametros}{FigSphereMCCDR}
@@ -817,14 +872,6 @@ parametros}{FigSphereMCCDR}
 \FIGIII{sphere-evolution-ga-1-4.eps}{sphere-evolution-ga-5-8.eps}
 {sphere-evolution-ga-9-11.eps}{Convergencia de la optimizacion de $g_{Sphere}$
 con el algoritmo genético y distintas combinaciones de parametros}{FigSphereGA}
-
-\FIGVI{sphere-variables-sw-50-50-1.eps}{sphere-variables-mc-2500-1.eps}
-{sphere-variables-sw-10-10-25-10-0.5.eps}
-{sphere-variables-mc-100-25-10-0.1.eps}
-{sphere-variables-ga-250-16-0.2-0.2-0.2-32.eps}
-{sphere-variables-mc-r-100-1-600-4-0.1-1.eps}
-{Parameters combination simulated by diferent algorithms.}
-{FigSphereParameters}
 
 \section{Practical applications}
 
@@ -954,33 +1001,33 @@ spillways of the canal.
 	\multicolumn{2}{c}{Manual management} & $\Delta t_A=3600$ s & 1.049056
 	\\ & & $\Delta t_{GT}=12600$ s
 	\\ \hline
-	Sweeps & $N_{simulations}=1024$ & $\Delta t_A=3368$ s & 0.047170
-	\\ & $N_{iterations}=1$ & $\Delta t_{GT}=3716$ s
+	Sweeps & $N_s=1024$ & $\Delta t_A=3368$ s & 0.047170
+	\\ & $N_i=1$ & $\Delta t_{GT}=3716$ s
 	\\ \hline
-	Sweeps & $N_{simulations}=256$ & $\Delta t_A=3329$ s & 0.047148
-	\\ & $N_{iterations}=4$ & $\Delta t_{GT}=3742$ s
-	\\ & $N_{best}=20$ &
-	\\ & $tolerance=0.1$
+	Sweeps & $N_s=256$ & $\Delta t_A=3329$ s & 0.047148
+	\\ & $N_i=4$ & $\Delta t_{GT}=3742$ s
+	\\ & $N_b=20$ &
+	\\ & $tol=0.1$
 	\\ \hline
-	Monte-Carlo & $N_{simulations}=1024$ & $\Delta t_A=3193$ s & 0.047183
-	\\ & $N_{iterations}=1$ & $\Delta t_{GT}=3705$ s
+	Monte-Carlo & $N_s=1024$ & $\Delta t_A=3193$ s & 0.047183
+	\\ & $N_i=1$ & $\Delta t_{GT}=3705$ s
 	\\ \hline
-	Monte-Carlo & $N_{simulations}=256$ & $\Delta t_A=3250$ s & 0.047139
-	\\ & $N_{iterations}=4$ & $\Delta t_{GT}=3751$ s
-	\\ & $N_{best}=4$
-	\\ & $tolerance=0.1$
+	Monte-Carlo & $N_s=256$ & $\Delta t_A=3250$ s & 0.047139
+	\\ & $N_i=4$ & $\Delta t_{GT}=3751$ s
+	\\ & $N_b=4$
+	\\ & $tol=0.1$
 	\\ \hline
-	Genetic & $N_{population}=256$ & $\Delta t_A=3363$ s & 0.047135
-	\\ & $N_{generations}=9$ & $\Delta t_{GT}=3752$ s
-	\\ & $R_{mutation}=0.125$
-	\\ & $R_{reproduction}=0.125$
-	\\ & $R_{adaptation}=0.125$
+	Genetic & $N_p=256$ & $\Delta t_A=3363$ s & 0.047135
+	\\ & $N_g=9$ & $\Delta t_{GT}=3752$ s
+	\\ & $R_m=0.125$
+	\\ & $R_r=0.125$
+	\\ & $R_a=0.125$
 	\\ \hline
-	Genetic & $N_{population}=64$ & $\Delta t_A=3375$ s & 0.047252
-	\\ & $N_{generations}=21$ & $\Delta t_{GT}=3599$ s
-	\\ & $R_{mutation}=0.25$
-	\\ & $R_{reproduction}=0.25$
-	\\ & $R_{adaptation}=0.25$
+	Genetic & $N_p=64$ & $\Delta t_A=3375$ s & 0.047252
+	\\ & $N_g=21$ & $\Delta t_{GT}=3599$ s
+	\\ & $R_m=0.25$
+	\\ & $R_r=0.25$
+	\\ & $R_a=0.25$
 	\\ \hline
 }{Optimal empirical parameters and value of the evaluation function in the simulation of the Canal de Violada using program SWIGS and several optimization algorithms in MPCOTool with the same total number of simulations ($N_{total}=1024$)}
 {TabSwigs}
@@ -1012,37 +1059,37 @@ value of the evaluation function, where the error norm is the same as in \citet{
 	Optimization & Optimization & Optimal empirical & Objective function
 	\\ algorithm & parameters & parameters & value
 	\\ \hline
-	Monte-Carlo & $N_{simulations}=3000$ & $n=0.0395$ & 0.3430
-	\\ & $N_{iterations}=1$ & $K=7.861\cdot 10^{-4}$
+	Monte-Carlo & $N_s=3000$ & $n=0.0395$ & 0.3430
+	\\ & $N_i=1$ & $K=7.861\cdot 10^{-4}$
 	\\ & & $a=0.534$
 	\\ \hline
-	Monte-Carlo & $N_{simulations}=500$ & $n=0.0422$ & 0.3321
-	\\ & $N_{iterations}=6$ & $K=9.994\cdot 10^{-4}$
-	\\ & $N_{best}=10$ & $a=0.497$
-	\\ & $tolerance=0.2$
+	Monte-Carlo & $N_s=500$ & $n=0.0422$ & 0.3321
+	\\ & $N_i=6$ & $K=9.994\cdot 10^{-4}$
+	\\ & $N_b=10$ & $a=0.497$
+	\\ & $tol=0.2$
 	\\ \hline
-	Genetic & $N_{population}=750$ & $n=0.0399$ & 0.3339
-	\\ & $N_{generations}=6$ & $K=9.907\cdot 10^{-4}$
-	\\ & $R_{mutation}=0.2$ & $a=0.498$
-	\\ & $R_{reproduction}=0.2$
-	\\ & $R_{adaptation}=0.2$
+	Genetic & $N_p=750$ & $n=0.0399$ & 0.3339
+	\\ & $N_g=6$ & $K=9.907\cdot 10^{-4}$
+	\\ & $R_m=0.2$ & $a=0.498$
+	\\ & $R_r=0.2$
+	\\ & $R_a=0.2$
 	\\ \hline
-	Genetic & $N_{population}=300$ & $n=0.0417$ & 0.3322
-	\\ & $N_{generations}=31$ & $K=9.989\cdot 10^{-4}$
-	\\ & $R_{mutation}=0.1$ & $a=0.496$
-	\\ & $R_{reproduction}=0.1$
-	\\ & $R_{adaptation}=0.1$
+	Genetic & $N_p=300$ & $n=0.0417$ & 0.3322
+	\\ & $N_g=31$ & $K=9.989\cdot 10^{-4}$
+	\\ & $R_m=0.1$ & $a=0.496$
+	\\ & $R_r=0.1$
+	\\ & $R_a=0.1$
 	\\ \hline
 }{Optimal empirical parameters and value of the evaluation function in the simulation of the furrow irrigation cases in \citet{JaviSurcos2} using program SURCOS and several optimization algorithms in MPCOTool with the same total number of simulations ($N_{total}=3000$)}{TabSurcos}
 
-Figure~\ref{FigSurcos} shows the results of the water depths and solute concentration from the simulation using the coefficients obtained by the Monte-Carlo method with $N_{iterations}=6$, compared with the experimental values.
+Figure~\ref{FigSurcos} shows the results of the water depths and solute concentration from the simulation using the coefficients obtained by the Monte-Carlo method with $N_i=6$, compared with the experimental values.
 
 \FIGVI{surcos-advance.eps}{surcos-depth.eps}{surcos-solute-q1.eps}
 {surcos-solute-q2.eps}{surcos-solute-q3.eps}{surcos-solute-q4.eps}
 {(top left) Advance time profile, (top right) inlet depth evolution and
 (middle-bottom) solute concentration evolution at probes for the experiments
 Q1-Q4 described in \citet{JaviSurcos2} simulated with the optimal calibrated
-parameters obtained for the Monte-Carlo method with $N_{iterations}=6$ (see
+parameters obtained for the Monte-Carlo method with $N_i=6$ (see
 table~\ref{TabSurcos})}{FigSurcos}
 
 \subsection{Calibration of empirical parameters of the ballistic model on
@@ -1061,35 +1108,35 @@ Table~\ref{TabSprinklerI} shows the results from the calibration of parameters $
 	Optimization & Optimization & Optimal empirical & Objective function
 	\\ algorithm & parameters & parameters & value
 	\\ \hline
-	Sweeps & $N_{simulations}=1000$ & $D_{50}=3.78$ mm & 2.54 mm
-	\\ & $N_{iterations}=1$ & $n=17.778$
+	Sweeps & $N_s=1000$ & $D_{50}=3.78$ mm & 2.54 mm
+	\\ & $N_i=1$ & $n=17.778$
 	\\ & & $P=0.556$
 	\\ \hline
-	Sweeps & $N_{simulations}=125$ & $D_{50}=3.50$ mm & 3.24 mm
-	\\ & $N_{iterations}=8$ & $n=10.225$
-	\\ & $N_{best}=8$ & $P=0.364$
-	\\ & $tolerance=0.4$
+	Sweeps & $N_s=125$ & $D_{50}=3.50$ mm & 3.24 mm
+	\\ & $N_i=8$ & $n=10.225$
+	\\ & $N_b=8$ & $P=0.364$
+	\\ & $tol=0.4$
 	\\ \hline
-	Monte-Carlo & $N_{simulations}=1000$ & $D_{50}=3.07$ mm & 2.01 mm
-	\\ & $N_{iterations}=1$ & $n=21.513$
+	Monte-Carlo & $N_s=1000$ & $D_{50}=3.07$ mm & 2.01 mm
+	\\ & $N_i=1$ & $n=21.513$
 	\\ & & $P=0.770$
 	\\ \hline
-	Monte-Carlo & $N_{simulations}=125$ & $D_{50}=3.06$ mm & 1.60 mm
-	\\ & $N_{iterations}=8$ & $n=20.878$
-	\\ & $N_{best}=8$ & $P=0.388$
-	\\ & $tolerance=0.4$
+	Monte-Carlo & $N_s=125$ & $D_{50}=3.06$ mm & 1.60 mm
+	\\ & $N_i=8$ & $n=20.878$
+	\\ & $N_b=8$ & $P=0.388$
+	\\ & $tol=0.4$
 	\\ \hline
-	Genetic & $N_{population}=250$ & $D_{50}=3.06$ mm & 1.71 mm
-	\\ & $N_{generations}=6$ & $n=21.001$
-	\\ & $R_{mutation}=0.2$ & $P=0.563$
-	\\ & $R_{reproduction}=0.2$
-	\\ & $R_{adaptation}=0.2$
+	Genetic & $N_p=250$ & $D_{50}=3.06$ mm & 1.71 mm
+	\\ & $N_g=6$ & $n=21.001$
+	\\ & $R_m=0.2$ & $P=0.563$
+	\\ & $R_r=0.2$
+	\\ & $R_a=0.2$
 	\\ \hline
-	Genetic & $N_{population}=100$ & $D_{50}=3.06$ mm & 1.62 mm
-	\\ & $N_{generations}=31$ & $n=19.963$
-	\\ & $R_{mutation}=0.1$ & $P=0.377$
-	\\ & $R_{reproduction}=0.1$
-	\\ & $R_{adaptation}=0.1$
+	Genetic & $N_p=100$ & $D_{50}=3.06$ mm & 1.62 mm
+	\\ & $N_g=31$ & $n=19.963$
+	\\ & $R_m=0.1$ & $P=0.377$
+	\\ & $R_r=0.1$
+	\\ & $R_a=0.1$
 	\\ \hline
 }{Optimal empirical parameters and value of the evaluation function in the case of the sprinkler irrigation
 using different optimization algorithms in MPCOTool with the same number of total simulations ($N_{total}=1000$)}{TabSprinklerI}
@@ -1101,33 +1148,33 @@ Next, using the optimal $D_{50}=3.06$ mm, $n=20.878$ and $P=0.388$ obtained by t
 	Optimization & Optimization & Optimal empirical & Objective function
 	\\ algorithm & parameters & parameters & value
 	\\ \hline
-	Sweeps & $N_{simulations}=400$ & $k_1=0.263$ & 12.17 mm
-	\\ & $N_{iterations}=1$ & $k_2=0.105$
+	Sweeps & $N_s=400$ & $k_1=0.263$ & 12.17 mm
+	\\ & $N_i=1$ & $k_2=0.105$
 	\\ \hline
-	Sweeps & $N_{simulations}=100$ & $k_1=0.284$ & 12.17 mm
-	\\ & $N_{iterations}=4$ & $k_2=0.098$
-	\\ & $N_{best}=11$
-	\\ & $tolerance=0.2$
+	Sweeps & $N_s=100$ & $k_1=0.284$ & 12.17 mm
+	\\ & $N_i=4$ & $k_2=0.098$
+	\\ & $N_b=11$
+	\\ & $tol=0.2$
 	\\ \hline
-	Monte-Carlo & $N_{simulations}=400$ & $k_1=0.396$ & 12.19 mm
-	\\ & $N_{iterations}=1$ & $k_2=0.067$
+	Monte-Carlo & $N_s=400$ & $k_1=0.396$ & 12.19 mm
+	\\ & $N_i=1$ & $k_2=0.067$
 	\\ \hline
-	Monte-Carlo & $N_{simulations}=100$ & $k_1=0.370$ & 12.15 mm
-	\\ & $N_{iterations}=4$ & $k_2=0.079$
-	\\ & $N_{best}=4$
-	\\ & $tolerance=0.2$
+	Monte-Carlo & $N_s=100$ & $k_1=0.370$ & 12.15 mm
+	\\ & $N_i=4$ & $k_2=0.079$
+	\\ & $N_b=4$
+	\\ & $tol=0.2$
 	\\ \hline
-	Genetic & $N_{population}=100$ & $k_1=0.400$ & 12.09 mm
-	\\ & $N_{generations}=6$ & $k_2=0.070$
-	\\ & $R_{mutation}=0.2$
-	\\ & $R_{reproduction}=0.2$
-	\\ & $R_{adaptation}=0.2$
+	Genetic & $N_p=100$ & $k_1=0.400$ & 12.09 mm
+	\\ & $N_g=6$ & $k_2=0.070$
+	\\ & $R_m=0.2$
+	\\ & $R_r=0.2$
+	\\ & $R_a=0.2$
 	\\ \hline
-	Genetic & $N_{population}=100$ & $k_1=0.400$ & 12.09 mm
-	\\ & $N_{generations}=11$ & $k_2=0.070$
-	\\ & $R_{mutation}=0.1$
-	\\ & $R_{reproduction}=0.1$
-	\\ & $R_{adaptation}=0.1$
+	Genetic & $N_p=100$ & $k_1=0.400$ & 12.09 mm
+	\\ & $N_g=11$ & $k_2=0.070$
+	\\ & $R_m=0.1$
+	\\ & $R_r=0.1$
+	\\ & $R_a=0.1$
 	\\ \hline
 }{Optimal parameters and values of the evaluations function in the experiment of the sprinkler irrigation under wind conditions of 2.84 m/s using different optimization algorithms implemented in MPCOTool with the same total number of simulations ($N_{total}=400$)}{TabSprinklerII}
 
@@ -1216,43 +1263,43 @@ The best results where obtained with the genetic algorithms. Note that in this c
 	Optimization & Optimization & Optimal empirical & Objective function
 	\\ algorithm & parameters & parameters & value
 	\\ \hline
-	Sweep & $N_{simulations}=10000$ & $\overline{\alpha_{start}}=179.910^\circ$
+	Sweep & $N_s=10000$ & $\overline{\alpha_{start}}=179.910^\circ$
 	& 9924.1
-	\\ & $N_{iterations}=1$ & $\overline{\alpha_{stop}}=180.300^\circ$
+	\\ & $N_i=1$ & $\overline{\alpha_{stop}}=180.300^\circ$
 	\\ & & $\delta=0.130^\circ$
 	\\ & & $\tau=4.40$s
 	\\ \hline
-	Sweep & $N_{simulations}=625$ & $\overline{\alpha_{start}}=179.335^\circ$
+	Sweep & $N_s=625$ & $\overline{\alpha_{start}}=179.335^\circ$
 	& 10443.4
-	\\ & $N_{iterations}=16$ & $\overline{\alpha_{stop}}=179.735^\circ$
-	\\ & $N_{best}=10$ & $\delta=0.113^\circ$
-	\\ & $tolerance=0.4$ & $\tau=4.08$s
+	\\ & $N_i=16$ & $\overline{\alpha_{stop}}=179.735^\circ$
+	\\ & $N_b=10$ & $\delta=0.113^\circ$
+	\\ & $tol=0.4$ & $\tau=4.08$s
 	\\ \hline
-	Monte-Carlo & $N_{simulations}=10000$
+	Monte-Carlo & $N_s=10000$
 	& $\overline{\alpha_{start}}=179.768^\circ$ & 12899.4
-	\\ & $N_{iterations}=1$ & $\overline{\alpha_{stop}}=180.177^\circ$
+	\\ & $N_i=1$ & $\overline{\alpha_{stop}}=180.177^\circ$
 	\\ & & $\delta=0.139^\circ$
 	\\ & & $\tau=3.77$s
 	\\ \hline
-	Monte-Carlo & $N_{simulations}=625$
+	Monte-Carlo & $N_s=625$
 	& $\overline{\alpha_{start}}=179.786^\circ$ & 9741.8
-	\\ & $N_{iterations}=16$ & $\overline{\alpha_{stop}}=180.194^\circ$
-	\\ & $N_{best}=10$ & $\delta=0.122^\circ$
-	\\ & $tolerance=0.1$ & $\tau=3.82$s
+	\\ & $N_i=16$ & $\overline{\alpha_{stop}}=180.194^\circ$
+	\\ & $N_b=10$ & $\delta=0.122^\circ$
+	\\ & $tol=0.1$ & $\tau=3.82$s
 	\\ \hline
-	Genetic & $N_{population}=1000$ & $\overline{\alpha_{start}}=179.800^\circ$
+	Genetic & $N_p=1000$ & $\overline{\alpha_{start}}=179.800^\circ$
 	& 9552.8
-	\\ & $N_{generations}=16$ & $\overline{\alpha_{stop}}=180.190^\circ$
-	\\ & $R_{mutation}=0.2$ & $\delta=0.137^\circ$
-	\\ & $R_{reproduction}=0.2$ & $\tau=4.39$s
-	\\ & $R_{adaptation}=0.2$
+	\\ & $N_g=16$ & $\overline{\alpha_{stop}}=180.190^\circ$
+	\\ & $R_m=0.2$ & $\delta=0.137^\circ$
+	\\ & $R_r=0.2$ & $\tau=4.39$s
+	\\ & $R_a=0.2$
 	\\ \hline
-	Genetic & $N_{population}=400$ & $\overline{\alpha_{start}}=179.751^\circ$
+	Genetic & $N_p=400$ & $\overline{\alpha_{start}}=179.751^\circ$
 	& 9187.5
-	\\ & $N_{generations}=81$ & $\overline{\alpha_{stop}}=180.166^\circ$
-	\\ & $R_{mutation}=0.1$ & $\delta=0.136^\circ$
-	\\ & $R_{reproduction}=0.1$ & $\tau=3.32$s
-	\\ & $R_{adaptation}=0.1$
+	\\ & $N_g=81$ & $\overline{\alpha_{stop}}=180.166^\circ$
+	\\ & $R_m=0.1$ & $\delta=0.136^\circ$
+	\\ & $R_r=0.1$ & $\tau=3.32$s
+	\\ & $R_a=0.1$
 	\\ \hline
 }{Optimal parameters and values of the evaluation function in the four towers pivot case in \citet{Ouazaa15} using different optimization algorithms implemented in MPCOTool with the same number of total simulations ($N_{total}=10000$)}{TabPivot}
 
