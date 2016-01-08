@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 #include <float.h>
 
@@ -13,8 +14,8 @@ int main (int argn, char **argc)
 	x0 = y0 = M_PI_4;
   else
 	{
-	  x0 = atof (arg[3]) + M_PI_4;
-	  y0 = atof (arg[4]) + M_PI_4;
+	  x0 = atof (argc[3]) + M_PI_4;
+	  y0 = atof (argc[4]) + M_PI_4;
 	}
   m = DBL_MAX;
   for (i = 1; fscanf (filein, "%lf%lf%lf", &x, &y, &z) == 3; ++i)

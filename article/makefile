@@ -13,11 +13,10 @@ figs = mpcotool-en.eps surcos-advance.eps surcos-depth.eps \
 	sphere-evolution-sw.eps sphere-evolution-mc.eps \
 	sphere-evolution-ga-1-4.eps sphere-evolution-ga-5-8.eps \
 	sphere-evolution-ga-9-11.eps \
-	sphere-variables-ga-100-33-0.25-0.25-0.25-32.eps \
 	sphere-variables-ga-250-16-0.2-0.2-0.2-32.eps \
 	sphere-variables-mc-100-25-10-0.1.eps \
 	sphere-variables-mc-2500-1.eps \
-	sphere-variables-mc-r-100-1-240-10-0.1-1.5.eps \
+	sphere-variables-mc-r-100-1-600-4-0.1-1.eps \
 	sphere-variables-sw-10-10-25-10-0.5.eps \
 	sphere-variables-sw-50-50-1.eps
 

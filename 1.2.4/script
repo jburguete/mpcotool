@@ -22,14 +22,13 @@
 ./mpcotoolbin ../tests/testSphere/test-mc-c-100-1-600-0.1-1.5-14.xml
 ./mpcotoolbin ../tests/testSphere/test-mc-c-100-1-600-0.1-2-14.xml
 ./mpcotoolbin ../tests/testSphere/test-mc-c-100-1-600-1-0-14.xml
-./mpcotoolbin ../tests/testSphere/test-mc-c-1600-1-225-0.001-1-14.xml
-./mpcotoolbin ../tests/testSphere/test-mc-c-1600-1-225-0.001-1.5-14.xml
+./mpcotoolbin ../tests/testSphere/test-mc-c-1600-1-225-0.01-1-14.xml
 ./mpcotoolbin ../tests/testSphere/test-mc-r-100-1-240-10-0.1-1-14.xml
-./mpcotoolbin ../tests/testSphere/test-mc-r-100-1-240-10-0.1-1.5-14.xml
+./mpcotoolbin ../tests/testSphere/test-mc-r-100-1-480-5-0.1-1-14.xml
 ./mpcotoolbin ../tests/testSphere/test-mc-r-100-1-600-4-0.1-1-14.xml
-./mpcotoolbin ../tests/testSphere/test-mc-r-100-1-600-4-0.1-1.5-14.xml
-./mpcotoolbin ../tests/testSphere/test-mc-r-1600-1-90-10-0.001-1-14.xml
-./mpcotoolbin ../tests/testSphere/test-mc-r-1600-1-90-10-0.001-1.5-14.xml
+./mpcotoolbin ../tests/testSphere/test-mc-r-100-1-800-3-0.1-1-14.xml
+./mpcotoolbin ../tests/testSphere/test-mc-r-100-1-1200-2-0.1-1-14.xml
+./mpcotoolbin ../tests/testSphere/test-mc-r-1600-1-225-4-0.01-1-14.xml
 ./mpcotoolbin ../tests/testSphere/test-sw-10-10-25-10-0.5-14.xml
 ./mpcotoolbin ../tests/testSphere/test-sw-10-10-25-4-0-14.xml
 ./mpcotoolbin ../tests/testSphere/test-sw-50-50-1-14.xml
@@ -62,14 +61,13 @@ cd ../tests
 ./process testSphere/variables-mc-c-100-1-600-0.1-1.5-14 testSphere/v-mc-c-100-1-600-0.1-1.5-14
 ./process testSphere/variables-mc-c-100-1-600-0.1-2-14 testSphere/v-mc-c-100-1-600-0.1-2-14
 ./process testSphere/variables-mc-c-100-1-600-1-0-14 testSphere/v-mc-c-100-1-600-1-0-14
-./process testSphere/variables-mc-c-1600-1-225-0.001-1-14 testSphere/v-mc-c-1600-1-225-0.001-1-14
-./process testSphere/variables-mc-c-1600-1-225-0.001-1.5-14 testSphere/v-mc-c-1600-1-225-0.001-1.5-14
+./process testSphere/variables-mc-c-1600-1-225-0.01-1-14 testSphere/v-mc-c-1600-1-225-0.01-1-14
 ./process testSphere/variables-mc-r-100-1-240-10-0.1-1-14 testSphere/v-mc-r-100-1-240-10-0.1-1-14
-./process testSphere/variables-mc-r-100-1-240-10-0.1-1.5-14 testSphere/v-mc-r-100-1-240-10-0.1-1.5-14
+./process testSphere/variables-mc-r-100-1-480-5-0.1-1-14 testSphere/v-mc-r-100-1-480-5-0.1-1-14
 ./process testSphere/variables-mc-r-100-1-600-4-0.1-1-14 testSphere/v-mc-r-100-1-600-4-0.1-1-14
-./process testSphere/variables-mc-r-100-1-600-4-0.1-1.5-14 testSphere/v-mc-r-100-1-600-4-0.1-1.5-14
-./process testSphere/variables-mc-r-1600-1-90-10-0.001-1-14 testSphere/v-mc-r-1600-1-90-10-0.001-1-14
-./process testSphere/variables-mc-r-1600-1-90-10-0.001-1.5-14 testSphere/v-mc-r-1600-1-90-10-0.001-1.5-14
+./process testSphere/variables-mc-r-100-1-800-3-0.1-1-14 testSphere/v-mc-r-100-1-800-3-0.1-1-14
+./process testSphere/variables-mc-r-100-1-1200-2-0.1-1-14 testSphere/v-mc-r-100-1-1200-2-0.1-1-14
+./process testSphere/variables-mc-r-1600-1-225-4-0.01-1-14 testSphere/v-mc-r-1600-1-225-4-0.01-1-14
 ./process testSphere/variables-sw-10-10-25-10-0.5-14 testSphere/v-sw-10-10-25-10-0.5-14
 ./process testSphere/variables-sw-10-10-25-4-0-14 testSphere/v-sw-10-10-25-4-0-14
 ./process testSphere/variables-sw-50-50-1-14 testSphere/v-sw-50-50-1-14

@@ -1,54 +1,63 @@
 set term pos 12 eps enh
-set size ratio 1 0.4,0.6
+set size ratio 1 0.45,0.6
 set xlabel 'x'
 set ylabel 'y'
 set palette gray
 set pm3d map
-set isosamples 1000,1000
 e=exp(1)
 
 f(x,y)=x**2+y**2
 g(x,y)=f(x-pi/4,y-pi/4)
 set title 'g_{Sphere}'
+set isosamples 100,100
+set cbrange [0:67]
 set out 'Sphere.eps'
-splot [-5:5][-5:5][0:] g(x,y) with pm3d not
+splot [-5:5][-5:5][0:67] g(x,y) with pm3d not
 
 f(x,y)=20*(1-exp(-0.2*sqrt(0.5*(x**2+y**2))))+e\
 	-exp(0.5*(cos(2*pi*x)+cos(2*pi*y)))
 g(x,y)=f(x-pi/4,y-pi/4)
+set isosamples 200,200
 set title 'g_{Ackley}'
-set cbrange [0:24]
+set cbrange [0:23]
 set out 'Ackley.eps'
-splot [-40:40][-40:40][0:] g(x,y) with pm3d not
+splot [-40:40][-40:40][0:23] g(x,y) with pm3d not
 set out 'Ackley2.eps'
-splot [-5:5][-5:5][0:] g(x,y) with pm3d not
+splot [-5:5][-5:5][0:23] g(x,y) with pm3d not
 unset cbrange
 
 f(x,y)=(x+2*y-7)**2+(2*x+y-5)**2
 g(x,y)=f(x-pi/4,y-pi/4)
 set title 'g_{Booth}'
+set isosamples 100,100
+set cbrange [0:2945]
 set out 'Booth.eps'
-splot [-10:10][-10:10][0:] g(x,y) with pm3d not
+splot [-10:10][-10:10][0:2945] g(x,y) with pm3d not
 
 f(x,y)=100*(y-x**2)**2+(x-1)**2
 g(x,y)=f(x-pi/4,y-pi/4)
 set title 'g_{Rosenbrock}'
+set cbrange [0:822613]
 set out 'Rosenbrock.eps'
-splot [-5:10][-5:10][0:] g(x,y) with pm3d not
+splot [-5:10][-5:10][0:822613] g(x,y) with pm3d not
+set cbrange [0:46444]
 set out 'Rosenbrock2.eps'
-splot [-3:5][-3:5][0:] g(x,y) with pm3d not
+splot [-3:5][-3:5][0:46444] g(x,y) with pm3d not
 
 g(x,y)=-cos(x)*cos(y)*exp(-((x-pi)**2+(y-pi)**2))
 set title 'f_{Easom}'
+set isosamples 200,200
 set cbrange [-1:0.2]
 set out 'Easom.eps'
-splot [-100:100][-100:100][-1:] g(x,y) with pm3d not
+splot [-100:100][-100:100][-1:0.2] g(x,y) with pm3d not
 set out 'Easom2.eps'
-splot [0:2*pi][0:2*pi][-1:] g(x,y) with pm3d not
+splot [0:2*pi][0:2*pi][-1:0.2] g(x,y) with pm3d not
 unset cbrange
 
 f(x,y)=(1.5-x+x*y)**2+(2.25-x+x*y**2)**2+(2.625-x+x*y**3)**2
 g(x,y)=f(x-pi/4,y-pi/4)
 set title 'g_{Beale}'
+set isosamples 100,100
+set cbrange [0:1310091]
 set out 'Beale.eps'
-splot [-5:5][-5:5][0:] g(x,y) with pm3d not
+splot [-5:5][-5:5][0:1310091] g(x,y) with pm3d not
