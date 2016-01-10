@@ -11,9 +11,9 @@ figs = mpcotool-en.eps surcos-advance.eps surcos-depth.eps \
 	pivot-measured-starts-27,48.eps pivot-measured-stops-27,48.eps \
 	Violada-contributions.eps Violada-optimized-contributions.eps \
 	sphere-evolution-sw.eps sphere-evolution-mc.eps \
-	sphere-evolution-ga-1-4.eps sphere-evolution-ga-5-8.eps \
-	sphere-evolution-ga-9-11.eps \
-	sphere-variables-ga-250-16-0.2-0.2-0.2-32.eps \
+	sphere-evolution-ge-1-4.eps sphere-evolution-ge-5-8.eps \
+	sphere-evolution-ge-9-11.eps \
+	sphere-variables-ge-250-16-0.2-0.2-0.2-32.eps \
 	sphere-variables-mc-100-25-10-0.1.eps \
 	sphere-variables-mc-2500-1.eps \
 	sphere-variables-mc-r-100-1-600-4-0.1-1.eps \

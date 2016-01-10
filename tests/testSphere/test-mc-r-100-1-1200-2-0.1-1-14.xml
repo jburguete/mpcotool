@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<calibrate simulator="Sphere" algorithm="Monte-Carlo" nsimulations="100" nsteps="800" gradient_method="random" nestimates="2" relaxation="1" result="result-mc-r-100-1-1200-2-0.1-1-14" variables="variables-mc-r-100-1-1200-2-0.1-1-14">
-  <experiment name="test.exp" template1="test.tmp"/>
-  <variable name="x" minimum="-5" maximum="5" precision="14" step="0.1"/>
-  <variable name="y" minimum="-5" maximum="5" precision="14" step="0.1"/>
-</calibrate>

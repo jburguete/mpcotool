@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<calibrate simulator="Sphere" algorithm="genetic" npopulation="500" ngenerations="21" mutation="0.2" reproduction="0" adaptation="0" result="result-ga-500-21-0.2-0-0-32-14" variables="variables-ga-500-21-0.2-0-0-32-14">
-  <experiment name="test.exp" template1="test.tmp"/>
-  <variable name="x" minimum="-5" maximum="5" nbits="32" precision="14"/>
-  <variable name="y" minimum="-5" maximum="5" nbits="32" precision="14"/>
-</calibrate>

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<calibrate simulator="Easom" algorithm="Monte-Carlo" nsimulations="1600" nsteps="225" gradient_method="coordinates" relaxation="1" result="result-mc-c-1600-1-225-0.001-1-14" variables="variables-mc-c-1600-1-225-0.001-1-14">
+  <experiment name="test.exp" template1="test.tmp"/>
+  <variable name="x" minimum="-40" maximum="1000" precision="14" step="1e-3"/>
+  <variable name="y" minimum="-40" maximum="1000" precision="14" step="1e-3"/>
+</calibrate>

@@ -12,6 +12,8 @@ int main (int argn, char **argc)
   fileout = fopen (argc[2], "w");
   if (argn == 3)
 	x0 = y0 = M_PI_4;
+  else if (argn == 4)
+	x0 = y0 = M_PI;
   else
 	{
 	  x0 = atof (argc[3]) + M_PI_4;

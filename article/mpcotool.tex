@@ -435,11 +435,11 @@ being $st_j$ the initial step size for the $j$-th variable defined by the user
 in the main input file. The number of estimates in this method depends on the
 variables number $N_v$:
 \EQ{N_e=2\,N_v}{EqNestimatesDescent}
-\item[Random (R)]: the vectors $\vec{t}_j$ are built randomly as:
+\item[Random (RA)]: the vectors $\vec{t}_j$ are built randomly as:
 \EQ
 {
 	\vec{t}_j=\MATRIX{c}{\PA{1-2\,r_{j,1}}\,st_1\\\vdots\\
-	\PA{1-2\,r_{j,k}}\,st_k\\\vdots\\\PA{1-2\,r_{j,N_v}}\,st_{N_v}},
+	\PA{1-2\,r_{j,N_v}}\,st_{N_v}},
 }{EqtRandom}
 with $r_{j,k}\in[0,1)$ random numbers.
 \end{description}
@@ -641,7 +641,7 @@ execute):
 \item Command line in parallelized mode (where X is the number of threads to
 open in every node):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-> mpirun [MPI options] ./mpcotool [-nthreads X] input_file.xml
+> mpirun [MPI options] ./mpcotoolbin [-nthreads X] input_file.xml
 \end{lstlisting}
 
 \item The syntax of the simulator has to be:
@@ -797,6 +797,10 @@ a usar las abreviaturas de la tabla~\ref{TabMethods}.
 	SW+CD-1 & SW+GB+CD & $N_x=N_y=10$, $N_{st}=600$, $st_x=st_y=0.1$, $rel=1$ \\
 	SW+CD-2 & SW+GB+CD & $N_x=N_y=40$, $N_{st}=225$, $st_x=st_y=0.01$,
 		$rel=1$ \\
+	SW+RA-1 & SW+GB+RA & $N_x=N_y=10$, $N_{st}=600$, $st_x=st_y=0.1$, $rel=1$,
+		$N_e=2$ \\
+	SW+RA-2 & SW+GB+RA & $N_x=N_y=40$, $N_{st}=225$, $st_x=st_y=0.01$,
+		$rel=1$, $N_e=2$ \\
 	MC-1 & MC & $N_s=2500$ \\
 	MC+IT-1 & MC+IT & $N_s=100$, $N_i=25$, $N_b=10$, $tol=0.1$ \\
 	MC+IT-2 & MC+IT & $N_s=100$, $N_i=25$, $N_b=4$, $tol=0$ \\
@@ -805,9 +809,31 @@ a usar las abreviaturas de la tabla~\ref{TabMethods}.
 	MC+CD-3 & MC+GB+CD & $N_s=100$, $N_{st}=600$, $st_x=st_y=0.01$, $rel=0$ \\
 	MC+CD-4 & MC+GB+CD & $N_s=100$, $N_{st}=600$, $st_x=st_y=0.01$, $rel=1$ \\
 	MC+CD-5 & MC+GB+CD & $N_s=100$, $N_{st}=600$, $st_x=st_y=0.01$, $rel=2$ \\
-}{}{TabMethods}
-
-\subsection{Sphere function}
+	MC+CD-6 & MC+GB+CD & $N_s=100$, $N_{st}=600$, $st_x=st_y=0.1$, $rel=0$ \\
+	MC+CD-7 & MC+GB+CD & $N_s=100$, $N_{st}=600$, $st_x=st_y=1$, $rel=0$ \\
+	MC+RA-1 & MC+GB+RA & $N_s=100$, $N_{st}=600$, $st_x=st_y=0.1$, $rel=1$,
+		$N_e=2$ \\
+	MC+RA-2 & MC+GB+RA & $N_x=1600$, $N_{st}=225$, $st_x=st_y=0.01$, $rel=1$,
+		$N_e=2$ \\
+	MC+RA-3 & MC+GB+RA & $N_s=100$, $N_{st}=600$, $st_x=st_y=0.1$, $rel=1$,
+		$N_e=3$ \\
+	MC+RA-4 & MC+GB+RA & $N_s=100$, $N_{st}=600$, $st_x=st_y=0.1$, $rel=1$,
+		$N_e=4$ \\
+	MC+RA-5 & MC+GB+RA & $N_s=100$, $N_{st}=600$, $st_x=st_y=0.1$, $rel=1$,
+		$N_e=10$ \\
+	GE-1 & GE & $N_p=100$, $N_g=33$, $R_m=R_r=0$, $R_a=0.75$, $N_{bits}=32$ \\
+	GE-2 & GE & $N_p=100$, $N_g=33$, $R_m=R_a=0$, $R_r=0.75$, $N_{bits}=32$ \\
+	GE-3 & GE & $N_p=100$, $N_g=33$, $R_m=R_r=R_a=0.25$, $N_{bits}=32$ \\
+	GE-4 & GE & $N_p=100$, $N_g=33$, $R_m=0.75$, $R_r=R_a=0$, $N_{bits}=32$ \\
+	GE-5 & GE & $N_p=250$, $N_g=16$, $R_m=R_r=R_a=0.2$, $N_{bits}=32$ \\
+	GE-6 & GE & $N_p=250$, $N_g=31$, $R_m=R_r=R_a=0.1$, $N_{bits}=32$ \\
+	GE-7 & GE & $N_p=500$, $N_g=21$, $R_m=R_r=0$, $R_a=0.2$, $N_{bits}=32$ \\
+	GE-8 & GE & $N_p=500$, $N_g=21$, $R_m=R_a=0$, $R_r=0.2$, $N_{bits}=32$ \\
+	GE-9 & GE & $N_p=500$, $N_g=21$, $R_m=0.2$, $R_r=R_a=0$, $N_{bits}=32$ \\
+	GE-10 & GE & $N_p=625$, $N_g=11$, $R_m=R_r=R_a=0.1$, $N_{bits}=32$ \\
+	GE-11 & GE & $N_p=625$, $N_g=6$, $R_m=R_r=R_a=0.2$, $N_{bits}=32$
+}{Abreviaturas de los métodos utilizadas en los resultados de los tests}
+{TabMethods}
 
 A continuación examinamos el comportamiento de los diferentes algoritmos de
 optimización en la sphere function, una función simétrica, convexa, sin extremos
@@ -825,7 +851,7 @@ rápidamente en la dirección del óptimo desde el valor mejor proporcionado por
 método de fuerza bruta asociado.
 \FIGVI{sphere-variables-sw-50-50-1.eps}{sphere-variables-mc-2500-1.eps}
 {sphere-variables-sw-10-10-25-10-0.5.eps}{sphere-variables-mc-100-25-10-0.1.eps}
-{sphere-variables-ga-250-16-0.2-0.2-0.2-32.eps}
+{sphere-variables-ge-250-16-0.2-0.2-0.2-32.eps}
 {sphere-variables-mc-r-100-1-600-4-0.1-1.eps}
 {Variables combination simulated by diferent algorithms}{FigSphereVariables}
 
@@ -841,7 +867,7 @@ MC+IT-2.
 barrido and (right) Monte-Carlo combinados ambos con el algoritmo iterativo y
 distintos parametros}{FigSphereSWMC}
 
-En la figura~\ref{FigSphereSWMC} se muestra la convergencia obtenida con los
+En la figura~\ref{FigSphereSWMCGR} se muestra la convergencia obtenida con los
 algoritmos de fuerza bruta de barrido y de Monte-Carlo acoplados al algoritmo
 basado en gradiente. Se comprueba que el algoritmo basado en gradiente tiene una
 convergencia muy superior, por lo que en esta función la convergencia es mayor
@@ -869,9 +895,71 @@ con el método aleatorio de estimar el gradiente.
 y el método basado en gradiente configurado con diferentes combinaciones de
 parametros}{FigSphereMCCDR}
 
-\FIGIII{sphere-evolution-ga-1-4.eps}{sphere-evolution-ga-5-8.eps}
-{sphere-evolution-ga-9-11.eps}{Convergencia de la optimizacion de $g_{Sphere}$
-con el algoritmo genético y distintas combinaciones de parametros}{FigSphereGA}
+En la figura~\ref{FigSphereGE} se presentan las convergencias del algoritmo
+genético con 11 diferentes combinaciones de parámetros. Los resultados, aunque
+mejoran ligeramente los de los algoritmos puros de fuerza bruta, son mucho
+peores que los del algoritmo iterativo y los del método basado en gradiente.
+\FIGIII{sphere-evolution-ge-1-4.eps}{sphere-evolution-ge-5-8.eps}
+{sphere-evolution-ge-9-11.eps}{Convergencia de la optimizacion de $g_{Sphere}$
+con el algoritmo genético y distintas combinaciones de parametros}{FigSphereGE}
+
+Finalmente, en la tabla~\ref{TabTestResults} se muestran los resultados
+obtenidos por 23 combinaciones de algoritmos y parámetros en las 6 funciones
+test. El resultado se presenta como menos el logaritmo decimal de la distancia
+obtenida al punto óptimo. Este valor viene a suponer el número de dígitos
+decimales de precisión obtenidos. Se han resaltado valores próximos a 14 que es
+la precisión teórica de la máquina. Los resultados de GE pueden calificarse como
+decepcionantes, si bien logran una ligera ventaja en una función convexa como la
+función esférica su ventaja sobre la fuerza bruta resulta más que dudosa en los
+demás casos En cuanto a los métodos de fuerza bruta SW a funcionado ligeramente
+mejor que MC. No obstante, podría tratarse de un hecho aleatorio. De hecho,
+teóricamente, MC saca ventaja en situaciones con muchas variables y en los que
+la influencia de cada variable sobre la función objetivo es distinta, cosa que
+no ocurre en los tests analizados. El algoritmo iterativo de MPCOTool sí que ha
+supuesto una mejora importante, logrando una sustancial mejora sobre la fuerza
+bruta en práctimente todos los casos, aunque ha tenido más problemas con la
+función de Rosenbrock. Ha funcionado ligeramente mejor acoplado a MC, aunque
+también podría ser un hecho aleatorio dado las funciones analizadas. Aunque la
+convergencia en la función esférica de GB es mayor usando un número bajo de
+simulaciones del método de fuerza bruta asociado, se revela como una mala
+estrategia en situaciones con muchos mínimos locales. En este caso funciona
+mejor que el método estocástico realice un número suficiente de simulaciones
+para obtener un punto cercano al óptimo y usar entonces GB para que converja
+rápidamente. En cuanto al método de estimar el gradiente, aunque RA usado con
+un número bajo de estimaciones acelera la convergencia, falla en algunos casos a
+la hora de encontrar el óptimo. CD resulta un método algo más lento pero mucho
+más seguro.
+\TABLE{\scriptsize}{c|cccccc}
+{
+	Method & $g_{Sphere}$ & $g_{Ackley}$ & $g_{Booth}$ & $g_{Rosenbrock}$ &
+	$f_{Easom}$ & $g_{Beale}$ \\
+	\hline
+	SW-1 & 1.0 & 1.4 & 1.0 & 1.1 & -0.2 & 1.4 \\
+	SW+IT-1 & 12.8 & 12.4 & 10.2 & 1.5 & 9.1 & 7.4 \\
+	SW+CD-1 & {\bf 15.3} & -0.7 & {\bf 14.6} & 11.6 & -1.0 & {\bf 13.6} \\
+	SW+CD-2 & {\bf 15.3} & {\bf 15.3} & {\bf 14.6} & 11.5 & 8.1 & {\bf 13.8} \\
+	SW+RA-1 & {\bf 14.6} & -0.7 & {\bf 14.6} & 4.3 & -1.0 & 11.7 \\
+	SW+RA-2 & {\bf 15.3} & {\bf 15.3} & {\bf 13.7} & 2.8 & 8.1 & 1.4 \\
+	MC-1 & 1.1 & 0.4 & 1.3 & 0.7 & -0.2 & 1.0 \\
+	MC+IT-1 & {\bf 14.0} & 12.8 & 11.1 & 4.0 & 9.0 & 8.3 \\
+	MC+CD-1 & {\bf 15.3} & -0.6 & {\bf 14.1} & 11.9 & -0.8 & {\bf 14.1} \\
+	MC+CD-2 & {\bf 15.3} & {\bf 15.1} & {\bf 14.6} & 8.6 & -0.3 & 13.4 \\
+	MC+RA-1 & {\bf 15.1} & -0.6 & {\bf 14.1} & 1.7 & -0.8 & 13.1 \\
+	MC+RA-2 & {\bf 15.3} & {\bf 15.3} & {\bf 14.6} & 0.6 & -0.3 & 8.0 \\
+	GE-1 & 0.8 & 0.6 & 1.0 & 0.2 & -0.3 & 0.7 \\
+	GE-2 & 2.2 & 0.8 & 1.0 & 1.1 & -0.4 & 1.1 \\
+	GE-3 & 0.8 & 0.8 & 0.6 & 0.2 & -0.3 & 1.4 \\
+	GE-4 & 2.2 & 0.8 & 1.9 & 0.6 & -0.2 & 1.4 \\
+	GE-5 & 3.1 & 2.2 & 0.8 & 0.3 & 0.7 & 1.3 \\
+	GE-6 & 2.5 & 0.1 & 1.4 & 1.1 & 1.3 & 1.3 \\
+	GE-7 & 1.6 & 0.0 & 1.4 & 0.9 & -0.3 & 0.6 \\
+	GE-8 & 2.2 & 0.7 & 1.4 & 1.3 & 0.0 & 1.3 \\
+	GE-9 & 1.8 & 0.7 & 1.3 & 1.1 & -0.2 & 0.9 \\
+	GE-10 & 2.3 & 0.5 & 0.9 & 0.7 & -0.4 & 0.9 \\
+	GE-11 & 1.7 & 0.4 & 1.7 & 0.8 & 0.2 & 1.2
+}{Error de los métodos, estimado como $-\log_{10}\PA{d_{2500}}$, en los tests.
+En negrita se han remarcado los que han alcanzado la precisión de la máquina
+(aproximadamente 14 dígitos en doble precisión)}{TabTestResults}
 
 \section{Practical applications}
 

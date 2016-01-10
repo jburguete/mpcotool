@@ -25,12 +25,12 @@ set out 'sphere-variables-sw-10-10-25-10-0.5.eps'
 plot 'variables-sw-10-10-25-10-0.5-14' not w d
 
 set title 'GE-5'
-set out 'sphere-variables-ga-250-16-0.2-0.2-0.2-32.eps'
-plot 'variables-ga-250-16-0.2-0.2-0.2-32-14' not w d
+set out 'sphere-variables-ge-250-16-0.2-0.2-0.2-32.eps'
+plot 'variables-ge-250-16-0.2-0.2-0.2-32-14' not w d
 
-set title 'MC+R-1'
-set out 'sphere-variables-mc-r-100-1-600-4-0.1-1.eps'
-plot 'variables-mc-r-100-1-600-4-0.1-1-14' not w d
+set title 'MC+RA-1'
+set out 'sphere-variables-mc-ra-100-1-600-4-0.1-1.eps'
+plot 'variables-mc-ra-100-1-600-4-0.1-1-14' not w d
 
 unset title
 set size noratio 0.47,0.47
@@ -52,14 +52,14 @@ plot 'v-mc-2500-1-14' u 1:(log10($5)) t'MC-1' w l,\
 set out 'sphere-evolution-sw-cdr.eps'
 plot 'v-sw-c-10-10-1-600-0.1-1-14' u 1:(log10($5)) t'SW+CD-1' w l,\
 	'v-sw-c-40-40-1-225-0.01-1-14' u 1:(log10($5)) t'SW+CD-2' w l,\
-	'v-sw-r-10-10-1-1200-2-0.1-1-14' u 1:(log10($5)) t'SW+R-1' w l,\
-	'v-sw-r-40-40-1-450-2-0.01-1-14' u 1:(log10($5)) t'SW+R-2' w l
+	'v-sw-ra-10-10-1-1200-2-0.1-1-14' u 1:(log10($5)) t'SW+RA-1' w l,\
+	'v-sw-ra-40-40-1-450-2-0.01-1-14' u 1:(log10($5)) t'SW+RA-2' w l
 
 set out 'sphere-evolution-mc-cdr.eps'
 plot 'v-mc-c-100-1-600-0.1-1-14' u 1:(log10($5)) t'MC+CD-1' w l,\
 	'v-mc-c-1600-1-225-0.01-1-14' u 1:(log10($5)) t'MC+CD-2' w l,\
-	'v-mc-r-100-1-1200-2-0.1-1-14' u 1:(log10($5)) t'MC+R-1' w l,\
-	'v-mc-r-1600-1-450-2-0.01-1-14' u 1:(log10($5)) t'MC+R-2' w l
+	'v-mc-ra-100-1-1200-2-0.1-1-14' u 1:(log10($5)) t'MC+RA-1' w l,\
+	'v-mc-ra-1600-1-450-2-0.01-1-14' u 1:(log10($5)) t'MC+RA-2' w l
 
 set out 'sphere-evolution-mc-cd-r.eps'
 plot [0:700]\
@@ -75,24 +75,25 @@ plot [0:700]\
 	'v-mc-c-100-1-600-1-0-14' u 1:(log10($5)) t'MC+CD-7 (st_x=st_y=1)' w l
 
 set out 'sphere-evolution-mc-r.eps'
-plot [0:700] 'v-mc-r-100-1-1200-2-0.1-1-14' u 1:(log10($5)) t'MC+R-1' w l,\
-	'v-mc-r-100-1-800-3-0.1-1-14' u 1:(log10($5)) t'MC+R-2' w l,\
-	'v-mc-r-100-1-600-4-0.1-1-14' u 1:(log10($5)) t'MC+R-3' w l,\
-	'v-mc-r-100-1-240-10-0.1-1-14' u 1:(log10($5)) t'MC+R-4' w l
+plot [0:700]\
+	'v-mc-ra-100-1-1200-2-0.1-1-14' u 1:(log10($5)) t'MC+RA-1 (N_e=2)' w l,\
+	'v-mc-ra-100-1-800-3-0.1-1-14' u 1:(log10($5)) t'MC+RA-3 (N_e=3)' w l,\
+	'v-mc-ra-100-1-600-4-0.1-1-14' u 1:(log10($5)) t'MC+RA-4 (N_e=4)' w l,\
+	'v-mc-ra-100-1-240-10-0.1-1-14' u 1:(log10($5)) t'MC+RA-5 (N_e=10)' w l
 
-set out 'sphere-evolution-ga-1-4.eps'
-plot 'v-ga-100-33-0-0-0.75-32-14' u 1:(log10($5)) t'GE-1' w l,\
-	'v-ga-100-33-0-0.75-0-32-14' u 1:(log10($5)) t'GE-2' w l,\
-	'v-ga-100-33-0.75-0-0-32-14' u 1:(log10($5)) t'GE-3' w l,\
-	'v-ga-100-33-0.25-0.25-0.25-32-14' u 1:(log10($5)) t'GE-4' w l
+set out 'sphere-evolution-ge-1-4.eps'
+plot 'v-ge-100-33-0-0-0.75-32-14' u 1:(log10($5)) t'GE-1' w l,\
+	'v-ge-100-33-0-0.75-0-32-14' u 1:(log10($5)) t'GE-2' w l,\
+	'v-ge-100-33-0.75-0-0-32-14' u 1:(log10($5)) t'GE-3' w l,\
+	'v-ge-100-33-0.25-0.25-0.25-32-14' u 1:(log10($5)) t'GE-4' w l
 
-set out 'sphere-evolution-ga-5-8.eps'
-plot 'v-ga-250-16-0.2-0.2-0.2-32-14' u 1:(log10($5)) t'GE-5' w l,\
-	'v-ga-250-31-0.1-0.1-0.1-32-14' u 1:(log10($5)) t'GE-6' w l,\
-	'v-ga-500-21-0-0-0.2-32-14' u 1:(log10($5)) t'GE-7' w l,\
-	'v-ga-500-21-0-0.2-0-32-14' u 1:(log10($5)) t'GE-8' w l
+set out 'sphere-evolution-ge-5-8.eps'
+plot 'v-ge-250-16-0.2-0.2-0.2-32-14' u 1:(log10($5)) t'GE-5' w l,\
+	'v-ge-250-31-0.1-0.1-0.1-32-14' u 1:(log10($5)) t'GE-6' w l,\
+	'v-ge-500-21-0-0-0.2-32-14' u 1:(log10($5)) t'GE-7' w l,\
+	'v-ge-500-21-0-0.2-0-32-14' u 1:(log10($5)) t'GE-8' w l
 
-set out 'sphere-evolution-ga-9-11.eps'
-plot 'v-ga-500-21-0.2-0-0-32-14' u 1:(log10($5)) t'GE-9' w l,\
-	'v-ga-625-11-0.1-0.1-0.1-32-14' u 1:(log10($5)) t'GE-10' w l,\
-	'v-ga-625-6-0.2-0.2-0.2-32-14' u 1:(log10($5)) t'GE-11' w l
+set out 'sphere-evolution-ge-9-11.eps'
+plot 'v-ge-500-21-0.2-0-0-32-14' u 1:(log10($5)) t'GE-9' w l,\
+	'v-ge-625-11-0.1-0.1-0.1-32-14' u 1:(log10($5)) t'GE-10' w l,\
+	'v-ge-625-6-0.2-0.2-0.2-32-14' u 1:(log10($5)) t'GE-11' w l

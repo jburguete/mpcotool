@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<calibrate result="result-ge-100-33-0-0.75-0-32-14" variables="variables-ge-100-33-0-0.75-0-32-14" simulator="Booth" algorithm="genetic" npopulation="100" ngenerations="33" mutation="0" reproduction="0.75" adaptation="0">
+  <experiment name="test.exp" template1="test.tmp"/>
+  <variable name="x" minimum="-10" maximum="10" precision="14" nbits="32"/>
+  <variable name="y" minimum="-10" maximum="10" precision="14" nbits="32"/>
+</calibrate>
