@@ -7,7 +7,7 @@ calibrations or optimizations of empirical parameters.
 VERSIONS
 --------
 
-* 1.2.4: Stable and recommended version.
+* 1.2.5: Stable and recommended version.
 * 1.3.9: Developing version to do new features.
 
 AUTHORS
@@ -51,15 +51,15 @@ FILES
 -----
 
 The source code has to have the following files:
-* 1.2.4/configure.ac: configure generator.
-* 1.2.4/Makefile.in: Makefile generator.
-* 1.2.4/config.h.in: config header generator.
-* 1.2.4/mpcotool.c: main source code.
-* 1.2.4/mpcotool.h: main header code.
-* 1.2.4/interface.h: interface header code.
-* 1.2.4/build: script to build all.
-* 1.2.4/logo.png: logo figure.
-* 1.2.4/Doxyfile: configuration file to generate doxygen documentation.
+* 1.2.5/configure.ac: configure generator.
+* 1.2.5/Makefile.in: Makefile generator.
+* 1.2.5/config.h.in: config header generator.
+* 1.2.5/mpcotool.c: main source code.
+* 1.2.5/mpcotool.h: main header code.
+* 1.2.5/interface.h: interface header code.
+* 1.2.5/build: script to build all.
+* 1.2.5/logo.png: logo figure.
+* 1.2.5/Doxyfile: configuration file to generate doxygen documentation.
 * TODO: tasks to do.
 * README.md: this file.
 * tests/testX/\*: several tests to check the program working.
@@ -102,7 +102,7 @@ a terminal:
 > $ git clone https://github.com/jburguete/mpcotool.git
 
 3. Link the latest genetic version to genetic:
-> $ cd mpcotool/1.2.4
+> $ cd mpcotool/1.2.5
 >
 > $ ln -s ../../genetic/0.6.1 genetic
 
@@ -155,7 +155,7 @@ MAKING TESTS INSTRUCTIONS
 In order to build the tests follow the next instructions:
 
 1. Link some tests that needs genetic library doing in a terminal (assuming that
-you are in the directory mpcotool/1.2.4):
+you are in the directory mpcotool/1.2.5):
 > $ cd ../tests/test2
 >
 > $ ln -s ../../../genetic/0.6.1 genetic
@@ -169,7 +169,7 @@ you are in the directory mpcotool/1.2.4):
 > $ ln -s ../../../genetic/0.6.1 genetic
 
 2. Build all tests doing in the same terminal:
-> $ cd ../../1.2.4
+> $ cd ../../1.2.5
 >
 > $ make tests
 
