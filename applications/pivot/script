@@ -1,7 +1,7 @@
 time ./mpcotoolbin pivot-sw-10-10-10-10-1.xml
 mv result result-sw-10-10-10-10-1
-time ./mpcotoolbin pivot-sw-5-5-5-5-16-10-0.4.xml
-mv result result-sw-5-5-5-5-16-10-0.4
+time ./mpcotoolbin pivot-sw-5-5-5-5-16-10-0.5.xml
+mv result result-sw-5-5-5-5-16-10-0.5
 time ./mpcotoolbin pivot-sw-cd-10-10-10-9-1-125-1.xml
 mv result result-sw-cd-10-10-10-9-125-1
 time ./mpcotoolbin pivot-mc-10000-1.xml
