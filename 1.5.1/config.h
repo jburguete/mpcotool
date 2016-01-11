@@ -43,7 +43,7 @@ OF SUCH DAMAGE.
   ///< Maximum number of input files in the simulator program.
 #define NALGORITHMS 3           ///< Number of stochastic algorithms.
 #define NGRADIENTS 2            ///< Number of gradient estimate methods.
-#define NNORMS 4          ///< Number of error norms.
+#define NNORMS 4                ///< Number of error norms.
 #define NPRECISIONS 15          ///< Number of precisions.
 
 // Default choices
@@ -55,7 +55,7 @@ OF SUCH DAMAGE.
 // Interface labels
 
 #define LOCALE_DIR "locales"    ///< Locales directory.
-#define PROGRAM_INTERFACE "mpcotool"  ///< Name of the interface program.
+#define PROGRAM_INTERFACE "mpcotool"    ///< Name of the interface program.
 
 // XML labels
 
@@ -94,14 +94,14 @@ OF SUCH DAMAGE.
   ///< ngenerations XML label.
 #define XML_NITERATIONS (const xmlChar*)"niterations"
   ///< niterations XML label.
-#define XML_NORM (const xmlChar*)"norm"       ///< norm XML label.
+#define XML_NORM (const xmlChar*)"norm" ///< norm XML label.
 #define XML_NPOPULATION (const xmlChar*)"npopulation"
   ///< npopulation XML label.
 #define XML_NSIMULATIONS (const xmlChar*)"nsimulations"
   ///< nsimulations XML label.
 #define XML_NSTEPS (const xmlChar*)"nsteps"     ///< nsteps XML label.
 #define XML_NSWEEPS (const xmlChar*)"nsweeps"   ///< nsweeps XML label.
-#define XML_P (const xmlChar*)"p" ///< p XML label.
+#define XML_P (const xmlChar*)"p"       ///< p XML label.
 #define XML_PRECISION (const xmlChar*)"precision"
   ///< precision XML label.
 #define XML_RANDOM (const xmlChar*)"random"     ///< random XML label.

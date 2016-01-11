@@ -114,6 +114,7 @@ const xmlChar *template[MAX_NINPUTS] = {
   XML_TEMPLATE1, XML_TEMPLATE2, XML_TEMPLATE3, XML_TEMPLATE4,
   XML_TEMPLATE5, XML_TEMPLATE6, XML_TEMPLATE7, XML_TEMPLATE8
 };
+
 ///< Array of xmlChar strings with template labels.
 
 const char *format[NPRECISIONS] = {
@@ -469,6 +470,29 @@ xml_node_set_float (xmlNode * node, const xmlChar * prop, double value)
   xmlSetProp (node, prop, buffer);
 }
 
+#if HAVE_GTK
+
+/**
+ * \fn unsigned int gtk_array_get_active (GtkRadioButton * array[], \
+ *   unsigned int n)
+ * \brief Function to get the active GtkRadioButton.
+ * \param array
+ * \brief Array of GtkRadioButtons.
+ * \param n
+ * \brief Number of GtkRadioButtons.
+ * \return Active GtkRadioButton.
+ */
+unsigned int
+gtk_array_get_active (GtkRadioButton * array[], unsigned int n)
+{
+  unsigned int i;
+  for (i = 0; i < n; ++i)
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (array[i])))
+      break;
+  return i;
+}
+
+#endif
 /**
  * \fn void input_new ()
  * \brief Function to create a new Input struct.
@@ -1162,33 +1186,33 @@ input_open (char *filename)
 
   // Obtaining the error norm
   if (xmlHasProp (node, XML_NORM))
-	{
-	  buffer = xmlGetProp (node, XML_NORM);
-	  if (!xmlStrcmp (buffer, XML_EUCLIDIAN))
-		input->norm = ERROR_NORM_EUCLIDIAN;
-	  else if (!xmlStrcmp (buffer, XML_MAXIMUM))
-		input->norm = ERROR_NORM_MAXIMUM;
-	  else if (!xmlStrcmp (buffer, XML_P))
-		{
-		    input->norm = ERROR_NORM_P;
-			input->p = xml_node_get_float (node, XML_P, &error_code);
-			if (!error_code)
-			  {
-				msg = gettext ("Bad P parameter");
-				goto exit_on_error;
-			  }
-		}
-	  else if (!xmlStrcmp (buffer, XML_TAXICAB))
-		input->norm = ERROR_NORM_TAXICAB;
-	  else
-		{
-		  msg = gettext ("Unknown error norm");
-		  goto exit_on_error;
-		}
-	  xmlFree (buffer);
-	}
+    {
+      buffer = xmlGetProp (node, XML_NORM);
+      if (!xmlStrcmp (buffer, XML_EUCLIDIAN))
+        input->norm = ERROR_NORM_EUCLIDIAN;
+      else if (!xmlStrcmp (buffer, XML_MAXIMUM))
+        input->norm = ERROR_NORM_MAXIMUM;
+      else if (!xmlStrcmp (buffer, XML_P))
+        {
+          input->norm = ERROR_NORM_P;
+          input->p = xml_node_get_float (node, XML_P, &error_code);
+          if (!error_code)
+            {
+              msg = gettext ("Bad P parameter");
+              goto exit_on_error;
+            }
+        }
+      else if (!xmlStrcmp (buffer, XML_TAXICAB))
+        input->norm = ERROR_NORM_TAXICAB;
+      else
+        {
+          msg = gettext ("Unknown error norm");
+          goto exit_on_error;
+        }
+      xmlFree (buffer);
+    }
   else
-  	input->norm = ERROR_NORM_EUCLIDIAN;
+    input->norm = ERROR_NORM_EUCLIDIAN;
 
   // Getting the working directory
   input->directory = g_path_get_dirname (filename);
@@ -1425,10 +1449,10 @@ calibrate_norm_euclidian (unsigned int simulation)
 #endif
   e = 0.;
   for (i = 0; i < calibrate->nexperiments; ++i)
-	{
+    {
       ei = calibrate_parse (simulation, i);
-	  e += ei * ei;
-	}
+      e += ei * ei;
+    }
   e = sqrt (e);
 #if DEBUG
   fprintf (stderr, "calibrate_norm_euclidian: error=%lg\n", e);
@@ -1454,10 +1478,10 @@ calibrate_norm_maximum (unsigned int simulation)
 #endif
   e = 0.;
   for (i = 0; i < calibrate->nexperiments; ++i)
-	{
+    {
       ei = fabs (calibrate_parse (simulation, i));
-	  e = fmax (e, ei);
-	}
+      e = fmax (e, ei);
+    }
 #if DEBUG
   fprintf (stderr, "calibrate_norm_maximum: error=%lg\n", e);
   fprintf (stderr, "calibrate_norm_maximum: end\n");
@@ -1482,10 +1506,10 @@ calibrate_norm_p (unsigned int simulation)
 #endif
   e = 0.;
   for (i = 0; i < calibrate->nexperiments; ++i)
-	{
+    {
       ei = fabs (calibrate_parse (simulation, i));
-	  e += pow (ei, calibrate->p);
-	}
+      e += pow (ei, calibrate->p);
+    }
   e = pow (e, 1. / calibrate->p);
 #if DEBUG
   fprintf (stderr, "calibrate_norm_p: error=%lg\n", e);
@@ -2678,20 +2702,20 @@ calibrate_open ()
 
   // Setting error norm
   switch (input->norm)
-	{
-		case ERROR_NORM_EUCLIDIAN:
-			calibrate_norm = calibrate_norm_euclidian;
-			break;
-		case ERROR_NORM_MAXIMUM:
-			calibrate_norm = calibrate_norm_maximum;
-			break;
-		case ERROR_NORM_P:
-			calibrate_norm = calibrate_norm_p;
-			calibrate->p = input->p;
-			break;
-		default:
-			calibrate_norm = calibrate_norm_taxicab;
-	}
+    {
+    case ERROR_NORM_EUCLIDIAN:
+      calibrate_norm = calibrate_norm_euclidian;
+      break;
+    case ERROR_NORM_MAXIMUM:
+      calibrate_norm = calibrate_norm_maximum;
+      break;
+    case ERROR_NORM_P:
+      calibrate_norm = calibrate_norm_p;
+      calibrate->p = input->p;
+      break;
+    default:
+      calibrate_norm = calibrate_norm_taxicab;
+    }
 
   // Allocating values
 #if DEBUG
@@ -2969,17 +2993,17 @@ input_save (char *filename)
 
   // Saving the error norm
   switch (input->norm)
-	{
-		case ERROR_NORM_MAXIMUM:
-			xmlSetProp (node, XML_NORM, XML_MAXIMUM);
-			break;
-		case ERROR_NORM_P:
-			xmlSetProp (node, XML_NORM, XML_P);
-			xml_node_set_float (node, XML_P, input->p);
-			break;
-		case ERROR_NORM_TAXICAB:
-			xmlSetProp (node, XML_NORM, XML_TAXICAB);
-	}
+    {
+    case ERROR_NORM_MAXIMUM:
+      xmlSetProp (node, XML_NORM, XML_MAXIMUM);
+      break;
+    case ERROR_NORM_P:
+      xmlSetProp (node, XML_NORM, XML_P);
+      xml_node_set_float (node, XML_P, input->p);
+      break;
+    case ERROR_NORM_TAXICAB:
+      xmlSetProp (node, XML_NORM, XML_TAXICAB);
+    }
 
   // Saving the XML file
   xmlSaveFormatFile (filename, doc, 1);
@@ -3089,21 +3113,18 @@ running_new ()
 }
 
 /**
- * \fn int window_get_algorithm ()
+ * \fn unsigned int window_get_algorithm ()
  * \brief Function to get the stochastic algorithm number.
  * \return Stochastic algorithm number.
  */
-int
+unsigned int
 window_get_algorithm ()
 {
   unsigned int i;
 #if DEBUG
   fprintf (stderr, "window_get_algorithm: start\n");
 #endif
-  for (i = 0; i < NALGORITHMS; ++i)
-    if (gtk_toggle_button_get_active
-        (GTK_TOGGLE_BUTTON (window->button_algorithm[i])))
-      break;
+  i = gtk_array_get_active (window->button_algorithm, NALGORITHMS);
 #if DEBUG
   fprintf (stderr, "window_get_algorithm: %u\n", i);
   fprintf (stderr, "window_get_algorithm: end\n");
@@ -3112,24 +3133,41 @@ window_get_algorithm ()
 }
 
 /**
- * \fn int window_get_gradient ()
+ * \fn unsigned int window_get_gradient ()
  * \brief Function to get the gradient base method number.
  * \return Gradient base method number.
  */
-int
+unsigned int
 window_get_gradient ()
 {
   unsigned int i;
 #if DEBUG
   fprintf (stderr, "window_get_gradient: start\n");
 #endif
-  for (i = 0; i < NGRADIENTS; ++i)
-    if (gtk_toggle_button_get_active
-        (GTK_TOGGLE_BUTTON (window->button_gradient[i])))
-      break;
+  i = gtk_array_get_active (window->button_gradient ,NGRADIENTS);
 #if DEBUG
   fprintf (stderr, "window_get_gradient: %u\n", i);
   fprintf (stderr, "window_get_gradient: end\n");
+#endif
+  return i;
+}
+
+/**
+ * \fn unsigned int window_get_norm ()
+ * \brief Function to get the norm base method number.
+ * \return Gradient base method number.
+ */
+unsigned int
+window_get_norm ()
+{
+  unsigned int i;
+#if DEBUG
+  fprintf (stderr, "window_get_norm: start\n");
+#endif
+  i = gtk_array_get_active (window->button_norm ,NNORMS);
+#if DEBUG
+  fprintf (stderr, "window_get_norm: %u\n", i);
+  fprintf (stderr, "window_get_norm: end\n");
 #endif
   return i;
 }
@@ -3257,6 +3295,8 @@ window_save ()
             = gtk_spin_button_get_value (window->spin_adaptation);
           break;
         }
+	  input->norm = window_get_norm ();
+	  input->p = gtk_spin_button_get_value (window->spin_p);
 
       // Saving the XML file
       buffer = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dlg));
@@ -3373,7 +3413,7 @@ window_about ()
               "parameters"),
      "authors", authors,
      "translator-credits", "Javier Burguete Tolosa <jburguete@eead.csic.es>",
-     "version", "1.5.0",
+     "version", "1.5.1",
      "copyright", "Copyright 2012-2016 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/mpcotool",
@@ -3457,6 +3497,8 @@ window_update ()
   gtk_widget_hide (GTK_WIDGET (window->grid_gradient));
   gtk_widget_hide (GTK_WIDGET (window->label_step));
   gtk_widget_hide (GTK_WIDGET (window->spin_step));
+  gtk_widget_hide (GTK_WIDGET (window->label_p));
+  gtk_widget_hide (GTK_WIDGET (window->spin_p));
   i = gtk_spin_button_get_value_as_int (window->spin_iterations);
   switch (window_get_algorithm ())
     {
@@ -3561,6 +3603,11 @@ window_update ()
   gtk_widget_set_sensitive
     (GTK_WIDGET (window->spin_maxabs),
      gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (window->check_maxabs)));
+  if (window_get_norm () == ERROR_NORM_P)
+	{
+      gtk_widget_show (GTK_WIDGET (window->label_p));
+      gtk_widget_show (GTK_WIDGET (window->spin_p));
+	}
 #if DEBUG
   fprintf (stderr, "window_update: end\n");
 #endif
@@ -4285,6 +4332,9 @@ window_read (char *filename)
       gtk_spin_button_set_value (window->spin_adaptation,
                                  input->adaptation_ratio);
     }
+  gtk_toggle_button_set_active
+	(GTK_TOGGLE_BUTTON (window->button_norm[input->norm]), TRUE);
+  gtk_spin_button_set_value (window->spin_p, input->p);
   g_signal_handler_block (window->combo_experiment, window->id_experiment);
   g_signal_handler_block (window->button_experiment,
                           window->id_experiment_name);
@@ -4414,6 +4464,13 @@ window_new ()
     gettext ("Coordinates descent gradient estimate method"),
     gettext ("Random gradient estimate method")
   };
+  char *label_norm[NNORMS] = { "L2", "L∞", "Lp", "L1" };
+  char *tip_norm[NNORMS] = {
+    gettext ("Euclidean error norm (L2)"),
+    gettext ("Maximum error norm (L∞)"),
+	gettext ("P error norm (Lp)"),
+	gettext ("Taxicab error norm (L1)")
+  };
 
 #if DEBUG
   fprintf (stderr, "window_new: start\n");
@@ -4535,17 +4592,17 @@ window_new ()
   gtk_grid_attach (window->grid_files, GTK_WIDGET (window->button_simulator),
                    1, 0, 1, 1);
   gtk_grid_attach (window->grid_files, GTK_WIDGET (window->check_evaluator),
-                   2, 0, 1, 1);
-  gtk_grid_attach (window->grid_files, GTK_WIDGET (window->button_evaluator),
-                   3, 0, 1, 1);
-  gtk_grid_attach (window->grid_files, GTK_WIDGET (window->label_result),
                    0, 1, 1, 1);
-  gtk_grid_attach (window->grid_files, GTK_WIDGET (window->entry_result),
+  gtk_grid_attach (window->grid_files, GTK_WIDGET (window->button_evaluator),
                    1, 1, 1, 1);
+  gtk_grid_attach (window->grid_files, GTK_WIDGET (window->label_result),
+                   0, 2, 1, 1);
+  gtk_grid_attach (window->grid_files, GTK_WIDGET (window->entry_result),
+                   1, 2, 1, 1);
   gtk_grid_attach (window->grid_files, GTK_WIDGET (window->label_variables),
-                   2, 1, 1, 1);
+                   0, 3, 1, 1);
   gtk_grid_attach (window->grid_files, GTK_WIDGET (window->entry_variables),
-                   3, 1, 1, 1);
+                   1, 3, 1, 1);
 
   // Creating the algorithm properties
   window->label_simulations = (GtkLabel *) gtk_label_new
@@ -4988,16 +5045,58 @@ window_new ()
   gtk_container_add (GTK_CONTAINER (window->frame_experiment),
                      GTK_WIDGET (window->grid_experiment));
 
+  // Creating the error norm widgets
+  window->frame_norm = (GtkFrame *) gtk_frame_new (gettext ("Error norm"));
+  window->grid_norm = (GtkGrid *) gtk_grid_new ();
+  gtk_container_add (GTK_CONTAINER (window->frame_norm),
+		             GTK_WIDGET (window->grid_norm));
+  window->button_norm[0] = (GtkRadioButton *)
+    gtk_radio_button_new_with_mnemonic (NULL, label_norm[0]);
+  gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_norm[0]),
+                               tip_norm[0]);
+  gtk_grid_attach (window->grid_norm,
+                   GTK_WIDGET (window->button_norm[0]), 0, 0, 1, 1);
+  g_signal_connect (window->button_norm[0], "clicked", window_update, NULL);
+  for (i = 0; ++i < NNORMS;)
+    {
+      window->button_norm[i] = (GtkRadioButton *)
+        gtk_radio_button_new_with_mnemonic
+        (gtk_radio_button_get_group (window->button_norm[0]),
+         label_norm[i]);
+      gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_norm[i]),
+                                   tip_norm[i]);
+      gtk_grid_attach (window->grid_norm,
+                       GTK_WIDGET (window->button_norm[i]), 0, i, 1, 1);
+      g_signal_connect (window->button_norm[i], "clicked", window_update, NULL);
+    }
+  window->label_p = (GtkLabel *) gtk_label_new (gettext ("P parameter"));
+  gtk_grid_attach (window->grid_norm, GTK_WIDGET (window->label_p),
+		           1, 0, 1, 2);
+  window->spin_p = (GtkSpinButton *)
+	gtk_spin_button_new_with_range (-G_MAXDOUBLE, G_MAXDOUBLE, 0.01);
+  gtk_widget_set_tooltip_text
+    (GTK_WIDGET (window->spin_p), gettext ("P parameter for the P error norm"));
+  window->scrolled_p
+    = (GtkScrolledWindow *) gtk_scrolled_window_new (NULL, NULL);
+  gtk_container_add (GTK_CONTAINER (window->scrolled_p),
+                     GTK_WIDGET (window->spin_p));
+  gtk_widget_set_hexpand (GTK_WIDGET (window->scrolled_p), TRUE);
+  gtk_widget_set_halign (GTK_WIDGET (window->scrolled_p), GTK_ALIGN_FILL);
+  gtk_grid_attach (window->grid_norm, GTK_WIDGET (window->scrolled_p),
+		           2, 0, 1, 2);
+
   // Creating the grid and attaching the widgets to the grid
   window->grid = (GtkGrid *) gtk_grid_new ();
   gtk_grid_attach (window->grid, GTK_WIDGET (window->bar_buttons), 0, 0, 3, 1);
-  gtk_grid_attach (window->grid, GTK_WIDGET (window->grid_files), 0, 1, 3, 1);
+  gtk_grid_attach (window->grid, GTK_WIDGET (window->grid_files), 0, 1, 1, 1);
   gtk_grid_attach (window->grid,
                    GTK_WIDGET (window->frame_algorithm), 0, 2, 1, 1);
   gtk_grid_attach (window->grid,
                    GTK_WIDGET (window->frame_variable), 1, 2, 1, 1);
   gtk_grid_attach (window->grid,
                    GTK_WIDGET (window->frame_experiment), 2, 2, 1, 1);
+  gtk_grid_attach (window->grid,
+		           GTK_WIDGET (window->frame_norm), 1, 1, 2, 1);
   gtk_container_add (GTK_CONTAINER (window->window), GTK_WIDGET (window->grid));
 
   // Setting the window logo
@@ -5014,6 +5113,7 @@ window_new ()
   gtk_widget_set_size_request (GTK_WIDGET (window->scrolled_minabs), -1, 40);
   gtk_widget_set_size_request (GTK_WIDGET (window->scrolled_maxabs), -1, 40);
   gtk_widget_set_size_request (GTK_WIDGET (window->scrolled_step), -1, 40);
+  gtk_widget_set_size_request (GTK_WIDGET (window->scrolled_p), -1, 40);
 #endif
 
   // Reading initial example

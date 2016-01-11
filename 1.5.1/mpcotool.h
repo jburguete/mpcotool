@@ -63,14 +63,14 @@ enum GradientMethod
  */
 enum ErrorNorm
 {
-	ERROR_NORM_EUCLIDIAN = 0,
-	///< Euclidian norm: \f$\sqrt{\sum_i\left(w_i\,x_i\right)^2}\f$.
-	ERROR_NORM_MAXIMUM = 1,
-	///< Maximum norm: \f$\max_i\left|w_i\,x_i\right|\f$.
-	ERROR_NORM_P = 2,
-	///< P-norm \f$\sqrt[p]{\sum_i\left|w_i\,x_i\right|^p}\f$.
-	ERROR_NORM_TAXICAB = 3
-	///< Taxicab norm \f$\sum_i\left|w_i\,x_i\right|\f$.
+  ERROR_NORM_EUCLIDIAN = 0,
+  ///< Euclidian norm: \f$\sqrt{\sum_i\left(w_i\,x_i\right)^2}\f$.
+  ERROR_NORM_MAXIMUM = 1,
+  ///< Maximum norm: \f$\max_i\left|w_i\,x_i\right|\f$.
+  ERROR_NORM_P = 2,
+  ///< P-norm \f$\sqrt[p]{\sum_i\left|w_i\,x_i\right|^p}\f$.
+  ERROR_NORM_TAXICAB = 3
+    ///< Taxicab norm \f$\sum_i\left|w_i\,x_i\right|\f$.
 };
 
 /**
@@ -104,7 +104,7 @@ typedef struct
   double reproduction_ratio;    ///< Reproduction probability.
   double adaptation_ratio;      ///< Adaptation probability.
   double relaxation;            ///< Relaxation parameter.
-  double p; ///< Exponent of the P error norm.
+  double p;                     ///< Exponent of the P error norm.
   unsigned long int seed;
   ///< Seed of the pseudo-random numbers generator.
   unsigned int nvariables;      ///< Variables number.
@@ -119,7 +119,7 @@ typedef struct
   ///< Number of simulations to estimate the gradient.
   unsigned int niterations;     ///< Number of algorithm iterations
   unsigned int nbest;           ///< Number of best simulations.
-  unsigned int norm; ///< Error norm type.
+  unsigned int norm;            ///< Error norm type.
 } Input;
 
 /**
@@ -169,7 +169,7 @@ typedef struct
   double adaptation_ratio;      ///< Adaptation probability.
   double relaxation;            ///< Relaxation parameter.
   double calculation_time;      ///< Calculation time.
-  double p; ///< Exponent of the P error norm.
+  double p;                     ///< Exponent of the P error norm.
   unsigned long int seed;
   ///< Seed of the pseudo-random numbers generator.
   unsigned int nvariables;      ///< Variables number.
@@ -223,6 +223,7 @@ void xml_node_set_int (xmlNode * node, const xmlChar * prop, int value);
 void xml_node_set_uint (xmlNode * node, const xmlChar * prop,
                         unsigned int value);
 void xml_node_set_float (xmlNode * node, const xmlChar * prop, double value);
+
 void input_new ();
 void input_free ();
 int input_open (char *filename);

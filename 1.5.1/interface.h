@@ -130,6 +130,7 @@ typedef struct
   ///< Array of GtkButtons to set the error norm.
   GtkLabel *label_p;            ///< GtkLabel to set the p parameter.
   GtkSpinButton *spin_p;        ///< GtkSpinButton to set the p parameter.
+  GtkScrolledWindow *scrolled_p;///< GtkScrolledWindow to set the p parameter.
   GtkFrame *frame_algorithm;    ///< GtkFrame to set the algorithm.
   GtkGrid *grid_algorithm;      ///< GtkGrid to set the algorithm.
   GtkRadioButton *button_algorithm[NALGORITHMS];
@@ -233,11 +234,13 @@ typedef struct
 } Window;
 
 // Public functions
+unsigned int gtk_array_get_active (GtkRadioButton * array[], unsigned int n);
 void input_save (char *filename);
 void options_new ();
 void running_new ();
-int window_get_algorithm ();
-int window_get_gradient ();
+unsigned int window_get_algorithm ();
+unsigned int window_get_gradient ();
+unsigned int window_get_norm ();
 void window_save_gradient ();
 int window_save ();
 void window_run ();
