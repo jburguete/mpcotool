@@ -112,12 +112,11 @@ const xmlChar *template[MAX_NINPUTS] = {
   XML_TEMPLATE1, XML_TEMPLATE2, XML_TEMPLATE3, XML_TEMPLATE4,
   XML_TEMPLATE5, XML_TEMPLATE6, XML_TEMPLATE7, XML_TEMPLATE8
 };
-
 ///< Array of xmlChar strings with template labels.
 
 const char *format[NPRECISIONS] = {
-  "%.1lg", "%.2lg", "%.3lg", "%.4lg", "%.5lg", "%.6lg", "%.7lg", "%.8lg",
-  "%.9lg", "%.10lg", "%.11lg", "%.12lg", "%.13lg", "%.14lg", "%.15lg"
+  "%.0lf", "%.1lf", "%.2lf", "%.3lf", "%.4lf", "%.5lf", "%.6lf", "%.7lf",
+  "%.8lf", "%.9lf", "%.10lf", "%.11lf", "%.12lf", "%.13lf", "%.14lf"
 };                              ///< Array of C-strings with variable formats.
 
 const double precision[NPRECISIONS] = {
@@ -918,7 +917,7 @@ input_open (char *filename)
               fprintf (stderr, "input_open: ninputs=%u\n", input->ninputs);
 #endif
             }
-          else if (input->nexperiments && input->ninputs >= i)
+          else if (input->nexperiments && input->ninputs > i)
             {
               snprintf (buffer2, 64, "%s %s: %s%u",
                         gettext ("Experiment"),
