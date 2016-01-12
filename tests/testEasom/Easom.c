@@ -7,7 +7,7 @@ Easom (double x, double y)
   double k1, k2;
   k1 = x - M_PI;
   k2 = y - M_PI;
-  return -cos (x) * cos (y) * exp (-(k1 * k1 + k2 * k2));
+  return 1. - cos (x) * cos (y) * exp (-(k1 * k1 + k2 * k2));
 }
 
 int

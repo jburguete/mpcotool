@@ -149,13 +149,13 @@ $(BEALE)Beale: $(BEALE)Beale.c $(BEALE)Makefile
 $(M1): $(MDIR)user-manual.tex $(MDIR)bib.bib \
 	$(MDIR)mpcotool-en.eps $(MDIR)result-en.eps Makefile
 	cd $(MDIR); latex user-manual; bibtex user-manual; latex user-manual; \
-		latex user-manual; dvipdf user-manual
+		latex user-manual; dvipdfmx user-manual
 
 $(M2): $(MDIR)manual-de-usuario.tex $(MDIR)bib.bib \
 	$(MDIR)mpcotool-es.eps Makefile
 	cd $(MDIR); latex manual-de-usuario; bibtex manual-de-usuario; \
 		latex manual-de-usuario; latex manual-de-usuario; \
-		dvipdf manual-de-usuario
+		dvipdfmx manual-de-usuario
 
 $(MDIR)reference-manual.pdf: mpcotool README.md Doxyfile
 	doxygen
