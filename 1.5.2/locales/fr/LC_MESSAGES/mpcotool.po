@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.5.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-12 06:00+0100\n"
+"POT-Creation-Date: 2016-01-12 07:26+0100\n"
 "PO-Revision-Date: 2015-10-20 18:47+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -118,7 +118,7 @@ msgid "Invalid relaxation parameter"
 msgstr "Nombre de relaxation incorrect"
 
 #: mpcotool.c:863 mpcotool.c:878 mpcotool.c:910 mpcotool.c:924 mpcotool.c:949
-#: mpcotool.c:5052
+#: mpcotool.c:5051
 msgid "Experiment"
 msgstr "Expérience"
 
@@ -605,47 +605,47 @@ msgstr "Grandeur de pas"
 msgid "Initial step size for the gradient based method"
 msgstr "Grandeur de pas initiale pour la méthode basée au gradient"
 
-#: mpcotool.c:4976
+#: mpcotool.c:4975
 msgid "Experiment selector"
 msgstr "Selecteur d'expériences"
 
-#: mpcotool.c:4985
+#: mpcotool.c:4984
 msgid "Add experiment"
 msgstr "Ajouter expérience"
 
-#: mpcotool.c:4992
+#: mpcotool.c:4991
 msgid "Remove experiment"
 msgstr "Éraser expérience"
 
-#: mpcotool.c:4994 mpcotool.c:4996 mpcotool.c:4999
+#: mpcotool.c:4993 mpcotool.c:4995 mpcotool.c:4998
 msgid "Experimental data file"
 msgstr "Fichier de données expérimentales"
 
-#: mpcotool.c:5004
+#: mpcotool.c:5003
 msgid "Weight"
 msgstr "Poids"
 
-#: mpcotool.c:5009
+#: mpcotool.c:5008
 msgid "Weight factor to build the objective function"
 msgstr "Facteur de poids pour faire la fonction objectif"
 
-#: mpcotool.c:5029 mpcotool.c:5038
+#: mpcotool.c:5028 mpcotool.c:5037
 msgid "Input template"
 msgstr "Modèle d'entrée"
 
-#: mpcotool.c:5042
+#: mpcotool.c:5041
 msgid "Experimental input template file"
 msgstr "Fichier de modèle d'entrée expérimental"
 
-#: mpcotool.c:5057
+#: mpcotool.c:5056
 msgid "Error norm"
 msgstr "Norme d'erreur"
 
-#: mpcotool.c:5080
+#: mpcotool.c:5079
 msgid "P parameter"
 msgstr "Paramètre P"
 
-#: mpcotool.c:5086
+#: mpcotool.c:5085
 msgid "P parameter for the P error norm"
 msgstr "Paramètre P pour la norme d'erreur P"
 

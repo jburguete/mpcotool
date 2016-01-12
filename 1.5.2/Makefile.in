@@ -146,19 +146,10 @@ $(BEALE)Beale: $(BEALE)Beale.c $(BEALE)Makefile
 	convert logo.png mpcotool.ico
 	@WINDRES@ mpcotool.rc -o @ICON@
 
-$(MDIR)result-en.eps: $(MDIR)result-en.png
-	convert $(MDIR)result-en.png $(MDIR)result-en.eps
-
-$(MDIR)mpcotool-en.eps: $(MDIR)mpcotool-en.png
-	convert $(MDIR)mpcotool-en.png $(MDIR)mpcotool-en.eps
-
 $(M1): $(MDIR)user-manual.tex $(MDIR)bib.bib \
 	$(MDIR)mpcotool-en.eps $(MDIR)result-en.eps Makefile
 	cd $(MDIR); latex user-manual; bibtex user-manual; latex user-manual; \
 		latex user-manual; dvipdf user-manual
-
-$(MDIR)mpcotool-es.eps: $(MDIR)mpcotool-es.png
-	convert $(MDIR)mpcotool-es.png $(MDIR)mpcotool-es.eps
 
 $(M2): $(MDIR)manual-de-usuario.tex $(MDIR)bib.bib \
 	$(MDIR)mpcotool-es.eps Makefile

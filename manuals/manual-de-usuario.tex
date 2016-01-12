@@ -83,6 +83,7 @@
 }
 
 \newcommand{\ABS}[1]{\left|#1\right|}
+\newcommand{\MATRIX}[2]{\PA{\begin{array}{#1}#2\end{array}}}
 \newcommand{\PA}[1]{\left(#1\right)}
 
 \bibliographystyle{abbrvnat}
@@ -92,9 +93,12 @@
 \title{MPCOTool: un software libre para obtener parámetros empíricos
 necesarios en modelos de simulación}
 
-\author{Javier Burguete}
+\author{Autores del software: J. Burguete y B. Latorre\\
+Autor del manual: J. Burguete}
 
 \maketitle
+
+\tableofcontents
 
 \chapter{Compilando el código fuente}
 
@@ -235,6 +239,31 @@ $ ./mpcotool
 \end{lstlisting}
 
 \end{itemize}
+
+\section{Aplicación con interfaz gráfica de usuario interactiva}
+
+Una forma alternativa de usar el programa consiste en usar la aplicación con
+interfaz gráfica de usuario interactiva, llamada \emph{MPCOTool}. En esta
+aplicación la paralelización en diferentes computadoras usando OpenMPI o MPICH
+está desactivada, esta paralelización sólo puede usarse en modo de comandos. En
+la figura~\ref{FigWindow} se muestra una figura con la ventana principal de la
+utilidad. Desde esta ventana podemos acceder a cada variable, coeficiente,
+algoritmo y programa de simulación requerido.
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=10.13cm]{mpcotool-es.eps}
+	\caption{Ventana principal de la aplicación con interfaz gráfica de usuario
+		interactiva de MPCOTool.\label{FigWindow}}
+\end{figure}
+
+Los resultados óptimos se presentan finalmente en un cuadro de diálogo como el
+mostrado en la figura~\ref{FigResult}.
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=2.87cm]{result-es.eps}
+	\caption{Cuadro de diálogo de los resultados óptimos de la aplicación con
+		interfaz gráfica de usuario interactiva de MPCOTool.\label{FigResult}}
+\end{figure}
 
 \section{Ficheros de entrada}
 
@@ -478,31 +507,6 @@ las combinaciones de variables probadas en la calibración, siendo además la
 definirse en la propiedad \emph{variables}. Si no se especifica esta propiedad
 se crea un fichero de numbre ``variables''.
 
-\section{Aplicación con interfaz gráfica de usuario interactiva}
-
-Una forma alternativa de usar el programa consiste en usar la aplicación con
-interfaz gráfica de usuario interactiva, llamada \emph{MPCOTool}. En esta
-aplicación la paralelización en diferentes computadoras usando OpenMPI o MPICH
-está desactivada, esta paralelización sólo puede usarse en modo de comandos. En
-la figura~\ref{FigWindow} se muestra una figura con la ventana principal de la
-utilidad. Desde esta ventana podemos acceder a cada variable, coeficiente,
-algoritmo y programa de simulación requerido.
-\begin{figure}[ht!]
-	\centering
-	\includegraphics[width=10.13cm]{mpcotool-es.eps}
-	\caption{Ventana principal de la aplicación con interfaz gráfica de usuario
-		interactiva de MPCOTool.\label{FigWindow}}
-\end{figure}
-
-Los resultados óptimos se presentan finalmente en un cuadro de diálogo como el
-mostrado en la figura~\ref{FigResult}.
-\begin{figure}[ht!]
-	\centering
-	\includegraphics[width=2.87cm]{result-es.eps}
-	\caption{Cuadro de diálogo de los resultados óptimos de la aplicación con
-		interfaz gráfica de usuario interactiva de MPCOTool.\label{FigResult}}
-\end{figure}
-
 \chapter{Organización de MPCOTool}
 
 Supongamos que buscamos un conjunto de $N_{parameters}$ parámetros empíricos 
@@ -632,16 +636,17 @@ generada por el algoritmo de optimización. Además, MPCOTool puede paralelizar
 automáticamente las simulaciones usando todos los recursos de computación
 disponibles en el sistema.
 
-\chapter{Optimization methods}
+\chapter{Métodos de optimización}
 
-The optimization methods implemented in MPCOTool are next presented. The following notation will be used:
+A continuación se presentan los métodos de optimización implementados en
+MPCOTool. Se usará la siguiente notación:
 \begin{description}
-	\item[$N_{simulations}$]: number of simulations made for each iteration.
-	\item[$N_{iterations}$]: number of iterations on iterative methods.
-	\item[$N_{total}$]: total number of simulations.
+	\item[$N_{simulations}$]: número de simulaciones en cada iteración,
+	\item[$N_{iterations}$]: número de iteraciones en algoritmos iterativos,
+	\item[$N_{total}$]: número total de simulaciones.
 \end{description}
-In iterative methods $N_{total}=N_{simulations}\times N_{iterations}$.
-In pure brute force methods
+En métodos iterativos $N_{total}=N_{simulations}\times N_{iterations}$.
+En métodos de fuerza bruta puros
 $N_{iterations}=1\;\Rightarrow\;N_{total}=N_{simulations}$.
 
 \section{Sweep brute force method}
@@ -779,13 +784,22 @@ A new interval in the variable $x$ is defined to build the optimization values i
 {EqIterationInterval}
 with:
 \[
-	x_{\max}^{j+1}=\frac{x_{\max}^b+x_{\min}^b
-		+\left(x_{\max}^b-x_{\min}^b\right)(1+tolerance)}{2},
+	\mathrm{Sweep}\;\Rightarrow\;\left\{\begin{array}{c}
+	\displaystyle
+	x_{\max}^{j+1}=x_{\max}^b+\frac{x_{\max}^j-x_{\min}^j}{N_x-1}\,tolerance,\\
+	\displaystyle
+	x_{\min}^{j+1}=x_{\min}^b-\frac{x_{\min}^j-x_{\min}^j}{N_x-1}\,tolerance,\\
+	\end{array}\right.
 \]
-\[
-	x_{\min}^{j+1}=\frac{x_{\max}^b+x_{\min}^b
-		-\left(x_{\max}^b-x_{\min}^b\right)(1+tolerance)}{2},
-\]
+\EQ
+{
+	\mathrm{Monte-Carlo}\;\Rightarrow\;\left\{\begin{array}{c}
+	\displaystyle x_{\max}^{j+1}=\frac{x_{\max}^b+x_{\min}^b
+	+\left(x_{\max}^b-x_{\min}^b\right)(1+tolerance)}{2},\\
+	\displaystyle x_{\min}^{j+1}=\frac{x_{\max}^b+x_{\min}^b
+	-\left(x_{\max}^b-x_{\min}^b\right)(1+tolerance)}{2},
+	\end{array}\right.
+}{EqIterationIntervalII}
 being $tolerance$ a factor increasing the size of the variable intervals to
 simulate the next iteration.
 Figure~\ref{FigIterative} contains a sketch of the procedure used by the the iterative algorithm to modify the variables intervals in order to enforce convergence. 
@@ -937,6 +951,171 @@ figure~\ref{FigIterativeParallelization}).
 	\psframe(-55,-120)(55,-130)
 }{Flowchart of the parallelization scheme in MPCOTool for the iterative
 method}{FigIterativeParallelization}
+
+\section{Gradient based method}
+
+Brute force optimization methods, sweep and Monte-Carlo, can be also combined
+with a gradient based algorithm. Defining the vector $\vec{r}_i$ as the optime
+variables combination obtained in the $i$-th step, $\vec{r}_1$ as the optime
+varaibles combination vector obtained by the brute force method and defining
+the vector $\vec{s}_i$ as:
+\EQ
+{
+	\vec{s}_1=\vec{0},\qquad
+	\vec{s}_i=(1-relaxation)\,\vec{s}_{i-1}+relaxation\,\Delta\vec{r}_{i-1},
+}{Eqs}
+with $\Delta\vec{r}_{i-1}=\vec{r}_i+\vec{r}_{i-1}$ and $relaxtion$ the
+relaxation parameter, the gradient based method checks $N_{estimates}$ variable
+combinations and choice the optimum as:
+\EQ
+{
+	\vec{r}_{i+1}=\mathrm{optime}\PA{\vec{r}_i,\;\vec{r}_i+\vec{s}_i+\vec{t}_j},
+	\;j=1,\cdots,N_{estimates}.
+}{EqGradient}
+If the step does not improve the optimum ($\vec{r}_i=\vec{r}_{i+1}$) then the
+gradient step vectors $\vec{t}_j$ are divided by two and $\vec{s}_{i+1}$ is set
+to zero. The method is iterated $N_{steps}$ times.
+
+Although gradient based method gets the fastest convergence, is the method in
+MPCOTool that obtains the least advantages of parallelization. The method is
+almost sequential and parallelization only can be performed for each step in
+the $N_{estimates}$ simulations to estimate the gradient. In the
+figure~\ref{FigGradientParallelization} a flowchart of the parallelization
+scheme for this method is shown.
+
+\psset{xunit=0.5mm,yunit=0.5mm}
+\PSPICTURE{-100}{-130}{100}{-15}
+{
+	\tiny
+	\rput(0,-15){1st step:}
+	\rput(0,-20){Generation of $N_{estimates}$ empirical parameters sets}
+	\psframe(-60,-25)(60,-10)
+	\psline{->}(0,-25)(-60,-30)
+	\psline{->}(0,-25)(0,-30)
+	\psline{->}(0,-25)(60,-30)
+	\rput(-60,-35){1st task:}
+	\rput(-60,-40){$N_{estimates}/N_{tasks}$ simulations}
+	\psframe(-100,-30)(-20,-45)
+	\rput(0,-37.5){$\cdots$}
+	\rput(60,-35){$N_{tasks}$-th task:}
+	\rput(60,-40){$N_{estimates}/N_{tasks}$ simulations}
+	\psframe(20,-30)(100,-45)
+	\psline{->}(-60,-45)(0,-50)
+	\psline{->}(0,-45)(0,-50)
+	\psline{->}(60,-45)(0,-50)
+	\rput(0,-55){Getting $N_{best}$ empirical parameters sets}
+	\psframe(-55,-50)(55,-60)
+	\psline{->}(0,-60)(0,-65)
+	\rput(0,-70){$\cdots$}
+	\psline{->}(0,-75)(0,-80)
+	\rput(0,-85){$N_{steps}$-th step:}
+	\rput(0,-90){Generation of $N_{estimates}$ empirical parameters sets}
+	\psframe(-60,-95)(60,-80)
+	\psline{->}(0,-95)(-60,-100)
+	\psline{->}(0,-95)(0,-100)
+	\psline{->}(0,-95)(60,-100)
+	\rput(-60,-105){1st task:}
+	\rput(-60,-110){$N_{estimates}/N_{tasks}$ simulations}
+	\psframe(-100,-100)(-20,-115)
+	\rput(0,-107.5){$\cdots$}
+	\rput(60,-105){$N_{tasks}$-th task:}
+	\rput(60,-110){$N_{estimates}/N_{tasks}$ simulations}
+	\psframe(20,-100)(100,-115)
+	\psline{->}(-60,-115)(0,-120)
+	\psline{->}(0,-115)(0,-120)
+	\psline{->}(60,-115)(0,-120)
+	\rput(0,-125){Getting optimal empirical parameters set}
+	\psframe(-55,-120)(55,-130)
+}{Flowchart of the parallelization scheme in MPCOTool for the gradient based
+method}{FigGradientParallelization}
+
+MPCOTool uses two methods to build the $\vec{t}_j$ vectors:
+
+\subsection{Coordinates descent}
+
+This method builds the $\vec{t}_j$ vectors by increasing or decreasing only one
+variable:
+\[
+	\vec{t}_1=\MATRIX{c}{step_1\\0\\0\\\vdots\\0},\quad
+	\vec{t}_2=\MATRIX{c}{-step_1\\0\\0\\\vdots\\0},\quad
+	\vec{t}_3=\MATRIX{c}{0\\step_2\\0\\\vdots\\0},
+\]
+\EQ
+{
+	\vec{t}_4=\MATRIX{c}{0\\-step_2\\0\\\vdots\\0},\quad\cdots\quad,
+	\vec{t}_{N_{estimates}}=\MATRIX{c}{0\\0\\0\\\vdots\\
+	-step_{N_{variables}}},
+}{EqtDescent}
+being $step_j$ the initial step size for the $j$-th variable defined by the user
+in the main input file. The number of estimates in this method depends on the
+variables number:
+\EQ{N_{estimates}=2\,N_{variables}}{EqNestimatesDescent}
+
+\subsection{Random}
+
+The vectors $\vec{t}_j$ are built randomly as:
+\EQ
+{
+	\vec{t}_j=\MATRIX{c}{\PA{1-2\,r_{j,1}}\,step_1\\\vdots\\
+	\PA{1-2\,r_{j,k}}\,step_k\\\vdots\\
+	\PA{1-2\,r_{j,N_{variables}}}\,step_{N_{variables}}},
+}{EqtRandom}
+with $r_{j,k}\in[0,1)$ random numbers.
+
+In the figure~\ref{FigGradient} a sketch for a system with two variables is
+presented to illustrate the working mode of coordinates descent and random
+algorithms.
+\psset{xunit=0.45mm,yunit=0.45mm,runit=0.5mm}
+\PSPICTURE{0}{0}{260}{100}
+{
+	\psline{->}(10,10)(10,90)
+	\rput(15,95){$variable_2$}
+	\psline{->}(10,10)(120,10)
+	\rput(110,5){$variable_1$}
+	\rput(20,15){$\vec{r}_{i-1}$}
+	\pscircle*(20,20){1}
+	\rput(55,34){$\vec{r}_i$}
+	\pscircle*(55,40){1}
+	\psline{->}(20,20)(55,40)
+	\rput(30,36){$\Delta\vec{r}_{i-1}$}
+	\psline{->}(55,40)(90,65)
+	\rput(65,54){$\vec{s}_i$}
+	\psline{->}(90,65)(90,85)
+	\pscircle*(90,85){1}
+	\rput(95,81){$\vec{t}_3$}
+	\psline{->}(90,65)(110,65)
+	\pscircle*(110,65){1}
+	\rput(105,71){$\vec{t}_1$}
+	\psline{->}(90,65)(70,65)
+	\pscircle*(70,65){1}
+	\rput(75,70){$\vec{t}_2$}
+	\psline{->}(90,65)(90,45)
+	\pscircle*(90,45){1}
+	\rput(95,50){$\vec{t}_4$}
+	\psline{->}(140,10)(140,90)
+	\rput(145,95){$variable_2$}
+	\psline{->}(140,10)(250,10)
+	\rput(240,5){$variable_1$}
+	\rput(150,15){$\vec{r}_{i-1}$}
+	\pscircle*(150,20){1}
+	\rput(185,34){$\vec{r}_i$}
+	\pscircle*(185,40){1}
+	\psline{->}(150,20)(185,40)
+	\rput(160,36){$\Delta\vec{r}_{i-1}$}
+	\psline{->}(185,40)(220,65)
+	\rput(195,54){$\vec{s}_i$}
+	\psline{->}(220,65)(207,75)
+	\pscircle*(207,75){1}
+	\rput(207,81){$\vec{t}_3$}
+	\psline{->}(220,65)(228,68)
+	\pscircle*(228,68){1}
+	\rput(228,74){$\vec{t}_1$}
+	\psline{->}(220,65)(212,49)
+	\pscircle*(212,49){1}
+	\rput(212,43){$\vec{t}_2$}
+}{(Left) coordinates descent and (right) random with $N_{estimates}=3$ gradient
+based method checks of variables combination in a system with two variables}
+{FigGradient}
 
 \section{Genetic method}
 
@@ -1349,7 +1528,7 @@ reproduction in the Genetic default algorithm. Note that the identical bits in b
 
 \subsection{Adaptation algorithm}
 
-Another algorithm is included in Genetic called ``adaptation'' although, in the
+Another algorithm is included in Genetic called "adaptation" although, in the
 biological sense, it would be rather be a smooth mutation. First, one of the
 variables codified in the genome is randomly selected with uniform probability.
 Then, a bit is randomly chosen assuming a probability linearly decreasing with
@@ -1553,6 +1732,9 @@ figure~\ref{FigGeneticParallelization}.
 }{Flowchart of the parallelization scheme implemented in Genetic for the genetic
 method}{FigGeneticParallelization}
 
+\clearpage
+\renewcommand{\bibname}{Referencias}
+\addcontentsline{toc}{chapter}{\bibname}
 \bibliography{bib}
 
 \end{document}

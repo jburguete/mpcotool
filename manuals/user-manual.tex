@@ -92,9 +92,12 @@
 \title{MPCOTool: an open source software to supply empirical parameters
 required in simulation models}
 
-\author{Javier Burguete}
+\author{Software authors: J. Burguete and B. Latorre\\
+Manual authors: J. Burguete, P. García-Navarro and S. Ambroj}
 
 \maketitle
+
+\tableofcontents
 
 \chapter{Building from the source code}
 
@@ -218,6 +221,31 @@ $ ./mpcotool
 \end{lstlisting}
 
 \end{itemize}
+
+\section{Interactive graphical user interface application}
+
+An alternative form to execute the software is to perform the interactive
+graphical user interface application, called \emph{MPCOTool}. In this
+application the parallalization in multiple computers with OpenMPI or MPICH is
+deactivated, it can be only used in command line execution. In the
+figure~\ref{FigWindow} a plot of the main window of this tool is represented.
+The main windows enable us to access to every variable, coefficient, algorithm
+and simulation softwares.
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=9.30cm]{mpcotool-en.eps}
+	\caption{Main window of MPCOTool graphical user interface application.
+		\label{FigWindow}}
+\end{figure}
+
+Final optime results are presented in a dialog as the shown in the
+figure~\ref{FigResult}.
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=2.87cm]{result-en.eps}
+	\caption{Results dialog of MPCOTool graphical user interface application.
+		\label{FigResult}}
+\end{figure}
 
 \section{Input files}
 
@@ -439,31 +467,6 @@ function value. The file name can be set in the \emph{varaibles} property of the
 main input file. A default name "variables" is used if this property is not
 defined.
 
-\section{Interactive graphical user interface application}
-
-An alternative form to execute the software is to perform the interactive
-graphical user interface application, called \emph{MPCOTool}. In this
-application the parallalization in multiple computers with OpenMPI or MPICH is
-deactivated, it can be only used in command line execution. In the
-figure~\ref{FigWindow} a plot of the main window of this tool is represented.
-The main windows enable us to access to every variable, coefficient, algorithm
-and simulation softwares.
-\begin{figure}[ht!]
-	\centering
-	\includegraphics[width=9.30cm]{mpcotool-en.eps}
-	\caption{Main window of MPCOTool graphical user interface application.
-		\label{FigWindow}}
-\end{figure}
-
-Final optime results are presented in a dialog as the shown in the
-figure~\ref{FigResult}.
-\begin{figure}[ht!]
-	\centering
-	\includegraphics[width=2.87cm]{result-en.eps}
-	\caption{Results dialog of MPCOTool graphical user interface application.
-		\label{FigResult}}
-\end{figure}
-
 \chapter{Organization of MPCOTool}
 
 Let us assume that $N_{parameters}$ empirical parameters are sought desired so
@@ -592,8 +595,8 @@ The whole process is repeated for each combination of empirical parameters gener
 
 The optimization methods implemented in MPCOTool are next presented. The following notation will be used:
 \begin{description}
-	\item[$N_{simulations}$]: number of simulations made for each iteration.
-	\item[$N_{iterations}$]: number of iterations on iterative methods.
+	\item[$N_{simulations}$]: number of simulations made for each iteration,
+	\item[$N_{iterations}$]: number of iterations on iterative methods,
 	\item[$N_{total}$]: total number of simulations.
 \end{description}
 In iterative methods $N_{total}=N_{simulations}\times N_{iterations}$.
@@ -1683,6 +1686,9 @@ figure~\ref{FigGeneticParallelization}.
 }{Flowchart of the parallelization scheme implemented in Genetic for the genetic
 method}{FigGeneticParallelization}
 
+\clearpage
+\renewcommand{\bibname}{References}
+\addcontentsline{toc}{chapter}{\bibname}
 \bibliography{bib}
 
 \end{document}
