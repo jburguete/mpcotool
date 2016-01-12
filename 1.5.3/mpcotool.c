@@ -48,7 +48,7 @@ OF SUCH DAMAGE.
 #include <glib/gstdio.h>
 #ifdef G_OS_WIN32
 #include <windows.h>
-#elif (!__BSD_VISIBLE)
+#elifndef (BSD)
 #include <alloca.h>
 #endif
 #if HAVE_MPI
@@ -3413,7 +3413,7 @@ window_about ()
               "parameters"),
      "authors", authors,
      "translator-credits", "Javier Burguete Tolosa <jburguete@eead.csic.es>",
-     "version", "1.5.2",
+     "version", "1.5.3",
      "copyright", "Copyright 2012-2016 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/mpcotool",
