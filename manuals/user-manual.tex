@@ -249,8 +249,10 @@ represented in figure~\ref{FigMainFile}.
 	\rput(105,0){nsteps}
 	\rput(135,0){nestimates}
 	\rput(170,0){relaxation}
-	\rput(200,0){result}
-	\rput(230,0){variables}
+	\rput(200,0){norm}
+	\rput(217,0){p}
+	\rput(235,0){result}
+	\rput(260,0){variables}
 	\psline(20,-5)(20,-15)(40,-15)
 	\psframe(40,-20)(280,-10)
 	\psline(80,-20)(80,-10)
@@ -308,8 +310,8 @@ algorithm}{FigMainFile}
 The main XML node has to begin with the key label \emph{"calibrate"}. The
 available properties are:
 \begin{description}
-	\item[simulator]: to indicate the simulator program.
-	\item[evaluator]: optional. It specifies the evaluator program if required.
+	\item[simulator]: to indicate the simulator program,
+	\item[evaluator]: optional. It specifies the evaluator program if required,
 	\item[algorithm]: to set the optimization algorithm. Three values are
 		currently available:
 	\begin{description}
@@ -317,39 +319,39 @@ available properties are:
 			variable:
 		\begin{description}
 			\item[nsweeps]: number of sweeps to generate each variable in every
-			experiment.
+			experiment,
 		\end{description}
 	\item[Monte-Carlo]: Monte-Carlo brute force algorithm. It requires on the
 		main XML node:
 		\begin{description}
 			\item[nsimulations]: number of simulations to run for each iteration
-				in every experiment.
+				in every experiment,
 		\end{description}
 	\item[genetic]: genetic algorithm. It requires the following parameters in
 		the main XML node:
 		\begin{description}
-			\item[npopulation]: number of population entities.
-			\item[ngenerations]: number of generations.
-			\item[mutation]: mutation ratio.
-			\item[reproduction]: reproduction ratio.
+			\item[npopulation]: number of population entities,
+			\item[ngenerations]: number of generations,
+			\item[mutation]: mutation ratio,
+			\item[reproduction]: reproduction ratio,
 			\item[adaptation]: adaptation ratio.
 		\end{description}
 	And for each variable:
 		\begin{description}
-			\item[nbits]: number of bits to encode each variable.
+			\item[nbits]: number of bits to encode each variable,
 		\end{description}
 	\end{description}
 	\item[niterations]: number of iterations (default 1) to perform the
-		iterative algorithm.
+		iterative algorithm,
 	\item[nbest]: number of best simulations to calculate convergence interval
-		on next iteration for the iterative algorithm (default 1).
+		on next iteration for the iterative algorithm (default 1),
 	\item[tolerance]: tolerance parameter to relax the convergence interval of
-		the iterative algorithm (default 0).
-	\item[seed]: seed of the pseudo-random numbers generator (default 7007).
+		the iterative algorithm (default 0),
+	\item[seed]: seed of the pseudo-random numbers generator (default 7007),
 	\item[gradient\_method]: method to estimate the gradient (optional for sweep
 		and Monte-Carlo algorithms). Two values are currently available:
 	\begin{description}
-		\item[coordinates]: coordinates descent estimate.
+		\item[coordinates]: coordinates descent estimate,
 		\item[random]: random estimate. It requieres:
 		\begin{description}
 			\item[nestimates]: number of random checks to estimate the gradient.
@@ -362,10 +364,25 @@ available properties are:
 	\end{description}
 	and for each variable:
 	\begin{description}
-		\item[step]: initial step size for the gradient based method.
+		\item[step]: initial step size for the gradient based method,
 	\end{description}
+	\item[norm]: to set the error norm (default "euclidian"). Four values are
+		currently available:
+		\begin{description}
+			\item[euclidian]: euclidian error norm $L_2$, see
+				(\ref{EqObjectiveFunctionLII}),
+			\item[maximum]: maximum error norm $L_\infty$, see
+				(\ref{EqObjectiveFunctionLi}),
+			\item[p]: P error norm $L_p$. It requires:
+			\begin{description}
+				\item[p]: exponent of the P error norm, see
+					(\ref{EqObjectiveFunctionLp}),
+			\end{description}
+			\item[taxicab]: taxicab error norm $L_1$, see
+				(\ref{EqObjectiveFunctionLI}),
+		\end{description}
 	\item[result]: to set the result file name. Optional, the default file name
-		is \emph{"result"}.
+		is \emph{"result"},
 	\item[variables]: to set the variables file name. Optional, the default file
 		name is \emph{"variables"}.
 \end{description}
@@ -373,9 +390,9 @@ available properties are:
 The first type of child XML nodes has to begin with the key label
 \emph{"experiment"}. It details the experimental data and it contains the properties:
 \begin{description}
-	\item[name]: name of the input data file with experimental results to calibrate.
-	\item[templateX]: $X$-th input data file template for the simulation program.
-	\item[weight]: weight (default 1) to apply in the objective function (see (\ref{EqObjectiveFunction})).
+	\item[name]: name of the input data file with experimental results to calibrate,
+	\item[templateX]: $X$-th input data file template for the simulation program,
+	\item[weight]: weight (default 1) to apply in the objective function, see (\ref{EqObjectiveFunctionLII}) to (\ref{EqObjectiveFunctionLI}).
 \end{description}
 
 The second type of child XML nodes has to begin with the key label
@@ -387,11 +404,11 @@ file templates creating the input simulation files by replacing all
 \item[minimum, maximum]: variable extreme values. The program creates the input
 simulation files by replacing all @valueX@ labels in the input file templates
 by a value between these extreme values on the $X$-th variable, depending on the
-optimization algorithm.
+optimization algorithm,
 \item[absolute\_minimum, absolute\_maximum]: absolute variable extreme values.
 On iterative methods, the tolerance can increase initial \emph{minimum} or
 \emph{maximum} values in each iteration. These values are the allowed extreme values
-compatible with the model parameter limits.
+compatible with the model parameter limits,
 \item[precision]: number of decimal digits of precision. 0 apply for integer numbers.
 \end{description}
 
@@ -464,13 +481,17 @@ file with the value of the error; or another external program, defined in the
 property \emph{evaluator}, is invoked to compare with the \emph{experimental
 data file} and to produce the error value. In both cases this error value is
 saved in an \emph{objective value file}. Then for each experiment, an objective
-value $o_i$ is obtained. The final value of the objective function associated
-with the experiments set is calculated by means of:
-\EQ
-{
-	J=\sqrt{\frac{1}{N_{experiments}}
-	\,\sum_{i=1}^{N_{experiments}}\ABS{w_i\,o_i}^2},
-}{EqObjectiveFunction}
+value $o_i$ is obtained. The final value of the objective function ($J$)
+associated with the experiments set can be calculated by four different error
+norms:
+\EQ{L_2:\quad J=\sqrt{\sum_{i=1}^{N_{experiments}}\ABS{w_i\,o_i}^2},}
+{EqObjectiveFunctionLII}
+\EQ{L_\infty:\quad J=\max_{i=1}^{N_{experiments}}\ABS{w_i\,o_i},}
+{EqObjectiveFunctionLi}
+\EQ{L_p:\quad J=\sqrt[p]{\sum_{i=1}^{N_{experiments}}\ABS{w_i\,o_i}^p},}
+{EqObjectiveFunctionLp}
+\EQ{L_1:\quad J=\sum_{i=1}^{N_{experiments}}\ABS{w_i\,o_i},}
+{EqObjectiveFunctionLI}
 with $w_i$ the weight associated to the $i$-th experiment, specified in the
 \emph{main input file}. Figure~\ref{FigStructure} is a sketch of the
 structure.
@@ -1037,14 +1058,15 @@ algorithms.
 	\psline{->}(220,65)(207,75)
 	\pscircle*(207,75){1}
 	\rput(207,81){$\vec{t}_3$}
-	\psline{->}(220,65)(236,68)
-	\pscircle*(236,68){1}
-	\rput(236,74){$\vec{t}_1$}
+	\psline{->}(220,65)(228,68)
+	\pscircle*(228,68){1}
+	\rput(228,74){$\vec{t}_1$}
 	\psline{->}(220,65)(212,49)
 	\pscircle*(212,49){1}
 	\rput(212,43){$\vec{t}_2$}
 }{(Left) coordinates descent and (right) random with $N_{estimates}=3$ gradient
-based method checks in a system with two variables.}{FigGradient}
+based method checks of variables combination in a system with two variables}
+{FigGradient}
 
 \section{Genetic method}
 

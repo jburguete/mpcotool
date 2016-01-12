@@ -3413,7 +3413,7 @@ window_about ()
               "parameters"),
      "authors", authors,
      "translator-credits", "Javier Burguete Tolosa <jburguete@eead.csic.es>",
-     "version", "1.5.1",
+     "version", "1.5.2",
      "copyright", "Copyright 2012-2016 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/mpcotool",
@@ -4561,6 +4561,7 @@ window_new ()
                                  GTK_FILE_CHOOSER_ACTION_OPEN);
   gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_simulator),
                                gettext ("Simulator program executable file"));
+  gtk_widget_set_hexpand (GTK_WIDGET (window->button_simulator), TRUE);
 
   // Creating the evaluator program label and entry
   window->check_evaluator = (GtkCheckButton *)
@@ -4612,6 +4613,7 @@ window_new ()
   gtk_widget_set_tooltip_text
     (GTK_WIDGET (window->spin_simulations),
      gettext ("Number of simulations to perform for each iteration"));
+  gtk_widget_set_hexpand (GTK_WIDGET (window->spin_simulations), TRUE);
   window->label_iterations = (GtkLabel *)
     gtk_label_new (gettext ("Iterations number"));
   window->spin_iterations
@@ -4620,6 +4622,7 @@ window_new ()
     (GTK_WIDGET (window->spin_iterations), gettext ("Number of iterations"));
   g_signal_connect
     (window->spin_iterations, "value-changed", window_update, NULL);
+  gtk_widget_set_hexpand (GTK_WIDGET (window->spin_iterations), TRUE);
   window->label_tolerance = (GtkLabel *) gtk_label_new (gettext ("Tolerance"));
   window->spin_tolerance
     = (GtkSpinButton *) gtk_spin_button_new_with_range (0., 1., 0.001);
@@ -4640,6 +4643,7 @@ window_new ()
   gtk_widget_set_tooltip_text
     (GTK_WIDGET (window->spin_population),
      gettext ("Number of population for the genetic algorithm"));
+  gtk_widget_set_hexpand (GTK_WIDGET (window->spin_population), TRUE);
   window->label_generations
     = (GtkLabel *) gtk_label_new (gettext ("Generations number"));
   window->spin_generations
@@ -4695,6 +4699,7 @@ window_new ()
   window->label_steps = (GtkLabel *) gtk_label_new (gettext ("Steps number"));
   window->spin_steps = (GtkSpinButton *)
     gtk_spin_button_new_with_range (1., 1.e12, 1.);
+  gtk_widget_set_hexpand (GTK_WIDGET (window->spin_steps), TRUE);
   window->label_estimates
     = (GtkLabel *) gtk_label_new (gettext ("Gradient estimates number"));
   window->spin_estimates = (GtkSpinButton *)
@@ -4824,6 +4829,7 @@ window_new ()
   window->entry_variable = (GtkEntry *) gtk_entry_new ();
   gtk_widget_set_tooltip_text
     (GTK_WIDGET (window->entry_variable), gettext ("Variable name"));
+  gtk_widget_set_hexpand (GTK_WIDGET (window->entry_variable), TRUE);
   window->id_variable_label = g_signal_connect
     (window->entry_variable, "changed", window_label_variable, NULL);
   window->label_min = (GtkLabel *) gtk_label_new (gettext ("Minimum"));
@@ -4993,6 +4999,7 @@ window_new ()
   window->id_experiment_name
     = g_signal_connect (window->button_experiment, "selection-changed",
                         window_name_experiment, NULL);
+  gtk_widget_set_hexpand (GTK_WIDGET (window->button_experiment), TRUE);
   window->label_weight = (GtkLabel *) gtk_label_new (gettext ("Weight"));
   window->spin_weight
     = (GtkSpinButton *) gtk_spin_button_new_with_range (0., 1., 0.001);

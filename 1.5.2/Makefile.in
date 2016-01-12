@@ -168,7 +168,8 @@ $(M2): $(MDIR)manual-de-usuario.tex $(MDIR)bib.bib \
 
 $(MDIR)reference-manual.pdf: mpcotool README.md Doxyfile
 	doxygen
-	cd latex; make; mv refman.pdf ../$(MDIR)reference-manual.pdf
+	cd latex; sed -i 's/∞//g' *.tex; make; \
+		mv refman.pdf ../$(MDIR)reference-manual.pdf
 
 BIN = @PREFIX@/bin/
 DLL = $(BIN)libatk-1.0-0.dll\

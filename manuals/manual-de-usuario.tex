@@ -266,8 +266,10 @@ representada en la figura~\ref{FigMainFile}.
 	\rput(105,0){nsteps}
 	\rput(135,0){nestimates}
 	\rput(170,0){relaxation}
-	\rput(200,0){result}
-	\rput(230,0){variables}
+	\rput(200,0){norm}
+	\rput(217,0){p}
+	\rput(235,0){result}
+	\rput(260,0){variables}
 	\psline(20,-5)(20,-15)(40,-15)
 	\psframe(40,-20)(280,-10)
 	\psline(80,-20)(80,-10)
@@ -390,6 +392,21 @@ Las propiedades que se pueden definir son:
 		\item[step]: tamaño de paso inicial para el método basado en el
 			gradiente.
 	\end{description}
+	\item[norm]: selecciona la norma de error (valor por defecto:
+		``euclidian''). Actualmente se pueden escoger cuatro tipos:
+		\begin{description}
+			\item[euclidian]: norma de error euclidiana $L_2$, véase
+				(\ref{EqObjectiveFunctionLII}),
+			\item[maximum]: norma de error máximo $L_\infty$, véase
+				(\ref{EqObjectiveFunctionLi}),
+			\item[p]: norma de error P $L_p$. Requiere:
+			\begin{description}
+				\item[p]: exponente de la norma de error P, véase
+					(\ref{EqObjectiveFunctionLp}),
+			\end{description}
+			\item[taxicab]: norma de error taxicab $L_1$, véase
+				(\ref{EqObjectiveFunctionLI}),
+		\end{description}
 	\item[result]: define el nombre del fichero de resultados óptimos. Es
 		opcional, si no se especifica se guarda con el nombre ``\emph{result}''.
 	\item[variables]: define el nombre del fichero donde se guardan todas
@@ -405,7 +422,8 @@ propiedades:
 	\item[templateX]: $X$-ésima plantilla del fichero de datos experimentales
 		del programa de simulación.
 	\item[weight]: peso (valor por defecto: 1) para aplicar en la función
-		objetivo (véase (\ref{EqObjectiveFunction})).
+		objetivo (véase (\ref{EqObjectiveFunctionLII}) a
+		(\ref{EqObjectiveFunctionLI})).
 \end{description}
 
 El segundo tipo de nodos XML hijo tiene que comenzar con la etiqueta
@@ -497,23 +515,26 @@ También contiene los valores extremos de los parámetros empíricos y el algori
 de optimización escogido. Entonces MPCOTool lee las corespondientes
 $N_{experimentos}\times N_{entradas}$ plantillas para crear los ficheros de
 entrada del simulador reemplazando etiquetas clave por los parámetros empíricos
-generados por el algoritmo de optimización. Has dos opciones: o bien el programa
+generados por el algoritmo de optimización. Hay dos opciones: o bien el programa
 simulador compara directamente los resultados de la simulación con el
-\emph{fichero de datos experimantales} y genera un fichero con el valor de la
+\emph{fichero de datos experimentales} y genera un fichero con el valor de la
 función objetivo; o bien otro programa externo, definido en la propiedad
 \emph{evaluator}, es ejecutado para comparar con el \emph{fichero de datos
 experimentales} produciendo el valor de la función objetivo. En ambos casos el
 valor de la función objetivo se guarda en un \emph{fichero de valores
 objetivos}. Por lo tanto, para cada experimento se obtiene un valor objetivo
-$o_i$. El valor final de la función objetivo asociado al conjunto de
-experimentos es calculado como:
-\EQ
-{
-	J=\sqrt{\frac{1}{N_{experimentos}}
-	\,\sum_{i=1}^{N_{experimentos}}\ABS{w_i\,o_i}^2},
-}{EqObjectiveFunction}
+$o_i$. El valor final de la función objetivo ($J$) asociado al conjunto de
+experimentos puede calcularse de cuatro modos:
+\EQ{L_2:\quad J=\sqrt{\sum_{i=1}^{N_{experiments}}\ABS{w_i\,o_i}^2},}
+{EqObjectiveFunctionLII}
+\EQ{L_\infty:\quad J=\max_{i=1}^{N_{experiments}}\ABS{w_i\,o_i},}
+{EqObjectiveFunctionLi}
+\EQ{L_p:\quad J=\sqrt[p]{\sum_{i=1}^{N_{experiments}}\ABS{w_i\,o_i}^p},}
+{EqObjectiveFunctionLp}
+\EQ{L_1:\quad J=\sum_{i=1}^{N_{experiments}}\ABS{w_i\,o_i},}
+{EqObjectiveFunctionLI}
 con $w_i$ el peso asociado al experimento $i$-ésimo, que se especifica en el
-\emph{ficero de entrada principal}. En la figura~\ref{FigStructure} puede verse
+\emph{fichero de entrada principal}. En la figura~\ref{FigStructure} puede verse
 un esquema de la estructura.
 \psset{xunit=0.4mm,yunit=0.4mm}
 \PSPICTURE{-20}{-95}{280}{55}

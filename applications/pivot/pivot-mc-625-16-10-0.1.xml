@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<calibrate simulator="pivot" evaluator="compare" nsimulations="625"
-	niterations="16" nbest="10" tolerance="0.1">
+<calibrate algorithm="Monte-Carlo" simulator="pivot" evaluator="compare"
+	nsimulations="625" niterations="16" nbest="10" tolerance="0.1">
 	<experiment name="Velocidad-Frecuencia-27,48.txt" template1="template1.js"/>
 	<experiment name="Velocidad-Frecuencia-42.txt" template1="template2.js"/>
 	<experiment name="Velocidad-Frecuencia-52.txt" template1="template3.js"/>
