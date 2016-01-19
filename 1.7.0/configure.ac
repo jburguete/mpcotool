@@ -1,5 +1,5 @@
 AC_PREREQ([2.67])
-AC_INIT([mpcotool], [1.5.3], [https://github.com/jburguete/mpcotool])
+AC_INIT([mpcotool], [1.7.0], [https://github.com/jburguete/mpcotool])
 
 # Checks for operative systems
 AC_CANONICAL_SYSTEM

@@ -63,7 +63,7 @@ typedef struct
   double rangeminabs;           ///< Minimum allowed value.
   double rangemaxabs;           ///< Maximum allowed value.
   double step;
-  ///< Initial step size for the gradient based method.
+  ///< Initial step size for the direction search method.
   unsigned int precision;       ///< Precision digits.
   unsigned int nsweeps;         ///< Sweeps number of the sweep algorithm.
   unsigned int nbits;           ///< Bits number of the genetic algorithm.
@@ -83,8 +83,8 @@ typedef struct
   ///< Pseudo-random numbers generator seed GtkSpinButton.
   GtkLabel *label_threads;      ///< Threads number GtkLabel.
   GtkSpinButton *spin_threads;  ///< Threads number GtkSpinButton.
-  GtkLabel *label_gradient;     ///< Gradient threads number GtkLabel.
-  GtkSpinButton *spin_gradient; ///< Gradient threads number GtkSpinButton.
+  GtkLabel *label_direction;     ///< Direction threads number GtkLabel.
+  GtkSpinButton *spin_direction; ///< Direction threads number GtkSpinButton.
 } Options;
 
 /**
@@ -130,7 +130,8 @@ typedef struct
   ///< Array of GtkButtons to set the error norm.
   GtkLabel *label_p;            ///< GtkLabel to set the p parameter.
   GtkSpinButton *spin_p;        ///< GtkSpinButton to set the p parameter.
-  GtkScrolledWindow *scrolled_p;///< GtkScrolledWindow to set the p parameter.
+  GtkScrolledWindow *scrolled_p;
+  ///< GtkScrolledWindow to set the p parameter.
   GtkFrame *frame_algorithm;    ///< GtkFrame to set the algorithm.
   GtkGrid *grid_algorithm;      ///< GtkGrid to set the algorithm.
   GtkRadioButton *button_algorithm[NALGORITHMS];
@@ -159,12 +160,12 @@ typedef struct
   GtkLabel *label_adaptation;   ///< GtkLabel to set the adaptation ratio.
   GtkSpinButton *spin_adaptation;
   ///< GtkSpinButton to set the adaptation ratio.
-  GtkCheckButton *check_gradient;
-  ///< GtkCheckButton to check running the gradient based method.
-  GtkGrid *grid_gradient;
-  ///< GtkGrid to pack the gradient based method widgets.
-  GtkRadioButton *button_gradient[NGRADIENTS];
-  ///< GtkRadioButtons array to set the gradient estimate method.
+  GtkCheckButton *check_direction;
+  ///< GtkCheckButton to check running the direction search method.
+  GtkGrid *grid_direction;
+  ///< GtkGrid to pack the direction search method widgets.
+  GtkRadioButton *button_direction[NDIRECTIONS];
+  ///< GtkRadioButtons array to set the direction estimate method.
   GtkLabel *label_steps;        ///< GtkLabel to set the steps number.
   GtkSpinButton *spin_steps;    ///< GtkSpinButton to set the steps number.
   GtkLabel *label_estimates;    ///< GtkLabel to set the estimates number.
@@ -239,13 +240,13 @@ void input_save (char *filename);
 void options_new ();
 void running_new ();
 unsigned int window_get_algorithm ();
-unsigned int window_get_gradient ();
+unsigned int window_get_direction ();
 unsigned int window_get_norm ();
-void window_save_gradient ();
+void window_save_direction ();
 int window_save ();
 void window_run ();
 void window_help ();
-void window_update_gradient ();
+void window_update_direction ();
 void window_update ();
 void window_set_algorithm ();
 void window_set_experiment ();

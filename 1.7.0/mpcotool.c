@@ -91,14 +91,14 @@ OF SUCH DAMAGE.
 
 int ntasks;                     ///< Number of tasks.
 unsigned int nthreads;          ///< Number of threads.
-unsigned int nthreads_gradient;
-  ///< Number of threads for the gradient based method.
+unsigned int nthreads_direction;
+  ///< Number of threads for the direction search method.
 GMutex mutex[1];                ///< Mutex struct.
 void (*calibrate_algorithm) ();
   ///< Pointer to the function to perform a calibration algorithm step.
-double (*calibrate_estimate_gradient) (unsigned int variable,
-                                       unsigned int estimate);
-  ///< Pointer to the function to estimate the gradient.
+double (*calibrate_estimate_direction) (unsigned int variable,
+                                        unsigned int estimate);
+  ///< Pointer to the function to estimate the direction.
 double (*calibrate_norm) (unsigned int simulation);
   ///< Pointer to the error norm function.
 Input input[1];
@@ -505,8 +505,7 @@ input_new ()
   fprintf (stderr, "input_new: start\n");
 #endif
   input->nvariables = input->nexperiments = input->ninputs = input->nsteps = 0;
-  input->simulator = input->evaluator = input->directory = input->name
-    = input->result = input->variables = NULL;
+  input->simulator = input->evaluator = input->directory = input->name = NULL;
   input->experiment = input->label = NULL;
   input->precision = input->nsweeps = input->nbits = NULL;
   input->rangemin = input->rangemax = input->rangeminabs = input->rangemaxabs
@@ -613,13 +612,19 @@ input_open (char *filename)
       goto exit_on_error;
     }
 
-  // Getting results file names
-  input->result = (char *) xmlGetProp (node, XML_RESULT);
+  // Getting result and variables file names
   if (!input->result)
-    input->result = (char *) xmlStrdup (result_name);
-  input->variables = (char *) xmlGetProp (node, XML_VARIABLES);
+    {
+      input->result = (char *) xmlGetProp (node, XML_RESULT);
+      if (!input->result)
+        input->result = (char *) xmlStrdup (result_name);
+    }
   if (!input->variables)
-    input->variables = (char *) xmlStrdup (variables_name);
+    {
+      input->variables = (char *) xmlGetProp (node, XML_VARIABLES);
+      if (!input->variables)
+        input->variables = (char *) xmlStrdup (variables_name);
+    }
 
   // Opening simulator program name
   input->simulator = (char *) xmlGetProp (node, XML_SIMULATOR);
@@ -804,7 +809,7 @@ input_open (char *filename)
           goto exit_on_error;
         }
 
-      // Getting gradient method parameters
+      // Getting direction search method parameters
       if (xmlHasProp (node, XML_NSTEPS))
         {
           input->nsteps = xml_node_get_uint (node, XML_NSTEPS, &error_code);
@@ -813,12 +818,12 @@ input_open (char *filename)
               msg = gettext ("Invalid steps number");
               goto exit_on_error;
             }
-          buffer = xmlGetProp (node, XML_GRADIENT_METHOD);
+          buffer = xmlGetProp (node, XML_DIRECTION);
           if (!xmlStrcmp (buffer, XML_COORDINATES))
-            input->gradient_method = GRADIENT_METHOD_COORDINATES;
+            input->direction = DIRECTION_METHOD_COORDINATES;
           else if (!xmlStrcmp (buffer, XML_RANDOM))
             {
-              input->gradient_method = GRADIENT_METHOD_RANDOM;
+              input->direction = DIRECTION_METHOD_RANDOM;
               input->nestimates
                 = xml_node_get_uint (node, XML_NESTIMATES, &error_code);
               if (error_code || !input->nestimates)
@@ -829,7 +834,7 @@ input_open (char *filename)
             }
           else
             {
-              msg = gettext ("Unknown method to estimate the gradient");
+              msg = gettext ("Unknown method to estimate the direction search");
               goto exit_on_error;
             }
           xmlFree (buffer);
@@ -1907,21 +1912,21 @@ calibrate_MonteCarlo ()
 }
 
 /**
- * \fn void calibrate_best_gradient (unsigned int simulation, \
+ * \fn void calibrate_best_direction (unsigned int simulation, \
  *   double value)
- * \brief Function to save the best simulation in a gradient based method.
+ * \brief Function to save the best simulation in a direction search method.
  * \param simulation
  * \brief Simulation number.
  * \param value
  * \brief Objective function value.
  */
 void
-calibrate_best_gradient (unsigned int simulation, double value)
+calibrate_best_direction (unsigned int simulation, double value)
 {
 #if DEBUG
-  fprintf (stderr, "calibrate_best_gradient: start\n");
+  fprintf (stderr, "calibrate_best_direction: start\n");
   fprintf (stderr,
-           "calibrate_best_gradient: simulation=%u value=%.14le best=%.14le\n",
+           "calibrate_best_direction: simulation=%u value=%.14le best=%.14le\n",
            simulation, value, calibrate->error_best[0]);
 #endif
   if (value < calibrate->error_best[0])
@@ -1930,133 +1935,133 @@ calibrate_best_gradient (unsigned int simulation, double value)
       calibrate->simulation_best[0] = simulation;
 #if DEBUG
       fprintf (stderr,
-               "calibrate_best_gradient: BEST simulation=%u value=%.14le\n",
+               "calibrate_best_direction: BEST simulation=%u value=%.14le\n",
                simulation, value);
 #endif
     }
 #if DEBUG
-  fprintf (stderr, "calibrate_best_gradient: end\n");
+  fprintf (stderr, "calibrate_best_direction: end\n");
 #endif
 }
 
 /**
- * \fn void calibrate_gradient_sequential (unsigned int simulation)
- * \brief Function to estimate the gradient sequentially.
+ * \fn void calibrate_direction_sequential (unsigned int simulation)
+ * \brief Function to estimate the direction search sequentially.
  * \param simulation
  * \brief Simulation number.
  */
 void
-calibrate_gradient_sequential (unsigned int simulation)
+calibrate_direction_sequential (unsigned int simulation)
 {
   unsigned int i, j;
   double e;
 #if DEBUG
-  fprintf (stderr, "calibrate_gradient_sequential: start\n");
-  fprintf (stderr, "calibrate_gradient_sequential: nstart_gradient=%u "
-           "nend_gradient=%u\n",
-           calibrate->nstart_gradient, calibrate->nend_gradient);
+  fprintf (stderr, "calibrate_direction_sequential: start\n");
+  fprintf (stderr, "calibrate_direction_sequential: nstart_direction=%u "
+           "nend_direction=%u\n",
+           calibrate->nstart_direction, calibrate->nend_direction);
 #endif
-  for (i = calibrate->nstart_gradient; i < calibrate->nend_gradient; ++i)
+  for (i = calibrate->nstart_direction; i < calibrate->nend_direction; ++i)
     {
       j = simulation + i;
       e = calibrate_norm (j);
-      calibrate_best_gradient (j, e);
+      calibrate_best_direction (j, e);
       calibrate_save_variables (j, e);
 #if DEBUG
-      fprintf (stderr, "calibrate_gradient_sequential: i=%u e=%lg\n", i, e);
+      fprintf (stderr, "calibrate_direction_sequential: i=%u e=%lg\n", i, e);
 #endif
     }
 #if DEBUG
-  fprintf (stderr, "calibrate_gradient_sequential: end\n");
+  fprintf (stderr, "calibrate_direction_sequential: end\n");
 #endif
 }
 
 /**
- * \fn void* calibrate_gradient_thread (ParallelData *data)
- * \brief Function to estimate the gradient on a thread.
+ * \fn void* calibrate_direction_thread (ParallelData *data)
+ * \brief Function to estimate the direction search on a thread.
  * \param data
  * \brief Function data.
  * \return NULL
  */
 void *
-calibrate_gradient_thread (ParallelData * data)
+calibrate_direction_thread (ParallelData * data)
 {
   unsigned int i, thread;
   double e;
 #if DEBUG
-  fprintf (stderr, "calibrate_gradient_thread: start\n");
+  fprintf (stderr, "calibrate_direction_thread: start\n");
 #endif
   thread = data->thread;
 #if DEBUG
-  fprintf (stderr, "calibrate_gradient_thread: thread=%u start=%u end=%u\n",
+  fprintf (stderr, "calibrate_direction_thread: thread=%u start=%u end=%u\n",
            thread,
-           calibrate->thread_gradient[thread],
-           calibrate->thread_gradient[thread + 1]);
+           calibrate->thread_direction[thread],
+           calibrate->thread_direction[thread + 1]);
 #endif
-  for (i = calibrate->thread_gradient[thread];
-       i < calibrate->thread_gradient[thread + 1]; ++i)
+  for (i = calibrate->thread_direction[thread];
+       i < calibrate->thread_direction[thread + 1]; ++i)
     {
       e = calibrate_norm (i);
       g_mutex_lock (mutex);
-      calibrate_best_gradient (i, e);
+      calibrate_best_direction (i, e);
       calibrate_save_variables (i, e);
       g_mutex_unlock (mutex);
 #if DEBUG
-      fprintf (stderr, "calibrate_gradient_thread: i=%u e=%lg\n", i, e);
+      fprintf (stderr, "calibrate_direction_thread: i=%u e=%lg\n", i, e);
 #endif
     }
 #if DEBUG
-  fprintf (stderr, "calibrate_gradient_thread: end\n");
+  fprintf (stderr, "calibrate_direction_thread: end\n");
 #endif
   g_thread_exit (NULL);
   return NULL;
 }
 
 /**
- * \fn double calibrate_estimate_gradient_random (unsigned int variable, \
+ * \fn double calibrate_estimate_direction_random (unsigned int variable, \
  *   unsigned int estimate)
- * \brief Function to estimate a component of the gradient vector.
+ * \brief Function to estimate a component of the direction search vector.
  * \param variable
  * \brief Variable number.
  * \param estimate
  * \brief Estimate number.
  */
 double
-calibrate_estimate_gradient_random (unsigned int variable,
-                                    unsigned int estimate)
+calibrate_estimate_direction_random (unsigned int variable,
+                                     unsigned int estimate)
 {
   double x;
 #if DEBUG
-  fprintf (stderr, "calibrate_estimate_gradient_random: start\n");
+  fprintf (stderr, "calibrate_estimate_direction_random: start\n");
 #endif
-  x = calibrate->gradient[variable]
+  x = calibrate->direction[variable]
     + (1. - 2. * gsl_rng_uniform (calibrate->rng)) * calibrate->step[variable];
 #if DEBUG
-  fprintf (stderr, "calibrate_estimate_gradient_random: gradient%u=%lg\n",
+  fprintf (stderr, "calibrate_estimate_direction_random: direction%u=%lg\n",
            variable, x);
-  fprintf (stderr, "calibrate_estimate_gradient_random: end\n");
+  fprintf (stderr, "calibrate_estimate_direction_random: end\n");
 #endif
   return x;
 }
 
 /**
- * \fn double calibrate_estimate_gradient_coordinates (unsigned int variable, \
+ * \fn double calibrate_estimate_direction_coordinates (unsigned int variable, \
  *   unsigned int estimate)
- * \brief Function to estimate a component of the gradient vector.
+ * \brief Function to estimate a component of the direction search vector.
  * \param variable
  * \brief Variable number.
  * \param estimate
  * \brief Estimate number.
  */
 double
-calibrate_estimate_gradient_coordinates (unsigned int variable,
-                                         unsigned int estimate)
+calibrate_estimate_direction_coordinates (unsigned int variable,
+                                          unsigned int estimate)
 {
   double x;
 #if DEBUG
-  fprintf (stderr, "calibrate_estimate_gradient_coordinates: start\n");
+  fprintf (stderr, "calibrate_estimate_direction_coordinates: start\n");
 #endif
-  x = calibrate->gradient[variable];
+  x = calibrate->direction[variable];
   if (estimate >= (2 * variable) && estimate < (2 * variable + 2))
     {
       if (estimate & 1)
@@ -2065,111 +2070,112 @@ calibrate_estimate_gradient_coordinates (unsigned int variable,
         x -= calibrate->step[variable];
     }
 #if DEBUG
-  fprintf (stderr, "calibrate_estimate_gradient_coordinates: gradient%u=%lg\n",
+  fprintf (stderr,
+		   "calibrate_estimate_direction_coordinates: direction%u=%lg\n",
            variable, x);
-  fprintf (stderr, "calibrate_estimate_gradient_coordinates: end\n");
+  fprintf (stderr, "calibrate_estimate_direction_coordinates: end\n");
 #endif
   return x;
 }
 
 /**
- * \fn void calibrate_step_gradient (unsigned int simulation)
- * \brief Function to do a step of the gradient based method.
+ * \fn void calibrate_step_direction (unsigned int simulation)
+ * \brief Function to do a step of the direction search method.
  * \param simulation
  * \brief Simulation number.
  */
 void
-calibrate_step_gradient (unsigned int simulation)
+calibrate_step_direction (unsigned int simulation)
 {
-  GThread *thread[nthreads_gradient];
-  ParallelData data[nthreads_gradient];
+  GThread *thread[nthreads_direction];
+  ParallelData data[nthreads_direction];
   unsigned int i, j, k, b;
 #if DEBUG
-  fprintf (stderr, "calibrate_step_gradient: start\n");
+  fprintf (stderr, "calibrate_step_direction: start\n");
 #endif
   for (i = 0; i < calibrate->nestimates; ++i)
     {
       k = (simulation + i) * calibrate->nvariables;
       b = calibrate->simulation_best[0] * calibrate->nvariables;
 #if DEBUG
-      fprintf (stderr, "calibrate_step_gradient: simulation=%u best=%u\n",
+      fprintf (stderr, "calibrate_step_direction: simulation=%u best=%u\n",
                simulation + i, calibrate->simulation_best[0]);
 #endif
       for (j = 0; j < calibrate->nvariables; ++j, ++k, ++b)
         {
 #if DEBUG
           fprintf (stderr,
-                   "calibrate_step_gradient: estimate=%u best%u=%.14le\n",
+                   "calibrate_step_direction: estimate=%u best%u=%.14le\n",
                    i, j, calibrate->value[b]);
 #endif
           calibrate->value[k]
-            = calibrate->value[b] + calibrate_estimate_gradient (j, i);
+            = calibrate->value[b] + calibrate_estimate_direction (j, i);
           calibrate->value[k] = fmin (fmax (calibrate->value[k],
                                             calibrate->rangeminabs[j]),
                                       calibrate->rangemaxabs[j]);
 #if DEBUG
           fprintf (stderr,
-                   "calibrate_step_gradient: estimate=%u variable%u=%.14le\n",
+                   "calibrate_step_direction: estimate=%u variable%u=%.14le\n",
                    i, j, calibrate->value[k]);
 #endif
         }
     }
-  if (nthreads_gradient == 1)
-    calibrate_gradient_sequential (simulation);
+  if (nthreads_direction == 1)
+    calibrate_direction_sequential (simulation);
   else
     {
-      for (i = 0; i <= nthreads_gradient; ++i)
+      for (i = 0; i <= nthreads_direction; ++i)
         {
-          calibrate->thread_gradient[i]
-            = simulation + calibrate->nstart_gradient
-            + i * (calibrate->nend_gradient - calibrate->nstart_gradient)
-            / nthreads_gradient;
+          calibrate->thread_direction[i]
+            = simulation + calibrate->nstart_direction
+            + i * (calibrate->nend_direction - calibrate->nstart_direction)
+            / nthreads_direction;
 #if DEBUG
           fprintf (stderr,
-                   "calibrate_step_gradient: i=%u thread_gradient=%u\n",
-                   i, calibrate->thread_gradient[i]);
+                   "calibrate_step_direction: i=%u thread_direction=%u\n",
+                   i, calibrate->thread_direction[i]);
 #endif
         }
-      for (i = 0; i < nthreads_gradient; ++i)
+      for (i = 0; i < nthreads_direction; ++i)
         {
           data[i].thread = i;
           thread[i] = g_thread_new
-            (NULL, (void (*)) calibrate_gradient_thread, &data[i]);
+            (NULL, (void (*)) calibrate_direction_thread, &data[i]);
         }
-      for (i = 0; i < nthreads_gradient; ++i)
+      for (i = 0; i < nthreads_direction; ++i)
         g_thread_join (thread[i]);
     }
 #if DEBUG
-  fprintf (stderr, "calibrate_step_gradient: end\n");
+  fprintf (stderr, "calibrate_step_direction: end\n");
 #endif
 }
 
 /**
- * \fn void calibrate_gradient ()
- * \brief Function to calibrate with a gradient based method.
+ * \fn void calibrate_direction ()
+ * \brief Function to calibrate with a direction search method.
  */
 void
-calibrate_gradient ()
+calibrate_direction ()
 {
   unsigned int i, j, k, b, s, adjust;
 #if DEBUG
-  fprintf (stderr, "calibrate_gradient: start\n");
+  fprintf (stderr, "calibrate_direction: start\n");
 #endif
   for (i = 0; i < calibrate->nvariables; ++i)
-    calibrate->gradient[i] = 0.;
+    calibrate->direction[i] = 0.;
   b = calibrate->simulation_best[0] * calibrate->nvariables;
   s = calibrate->nsimulations;
   adjust = 1;
   for (i = 0; i < calibrate->nsteps; ++i, s += calibrate->nestimates, b = k)
     {
 #if DEBUG
-      fprintf (stderr, "calibrate_gradient: step=%u old_best=%u\n",
+      fprintf (stderr, "calibrate_direction: step=%u old_best=%u\n",
                i, calibrate->simulation_best[0]);
 #endif
-      calibrate_step_gradient (s);
+      calibrate_step_direction (s);
       k = calibrate->simulation_best[0] * calibrate->nvariables;
 #if DEBUG
-      fprintf (stderr, "calibrate_gradient: step=%u best=%u\n",
+      fprintf (stderr, "calibrate_direction: step=%u best=%u\n",
                i, calibrate->simulation_best[0]);
 #endif
       if (k == b)
@@ -2178,7 +2184,7 @@ calibrate_gradient ()
             for (j = 0; j < calibrate->nvariables; ++j)
               calibrate->step[j] *= 0.5;
           for (j = 0; j < calibrate->nvariables; ++j)
-            calibrate->gradient[j] = 0.;
+            calibrate->direction[j] = 0.;
           adjust = 1;
         }
       else
@@ -2187,23 +2193,23 @@ calibrate_gradient ()
             {
 #if DEBUG
               fprintf (stderr,
-                       "calibrate_gradient: best%u=%.14le old%u=%.14le\n",
+                       "calibrate_direction: best%u=%.14le old%u=%.14le\n",
                        j, calibrate->value[k + j], j, calibrate->value[b + j]);
 #endif
-              calibrate->gradient[j]
-                = (1. - calibrate->relaxation) * calibrate->gradient[j]
+              calibrate->direction[j]
+                = (1. - calibrate->relaxation) * calibrate->direction[j]
                 + calibrate->relaxation
                 * (calibrate->value[k + j] - calibrate->value[b + j]);
 #if DEBUG
-              fprintf (stderr, "calibrate_gradient: gradient%u=%.14le\n",
-                       j, calibrate->gradient[j]);
+              fprintf (stderr, "calibrate_direction: direction%u=%.14le\n",
+                       j, calibrate->direction[j]);
 #endif
             }
           adjust = 0;
         }
     }
 #if DEBUG
-  fprintf (stderr, "calibrate_gradient: end\n");
+  fprintf (stderr, "calibrate_direction: end\n");
 #endif
 }
 
@@ -2471,7 +2477,7 @@ calibrate_step ()
 #endif
   calibrate_algorithm ();
   if (calibrate->nsteps)
-    calibrate_gradient ();
+    calibrate_direction ();
 #if DEBUG
   fprintf (stderr, "calibrate_step: end\n");
 #endif
@@ -2607,17 +2613,17 @@ calibrate_open ()
   calibrate->nestimates = 0;
   if (input->nsteps)
     {
-      calibrate->gradient_method = input->gradient_method;
       calibrate->relaxation = input->relaxation;
-      switch (input->gradient_method)
+      switch (input->direction)
         {
-        case GRADIENT_METHOD_COORDINATES:
+        case DIRECTION_METHOD_COORDINATES:
           calibrate->nestimates = 2 * calibrate->nvariables;
-          calibrate_estimate_gradient = calibrate_estimate_gradient_coordinates;
+          calibrate_estimate_direction
+			= calibrate_estimate_direction_coordinates;
           break;
         default:
           calibrate->nestimates = input->nestimates;
-          calibrate_estimate_gradient = calibrate_estimate_gradient_random;
+          calibrate_estimate_direction = calibrate_estimate_direction_random;
         }
     }
 
@@ -2697,7 +2703,7 @@ calibrate_open ()
         }
     }
   if (calibrate->nsteps)
-    calibrate->gradient
+    calibrate->direction
       = (double *) alloca (calibrate->nvariables * sizeof (double));
 
   // Setting error norm
@@ -2758,9 +2764,9 @@ calibrate_open ()
     = (1 + calibrate->mpi_rank) * calibrate->nsimulations / ntasks;
   if (calibrate->nsteps)
     {
-      calibrate->nstart_gradient
+      calibrate->nstart_direction
         = calibrate->mpi_rank * calibrate->nestimates / ntasks;
-      calibrate->nend_gradient
+      calibrate->nend_direction
         = (1 + calibrate->mpi_rank) * calibrate->nestimates / ntasks;
     }
 #else
@@ -2768,8 +2774,8 @@ calibrate_open ()
   calibrate->nend = calibrate->nsimulations;
   if (calibrate->nsteps)
     {
-      calibrate->nstart_gradient = 0;
-      calibrate->nend_gradient = calibrate->nestimates;
+      calibrate->nstart_direction = 0;
+      calibrate->nend_direction = calibrate->nestimates;
     }
 #endif
 #if DEBUG
@@ -2790,8 +2796,8 @@ calibrate_open ()
 #endif
     }
   if (calibrate->nsteps)
-    calibrate->thread_gradient = (unsigned int *)
-      alloca ((1 + nthreads_gradient) * sizeof (unsigned int));
+    calibrate->thread_direction = (unsigned int *)
+      alloca ((1 + nthreads_direction) * sizeof (unsigned int));
 
   // Opening result files
   calibrate->file_result = g_fopen (calibrate->result, "w");
@@ -2833,34 +2839,34 @@ calibrate_open ()
 #if HAVE_GTK
 
 /**
- * \fn void input_save_gradient (xmlNode *node)
- * \brief Function to save the gradient based method data in a XML node.
+ * \fn void input_save_direction (xmlNode *node)
+ * \brief Function to save the direction search method data in a XML node.
  * \param node
  * \brief XML node.
  */
 void
-input_save_gradient (xmlNode * node)
+input_save_direction (xmlNode * node)
 {
 #if DEBUG
-  fprintf (stderr, "input_save_gradient: start\n");
+  fprintf (stderr, "input_save_direction: start\n");
 #endif
   if (input->nsteps)
     {
       xml_node_set_uint (node, XML_NSTEPS, input->nsteps);
       if (input->relaxation != DEFAULT_RELAXATION)
         xml_node_set_float (node, XML_RELAXATION, input->relaxation);
-      switch (input->gradient_method)
+      switch (input->direction)
         {
-        case GRADIENT_METHOD_COORDINATES:
-          xmlSetProp (node, XML_GRADIENT_METHOD, XML_COORDINATES);
+        case DIRECTION_METHOD_COORDINATES:
+          xmlSetProp (node, XML_DIRECTION, XML_COORDINATES);
           break;
         default:
-          xmlSetProp (node, XML_GRADIENT_METHOD, XML_RANDOM);
+          xmlSetProp (node, XML_DIRECTION, XML_RANDOM);
           xml_node_set_uint (node, XML_NESTIMATES, input->nestimates);
         }
     }
 #if DEBUG
-  fprintf (stderr, "input_save_gradient: end\n");
+  fprintf (stderr, "input_save_direction: end\n");
 #endif
 }
 
@@ -2931,7 +2937,7 @@ input_save (char *filename)
       xmlSetProp (node, XML_TOLERANCE, (xmlChar *) buffer);
       snprintf (buffer, 64, "%u", input->nbest);
       xmlSetProp (node, XML_NBEST, (xmlChar *) buffer);
-      input_save_gradient (node);
+      input_save_direction (node);
       break;
     case ALGORITHM_SWEEP:
       xmlSetProp (node, XML_ALGORITHM, XML_SWEEP);
@@ -2941,7 +2947,7 @@ input_save (char *filename)
       xmlSetProp (node, XML_TOLERANCE, (xmlChar *) buffer);
       snprintf (buffer, 64, "%u", input->nbest);
       xmlSetProp (node, XML_NBEST, (xmlChar *) buffer);
-      input_save_gradient (node);
+      input_save_direction (node);
       break;
     default:
       xmlSetProp (node, XML_ALGORITHM, XML_GENETIC);
@@ -3043,16 +3049,16 @@ options_new ()
      gettext ("Number of threads to perform the calibration/optimization for "
               "the stochastic algorithm"));
   gtk_spin_button_set_value (options->spin_threads, (gdouble) nthreads);
-  options->label_gradient = (GtkLabel *)
-    gtk_label_new (gettext ("Threads number for the gradient based method"));
-  options->spin_gradient
+  options->label_direction = (GtkLabel *)
+    gtk_label_new (gettext ("Threads number for the direction search method"));
+  options->spin_direction
     = (GtkSpinButton *) gtk_spin_button_new_with_range (1., 64., 1.);
   gtk_widget_set_tooltip_text
-    (GTK_WIDGET (options->spin_gradient),
+    (GTK_WIDGET (options->spin_direction),
      gettext ("Number of threads to perform the calibration/optimization for "
-              "the gradient based method"));
-  gtk_spin_button_set_value (options->spin_gradient,
-                             (gdouble) nthreads_gradient);
+              "the direction search method"));
+  gtk_spin_button_set_value (options->spin_direction,
+                             (gdouble) nthreads_direction);
   options->grid = (GtkGrid *) gtk_grid_new ();
   gtk_grid_attach (options->grid, GTK_WIDGET (options->label_seed), 0, 0, 1, 1);
   gtk_grid_attach (options->grid, GTK_WIDGET (options->spin_seed), 1, 0, 1, 1);
@@ -3060,9 +3066,9 @@ options_new ()
                    0, 1, 1, 1);
   gtk_grid_attach (options->grid, GTK_WIDGET (options->spin_threads),
                    1, 1, 1, 1);
-  gtk_grid_attach (options->grid, GTK_WIDGET (options->label_gradient),
+  gtk_grid_attach (options->grid, GTK_WIDGET (options->label_direction),
                    0, 2, 1, 1);
-  gtk_grid_attach (options->grid, GTK_WIDGET (options->spin_gradient),
+  gtk_grid_attach (options->grid, GTK_WIDGET (options->spin_direction),
                    1, 2, 1, 1);
   gtk_widget_show_all (GTK_WIDGET (options->grid));
   options->dialog = (GtkDialog *)
@@ -3080,8 +3086,8 @@ options_new ()
       input->seed
         = (unsigned long int) gtk_spin_button_get_value (options->spin_seed);
       nthreads = gtk_spin_button_get_value_as_int (options->spin_threads);
-      nthreads_gradient
-        = gtk_spin_button_get_value_as_int (options->spin_gradient);
+      nthreads_direction
+        = gtk_spin_button_get_value_as_int (options->spin_direction);
     }
   gtk_widget_destroy (GTK_WIDGET (options->dialog));
 #if DEBUG
@@ -3133,29 +3139,29 @@ window_get_algorithm ()
 }
 
 /**
- * \fn unsigned int window_get_gradient ()
- * \brief Function to get the gradient base method number.
- * \return Gradient base method number.
+ * \fn unsigned int window_get_direction ()
+ * \brief Function to get the direction search method number.
+ * \return Direction search method number.
  */
 unsigned int
-window_get_gradient ()
+window_get_direction ()
 {
   unsigned int i;
 #if DEBUG
-  fprintf (stderr, "window_get_gradient: start\n");
+  fprintf (stderr, "window_get_direction: start\n");
 #endif
-  i = gtk_array_get_active (window->button_gradient ,NGRADIENTS);
+  i = gtk_array_get_active (window->button_direction, NDIRECTIONS);
 #if DEBUG
-  fprintf (stderr, "window_get_gradient: %u\n", i);
-  fprintf (stderr, "window_get_gradient: end\n");
+  fprintf (stderr, "window_get_direction: %u\n", i);
+  fprintf (stderr, "window_get_direction: end\n");
 #endif
   return i;
 }
 
 /**
  * \fn unsigned int window_get_norm ()
- * \brief Function to get the norm base method number.
- * \return Gradient base method number.
+ * \brief Function to get the norm method number.
+ * \return Norm method number.
  */
 unsigned int
 window_get_norm ()
@@ -3164,7 +3170,7 @@ window_get_norm ()
 #if DEBUG
   fprintf (stderr, "window_get_norm: start\n");
 #endif
-  i = gtk_array_get_active (window->button_norm ,NNORMS);
+  i = gtk_array_get_active (window->button_norm, NNORMS);
 #if DEBUG
   fprintf (stderr, "window_get_norm: %u\n", i);
   fprintf (stderr, "window_get_norm: end\n");
@@ -3173,26 +3179,27 @@ window_get_norm ()
 }
 
 /**
- * \fn void window_save_gradient ()
- * \brief Function to save the gradient based method data in the input file.
+ * \fn void window_save_direction ()
+ * \brief Function to save the direction search method data in the input file.
  */
 void
-window_save_gradient ()
+window_save_direction ()
 {
 #if DEBUG
-  fprintf (stderr, "window_save_gradient: start\n");
+  fprintf (stderr, "window_save_direction: start\n");
 #endif
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (window->check_gradient)))
+  if (gtk_toggle_button_get_active
+	  (GTK_TOGGLE_BUTTON (window->check_direction)))
     {
       input->nsteps = gtk_spin_button_get_value_as_int (window->spin_steps);
       input->relaxation = gtk_spin_button_get_value (window->spin_relaxation);
-      switch (window_get_gradient ())
+      switch (window_get_direction ())
         {
-        case GRADIENT_METHOD_COORDINATES:
-          input->gradient_method = GRADIENT_METHOD_COORDINATES;
+        case DIRECTION_METHOD_COORDINATES:
+          input->direction = DIRECTION_METHOD_COORDINATES;
           break;
         default:
-          input->gradient_method = GRADIENT_METHOD_RANDOM;
+          input->direction = DIRECTION_METHOD_RANDOM;
           input->nestimates
             = gtk_spin_button_get_value_as_int (window->spin_estimates);
         }
@@ -3200,7 +3207,7 @@ window_save_gradient ()
   else
     input->nsteps = 0;
 #if DEBUG
-  fprintf (stderr, "window_save_gradient: end\n");
+  fprintf (stderr, "window_save_direction: end\n");
 #endif
 }
 
@@ -3271,7 +3278,7 @@ window_save ()
             = gtk_spin_button_get_value_as_int (window->spin_iterations);
           input->tolerance = gtk_spin_button_get_value (window->spin_tolerance);
           input->nbest = gtk_spin_button_get_value_as_int (window->spin_bests);
-          window_save_gradient ();
+          window_save_direction ();
           break;
         case ALGORITHM_SWEEP:
           input->algorithm = ALGORITHM_SWEEP;
@@ -3279,7 +3286,7 @@ window_save ()
             = gtk_spin_button_get_value_as_int (window->spin_iterations);
           input->tolerance = gtk_spin_button_get_value (window->spin_tolerance);
           input->nbest = gtk_spin_button_get_value_as_int (window->spin_bests);
-          window_save_gradient ();
+          window_save_direction ();
           break;
         default:
           input->algorithm = ALGORITHM_GENETIC;
@@ -3295,8 +3302,8 @@ window_save ()
             = gtk_spin_button_get_value (window->spin_adaptation);
           break;
         }
-	  input->norm = window_get_norm ();
-	  input->p = gtk_spin_button_get_value (window->spin_p);
+      input->norm = window_get_norm ();
+      input->p = gtk_spin_button_get_value (window->spin_p);
 
       // Saving the XML file
       buffer = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dlg));
@@ -3413,7 +3420,7 @@ window_about ()
               "parameters"),
      "authors", authors,
      "translator-credits", "Javier Burguete Tolosa <jburguete@eead.csic.es>",
-     "version", "1.5.3",
+     "version", "1.7.0",
      "copyright", "Copyright 2012-2016 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/mpcotool",
@@ -3424,26 +3431,27 @@ window_about ()
 }
 
 /**
- * \fn void window_update_gradient ()
- * \brief Function to update gradient based method widgets view in the main
+ * \fn void window_update_direction ()
+ * \brief Function to update direction search method widgets view in the main
  *   window.
  */
 void
-window_update_gradient ()
+window_update_direction ()
 {
 #if DEBUG
-  fprintf (stderr, "window_update_gradient: start\n");
+  fprintf (stderr, "window_update_direction: start\n");
 #endif
-  gtk_widget_show (GTK_WIDGET (window->check_gradient));
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (window->check_gradient)))
+  gtk_widget_show (GTK_WIDGET (window->check_direction));
+  if (gtk_toggle_button_get_active
+	  (GTK_TOGGLE_BUTTON (window->check_direction)))
     {
-      gtk_widget_show (GTK_WIDGET (window->grid_gradient));
+      gtk_widget_show (GTK_WIDGET (window->grid_direction));
       gtk_widget_show (GTK_WIDGET (window->label_step));
       gtk_widget_show (GTK_WIDGET (window->spin_step));
     }
-  switch (window_get_gradient ())
+  switch (window_get_direction ())
     {
-    case GRADIENT_METHOD_COORDINATES:
+    case DIRECTION_METHOD_COORDINATES:
       gtk_widget_hide (GTK_WIDGET (window->label_estimates));
       gtk_widget_hide (GTK_WIDGET (window->spin_estimates));
       break;
@@ -3452,7 +3460,7 @@ window_update_gradient ()
       gtk_widget_show (GTK_WIDGET (window->spin_estimates));
     }
 #if DEBUG
-  fprintf (stderr, "window_update_gradient: end\n");
+  fprintf (stderr, "window_update_direction: end\n");
 #endif
 }
 
@@ -3493,8 +3501,8 @@ window_update ()
   gtk_widget_hide (GTK_WIDGET (window->spin_sweeps));
   gtk_widget_hide (GTK_WIDGET (window->label_bits));
   gtk_widget_hide (GTK_WIDGET (window->spin_bits));
-  gtk_widget_hide (GTK_WIDGET (window->check_gradient));
-  gtk_widget_hide (GTK_WIDGET (window->grid_gradient));
+  gtk_widget_hide (GTK_WIDGET (window->check_direction));
+  gtk_widget_hide (GTK_WIDGET (window->grid_direction));
   gtk_widget_hide (GTK_WIDGET (window->label_step));
   gtk_widget_hide (GTK_WIDGET (window->spin_step));
   gtk_widget_hide (GTK_WIDGET (window->label_p));
@@ -3514,7 +3522,7 @@ window_update ()
           gtk_widget_show (GTK_WIDGET (window->label_bests));
           gtk_widget_show (GTK_WIDGET (window->spin_bests));
         }
-      window_update_gradient ();
+      window_update_direction ();
       break;
     case ALGORITHM_SWEEP:
       gtk_widget_show (GTK_WIDGET (window->label_iterations));
@@ -3528,8 +3536,8 @@ window_update ()
         }
       gtk_widget_show (GTK_WIDGET (window->label_sweeps));
       gtk_widget_show (GTK_WIDGET (window->spin_sweeps));
-      gtk_widget_show (GTK_WIDGET (window->check_gradient));
-      window_update_gradient ();
+      gtk_widget_show (GTK_WIDGET (window->check_direction));
+      window_update_direction ();
       break;
     default:
       gtk_widget_show (GTK_WIDGET (window->label_population));
@@ -3604,10 +3612,10 @@ window_update ()
     (GTK_WIDGET (window->spin_maxabs),
      gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (window->check_maxabs)));
   if (window_get_norm () == ERROR_NORM_P)
-	{
+    {
       gtk_widget_show (GTK_WIDGET (window->label_p));
       gtk_widget_show (GTK_WIDGET (window->spin_p));
-	}
+    }
 #if DEBUG
   fprintf (stderr, "window_update: end\n");
 #endif
@@ -4302,20 +4310,20 @@ window_read (char *filename)
                                  (gdouble) input->niterations);
       gtk_spin_button_set_value (window->spin_bests, (gdouble) input->nbest);
       gtk_spin_button_set_value (window->spin_tolerance, input->tolerance);
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (window->check_gradient),
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (window->check_direction),
                                     input->nsteps);
       if (input->nsteps)
         {
           gtk_toggle_button_set_active
-            (GTK_TOGGLE_BUTTON (window->button_gradient
-                                [input->gradient_method]), TRUE);
+            (GTK_TOGGLE_BUTTON (window->button_direction
+                                [input->direction]), TRUE);
           gtk_spin_button_set_value (window->spin_steps,
                                      (gdouble) input->nsteps);
           gtk_spin_button_set_value (window->spin_relaxation,
                                      (gdouble) input->relaxation);
-          switch (input->gradient_method)
+          switch (input->direction)
             {
-            case GRADIENT_METHOD_RANDOM:
+            case DIRECTION_METHOD_RANDOM:
               gtk_spin_button_set_value (window->spin_estimates,
                                          (gdouble) input->nestimates);
             }
@@ -4333,7 +4341,7 @@ window_read (char *filename)
                                  input->adaptation_ratio);
     }
   gtk_toggle_button_set_active
-	(GTK_TOGGLE_BUTTON (window->button_norm[input->norm]), TRUE);
+    (GTK_TOGGLE_BUTTON (window->button_norm[input->norm]), TRUE);
   gtk_spin_button_set_value (window->spin_p, input->p);
   g_signal_handler_block (window->combo_experiment, window->id_experiment);
   g_signal_handler_block (window->button_experiment,
@@ -4457,19 +4465,19 @@ window_new ()
     gettext ("Sweep brute force algorithm"),
     gettext ("Genetic algorithm")
   };
-  char *label_gradient[NGRADIENTS] = {
+  char *label_direction[NDIRECTIONS] = {
     gettext ("_Coordinates descent"), gettext ("_Random")
   };
-  char *tip_gradient[NGRADIENTS] = {
-    gettext ("Coordinates descent gradient estimate method"),
-    gettext ("Random gradient estimate method")
+  char *tip_direction[NDIRECTIONS] = {
+    gettext ("Coordinates direction estimate method"),
+    gettext ("Random direction estimate method")
   };
   char *label_norm[NNORMS] = { "L2", "L∞", "Lp", "L1" };
   char *tip_norm[NNORMS] = {
     gettext ("Euclidean error norm (L2)"),
     gettext ("Maximum error norm (L∞)"),
-	gettext ("P error norm (Lp)"),
-	gettext ("Taxicab error norm (L1)")
+    gettext ("P error norm (Lp)"),
+    gettext ("Taxicab error norm (L1)")
   };
 
 #if DEBUG
@@ -4673,27 +4681,28 @@ window_new ()
     (GTK_WIDGET (window->spin_adaptation),
      gettext ("Ratio of adaptation for the genetic algorithm"));
 
-  // Creating the gradient based method properties
-  window->check_gradient = (GtkCheckButton *)
-    gtk_check_button_new_with_mnemonic (gettext ("_Gradient based method"));
-  g_signal_connect (window->check_gradient, "clicked", window_update, NULL);
-  window->grid_gradient = (GtkGrid *) gtk_grid_new ();
-  window->button_gradient[0] = (GtkRadioButton *)
-    gtk_radio_button_new_with_mnemonic (NULL, label_gradient[0]);
-  gtk_grid_attach (window->grid_gradient,
-                   GTK_WIDGET (window->button_gradient[0]), 0, 0, 1, 1);
-  g_signal_connect (window->button_gradient[0], "clicked", window_update, NULL);
-  for (i = 0; ++i < NGRADIENTS;)
+  // Creating the direction search method properties
+  window->check_direction = (GtkCheckButton *)
+    gtk_check_button_new_with_mnemonic (gettext ("_Direction search method"));
+  g_signal_connect (window->check_direction, "clicked", window_update, NULL);
+  window->grid_direction = (GtkGrid *) gtk_grid_new ();
+  window->button_direction[0] = (GtkRadioButton *)
+    gtk_radio_button_new_with_mnemonic (NULL, label_direction[0]);
+  gtk_grid_attach (window->grid_direction,
+                   GTK_WIDGET (window->button_direction[0]), 0, 0, 1, 1);
+  g_signal_connect (window->button_direction[0], "clicked", window_update,
+		            NULL);
+  for (i = 0; ++i < NDIRECTIONS;)
     {
-      window->button_gradient[i] = (GtkRadioButton *)
+      window->button_direction[i] = (GtkRadioButton *)
         gtk_radio_button_new_with_mnemonic
-        (gtk_radio_button_get_group (window->button_gradient[0]),
-         label_gradient[i]);
-      gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_gradient[i]),
-                                   tip_gradient[i]);
-      gtk_grid_attach (window->grid_gradient,
-                       GTK_WIDGET (window->button_gradient[i]), 0, i, 1, 1);
-      g_signal_connect (window->button_gradient[i], "clicked",
+        (gtk_radio_button_get_group (window->button_direction[0]),
+         label_direction[i]);
+      gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_direction[i]),
+                                   tip_direction[i]);
+      gtk_grid_attach (window->grid_direction,
+                       GTK_WIDGET (window->button_direction[i]), 0, i, 1, 1);
+      g_signal_connect (window->button_direction[i], "clicked",
                         window_update, NULL);
     }
   window->label_steps = (GtkLabel *) gtk_label_new (gettext ("Steps number"));
@@ -4701,25 +4710,26 @@ window_new ()
     gtk_spin_button_new_with_range (1., 1.e12, 1.);
   gtk_widget_set_hexpand (GTK_WIDGET (window->spin_steps), TRUE);
   window->label_estimates
-    = (GtkLabel *) gtk_label_new (gettext ("Gradient estimates number"));
+    = (GtkLabel *) gtk_label_new (gettext ("Direction estimates number"));
   window->spin_estimates = (GtkSpinButton *)
     gtk_spin_button_new_with_range (1., 1.e3, 1.);
   window->label_relaxation
     = (GtkLabel *) gtk_label_new (gettext ("Relaxation parameter"));
   window->spin_relaxation = (GtkSpinButton *)
     gtk_spin_button_new_with_range (0., 2., 0.001);
-  gtk_grid_attach (window->grid_gradient, GTK_WIDGET (window->label_steps),
-                   0, NGRADIENTS, 1, 1);
-  gtk_grid_attach (window->grid_gradient, GTK_WIDGET (window->spin_steps),
-                   1, NGRADIENTS, 1, 1);
-  gtk_grid_attach (window->grid_gradient, GTK_WIDGET (window->label_estimates),
-                   0, NGRADIENTS + 1, 1, 1);
-  gtk_grid_attach (window->grid_gradient, GTK_WIDGET (window->spin_estimates),
-                   1, NGRADIENTS + 1, 1, 1);
-  gtk_grid_attach (window->grid_gradient, GTK_WIDGET (window->label_relaxation),
-                   0, NGRADIENTS + 2, 1, 1);
-  gtk_grid_attach (window->grid_gradient, GTK_WIDGET (window->spin_relaxation),
-                   1, NGRADIENTS + 2, 1, 1);
+  gtk_grid_attach (window->grid_direction, GTK_WIDGET (window->label_steps),
+                   0, NDIRECTIONS, 1, 1);
+  gtk_grid_attach (window->grid_direction, GTK_WIDGET (window->spin_steps),
+                   1, NDIRECTIONS, 1, 1);
+  gtk_grid_attach (window->grid_direction, GTK_WIDGET (window->label_estimates),
+                   0, NDIRECTIONS + 1, 1, 1);
+  gtk_grid_attach (window->grid_direction, GTK_WIDGET (window->spin_estimates),
+                   1, NDIRECTIONS + 1, 1, 1);
+  gtk_grid_attach (window->grid_direction,
+		           GTK_WIDGET (window->label_relaxation), 0, NDIRECTIONS + 2, 1,
+				   1);
+  gtk_grid_attach (window->grid_direction, GTK_WIDGET (window->spin_relaxation),
+                   1, NDIRECTIONS + 2, 1, 1);
 
   // Creating the array of algorithms
   window->grid_algorithm = (GtkGrid *) gtk_grid_new ();
@@ -4796,10 +4806,10 @@ window_new ()
                    GTK_WIDGET (window->spin_adaptation), 1,
                    NALGORITHMS + 8, 1, 1);
   gtk_grid_attach (window->grid_algorithm,
-                   GTK_WIDGET (window->check_gradient), 0,
+                   GTK_WIDGET (window->check_direction), 0,
                    NALGORITHMS + 9, 2, 1);
   gtk_grid_attach (window->grid_algorithm,
-                   GTK_WIDGET (window->grid_gradient), 0,
+                   GTK_WIDGET (window->grid_direction), 0,
                    NALGORITHMS + 10, 2, 1);
   window->frame_algorithm = (GtkFrame *) gtk_frame_new (gettext ("Algorithm"));
   gtk_container_add (GTK_CONTAINER (window->frame_algorithm),
@@ -4915,7 +4925,7 @@ window_new ()
     (-G_MAXDOUBLE, G_MAXDOUBLE, precision[DEFAULT_PRECISION]);
   gtk_widget_set_tooltip_text
     (GTK_WIDGET (window->spin_step),
-     gettext ("Initial step size for the gradient based method"));
+     gettext ("Initial step size for the direction search method"));
   window->scrolled_step
     = (GtkScrolledWindow *) gtk_scrolled_window_new (NULL, NULL);
   gtk_container_add (GTK_CONTAINER (window->scrolled_step),
@@ -5056,7 +5066,7 @@ window_new ()
   window->frame_norm = (GtkFrame *) gtk_frame_new (gettext ("Error norm"));
   window->grid_norm = (GtkGrid *) gtk_grid_new ();
   gtk_container_add (GTK_CONTAINER (window->frame_norm),
-		             GTK_WIDGET (window->grid_norm));
+                     GTK_WIDGET (window->grid_norm));
   window->button_norm[0] = (GtkRadioButton *)
     gtk_radio_button_new_with_mnemonic (NULL, label_norm[0]);
   gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_norm[0]),
@@ -5068,8 +5078,7 @@ window_new ()
     {
       window->button_norm[i] = (GtkRadioButton *)
         gtk_radio_button_new_with_mnemonic
-        (gtk_radio_button_get_group (window->button_norm[0]),
-         label_norm[i]);
+        (gtk_radio_button_get_group (window->button_norm[0]), label_norm[i]);
       gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_norm[i]),
                                    tip_norm[i]);
       gtk_grid_attach (window->grid_norm,
@@ -5077,10 +5086,9 @@ window_new ()
       g_signal_connect (window->button_norm[i], "clicked", window_update, NULL);
     }
   window->label_p = (GtkLabel *) gtk_label_new (gettext ("P parameter"));
-  gtk_grid_attach (window->grid_norm, GTK_WIDGET (window->label_p),
-		           1, 0, 1, 2);
+  gtk_grid_attach (window->grid_norm, GTK_WIDGET (window->label_p), 1, 0, 1, 2);
   window->spin_p = (GtkSpinButton *)
-	gtk_spin_button_new_with_range (-G_MAXDOUBLE, G_MAXDOUBLE, 0.01);
+    gtk_spin_button_new_with_range (-G_MAXDOUBLE, G_MAXDOUBLE, 0.01);
   gtk_widget_set_tooltip_text
     (GTK_WIDGET (window->spin_p), gettext ("P parameter for the P error norm"));
   window->scrolled_p
@@ -5090,7 +5098,7 @@ window_new ()
   gtk_widget_set_hexpand (GTK_WIDGET (window->scrolled_p), TRUE);
   gtk_widget_set_halign (GTK_WIDGET (window->scrolled_p), GTK_ALIGN_FILL);
   gtk_grid_attach (window->grid_norm, GTK_WIDGET (window->scrolled_p),
-		           2, 0, 1, 2);
+                   2, 0, 1, 2);
 
   // Creating the grid and attaching the widgets to the grid
   window->grid = (GtkGrid *) gtk_grid_new ();
@@ -5102,8 +5110,7 @@ window_new ()
                    GTK_WIDGET (window->frame_variable), 1, 2, 1, 1);
   gtk_grid_attach (window->grid,
                    GTK_WIDGET (window->frame_experiment), 2, 2, 1, 1);
-  gtk_grid_attach (window->grid,
-		           GTK_WIDGET (window->frame_norm), 1, 1, 2, 1);
+  gtk_grid_attach (window->grid, GTK_WIDGET (window->frame_norm), 1, 1, 2, 1);
   gtk_container_add (GTK_CONTAINER (window->window), GTK_WIDGET (window->grid));
 
   // Setting the window logo
@@ -5173,7 +5180,6 @@ main (int argn, char **argc)
 
   // Starting pseudo-random numbers generator
   calibrate->rng = gsl_rng_alloc (gsl_rng_taus2);
-  calibrate->seed = DEFAULT_RANDOM_SEED;
 
   // Allowing spaces in the XML data file
   xmlKeepBlanksDefault (0);
@@ -5188,10 +5194,14 @@ main (int argn, char **argc)
   ntasks = 1;
 #endif
 
+  // Resetting result and variables file names
+  input->result = input->variables = NULL;
+
 #if HAVE_GTK
 
-  // Getting threads number
-  nthreads_gradient = nthreads = cores_number ();
+  // Getting threads number and pseudo-random numbers generator seed
+  nthreads_direction = nthreads = cores_number ();
+  calibrate->seed = DEFAULT_RANDOM_SEED;
 
   // Setting local language and international floating point numbers notation
   setlocale (LC_ALL, "");
@@ -5219,25 +5229,66 @@ main (int argn, char **argc)
 #else
 
   // Checking syntax
-  if (!(argn == 2 || (argn == 4 && !strcmp (argc[1], "-nthreads"))))
+  if (argn < 2)
     {
-      printf ("The syntax is:\nmpcotoolbin [-nthreads x] data_file\n");
+      printf ("The syntax is:\n"
+              "./mpcotoolbin [-nthreads x] [-seed s] data_file [result_file] "
+              "[variables_file]\n");
       return 1;
     }
 
-  // Getting threads number
-  if (argn == 2)
-    nthreads_gradient = nthreads = cores_number ();
-  else
+  // Getting threads number and pseudo-random numbers generator seed
+  nthreads_direction = nthreads = cores_number ();
+  calibrate->seed = DEFAULT_RANDOM_SEED;
+  if (argn > 2 && !strcmp (argc[1], "-nthreads"))
     {
-      nthreads_gradient = nthreads = atoi (argc[2]);
+      nthreads_direction = nthreads = atoi (argc[2]);
       if (!nthreads)
         {
           printf ("Bad threads number\n");
           return 2;
         }
+      argc += 2;
+      argn -= 2;
+      if (argn > 2 && !strcmp (argc[1], "-seed"))
+        {
+          calibrate->seed = atoi (argc[2]);
+          argc += 2;
+          argn -= 2;
+        }
+    }
+  else if (argn > 2 && !strcmp (argc[1], "-seed"))
+    {
+      calibrate->seed = atoi (argc[2]);
+      argc += 2;
+      argn -= 2;
+      if (argn > 2 && !strcmp (argc[1], "-nthreads"))
+        {
+          nthreads_direction = nthreads = atoi (argc[2]);
+          if (!nthreads)
+            {
+              printf ("Bad threads number\n");
+              return 2;
+            }
+          argc += 2;
+          argn -= 2;
+        }
     }
   printf ("nthreads=%u\n", nthreads);
+  printf ("seed=%lu\n", calibrate->seed);
+
+  // Checking arguments
+  if (argn > 4 || argn < 2)
+    {
+      printf ("The syntax is:\n"
+              "./mpcotoolbin [-nthreads x] [-seed s] data_file [result_file] "
+              "[variables_file]\n");
+      return 1;
+    }
+  if (argn > 2)
+    input->result = argc[2];
+  if (argn == 4)
+    input->variables = argc[3];
 
   // Making calibration
   if (input_open (argc[argn - 1]))

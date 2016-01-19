@@ -42,7 +42,7 @@ OF SUCH DAMAGE.
 #define MAX_NINPUTS 8
   ///< Maximum number of input files in the simulator program.
 #define NALGORITHMS 3           ///< Number of stochastic algorithms.
-#define NGRADIENTS 2            ///< Number of gradient estimate methods.
+#define NDIRECTIONS 2            ///< Number of direction estimate methods.
 #define NNORMS 4                ///< Number of error norms.
 #define NPRECISIONS 15          ///< Number of precisions.
 
@@ -71,6 +71,8 @@ OF SUCH DAMAGE.
   ///< calibrate XML label.
 #define XML_COORDINATES (const xmlChar*)"coordinates"
   ///< coordinates XML label.
+#define XML_DIRECTION (const xmlChar*)"direction"
+  ///< direction XML label.
 #define XML_EUCLIDIAN (const xmlChar*)"euclidian"
   ///< euclidian XML label.
 #define XML_EVALUATOR (const xmlChar*)"evaluator"
@@ -78,8 +80,6 @@ OF SUCH DAMAGE.
 #define XML_EXPERIMENT (const xmlChar*)"experiment"
   ///< experiment XML label.
 #define XML_GENETIC (const xmlChar*)"genetic"   ///< genetic XML label.
-#define XML_GRADIENT_METHOD (const xmlChar*)"gradient_method"
-  ///< gradient_method XML label.
 #define XML_MINIMUM (const xmlChar*)"minimum"   ///< minimum XML label.
 #define XML_MAXIMUM (const xmlChar*)"maximum"   ///< maximum XML label.
 #define XML_MONTE_CARLO (const xmlChar*)"Monte-Carlo"

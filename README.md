@@ -8,7 +8,7 @@ VERSIONS
 --------
 
 * 1.2.5: Stable and recommended version.
-* 1.5.3: Developing version to do new features.
+* 1.7.0: Developing version to do new features.
 
 AUTHORS
 -------

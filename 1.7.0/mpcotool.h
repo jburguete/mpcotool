@@ -48,13 +48,13 @@ enum Algorithm
 };
 
 /**
- * \enum GradientMethod
- * \brief Enum to define the methods to estimate the gradient.
+ * \enum DirectionMethod
+ * \brief Enum to define the methods to estimate the direction search.
  */
-enum GradientMethod
+enum DirectionMethod
 {
-  GRADIENT_METHOD_COORDINATES = 0,      ///< Coordinates descent method.
-  GRADIENT_METHOD_RANDOM = 1,   ///< Random method.
+  DIRECTION_METHOD_COORDINATES = 0,      ///< Coordinates descent method.
+  DIRECTION_METHOD_RANDOM = 1,   ///< Random method.
 };
 
 /**
@@ -94,7 +94,8 @@ typedef struct
   double *rangeminabs;          ///< Array of absolute minimum variable values.
   double *rangemaxabs;          ///< Array of absolute maximum variable values.
   double *weight;               ///< Array of the experiment weights.
-  double *step;                 ///< Array of gradient based method step sizes.
+  double *step;                 
+  ///< Array of direction search method step sizes.
   unsigned int *precision;      ///< Array of variable precisions.
   unsigned int *nsweeps;        ///< Array of sweeps of the sweep algorithm.
   unsigned int *nbits;
@@ -113,10 +114,10 @@ typedef struct
   unsigned int nsimulations;    ///< Simulations number per experiment.
   unsigned int algorithm;       ///< Algorithm type.
   unsigned int nsteps;
-  ///< Number of steps to do the gradient based method.
-  unsigned int gradient_method; ///< Method to estimate the gradient.
+  ///< Number of steps to do the direction search method.
+  unsigned int direction;       ///< Method to estimate the direction search.
   unsigned int nestimates;
-  ///< Number of simulations to estimate the gradient.
+  ///< Number of simulations to estimate the direction search.
   unsigned int niterations;     ///< Number of algorithm iterations
   unsigned int nbest;           ///< Number of best simulations.
   unsigned int norm;            ///< Error norm type.
@@ -149,8 +150,9 @@ typedef struct
   double *rangemaxabs;          ///< Array of absolute maximum variable values.
   double *error_best;           ///< Array of the best minimum errors.
   double *weight;               ///< Array of the experiment weights.
-  double *step;                 ///< Array of gradient based method step sizes.
-  double *gradient;             ///< Vector of gradient estimation.
+  double *step;
+  ///< Array of direction search method step sizes.
+  double *direction;             ///< Vector of direction search estimation.
   double *value_old;
   ///< Array of the best variable values on the previous step.
   double *error_old;
@@ -159,9 +161,9 @@ typedef struct
   unsigned int *nsweeps;        ///< Array of sweeps of the sweep algorithm.
   unsigned int *thread;
   ///< Array of simulation numbers to calculate on the thread.
-  unsigned int *thread_gradient;
-  ///< Array of simulation numbers to calculate on the thread for the gradient
-  ///< based method.
+  unsigned int *thread_direction;
+  ///< Array of simulation numbers to calculate on the thread for the direction
+  ///< search method.
   unsigned int *simulation_best;        ///< Array of best simulation numbers.
   double tolerance;             ///< Algorithm tolerance.
   double mutation_ratio;        ///< Mutation probability.
@@ -176,18 +178,17 @@ typedef struct
   unsigned int nexperiments;    ///< Experiments number.
   unsigned int ninputs;         ///< Number of input files to the simulator.
   unsigned int nsimulations;    ///< Simulations number per experiment.
-  unsigned int gradient_method; ///< Method to estimate the gradient.
   unsigned int nsteps;
-  ///< Number of steps for the gradient based method.
+  ///< Number of steps for the direction search method.
   unsigned int nestimates;
-  ///< Number of simulations to estimate the gradient.
+  ///< Number of simulations to estimate the direction.
   unsigned int algorithm;       ///< Algorithm type.
   unsigned int nstart;          ///< Beginning simulation number of the task.
   unsigned int nend;            ///< Ending simulation number of the task.
-  unsigned int nstart_gradient;
-  ///< Beginning simulation number of the task for the gradient based method.
-  unsigned int nend_gradient;
-  ///< Ending simulation number of the task for the gradient based method.
+  unsigned int nstart_direction;
+  ///< Beginning simulation number of the task for the direction search method.
+  unsigned int nend_direction;
+  ///< Ending simulation number of the task for the direction search method.
   unsigned int niterations;     ///< Number of algorithm iterations
   unsigned int nbest;           ///< Number of best simulations.
   unsigned int nsaveds;         ///< Number of saved simulations.
@@ -242,12 +243,12 @@ void calibrate_synchronise ();
 #endif
 void calibrate_sweep ();
 void calibrate_MonteCarlo ();
-void calibrate_best_gradient (unsigned int simulation, double value);
-void calibrate_gradient_sequential ();
-void *calibrate_gradient_thread (ParallelData * data);
-double calibrate_variable_step_gradient (unsigned int variable);
-void calibrate_step_gradient (unsigned int simulation);
-void calibrate_gradient ();
+void calibrate_best_direction (unsigned int simulation, double value);
+void calibrate_direction_sequential ();
+void *calibrate_direction_thread (ParallelData * data);
+double calibrate_variable_step_direction (unsigned int variable);
+void calibrate_step_direction (unsigned int simulation);
+void calibrate_direction ();
 double calibrate_genetic_objective (Entity * entity);
 void calibrate_genetic ();
 void calibrate_save_old ();
