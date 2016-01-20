@@ -1,5 +1,8 @@
+/* config.h.  Generated from config.h.in by configure.  */
 /*
-MPCOTool: a software to make calibrations of empirical parameters.
+MPCOTool:
+The Multi-Purposes Calibration and Optimization Tool. A software to perform
+calibrations or optimizations of empirical parameters.
 
 AUTHORS: Javier Burguete and Borja Latorre.
 
@@ -66,8 +69,8 @@ OF SUCH DAMAGE.
   ///< adaption XML label.
 #define XML_ALGORITHM (const xmlChar*)"algorithm"
   ///< algoritm XML label.
-#define XML_CALIBRATE (const xmlChar*)"calibrate"
-  ///< calibrate XML label.
+#define XML_OPTIMIZE (const xmlChar*)"optimize"
+  ///< optimize XML label.
 #define XML_COORDINATES (const xmlChar*)"coordinates"
   ///< coordinates XML label.
 #define XML_DIRECTION (const xmlChar*)"direction"

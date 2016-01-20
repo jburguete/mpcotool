@@ -1,5 +1,7 @@
 /*
-MPCOTool: a software to make calibrations of empirical parameters.
+MPCOTool:
+The Multi-Purposes Calibration and Optimization Tool. A software to perform
+calibrations or optimizations of empirical parameters.
 
 AUTHORS: Javier Burguete and Borja Latorre.
 
@@ -29,7 +31,7 @@ OF SUCH DAMAGE.
 
 /**
  * \file interface.h
- * \brief Header file of the interface.
+ * \brief Header file to define the graphical interface functions.
  * \authors Javier Burguete.
  * \copyright Copyright 2012-2016, all rights reserved.
  */
@@ -234,6 +236,12 @@ typedef struct
   unsigned int nvariables;      ///< Number of variables.
 } Window;
 
+// Global variables
+extern const char *logo[];
+extern Options options[1];
+extern Running running[1];
+extern Window window[1];
+
 // Public functions
 unsigned int gtk_array_get_active (GtkRadioButton * array[], unsigned int n);
 void input_save (char *filename);
@@ -269,6 +277,5 @@ void window_update_variable ();
 int window_read (char *filename);
 void window_open ();
 void window_new ();
-int cores_number ();
 
 #endif

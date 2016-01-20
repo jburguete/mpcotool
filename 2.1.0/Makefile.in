@@ -4,9 +4,12 @@ CFLAGS = -g -Wall -O3 @CPPFLAGS@ @GSL_CFLAGS@ @XML_CFLAGS@ @GLIB_CFLAGS@ \
 LDFLAGS = @LDFLAGS@ @LIBS@ @GSL_LIBS@ @XML_LIBS@ @GLIB_LIBS@ @GTHREAD_LIBS@
 
 SRC = genetic/entity.c genetic/population.c genetic/reproduction.c \
-	genetic/selection.c genetic/evolution.c genetic/genetic.c mpcotool.c
+	genetic/selection.c genetic/evolution.c genetic/genetic.c utils.c \
+	optimize.c interface.c main.c
 OBJ = genetic/entity.o genetic/population.o genetic/reproduction.o \
-	genetic/selection.o genetic/evolution.o genetic/genetic.o
+	genetic/selection.o genetic/evolution.o genetic/genetic.o optimize.o
+OBJBIN = utilsbin.o $(OBJ)
+OBJGUI = interface.o utils.o $(OBJ) @ICON@
 DEP = Makefile
 ES = es/LC_MESSAGES/
 FR = fr/LC_MESSAGES/
@@ -65,16 +68,27 @@ genetic/genetic.o: genetic/genetic.c genetic/genetic.h genetic/evolution.h \
 	genetic/entity.h genetic/bits.h $(DEP)
 	$(CC) $(CFLAGS) -c genetic/genetic.c -o genetic/genetic.o
 
-mpcotoolbin: mpcotool.c mpcotool.h $(OBJ) config.h
-	$(CC) $(CFLAGS) mpcotool.c $(OBJ) $(LDFLAGS) -o mpcotoolbin
+utilsbin.o: utils.c utils.h config.h
+	$(CC) -c $(CFLAGS) utils.c -o utilsbin.o
 
-mpcotool: mpcotool.c interface.h mpcotool.h $(OBJ) @ICON@ config.h
-	$(CC) $(CFLAGS) @GTK_CFLAGS@ mpcotool.c $(OBJ) @ICON@ \
-		$(LDFLAGS) @GTK_LIBS@ -o mpcotool -DHAVE_GTK=1
+utils.o: utils.c utils.h config.h
+	$(CC) -c $(CFLAGS) @GTK_CFLAGS@ utils.c -o utils.o -DHAVE_GTK=1
+
+optimize.o: optimize.c optimize.h utils.h config.h
+	$(CC) -c $(CFLAGS) optimize.c -o optimize.o
+
+interface.o: interface.c interface.h optimize.h utils.h config.h
+	$(CC) -c $(CFLAGS) @GTK_CFLAGS@ interface.c -o interface.o -DHAVE_GTK=1
+
+mpcotoolbin: main.c $(OBJBIN)
+	$(CC) $(CFLAGS) main.c $(OBJBIN) $(LDFLAGS) -o mpcotoolbin
+
+mpcotool: main.c $(OBJGUI) @ICON@
+	$(CC) $(CFLAGS) @GTK_CFLAGS@ main.c $(OBJGUI) $(LDFLAGS) @GTK_LIBS@ \
+		-o mpcotool -DHAVE_GTK=1
 
 locales/mpcotool.pot: mpcotool
-	xgettext -d mpcotool -o locales/mpcotool.pot --from-code=UTF-8 \
-		$(SRC)
+	xgettext -d mpcotool -o locales/mpcotool.pot --from-code=UTF-8 $(SRC)
 
 locales/$(ES)mpcotool.po: locales/mpcotool.pot
 	test -d locales/$(ES) || mkdir -p locales/$(ES)
