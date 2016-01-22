@@ -44,7 +44,7 @@ OF SUCH DAMAGE.
 #define MAX_NINPUTS 8
   ///< Maximum number of input files in the simulator program.
 #define NALGORITHMS 3           ///< Number of stochastic algorithms.
-#define NDIRECTIONS 2            ///< Number of direction estimate methods.
+#define NDIRECTIONS 2           ///< Number of direction estimate methods.
 #define NNORMS 4                ///< Number of error norms.
 #define NPRECISIONS 15          ///< Number of precisions.
 

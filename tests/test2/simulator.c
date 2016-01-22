@@ -62,7 +62,7 @@ main (int argn, char **argc)
                                               (ngenerations -
                                                1) * evolution_ratio),
                              ngenerations, mutation_ratio, reproduction_ratio,
-                             adaptation_ratio, &evaluate, &best_genome,
+                             adaptation_ratio, 0., &evaluate, &best_genome,
                              &best_variables, &best_objective);
   if (rank == 0)
     {

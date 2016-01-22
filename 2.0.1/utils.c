@@ -40,6 +40,10 @@ OF SUCH DAMAGE.
 #include <stdio.h>
 #include <unistd.h>
 #include <libxml/parser.h>
+#include <glib.h>
+#ifdef G_OS_WIN32
+#include <windows.h>
+#endif
 #include <libintl.h>
 #if HAVE_GTK
 #include <gtk/gtk.h>
