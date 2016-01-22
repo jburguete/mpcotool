@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<calibrate simulator="simulator" seed="4" algorithm="Monte-Carlo" nsimulations="500" niterations="2" tolerance="0.1" nbest="10">
+<optimize simulator="simulator" seed="4" algorithm="Monte-Carlo" nsimulations="500" niterations="2" tolerance="0.1" nbest="10">
   <experiment name="test.exp" template1="test.tmp"/>
   <variable name="var1" minimum="-10" maximum="10"/>
   <variable name="var2" minimum="-10" maximum="10"/>
-</calibrate>
+</optimize>

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<calibrate simulator="Ackley" algorithm="sweep" result="result-sw-50-50-1-14" variables="variables-sw-50-50-1-14">
+<optimize simulator="Ackley" algorithm="sweep" result="result-sw-50-50-1-14" variables="variables-sw-50-50-1-14">
   <experiment name="test.exp" template1="test.tmp"/>
   <variable name="x" minimum="-40" maximum="40" precision="14" nsweeps="50"/>
   <variable name="y" minimum="-40" maximum="40" precision="14" nsweeps="50"/>
-</calibrate>
+</optimize>

@@ -157,7 +157,7 @@ $ ./build
 The following step is to download the source code MPCOTool, to link it with Genetic and compile together by means of:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 $ git clone https://github.com/jburguete/mpcotool.git
-$ cd mpcotool/1.2.5
+$ cd mpcotool/2.0.0
 $ ln -s ../../genetic/0.6.1 genetic
 $ ./build
 \end{lstlisting}
@@ -172,7 +172,7 @@ $ cd ../test3
 $ ln -s ../../../genetic/0.6.1 genetic
 $ cd ../test4
 $ ln -s ../../../genetic/0.6.1 genetic
-$ cd ../../1.2.5
+$ cd ../../2.0.0
 $ make tests
 \end{lstlisting}
 
@@ -259,7 +259,7 @@ represented in figure~\ref{FigMainFile}.
 	\tiny
 	\psframe(0,-5)(280,25)
 	\psline(40,-5)(40,25)
-	\rput(20,20){\bf calibrate}
+	\rput(20,20){\bf optimize}
 	\rput(60,20){\bf simulator}
 	\rput(100,20){\bf algorithm}
 	\rput(140,20){evaluator}
@@ -335,7 +335,7 @@ represented in figure~\ref{FigMainFile}.
 Others properties can be also mandatory depending on the selected optimization
 algorithm}{FigMainFile}
 
-The main XML node has to begin with the key label \emph{"calibrate"}. The
+The main XML node has to begin with the key label \emph{"optimize"}. The
 available properties are:
 \begin{description}
 	\item[simulator]: to indicate the simulator program,

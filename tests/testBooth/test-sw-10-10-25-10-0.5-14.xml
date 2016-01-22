@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<calibrate simulator="Booth" algorithm="sweep" niterations="25" nbest="10" tolerance="0.5" result="result-sw-10-10-25-10-0.5-14" variables="variables-sw-10-10-25-10-0.5-14">
+<optimize simulator="Booth" algorithm="sweep" niterations="25" nbest="10" tolerance="0.5" result="result-sw-10-10-25-10-0.5-14" variables="variables-sw-10-10-25-10-0.5-14">
   <experiment name="test.exp" template1="test.tmp"/>
   <variable name="x" minimum="-10" maximum="10" precision="14" nsweeps="10"/>
   <variable name="y" minimum="-10" maximum="10" precision="14" nsweeps="10"/>
-</calibrate>
+</optimize>

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<calibrate result="result-mc-2500-1-14" variables="variables-mc-2500-1-14" simulator="Easom" algorithm="Monte-Carlo" nsimulations="2500" niterations="1" tolerance="0" nbest="1">
+<optimize result="result-mc-2500-1-14" variables="variables-mc-2500-1-14" simulator="Easom" algorithm="Monte-Carlo" nsimulations="2500" niterations="1" tolerance="0" nbest="1">
   <experiment name="test.exp" template1="test.tmp"/>
   <variable name="x" minimum="-100" maximum="100"/>
   <variable name="y" minimum="-100" maximum="100"/>
-</calibrate>
+</optimize>

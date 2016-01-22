@@ -7,8 +7,8 @@ calibrations or optimizations of empirical parameters.
 VERSIONS
 --------
 
-* 1.2.5: Stable and recommended version.
-* 2.1.0: Developing version to do new features.
+* 2.0.0: Stable and recommended version.
+* 2.1.1: Developing version to do new features.
 
 AUTHORS
 -------
@@ -51,15 +51,15 @@ FILES
 -----
 
 The source code has to have the following files:
-* 1.2.5/configure.ac: configure generator.
-* 1.2.5/Makefile.in: Makefile generator.
-* 1.2.5/config.h.in: config header generator.
-* 1.2.5/mpcotool.c: main source code.
-* 1.2.5/mpcotool.h: main header code.
-* 1.2.5/interface.h: interface header code.
-* 1.2.5/build: script to build all.
-* 1.2.5/logo.png: logo figure.
-* 1.2.5/Doxyfile: configuration file to generate doxygen documentation.
+* 2.0.0/configure.ac: configure generator.
+* 2.0.0/Makefile.in: Makefile generator.
+* 2.0.0/config.h.in: config header generator.
+* 2.0.0/mpcotool.c: main source code.
+* 2.0.0/mpcotool.h: main header code.
+* 2.0.0/interface.h: interface header code.
+* 2.0.0/build: script to build all.
+* 2.0.0/logo.png: logo figure.
+* 2.0.0/Doxyfile: configuration file to generate doxygen documentation.
 * TODO: tasks to do.
 * README.md: this file.
 * tests/testX/\*: several tests to check the program working.
@@ -102,9 +102,9 @@ a terminal:
 > $ git clone https://github.com/jburguete/mpcotool.git
 
 3. Link the latest genetic version to genetic:
-> $ cd mpcotool/1.2.5
+> $ cd mpcotool/2.0.0
 >
-> $ ln -s ../../genetic/0.6.1 genetic
+> $ ln -s ../../genetic/1.0.0 genetic
 
 4. Build doing on a terminal:
 > $ ./build
@@ -155,21 +155,21 @@ MAKING TESTS INSTRUCTIONS
 In order to build the tests follow the next instructions:
 
 1. Link some tests that needs genetic library doing in a terminal (assuming that
-you are in the directory mpcotool/1.2.5):
+you are in the directory mpcotool/2.0.0):
 > $ cd ../tests/test2
 >
-> $ ln -s ../../../genetic/0.6.1 genetic
+> $ ln -s ../../../genetic/1.0.0 genetic
 >
 > $ cd ../test3
 >
-> $ ln -s ../../../genetic/0.6.1 genetic
+> $ ln -s ../../../genetic/1.0.0 genetic
 >
 > $ cd ../test4
 >
-> $ ln -s ../../../genetic/0.6.1 genetic
+> $ ln -s ../../../genetic/1.0.0 genetic
 
 2. Build all tests doing in the same terminal:
-> $ cd ../../1.2.5
+> $ cd ../../2.0.0
 >
 > $ make tests
 
