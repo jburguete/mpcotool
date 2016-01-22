@@ -391,9 +391,9 @@ has to be performed for each iteration.
 \subsection{Gradient based method (GB)}
 
 Brute force optimization methods, SW and MC, can be also combined
-with a gradient based algorithm. Defining the vector $\vec{r}_i$ as the optime
-variables combination obtained in the $i$-th step, $\vec{r}_1$ as the optime
-varaibles combination vector obtained by the brute force method and defining
+with a gradient based algorithm. Defining the vector $\vec{r}_i$ as the optimum
+combination of variables obtained in the $i$-th step, $\vec{r}_1$ as the vector of the 
+optimum combination of variables obtained by the brute force method and defining
 the vector $\vec{s}_i$ as:
 \EQ
 {
@@ -401,8 +401,8 @@ the vector $\vec{s}_i$ as:
 	\vec{s}_i=(1-rel)\,\vec{s}_{i-1}+rel\,\Delta\vec{r}_{i-1},
 }{Eqs}
 with $\Delta\vec{r}_{i-1}=\vec{r}_i+\vec{r}_{i-1}$ and $rel$ the
-relaxation parameter, the gradient based method checks $N_e$ variable
-combinations and choice the optimum as:
+relaxation parameter, the gradient based method checks $N_e$ 
+combinations of variables and choice the optimum as:
 \EQ
 {
 	\vec{r}_{i+1}=\mathrm{optime}\PA{\vec{r}_i,\;\vec{r}_i+\vec{s}_i+\vec{t}_j},
@@ -678,14 +678,13 @@ application}{FigWindow}
 
 \section{Optimization analytical tests}
 
-A continuación se presentan unos tests muy comunes (como puede comprobarse en
-Wikipedia
-\url{https://en.wikipedia.org/wiki/Test_functions_for_optimization}),
-para probar el rendimiento de los
-diferentes algoritmos de optimización. En todos los casos se trata de
-optimizar dos parámetros que minimizan una función analítica, teniendo el
-problema asimismo solución analítica. Los tests han sido extraídos de
-\citet{SurjanovicBingam15}, que los clasifican dentro de los siguientes tipos:
+Several common tests are presented below (as can be seen in Wikipedia
+\url{https://en.wikipedia.org/wiki/Test_functions_for_optimization})
+in order to test the performance of the different optimization 
+algorithms. In all cases, the optimization of two parameters which minimizes
+an analytical function is attempted, having each problem an 
+analytical solution as well. The tests were obtained from \citet{SurjanovicBingam15},
+where they are classified as follows:
 \begin{itemize}
 \item Bowl-shaped function: Sphere function.
 \item Many local minima function: Ackley's function.
@@ -694,8 +693,8 @@ problema asimismo solución analítica. Los tests han sido extraídos de
 \item Step ridges/drops function: Easom's function.
 \item Other type function: Beale's function.
 \end{itemize}
-En la tabla~\ref{TabOriginalTests} se muestran todas estas funciones con su
-mínimo absoluto y el dominio usado para la optimización.
+Table~\ref{TabOriginalTests} displays the absolute minimum and the domain used
+for the optimization of the aforementioned functions.
 \TABLE{\scriptsize}{ccc}
 {
 	Objective function & Minimum & Domain \\
@@ -726,12 +725,11 @@ mínimo absoluto y el dominio usado para la optimización.
 	& $y\in[-5,5]$
 }{}{TabOriginalTests}
 
-Los algoritmos basados en el método de barrido, al recorrer los espacios de las
-variables en intervalos regulares, tienen
-muchas posiblidades de caer exactamente en el mínimo de la función cuando los
-parámetros que la minimizan son números enteros o racionales. En esos casos
-hemos decido modificar la función para que el mínimo se obtenga siempre con
-parámetros irracionales.
+The algorithms based on the sweep method, as the space between the variables
+is traversed at regular intervals, are likely to exactly fall in the minimum
+of the function when the parameters to be minimized are integer or rational
+numbers. In those cases, the function has been modified in order always to get 
+the minimum with irrational parameters.
 \TABLE{\scriptsize}{ccc}
 {
 	Objective function & Minimum & Domain \\
@@ -760,36 +758,35 @@ parámetros irracionales.
 	$x\in[-5,5]$ \\ & & $y\in[-5,5]$
 }{}{TabModifiedTests}
 
-A la hora de presentar resultados vamos a utilizar la siguiente notación:
+When presenting the results, the following notation is used:
 \begin{description}
-\item[$N_{simulated}$]: número de simulaciones realizadas.
-\item[$\tilde{x}_i$]: valor del parámetro $x$ de la mejor de las $i$
-	simulaciones realizadas.
-\item[$\overline{x}$]: valor óptimo del parámetro $x$.
+\item[$N_{simulated}$]: number of performed simulations. 
+\item[$\tilde{x}_i$]: value of the parameter $x$ for the best of the $i$
+	performed simulations.
+\item[$\overline{x}$]: optimum value of the parameter $x$.
 \item[$d_i=\sqrt{\PA{\tilde{x}_i-\overline{x}}^2
-	+\PA{\tilde{y}_i-\overline{y}_i}^2}$]: distancia entre la mejor de las $i$
-	simulaciones realizadas y el valor óptimo de los parámetros (para una
-	optimización en 2 variables).
+	+\PA{\tilde{y}_i-\overline{y}_i}^2}$]: distance between the best of the $i$
+	performed simulations and the optimum value of the parameters (in the case
+    of an optimization problem with two variables).
 \end{description}
 
-En la figura~\ref{FigTests} se muestra una representación del valor de estas
-funciones en el plano $x-y$.
+The value of these functions in the $x-y$ plane is shown in figure~\ref{FigTests}.
 \FIGVI{Sphere.eps}{Ackley.eps}{Booth.eps}{Rosenbrock.eps}{Easom.eps}{Beale.eps}
-{Mapa en el plano $x-y$ de los valores de las funciones objetivo usadas como
+{Map in the $x-y$ plane showing the values of the objective functions used as 
 test}{FigTests}
-En la figura~\ref{FigTestsZoom} se muestra un zoom de alguna de estas funciones
-para resaltar sus peculiaridades.
+Figure~\ref{FigTestsZoom} shows a zoomed area of some of these functions to 
+highlight their peculiarities.
 \PLOTII{Ackley2.eps}{Easom2.eps}{A zoom of (left) Ackley and (right) Easom
 objective functions}{FigTestsZoom}
 
-A continuación vamos a ver la capacidad de los diferentes algoritmos con
-para obtener el óptimo en todos estos tests usando un número fijo de
-simulaciones total de 2500 en cada método. Para simplificar las diferentes
-combinaciones de algoritmos de optimización y parámetros de configuración se van
-a usar las abreviaturas de la tabla~\ref{TabMethods}.
+The ability of the different algorithms in order to obtain the optimum
+value for all the tests, using a fixed number of total simulations of 2500 in each method,
+is then presented. The abbreviations shown in table~\ref{TabMethods}, related 
+to the different combinations of algorithms and configuration parameters, are used
+for the sake of simplicity.
 \TABLE{\scriptsize}{ccc}
 {
-	Abreviaturas & Algorithms & Parameters \\
+	Abbreviations & Algorithms & Parameters \\
 	\hline
 	SW-1 & SW & $N_x=N_y=50$ \\
 	SW+IT-1 & SW+IT & $N_x=N_y=10$, $N_i=25$, $N_b=10$, $tol=0.5$ \\
@@ -832,103 +829,101 @@ a usar las abreviaturas de la tabla~\ref{TabMethods}.
 	GE-9 & GE & $N_p=500$, $N_g=21$, $R_m=0.2$, $R_r=R_a=0$, $N_{bits}=32$ \\
 	GE-10 & GE & $N_p=625$, $N_g=11$, $R_m=R_r=R_a=0.1$, $N_{bits}=32$ \\
 	GE-11 & GE & $N_p=625$, $N_g=6$, $R_m=R_r=R_a=0.2$, $N_{bits}=32$
-}{Abreviaturas de los métodos utilizadas en los resultados de los tests}
+}{Abbreviations of the methods used in the results of the tests}
 {TabMethods}
 
-A continuación examinamos el comportamiento de los diferentes algoritmos de
-optimización en la sphere function, una función simétrica, convexa, sin extremos
-locales y fácil de optimizar.
+Next, the behavior of the different optimization algorithms for the sphere function
+is analyzed, being a symmetric, convex, without local extrema and easy to optimize
+function.
 
-En la figura~\ref{FigSphereVariables} se representan todas las combinaciones de
-variables simuladas por los distintos algoritmos para ilustrar la forma de
-operar de cada método. Se observa la forma regular de explorar el espacio de
-variables del método de barrido frente a la forma aleatoria del de Monte-Carlo.
-Puede verse también cómo en ambos casos el algoritmo iterativo va reduciendo
-progresivamente el intervalo de búsqueda. El método genético también realiza una
-búsqueda aleatoria pero progresivamente va buscando con mayor probabilidad en
-puntos cercanos al óptimo. En cambio el método basado en gradiente busca
-rápidamente en la dirección del óptimo desde el valor mejor proporcionado por el
-método de fuerza bruta asociado.
+Figure~\ref{FigSphereVariables} displays all the possible combinations of the
+simulated variables by the different algorithms in order to illustrate how
+each method operates. It can be observed the regular way of exploring the space
+of variables for the sweep method in contrast to the random method for the
+Monte-Carlo method. It is shown as well the progressive reduction of the search
+interval for the iterative algorithm in both cases. The genetic method also 
+performs a random search, but the likelihood of falling at points in the  
+vicinity of the optimum increases progressively. However, the gradient based
+method rapidly searches in the direction of the optimum, from the best value
+provided by the associated brute force method. 
 \FIGVI{sphere-variables-sw-50-50-1.eps}{sphere-variables-mc-2500-1.eps}
 {sphere-variables-sw-10-10-25-10-0.5.eps}{sphere-variables-mc-100-25-10-0.1.eps}
 {sphere-variables-ge-250-16-0.2-0.2-0.2-32.eps}
 {sphere-variables-mc-r-100-1-600-4-0.1-1.eps}
-{Variables combination simulated by diferent algorithms}{FigSphereVariables}
+{Combination of variables simulated by different algorithms}{FigSphereVariables}
 
-En la figura~\ref{FigSphereSWMC} se muestra la convergencia obtenida con los
-algoritmos de fuerza bruta de barrido y de Monte-Carlo y la combinación de ambos
-con el algoritmo iterativo. Se comprueba que cómo la convergencia aumenta
-con el algoritmo iterativo. Aunque teóricamente la convergencia con los métodos
-iterativos aumenta, con bajos $N_b$ y $tol$ el valor óptimo puede caer fuera del
-intervalo de búsqueda y arruinar la convergencia, como sucede con SW+IT-2 y
-MC+IT-2.
+Figure~\ref{FigSphereSWMC} shows the convergence obtained for the sweep brute force
+and Monte-Carlo methods and their combination with the iterative algorithm. It can
+be observed how the convergence improves with the iterative algorithm. It is important
+to note that, although theoretically the convergence increases with the iterative methods, 
+low values of $N_b$ and $tol$ can cause the optimum value to fall outside of the search
+interval ruining the convergence, as is the case of SW+IT-2 and MC+IT-2.
 \PLOTII{sphere-evolution-sw.eps}{sphere-evolution-mc.eps}
-{Convergencia de la optimizacion de $g_{Sphere}$ con (left) el algoritmo de
-barrido and (right) Monte-Carlo combinados ambos con el algoritmo iterativo y
-distintos parametros}{FigSphereSWMC}
+{Convergence of the optimizacion for $g_{Sphere}$ with (left) the sweep algorithm
+and (right) Monte-Carlo, both combined with the iterative algorithm and different
+parameters}{FigSphereSWMC}
 
-En la figura~\ref{FigSphereSWMCGR} se muestra la convergencia obtenida con los
-algoritmos de fuerza bruta de barrido y de Monte-Carlo acoplados al algoritmo
-basado en gradiente. Se comprueba que el algoritmo basado en gradiente tiene una
-convergencia muy superior, por lo que en esta función la convergencia es mayor
-cuanto menor es el número de casos simulados con el algoritmo de fuerza bruta.
-En cuanto al método de estimar el gradiente, el método aleatorio se muestra
-superior al método de descenso de coordenadas.
+Figure~\ref{FigSphereSWMCGR} displays the convergence obtained with the sweep
+brute force and Monte-Carlo methods coupled with the gradient based method. 
+It can be shown that the convergence of the gradient based method is vastly
+superior, so that in this function the the greater the number of simulations with 
+the brute force method, the lower the convergence. With regard to the method of
+estimating the gradient, the random method is shown superior to the coordinates
+descent method. 
 \PLOTII{sphere-evolution-sw-cdr.eps}{sphere-evolution-mc-cdr.eps}
-{Convergencia de la optimizacion de $g_{Sphere}$ con (left) el algoritmo de
-barrido and (right) Monte-Carlo combinados ambos con el algoritmo basado en el
-gradiente y distintos parametros}{FigSphereSWMCGR}
+{Convergence of the optimizacion for $g_{Sphere}$ with (left) the sweep algorithm
+and (right) Monte-Carlo, both combined with gradient based method and different
+parameters}{FigSphereSWMCGR}
 
-En la figura~\ref{FigSphereMCCDR} se muestra la influencia de los distintos
-parámetros en la convergencia lograda por el método basado en gradiente.
-Arriba a la iquierda se ilustra el efecto del parámetro $rel$. Con un tamaño de
-paso pequeño, valores de $rel$ nulos producen una convergencia menor. Arriba a
-la derecha puede verse el efecto del tamaño de paso. En general, debe escogerse
-un tamaño de paso unas pocas veces menor que la distancia aproximada esperada
-de la distancia entre el óptimo y el mejor punto obtenido por el método de
-fuerza bruta. Finalmente, en la figura de abajo se comprueba que el menor número
-de estimaciones del gradiente ($N_e=2$) proporcionan la convergencia más rápida
-con el método aleatorio de estimar el gradiente.
+The influence of the different parameters on the convergence for the gradient
+based method is depicted in figure~\ref{FigSphereMCCDR}.
+On the top left side, the effect of the parameter $rel$ is illustrated. With a
+small step size, null values of $rel$ result in lower values of the convergence.
+On the top right side, the influence of the step size is shown. In general,
+it is recommended to select a step size of around a few times the expected 
+approximated distance between the optimum and the best point obtained by the brute
+force method. Finally, in the bottom figure can be observed that a lower number of gradient
+estimates ($N_e=2$) results in the fastest convergence with the random value for the
+gradient based method. 
 \FIGIII{sphere-evolution-mc-cd-r.eps}{sphere-evolution-mc-cd-s.eps}
 {sphere-evolution-mc-r.eps}
-{Convergencia de la optimizacion de $g_{Sphere}$ con el algoritmo de Monte-Carlo
-y el método basado en gradiente configurado con diferentes combinaciones de
-parametros}{FigSphereMCCDR}
+{Convergence of the optimizacion for $g_{Sphere}$ with Monte-Carlo and gradient based
+methods and different combinations of parameters}{FigSphereMCCDR}
 
-En la figura~\ref{FigSphereGE} se presentan las convergencias del algoritmo
-genético con 11 diferentes combinaciones de parámetros. Los resultados, aunque
-mejoran ligeramente los de los algoritmos puros de fuerza bruta, son mucho
-peores que los del algoritmo iterativo y los del método basado en gradiente.
+Figure~\ref{FigSphereGE} displays the different convergences for the genetic 
+algorithm with 11 different combinations of parameters. The results, although
+slightly better than those of the brute force methods, are clearly inferior to
+those obtained with the iterative and gradient based methods. 
 \FIGIII{sphere-evolution-ge-1-4.eps}{sphere-evolution-ge-5-8.eps}
-{sphere-evolution-ge-9-11.eps}{Convergencia de la optimizacion de $g_{Sphere}$
-con el algoritmo genético y distintas combinaciones de parametros}{FigSphereGE}
+{sphere-evolution-ge-9-11.eps}{Convergence of the optimization for $g_{Sphere}$
+with the genetic algorithm and different combinations of parameters}{FigSphereGE}
 
-Finalmente, en la tabla~\ref{TabTestResults} se muestran los resultados
-obtenidos por 23 combinaciones de algoritmos y parámetros en las 6 funciones
-test. El resultado se presenta como menos el logaritmo decimal de la distancia
-obtenida al punto óptimo. Este valor viene a suponer el número de dígitos
-decimales de precisión obtenidos. Se han resaltado valores próximos a 14 que es
-la precisión teórica de la máquina. Los resultados de GE pueden calificarse como
-decepcionantes, si bien logran una ligera ventaja en una función convexa como la
-función esférica su ventaja sobre la fuerza bruta resulta más que dudosa en los
-demás casos En cuanto a los métodos de fuerza bruta SW a funcionado ligeramente
-mejor que MC. No obstante, podría tratarse de un hecho aleatorio. De hecho,
-teóricamente, MC saca ventaja en situaciones con muchas variables y en los que
-la influencia de cada variable sobre la función objetivo es distinta, cosa que
-no ocurre en los tests analizados. El algoritmo iterativo de MPCOTool sí que ha
-supuesto una mejora importante, logrando una sustancial mejora sobre la fuerza
-bruta en práctimente todos los casos, aunque ha tenido más problemas con la
-función de Rosenbrock. Ha funcionado ligeramente mejor acoplado a MC, aunque
-también podría ser un hecho aleatorio dado las funciones analizadas. Aunque la
-convergencia en la función esférica de GB es mayor usando un número bajo de
-simulaciones del método de fuerza bruta asociado, se revela como una mala
-estrategia en situaciones con muchos mínimos locales. En este caso funciona
-mejor que el método estocástico realice un número suficiente de simulaciones
-para obtener un punto cercano al óptimo y usar entonces GB para que converja
-rápidamente. En cuanto al método de estimar el gradiente, aunque RA usado con
-un número bajo de estimaciones acelera la convergencia, falla en algunos casos a
-la hora de encontrar el óptimo. CD resulta un método algo más lento pero mucho
-más seguro.
+Finally, the results obtained by the 23 different combinations of algorithms
+and parameters for the 6 test functions are displayed in table~\ref{TabTestResults}. 
+The result is presented as minus the decimal logarithm of the distance obtained
+to the optimum point. This value represents the number of decimal digits of 
+precision achieved. Values close to 14 have been highlighted, being this value the
+theoretical precision of the machine. The results for the GE can be qualified as
+disappointing. Although GE gets slightly better results for a convex function
+like the sphere, its improvement over brute force method is highly questionable
+for all other cases. With regard to the brute force methods, the behavior of SW
+is slightly superior to MC; however, this may be a random fact. Indeed, theoretically,
+MC takes advantage of situations with many variables, where the influence of each 
+variable over the objective function is distinct, which is not the case for
+the analyzed cases. The MPCOTool iterative algorithm do lead to a significant
+improvement, with a substantial progress over the brute force methods in 
+virtually all cases, even though some problems with the Rosenbrock function. 
+It outperforms slightly better coupled with MC, although it may also be
+a random fact related to the analyzed functions. Despite the fact that the
+convergence of GB for the sphere function is higher using a lower number of
+simulations for the associated brute force method, reveals itself as a bad
+strategy with many local minima functions. In this case, a better approach
+consist of beginning with a sufficient number of simulations by the stochastic model,
+in order to obtain a point in the vicinity of the optimum, and subsequently use
+the GB for a fast convergence. As regards the method to estimate the gradient,
+although when RA with a low number of estimates is used, the convergence is accelerated,
+it does not success in finding the optimum in some cases. CD proves to be a 
+method somewhat slower but is deemed more secure. 
 \TABLE{\scriptsize}{c|cccccc}
 {
 	Method & $g_{Sphere}$ & $g_{Ackley}$ & $g_{Booth}$ & $g_{Rosenbrock}$ &
