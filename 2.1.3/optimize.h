@@ -39,94 +39,6 @@ OF SUCH DAMAGE.
 #define OPTIMIZE__H 1
 
 /**
- * \enum Algorithm
- * \brief Enum to define the algorithms.
- */
-enum Algorithm
-{
-  ALGORITHM_MONTE_CARLO = 0,    ///< Monte-Carlo algorithm.
-  ALGORITHM_SWEEP = 1,          ///< Sweep algorithm.
-  ALGORITHM_GENETIC = 2         ///< Genetic algorithm.
-};
-
-/**
- * \enum DirectionMethod
- * \brief Enum to define the methods to estimate the direction search.
- */
-enum DirectionMethod
-{
-  DIRECTION_METHOD_COORDINATES = 0,     ///< Coordinates descent method.
-  DIRECTION_METHOD_RANDOM = 1,  ///< Random method.
-};
-
-/**
- * \enum ErrorNorm
- * \brief Enum to define the error norm.
- */
-enum ErrorNorm
-{
-  ERROR_NORM_EUCLIDIAN = 0,
-  ///< Euclidian norm: \f$\sqrt{\sum_i\left(w_i\,x_i\right)^2}\f$.
-  ERROR_NORM_MAXIMUM = 1,
-  ///< Maximum norm: \f$\max_i\left|w_i\,x_i\right|\f$.
-  ERROR_NORM_P = 2,
-  ///< P-norm \f$\sqrt[p]{\sum_i\left|w_i\,x_i\right|^p}\f$.
-  ERROR_NORM_TAXICAB = 3
-    ///< Taxicab norm \f$\sum_i\left|w_i\,x_i\right|\f$.
-};
-
-/**
- * \struct Input
- * \brief Struct to define the optimization input file.
- */
-typedef struct
-{
-  char **template[MAX_NINPUTS]; ///< Matrix of template names of input files.
-  char **experiment;            ///< Array of experimental data file names.
-  char **label;                 ///< Array of variable names.
-  char *result;                 ///< Name of the result file.
-  char *variables;              ///< Name of the variables file.
-  char *simulator;              ///< Name of the simulator program.
-  char *evaluator;
-  ///< Name of the program to evaluate the objective function.
-  char *directory;              ///< Working directory.
-  char *name;                   ///< Input data file name.
-  double *rangemin;             ///< Array of minimum variable values.
-  double *rangemax;             ///< Array of maximum variable values.
-  double *rangeminabs;          ///< Array of absolute minimum variable values.
-  double *rangemaxabs;          ///< Array of absolute maximum variable values.
-  double *weight;               ///< Array of the experiment weights.
-  double *step;
-  ///< Array of direction search method step sizes.
-  unsigned int *precision;      ///< Array of variable precisions.
-  unsigned int *nsweeps;        ///< Array of sweeps of the sweep algorithm.
-  unsigned int *nbits;
-  ///< Array of bits numbers of the genetic algorithm.
-  double tolerance;             ///< Algorithm tolerance.
-  double mutation_ratio;        ///< Mutation probability.
-  double reproduction_ratio;    ///< Reproduction probability.
-  double adaptation_ratio;      ///< Adaptation probability.
-  double relaxation;            ///< Relaxation parameter.
-  double p;                     ///< Exponent of the P error norm.
-  double thresold;              ///< Thresold to finish the optimization.
-  unsigned long int seed;
-  ///< Seed of the pseudo-random numbers generator.
-  unsigned int nvariables;      ///< Variables number.
-  unsigned int nexperiments;    ///< Experiments number.
-  unsigned int ninputs;         ///< Number of input files to the simulator.
-  unsigned int nsimulations;    ///< Simulations number per experiment.
-  unsigned int algorithm;       ///< Algorithm type.
-  unsigned int nsteps;
-  ///< Number of steps to do the direction search method.
-  unsigned int direction;       ///< Method to estimate the direction search.
-  unsigned int nestimates;
-  ///< Number of simulations to estimate the direction search.
-  unsigned int niterations;     ///< Number of algorithm iterations
-  unsigned int nbest;           ///< Number of best simulations.
-  unsigned int norm;            ///< Error norm type.
-} Input;
-
-/**
  * \struct Optimize
  * \brief Struct to define the optimization ation data.
  */
@@ -220,18 +132,11 @@ extern void (*optimize_algorithm) ();
 extern double (*optimize_estimate_direction) (unsigned int variable,
                                               unsigned int estimate);
 extern double (*optimize_norm) (unsigned int simulation);
-extern Input input[1];
 extern Optimize optimize[1];
 extern const xmlChar *result_name;
 extern const xmlChar *variables_name;
-extern const xmlChar *template[MAX_NINPUTS];
-extern const char *format[NPRECISIONS];
-extern const double precision[NPRECISIONS];
 
 // Public functions
-void input_new ();
-void input_free ();
-int input_open (char *filename);
 void optimize_input (unsigned int simulation, char *input,
                      GMappedFile * template);
 double optimize_parse (unsigned int simulation, unsigned int experiment);

@@ -50,6 +50,8 @@ OF SUCH DAMAGE.
 GtkWindow *main_window;         ///< Main GtkWindow.
 #endif
 
+char *error_message; ///< Error message.
+
 /**
  * \fn void show_message (char *title, char *msg, int type)
  * \brief Function to show a dialog with a message.

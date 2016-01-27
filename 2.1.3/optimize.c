@@ -56,6 +56,9 @@ OF SUCH DAMAGE.
 #endif
 #include "genetic/genetic.h"
 #include "utils.h"
+#include "experiment.h"
+#include "variable.h"
+#include "input.h"
 #include "optimize.h"
 
 #define DEBUG 0                 ///< Macro to debug.
@@ -82,31 +85,12 @@ double (*optimize_estimate_direction) (unsigned int variable,
   ///< Pointer to the function to estimate the direction.
 double (*optimize_norm) (unsigned int simulation);
   ///< Pointer to the error norm function.
-Input input[1];
-  ///< Input struct to define the input file to mpcotool.
 Optimize optimize[1];           ///< Optimization data.
 
 const xmlChar *result_name = (xmlChar *) "result";
   ///< Name of the result file.
 const xmlChar *variables_name = (xmlChar *) "variables";
   ///< Name of the variables file.
-
-const xmlChar *template[MAX_NINPUTS] = {
-  XML_TEMPLATE1, XML_TEMPLATE2, XML_TEMPLATE3, XML_TEMPLATE4,
-  XML_TEMPLATE5, XML_TEMPLATE6, XML_TEMPLATE7, XML_TEMPLATE8
-};
-
-///< Array of xmlChar strings with template labels.
-
-const char *format[NPRECISIONS] = {
-  "%.0lf", "%.1lf", "%.2lf", "%.3lf", "%.4lf", "%.5lf", "%.6lf", "%.7lf",
-  "%.8lf", "%.9lf", "%.10lf", "%.11lf", "%.12lf", "%.13lf", "%.14lf"
-};                              ///< Array of C-strings with variable formats.
-
-const double precision[NPRECISIONS] = {
-  1., 0.1, 0.01, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8, 1e-9, 1e-10, 1e-11, 1e-12,
-  1e-13, 1e-14
-};                              ///< Array of variable precisions.
 
 /**
  * \fn void input_new ()

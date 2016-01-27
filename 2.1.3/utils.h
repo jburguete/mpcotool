@@ -53,6 +53,8 @@ extern GtkWindow *main_window;
 #define INFO_TYPE 0
 #endif
 
+extern char *error_message;
+
 // Public functions
 void show_message (char *title, char *msg, int type);
 void show_error (char *msg);
