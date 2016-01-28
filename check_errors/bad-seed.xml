@@ -1,2 +1,2 @@
 <?xml version="1.0"?>
-<calibrate simulator="a" seed="a"/>
+<optimize simulator="a" seed="a"/>

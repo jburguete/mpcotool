@@ -1,4 +1,4 @@
 <?xml version="1.0"?>
-<calibrate simulator="a" algorithm="sweep" niterations="2">
+<optimize simulator="a" algorithm="sweep" niterations="2">
 	<experiment/>
-</calibrate>
+</optimize>

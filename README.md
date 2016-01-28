@@ -7,8 +7,8 @@ calibrations or optimizations of empirical parameters.
 VERSIONS
 --------
 
-* 2.0.1: Stable and recommended version.
-* 2.3.0: Developing version to do new features.
+* 2.2.0: Stable and recommended version.
+* 2.3.1: Developing version to do new features.
 
 AUTHORS
 -------
@@ -51,15 +51,15 @@ FILES
 -----
 
 The source code has to have the following files:
-* 2.0.1/configure.ac: configure generator.
-* 2.0.1/Makefile.in: Makefile generator.
-* 2.0.1/config.h.in: config header generator.
-* 2.0.1/mpcotool.c: main source code.
-* 2.0.1/mpcotool.h: main header code.
-* 2.0.1/interface.h: interface header code.
-* 2.0.1/build: script to build all.
-* 2.0.1/logo.png: logo figure.
-* 2.0.1/Doxyfile: configuration file to generate doxygen documentation.
+* 2.2.0/configure.ac: configure generator.
+* 2.2.0/Makefile.in: Makefile generator.
+* 2.2.0/config.h.in: config header generator.
+* 2.2.0/mpcotool.c: main source code.
+* 2.2.0/mpcotool.h: main header code.
+* 2.2.0/interface.h: interface header code.
+* 2.2.0/build: script to build all.
+* 2.2.0/logo.png: logo figure.
+* 2.2.0/Doxyfile: configuration file to generate doxygen documentation.
 * TODO: tasks to do.
 * README.md: this file.
 * tests/testX/\*: several tests to check the program working.
@@ -102,7 +102,7 @@ a terminal:
 > $ git clone https://github.com/jburguete/mpcotool.git
 
 3. Link the latest genetic version to genetic:
-> $ cd mpcotool/2.0.1
+> $ cd mpcotool/2.2.0
 >
 > $ ln -s ../../genetic/1.0.0 genetic
 
@@ -155,7 +155,7 @@ MAKING TESTS INSTRUCTIONS
 In order to build the tests follow the next instructions:
 
 1. Link some tests that needs genetic library doing in a terminal (assuming that
-you are in the directory mpcotool/2.0.1):
+you are in the directory mpcotool/2.2.0):
 > $ cd ../tests/test2
 >
 > $ ln -s ../../../genetic/1.0.0 genetic
@@ -169,7 +169,7 @@ you are in the directory mpcotool/2.0.1):
 > $ ln -s ../../../genetic/1.0.0 genetic
 
 2. Build all tests doing in the same terminal:
-> $ cd ../../2.0.1
+> $ cd ../../2.2.0
 >
 > $ make tests
 

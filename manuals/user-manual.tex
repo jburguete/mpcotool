@@ -133,7 +133,7 @@ The indications provided in \citet{install-unix} can be followed in order to ins
 
 On OpenBSD 5.8, prior to build the code, you have to select adequate version of Autoconf and Automake doing on a terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.15
+> export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.15
 \end{lstlisting}
 
 On Window systems, you have to install MSYS2
@@ -144,64 +144,68 @@ https://github.com/jburguete/install-unix.
 On Fedora Linux 23, in order to use OpenMPI compilation, do in a terminal (in 64
 bits version):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ export PATH=$PATH:/usr/lib64/openmpi/bin
+> export PATH=$PATH:/usr/lib64/openmpi/bin
 \end{lstlisting}
 
 Once all the tools installed, the Genetic source code must be downloaded and it must be compiled following on a terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ git clone https://github.com/jburguete/genetic.git
-$ cd genetic/0.6.1
-$ ./build
+> git clone https://github.com/jburguete/genetic.git
+> cd genetic/1.0.0
+> ./build
 \end{lstlisting}
 
 The following step is to download the source code MPCOTool, to link it with Genetic and compile together by means of:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ git clone https://github.com/jburguete/mpcotool.git
-$ cd mpcotool/2.0.1
-$ ln -s ../../genetic/0.6.1 genetic
-$ ./build
+> git clone https://github.com/jburguete/mpcotool.git
+> cd mpcotool/2.2.0
+> ln -s ../../genetic/1.0.0 genetic
+> ./build
 \end{lstlisting}
 
 Optionally, to compile the tests with the standard analytical optimization
 functions, you have to do (the executable files of test2, test3 and test4 use
 also the \emph{Genetic} library):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ cd ../tests/test2
-$ ln -s ../../../genetic/0.6.1 genetic
-$ cd ../test3
-$ ln -s ../../../genetic/0.6.1 genetic
-$ cd ../test4
-$ ln -s ../../../genetic/0.6.1 genetic
-$ cd ../../2.0.1
-$ make tests
+> cd ../tests/test2
+> ln -s ../../../genetic/1.0.0 genetic
+> cd ../test3
+> ln -s ../../../genetic/1.0.0 genetic
+> cd ../test4
+> ln -s ../../../genetic/1.0.0 genetic
+> cd ../../2.2.0
+> make tests
 \end{lstlisting}
 
 Finally, the next optional step build the PDF manuals:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ make manuals
+> make manuals
 \end{lstlisting}
 
 \chapter{Interface}
 
 \section{Command line format}
 
+In this section optional arguments are typed in square brackets.
+
 \begin{itemize}
 
 \item Command line in sequential mode (where X is the number of threads to
-execute):
+execute and S is a seed for the pseudo-random numbers genertator):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ ./mpcotoolbin [-nthreads X] input_file.xml
+> ./mpcotoolbin [-nthreads X] [-seed S] input_file.xml
+[result_file] [variables_file]
 \end{lstlisting}
 
 \item Command line in parallelized mode (where X is the number of threads to
-open for every node):
+open for every node and S is a seed for the pseudo-random numbers genertator):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ mpirun [MPI options] ./mpcotoolbin [-nthreads X] input_file.xml
+> mpirun [MPI options] ./mpcotoolbin [-nthreads X] [-seed S]
+input_file.xml [result_file] [variables_file]
 \end{lstlisting}
 
-\item The syntax of the simulator has to be:
+\item The syntax of the simulator program has to be:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ ./simulator_name input_file_1 [input_file_2] [...] output_file
+> ./simulator_name input_file_1 [input_file_2] [...] output_file
 \end{lstlisting}
 There are two options for the output file. It can begin with a number indicating
 the objective function value or it can be a results file that has to be
@@ -212,12 +216,12 @@ data file.
 evaluate the objective function has to be (where the results file has to begin
 with the objective function value):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ ./evaluator_name simulated_file experimental_file results_file
+> ./evaluator_name simulated_file experimental_file results_file
 \end{lstlisting}
 
 \item On UNIX type systems the GUI application can be open doing on a terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ ./mpcotool
+> ./mpcotool
 \end{lstlisting}
 
 \end{itemize}
@@ -273,9 +277,9 @@ represented in figure~\ref{FigMainFile}.
 	\rput(195,10){reproduction}
 	\rput(235,10){adaptation}
 	\rput(265,10){seed}
-	\rput(65,0){gradient\_method}
-	\rput(105,0){nsteps}
-	\rput(135,0){nestimates}
+	\rput(60,0){direction}
+	\rput(95,0){nsteps}
+	\rput(130,0){nestimates}
 	\rput(170,0){relaxation}
 	\rput(200,0){norm}
 	\rput(217,0){p}
@@ -376,23 +380,24 @@ available properties are:
 	\item[tolerance]: tolerance parameter to relax the convergence interval of
 		the iterative algorithm (default 0),
 	\item[seed]: seed of the pseudo-random numbers generator (default 7007),
-	\item[gradient\_method]: method to estimate the gradient (optional for sweep
+	\item[direction]: method to search the optimal direction (optional for sweep
 		and Monte-Carlo algorithms). Two values are currently available:
 	\begin{description}
-		\item[coordinates]: coordinates descent estimate,
-		\item[random]: random estimate. It requieres:
+		\item[coordinates]: coordinates descent search,
+		\item[random]: random search. It requieres:
 		\begin{description}
-			\item[nestimates]: number of random checks to estimate the gradient.
+			\item[nestimates]: number of random checks to search the optimal
+				direction.
 		\end{description}
 	\end{description}
 	Both methods requires the following parameters:
 	\begin{description}
-		\item[nsteps]: number of steps to perform the gradient based method,
-		\item[relaxation]: relaxation parameter for the gradient based method,
+		\item[nsteps]: number of steps to perform the direction search method,
+		\item[relaxation]: relaxation parameter for the direction search method,
 	\end{description}
 	and for each variable:
 	\begin{description}
-		\item[step]: initial step size for the gradient based method,
+		\item[step]: initial step size for the direction search method,
 	\end{description}
 	\item[norm]: to set the error norm (default "euclidian"). Four values are
 		currently available:
@@ -472,7 +477,7 @@ defined.
 Let us assume that $N_{parameters}$ empirical parameters are sought desired so
 that the results from a simulation model are the best fit to $N_{experiments}$
 experimental data and that the simulator requires $N_{inputs}$ input files. The
-structure followed by MPCOTool is summarized in \emph{main input file},
+structure followed by MPCOTool is summarized in the \emph{main input file},
 where both $N_{experiments}$ and $N_{inputs}$ are specified. Furthermore, it
 contains the extreme values of the empirical parameters and the chosen
 optimization algorithm. Then, MPCOTool reads the corresponding
@@ -906,10 +911,10 @@ figure~\ref{FigIterativeParallelization}).
 }{Flowchart of the parallelization scheme in MPCOTool for the iterative
 method}{FigIterativeParallelization}
 
-\section{Gradient based method}
+\section{Direction search method}
 
 Brute force optimization methods, sweep and Monte-Carlo, can be also combined
-with a gradient based algorithm. Defining the vector $\vec{r}_i$ as the optime
+with a direction search algorithm. Defining the vector $\vec{r}_i$ as the optime
 variables combination obtained in the $i$-th step, $\vec{r}_1$ as the optime
 varaibles combination vector obtained by the brute force method and defining
 the vector $\vec{s}_i$ as:
@@ -919,22 +924,22 @@ the vector $\vec{s}_i$ as:
 	\vec{s}_i=(1-relaxation)\,\vec{s}_{i-1}+relaxation\,\Delta\vec{r}_{i-1},
 }{Eqs}
 with $\Delta\vec{r}_{i-1}=\vec{r}_i+\vec{r}_{i-1}$ and $relaxtion$ the
-relaxation parameter, the gradient based method checks $N_{estimates}$ variable
-combinations and choice the optimum as:
+relaxation parameter, the direction search method checks $N_{estimates}$
+variable combinations and choice the optimum as:
 \EQ
 {
 	\vec{r}_{i+1}=\mathrm{optime}\PA{\vec{r}_i,\;\vec{r}_i+\vec{s}_i+\vec{t}_j},
 	\;j=1,\cdots,N_{estimates}.
-}{EqGradient}
+}{EqDirection}
 If the step does not improve the optimum ($\vec{r}_i=\vec{r}_{i+1}$) then the
-gradient step vectors $\vec{t}_j$ are divided by two and $\vec{s}_{i+1}$ is set
+direction step vectors $\vec{t}_j$ are divided by two and $\vec{s}_{i+1}$ is set
 to zero. The method is iterated $N_{steps}$ times.
 
-Although gradient based method gets the fastest convergence, is the method in
+Although direction search method gets the fastest convergence, is the method in
 MPCOTool that obtains the least advantages of parallelization. The method is
 almost sequential and parallelization only can be performed for each step in
-the $N_{estimates}$ simulations to estimate the gradient. In the
-figure~\ref{FigGradientParallelization} a flowchart of the parallelization
+the $N_{estimates}$ simulations to estimate the optimal direction. In the
+figure~\ref{FigDirectionParallelization} a flowchart of the parallelization
 scheme for this method is shown.
 
 \psset{xunit=0.5mm,yunit=0.5mm}
@@ -957,7 +962,7 @@ scheme for this method is shown.
 	\psline{->}(-60,-45)(0,-50)
 	\psline{->}(0,-45)(0,-50)
 	\psline{->}(60,-45)(0,-50)
-	\rput(0,-55){Getting $N_{best}$ empirical parameters sets}
+	\rput(0,-55){Getting optimal empirical parameters set}
 	\psframe(-55,-50)(55,-60)
 	\psline{->}(0,-60)(0,-65)
 	\rput(0,-70){$\cdots$}
@@ -980,8 +985,8 @@ scheme for this method is shown.
 	\psline{->}(60,-115)(0,-120)
 	\rput(0,-125){Getting optimal empirical parameters set}
 	\psframe(-55,-120)(55,-130)
-}{Flowchart of the parallelization scheme in MPCOTool for the gradient based
-method}{FigGradientParallelization}
+}{Flowchart of the parallelization scheme in MPCOTool for the direction search
+method}{FigDirectionParallelization}
 
 MPCOTool uses two methods to build the $\vec{t}_j$ vectors:
 
@@ -1016,7 +1021,7 @@ The vectors $\vec{t}_j$ are built randomly as:
 }{EqtRandom}
 with $r_{j,k}\in[0,1)$ random numbers.
 
-In the figure~\ref{FigGradient} a sketch for a system with two variables is
+In the figure~\ref{FigDirection} a sketch for a system with two variables is
 presented to illustrate the working mode of coordinates descent and random
 algorithms.
 \psset{xunit=0.45mm,yunit=0.45mm,runit=0.5mm}
@@ -1067,9 +1072,9 @@ algorithms.
 	\psline{->}(220,65)(212,49)
 	\pscircle*(212,49){1}
 	\rput(212,43){$\vec{t}_2$}
-}{(Left) coordinates descent and (right) random with $N_{estimates}=3$ gradient
-based method checks of variables combination in a system with two variables}
-{FigGradient}
+}{(Left) coordinates descent and (right) random with $N_{estimates}=3$ direction
+search method checks of variables combination in a system with two variables}
+{FigDirection}
 
 \section{Genetic method}
 

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<calibrate simulator="a" algorithm="sweep" niterations="2">
+<optimize simulator="a" algorithm="sweep" niterations="2">
 	<experiment name="a" template1="a" template2="a"/>
 	<experiment name="a" template1="a" template2="a" template3="a"/>
-</calibrate>
+</optimize>

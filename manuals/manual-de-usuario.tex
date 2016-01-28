@@ -125,7 +125,7 @@ Corporation.}
 Para generar el fichero ejecutable a partir de código fuente, un compilador de C
 (\citet{gcc} o \citet{clang}), los sistemas de configuración \citet{autoconf},
 \citet{automake} y \citet{pkgconfig}, el programa de control de la creación de
-ejecutables \citet{gnumake} and las siguienres librerías de software libre son
+ejecutables \citet{gnumake} y las siguienres librerías de software libre son
 necesarias:
 \begin{itemize}
 \item\citet{libxml}: Librería requerida para leer el fichero principal de
@@ -148,7 +148,7 @@ instalar todas estas utilidades.
 En OpenBSD 5.8, antes de generar el código, deben seleccionarse versiones
 adecuadas de Autoconf y Automake haciendo en un terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.15
+> export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.15
 \end{lstlisting}
 
 En sistemas Windows hay que instalar MSYS2
@@ -159,66 +159,74 @@ https://github.com/jburguete/install-unix.
 En Fedora Linux 23, para usar OpenMPI hay que hacer en un terminal (en la
 versión de 64 bits):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ export PATH=$PATH:/usr/lib64/openmpi/bin
+> export PATH=$PATH:/usr/lib64/openmpi/bin
 \end{lstlisting}
 
 Una vez que todas las utilidades necesarias han sido instaladas, hay que
 descargar el código de Genetic. Luego puede compilarse haciendo en un terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ git clone https://github.com/jburguete/genetic.git
-$ cd genetic/0.6.1
-$ ./build
+> git clone https://github.com/jburguete/genetic.git
+> cd genetic/1.0.0
+> ./build
 \end{lstlisting}
 
 El siguiente paso es descargar el código fuente de MPCOTool, enlazarlo con el
 de Genetic y compilar todo junto haciendo:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ git clone https://github.com/jburguete/mpcotool.git
-$ cd mpcotool/2.0.1
-$ ln -s ../../genetic/0.6.1 genetic
-$ ./build
+> git clone https://github.com/jburguete/mpcotool.git
+> cd mpcotool/2.2.0
+> ln -s ../../genetic/1.0.0 genetic
+> ./build
 \end{lstlisting}
 
 Opcionalmente, si se quieren compilar los tests con las funciones analíticas de
 optimización estándar, hay que hacer (los ejecutables de test2, test3 y test4
 usan también la librería \emph{Genetic}):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ cd ../tests/test2
-$ ln -s ../../../genetic/0.6.1 genetic
-$ cd ../test3
-$ ln -s ../../../genetic/0.6.1 genetic
-$ cd ../test4
-$ ln -s ../../../genetic/0.6.1 genetic
-$ cd ../../2.0.1
-$ make tests
+> cd ../tests/test2
+> ln -s ../../../genetic/1.0.0 genetic
+> cd ../test3
+> ln -s ../../../genetic/1.0.0 genetic
+> cd ../test4
+> ln -s ../../../genetic/1.0.0 genetic
+> cd ../../2.2.0
+> make tests
 \end{lstlisting}
 
 Finalmente podemos construir los manuales en formato PDF haciendo:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ make manuals
+> make manuals
 \end{lstlisting}
 
 \chapter{Interfaz}
 
 \section{Formato en línea de comandos}
 
+En esta sección hemos marcado entre corchetes los argumentos opcionales.
+
 \begin{itemize}
 
-\item La línea de comandos en modo secuencial es (donde X es el número de tareas
-a ejecutar paralelamente):
+\item La línea de comandos en modo secuencial es (donde X es el número de hilos
+a ejecutar paralelamente y S una semilla para el generador de números
+pseudo-aleatorios):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ ./mpcotoolbin [-nthreads X] input_file.xml
+> ./mpcotoolbin [-nthreads X] [-seed S] fichero_de_entrada.xml
+[fichero_de_resultados] [fichero_de_variables]
 \end{lstlisting}
 
 \item La línea de comandos en modo paralelizado en diferentes computadoras con
-MPI es (donde X es el número de tareas a ejecutar en cada nodo):
+MPI es (donde X es el número de hilos a ejecutar en cada nodo y S una semilla
+para el generador de números pseudo-aleatorios):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ mpirun [MPI options] ./mpcotoolbin [-nthreads X] input_file.xml
+> mpirun [MPI options] ./mpcotoolbin [-nthreads X] [-seed S] 
+fichero_de_entrada.xml [fichero_de_resultados]
+[fichero_de_variables]
 \end{lstlisting}
 
 \item La sintaxis del programa simulador ha de ser:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ ./simulator_name input_file_1 [input_file_2] [...] output_file
+> ./simulador fichero_de_entrada_1 [fichero_de_entrada_2] [...]
+fichero_de_salida
 \end{lstlisting}
 Hay dos opciones para el fichero de salida. Puede comenzar con un número que
 indique el valor de la función objetivo o puede ser un fichero de resultados que
@@ -229,13 +237,14 @@ fichero de datos experimentales.
 para evaluar la función objetivo tiene que ser (donde el fichero de resultados
 debe comenzar con el valor de la función objetivo):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ ./evaluator_name simulated_file experimental_file results_file
+> ./evaluador fichero_simulado fichero_experimental
+fichero_de_resultados
 \end{lstlisting}
 
 \item En systemas de tipo UNIX, la aplicación interactiva puede abrirse haciendo
 en un terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-$ ./mpcotool
+> ./mpcotool
 \end{lstlisting}
 
 \end{itemize}
@@ -277,7 +286,7 @@ representada en la figura~\ref{FigMainFile}.
 	\tiny
 	\psframe(0,-5)(280,25)
 	\psline(40,-5)(40,25)
-	\rput(20,20){\bf calibrate}
+	\rput(20,20){\bf optimize}
 	\rput(60,20){\bf simulator}
 	\rput(100,20){\bf algorithm}
 	\rput(140,20){evaluator}
@@ -291,9 +300,9 @@ representada en la figura~\ref{FigMainFile}.
 	\rput(195,10){reproduction}
 	\rput(235,10){adaptation}
 	\rput(265,10){seed}
-	\rput(65,0){gradient\_method}
-	\rput(105,0){nsteps}
-	\rput(135,0){nestimates}
+	\rput(60,0){direction}
+	\rput(95,0){nsteps}
+	\rput(130,0){nestimates}
 	\rput(170,0){relaxation}
 	\rput(200,0){norm}
 	\rput(217,0){p}
@@ -354,7 +363,7 @@ imprescindibles están en negrita. No obstante, otras propiedades también puede
 ser necesarias en función del algoritmo de optimización seleccionado}
 {FigMainFile}
 
-El nodo XML principal tiene que comenzar con la etiqueta ``\emph{calibrate}''.
+El nodo XML principal tiene que comenzar con la etiqueta ``\emph{optimize}''.
 Las propiedades que se pueden definir son:
 \begin{description}
 	\item[simulator]: indica el programa simulador.
@@ -398,28 +407,28 @@ Las propiedades que se pueden definir son:
 		convergencia del algoritmo iterativo (valor por defecto: 0)
 	\item[seed]: semilla del generador de números pseudo-aleatorios (valor por
 		defecto 7007).
-	\item[gradient\_method]: método de estimar el gradiente (opcional para los
+	\item[direction]: método de buscar la dirección óptima (opcional para los
 		algoritmos de barrido y de Monte-Carlo). Dos valores están disponibles
 		actualmente:
 	\begin{description}
-		\item[coordinates]: estimación por descenso de coordenadas.
-		\item[random]: estimación aleatoria. Requiere:
+		\item[coordinates]: búsqueda por descenso de coordenadas.
+		\item[random]: búsqueda aleatoria. Requiere:
 		\begin{description}
-			\item[nestimates]: número de pruebas aleatorias para estimar el
-				gradiente.
+			\item[nestimates]: número de pruebas aleatorias para buscar la
+				dirección óptima.
 		\end{description}
 	\end{description}
 	Ambos métodos requieren además los siguientes parámetros:
 	\begin{description}
-		\item[nsteps]: número de pasos para ejecutar el método basado en el
-			gradiente,
-		\item[relaxation]: parámetro de relajación para el método basado en el
-			gradiente,
+		\item[nsteps]: número de pasos para ejecutar el método de búsqueda de
+			dirección,
+		\item[relaxation]: parámetro de relajación para el método de búsqueda de
+			dirección,
 	\end{description}
 	y para cada variable:
 	\begin{description}
-		\item[step]: tamaño de paso inicial para el método basado en el
-			gradiente.
+		\item[step]: tamaño de paso inicial para el método de búsqueda de
+			dirección.
 	\end{description}
 	\item[norm]: selecciona la norma de error (valor por defecto:
 		``euclidian''). Actualmente se pueden escoger cuatro tipos:
@@ -649,12 +658,17 @@ En métodos iterativos $N_{total}=N_{simulations}\times N_{iterations}$.
 En métodos de fuerza bruta puros
 $N_{iterations}=1\;\Rightarrow\;N_{total}=N_{simulations}$.
 
-\section{Sweep brute force method}
+\section{Método de fuerza bruta de barrido}
 
-The sweep brute force method finds the optimal set of parameters within a solution region by dividing it into regular subdomains. To find the optimal solution, the domain interval $x_i \in \PA{x_{i,min},\,x_{i,max}}$ is first defined for each variable $x_i$. Then, a regular partition in  $N_{x,i}$ subintervals is made. Taking into account this division of the solution space, the number of required simulations is:
+El método de barrido es un método de fuerza bruta que encuentra el conjunto
+óptimo de parámatros en una región dividiéndola en subdominios regulares. Para
+encontrar la solución óptima, el intervalo de dominio
+$x_i \in \PA{x_{i,min},\,x_{i,max}}$ se define para cada variable $x_i$.
+y se subdivide en una partición regular de $N_{x,i}$ subintervalos. El número de
+simulaciones que se requieren es:
 \EQ{N_{simulations}=N_{x,1}\times N_{x,2}\times\cdots,}
 {EqNSweeps}
-where $N_{x,i}$ is the number of sweeps in the variable $x_i$.
+donde $N_{x,i}$ es el número de barridos en la variable $x_i$.
 
 In figure~\ref{FigSweep} the $(x,y)$ domain is defined by the intervals $x\in\PA{x_{min},\,x_{max}}$ and $y \in \PA{y_{min},\,y_{max}}$. Both $x$ and $y$ intervals are divided into 5 regions with $N_{x}=N_{y}=5$. The optimal will be found within the region by evaluating the error of each $\PA{x_i,\,y_i}$ set of parameters hence requiring 25 evaluations. Note that the computational cost increases strongly as the number of variables grow.
 
@@ -952,10 +966,10 @@ figure~\ref{FigIterativeParallelization}).
 }{Flowchart of the parallelization scheme in MPCOTool for the iterative
 method}{FigIterativeParallelization}
 
-\section{Gradient based method}
+\section{Direction search method}
 
 Brute force optimization methods, sweep and Monte-Carlo, can be also combined
-with a gradient based algorithm. Defining the vector $\vec{r}_i$ as the optime
+with a direction search algorithm. Defining the vector $\vec{r}_i$ as the optime
 variables combination obtained in the $i$-th step, $\vec{r}_1$ as the optime
 varaibles combination vector obtained by the brute force method and defining
 the vector $\vec{s}_i$ as:
@@ -965,22 +979,22 @@ the vector $\vec{s}_i$ as:
 	\vec{s}_i=(1-relaxation)\,\vec{s}_{i-1}+relaxation\,\Delta\vec{r}_{i-1},
 }{Eqs}
 with $\Delta\vec{r}_{i-1}=\vec{r}_i+\vec{r}_{i-1}$ and $relaxtion$ the
-relaxation parameter, the gradient based method checks $N_{estimates}$ variable
-combinations and choice the optimum as:
+relaxation parameter, the direction search method checks $N_{estimates}$
+variable combinations and choice the optimum as:
 \EQ
 {
 	\vec{r}_{i+1}=\mathrm{optime}\PA{\vec{r}_i,\;\vec{r}_i+\vec{s}_i+\vec{t}_j},
 	\;j=1,\cdots,N_{estimates}.
-}{EqGradient}
+}{EqDirection}
 If the step does not improve the optimum ($\vec{r}_i=\vec{r}_{i+1}$) then the
-gradient step vectors $\vec{t}_j$ are divided by two and $\vec{s}_{i+1}$ is set
+direction step vectors $\vec{t}_j$ are divided by two and $\vec{s}_{i+1}$ is set
 to zero. The method is iterated $N_{steps}$ times.
 
-Although gradient based method gets the fastest convergence, is the method in
+Although direction search method gets the fastest convergence, is the method in
 MPCOTool that obtains the least advantages of parallelization. The method is
 almost sequential and parallelization only can be performed for each step in
-the $N_{estimates}$ simulations to estimate the gradient. In the
-figure~\ref{FigGradientParallelization} a flowchart of the parallelization
+the $N_{estimates}$ simulations to estimate the optimal direction. In the
+figure~\ref{FigDirectionParallelization} a flowchart of the parallelization
 scheme for this method is shown.
 
 \psset{xunit=0.5mm,yunit=0.5mm}
@@ -1003,7 +1017,7 @@ scheme for this method is shown.
 	\psline{->}(-60,-45)(0,-50)
 	\psline{->}(0,-45)(0,-50)
 	\psline{->}(60,-45)(0,-50)
-	\rput(0,-55){Getting $N_{best}$ empirical parameters sets}
+	\rput(0,-55){Getting optimal empirical parameters set}
 	\psframe(-55,-50)(55,-60)
 	\psline{->}(0,-60)(0,-65)
 	\rput(0,-70){$\cdots$}
@@ -1026,8 +1040,8 @@ scheme for this method is shown.
 	\psline{->}(60,-115)(0,-120)
 	\rput(0,-125){Getting optimal empirical parameters set}
 	\psframe(-55,-120)(55,-130)
-}{Flowchart of the parallelization scheme in MPCOTool for the gradient based
-method}{FigGradientParallelization}
+}{Flowchart of the parallelization scheme in MPCOTool for the direction search
+method}{FigDirectionParallelization}
 
 MPCOTool uses two methods to build the $\vec{t}_j$ vectors:
 
@@ -1062,7 +1076,7 @@ The vectors $\vec{t}_j$ are built randomly as:
 }{EqtRandom}
 with $r_{j,k}\in[0,1)$ random numbers.
 
-In the figure~\ref{FigGradient} a sketch for a system with two variables is
+In the figure~\ref{FigDirection} a sketch for a system with two variables is
 presented to illustrate the working mode of coordinates descent and random
 algorithms.
 \psset{xunit=0.45mm,yunit=0.45mm,runit=0.5mm}
@@ -1113,9 +1127,9 @@ algorithms.
 	\psline{->}(220,65)(212,49)
 	\pscircle*(212,49){1}
 	\rput(212,43){$\vec{t}_2$}
-}{(Left) coordinates descent and (right) random with $N_{estimates}=3$ gradient
-based method checks of variables combination in a system with two variables}
-{FigGradient}
+}{(Left) coordinates descent and (right) random with $N_{estimates}=3$ direction
+search method checks of variables combination in a system with two variables}
+{FigDirection}
 
 \section{Genetic method}
 

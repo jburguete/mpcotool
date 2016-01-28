@@ -1,2 +1,2 @@
 <?xml version="1.0"?>
-<calibrate simulator="a" algorithm="Monte-Carlo"/>
+<optimize simulator="a" algorithm="Monte-Carlo"/>

@@ -284,18 +284,11 @@ smaller scales.
 Optimization can be understood as the minimization process of some functional
 that evaluates the objective of a model. Therefore, a functional $J$ must be
 defined in order to evaluate the deviation between your model results
-$\mathbf{x}$ and your objectives $\mathbf{x}_o$. The root mean square deviation
-for example measures the average distance between both:
-\EQ
-{
-	J \equiv J\PA{\mathbf{x}}
-	=\sqrt{\frac{1}{n}\,\sum_i^n\ABS{x_i-x_{o,i}}^2},
-}{EqRMSD}
-with $\mathbf{x},\mathbf{x}_o\in\mathbb{R}^n$ real vectors of $n\ge 1$
+$\mathbf{x}$ and your objectives $\mathbf{x}_o$, with
+$\mathbf{x},\mathbf{x}_o\in\mathbb{R}^n$ real vectors of $n\ge 1$
 components ($x_i$ and $x_{o,i}$ respectively) and
 $J:\mathbb{R}^n \rightarrow \mathbb{R}$. 
-This is one of the most used examples with the objective function, although 
-infinite ways of defining $J$ can be used, for example penalizing different
+Infinite ways of defining $J$ can be used, for example penalizing different
 variables with different weights according to their importance to our
 objectives. The aim is to find the minimum of this functional:
 \EQ{\min_{\mathbf{x}}\;J\PA{\mathbf{x}}.}{EqFunctionalMin}
@@ -388,28 +381,28 @@ The iterative algorithm can be also easily parallelized. However, this method is
 less parallelizable than pure brute force methods because the parallelization
 has to be performed for each iteration.
 
-\subsection{Gradient based method (GB)}
+\subsection{Direction search method (DS)}
 
 Brute force optimization methods, SW and MC, can be also combined
-with a gradient based algorithm. Defining the vector $\vec{r}_i$ as the optimum
-combination of variables obtained in the $i$-th step, $\vec{r}_1$ as the vector of the 
-optimum combination of variables obtained by the brute force method and defining
+with a direction search algorithm. Defining the vector $\vec{r}_i$ as the optime
+variables combination obtained in the $i$-th step, $\vec{r}_1$ as the optime
+varaibles combination vector obtained by the brute force method and defining
 the vector $\vec{s}_i$ as:
 \EQ
 {
-	\vec{s}_1=\vec{0},\quad
+	\vec{s}_1=\vec{0},\qquad
 	\vec{s}_i=(1-rel)\,\vec{s}_{i-1}+rel\,\Delta\vec{r}_{i-1},
 }{Eqs}
 with $\Delta\vec{r}_{i-1}=\vec{r}_i+\vec{r}_{i-1}$ and $rel$ the
-relaxation parameter, the gradient based method checks $N_e$ 
-combinations of variables and choice the optimum as:
+relaxation parameter, the DS method checks $N_e$
+variable combinations and choice the optimum as:
 \EQ
 {
 	\vec{r}_{i+1}=\mathrm{optime}\PA{\vec{r}_i,\;\vec{r}_i+\vec{s}_i+\vec{t}_j},
-	\;j=1,\cdots,N_e,
-}{EqGradient}
+	\;j=1,\cdots,N_e.
+}{EqDirection}
 If the step does not improve the optimum ($\vec{r}_i=\vec{r}_{i+1}$) then the
-gradient step vectors $\vec{t}_j$ are divided by two and $\vec{s}_{i+1}$ is set
+direction step vectors $\vec{t}_j$ are divided by two and $\vec{s}_{i+1}$ is set
 to zero. The method is iterated $N_{st}$ times.
 
 Although gradient based method gets the fastest convergence, is the method in
@@ -418,31 +411,31 @@ almost sequential and parallelization only can be performed for each step in
 the $N_e$ simulations to estimate the gradient.
 
 MPCOTool uses two methods to build the $\vec{t}_j$ vectors:
-\begin{description}
-\item[Coordinates descent (CD)]: this method builds the $\vec{t}_j$ vectors by
-increasing or decreasing only one variable:
-\[
-	\vec{t}_1=\MATRIX{c}{st_1\\0\\\vdots\\0},\quad
-	\vec{t}_2=\MATRIX{c}{-st_1\\0\\\vdots\\0},\quad
-	\vec{t}_3=\MATRIX{c}{0\\st_2\\\vdots\\0},\quad
-	\vec{t}_4=\MATRIX{c}{0\\-st_2\\\vdots\\0},
-\]
+
+\subsubsection{Coordinates descent (CD)}
+
+This method builds the $\vec{t}_j$ vectors by increasing or decreasing only one
+variable:
 \EQ
 {
-	\cdots,\quad\vec{t}_{N_e}=\MATRIX{c}{0\\0\\\vdots\\-st_{N_v}},
+	\vec{t}_1=\MATRIX{c}{st_1\\0\\\vdots\\0},\quad
+	\vec{t}_2=\MATRIX{c}{-st_1\\0\\\vdots\\0},\quad
+	\cdots\quad,\vec{t}_{N_e}=\MATRIX{c}{0\\0\\\vdots\\-st_{N_v}},
 }{EqtDescent}
 being $st_j$ the initial step size for the $j$-th variable defined by the user
 in the main input file. The number of estimates in this method depends on the
-variables number $N_v$:
+variables number:
 \EQ{N_e=2\,N_v}{EqNestimatesDescent}
-\item[Random (RA)]: the vectors $\vec{t}_j$ are built randomly as:
+
+\subsubsection{Random (RA)}
+
+The vectors $\vec{t}_j$ are built randomly as:
 \EQ
 {
 	\vec{t}_j=\MATRIX{c}{\PA{1-2\,r_{j,1}}\,st_1\\\vdots\\
 	\PA{1-2\,r_{j,N_v}}\,st_{N_v}},
 }{EqtRandom}
 with $r_{j,k}\in[0,1)$ random numbers.
-\end{description}
 
 \subsection{Genetic method (GE)}
 
@@ -512,7 +505,7 @@ generation.
 Let us assume that $N_{par}$ empirical parameters are sought desired so
 that the results from a simulation model are the best fit to $N_{exp}$
 experimental data and that the simulator requires $N_{in}$ input files. The
-structure followed by MPCOTool is summarized in \emph{main input file},
+structure followed by MPCOTool is summarized in the \emph{main input file},
 where both $N_{exp}$ and $N_{in}$ are specified. Furthermore, it
 contains the extreme values of the empirical parameters and the chosen
 optimization algorithm. Then, MPCOTool reads the
@@ -524,13 +517,21 @@ file with the value of the error, or an external program called \emph{evaluator}
 is invoked to compare with the \emph{experimental data file} and to produce the
 error value. In both cases this error value is saved in an
 \emph{objective value file}. Then for each experiment, an objective value $o_i$
-is obtained. The final value of the objective function associated with the
-experiments is calculated by means of:
-\EQ{J=\sqrt{\frac{1}{N_{exp}}\,\sum_{i=1}^{N_{exp}}\ABS{w_i\,o_i}^2},}
-{EqObjectiveFunction}
+is obtained. The final value of the objective function ($J$) associated with the
+experiments set can be calculated by four different error norms:
+\EQ{L_2:\quad J=\sqrt{\sum_{i=1}^{N_{experiments}}\ABS{w_i\,o_i}^2},}
+{EqObjectiveFunctionLII}
+\EQ{L_\infty:\quad J=\max_{i=1}^{N_{experiments}}\ABS{w_i\,o_i},}
+{EqObjectiveFunctionLi}
+\EQ{L_p:\quad J=\sqrt[p]{\sum_{i=1}^{N_{experiments}}\ABS{w_i\,o_i}^p},}
+{EqObjectiveFunctionLp}
+\EQ{L_1:\quad J=\sum_{i=1}^{N_{experiments}}\ABS{w_i\,o_i},}
+{EqObjectiveFunctionLI}
 with $w_i$ the weight associated to the $i$-th experiment, specified in the
-\emph{main input file}. Figure~\ref{FigStructure} is a sketch of the
-structure.
+\emph{main input file}. Note that these error norms are used to combine the
+error $o_i$ obtained for each experiment. The user is completely free to define
+the objective function for every experiment. Figure~\ref{FigStructure} is a
+sketch of the structure.
 \psset{xunit=0.4mm,yunit=0.4mm}
 \PSPICTURE{-20}{-95}{280}{55}
 {
@@ -628,23 +629,25 @@ The required format for the main input file and the template files are described
 
 \subsection{Command line format}
 
-The code of MPCOTool is written in C code using standard open source libraries. The software can be compiled in the most widely used operative systems (Windows, Linux, FreeBSD, ...). Instructions to build the executable can be read in the user manual.
+The code of MPCOTool is written in C code using standard open source libraries. The software can be compiled in the most widely used operative systems (Windows, Linux, FreeBSD, ...). Instructions to build the executable can be read in the user manual. The optional arguments for the command line will be typed in square brackets.
 
 \begin{itemize}
 
 \item Command line in sequential mode (where X is the number of threads to
-execute):
+execute and S is a seed for the pseudo-random numbers genertator):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-> ./mpcotoolbin [-nthreads X] input_file.xml
+> ./mpcotoolbin [-nthreads X] [-seed S] input_file.xml
+[result_file] [variables_file]
 \end{lstlisting}
 
-\item Command line in parallelized mode (where X is the number of threads to
-open in every node):
+\item Command line in parallelized mode (where in this case X is the number of
+threads to open for every node):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-> mpirun [MPI options] ./mpcotoolbin [-nthreads X] input_file.xml
+> mpirun [MPI options] ./mpcotoolbin [-nthreads X] [-seed S]
+input_file.xml [result_file] [variables_file]
 \end{lstlisting}
 
-\item The syntax of the simulator has to be:
+\item The syntax of the simulator program has to be:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > ./simulator_name input_file_1 [input_file_2] [...] output_file
 \end{lstlisting}
@@ -658,11 +661,6 @@ evaluate the objective function has to be (where the results file has to begin
 with the objective function value):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > ./evaluator_name simulated_file experimental_file results_file
-\end{lstlisting}
-
-\item On UNIX type systems the GUI application can be open doing on a terminal:
-\begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-> ./mpcotool
 \end{lstlisting}
 
 \end{itemize}
