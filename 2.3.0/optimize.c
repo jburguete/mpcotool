@@ -87,768 +87,6 @@ double (*optimize_norm) (unsigned int simulation);
   ///< Pointer to the error norm function.
 Optimize optimize[1];           ///< Optimization data.
 
-const xmlChar *result_name = (xmlChar *) "result";
-  ///< Name of the result file.
-const xmlChar *variables_name = (xmlChar *) "variables";
-  ///< Name of the variables file.
-
-/**
- * \fn void input_new ()
- * \brief Function to create a new Input struct.
- */
-void
-input_new ()
-{
-  unsigned int i;
-#if DEBUG
-  fprintf (stderr, "input_new: start\n");
-#endif
-  input->nvariables = input->nexperiments = input->ninputs = input->nsteps = 0;
-  input->simulator = input->evaluator = input->directory = input->name = NULL;
-  input->experiment = input->label = NULL;
-  input->precision = input->nsweeps = input->nbits = NULL;
-  input->rangemin = input->rangemax = input->rangeminabs = input->rangemaxabs
-    = input->weight = input->step = NULL;
-  for (i = 0; i < MAX_NINPUTS; ++i)
-    input->template[i] = NULL;
-#if DEBUG
-  fprintf (stderr, "input_new: end\n");
-#endif
-}
-
-/**
- * \fn void input_free ()
- * \brief Function to free the memory of the input file data.
- */
-void
-input_free ()
-{
-  unsigned int i, j;
-#if DEBUG
-  fprintf (stderr, "input_free: start\n");
-#endif
-  g_free (input->name);
-  g_free (input->directory);
-  for (i = 0; i < input->nexperiments; ++i)
-    {
-      xmlFree (input->experiment[i]);
-      for (j = 0; j < input->ninputs; ++j)
-        xmlFree (input->template[j][i]);
-      g_free (input->template[j]);
-    }
-  g_free (input->experiment);
-  for (i = 0; i < input->ninputs; ++i)
-    g_free (input->template[i]);
-  for (i = 0; i < input->nvariables; ++i)
-    xmlFree (input->label[i]);
-  g_free (input->label);
-  g_free (input->precision);
-  g_free (input->rangemin);
-  g_free (input->rangemax);
-  g_free (input->rangeminabs);
-  g_free (input->rangemaxabs);
-  g_free (input->weight);
-  g_free (input->step);
-  g_free (input->nsweeps);
-  g_free (input->nbits);
-  xmlFree (input->evaluator);
-  xmlFree (input->simulator);
-  xmlFree (input->result);
-  xmlFree (input->variables);
-  input->nexperiments = input->ninputs = input->nvariables = input->nsteps = 0;
-#if DEBUG
-  fprintf (stderr, "input_free: end\n");
-#endif
-}
-
-/**
- * \fn int input_open (char *filename)
- * \brief Function to open the input file.
- * \param filename
- * \brief Input data file name.
- * \return 1 on success, 0 on error.
- */
-int
-input_open (char *filename)
-{
-  char buffer2[64];
-  char *buffert[MAX_NINPUTS] =
-    { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
-  xmlDoc *doc;
-  xmlNode *node, *child;
-  xmlChar *buffer;
-  char *msg;
-  int error_code;
-  unsigned int i;
-
-#if DEBUG
-  fprintf (stderr, "input_open: start\n");
-#endif
-
-  // Resetting input data
-  buffer = NULL;
-  input_new ();
-
-  // Parsing the input file
-#if DEBUG
-  fprintf (stderr, "input_open: parsing the input file %s\n", filename);
-#endif
-  doc = xmlParseFile (filename);
-  if (!doc)
-    {
-      msg = gettext ("Unable to parse the input file");
-      goto exit_on_error;
-    }
-
-  // Getting the root node
-#if DEBUG
-  fprintf (stderr, "input_open: getting the root node\n");
-#endif
-  node = xmlDocGetRootElement (doc);
-  if (xmlStrcmp (node->name, XML_OPTIMIZE))
-    {
-      msg = gettext ("Bad root XML node");
-      goto exit_on_error;
-    }
-
-  // Getting result and variables file names
-  if (!input->result)
-    {
-      input->result = (char *) xmlGetProp (node, XML_RESULT);
-      if (!input->result)
-        input->result = (char *) xmlStrdup (result_name);
-    }
-  if (!input->variables)
-    {
-      input->variables = (char *) xmlGetProp (node, XML_VARIABLES);
-      if (!input->variables)
-        input->variables = (char *) xmlStrdup (variables_name);
-    }
-
-  // Opening simulator program name
-  input->simulator = (char *) xmlGetProp (node, XML_SIMULATOR);
-  if (!input->simulator)
-    {
-      msg = gettext ("Bad simulator program");
-      goto exit_on_error;
-    }
-
-  // Opening evaluator program name
-  input->evaluator = (char *) xmlGetProp (node, XML_EVALUATOR);
-
-  // Obtaining pseudo-random numbers generator seed
-  input->seed
-    = xml_node_get_uint_with_default (node, XML_SEED, DEFAULT_RANDOM_SEED,
-                                      &error_code);
-  if (error_code)
-    {
-      msg = gettext ("Bad pseudo-random numbers generator seed");
-      goto exit_on_error;
-    }
-
-  // Opening algorithm
-  buffer = xmlGetProp (node, XML_ALGORITHM);
-  if (!xmlStrcmp (buffer, XML_MONTE_CARLO))
-    {
-      input->algorithm = ALGORITHM_MONTE_CARLO;
-
-      // Obtaining simulations number
-      input->nsimulations
-        = xml_node_get_int (node, XML_NSIMULATIONS, &error_code);
-      if (error_code)
-        {
-          msg = gettext ("Bad simulations number");
-          goto exit_on_error;
-        }
-    }
-  else if (!xmlStrcmp (buffer, XML_SWEEP))
-    input->algorithm = ALGORITHM_SWEEP;
-  else if (!xmlStrcmp (buffer, XML_GENETIC))
-    {
-      input->algorithm = ALGORITHM_GENETIC;
-
-      // Obtaining population
-      if (xmlHasProp (node, XML_NPOPULATION))
-        {
-          input->nsimulations
-            = xml_node_get_uint (node, XML_NPOPULATION, &error_code);
-          if (error_code || input->nsimulations < 3)
-            {
-              msg = gettext ("Invalid population number");
-              goto exit_on_error;
-            }
-        }
-      else
-        {
-          msg = gettext ("No population number");
-          goto exit_on_error;
-        }
-
-      // Obtaining generations
-      if (xmlHasProp (node, XML_NGENERATIONS))
-        {
-          input->niterations
-            = xml_node_get_uint (node, XML_NGENERATIONS, &error_code);
-          if (error_code || !input->niterations)
-            {
-              msg = gettext ("Invalid generations number");
-              goto exit_on_error;
-            }
-        }
-      else
-        {
-          msg = gettext ("No generations number");
-          goto exit_on_error;
-        }
-
-      // Obtaining mutation probability
-      if (xmlHasProp (node, XML_MUTATION))
-        {
-          input->mutation_ratio
-            = xml_node_get_float (node, XML_MUTATION, &error_code);
-          if (error_code || input->mutation_ratio < 0.
-              || input->mutation_ratio >= 1.)
-            {
-              msg = gettext ("Invalid mutation probability");
-              goto exit_on_error;
-            }
-        }
-      else
-        {
-          msg = gettext ("No mutation probability");
-          goto exit_on_error;
-        }
-
-      // Obtaining reproduction probability
-      if (xmlHasProp (node, XML_REPRODUCTION))
-        {
-          input->reproduction_ratio
-            = xml_node_get_float (node, XML_REPRODUCTION, &error_code);
-          if (error_code || input->reproduction_ratio < 0.
-              || input->reproduction_ratio >= 1.0)
-            {
-              msg = gettext ("Invalid reproduction probability");
-              goto exit_on_error;
-            }
-        }
-      else
-        {
-          msg = gettext ("No reproduction probability");
-          goto exit_on_error;
-        }
-
-      // Obtaining adaptation probability
-      if (xmlHasProp (node, XML_ADAPTATION))
-        {
-          input->adaptation_ratio
-            = xml_node_get_float (node, XML_ADAPTATION, &error_code);
-          if (error_code || input->adaptation_ratio < 0.
-              || input->adaptation_ratio >= 1.)
-            {
-              msg = gettext ("Invalid adaptation probability");
-              goto exit_on_error;
-            }
-        }
-      else
-        {
-          msg = gettext ("No adaptation probability");
-          goto exit_on_error;
-        }
-
-      // Checking survivals
-      i = input->mutation_ratio * input->nsimulations;
-      i += input->reproduction_ratio * input->nsimulations;
-      i += input->adaptation_ratio * input->nsimulations;
-      if (i > input->nsimulations - 2)
-        {
-          msg = gettext
-            ("No enough survival entities to reproduce the population");
-          goto exit_on_error;
-        }
-    }
-  else
-    {
-      msg = gettext ("Unknown algorithm");
-      goto exit_on_error;
-    }
-  xmlFree (buffer);
-  buffer = NULL;
-
-  if (input->algorithm == ALGORITHM_MONTE_CARLO
-      || input->algorithm == ALGORITHM_SWEEP)
-    {
-
-      // Obtaining iterations number
-      input->niterations
-        = xml_node_get_uint (node, XML_NITERATIONS, &error_code);
-      if (error_code == 1)
-        input->niterations = 1;
-      else if (error_code)
-        {
-          msg = gettext ("Bad iterations number");
-          goto exit_on_error;
-        }
-
-      // Obtaining best number
-      input->nbest
-        = xml_node_get_uint_with_default (node, XML_NBEST, 1, &error_code);
-      if (error_code || !input->nbest)
-        {
-          msg = gettext ("Invalid best number");
-          goto exit_on_error;
-        }
-
-      // Obtaining tolerance
-      input->tolerance
-        = xml_node_get_float_with_default (node, XML_TOLERANCE, 0.,
-                                           &error_code);
-      if (error_code || input->tolerance < 0.)
-        {
-          msg = gettext ("Invalid tolerance");
-          goto exit_on_error;
-        }
-
-      // Getting direction search method parameters
-      if (xmlHasProp (node, XML_NSTEPS))
-        {
-          input->nsteps = xml_node_get_uint (node, XML_NSTEPS, &error_code);
-          if (error_code || !input->nsteps)
-            {
-              msg = gettext ("Invalid steps number");
-              goto exit_on_error;
-            }
-          buffer = xmlGetProp (node, XML_DIRECTION);
-          if (!xmlStrcmp (buffer, XML_COORDINATES))
-            input->direction = DIRECTION_METHOD_COORDINATES;
-          else if (!xmlStrcmp (buffer, XML_RANDOM))
-            {
-              input->direction = DIRECTION_METHOD_RANDOM;
-              input->nestimates
-                = xml_node_get_uint (node, XML_NESTIMATES, &error_code);
-              if (error_code || !input->nestimates)
-                {
-                  msg = gettext ("Invalid estimates number");
-                  goto exit_on_error;
-                }
-            }
-          else
-            {
-              msg = gettext ("Unknown method to estimate the direction search");
-              goto exit_on_error;
-            }
-          xmlFree (buffer);
-          buffer = NULL;
-          input->relaxation
-            = xml_node_get_float_with_default (node, XML_RELAXATION,
-                                               DEFAULT_RELAXATION, &error_code);
-          if (error_code || input->relaxation < 0. || input->relaxation > 2.)
-            {
-              msg = gettext ("Invalid relaxation parameter");
-              goto exit_on_error;
-            }
-        }
-      else
-        input->nsteps = 0;
-    }
-  // Obtaining the thresold
-  input->thresold = xml_node_get_float_with_default (node, XML_THRESOLD, 0.,
-                                                     &error_code);
-  if (error_code)
-    {
-      msg = gettext ("Invalid thresold");
-      goto exit_on_error;
-    }
-
-  // Reading the experimental data
-  for (child = node->children; child; child = child->next)
-    {
-      if (xmlStrcmp (child->name, XML_EXPERIMENT))
-        break;
-#if DEBUG
-      fprintf (stderr, "input_open: nexperiments=%u\n", input->nexperiments);
-#endif
-      if (xmlHasProp (child, XML_NAME))
-        buffer = xmlGetProp (child, XML_NAME);
-      else
-        {
-          snprintf (buffer2, 64, "%s %u: %s",
-                    gettext ("Experiment"),
-                    input->nexperiments + 1, gettext ("no data file name"));
-          msg = buffer2;
-          goto exit_on_error;
-        }
-#if DEBUG
-      fprintf (stderr, "input_open: experiment=%s\n", buffer);
-#endif
-      input->weight = g_realloc (input->weight,
-                                 (1 + input->nexperiments) * sizeof (double));
-      input->weight[input->nexperiments]
-        = xml_node_get_float_with_default (child, XML_WEIGHT, 1., &error_code);
-      if (error_code)
-        {
-          snprintf (buffer2, 64, "%s %s: %s",
-                    gettext ("Experiment"), buffer, gettext ("bad weight"));
-          msg = buffer2;
-          goto exit_on_error;
-        }
-#if DEBUG
-      fprintf (stderr, "input_open: weight=%lg\n",
-               input->weight[input->nexperiments]);
-#endif
-      if (!input->nexperiments)
-        input->ninputs = 0;
-#if DEBUG
-      fprintf (stderr, "input_open: template[0]\n");
-#endif
-      if (xmlHasProp (child, XML_TEMPLATE1))
-        {
-          input->template[0]
-            = (char **) g_realloc (input->template[0],
-                                   (1 + input->nexperiments) * sizeof (char *));
-          buffert[0] = (char *) xmlGetProp (child, template[0]);
-#if DEBUG
-          fprintf (stderr, "input_open: experiment=%u template1=%s\n",
-                   input->nexperiments, buffert[0]);
-#endif
-          if (!input->nexperiments)
-            ++input->ninputs;
-#if DEBUG
-          fprintf (stderr, "input_open: ninputs=%u\n", input->ninputs);
-#endif
-        }
-      else
-        {
-          snprintf (buffer2, 64, "%s %s: %s",
-                    gettext ("Experiment"), buffer, gettext ("no template"));
-          msg = buffer2;
-          goto exit_on_error;
-        }
-      for (i = 1; i < MAX_NINPUTS; ++i)
-        {
-#if DEBUG
-          fprintf (stderr, "input_open: template%u\n", i + 1);
-#endif
-          if (xmlHasProp (child, template[i]))
-            {
-              if (input->nexperiments && input->ninputs <= i)
-                {
-                  snprintf (buffer2, 64, "%s %s: %s",
-                            gettext ("Experiment"),
-                            buffer, gettext ("bad templates number"));
-                  msg = buffer2;
-                  while (i-- > 0)
-                    xmlFree (buffert[i]);
-                  goto exit_on_error;
-                }
-              input->template[i] = (char **)
-                g_realloc (input->template[i],
-                           (1 + input->nexperiments) * sizeof (char *));
-              buffert[i] = (char *) xmlGetProp (child, template[i]);
-#if DEBUG
-              fprintf (stderr, "input_open: experiment=%u template%u=%s\n",
-                       input->nexperiments, i + 1,
-                       input->template[i][input->nexperiments]);
-#endif
-              if (!input->nexperiments)
-                ++input->ninputs;
-#if DEBUG
-              fprintf (stderr, "input_open: ninputs=%u\n", input->ninputs);
-#endif
-            }
-          else if (input->nexperiments && input->ninputs > i)
-            {
-              snprintf (buffer2, 64, "%s %s: %s%u",
-                        gettext ("Experiment"),
-                        buffer, gettext ("no template"), i + 1);
-              msg = buffer2;
-              while (i-- > 0)
-                xmlFree (buffert[i]);
-              goto exit_on_error;
-            }
-          else
-            break;
-        }
-      input->experiment
-        = g_realloc (input->experiment,
-                     (1 + input->nexperiments) * sizeof (char *));
-      input->experiment[input->nexperiments] = (char *) buffer;
-      for (i = 0; i < input->ninputs; ++i)
-        input->template[i][input->nexperiments] = buffert[i];
-      ++input->nexperiments;
-#if DEBUG
-      fprintf (stderr, "input_open: nexperiments=%u\n", input->nexperiments);
-#endif
-    }
-  if (!input->nexperiments)
-    {
-      msg = gettext ("No optimization experiments");
-      goto exit_on_error;
-    }
-  buffer = NULL;
-
-  // Reading the variables data
-  for (; child; child = child->next)
-    {
-      if (xmlStrcmp (child->name, XML_VARIABLE))
-        {
-          snprintf (buffer2, 64, "%s %u: %s",
-                    gettext ("Variable"),
-                    input->nvariables + 1, gettext ("bad XML node"));
-          msg = buffer2;
-          goto exit_on_error;
-        }
-      if (xmlHasProp (child, XML_NAME))
-        buffer = xmlGetProp (child, XML_NAME);
-      else
-        {
-          snprintf (buffer2, 64, "%s %u: %s",
-                    gettext ("Variable"),
-                    input->nvariables + 1, gettext ("no name"));
-          msg = buffer2;
-          goto exit_on_error;
-        }
-      if (xmlHasProp (child, XML_MINIMUM))
-        {
-          input->rangemin = g_realloc
-            (input->rangemin, (1 + input->nvariables) * sizeof (double));
-          input->rangeminabs = g_realloc
-            (input->rangeminabs, (1 + input->nvariables) * sizeof (double));
-          input->rangemin[input->nvariables]
-            = xml_node_get_float (child, XML_MINIMUM, &error_code);
-          if (error_code)
-            {
-              snprintf (buffer2, 64, "%s %s: %s",
-                        gettext ("Variable"), buffer, gettext ("bad minimum"));
-              msg = buffer2;
-              goto exit_on_error;
-            }
-          input->rangeminabs[input->nvariables]
-            = xml_node_get_float_with_default (child, XML_ABSOLUTE_MINIMUM,
-                                               -G_MAXDOUBLE, &error_code);
-          if (error_code)
-            {
-              snprintf (buffer2, 64, "%s %s: %s", gettext ("Variable"), buffer,
-                        gettext ("bad absolute minimum"));
-              msg = buffer2;
-              goto exit_on_error;
-            }
-          if (input->rangemin[input->nvariables]
-              < input->rangeminabs[input->nvariables])
-            {
-              snprintf (buffer2, 64, "%s %s: %s",
-                        gettext ("Variable"),
-                        buffer, gettext ("minimum range not allowed"));
-              msg = buffer2;
-              goto exit_on_error;
-            }
-        }
-      else
-        {
-          snprintf (buffer2, 64, "%s %s: %s",
-                    gettext ("Variable"), buffer, gettext ("no minimum range"));
-          msg = buffer2;
-          goto exit_on_error;
-        }
-      if (xmlHasProp (child, XML_MAXIMUM))
-        {
-          input->rangemax = g_realloc
-            (input->rangemax, (1 + input->nvariables) * sizeof (double));
-          input->rangemaxabs = g_realloc
-            (input->rangemaxabs, (1 + input->nvariables) * sizeof (double));
-          input->rangemax[input->nvariables]
-            = xml_node_get_float (child, XML_MAXIMUM, &error_code);
-          if (error_code)
-            {
-              snprintf (buffer2, 64, "%s %s: %s",
-                        gettext ("Variable"), buffer, gettext ("bad maximum"));
-              msg = buffer2;
-              goto exit_on_error;
-            }
-          input->rangemaxabs[input->nvariables]
-            = xml_node_get_float_with_default (child, XML_ABSOLUTE_MAXIMUM,
-                                               G_MAXDOUBLE, &error_code);
-          if (error_code)
-            {
-              snprintf (buffer2, 64, "%s %s: %s", gettext ("Variable"), buffer,
-                        gettext ("bad absolute maximum"));
-              msg = buffer2;
-              goto exit_on_error;
-            }
-          if (input->rangemax[input->nvariables]
-              > input->rangemaxabs[input->nvariables])
-            {
-              snprintf (buffer2, 64, "%s %s: %s",
-                        gettext ("Variable"),
-                        buffer, gettext ("maximum range not allowed"));
-              msg = buffer2;
-              goto exit_on_error;
-            }
-        }
-      else
-        {
-          snprintf (buffer2, 64, "%s %s: %s",
-                    gettext ("Variable"), buffer, gettext ("no maximum range"));
-          msg = buffer2;
-          goto exit_on_error;
-        }
-      if (input->rangemax[input->nvariables]
-          < input->rangemin[input->nvariables])
-        {
-          snprintf (buffer2, 64, "%s %s: %s",
-                    gettext ("Variable"), buffer, gettext ("bad range"));
-          msg = buffer2;
-          goto exit_on_error;
-        }
-      input->precision = g_realloc
-        (input->precision, (1 + input->nvariables) * sizeof (unsigned int));
-      input->precision[input->nvariables]
-        = xml_node_get_uint_with_default (child, XML_PRECISION,
-                                          DEFAULT_PRECISION, &error_code);
-      if (error_code || input->precision[input->nvariables] >= NPRECISIONS)
-        {
-          snprintf (buffer2, 64, "%s %s: %s", gettext ("Variable"), buffer,
-                    gettext ("bad precision"));
-          msg = buffer2;
-          goto exit_on_error;
-        }
-      if (input->algorithm == ALGORITHM_SWEEP)
-        {
-          if (xmlHasProp (child, XML_NSWEEPS))
-            {
-              input->nsweeps = (unsigned int *)
-                g_realloc (input->nsweeps,
-                           (1 + input->nvariables) * sizeof (unsigned int));
-              input->nsweeps[input->nvariables]
-                = xml_node_get_uint (child, XML_NSWEEPS, &error_code);
-              if (error_code || !input->nsweeps[input->nvariables])
-                {
-                  snprintf (buffer2, 64, "%s %s: %s",
-                            gettext ("Variable"),
-                            buffer, gettext ("bad sweeps"));
-                  msg = buffer2;
-                  goto exit_on_error;
-                }
-            }
-          else
-            {
-              snprintf (buffer2, 64, "%s %s: %s", gettext ("Variable"), buffer,
-                        gettext ("no sweeps number"));
-              msg = buffer2;
-              goto exit_on_error;
-            }
-#if DEBUG
-          fprintf (stderr, "input_open: nsweeps=%u nsimulations=%u\n",
-                   input->nsweeps[input->nvariables], input->nsimulations);
-#endif
-        }
-      if (input->algorithm == ALGORITHM_GENETIC)
-        {
-          // Obtaining bits representing each variable
-          if (xmlHasProp (child, XML_NBITS))
-            {
-              input->nbits = (unsigned int *)
-                g_realloc (input->nbits,
-                           (1 + input->nvariables) * sizeof (unsigned int));
-              i = xml_node_get_uint (child, XML_NBITS, &error_code);
-              if (error_code || !i)
-                {
-                  snprintf (buffer2, 64, "%s %s: %s",
-                            gettext ("Variable"),
-                            buffer, gettext ("invalid bits number"));
-                  msg = buffer2;
-                  goto exit_on_error;
-                }
-              input->nbits[input->nvariables] = i;
-            }
-          else
-            {
-              snprintf (buffer2, 64, "%s %s: %s",
-                        gettext ("Variable"),
-                        buffer, gettext ("no bits number"));
-              msg = buffer2;
-              goto exit_on_error;
-            }
-        }
-      else if (input->nsteps)
-        {
-          input->step = (double *)
-            g_realloc (input->step, (1 + input->nvariables) * sizeof (double));
-          input->step[input->nvariables]
-            = xml_node_get_float (child, XML_STEP, &error_code);
-          if (error_code || input->step[input->nvariables] < 0.)
-            {
-              snprintf (buffer2, 64, "%s %s: %s",
-                        gettext ("Variable"),
-                        buffer, gettext ("bad step size"));
-              msg = buffer2;
-              goto exit_on_error;
-            }
-        }
-      input->label = g_realloc
-        (input->label, (1 + input->nvariables) * sizeof (char *));
-      input->label[input->nvariables] = (char *) buffer;
-      ++input->nvariables;
-    }
-  if (!input->nvariables)
-    {
-      msg = gettext ("No optimization variables");
-      goto exit_on_error;
-    }
-  buffer = NULL;
-
-  // Obtaining the error norm
-  if (xmlHasProp (node, XML_NORM))
-    {
-      buffer = xmlGetProp (node, XML_NORM);
-      if (!xmlStrcmp (buffer, XML_EUCLIDIAN))
-        input->norm = ERROR_NORM_EUCLIDIAN;
-      else if (!xmlStrcmp (buffer, XML_MAXIMUM))
-        input->norm = ERROR_NORM_MAXIMUM;
-      else if (!xmlStrcmp (buffer, XML_P))
-        {
-          input->norm = ERROR_NORM_P;
-          input->p = xml_node_get_float (node, XML_P, &error_code);
-          if (!error_code)
-            {
-              msg = gettext ("Bad P parameter");
-              goto exit_on_error;
-            }
-        }
-      else if (!xmlStrcmp (buffer, XML_TAXICAB))
-        input->norm = ERROR_NORM_TAXICAB;
-      else
-        {
-          msg = gettext ("Unknown error norm");
-          goto exit_on_error;
-        }
-      xmlFree (buffer);
-    }
-  else
-    input->norm = ERROR_NORM_EUCLIDIAN;
-
-  // Getting the working directory
-  input->directory = g_path_get_dirname (filename);
-  input->name = g_path_get_basename (filename);
-
-  // Closing the XML document
-  xmlFreeDoc (doc);
-
-#if DEBUG
-  fprintf (stderr, "input_open: end\n");
-#endif
-  return 1;
-
-exit_on_error:
-  xmlFree (buffer);
-  xmlFreeDoc (doc);
-  show_error (msg);
-  input_free ();
-#if DEBUG
-  fprintf (stderr, "input_open: end\n");
-#endif
-  return 0;
-}
-
 /**
  * \fn void optimize_input (unsigned int simulation, char *input, \
  *   GMappedFile *template)
@@ -2164,8 +1402,6 @@ optimize_free ()
   g_free (optimize->value_old);
   g_free (optimize->value);
   g_free (optimize->genetic_variable);
-  g_free (optimize->rangemax);
-  g_free (optimize->rangemin);
 #if DEBUG
   fprintf (stderr, "optimize_free: end\n");
 #endif
@@ -2271,24 +1507,29 @@ optimize_open ()
   g_free (buffer);
 #endif
   optimize->nexperiments = input->nexperiments;
-  optimize->ninputs = input->ninputs;
-  optimize->experiment = input->experiment;
-  optimize->weight = input->weight;
-  for (i = 0; i < input->ninputs; ++i)
+  optimize->ninputs = input->experiment->ninputs;
+  optimize->experiment
+	= (char **) alloca (input->nexperiments * sizeof (char *));
+  optimize->weight = (double *) alloca (input->nexperiments * sizeof (double));
+  for (i = 0; i < input->experiment->ninputs; ++i)
     {
-      optimize->template[i] = input->template[i];
-      optimize->file[i]
-        = g_malloc (input->nexperiments * sizeof (GMappedFile *));
+      optimize->template[i]
+		= (char **) alloca (input->nexperiments * sizeof (char *));
+      optimize->file[i] = (GMappedFile **)
+		g_malloc (input->nexperiments * sizeof (GMappedFile *));
     }
   for (i = 0; i < input->nexperiments; ++i)
     {
 #if DEBUG
       fprintf (stderr, "optimize_open: i=%u\n", i);
-      fprintf (stderr, "optimize_open: experiment=%s\n",
-               optimize->experiment[i]);
-      fprintf (stderr, "optimize_open: weight=%lg\n", optimize->weight[i]);
 #endif
-      for (j = 0; j < input->ninputs; ++j)
+	  optimize->experiment[i] = input->experiment[i].name;
+	  optimize->weight[i] = input->experiment[i].weight;
+#if DEBUG
+      fprintf (stderr, "optimize_open: experiment=%s weight=%lg\n",
+               optimize->experiment[i], optimize->weight[i]);
+#endif
+      for (j = 0; j < input->experiment->ninputs; ++j)
         {
 #if DEBUG
           fprintf (stderr, "optimize_open: template%u\n", j + 1);
@@ -2296,7 +1537,7 @@ optimize_open ()
                    i, j + 1, optimize->template[j][i]);
 #endif
           optimize->file[j][i]
-            = g_mapped_file_new (input->template[j][i], 0, NULL);
+            = g_mapped_file_new (input->experiment[i].template[j], 0, NULL);
         }
     }
 
@@ -2304,18 +1545,29 @@ optimize_open ()
 #if DEBUG
   fprintf (stderr, "optimize_open: reading variables\n");
 #endif
-  optimize->label = input->label;
+  optimize->label = (char **) alloca (input->nvariables * sizeof (char *));
   j = input->nvariables * sizeof (double);
-  optimize->rangemin = (double *) g_malloc (j);
-  optimize->rangemax = (double *) g_malloc (j);
-  memcpy (optimize->rangemin, input->rangemin, j);
-  memcpy (optimize->rangemax, input->rangemax, j);
-  optimize->rangeminabs = input->rangeminabs;
-  optimize->rangemaxabs = input->rangemaxabs;
-  optimize->precision = input->precision;
-  optimize->nsweeps = input->nsweeps;
-  optimize->step = input->step;
-  nbits = input->nbits;
+  optimize->rangemin = (double *) alloca (j);
+  optimize->rangeminabs = (double *) alloca (j);
+  optimize->rangemax = (double *) alloca (j);
+  optimize->rangemaxabs = (double *) alloca (j);
+  optimize->step = (double *) alloca (j);
+  j = input->nvariables * sizeof (unsigned int);
+  optimize->precision = (unsigned int *) alloca (j);
+  optimize->nsweeps = (unsigned int *) alloca (j);
+  optimize->nbits = (unsigned int *) alloca (j);
+  for (i = 0; i < input->nvariables; ++i)
+	{
+	  optimize->label[i] = input->variable[i].name;
+	  optimize->rangemin[i] = input->variable[i].rangemin;
+	  optimize->rangeminabs[i] = input->variable[i].rangeminabs;
+	  optimize->rangemax[i] = input->variable[i].rangemax;
+	  optimize->rangemaxabs[i] = input->variable[i].rangemaxabs;
+	  optimize->precision[i] = input->variable[i].precision;
+	  optimize->step[i] = input->variable[i].step;
+	  optimize->nsweeps[i] = input->variable[i].nsweeps;
+	  optimize->nbits[i] = input->variable[i].nbits;
+	}
   if (input->algorithm == ALGORITHM_SWEEP)
     {
       optimize->nsimulations = 1;
@@ -2323,7 +1575,7 @@ optimize_open ()
         {
           if (input->algorithm == ALGORITHM_SWEEP)
             {
-              optimize->nsimulations *= input->nsweeps[i];
+              optimize->nsimulations *= optimize->nsweeps[i];
 #if DEBUG
               fprintf (stderr, "optimize_open: nsweeps=%u nsimulations=%u\n",
                        optimize->nsweeps[i], optimize->nsimulations);

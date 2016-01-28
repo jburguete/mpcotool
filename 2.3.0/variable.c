@@ -86,7 +86,7 @@ variable_free (Variable * variable)
 #if DEBUG
   fprintf (stderr, "variable_free: start\n");
 #endif
-  g_free (variable->name);
+  xmlFree (variable->name);
 #if DEBUG
   fprintf (stderr, "variable_free: end\n");
 #endif

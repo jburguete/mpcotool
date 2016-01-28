@@ -8,7 +8,7 @@ VERSIONS
 --------
 
 * 2.0.1: Stable and recommended version.
-* 2.1.3: Developing version to do new features.
+* 2.3.0: Developing version to do new features.
 
 AUTHORS
 -------

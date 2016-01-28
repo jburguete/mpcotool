@@ -61,6 +61,9 @@ OF SUCH DAMAGE.
 #endif
 #include "genetic/genetic.h"
 #include "utils.h"
+#include "experiment.h"
+#include "variable.h"
+#include "input.h"
 #include "optimize.h"
 #if HAVE_GTK
 #include "interface.h"
@@ -85,13 +88,22 @@ main (int argn, char **argc)
 #endif
 
   // Starting pseudo-random numbers generator
+#if DEBUG
+  fprintf (stderr, "main: starting pseudo-random numbers generator\n");
+#endif
   optimize->rng = gsl_rng_alloc (gsl_rng_taus2);
 
   // Allowing spaces in the XML data file
+#if DEBUG
+  fprintf (stderr, "main: allowing spaces in the XML data file\n");
+#endif
   xmlKeepBlanksDefault (0);
 
   // Starting MPI
 #if HAVE_MPI
+#if DEBUG
+  fprintf (stderr, "main: starting MPI\n");
+#endif
   MPI_Init (&argn, &argc);
   MPI_Comm_size (MPI_COMM_WORLD, &ntasks);
   MPI_Comm_rank (MPI_COMM_WORLD, &optimize->mpi_rank);
@@ -101,6 +113,9 @@ main (int argn, char **argc)
 #endif
 
   // Resetting result and variables file names
+#if DEBUG
+  fprintf (stderr, "main: resetting result and variables file names\n");
+#endif
   input->result = input->variables = NULL;
 
 #if HAVE_GTK
@@ -144,6 +159,10 @@ main (int argn, char **argc)
     }
 
   // Getting threads number and pseudo-random numbers generator seed
+#if DEBUG
+  fprintf (stderr, "main: getting threads number and pseudo-random numbers "
+		   "generator seed\n");
+#endif
   nthreads_direction = nthreads = cores_number ();
   optimize->seed = DEFAULT_RANDOM_SEED;
   if (argn > 2 && !strcmp (argc[1], "-nthreads"))
@@ -184,6 +203,9 @@ main (int argn, char **argc)
   printf ("seed=%lu\n", optimize->seed);
 
   // Checking arguments
+#if DEBUG
+  fprintf (stderr, "main: checking arguments\n");
+#endif
   if (argn > 4 || argn < 2)
     {
       printf ("The syntax is:\n"
@@ -197,10 +219,16 @@ main (int argn, char **argc)
     input->variables = argc[3];
 
   // Making optimization
+#if DEBUG
+  fprintf (stderr, "main: making optimization\n");
+#endif
   if (input_open (argc[1]))
     optimize_open ();
 
   // Freeing memory
+#if DEBUG
+  fprintf (stderr, "main: freeing memory and closing\n");
+#endif
   optimize_free ();
 
 #endif

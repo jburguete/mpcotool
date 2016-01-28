@@ -66,7 +66,7 @@ input_new ()
 #if DEBUG
   fprintf (stderr, "input_new: start\n");
 #endif
-  input->nvariables = input->nexperiments = input->ninputs = input->nsteps = 0;
+  input->nvariables = input->nexperiments = input->nsteps = 0;
   input->simulator = input->evaluator = input->directory = input->name 
     = input->result = input->variables = NULL;
   input->experiment = NULL;
@@ -99,7 +99,7 @@ input_free ()
   xmlFree (input->simulator);
   xmlFree (input->result);
   xmlFree (input->variables);
-  input->nexperiments = input->ninputs = input->nvariables = input->nsteps = 0;
+  input->nexperiments = input->nvariables = input->nsteps = 0;
 #if DEBUG
   fprintf (stderr, "input_free: end\n");
 #endif
@@ -425,7 +425,7 @@ input_open (char *filename)
 #endif
       input->experiment = (Experiment *)
 		g_realloc (input->experiment,
-				   (1 + input->nexperiments) * sizeof (double));
+				   (1 + input->nexperiments) * sizeof (Experiment));
 	  if (!input->nexperiments)
 		{
           if (!experiment_open (input->experiment, child, 0))
@@ -452,6 +452,9 @@ input_open (char *filename)
   // Reading the variables data
   for (; child; child = child->next)
     {
+#if DEBUG
+      fprintf (stderr, "input_open: nvariables=%u\n", input->nvariables);
+#endif
       if (xmlStrcmp (child->name, XML_VARIABLE))
         {
           snprintf (buffer2, 64, "%s %u: %s",
@@ -461,7 +464,8 @@ input_open (char *filename)
           goto exit_on_error;
 		}
       input->variable = (Variable *)
-		g_realloc (input->variable, (1 + input->nvariables) * sizeof (double));
+		g_realloc (input->variable,
+				   (1 + input->nvariables) * sizeof (Variable));
 	  if (!variable_open (input->variable + input->nvariables, child,
 				          input->algorithm, input->nsteps))
         goto exit_on_error;

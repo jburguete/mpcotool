@@ -90,7 +90,6 @@ typedef struct
   ///< Seed of the pseudo-random numbers generator.
   unsigned int nvariables;      ///< Variables number.
   unsigned int nexperiments;    ///< Experiments number.
-  unsigned int ninputs;         ///< Number of input files to the simulator.
   unsigned int nsimulations;    ///< Simulations number per experiment.
   unsigned int algorithm;       ///< Algorithm type.
   unsigned int nsteps;

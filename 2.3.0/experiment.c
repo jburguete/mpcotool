@@ -90,7 +90,7 @@ experiment_free (Experiment * experiment)
 #endif
   for (i = 0; i < experiment->ninputs; ++i)
     xmlFree (experiment->template[i]);
-  g_free (experiment->name);
+  xmlFree (experiment->name);
   experiment->ninputs = 0;
 #if DEBUG
   fprintf (stderr, "experiment_free: end\n");

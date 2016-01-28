@@ -42,36 +42,6 @@ OF SUCH DAMAGE.
   ///< Max length of texts allowed in GtkSpinButtons.
 
 /**
- * \struct Experiment
- * \brief Struct to define experiment data.
- */
-typedef struct
-{
-  char *template[MAX_NINPUTS];  ///< Array of input template names.
-  char *name;                   ///< File name.
-  double weight;
-  ///< Weight to calculate the objective function value.
-} Experiment;
-
-/**
- * \struct Variable
- * \brief Struct to define variable data.
- */
-typedef struct
-{
-  char *label;                  ///< Variable label.
-  double rangemin;              ///< Minimum value.
-  double rangemax;              ///< Maximum value.
-  double rangeminabs;           ///< Minimum allowed value.
-  double rangemaxabs;           ///< Maximum allowed value.
-  double step;
-  ///< Initial step size for the direction search method.
-  unsigned int precision;       ///< Precision digits.
-  unsigned int nsweeps;         ///< Sweeps number of the sweep algorithm.
-  unsigned int nbits;           ///< Bits number of the genetic algorithm.
-} Variable;
-
-/**
  * \struct Options
  * \brief Struct to define the options dialog.
  */

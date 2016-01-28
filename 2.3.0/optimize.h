@@ -74,6 +74,8 @@ typedef struct
   ///< Array of the best minimum errors on the previous step.
   unsigned int *precision;      ///< Array of variable precisions.
   unsigned int *nsweeps;        ///< Array of sweeps of the sweep algorithm.
+  unsigned int *nbits;
+  ///< Array of bits number of the genetic algorithm.
   unsigned int *thread;
   ///< Array of simulation numbers to calculate on the thread.
   unsigned int *thread_direction;
