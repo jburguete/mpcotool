@@ -179,11 +179,11 @@ USER INSTRUCTIONS
 Optional arguments are typed in square brackets.
 
 * Command line in sequential mode (where X is the number of threads to execute
-and S is a seed for the pseudo-random numbers genertator):
+and S is a seed for the pseudo-random numbers generator):
 > $ ./mpcotoolbin [-nthreads X] [-seed S] input_file.xml [result_file] [variables_file]
 
 * Command line in parallelized mode (where X is the number of threads to
-open for every node and S is a seed for the pseudo-random numbers genertator):
+open for every node and S is a seed for the pseudo-random numbers generator):
 > $ mpirun [MPI options] ./mpcotoolbin [-nthreads X] [-seed S] input_file.xml [result_file] [variables_file]
 
 * The syntax of the simulator has to be:
@@ -203,14 +203,14 @@ The format of the main input file is as:
 
 ```xml
 <?xml version="1.0"?>
-<calibrate simulator="simulator_name" evaluator="evaluator_name" algorithm="algorithm_type" nsimulations="simulations_number" niterations="iterations_number" tolerance="tolerance_value" nbest="best_number" npopulation="population_number" ngenerations="generations_number" mutation="mutation_ratio" reproduction="reproduction_ratio" adaptation="adaptation_ratio" gradient_type="gradient_method_type" nsteps="steps_number" relaxation="relaxation_paramter" nestimates="estimates_number" seed="random_seed" result="result_file" variables="variables_file">
+<optimize simulator="simulator_name" evaluator="evaluator_name" algorithm="algorithm_type" nsimulations="simulations_number" niterations="iterations_number" tolerance="tolerance_value" nbest="best_number" npopulation="population_number" ngenerations="generations_number" mutation="mutation_ratio" reproduction="reproduction_ratio" adaptation="adaptation_ratio" direction="direction_search_type" nsteps="steps_number" relaxation="relaxation_paramter" nestimates="estimates_number" seed="random_seed" result="result_file" variables="variables_file">
     <experiment name="data_file_1" template1="template_1_1" template2="template_1_2" ... weight="weight_1"/>
     ...
     <experiment name="data_file_N" template1="template_N_1" template2="template_N_2" ... weight="weight_N"/>
     <variable name="variable_1" minimum="min_value" maximum="max_value" precision="precision_digits" sweeps="sweeps_number" nbits="bits_number" step="step_size"/>
     ...
     <variable name="variable_M" minimum="min_value" maximum="max_value" precision="precision_digits" sweeps="sweeps_number" nbits="bits_number" step="step_size"/>
-</calibrate>
+</optimize>
 ```
 
 with:
@@ -256,9 +256,9 @@ the following parameters:
      It multiplies the total number of simulations:
 > x (number of iterations)
 
-* Moreover, both brute force algorithms can be coupled with a gradient based
+* Moreover, both brute force algorithms can be coupled with a direction search
 method by using:
-  * *gradient_type*: method to estimate the gradient. Two options are
+  * *direction*: method to estimate the optimal direction. Two options are
   currently available:
     * coordinates: coordinates descent method.
 
@@ -266,7 +266,7 @@ method by using:
 > (number of experiments) x (number of iterations) x (number of steps) x 2
 > x (number of variables)
     * random: random method. It requires:
-    * nestimates: number of random checks to estimate the gradient.
+    * nestimates: number of random checks to estimate the optimal direction.
 
       It increases the total number of simulations by:
 > (number of experiments) x (number of iterations) x (number of steps)
