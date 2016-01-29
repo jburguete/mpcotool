@@ -273,11 +273,11 @@ method by using:
 > x (number of estimates)
 
   Both methods require also:
-    * nsteps: number of steps to perform the gradient based method,
+    * nsteps: number of steps to perform the direction search method,
     * relaxation: relaxation parameter,
 
   and for each variable:
-    * step: initial step size for the gradient based method.
+    * step: initial step size for the direction search method.
 
 * **genetic**: Genetic algorithm. It requires the following parameters:
   * *npopulation*: number of population.
