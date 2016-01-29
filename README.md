@@ -176,12 +176,15 @@ you are in the directory mpcotool/2.2.0):
 USER INSTRUCTIONS
 -----------------
 
-* Command line in sequential mode:
-> $ ./mpcotoolbin [-nthreads X] input_file.xml
+Optional arguments are typed in square brackets.
 
-* Command line in parallelized mode (where X is the number of threads to open in
-every node):
-> $ mpirun [MPI options] ./mpcotoolbin [-nthreads X] input_file.xml
+* Command line in sequential mode (where X is the number of threads to execute
+and S is a seed for the pseudo-random numbers genertator):
+> $ ./mpcotoolbin [-nthreads X] [-seed S] input_file.xml [result_file] [variables_file]
+
+* Command line in parallelized mode (where X is the number of threads to
+open for every node and S is a seed for the pseudo-random numbers genertator):
+> $ mpirun [MPI options] ./mpcotoolbin [-nthreads X] [-seed S] input_file.xml [result_file] [variables_file]
 
 * The syntax of the simulator has to be:
 > $ ./simulator_name input_file_1 [input_file_2] [input_file_3] [input_file_4] output_file

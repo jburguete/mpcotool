@@ -670,7 +670,12 @@ simulaciones que se requieren es:
 {EqNSweeps}
 donde $N_{x,i}$ es el número de barridos en la variable $x_i$.
 
-In figure~\ref{FigSweep} the $(x,y)$ domain is defined by the intervals $x\in\PA{x_{min},\,x_{max}}$ and $y \in \PA{y_{min},\,y_{max}}$. Both $x$ and $y$ intervals are divided into 5 regions with $N_{x}=N_{y}=5$. The optimal will be found within the region by evaluating the error of each $\PA{x_i,\,y_i}$ set of parameters hence requiring 25 evaluations. Note that the computational cost increases strongly as the number of variables grow.
+En la figura~\ref{FigSweep} el dominio $(x,y)$ se define en los intervalos
+$x\in\PA{x_{min},\,x_{max}}$ e $y \in \PA{y_{min},\,y_{max}}$. Ambos intervalos
+$x$ e $y$ se dividen en 5 regiones con $N_{x}=N_{y}=5$. El parámetro óptimo se
+encuentra evaluando el error de cada combinación de parámetros $\PA{x_i,\,y_i}$
+requiriendo por tanto 25 evaluaciones. Nótese que el costo computacional se
+incrementa exponencialmente con el número de variables.
 
 \PICTURE{210}{200}
 {

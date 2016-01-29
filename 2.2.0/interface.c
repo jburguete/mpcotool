@@ -766,7 +766,7 @@ window_about ()
               "empirical parameters"),
      "authors", authors,
      "translator-credits", "Javier Burguete Tolosa <jburguete@eead.csic.es>",
-     "version", "2.3.0",
+     "version", "2.2.0",
      "copyright", "Copyright 2012-2016 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/mpcotool",
