@@ -344,7 +344,7 @@ are:
 
 ```xml
 <?xml version="1.0"?>
-<calibrate simulator="pivot" evaluator="compare" algorithm="sweep">
+<optimize simulator="pivot" evaluator="compare" algorithm="sweep">
     <experiment name="27-48.txt" template1="template1.js"/>
     <experiment name="42.txt" template1="template2.js"/>
     <experiment name="52.txt" template1="template3.js"/>
@@ -353,7 +353,7 @@ are:
     <variable name="alpha2" minimum="179.30" maximum="179.60" precision="2" nsweeps="5"/>
     <variable name="random" minimum="0.00" maximum="0.20" precision="2" nsweeps="5"/>
     <variable name="boot-time" minimum="0.0" maximum="3.0" precision="1" nsweeps="5"/>
-</calibrate>
+</optimize>
 ```
 
 * A template file as *template1.js*:
