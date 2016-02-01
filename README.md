@@ -105,7 +105,7 @@ a terminal:
 3. Link the latest genetic version to genetic:
 > $ cd mpcotool/2.2.1
 >
-> $ ln -s ../../genetic/1.0.0 genetic
+> $ ln -s ../../genetic/2.0.0 genetic
 
 4. Build doing on a terminal:
 > $ ./build
@@ -159,15 +159,15 @@ In order to build the tests follow the next instructions:
 you are in the directory mpcotool/2.2.1):
 > $ cd ../tests/test2
 >
-> $ ln -s ../../../genetic/1.0.0 genetic
+> $ ln -s ../../../genetic/2.0.0 genetic
 >
 > $ cd ../test3
 >
-> $ ln -s ../../../genetic/1.0.0 genetic
+> $ ln -s ../../../genetic/2.0.0 genetic
 >
 > $ cd ../test4
 >
-> $ ln -s ../../../genetic/1.0.0 genetic
+> $ ln -s ../../../genetic/2.0.0 genetic
 
 2. Build all tests doing in the same terminal:
 > $ cd ../../2.2.1

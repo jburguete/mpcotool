@@ -113,6 +113,14 @@ main (int argn, char **argc)
         fprintf (file, "./process test%s/variables-%s test%s/v-%s %s\n",
                  test[i], methodA2[j], test[i], methodA2[j], arguments[i]);
     }
+  for (i = 0; i < NTESTS; ++i)
+    {  
+      for (j = 0; j < NMETHODSA1; ++j)
+        fprintf (file, "./process2 %s %s-* 10 >> result\n",
+                 test[i], methodA1[j]);
+      for (j = 0; j < NMETHODSA2; ++j)
+        fprintf (file, "./process2 %s %s 1 >> result\n", test[i], methodA2[j]);
+    }
   fclose (file);
   return 0;
 }

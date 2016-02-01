@@ -195,11 +195,6 @@ variable_open (Variable * variable, xmlNode * node, unsigned int algorithm,
           variable_error (variable, gettext ("bad range"));
           goto exit_on_error;
         }
-      if (variable->rangemaxabs < variable->rangeminabs)
-        {
-          variable_error (variable, gettext ("bad absolute range"));
-          goto exit_on_error;
-        }
     }
   else
     {

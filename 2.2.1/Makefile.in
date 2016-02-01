@@ -69,27 +69,27 @@ genetic/genetic.o: genetic/genetic.c genetic/genetic.h genetic/evolution.h \
 	genetic/entity.h genetic/bits.h $(DEP)
 	$(CC) $(CFLAGS) -c genetic/genetic.c -o genetic/genetic.o
 
-utilsbin.o: utils.c utils.h config.h
+utilsbin.o: utils.c utils.h config.h $(DEP)
 	$(CC) -c $(CFLAGS) utils.c -o utilsbin.o
 
-utils.o: utils.c utils.h config.h
+utils.o: utils.c utils.h config.h $(DEP)
 	$(CC) -c $(CFLAGS) @GTK_CFLAGS@ utils.c -o utils.o -DHAVE_GTK=1
 
-experiment.o: experiment.c experiment.h utils.h config.h
+experiment.o: experiment.c experiment.h utils.h config.h $(DEP)
 	$(CC) -c $(CFLAGS) experiment.c -o experiment.o
 
-variable.o: variable.c variable.h utils.h config.h
+variable.o: variable.c variable.h utils.h config.h $(DEP)
 	$(CC) -c $(CFLAGS) variable.c -o variable.o
 
-input.o: input.c input.h variable.h experiment.h utils.h config.h
+input.o: input.c input.h variable.h experiment.h utils.h config.h $(DEP)
 	$(CC) -c $(CFLAGS) input.c -o input.o
 
 optimize.o: optimize.c optimize.h input.h variable.h experiment.h utils.h \
-	config.h
+	config.h $(DEP)
 	$(CC) -c $(CFLAGS) optimize.c -o optimize.o
 
 interface.o: interface.c interface.h optimize.h input.h variable.h \
-	experiment.h utils.h config.h
+	experiment.h utils.h config.h $(DEP)
 	$(CC) -c $(CFLAGS) @GTK_CFLAGS@ interface.c -o interface.o -DHAVE_GTK=1
 
 mpcotoolbin: main.c $(OBJBIN)

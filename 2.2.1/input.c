@@ -47,7 +47,7 @@ OF SUCH DAMAGE.
 #include "variable.h"
 #include "input.h"
 
-#define DEBUG 0                 ///< Macro to debug.
+#define DEBUG_INPUT 1           ///< Macro to debug.
 
 Input input[1];
 
@@ -63,14 +63,14 @@ const xmlChar *variables_name = (xmlChar *) "variables";
 void
 input_new ()
 {
-#if DEBUG
+#if DEBUG_INPUT
   fprintf (stderr, "input_new: start\n");
 #endif
   input->nvariables = input->nexperiments = input->nsteps = 0;
   input->simulator = input->evaluator = input->directory = input->name = NULL;
   input->experiment = NULL;
   input->variable = NULL;
-#if DEBUG
+#if DEBUG_INPUT
   fprintf (stderr, "input_new: end\n");
 #endif
 }
@@ -83,7 +83,7 @@ void
 input_free ()
 {
   unsigned int i;
-#if DEBUG
+#if DEBUG_INPUT
   fprintf (stderr, "input_free: start\n");
 #endif
   g_free (input->name);
@@ -99,7 +99,7 @@ input_free ()
   xmlFree (input->result);
   xmlFree (input->variables);
   input->nexperiments = input->nvariables = input->nsteps = 0;
-#if DEBUG
+#if DEBUG_INPUT
   fprintf (stderr, "input_free: end\n");
 #endif
 }
@@ -135,7 +135,7 @@ input_open (char *filename)
   int error_code;
   unsigned int i;
 
-#if DEBUG
+#if DEBUG_INPUT
   fprintf (stderr, "input_open: start\n");
 #endif
 
@@ -144,7 +144,7 @@ input_open (char *filename)
   input_new ();
 
   // Parsing the input file
-#if DEBUG
+#if DEBUG_INPUT
   fprintf (stderr, "input_open: parsing the input file %s\n", filename);
 #endif
   doc = xmlParseFile (filename);
@@ -155,7 +155,7 @@ input_open (char *filename)
     }
 
   // Getting the root node
-#if DEBUG
+#if DEBUG_INPUT
   fprintf (stderr, "input_open: getting the root node\n");
 #endif
   node = xmlDocGetRootElement (doc);
@@ -419,7 +419,7 @@ input_open (char *filename)
     {
       if (xmlStrcmp (child->name, XML_EXPERIMENT))
         break;
-#if DEBUG
+#if DEBUG_INPUT
       fprintf (stderr, "input_open: nexperiments=%u\n", input->nexperiments);
 #endif
       input->experiment = (Experiment *)
@@ -437,7 +437,7 @@ input_open (char *filename)
             goto exit_on_error;
         }
       ++input->nexperiments;
-#if DEBUG
+#if DEBUG_INPUT
       fprintf (stderr, "input_open: nexperiments=%u\n", input->nexperiments);
 #endif
     }
@@ -451,7 +451,7 @@ input_open (char *filename)
   // Reading the variables data
   for (; child; child = child->next)
     {
-#if DEBUG
+#if DEBUG_INPUT
       fprintf (stderr, "input_open: nvariables=%u\n", input->nvariables);
 #endif
       if (xmlStrcmp (child->name, XML_VARIABLE))
@@ -514,7 +514,7 @@ input_open (char *filename)
   // Closing the XML document
   xmlFreeDoc (doc);
 
-#if DEBUG
+#if DEBUG_INPUT
   fprintf (stderr, "input_open: end\n");
 #endif
   return 1;
@@ -525,7 +525,7 @@ exit_on_error:
   show_error (error_message);
   g_free (error_message);
   input_free ();
-#if DEBUG
+#if DEBUG_INPUT
   fprintf (stderr, "input_open: end\n");
 #endif
   return 0;

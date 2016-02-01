@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-28 15:05+0100\n"
+"POT-Creation-Date: 2016-02-01 14:43+0100\n"
 "PO-Revision-Date: 2015-10-20 18:47+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: utils.c:110
+#: utils.c:111
 msgid "ERROR!"
 msgstr "ERREUR!"
 
@@ -41,199 +41,199 @@ msgstr "modèle d'entrée indéfini"
 msgid "bad templates number"
 msgstr "nombre de modèles incorrect"
 
-#: variable.c:108 variable.c:110 input.c:461 interface.c:2287
+#: variable.c:108 variable.c:110 input.c:460 interface.c:2287
 msgid "Variable"
 msgstr "Variable"
 
-#: variable.c:143
+#: variable.c:142
 msgid "no name"
 msgstr "nom indéfini"
 
-#: variable.c:151
+#: variable.c:150
 msgid "bad minimum"
 msgstr "minimum incorrect"
 
-#: variable.c:159
+#: variable.c:158
 msgid "bad absolute minimum"
 msgstr "minimum absolu incorrect"
 
-#: variable.c:164
+#: variable.c:163
 msgid "minimum range not allowed"
 msgstr "gamme minimum interdite"
 
-#: variable.c:170
+#: variable.c:169
 msgid "no minimum range"
 msgstr "gamme minimum indéfinie"
 
-#: variable.c:179
+#: variable.c:177
 msgid "bad maximum"
 msgstr "maximum incorrect"
 
-#: variable.c:187
+#: variable.c:185
 msgid "bad absolute maximum"
 msgstr "maximum absolu incorrect"
 
-#: variable.c:192
+#: variable.c:190
 msgid "maximum range not allowed"
 msgstr "gamme maximum interdite"
 
-#: variable.c:197
+#: variable.c:195
 msgid "bad range"
 msgstr "gamme incorrecte"
 
-#: variable.c:202
+#: variable.c:200
 msgid "bad absolute range"
 msgstr "gamme absolue incorrecte"
 
-#: variable.c:208
+#: variable.c:206
 msgid "no maximum range"
 msgstr "gamme maximum indéfinie"
 
-#: variable.c:216
+#: variable.c:214
 msgid "bad precision"
 msgstr "précision incorrecte"
 
-#: variable.c:227
+#: variable.c:225
 msgid "bad sweeps"
 msgstr "nombre de balayages incorrect"
 
-#: variable.c:233
+#: variable.c:231
 msgid "no sweeps number"
 msgstr "nombre de balayages indéfini"
 
-#: variable.c:248
+#: variable.c:246
 msgid "invalid bits number"
 msgstr "nombre de bits incorrect"
 
-#: variable.c:254
+#: variable.c:252
 msgid "no bits number"
 msgstr "nombre de bits indéfini"
 
-#: variable.c:264
+#: variable.c:261
 msgid "bad step size"
 msgstr "grandeur de pas incorrecte"
 
-#: input.c:118
+#: input.c:117
 msgid "Input"
 msgstr "Entrée"
 
-#: input.c:154
+#: input.c:153
 msgid "Unable to parse the input file"
 msgstr "On ne peut pas analyser le fichier d'entrée"
 
-#: input.c:165
+#: input.c:164
 msgid "Bad root XML node"
 msgstr "Node XML source incorrect"
 
-#: input.c:187
+#: input.c:186
 msgid "Bad simulator program"
 msgstr "Programme simulateur incorrect"
 
-#: input.c:200
+#: input.c:199
 msgid "Bad pseudo-random numbers generator seed"
 msgstr "Grain du générateur de nombres pseudo-aléatoires incorrect"
 
-#: input.c:215
+#: input.c:214
 msgid "Bad simulations number"
 msgstr "Nombre de simulations incorrect"
 
-#: input.c:232
+#: input.c:231
 msgid "Invalid population number"
 msgstr "Nombre de population incorrect"
 
-#: input.c:238
+#: input.c:237
 msgid "No population number"
 msgstr "Nombre de population indéfini"
 
-#: input.c:249
+#: input.c:248
 msgid "Invalid generations number"
 msgstr "Nombre de générations incorrect"
 
-#: input.c:255
+#: input.c:254
 msgid "No generations number"
 msgstr "Nombre de générations indéfini"
 
-#: input.c:267
+#: input.c:266
 msgid "Invalid mutation probability"
 msgstr "Probabilité de mutation incorrecte"
 
-#: input.c:273
+#: input.c:272
 msgid "No mutation probability"
 msgstr "Probabilité de mutation indéfinie"
 
-#: input.c:285
+#: input.c:284
 msgid "Invalid reproduction probability"
 msgstr "Probabilité de reproduction incorrecte"
 
-#: input.c:291
+#: input.c:290
 msgid "No reproduction probability"
 msgstr "Probabilité de reproduction indéfinie"
 
-#: input.c:303
+#: input.c:302
 msgid "Invalid adaptation probability"
 msgstr "Probabilité d'adaptation incorrecte"
 
-#: input.c:309
+#: input.c:308
 msgid "No adaptation probability"
 msgstr "Probabilité d'adaptation indéfinie"
 
-#: input.c:320
+#: input.c:319
 msgid "No enough survival entities to reproduce the population"
 msgstr "Número de survivants insuffisante pour reproduire la population"
 
-#: input.c:326
+#: input.c:325
 msgid "Unknown algorithm"
 msgstr "Algorithme inconnu"
 
-#: input.c:343
+#: input.c:342
 msgid "Bad iterations number"
 msgstr "Nombre d'iterations incorrect"
 
-#: input.c:352
+#: input.c:351
 msgid "Invalid best number"
 msgstr "Nombre des meilleurs incorrect"
 
-#: input.c:362
+#: input.c:361
 msgid "Invalid tolerance"
 msgstr "Tolérance incorrecte"
 
-#: input.c:372
+#: input.c:371
 msgid "Invalid steps number"
 msgstr "Nombre de pas incorrect"
 
-#: input.c:385
+#: input.c:384
 msgid "Invalid estimates number"
 msgstr "Nombre d'estimations incorrect"
 
-#: input.c:392
+#: input.c:391
 msgid "Unknown method to estimate the direction search"
 msgstr "Méthode d'éstimer la direction inconnue"
 
-#: input.c:402
+#: input.c:401
 msgid "Invalid relaxation parameter"
 msgstr "Nombre de relaxation incorrect"
 
-#: input.c:414
+#: input.c:413
 msgid "Invalid thresold"
 msgstr "Seuil incorrect"
 
-#: input.c:447
+#: input.c:446
 msgid "No optimization experiments"
 msgstr "Expériences d'optimisation indéfinis"
 
-#: input.c:462
+#: input.c:461
 msgid "bad XML node"
 msgstr "noeud XML incorrect"
 
-#: input.c:476
+#: input.c:475
 msgid "No optimization variables"
 msgstr "Variables d'optimisation indéfinies"
 
-#: input.c:495
+#: input.c:494
 msgid "Bad P parameter"
 msgstr "Paramètre P incorrecte"
 
-#: input.c:503
+#: input.c:502
 msgid "Unknown error norm"
 msgstr "Norme d'erreur inconnue"
 
@@ -241,7 +241,7 @@ msgstr "Norme d'erreur inconnue"
 msgid "Best result"
 msgstr "Meilleur résultat"
 
-#: optimize.c:1703 optimize.c:1705 interface.c:705
+#: optimize.c:1707 optimize.c:1709 interface.c:705
 msgid "Calculation time"
 msgstr "Temps de calcul"
 

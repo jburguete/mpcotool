@@ -64,7 +64,7 @@ OF SUCH DAMAGE.
 #include "optimize.h"
 #include "interface.h"
 
-#define DEBUG 0                 ///< Macro to debug.
+#define DEBUG_INTERFACE 1       ///< Macro to debug.
 
 /**
  * \def INPUT_FILE
@@ -171,7 +171,7 @@ Window window[1];
 void
 input_save_direction (xmlNode * node)
 {
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "input_save_direction: start\n");
 #endif
   if (input->nsteps)
@@ -189,7 +189,7 @@ input_save_direction (xmlNode * node)
           xml_node_set_uint (node, XML_NESTIMATES, input->nestimates);
         }
     }
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "input_save_direction: end\n");
 #endif
 }
@@ -209,7 +209,7 @@ input_save (char *filename)
   xmlNode *node, *child;
   GFile *file, *file2;
 
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "input_save: start\n");
 #endif
 
@@ -346,7 +346,7 @@ input_save (char *filename)
   // Freeing memory
   xmlFreeDoc (doc);
 
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "input_save: end\n");
 #endif
 }
@@ -358,7 +358,7 @@ input_save (char *filename)
 void
 options_new ()
 {
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "options_new: start\n");
 #endif
   options->label_seed = (GtkLabel *)
@@ -419,7 +419,7 @@ options_new ()
         = gtk_spin_button_get_value_as_int (options->spin_direction);
     }
   gtk_widget_destroy (GTK_WIDGET (options->dialog));
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "options_new: end\n");
 #endif
 }
@@ -431,7 +431,7 @@ options_new ()
 void
 running_new ()
 {
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "running_new: start\n");
 #endif
   running->label = (GtkLabel *) gtk_label_new (gettext ("Calculating ..."));
@@ -447,7 +447,7 @@ running_new ()
      GTK_WIDGET (running->grid));
   gtk_spinner_start (running->spinner);
   gtk_widget_show_all (GTK_WIDGET (running->dialog));
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "running_new: end\n");
 #endif
 }
@@ -461,11 +461,11 @@ unsigned int
 window_get_algorithm ()
 {
   unsigned int i;
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_get_algorithm: start\n");
 #endif
   i = gtk_array_get_active (window->button_algorithm, NALGORITHMS);
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_get_algorithm: %u\n", i);
   fprintf (stderr, "window_get_algorithm: end\n");
 #endif
@@ -481,11 +481,11 @@ unsigned int
 window_get_direction ()
 {
   unsigned int i;
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_get_direction: start\n");
 #endif
   i = gtk_array_get_active (window->button_direction, NDIRECTIONS);
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_get_direction: %u\n", i);
   fprintf (stderr, "window_get_direction: end\n");
 #endif
@@ -501,11 +501,11 @@ unsigned int
 window_get_norm ()
 {
   unsigned int i;
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_get_norm: start\n");
 #endif
   i = gtk_array_get_active (window->button_norm, NNORMS);
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_get_norm: %u\n", i);
   fprintf (stderr, "window_get_norm: end\n");
 #endif
@@ -519,7 +519,7 @@ window_get_norm ()
 void
 window_save_direction ()
 {
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_save_direction: start\n");
 #endif
   if (gtk_toggle_button_get_active
@@ -540,7 +540,7 @@ window_save_direction ()
     }
   else
     input->nsteps = 0;
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_save_direction: end\n");
 #endif
 }
@@ -557,7 +557,7 @@ window_save ()
   GtkFileFilter *filter;
   char *buffer;
 
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_save: start\n");
 #endif
 
@@ -647,7 +647,7 @@ window_save ()
       // Closing and freeing memory
       g_free (buffer);
       gtk_widget_destroy (GTK_WIDGET (dlg));
-#if DEBUG
+#if DEBUG_INTERFACE
       fprintf (stderr, "window_save: end\n");
 #endif
       return 1;
@@ -655,7 +655,7 @@ window_save ()
 
   // Closing and freeing memory
   gtk_widget_destroy (GTK_WIDGET (dlg));
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_save: end\n");
 #endif
   return 0;
@@ -670,12 +670,12 @@ window_run ()
 {
   unsigned int i;
   char *msg, *msg2, buffer[64], buffer2[64];
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_run: start\n");
 #endif
   if (!window_save ())
     {
-#if DEBUG
+#if DEBUG_INTERFACE
       fprintf (stderr, "window_run: end\n");
 #endif
       return;
@@ -684,12 +684,12 @@ window_run ()
   while (gtk_events_pending ())
     gtk_main_iteration ();
   optimize_open ();
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_run: closing running dialog\n");
 #endif
   gtk_spinner_stop (running->spinner);
   gtk_widget_destroy (GTK_WIDGET (running->dialog));
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_run: displaying results\n");
 #endif
   snprintf (buffer, 64, "error = %.15le\n", optimize->error_old[0]);
@@ -708,11 +708,11 @@ window_run ()
   g_free (msg2);
   show_message (gettext ("Best result"), msg, INFO_TYPE);
   g_free (msg);
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_run: freeing memory\n");
 #endif
   optimize_free ();
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_run: end\n");
 #endif
 }
@@ -725,7 +725,7 @@ void
 window_help ()
 {
   char *buffer, *buffer2;
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_help: start\n");
 #endif
   buffer2 = g_build_filename (window->application_directory, "..", "manuals",
@@ -733,11 +733,11 @@ window_help ()
   buffer = g_filename_to_uri (buffer2, NULL, NULL);
   g_free (buffer2);
   gtk_show_uri (NULL, buffer, GDK_CURRENT_TIME, NULL);
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_help: uri=%s\n", buffer);
 #endif
   g_free (buffer);
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_help: end\n");
 #endif
 }
@@ -754,7 +754,7 @@ window_about ()
     "Borja Latorre Garcés <borja.latorre@csic.es>",
     NULL
   };
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_about: start\n");
 #endif
   gtk_show_about_dialog
@@ -771,7 +771,7 @@ window_about ()
      "logo", window->logo,
      "website", "https://github.com/jburguete/mpcotool",
      "license-type", GTK_LICENSE_BSD, NULL);
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_about: end\n");
 #endif
 }
@@ -784,7 +784,7 @@ window_about ()
 void
 window_update_direction ()
 {
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_update_direction: start\n");
 #endif
   gtk_widget_show (GTK_WIDGET (window->check_direction));
@@ -805,7 +805,7 @@ window_update_direction ()
       gtk_widget_show (GTK_WIDGET (window->label_estimates));
       gtk_widget_show (GTK_WIDGET (window->spin_estimates));
     }
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_update_direction: end\n");
 #endif
 }
@@ -818,7 +818,7 @@ void
 window_update ()
 {
   unsigned int i;
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_update: start\n");
 #endif
   gtk_widget_set_sensitive
@@ -962,7 +962,7 @@ window_update ()
       gtk_widget_show (GTK_WIDGET (window->label_p));
       gtk_widget_show (GTK_WIDGET (window->spin_p));
     }
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_update: end\n");
 #endif
 }
@@ -975,7 +975,7 @@ void
 window_set_algorithm ()
 {
   int i;
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_set_algorithm: start\n");
 #endif
   i = window_get_algorithm ();
@@ -996,7 +996,7 @@ window_set_algorithm ()
                                  (gdouble) input->variable[i].nbits);
     }
   window_update ();
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_set_algorithm: end\n");
 #endif
 }
@@ -1010,7 +1010,7 @@ window_set_experiment ()
 {
   unsigned int i, j;
   char *buffer1, *buffer2;
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_set_experiment: start\n");
 #endif
   i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_experiment));
@@ -1036,7 +1036,7 @@ window_set_experiment ()
       g_signal_handler_unblock
         (window->button_template[j], window->id_input[j]);
     }
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_set_experiment: end\n");
 #endif
 }
@@ -1049,7 +1049,7 @@ void
 window_remove_experiment ()
 {
   unsigned int i, j;
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_remove_experiment: start\n");
 #endif
   i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_experiment));
@@ -1074,7 +1074,7 @@ window_remove_experiment ()
   for (j = 0; j < input->experiment->ninputs; ++j)
     g_signal_handler_unblock (window->button_template[j], window->id_input[j]);
   window_update ();
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_remove_experiment: end\n");
 #endif
 }
@@ -1087,7 +1087,7 @@ void
 window_add_experiment ()
 {
   unsigned int i, j;
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_add_experiment: start\n");
 #endif
   i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_experiment));
@@ -1118,7 +1118,7 @@ window_add_experiment ()
   for (j = 0; j < input->experiment->ninputs; ++j)
     g_signal_handler_unblock (window->button_template[j], window->id_input[j]);
   window_update ();
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_add_experiment: end\n");
 #endif
 }
@@ -1133,7 +1133,7 @@ window_name_experiment ()
   unsigned int i;
   char *buffer;
   GFile *file1, *file2;
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_name_experiment: start\n");
 #endif
   i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_experiment));
@@ -1149,7 +1149,7 @@ window_name_experiment ()
   g_free (buffer);
   g_object_unref (file2);
   g_object_unref (file1);
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_name_experiment: end\n");
 #endif
 }
@@ -1162,12 +1162,12 @@ void
 window_weight_experiment ()
 {
   unsigned int i;
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_weight_experiment: start\n");
 #endif
   i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_experiment));
   input->experiment[i].weight = gtk_spin_button_get_value (window->spin_weight);
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_weight_experiment: end\n");
 #endif
 }
@@ -1181,7 +1181,7 @@ void
 window_inputs_experiment ()
 {
   unsigned int j;
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_inputs_experiment: start\n");
 #endif
   j = input->experiment->ninputs - 1;
@@ -1194,7 +1194,7 @@ window_inputs_experiment ()
                                        (window->check_template[j])))
     ++input->experiment->ninputs;
   window_update ();
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_inputs_experiment: end\n");
 #endif
 }
@@ -1212,7 +1212,7 @@ window_template_experiment (void *data)
   unsigned int i, j;
   char *buffer;
   GFile *file1, *file2;
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_template_experiment: start\n");
 #endif
   i = (size_t) data;
@@ -1225,7 +1225,7 @@ window_template_experiment (void *data)
   g_free (buffer);
   g_object_unref (file2);
   g_object_unref (file1);
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_template_experiment: end\n");
 #endif
 }
@@ -1238,7 +1238,7 @@ void
 window_set_variable ()
 {
   unsigned int i;
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_set_variable: start\n");
 #endif
   i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_variable));
@@ -1278,7 +1278,7 @@ window_set_variable ()
   gtk_spin_button_set_value (window->spin_steps, (gdouble) input->nsteps);
   if (input->nsteps)
     gtk_spin_button_set_value (window->spin_step, input->variable[i].step);
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_set_variable: precision[%u]=%u\n", i,
            input->variable[i].precision);
 #endif
@@ -1287,7 +1287,7 @@ window_set_variable ()
     case ALGORITHM_SWEEP:
       gtk_spin_button_set_value (window->spin_sweeps,
                                  (gdouble) input->variable[i].nsweeps);
-#if DEBUG
+#if DEBUG_INTERFACE
       fprintf (stderr, "window_set_variable: nsweeps[%u]=%u\n", i,
                input->variable[i].nsweeps);
 #endif
@@ -1295,14 +1295,14 @@ window_set_variable ()
     case ALGORITHM_GENETIC:
       gtk_spin_button_set_value (window->spin_bits,
                                  (gdouble) input->variable[i].nbits);
-#if DEBUG
+#if DEBUG_INTERFACE
       fprintf (stderr, "window_set_variable: nbits[%u]=%u\n", i,
                input->variable[i].nbits);
 #endif
       break;
     }
   window_update ();
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_set_variable: end\n");
 #endif
 }
@@ -1315,7 +1315,7 @@ void
 window_remove_variable ()
 {
   unsigned int i, j;
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_remove_variable: start\n");
 #endif
   i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_variable));
@@ -1333,7 +1333,7 @@ window_remove_variable ()
   gtk_combo_box_set_active (GTK_COMBO_BOX (window->combo_variable), i);
   g_signal_handler_unblock (window->entry_variable, window->id_variable_label);
   window_update ();
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_remove_variable: end\n");
 #endif
 }
@@ -1346,7 +1346,7 @@ void
 window_add_variable ()
 {
   unsigned int i, j;
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_add_variable: start\n");
 #endif
   i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_variable));
@@ -1366,7 +1366,7 @@ window_add_variable ()
   gtk_combo_box_set_active (GTK_COMBO_BOX (window->combo_variable), i + 1);
   g_signal_handler_unblock (window->entry_variable, window->id_variable_label);
   window_update ();
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_add_variable: end\n");
 #endif
 }
@@ -1380,7 +1380,7 @@ window_label_variable ()
 {
   unsigned int i;
   const char *buffer;
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_label_variable: start\n");
 #endif
   i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_variable));
@@ -1390,7 +1390,7 @@ window_label_variable ()
   gtk_combo_box_text_insert_text (window->combo_variable, i, buffer);
   gtk_combo_box_set_active (GTK_COMBO_BOX (window->combo_variable), i);
   g_signal_handler_unblock (window->combo_variable, window->id_variable);
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_label_variable: end\n");
 #endif
 }
@@ -1403,7 +1403,7 @@ void
 window_precision_variable ()
 {
   unsigned int i;
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_precision_variable: start\n");
 #endif
   i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_variable));
@@ -1415,7 +1415,7 @@ window_precision_variable ()
                               input->variable[i].precision);
   gtk_spin_button_set_digits (window->spin_maxabs,
                               input->variable[i].precision);
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_precision_variable: end\n");
 #endif
 }
@@ -1428,12 +1428,12 @@ void
 window_rangemin_variable ()
 {
   unsigned int i;
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_rangemin_variable: start\n");
 #endif
   i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_variable));
   input->variable[i].rangemin = gtk_spin_button_get_value (window->spin_min);
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_rangemin_variable: end\n");
 #endif
 }
@@ -1446,12 +1446,12 @@ void
 window_rangemax_variable ()
 {
   unsigned int i;
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_rangemax_variable: start\n");
 #endif
   i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_variable));
   input->variable[i].rangemax = gtk_spin_button_get_value (window->spin_max);
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_rangemax_variable: end\n");
 #endif
 }
@@ -1464,13 +1464,13 @@ void
 window_rangeminabs_variable ()
 {
   unsigned int i;
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_rangeminabs_variable: start\n");
 #endif
   i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_variable));
   input->variable[i].rangeminabs
     = gtk_spin_button_get_value (window->spin_minabs);
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_rangeminabs_variable: end\n");
 #endif
 }
@@ -1483,13 +1483,13 @@ void
 window_rangemaxabs_variable ()
 {
   unsigned int i;
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_rangemaxabs_variable: start\n");
 #endif
   i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_variable));
   input->variable[i].rangemaxabs
     = gtk_spin_button_get_value (window->spin_maxabs);
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_rangemaxabs_variable: end\n");
 #endif
 }
@@ -1502,12 +1502,12 @@ void
 window_step_variable ()
 {
   unsigned int i;
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_step_variable: start\n");
 #endif
   i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_variable));
   input->variable[i].step = gtk_spin_button_get_value (window->spin_step);
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_step_variable: end\n");
 #endif
 }
@@ -1520,7 +1520,7 @@ void
 window_update_variable ()
 {
   int i;
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_update_variable: start\n");
 #endif
   i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_variable));
@@ -1531,7 +1531,7 @@ window_update_variable ()
     case ALGORITHM_SWEEP:
       input->variable[i].nsweeps
         = gtk_spin_button_get_value_as_int (window->spin_sweeps);
-#if DEBUG
+#if DEBUG_INTERFACE
       fprintf (stderr, "window_update_variable: nsweeps[%d]=%u\n", i,
                input->variable[i].nsweeps);
 #endif
@@ -1539,12 +1539,12 @@ window_update_variable ()
     case ALGORITHM_GENETIC:
       input->variable[i].nbits
         = gtk_spin_button_get_value_as_int (window->spin_bits);
-#if DEBUG
+#if DEBUG_INTERFACE
       fprintf (stderr, "window_update_variable: nbits[%d]=%u\n", i,
                input->variable[i].nbits);
 #endif
     }
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_update_variable: end\n");
 #endif
 }
@@ -1561,14 +1561,19 @@ window_read (char *filename)
 {
   unsigned int i;
   char *buffer;
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_read: start\n");
 #endif
 
   // Reading new input file
   input_free ();
   if (!input_open (filename))
-    return 0;
+    {
+#if DEBUG_INTERFACE
+      fprintf (stderr, "window_read: end\n");
+#endif
+      return 0;
+    }
 
   // Setting GTK+ widgets data
   gtk_entry_set_text (window->entry_result, input->result);
@@ -1655,7 +1660,7 @@ window_read (char *filename)
   window_set_variable ();
   window_update ();
 
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_read: end\n");
 #endif
   return 1;
@@ -1672,7 +1677,7 @@ window_open ()
   GtkFileFilter *filter;
   char *buffer, *directory, *name;
 
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_open: start\n");
 #endif
 
@@ -1703,7 +1708,7 @@ window_open ()
       buffer = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dlg));
       if (!window_read (buffer))
         {
-#if DEBUG
+#if DEBUG_INTERFACE
           fprintf (stderr, "window_open: error reading input file\n");
 #endif
           g_free (buffer);
@@ -1714,7 +1719,7 @@ window_open ()
             {
 
               // Closing on backup file reading error
-#if DEBUG
+#if DEBUG_INTERFACE
               fprintf (stderr, "window_read: error reading backup file\n");
 #endif
               g_free (buffer);
@@ -1733,7 +1738,7 @@ window_open ()
   g_free (name);
   g_free (directory);
   gtk_widget_destroy (GTK_WIDGET (dlg));
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_open: end\n");
 #endif
 }
@@ -1770,7 +1775,7 @@ window_new ()
     gettext ("Taxicab error norm (L1)")
   };
 
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_new: start\n");
 #endif
 
@@ -2448,7 +2453,7 @@ window_new ()
   window_read (buffer);
   g_free (buffer);
 
-#if DEBUG
+#if DEBUG_INTERFACE
   fprintf (stderr, "window_new: start\n");
 #endif
 }

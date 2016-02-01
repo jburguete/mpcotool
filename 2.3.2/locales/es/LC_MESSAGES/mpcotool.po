@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-28 15:05+0100\n"
+"POT-Creation-Date: 2016-02-01 14:43+0100\n"
 "PO-Revision-Date: 2015-10-20 07:33+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: utils.c:110
+#: utils.c:111
 msgid "ERROR!"
 msgstr "¡ERROR!"
 
@@ -41,199 +41,199 @@ msgstr "falta plantilla"
 msgid "bad templates number"
 msgstr "número de plantillas incorrecto"
 
-#: variable.c:108 variable.c:110 input.c:461 interface.c:2287
+#: variable.c:108 variable.c:110 input.c:460 interface.c:2287
 msgid "Variable"
 msgstr "Variable"
 
-#: variable.c:143
+#: variable.c:142
 msgid "no name"
 msgstr "falta el nombre"
 
-#: variable.c:151
+#: variable.c:150
 msgid "bad minimum"
 msgstr "mínimo incorrecto"
 
-#: variable.c:159
+#: variable.c:158
 msgid "bad absolute minimum"
 msgstr "mínimo absoluto incorrecto"
 
-#: variable.c:164
+#: variable.c:163
 msgid "minimum range not allowed"
 msgstr "rango mínimo no permitido"
 
-#: variable.c:170
+#: variable.c:169
 msgid "no minimum range"
 msgstr "falta el rango mínimo"
 
-#: variable.c:179
+#: variable.c:177
 msgid "bad maximum"
 msgstr "máximo incorrecto"
 
-#: variable.c:187
+#: variable.c:185
 msgid "bad absolute maximum"
 msgstr "máximo absoluto incorrecto"
 
-#: variable.c:192
+#: variable.c:190
 msgid "maximum range not allowed"
 msgstr "rango máximo no permitido"
 
-#: variable.c:197
+#: variable.c:195
 msgid "bad range"
 msgstr "rango no válido"
 
-#: variable.c:202
+#: variable.c:200
 msgid "bad absolute range"
 msgstr "rango absoluto incorrecto"
 
-#: variable.c:208
+#: variable.c:206
 msgid "no maximum range"
 msgstr "falta el rango máximo"
 
-#: variable.c:216
+#: variable.c:214
 msgid "bad precision"
 msgstr "precisión incorrecta"
 
-#: variable.c:227
+#: variable.c:225
 msgid "bad sweeps"
 msgstr "número de barridos incorrecto"
 
-#: variable.c:233
+#: variable.c:231
 msgid "no sweeps number"
 msgstr "falta el número de barridos"
 
-#: variable.c:248
+#: variable.c:246
 msgid "invalid bits number"
 msgstr "número de bits no válido"
 
-#: variable.c:254
+#: variable.c:252
 msgid "no bits number"
 msgstr "falta el número de bits"
 
-#: variable.c:264
+#: variable.c:261
 msgid "bad step size"
 msgstr "tamaño de paso incorrecto"
 
-#: input.c:118
+#: input.c:117
 msgid "Input"
 msgstr "Entrada"
 
-#: input.c:154
+#: input.c:153
 msgid "Unable to parse the input file"
 msgstr "Imposible analizar el fichero de entrada"
 
-#: input.c:165
+#: input.c:164
 msgid "Bad root XML node"
 msgstr "Nodo XML raíz incorrecto"
 
-#: input.c:187
+#: input.c:186
 msgid "Bad simulator program"
 msgstr "Programa simulador incorrecto"
 
-#: input.c:200
+#: input.c:199
 msgid "Bad pseudo-random numbers generator seed"
 msgstr "Semilla del generador de números pseudo-aleatorios incorrecta"
 
-#: input.c:215
+#: input.c:214
 msgid "Bad simulations number"
 msgstr "Número de simulaciones incorrecto"
 
-#: input.c:232
+#: input.c:231
 msgid "Invalid population number"
 msgstr "Número de población no válido"
 
-#: input.c:238
+#: input.c:237
 msgid "No population number"
 msgstr "Falta el número de población"
 
-#: input.c:249
+#: input.c:248
 msgid "Invalid generations number"
 msgstr "Numéro de generaciones no válido"
 
-#: input.c:255
+#: input.c:254
 msgid "No generations number"
 msgstr "Falta número de generaciones"
 
-#: input.c:267
+#: input.c:266
 msgid "Invalid mutation probability"
 msgstr "Probabilidad de mutación no válida"
 
-#: input.c:273
+#: input.c:272
 msgid "No mutation probability"
 msgstr "Falta probabilidad de mutación"
 
-#: input.c:285
+#: input.c:284
 msgid "Invalid reproduction probability"
 msgstr "Probabilidad de reproducción no válida"
 
-#: input.c:291
+#: input.c:290
 msgid "No reproduction probability"
 msgstr "Falta probabilidad de reproducción"
 
-#: input.c:303
+#: input.c:302
 msgid "Invalid adaptation probability"
 msgstr "Probabilidad de adaptación no válida"
 
-#: input.c:309
+#: input.c:308
 msgid "No adaptation probability"
 msgstr "Falta probabilidad de adaptación"
 
-#: input.c:320
+#: input.c:319
 msgid "No enough survival entities to reproduce the population"
 msgstr "Número de supervivientes insuficiente para reproducir la población"
 
-#: input.c:326
+#: input.c:325
 msgid "Unknown algorithm"
 msgstr "Algoritmo desconocido"
 
-#: input.c:343
+#: input.c:342
 msgid "Bad iterations number"
 msgstr "Número de iteraciones incorrecto"
 
-#: input.c:352
+#: input.c:351
 msgid "Invalid best number"
 msgstr "Número de mejores no válido"
 
-#: input.c:362
+#: input.c:361
 msgid "Invalid tolerance"
 msgstr "Tolerancia no válida"
 
-#: input.c:372
+#: input.c:371
 msgid "Invalid steps number"
 msgstr "Número de pasos no válido"
 
-#: input.c:385
+#: input.c:384
 msgid "Invalid estimates number"
 msgstr "Número de estimaciones no válido"
 
-#: input.c:392
+#: input.c:391
 msgid "Unknown method to estimate the direction search"
 msgstr "Método de estimar la búsqueda de dirección desconocido"
 
-#: input.c:402
+#: input.c:401
 msgid "Invalid relaxation parameter"
 msgstr "Parámetro de relajación no válido"
 
-#: input.c:414
+#: input.c:413
 msgid "Invalid thresold"
 msgstr "Umbral no válido"
 
-#: input.c:447
+#: input.c:446
 msgid "No optimization experiments"
 msgstr "Faltan experimentos de optimización"
 
-#: input.c:462
+#: input.c:461
 msgid "bad XML node"
 msgstr "nodo XML incorrecto"
 
-#: input.c:476
+#: input.c:475
 msgid "No optimization variables"
 msgstr "Faltan las variables de optimización"
 
-#: input.c:495
+#: input.c:494
 msgid "Bad P parameter"
 msgstr "Parámetro P incorrecto"
 
-#: input.c:503
+#: input.c:502
 msgid "Unknown error norm"
 msgstr "Norma de error desconocida"
 
@@ -241,7 +241,7 @@ msgstr "Norma de error desconocida"
 msgid "Best result"
 msgstr "Mejor resultado"
 
-#: optimize.c:1703 optimize.c:1705 interface.c:705
+#: optimize.c:1707 optimize.c:1709 interface.c:705
 msgid "Calculation time"
 msgstr "Tiempo de cálculo"
 

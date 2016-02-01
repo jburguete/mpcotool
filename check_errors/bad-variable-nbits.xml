@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<optimize simulator="a" algorithm="genetic" npopulation="10" ngenerations="3" mutation="0.1" reproduction="0.1" adaptation="0.1">
+	<experiment name="a" template1="a"/>
+	<variable name="a" minimum="0" maximum="1" nbits="a"/>
+</optimize>
