@@ -90,8 +90,9 @@
 
 \begin{document}
 
-\title{MPCOTool: un software libre para obtener parámetros empíricos
-necesarios en modelos de simulación}
+\title{MPCOTool (the Multi-Purposes Calibration and Optimization Tool): un
+software libre para obtener parámetros empíricos necesarios en modelos de
+simulación}
 
 \author{Autores del software: J. Burguete y B. Latorre\\
 Autor del manual: J. Burguete}
@@ -174,7 +175,7 @@ El siguiente paso es descargar el código fuente de MPCOTool, enlazarlo con el
 de Genetic y compilar todo junto haciendo:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > git clone https://github.com/jburguete/mpcotool.git
-> cd mpcotool/2.2.0
+> cd mpcotool/2.2.1
 > ln -s ../../genetic/1.0.0 genetic
 > ./build
 \end{lstlisting}
@@ -189,7 +190,7 @@ usan también la librería \emph{Genetic}):
 > ln -s ../../../genetic/1.0.0 genetic
 > cd ../test4
 > ln -s ../../../genetic/1.0.0 genetic
-> cd ../../2.2.0
+> cd ../../2.2.1
 > make tests
 \end{lstlisting}
 
@@ -199,6 +200,9 @@ Finalmente podemos construir los manuales en formato PDF haciendo:
 \end{lstlisting}
 
 \chapter{Interfaz}
+
+{\bf ¡OJO!} La representación de los números reales se hace, según el estándar
+internacional, separando los decimales mediante el ``.'' decimal.
 
 \section{Formato en línea de comandos}
 

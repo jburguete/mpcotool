@@ -406,10 +406,10 @@ If the step does not improve the optimum ($\vec{r}_i=\vec{r}_{i+1}$) then the
 direction step vectors $\vec{t}_j$ are divided by two and $\vec{s}_{i+1}$ is set
 to zero. The method is iterated $N_{st}$ times.
 
-Although gradient based method gets the fastest convergence, is the method in
-MPCOTool that obtains the least advantages of parallelization. The method is
-almost sequential and parallelization only can be performed for each step in
-the $N_e$ simulations to estimate the gradient.
+Although direction search method gets the fastest convergence, it is the method
+in MPCOTool that obtains the least advantages of parallelization. The method is
+almost sequential and parallelization can be only performed for each step in the
+$N_e$ simulations to estimate the gradient.
 
 MPCOTool uses two methods to build the $\vec{t}_j$ vectors:
 
@@ -722,13 +722,15 @@ for the optimization of the aforementioned functions.
 	$x\in[-5,5]$ \\
 	$+\PA{2.25-x+x\,y^2}^2+\PA{2.625-x+x\,y^3}^2$ &
 	& $y\in[-5,5]$
-}{}{TabOriginalTests}
+}{Some standard functions to check the performance of the optimization
+algorithms}{TabOriginalTests}
 
 The algorithms based on the sweep method, as the space between the variables
 is traversed at regular intervals, are likely to exactly fall in the minimum
 of the function when the parameters to be minimized are integer or rational
 numbers. In those cases, the function has been modified in order always to get 
-the minimum with irrational parameters.
+the minimum with irrational parameters. Moreover, negative functions will be
+translated because the error norms have to be defined positive.
 \TABLE{\scriptsize}{ccc}
 {
 	Objective function & Minimum & Domain \\
@@ -751,11 +753,14 @@ the minimum with irrational parameters.
 	$=f_{Rosenbrock}\PA{x-\frac{\pi}{4},\,y-\frac{\pi}{4}}$ &
 	$=0$ &
 	$y\in[-5,10]$ \\
+	\multirow{2}{*}{$g_{Easom}(x,\,y)=1+f_{Easom}(x,y)$} &
+	\multirow{2}{*}{$g_{Easom},(\pi,\pi)=0$} &
+	$x\in[-100,100]$ \\ & & $y\in[-100,100]$ \\
 	\multirow{2}{*}{$g_{Beale}(x,\,y)
 		=f_{Beale}\PA{x-\frac{\pi}{4},\,y-\frac{\pi}{4}}$} &
 	\multirow{2}{*}{$g_{Beale}\PA{3+\frac{\pi}{4},\,\frac12+\frac{\pi}{4}}=0$} &
 	$x\in[-5,5]$ \\ & & $y\in[-5,5]$
-}{}{TabModifiedTests}
+}{Modified standard function to work in MPCOTool}{TabModifiedTests}
 
 When presenting the results, the following notation is used:
 \begin{description}
@@ -932,25 +937,25 @@ method somewhat slower but is deemed more secure.
 	SW+IT-1 & 12.8 & 12.4 & 10.2 & 1.5 & 9.1 & 7.4 \\
 	SW+CD-1 & {\bf 15.3} & -0.7 & {\bf 14.6} & 11.6 & -1.0 & {\bf 13.6} \\
 	SW+CD-2 & {\bf 15.3} & {\bf 15.3} & {\bf 14.6} & 11.5 & 8.1 & {\bf 13.8} \\
-	SW+RA-1 & {\bf 14.6} & -0.7 & {\bf 14.6} & 4.3 & -1.0 & 11.7 \\
-	SW+RA-2 & {\bf 15.3} & {\bf 15.3} & {\bf 13.7} & 2.8 & 8.1 & 1.4 \\
-	MC-1 & 1.1 & 0.4 & 1.3 & 0.7 & -0.2 & 1.0 \\
-	MC+IT-1 & {\bf 14.0} & 12.8 & 11.1 & 4.0 & 9.0 & 8.3 \\
-	MC+CD-1 & {\bf 15.3} & -0.6 & {\bf 14.1} & 11.9 & -0.8 & {\bf 14.1} \\
-	MC+CD-2 & {\bf 15.3} & {\bf 15.1} & {\bf 14.6} & 8.6 & -0.3 & 13.4 \\
-	MC+RA-1 & {\bf 15.1} & -0.6 & {\bf 14.1} & 1.7 & -0.8 & 13.1 \\
-	MC+RA-2 & {\bf 15.3} & {\bf 15.3} & {\bf 14.6} & 0.6 & -0.3 & 8.0 \\
-	GE-1 & 0.8 & 0.6 & 1.0 & 0.2 & -0.3 & 0.7 \\
-	GE-2 & 2.2 & 0.8 & 1.0 & 1.1 & -0.4 & 1.1 \\
-	GE-3 & 0.8 & 0.8 & 0.6 & 0.2 & -0.3 & 1.4 \\
-	GE-4 & 2.2 & 0.8 & 1.9 & 0.6 & -0.2 & 1.4 \\
-	GE-5 & 3.1 & 2.2 & 0.8 & 0.3 & 0.7 & 1.3 \\
-	GE-6 & 2.5 & 0.1 & 1.4 & 1.1 & 1.3 & 1.3 \\
-	GE-7 & 1.6 & 0.0 & 1.4 & 0.9 & -0.3 & 0.6 \\
-	GE-8 & 2.2 & 0.7 & 1.4 & 1.3 & 0.0 & 1.3 \\
-	GE-9 & 1.8 & 0.7 & 1.3 & 1.1 & -0.2 & 0.9 \\
-	GE-10 & 2.3 & 0.5 & 0.9 & 0.7 & -0.4 & 0.9 \\
-	GE-11 & 1.7 & 0.4 & 1.7 & 0.8 & 0.2 & 1.2
+	SW+RA-1 & {\bf 13.5-14.2} & -0.7 & {\bf 14.6} & 4.3 & -1.0 & 11.7 \\
+	SW+RA-2 & {\bf 13.8-14.1} & {\bf 15.3} & {\bf 13.7} & 2.8 & 8.1 & 1.4 \\
+	MC-1 & 0.7-0.9 & 0.4 & 1.3 & 0.7 & -0.2 & 1.0 \\
+	MC+IT-1 & {\bf 13.5-13.8} & 12.8 & 11.1 & 4.0 & 9.0 & 8.3 \\
+	MC+CD-1 & {\bf 14.6-14.6} & -0.6 & {\bf 14.1} & 11.9 & -0.8 & {\bf 14.1} \\
+	MC+CD-2 & {\bf 14.6-14.6} & {\bf 15.1} & {\bf 14.6} & 8.6 & -0.3 & 13.4 \\
+	MC+RA-1 & {\bf 13.8-14.1} & -0.6 & {\bf 14.1} & 1.7 & -0.8 & 13.1 \\
+	MC+RA-2 & {\bf 13.4-14.0} & {\bf 15.3} & {\bf 14.6} & 0.6 & -0.3 & 8.0 \\
+	GE-1 & 0.3-1.5 & 0.6 & 1.0 & 0.2 & -0.3 & 0.7 \\
+	GE-2 & 0.3-1.2 & 0.8 & 1.0 & 1.1 & -0.4 & 1.1 \\
+	GE-3 & 0.3-1.6 & 0.8 & 0.6 & 0.2 & -0.3 & 1.4 \\
+	GE-4 & 0.3-1.6 & 0.8 & 1.9 & 0.6 & -0.2 & 1.4 \\
+	GE-5 & 0.8-2.2 & 2.2 & 0.8 & 0.3 & 0.7 & 1.3 \\
+	GE-6 & 2.2-2.6 & 0.1 & 1.4 & 1.1 & 1.3 & 1.3 \\
+	GE-7 & 0.8-1.2 & 0.0 & 1.4 & 0.9 & -0.3 & 0.6 \\
+	GE-8 & 1.7-2.0 & 0.7 & 1.4 & 1.3 & 0.0 & 1.3 \\
+	GE-9 & 1.0-1.4 & 0.7 & 1.3 & 1.1 & -0.2 & 0.9 \\
+	GE-10 & 1.4-1.6 & 0.5 & 0.9 & 0.7 & -0.4 & 0.9 \\
+	GE-11 & 1.4-1.7 & 0.4 & 1.7 & 0.8 & 0.2 & 1.2
 }{Error de los métodos, estimado como $-\log_{10}\PA{d_{2500}}$, en los tests.
 En negrita se han remarcado los que han alcanzado la precisión de la máquina
 (aproximadamente 14 dígitos en doble precisión)}{TabTestResults}

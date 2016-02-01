@@ -1,7 +1,3 @@
-MPCOTool:
-The Multi-Purposes Calibration and Optimization Tool. A software to perform
-calibrations or optimizations of empirical parameters.
-
 AUTHORS: Javier Burguete and Borja Latorre.
 
 Copyright 2012-2016, AUTHORS.
