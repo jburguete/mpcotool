@@ -9,6 +9,7 @@
 #include "genetic/genetic.h"
 
 #define N_SIMULATIONS 10000
+#define SEED 707l
 int ntasks = 1;
 unsigned int nthreads = 1;
 GeneticVariable v[2];
@@ -62,8 +63,8 @@ main (int argn, char **argc)
                                               (ngenerations -
                                                1) * evolution_ratio),
                              ngenerations, mutation_ratio, reproduction_ratio,
-                             adaptation_ratio, 0., &evaluate, &best_genome,
-                             &best_variables, &best_objective);
+                             adaptation_ratio, SEED, 0., &evaluate,
+							 &best_genome, &best_variables, &best_objective);
   if (rank == 0)
     {
       file = fopen (argc[2], "w");
