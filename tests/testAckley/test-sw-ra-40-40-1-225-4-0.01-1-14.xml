@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<optimize simulator="Ackley" algorithm="sweep" nsteps="225" direction="random" nestimates="4" relaxation="1" result="result-sw-ra-40-40-1-450-2-0.01-1-14" variables="variables-sw-ra-40-40-1-450-2-0.01-1-14">
+  <experiment name="test.exp" template1="test.tmp"/>
+  <variable name="x" minimum="-40" maximum="40" precision="14" nsweeps="40" step="0.01"/>
+  <variable name="y" minimum="-40" maximum="40" precision="14" nsweeps="40" step="0.01"/>
+</optimize>
