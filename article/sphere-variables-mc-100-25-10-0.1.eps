@@ -1,7 +1,7 @@
 %!PS-Adobe-2.0 EPSF-2.0
 %%Title: sphere-variables-mc-100-25-10-0.1.eps
-%%Creator: gnuplot 5.0 patchlevel 1
-%%CreationDate: Sat Jan  9 03:07:52 2016
+%%Creator: gnuplot 4.6 patchlevel 6
+%%CreationDate: Mon Feb  1 19:02:28 2016
 %%DocumentFonts: (atend)
 %%BoundingBox: 50 50 201 201
 %%EndComments
@@ -18,7 +18,6 @@ gnudict begin
 /Dashlength 1 def
 /Landscape false def
 /Level1 false def
-/Level3 false def
 /Rounded false def
 /ClipToBoundingBox false def
 /SuppressPDFMark false def
@@ -30,11 +29,11 @@ gnudict begin
 %
 /vshift -46 def
 /dl1 {
-  10.0 Dashlength userlinewidth gnulinewidth div mul mul mul
+  10.0 Dashlength mul mul
   Rounded { currentlinewidth 0.75 mul sub dup 0 le { pop 0.01 } if } if
 } def
 /dl2 {
-  10.0 Dashlength userlinewidth gnulinewidth div mul mul mul
+  10.0 Dashlength mul mul
   Rounded { currentlinewidth 0.75 mul add } if
 } def
 /hpt_ 31.5 def
@@ -48,7 +47,7 @@ gnudict begin
   } if
 } def
 %
-% Gnuplot Prolog Version 5.0 (Dec 2014)
+% Gnuplot Prolog Version 4.6 (September 2012)
 %
 %/SuppressPDFMark true def
 %
@@ -65,11 +64,11 @@ gnudict begin
 /vpt2 vpt 2 mul def
 /hpt2 hpt 2 mul def
 /Lshow {currentpoint stroke M 0 vshift R 
-	Blacktext {gsave 0 setgray textshow grestore} {textshow} ifelse} def
+	Blacktext {gsave 0 setgray show grestore} {show} ifelse} def
 /Rshow {currentpoint stroke M dup stringwidth pop neg vshift R
-	Blacktext {gsave 0 setgray textshow grestore} {textshow} ifelse} def
+	Blacktext {gsave 0 setgray show grestore} {show} ifelse} def
 /Cshow {currentpoint stroke M dup stringwidth pop -2 div vshift R 
-	Blacktext {gsave 0 setgray textshow grestore} {textshow} ifelse} def
+	Blacktext {gsave 0 setgray show grestore} {show} ifelse} def
 /UP {dup vpt_ mul /vpt exch def hpt_ mul /hpt exch def
   /hpt2 hpt 2 mul def /vpt2 vpt 2 mul def} def
 /DL {Color {setrgbcolor Solid {pop []} if 0 setdash}
@@ -83,7 +82,7 @@ gnudict begin
 /PL {stroke userlinewidth setlinewidth
 	Rounded {1 setlinejoin 1 setlinecap} if} def
 3.8 setmiterlimit
-% Classic Line colors (version 5.0)
+% Default Line colors
 /LCw {1 1 1} def
 /LCb {0 0 0} def
 /LCa {0 0 0} def
@@ -96,20 +95,19 @@ gnudict begin
 /LC6 {0 0 0} def
 /LC7 {1 0.3 0} def
 /LC8 {0.5 0.5 0.5} def
-% Default dash patterns (version 5.0)
+% Default Line Types
 /LTw {PL [] 1 setgray} def
 /LTb {BL [] LCb DL} def
 /LTa {AL [1 udl mul 2 udl mul] 0 setdash LCa setrgbcolor} def
 /LT0 {PL [] LC0 DL} def
-/LT1 {PL [2 dl1 3 dl2] LC1 DL} def
-/LT2 {PL [1 dl1 1.5 dl2] LC2 DL} def
-/LT3 {PL [6 dl1 2 dl2 1 dl1 2 dl2] LC3 DL} def
-/LT4 {PL [1 dl1 2 dl2 6 dl1 2 dl2 1 dl1 2 dl2] LC4 DL} def
-/LT5 {PL [4 dl1 2 dl2] LC5 DL} def
-/LT6 {PL [1.5 dl1 1.5 dl2 1.5 dl1 1.5 dl2 1.5 dl1 6 dl2] LC6 DL} def
-/LT7 {PL [3 dl1 3 dl2 1 dl1 3 dl2] LC7 DL} def
-/LT8 {PL [2 dl1 2 dl2 2 dl1 6 dl2] LC8 DL} def
-/SL {[] 0 setdash} def
+/LT1 {PL [4 dl1 2 dl2] LC1 DL} def
+/LT2 {PL [2 dl1 3 dl2] LC2 DL} def
+/LT3 {PL [1 dl1 1.5 dl2] LC3 DL} def
+/LT4 {PL [6 dl1 2 dl2 1 dl1 2 dl2] LC4 DL} def
+/LT5 {PL [3 dl1 3 dl2 1 dl1 3 dl2] LC5 DL} def
+/LT6 {PL [2 dl1 2 dl2 2 dl1 6 dl2] LC6 DL} def
+/LT7 {PL [1 dl1 2 dl2 6 dl1 2 dl2 1 dl1 2 dl2] LC7 DL} def
+/LT8 {PL [2 dl1 2 dl2 2 dl1 2 dl2 2 dl1 2 dl2 2 dl1 4 dl2] LC8 DL} def
 /Pnt {stroke [] 0 setdash gsave 1 setlinecap M 0 0 V stroke grestore} def
 /Dia {stroke [] 0 setdash 2 copy vpt add M
   hpt neg vpt neg V hpt vpt neg V
@@ -331,14 +329,9 @@ gnudict begin
 %
 /languagelevel where
  {pop languagelevel} {1} ifelse
-dup 2 lt
-	{/InterpretLevel1 true def
-	 /InterpretLevel3 false def}
-	{/InterpretLevel1 Level1 def
-	 2 gt
-	    {/InterpretLevel3 Level3 def}
-	    {/InterpretLevel3 false def}
-	 ifelse }
+ 2 lt
+	{/InterpretLevel1 true def}
+	{/InterpretLevel1 Level1 def}
  ifelse
 %
 % PostScript level 2 pattern fill definitions
@@ -427,17 +420,16 @@ Level1 {Level1PatternFill} {Level2PatternFill} ifelse
 /Symbol-Oblique /Symbol findfont [1 0 .167 1 0 0] makefont
 dup length dict begin {1 index /FID eq {pop pop} {def} ifelse} forall
 currentdict end definefont pop
-%
 /MFshow {
    { dup 5 get 3 ge
      { 5 get 3 eq {gsave} {grestore} ifelse }
      {dup dup 0 get findfont exch 1 get scalefont setfont
      [ currentpoint ] exch dup 2 get 0 exch R dup 5 get 2 ne {dup dup 6
-     get exch 4 get {textshow} {stringwidth pop 0 R} ifelse }if dup 5 get 0 eq
+     get exch 4 get {Gshow} {stringwidth pop 0 R} ifelse }if dup 5 get 0 eq
      {dup 3 get {2 get neg 0 exch R pop} {pop aload pop M} ifelse} {dup 5
      get 1 eq {dup 2 get exch dup 3 get exch 6 get stringwidth pop -2 div
      dup 0 R} {dup 6 get stringwidth pop -2 div 0 R 6 get
-     textshow 2 index {aload pop M neg 3 -1 roll neg R pop pop} {pop pop pop
+     show 2 index {aload pop M neg 3 -1 roll neg R pop pop} {pop pop pop
      pop aload pop M} ifelse }ifelse }ifelse }
      ifelse }
    forall} def
@@ -465,40 +457,15 @@ systemdict /pdfmark known not {
 SDict begin [
   /Title (sphere-variables-mc-100-25-10-0.1.eps)
   /Subject (gnuplot plot)
-  /Creator (gnuplot 5.0 patchlevel 1)
-  /Author (burguete)
+  /Creator (gnuplot 4.6 patchlevel 6)
+  /Author (javi)
 %  /Producer (gnuplot)
 %  /Keywords ()
-  /CreationDate (Sat Jan  9 03:07:52 2016)
+  /CreationDate (Mon Feb  1 19:02:28 2016)
   /DOCINFO pdfmark
 end
 } ifelse
 end
-%
-% Support for boxed text - Ethan A Merritt May 2005
-%
-/InitTextBox { userdict /TBy2 3 -1 roll put userdict /TBx2 3 -1 roll put
-           userdict /TBy1 3 -1 roll put userdict /TBx1 3 -1 roll put
-	   /Boxing true def } def
-/ExtendTextBox { Boxing
-    { gsave dup false charpath pathbbox
-      dup TBy2 gt {userdict /TBy2 3 -1 roll put} {pop} ifelse
-      dup TBx2 gt {userdict /TBx2 3 -1 roll put} {pop} ifelse
-      dup TBy1 lt {userdict /TBy1 3 -1 roll put} {pop} ifelse
-      dup TBx1 lt {userdict /TBx1 3 -1 roll put} {pop} ifelse
-      grestore } if } def
-/PopTextBox { newpath TBx1 TBxmargin sub TBy1 TBymargin sub M
-               TBx1 TBxmargin sub TBy2 TBymargin add L
-	       TBx2 TBxmargin add TBy2 TBymargin add L
-	       TBx2 TBxmargin add TBy1 TBymargin sub L closepath } def
-/DrawTextBox { PopTextBox stroke /Boxing false def} def
-/FillTextBox { gsave PopTextBox 1 1 1 setrgbcolor fill grestore /Boxing false def} def
-0 0 0 0 InitTextBox
-/TBxmargin 20 def
-/TBymargin 20 def
-/Boxing false def
-/textshow { ExtendTextBox Gshow } def
-%
 %%EndProlog
 %%Page: 1 1
 gnudict begin
@@ -512,7 +479,6 @@ newpath
 BackgroundColor 0 lt 3 1 roll 0 lt exch 0 lt or or not {BackgroundColor C 1.000 0 0 3024.00 3024.00 BoxColFill} if
 1.000 UL
 LTb
-LCb setrgbcolor
 567 664 M
 63 0 V
 2092 0 R
@@ -523,7 +489,6 @@ stroke
 ] -46.7 MRshow
 1.000 UL
 LTb
-LCb setrgbcolor
 567 1095 M
 63 0 V
 2092 0 R
@@ -534,7 +499,6 @@ stroke
 ] -46.7 MRshow
 1.000 UL
 LTb
-LCb setrgbcolor
 567 1526 M
 63 0 V
 2092 0 R
@@ -545,7 +509,6 @@ stroke
 ] -46.7 MRshow
 1.000 UL
 LTb
-LCb setrgbcolor
 567 1957 M
 63 0 V
 2092 0 R
@@ -556,7 +519,6 @@ stroke
 ] -46.7 MRshow
 1.000 UL
 LTb
-LCb setrgbcolor
 567 2388 M
 63 0 V
 2092 0 R
@@ -567,7 +529,6 @@ stroke
 ] -46.7 MRshow
 1.000 UL
 LTb
-LCb setrgbcolor
 783 448 M
 0 63 V
 0 2092 R
@@ -578,7 +539,6 @@ stroke
 ] -46.7 MCshow
 1.000 UL
 LTb
-LCb setrgbcolor
 1214 448 M
 0 63 V
 0 2092 R
@@ -589,7 +549,6 @@ stroke
 ] -46.7 MCshow
 1.000 UL
 LTb
-LCb setrgbcolor
 1645 448 M
 0 63 V
 0 2092 R
@@ -600,7 +559,6 @@ stroke
 ] -46.7 MCshow
 1.000 UL
 LTb
-LCb setrgbcolor
 2076 448 M
 0 63 V
 0 2092 R
@@ -611,7 +569,6 @@ stroke
 ] -46.7 MCshow
 1.000 UL
 LTb
-LCb setrgbcolor
 2507 448 M
 0 63 V
 0 2092 R
@@ -622,20 +579,14 @@ stroke
 ] -46.7 MCshow
 1.000 UL
 LTb
-LCb setrgbcolor
 1.000 UL
 LTb
-LCb setrgbcolor
 567 2603 N
 567 448 L
 2155 0 V
 0 2155 V
 -2155 0 V
 Z stroke
-1.000 UP
-1.000 UL
-LTb
-LCb setrgbcolor
 LCb setrgbcolor
 161 1525 M
 currentpoint gsave translate -270 rotate 0 0 moveto
@@ -648,264 +599,265 @@ LCb setrgbcolor
 [ [(Helvetica) 140.0 0.0 true true 0 (x)]
 ] -46.7 MCshow
 LTb
-LCb setrgbcolor
 1644 2813 M
 [ [(Helvetica) 140.0 0.0 true true 0 (MC+IT-1)]
 ] -46.7 MCshow
-% Begin plot #1
+1.000 UP
 1.000 UL
 LTb
-LCb setrgbcolor
+% Begin plot #1
+1.000 UL
+LT0
+1787 884 Pnt
 2375 811 Pnt
 678 2401 Pnt
 1845 983 Pnt
-1787 884 Pnt
-1402 788 Pnt
+1761 1113 Pnt
 1023 2348 Pnt
 2486 2120 Pnt
-1761 1113 Pnt
-839 2449 Pnt
-2093 2313 Pnt
-768 1420 Pnt
+1402 788 Pnt
 1828 2270 Pnt
-1685 1050 Pnt
+768 1420 Pnt
+2093 2313 Pnt
+839 2449 Pnt
+748 1000 Pnt
 1649 2008 Pnt
 1252 1121 Pnt
-748 1000 Pnt
-2067 2093 Pnt
-2154 1860 Pnt
+1685 1050 Pnt
 2399 979 Pnt
 1310 490 Pnt
+2154 1860 Pnt
+2067 2093 Pnt
 2560 909 Pnt
-2075 1552 Pnt
 1216 1493 Pnt
-1595 1657 Pnt
 1314 2535 Pnt
-1185 2393 Pnt
+2075 1552 Pnt
+1595 1657 Pnt
 702 582 Pnt
 1490 2001 Pnt
-2298 972 Pnt
+1185 2393 Pnt
 1466 768 Pnt
-1441 665 Pnt
-2032 1192 Pnt
+2298 972 Pnt
 1481 803 Pnt
-1127 2383 Pnt
+1441 665 Pnt
 1553 1977 Pnt
-1711 494 Pnt
-1458 2476 Pnt
+2032 1192 Pnt
+1127 2383 Pnt
 2422 2253 Pnt
 2551 1573 Pnt
-2674 465 Pnt
-1622 2539 Pnt
+1711 494 Pnt
+1458 2476 Pnt
 1731 1453 Pnt
 1104 1237 Pnt
+2674 465 Pnt
+1622 2539 Pnt
+2221 1955 Pnt
+1981 1924 Pnt
 1431 1530 Pnt
 1921 616 Pnt
-1981 1924 Pnt
-2221 1955 Pnt
+897 1214 Pnt
+2273 1493 Pnt
 1555 2345 Pnt
 2061 1885 Pnt
-2273 1493 Pnt
-2599 1810 Pnt
-897 1214 Pnt
-1656 1985 Pnt
 1312 2439 Pnt
 1303 2516 Pnt
-990 1216 Pnt
-1612 2331 Pnt
+2599 1810 Pnt
+1656 1985 Pnt
 738 2578 Pnt
-1478 964 Pnt
-1026 1973 Pnt
+990 1216 Pnt
 1738 1632 Pnt
+1612 2331 Pnt
 2257 2112 Pnt
+1478 964 Pnt
+2654 1776 Pnt
+1026 1973 Pnt
+2207 1101 Pnt
+2054 1778 Pnt
 1316 2017 Pnt
 2405 1473 Pnt
-2654 1776 Pnt
-2207 1101 Pnt
-1231 1373 Pnt
-2054 1778 Pnt
-2180 471 Pnt
-2309 1383 Pnt
 1062 1911 Pnt
 949 745 Pnt
-2498 1670 Pnt
-2010 539 Pnt
+1231 1373 Pnt
+2180 471 Pnt
 1511 2215 Pnt
-1509 895 Pnt
-1274 2445 Pnt
+2010 539 Pnt
+2309 1383 Pnt
+2498 1670 Pnt
 2570 569 Pnt
 696 727 Pnt
-1901 664 Pnt
-1352 635 Pnt
-2174 1321 Pnt
+1274 2445 Pnt
+1509 895 Pnt
 733 900 Pnt
-1480 577 Pnt
-2430 1669 Pnt
-2618 886 Pnt
+2174 1321 Pnt
+1352 635 Pnt
+1901 664 Pnt
 1690 1901 Pnt
-796 575 Pnt
-1558 2425 Pnt
+2430 1669 Pnt
+1480 577 Pnt
+2618 886 Pnt
 2200 1253 Pnt
+1558 2425 Pnt
+796 575 Pnt
 868 1017 Pnt
+898 1395 Pnt
 721 2344 Pnt
 1200 2064 Pnt
 1178 2475 Pnt
-898 1395 Pnt
+1298 457 Pnt
 588 1030 Pnt
 2121 2471 Pnt
 2441 639 Pnt
 2420 2042 Pnt
-1298 457 Pnt
-1664 1968 Pnt
-2032 1498 Pnt
 1723 1606 Pnt
 1829 1555 Pnt
+2032 1498 Pnt
+1664 1968 Pnt
+1597 1706 Pnt
+2083 1480 Pnt
 1593 1604 Pnt
 1838 1972 Pnt
-1597 1706 Pnt
-2082 1804 Pnt
-2083 1480 Pnt
-1605 1707 Pnt
 1802 1585 Pnt
-1607 1484 Pnt
+2082 1804 Pnt
 1585 1434 Pnt
+1607 1484 Pnt
 2037 1982 Pnt
-2078 1581 Pnt
-2004 1909 Pnt
-1602 2034 Pnt
+1605 1707 Pnt
 1764 1529 Pnt
+2078 1581 Pnt
 1603 1710 Pnt
+2004 1909 Pnt
+1782 2002 Pnt
 1695 1478 Pnt
 1986 1453 Pnt
-1959 1842 Pnt
-1782 2002 Pnt
-1888 1471 Pnt
-1936 1625 Pnt
-1806 1935 Pnt
-1754 1742 Pnt
+1602 2034 Pnt
 1848 1966 Pnt
-1598 1752 Pnt
+1806 1935 Pnt
+1888 1471 Pnt
+1959 1842 Pnt
 1823 1912 Pnt
-1736 1567 Pnt
-1842 1883 Pnt
 1937 1729 Pnt
+1754 1742 Pnt
+1936 1625 Pnt
 1703 1583 Pnt
-1754 1905 Pnt
-1581 1632 Pnt
 1776 1740 Pnt
-2055 1623 Pnt
-1834 1966 Pnt
-1644 1703 Pnt
+1598 1752 Pnt
+1736 1567 Pnt
 1973 1467 Pnt
-1973 1698 Pnt
+2055 1623 Pnt
+1842 1883 Pnt
+1754 1905 Pnt
 1811 1655 Pnt
-1799 1866 Pnt
 1886 1516 Pnt
+1581 1632 Pnt
 1577 1540 Pnt
-1882 1947 Pnt
-1615 1761 Pnt
-1854 1771 Pnt
+1644 1703 Pnt
 1719 1950 Pnt
+1834 1966 Pnt
+1615 1761 Pnt
+1799 1866 Pnt
+2056 1830 Pnt
+1973 1698 Pnt
+1644 1889 Pnt
+1854 1771 Pnt
+1882 1947 Pnt
+2076 1507 Pnt
+2083 1854 Pnt
 2037 1448 Pnt
 1700 2034 Pnt
-2056 1830 Pnt
-1644 1889 Pnt
-1702 1980 Pnt
-2076 1507 Pnt
-1846 1983 Pnt
-2083 1854 Pnt
-1811 1692 Pnt
-1796 1528 Pnt
 1687 1462 Pnt
 1884 1932 Pnt
-1828 1536 Pnt
-1908 1651 Pnt
+1702 1980 Pnt
+1846 1983 Pnt
 1678 1490 Pnt
 2052 2015 Pnt
-1587 1723 Pnt
-2047 1483 Pnt
+1796 1528 Pnt
+1811 1692 Pnt
 1656 1576 Pnt
 1947 1665 Pnt
-1577 1520 Pnt
-2040 1923 Pnt
+1828 1536 Pnt
+1908 1651 Pnt
 1873 1972 Pnt
 1961 1445 Pnt
+1587 1723 Pnt
+2047 1483 Pnt
+1661 1646 Pnt
+1577 1520 Pnt
+1625 1841 Pnt
+2040 1923 Pnt
+1841 1957 Pnt
 1965 1982 Pnt
 1828 2034 Pnt
-1661 1646 Pnt
-1625 1841 Pnt
-2098 1643 Pnt
-2027 2006 Pnt
-1841 1957 Pnt
 2015 1983 Pnt
+2007 1621 Pnt
+2016 1840 Pnt
+2027 2006 Pnt
+2098 1643 Pnt
+1926 1617 Pnt
 1881 1513 Pnt
 2038 1579 Pnt
-2007 1621 Pnt
-1703 1772 Pnt
-2016 1840 Pnt
-1585 1936 Pnt
-1653 1461 Pnt
-1926 1617 Pnt
 1843 1775 Pnt
+1870 1795 Pnt
+1703 1772 Pnt
+1750 1941 Pnt
+1585 1936 Pnt
+1709 1578 Pnt
+1653 1461 Pnt
+1911 1469 Pnt
 2032 1568 Pnt
 1717 1824 Pnt
-1870 1795 Pnt
-1750 1941 Pnt
-1585 1582 Pnt
-1709 1578 Pnt
-1911 1469 Pnt
 1692 1664 Pnt
+1585 1582 Pnt
 1999 1772 Pnt
+1866 1725 Pnt
 1840 1654 Pnt
 1836 1693 Pnt
-1866 1725 Pnt
 1737 1795 Pnt
+1849 1805 Pnt
 1744 1576 Pnt
 1782 1723 Pnt
-1849 1805 Pnt
 1809 1659 Pnt
+1766 1718 Pnt
 1913 1669 Pnt
 1816 1604 Pnt
-1766 1718 Pnt
 1900 1633 Pnt
+1840 1595 Pnt
 1785 1795 Pnt
 1773 1649 Pnt
+1875 1679 Pnt
 1742 1725 Pnt
 1744 1577 Pnt
-1840 1595 Pnt
-1743 1604 Pnt
 1886 1631 Pnt
 1818 1664 Pnt
-1875 1679 Pnt
-1844 1726 Pnt
-1841 1755 Pnt
 1868 1582 Pnt
+1743 1604 Pnt
+1841 1755 Pnt
+1844 1726 Pnt
+1896 1634 Pnt
 1800 1578 Pnt
 1828 1716 Pnt
-1896 1634 Pnt
 1807 1752 Pnt
-1735 1793 Pnt
 1742 1727 Pnt
+1735 1793 Pnt
 1849 1751 Pnt
-1848 1579 Pnt
 1913 1777 Pnt
+1848 1579 Pnt
 1853 1805 Pnt
-1848 1753 Pnt
 1903 1625 Pnt
-1819 1758 Pnt
+1848 1753 Pnt
 1797 1735 Pnt
-1865 1645 Pnt
 1852 1622 Pnt
-1901 1740 Pnt
+1819 1758 Pnt
+1865 1645 Pnt
 1764 1581 Pnt
 1915 1796 Pnt
+1901 1740 Pnt
 1850 1773 Pnt
-1803 1625 Pnt
 1856 1603 Pnt
+1803 1625 Pnt
 1829 1736 Pnt
 1761 1701 Pnt
-1856 1602 Pnt
 1780 1801 Pnt
+1856 1602 Pnt
 1786 1716 Pnt
 1905 1766 Pnt
 1821 1783 Pnt
@@ -917,353 +869,354 @@ LCb setrgbcolor
 1913 1765 Pnt
 1906 1766 Pnt
 1864 1668 Pnt
-1803 1590 Pnt
 1775 1645 Pnt
+1803 1590 Pnt
 1803 1729 Pnt
-1809 1628 Pnt
+1810 1796 Pnt
 1824 1694 Pnt
 1832 1739 Pnt
-1810 1796 Pnt
-1875 1639 Pnt
-1836 1732 Pnt
-1892 1620 Pnt
+1809 1628 Pnt
 1825 1798 Pnt
-1904 1660 Pnt
-1787 1801 Pnt
-1796 1688 Pnt
+1836 1732 Pnt
+1875 1639 Pnt
+1892 1620 Pnt
 1753 1651 Pnt
-1800 1598 Pnt
-1867 1744 Pnt
-1864 1652 Pnt
+1796 1688 Pnt
+1787 1801 Pnt
+1904 1660 Pnt
 1913 1714 Pnt
-1771 1653 Pnt
-1751 1774 Pnt
-1848 1799 Pnt
+1864 1652 Pnt
+1867 1744 Pnt
+1800 1598 Pnt
 1836 1803 Pnt
-1906 1800 Pnt
+1848 1799 Pnt
+1751 1774 Pnt
+1771 1653 Pnt
+1819 1636 Pnt
 1753 1637 Pnt
 1827 1698 Pnt
-1893 1589 Pnt
-1819 1636 Pnt
-1866 1714 Pnt
-1795 1774 Pnt
-1836 1595 Pnt
+1906 1800 Pnt
 1740 1602 Pnt
-1870 1755 Pnt
-1808 1591 Pnt
+1893 1589 Pnt
+1795 1774 Pnt
+1866 1714 Pnt
+1836 1595 Pnt
 1895 1661 Pnt
-1882 1769 Pnt
-1781 1611 Pnt
-1828 1750 Pnt
+1808 1591 Pnt
+1870 1755 Pnt
 1790 1739 Pnt
-1822 1714 Pnt
-1796 1683 Pnt
+1781 1611 Pnt
+1882 1769 Pnt
+1828 1750 Pnt
 1835 1689 Pnt
 1804 1670 Pnt
-1821 1695 Pnt
-1835 1661 Pnt
-1813 1711 Pnt
+1822 1714 Pnt
+1796 1683 Pnt
 1790 1693 Pnt
-1824 1686 Pnt
-1805 1705 Pnt
+1835 1661 Pnt
+1821 1695 Pnt
+1813 1711 Pnt
 1792 1670 Pnt
+1805 1705 Pnt
 1791 1687 Pnt
+1824 1686 Pnt
 1801 1711 Pnt
-1790 1728 Pnt
 1811 1685 Pnt
+1790 1728 Pnt
 1803 1673 Pnt
 1815 1700 Pnt
-1821 1720 Pnt
 1791 1732 Pnt
 1830 1679 Pnt
+1821 1720 Pnt
 1833 1701 Pnt
-1836 1703 Pnt
-1790 1659 Pnt
-1835 1685 Pnt
 1801 1685 Pnt
-1808 1704 Pnt
-1811 1672 Pnt
+1790 1659 Pnt
+1836 1703 Pnt
+1835 1685 Pnt
 1816 1677 Pnt
+1811 1672 Pnt
+1808 1704 Pnt
 1816 1679 Pnt
+1837 1705 Pnt
 1799 1663 Pnt
 1820 1686 Pnt
-1837 1705 Pnt
-1800 1659 Pnt
-1814 1674 Pnt
 1837 1711 Pnt
 1831 1729 Pnt
-1818 1657 Pnt
+1814 1674 Pnt
+1800 1659 Pnt
 1823 1660 Pnt
-1786 1678 Pnt
 1836 1706 Pnt
-1808 1664 Pnt
-1813 1712 Pnt
+1818 1657 Pnt
+1786 1678 Pnt
 1802 1716 Pnt
+1813 1712 Pnt
 1800 1676 Pnt
-1784 1730 Pnt
-1838 1714 Pnt
+1808 1664 Pnt
 1820 1664 Pnt
+1838 1714 Pnt
 1832 1676 Pnt
-1809 1657 Pnt
-1790 1675 Pnt
+1784 1730 Pnt
 1792 1658 Pnt
 1795 1705 Pnt
-1791 1677 Pnt
-1792 1707 Pnt
-1812 1656 Pnt
-1816 1711 Pnt
+1790 1675 Pnt
 1809 1660 Pnt
-1787 1692 Pnt
+1809 1657 Pnt
+1812 1656 Pnt
+1792 1707 Pnt
+1791 1677 Pnt
 1830 1694 Pnt
 1835 1699 Pnt
-1808 1718 Pnt
+1787 1692 Pnt
 1822 1711 Pnt
+1816 1711 Pnt
 1791 1714 Pnt
 1792 1701 Pnt
-1833 1704 Pnt
 1784 1706 Pnt
+1808 1718 Pnt
+1804 1696 Pnt
 1804 1681 Pnt
 1825 1683 Pnt
+1833 1704 Pnt
 1825 1657 Pnt
-1804 1696 Pnt
-1792 1661 Pnt
-1816 1700 Pnt
 1818 1689 Pnt
-1828 1717 Pnt
-1795 1684 Pnt
+1816 1700 Pnt
+1792 1661 Pnt
 1796 1692 Pnt
 1831 1731 Pnt
+1795 1684 Pnt
+1828 1717 Pnt
 1805 1682 Pnt
-1814 1727 Pnt
 1800 1689 Pnt
 1792 1722 Pnt
+1814 1727 Pnt
 1826 1724 Pnt
-1801 1733 Pnt
-1820 1707 Pnt
-1789 1679 Pnt
 1821 1678 Pnt
+1820 1707 Pnt
+1801 1733 Pnt
 1827 1677 Pnt
-1786 1678 Pnt
 1806 1680 Pnt
+1786 1678 Pnt
+1789 1679 Pnt
+1831 1728 Pnt
 1785 1716 Pnt
 1831 1726 Pnt
-1831 1728 Pnt
 1832 1684 Pnt
-1785 1669 Pnt
-1798 1691 Pnt
 1797 1701 Pnt
+1798 1691 Pnt
+1785 1669 Pnt
 1821 1668 Pnt
-1816 1700 Pnt
 1785 1691 Pnt
 1809 1658 Pnt
-1816 1693 Pnt
-1806 1692 Pnt
-1817 1696 Pnt
+1816 1700 Pnt
 1806 1686 Pnt
+1817 1696 Pnt
+1806 1692 Pnt
+1816 1693 Pnt
+1808 1688 Pnt
+1810 1685 Pnt
 1805 1688 Pnt
 1812 1691 Pnt
-1810 1685 Pnt
-1808 1688 Pnt
-1819 1700 Pnt
-1823 1692 Pnt
+1817 1687 Pnt
 1822 1700 Pnt
-1804 1685 Pnt
-1817 1687 Pnt
-1805 1699 Pnt
-1813 1690 Pnt
-1809 1690 Pnt
+1823 1692 Pnt
+1819 1700 Pnt
 1807 1691 Pnt
-1808 1691 Pnt
-1820 1700 Pnt
-1809 1687 Pnt
+1813 1690 Pnt
+1805 1699 Pnt
+1804 1685 Pnt
 1806 1700 Pnt
-1821 1695 Pnt
-1825 1691 Pnt
-1809 1696 Pnt
-1820 1696 Pnt
-1817 1687 Pnt
-1803 1685 Pnt
-1804 1699 Pnt
-1816 1689 Pnt
-1804 1691 Pnt
-1820 1689 Pnt
-1824 1692 Pnt
-1803 1698 Pnt
-1818 1688 Pnt
-1807 1686 Pnt
-1805 1696 Pnt
 1808 1691 Pnt
-1808 1696 Pnt
-1814 1696 Pnt
-1809 1700 Pnt
-1819 1698 Pnt
-1805 1696 Pnt
-1807 1688 Pnt
-1809 1686 Pnt
-1804 1693 Pnt
-1816 1697 Pnt
-1816 1685 Pnt
-1812 1693 Pnt
-1814 1696 Pnt
-1823 1686 Pnt
-1818 1698 Pnt
-1818 1686 Pnt
-1803 1699 Pnt
-1820 1685 Pnt
-1813 1701 Pnt
-1814 1694 Pnt
-1825 1686 Pnt
-1820 1690 Pnt
-1804 1687 Pnt
-1805 1688 Pnt
-1809 1694 Pnt
-1816 1687 Pnt
-1806 1699 Pnt
-1806 1691 Pnt
-1818 1699 Pnt
-1820 1689 Pnt
-1804 1691 Pnt
+1809 1690 Pnt
+1809 1687 Pnt
+1820 1696 Pnt
 1821 1695 Pnt
-1819 1687 Pnt
-1816 1698 Pnt
-1811 1693 Pnt
-1803 1692 Pnt
-1803 1694 Pnt
-1812 1692 Pnt
+1820 1700 Pnt
+1825 1691 Pnt
+1820 1689 Pnt
+1817 1687 Pnt
+1809 1696 Pnt
+1804 1699 Pnt
+1807 1686 Pnt
 1804 1691 Pnt
-1822 1691 Pnt
-1806 1685 Pnt
-1803 1687 Pnt
-1824 1697 Pnt
-1804 1688 Pnt
-1821 1688 Pnt
-1813 1695 Pnt
-1821 1700 Pnt
-1811 1695 Pnt
-1806 1697 Pnt
-1822 1687 Pnt
+1803 1685 Pnt
 1824 1692 Pnt
+1808 1696 Pnt
+1803 1698 Pnt
+1805 1696 Pnt
+1819 1698 Pnt
+1816 1689 Pnt
+1808 1691 Pnt
+1818 1688 Pnt
 1809 1700 Pnt
-1822 1685 Pnt
-1823 1697 Pnt
-1806 1691 Pnt
-1817 1699 Pnt
-1809 1699 Pnt
-1814 1698 Pnt
-1806 1685 Pnt
-1805 1698 Pnt
-1817 1697 Pnt
-1817 1695 Pnt
-1807 1685 Pnt
-1818 1691 Pnt
+1816 1685 Pnt
+1809 1686 Pnt
+1818 1698 Pnt
+1814 1696 Pnt
+1807 1688 Pnt
 1812 1693 Pnt
-1816 1696 Pnt
+1813 1701 Pnt
+1804 1693 Pnt
+1805 1696 Pnt
+1820 1685 Pnt
+1820 1690 Pnt
+1816 1697 Pnt
+1814 1696 Pnt
+1804 1687 Pnt
+1816 1687 Pnt
+1823 1686 Pnt
+1806 1699 Pnt
+1818 1686 Pnt
+1820 1689 Pnt
+1803 1699 Pnt
+1804 1691 Pnt
+1814 1694 Pnt
+1816 1698 Pnt
+1825 1686 Pnt
+1811 1693 Pnt
+1805 1688 Pnt
+1803 1694 Pnt
+1806 1691 Pnt
+1822 1691 Pnt
+1809 1694 Pnt
+1803 1687 Pnt
+1804 1688 Pnt
+1821 1695 Pnt
+1818 1699 Pnt
+1813 1695 Pnt
+1811 1695 Pnt
+1803 1692 Pnt
+1819 1687 Pnt
+1822 1687 Pnt
+1804 1691 Pnt
+1823 1697 Pnt
+1812 1692 Pnt
+1822 1685 Pnt
+1814 1698 Pnt
+1824 1697 Pnt
+1806 1685 Pnt
+1809 1699 Pnt
+1817 1697 Pnt
+1821 1700 Pnt
+1807 1685 Pnt
+1821 1688 Pnt
+1806 1685 Pnt
+1824 1692 Pnt
+1806 1697 Pnt
+1818 1691 Pnt
+1817 1695 Pnt
+1806 1691 Pnt
+1809 1700 Pnt
+1805 1698 Pnt
+1817 1699 Pnt
+1812 1693 Pnt
 1812 1698 Pnt
+1816 1696 Pnt
 1815 1693 Pnt
 1813 1693 Pnt
-1812 1695 Pnt
+1814 1698 Pnt
 1814 1696 Pnt
-1814 1698 Pnt
-1815 1692 Pnt
-1813 1693 Pnt
-1814 1698 Pnt
-1815 1698 Pnt
-1816 1696 Pnt
-1816 1696 Pnt
-1814 1693 Pnt
-1816 1694 Pnt
-1813 1695 Pnt
-1812 1697 Pnt
-1815 1696 Pnt
-1815 1698 Pnt
-1816 1693 Pnt
-1813 1695 Pnt
-1816 1694 Pnt
-1812 1693 Pnt
-1816 1696 Pnt
 1812 1695 Pnt
 1815 1692 Pnt
+1814 1698 Pnt
+1816 1696 Pnt
 1815 1698 Pnt
+1813 1693 Pnt
+1816 1694 Pnt
+1815 1696 Pnt
+1814 1693 Pnt
+1815 1698 Pnt
+1816 1696 Pnt
+1816 1694 Pnt
+1812 1697 Pnt
+1813 1695 Pnt
+1816 1696 Pnt
+1815 1692 Pnt
+1816 1693 Pnt
 1813 1697 Pnt
-1814 1695 Pnt
+1813 1695 Pnt
 1816 1695 Pnt
+1815 1693 Pnt
+1812 1693 Pnt
+1812 1695 Pnt
+1813 1695 Pnt
+1814 1693 Pnt
+1815 1698 Pnt
+1814 1695 Pnt
+1815 1694 Pnt
+1814 1697 Pnt
 1815 1693 Pnt
 1817 1694 Pnt
-1815 1693 Pnt
-1813 1695 Pnt
+1816 1694 Pnt
 1814 1693 Pnt
+1814 1693 Pnt
+1815 1694 Pnt
 1815 1696 Pnt
-1814 1693 Pnt
-1814 1697 Pnt
+1816 1696 Pnt
 1813 1696 Pnt
-1816 1694 Pnt
+1814 1696 Pnt
 1816 1694 Pnt
 1815 1694 Pnt
-1815 1694 Pnt
+1816 1697 Pnt
+1816 1696 Pnt
 1816 1695 Pnt
-1815 1694 Pnt
-1814 1693 Pnt
-1814 1696 Pnt
-1814 1696 Pnt
 1816 1693 Pnt
-1816 1696 Pnt
-1813 1695 Pnt
-1816 1696 Pnt
-1814 1698 Pnt
-1814 1694 Pnt
+1813 1696 Pnt
 1814 1693 Pnt
+1814 1696 Pnt
+1813 1694 Pnt
+1814 1698 Pnt
+1812 1693 Pnt
+1814 1694 Pnt
+1813 1695 Pnt
+1816 1693 Pnt
+1814 1693 Pnt
+1814 1696 Pnt
 1813 1693 Pnt
 1816 1697 Pnt
-1812 1693 Pnt
-1813 1696 Pnt
+1816 1696 Pnt
+1813 1695 Pnt
 1813 1694 Pnt
-1814 1693 Pnt
-1814 1696 Pnt
 1813 1694 Pnt
 1816 1696 Pnt
-1816 1693 Pnt
-1816 1693 Pnt
-1813 1695 Pnt
-1816 1696 Pnt
-1816 1697 Pnt
-1814 1696 Pnt
 1814 1694 Pnt
-1814 1694 Pnt
-1813 1694 Pnt
-1814 1695 Pnt
-1814 1693 Pnt
-1816 1695 Pnt
-1813 1697 Pnt
 1813 1696 Pnt
-1813 1695 Pnt
-1813 1698 Pnt
-1815 1693 Pnt
+1816 1693 Pnt
+1814 1693 Pnt
 1817 1693 Pnt
-1813 1696 Pnt
-1812 1695 Pnt
-1816 1696 Pnt
-1812 1694 Pnt
-1813 1697 Pnt
-1812 1697 Pnt
-1813 1694 Pnt
-1816 1695 Pnt
-1816 1696 Pnt
-1815 1696 Pnt
-1812 1697 Pnt
+1814 1696 Pnt
+1814 1694 Pnt
 1815 1693 Pnt
-1812 1692 Pnt
+1812 1694 Pnt
+1816 1695 Pnt
+1814 1695 Pnt
+1816 1696 Pnt
+1816 1695 Pnt
 1813 1697 Pnt
+1813 1695 Pnt
+1812 1692 Pnt
 1813 1694 Pnt
-1815 1695 Pnt
+1813 1698 Pnt
+1812 1695 Pnt
+1813 1694 Pnt
+1816 1696 Pnt
+1813 1696 Pnt
+1813 1697 Pnt
 1816 1694 Pnt
+1815 1693 Pnt
+1812 1697 Pnt
+1815 1696 Pnt
+1815 1695 Pnt
+1812 1697 Pnt
+1813 1697 Pnt
+1813 1695 Pnt
+1813 1695 Pnt
+1814 1694 Pnt
 1814 1695 Pnt
-1813 1695 Pnt
-1814 1694 Pnt
-1813 1695 Pnt
+1813 1694 Pnt
 1813 1694 Pnt
 1813 1694 Pnt
 1814 1694 Pnt
-1813 1694 Pnt
+1813 1695 Pnt
 1813 1695 Pnt
 1814 1695 Pnt
 1814 1696 Pnt
@@ -1272,87 +1225,86 @@ LCb setrgbcolor
 1813 1696 Pnt
 1814 1694 Pnt
 1813 1694 Pnt
+1813 1694 Pnt
+1813 1694 Pnt
 1813 1695 Pnt
-1813 1695 Pnt
+1814 1694 Pnt
+1814 1694 Pnt
+1814 1695 Pnt
 1813 1694 Pnt
 1814 1694 Pnt
-1813 1694 Pnt
-1814 1695 Pnt
-1814 1694 Pnt
-1813 1694 Pnt
-1814 1694 Pnt
-1813 1694 Pnt
-1814 1695 Pnt
-1813 1695 Pnt
-1814 1695 Pnt
 1813 1695 Pnt
 1813 1694 Pnt
+1813 1695 Pnt
+1814 1694 Pnt
+1814 1695 Pnt
+1814 1695 Pnt
+1813 1694 Pnt
+1813 1694 Pnt
+1814 1694 Pnt
 1814 1696 Pnt
-1813 1694 Pnt
-1814 1694 Pnt
-1814 1695 Pnt
-1814 1694 Pnt
-1814 1695 Pnt
-1813 1695 Pnt
-1813 1695 Pnt
-1813 1695 Pnt
-1813 1694 Pnt
 1814 1695 Pnt
 1813 1694 Pnt
-1813 1694 Pnt
 1814 1695 Pnt
-1814 1694 Pnt
-1814 1694 Pnt
 1813 1695 Pnt
-1814 1695 Pnt
 1813 1695 Pnt
 1814 1695 Pnt
 1813 1695 Pnt
 1813 1694 Pnt
-1813 1695 Pnt
-1813 1695 Pnt
+1814 1695 Pnt
 1813 1695 Pnt
 1813 1694 Pnt
-1814 1695 Pnt
-1814 1695 Pnt
 1813 1695 Pnt
 1814 1694 Pnt
+1813 1694 Pnt
 1813 1695 Pnt
+1814 1695 Pnt
 1814 1694 Pnt
+1813 1695 Pnt
+1813 1694 Pnt
+1813 1695 Pnt
+1814 1695 Pnt
+1814 1694 Pnt
+1813 1695 Pnt
+1814 1695 Pnt
 1813 1695 Pnt
 1813 1694 Pnt
 1814 1694 Pnt
 1813 1695 Pnt
-1813 1695 Pnt
 1814 1695 Pnt
-1813 1695 Pnt
 1814 1695 Pnt
+1814 1694 Pnt
+1813 1695 Pnt
 1813 1695 Pnt
 1814 1694 Pnt
 1814 1695 Pnt
 1813 1695 Pnt
+1813 1695 Pnt
+1814 1695 Pnt
+1813 1694 Pnt
+1813 1695 Pnt
+1814 1695 Pnt
+1814 1695 Pnt
 1814 1695 Pnt
 1814 1695 Pnt
 1813 1694 Pnt
+1814 1695 Pnt
+1814 1695 Pnt
+1813 1695 Pnt
 1813 1694 Pnt
 1814 1695 Pnt
-1814 1695 Pnt
-1814 1695 Pnt
-1814 1695 Pnt
+1813 1694 Pnt
 1814 1694 Pnt
-1813 1694 Pnt
-1814 1694 Pnt
 1814 1695 Pnt
-1813 1694 Pnt
-1813 1694 Pnt
-1814 1695 Pnt
-1814 1695 Pnt
-1813 1695 Pnt
-1814 1695 Pnt
-1813 1695 Pnt
-1814 1695 Pnt
-1813 1695 Pnt
 1813 1696 Pnt
+1813 1694 Pnt
+1814 1695 Pnt
+1814 1695 Pnt
+1813 1695 Pnt
+1814 1694 Pnt
+1813 1695 Pnt
+1813 1695 Pnt
+1814 1695 Pnt
 1814 1695 Pnt
 1814 1695 Pnt
 1813 1695 Pnt
@@ -3157,12 +3109,8 @@ LCb setrgbcolor
 1814 1695 Pnt
 1814 1695 Pnt
 % End plot #1
-2.000 UL
-LTb
-LCb setrgbcolor
 1.000 UL
 LTb
-LCb setrgbcolor
 567 2603 N
 567 448 L
 2155 0 V
@@ -3172,7 +3120,6 @@ Z stroke
 1.000 UP
 1.000 UL
 LTb
-LCb setrgbcolor
 stroke
 grestore
 end
