@@ -44,7 +44,7 @@ OF SUCH DAMAGE.
 #include "utils.h"
 #include "experiment.h"
 
-#define DEBUG 0                 ///< Macro to debug.
+#define DEBUG_EXPERIMENT 0                 ///< Macro to debug.
 
 const xmlChar *template[MAX_NINPUTS] = {
   XML_TEMPLATE1, XML_TEMPLATE2, XML_TEMPLATE3, XML_TEMPLATE4,
@@ -63,14 +63,14 @@ void
 experiment_new (Experiment * experiment)
 {
   unsigned int i;
-#if DEBUG
+#if DEBUG_EXPERIMENT
   fprintf (stderr, "experiment_new: start\n");
 #endif
   experiment->name = NULL;
   experiment->ninputs = 0;
   for (i = 0; i < MAX_NINPUTS; ++i)
     experiment->template[i] = NULL;
-#if DEBUG
+#if DEBUG_EXPERIMENT
   fprintf (stderr, "input_new: end\n");
 #endif
 }
@@ -85,14 +85,14 @@ void
 experiment_free (Experiment * experiment)
 {
   unsigned int i;
-#if DEBUG
+#if DEBUG_EXPERIMENT
   fprintf (stderr, "experiment_free: start\n");
 #endif
   for (i = 0; i < experiment->ninputs; ++i)
     xmlFree (experiment->template[i]);
   xmlFree (experiment->name);
   experiment->ninputs = 0;
-#if DEBUG
+#if DEBUG_EXPERIMENT
   fprintf (stderr, "experiment_free: end\n");
 #endif
 }
@@ -136,7 +136,7 @@ experiment_open (Experiment * experiment, xmlNode * node, unsigned int ninputs)
   int error_code;
   unsigned int i;
 
-#if DEBUG
+#if DEBUG_EXPERIMENT
   fprintf (stderr, "experiment_open: start\n");
 #endif
 
@@ -150,7 +150,7 @@ experiment_open (Experiment * experiment, xmlNode * node, unsigned int ninputs)
       experiment_error (experiment, gettext ("no data file name"));
       goto exit_on_error;
     }
-#if DEBUG
+#if DEBUG_EXPERIMENT
   fprintf (stderr, "experiment_open: name=%s\n", experiment->name);
 #endif
   experiment->weight
@@ -160,13 +160,13 @@ experiment_open (Experiment * experiment, xmlNode * node, unsigned int ninputs)
       experiment_error (experiment, gettext ("bad weight"));
       goto exit_on_error;
     }
-#if DEBUG
+#if DEBUG_EXPERIMENT
   fprintf (stderr, "experiment_open: weight=%lg\n", experiment->weight);
 #endif
   experiment->template[0] = (char *) xmlGetProp (node, template[0]);
   if (experiment->template[0])
     {
-#if DEBUG
+#if DEBUG_EXPERIMENT
       fprintf (stderr, "experiment_open: experiment=%s template1=%s\n",
                experiment->name, buffer2[0]);
 #endif
@@ -179,7 +179,7 @@ experiment_open (Experiment * experiment, xmlNode * node, unsigned int ninputs)
     }
   for (i = 1; i < MAX_NINPUTS; ++i)
     {
-#if DEBUG
+#if DEBUG_EXPERIMENT
       fprintf (stderr, "experiment_open: template%u\n", i + 1);
 #endif
       if (xmlHasProp (node, template[i]))
@@ -190,7 +190,7 @@ experiment_open (Experiment * experiment, xmlNode * node, unsigned int ninputs)
               goto exit_on_error;
             }
           experiment->template[i] = (char *) xmlGetProp (node, template[i]);
-#if DEBUG
+#if DEBUG_EXPERIMENT
           fprintf (stderr, "experiment_open: experiment=%s template%u=%s\n",
                    experiment->nexperiments, experiment->name,
                    experiment->template[i]);
@@ -207,14 +207,14 @@ experiment_open (Experiment * experiment, xmlNode * node, unsigned int ninputs)
         break;
     }
 
-#if DEBUG
+#if DEBUG_EXPERIMENT
   fprintf (stderr, "experiment_open: end\n");
 #endif
   return 1;
 
 exit_on_error:
   experiment_free (experiment);
-#if DEBUG
+#if DEBUG_EXPERIMENT
   fprintf (stderr, "experiment_open: end\n");
 #endif
   return 0;

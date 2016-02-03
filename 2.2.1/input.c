@@ -47,7 +47,7 @@ OF SUCH DAMAGE.
 #include "variable.h"
 #include "input.h"
 
-#define DEBUG_INPUT 1           ///< Macro to debug.
+#define DEBUG_INPUT 0           ///< Macro to debug.
 
 Input input[1];
 
