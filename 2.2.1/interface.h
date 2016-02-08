@@ -218,6 +218,20 @@ extern Options options[1];
 extern Running running[1];
 extern Window window[1];
 
+// Inline functions
+#if GTK_MAJOR_VERSION <= 3 || GTK_MINOR_VERSION < 10
+static inline GtkButton *gtk_button_new_from_icon_name (const char *name,
+                                                        GtkIconSize size)
+{
+  GtkButton *button;
+  GtkImage *image;
+  button = (GtkButton *)gtk_button_new ();
+  image = (GtkImage *)gtk_image_new_from_icon_name (name, size);
+  gtk_button_set_image (button, GTK_WIDGET (image));
+  return button;
+}
+#endif
+
 // Public functions
 unsigned int gtk_array_get_active (GtkRadioButton * array[], unsigned int n);
 void input_save (char *filename);
