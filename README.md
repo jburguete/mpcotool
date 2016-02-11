@@ -204,7 +204,7 @@ The format of the main input file is as:
 
 ```xml
 <?xml version="1.0"?>
-<optimize simulator="simulator_name" evaluator="evaluator_name" algorithm="algorithm_type" nsimulations="simulations_number" niterations="iterations_number" tolerance="tolerance_value" nbest="best_number" npopulation="population_number" ngenerations="generations_number" mutation="mutation_ratio" reproduction="reproduction_ratio" adaptation="adaptation_ratio" direction="direction_search_type" nsteps="steps_number" relaxation="relaxation_paramter" nestimates="estimates_number" seed="random_seed" result="result_file" variables="variables_file">
+<optimize simulator="simulator_name" evaluator="evaluator_name" algorithm="algorithm_type" nsimulations="simulations_number" niterations="iterations_number" tolerance="tolerance_value" nbest="best_number" npopulation="population_number" ngenerations="generations_number" mutation="mutation_ratio" reproduction="reproduction_ratio" adaptation="adaptation_ratio" direction="direction_search_type" nsteps="steps_number" relaxation="relaxation_parameter" nestimates="estimates_number" thresold="thresold_parameter" norm="norm_type" p="p_parameter" seed="random_seed" result="result_file" variables="variables_file">
     <experiment name="data_file_1" template1="template_1_1" template2="template_1_2" ... weight="weight_1"/>
     ...
     <experiment name="data_file_N" template1="template_N_1" template2="template_N_2" ... weight="weight_N"/>
@@ -217,18 +217,22 @@ The format of the main input file is as:
 with:
 
 * **simulator**: simulator executable file name.
-* **evaluator**: Optional. When needed is the evaluator executable file name.
-* **seed**: Optional. Seed of the pseudo-random numbers generator (default value
+* **evaluator**: optional. When needed is the evaluator executable file name.
+* **seed**: optional. Seed of the pseudo-random numbers generator (default value
 is 7007).
-* **result**: Optional. It is the name of the optime result file (default name
+* **result**: optional. It is the name of the optime result file (default name
 is "result").
-* **variables**: Optional. It is the name of all simulated variables file
+* **variables**: optional. It is the name of all simulated variables file
 (default name is "variables").
-* **precision**: Optional, defined for each variable. Number of precision digits
+* **precision**: optional, defined for each variable. Number of precision digits
 to evaluate the variable. 0 apply for integer numbers (default value is 14).
-* **weight** Optional, defined for each experiment. Multiplies the objective
+* **weight**: optional, defined for each experiment. Multiplies the objective
 value obtained for each experiment in the final objective function value
 (default value is 1).
+* **thresold**: optional, to stop the simulations if objective function value
+less than the thresold is obtained (default value is 0).
+* **algorithm**: optimization algorithm type.
+* **norm**: error norm type.
 
 Implemented algorithms are:
 
@@ -294,6 +298,14 @@ method by using:
   The total number of simulations to run is:
 > (number of experiments) x (npopulation) x [1 + (ngenerations - 1)
 > x (mutation + reproduction + adaptation)]
+
+Implemented error noms are:
+
+* **euclidian**: Euclidian norm.
+* **maximum**: maximum norm.
+* **p**: p-norm. It requires the parameter:
+  * *p*: p exponent.
+* **minimum**: minimum norm.
 
 SOME EXAMPLES OF INPUT FILES
 ----------------------------
