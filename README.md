@@ -305,7 +305,7 @@ Implemented error noms are:
 * **maximum**: maximum norm.
 * **p**: p-norm. It requires the parameter:
   * *p*: p exponent.
-* **minimum**: minimum norm.
+* **taxicab**: Taxicab norm.
 
 SOME EXAMPLES OF INPUT FILES
 ----------------------------
