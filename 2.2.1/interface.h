@@ -219,7 +219,7 @@ extern Running running[1];
 extern Window window[1];
 
 // Inline functions
-#if GTK_MAJOR_VERSION <= 3 || GTK_MINOR_VERSION < 10
+#if GTK_MAJOR_VERSION <= 3 && GTK_MINOR_VERSION < 10
 static inline GtkButton *gtk_button_new_from_icon_name (const char *name,
                                                         GtkIconSize size)
 {

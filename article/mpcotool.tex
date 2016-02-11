@@ -912,12 +912,13 @@ those obtained with the iterative and gradient based methods.
 {sphere-evolution-ge-9-11.eps}{Convergence of the optimization for $g_{Sphere}$
 with the genetic algorithm and different combinations of parameters}{FigSphereGE}
 
-Finally, the results obtained by the 23 different combinations of algorithms
-and parameters for the 6 test functions are displayed in table~\ref{TabTestResults}. 
+Finally, the results obtained by the 31 different combinations of algorithms
+and parameters for the 6 test functions are displayed in
+Fig.~\ref{FigTestResults}. 
 The result is presented as minus the decimal logarithm of the distance obtained
 to the optimum point. This value represents the number of decimal digits of 
-precision achieved. Values close to 14 have been highlighted, being this value the
-theoretical precision of the machine. The results for the GE can be qualified as
+precision achieved.
+The results for the GE can be qualified as
 disappointing. Although GE gets slightly better results for a convex function
 like the sphere, its improvement over brute force method is highly questionable
 for all other cases. With regard to the brute force methods, the behavior of SW
@@ -938,44 +939,9 @@ the GB for a fast convergence. As regards the method to estimate the gradient,
 although when RA with a low number of estimates is used, the convergence is accelerated,
 it does not success in finding the optimum in some cases. CD proves to be a 
 method somewhat slower but is deemed more secure. 
-\TABLE{\scriptsize}{c|cccccc}
-{
-	Method & $g_{Sphere}$ & $g_{Ackley}$ & $g_{Booth}$ & $g_{Rosenbrock}$ &
-	$f_{Easom}$ & $g_{Beale}$ \\
-	\hline
-	SW-1 & 1.0 & 1.4 & 1.0 & 1.1 & -0.2 & 1.4 \\
-	SW+IT-1 & 12.8 & 12.4 & 10.2 & 1.5 & -0.7 & 7.4 \\
-	SW+CD-1 & {\bf 14.6} & -0.7 & {\bf 14.6} & 11.6 & -1.1 & {\bf 13.5} \\
-	SW+CD-2 & {\bf 14.6} & {\bf 14.6} & {\bf 14.6} & 11.5 & 8.1 & {\bf 13.8} \\
-	SW+RA-1 & {\bf 13.5,14.2} & -0.7,-0.7 & 13.4,{\bf 13.9} & 0.8,2.9
-		& -1.1,-1.1 & 10.8,11.7 \\
-	SW+RA-2 & {\bf 13.8,14.1} & {\bf 13.9,14.3} & 13.2,{\bf 14.0} & 2.5,2.8
-		& 7.8,8.3 & 3.4,5.5 \\
-	MC-1 & 0.7,0.9 & 0.0,0.3 & 0.6,0.8 & 0.4,0.7 & -0.3,-0.2 & 0.6,1.0 \\
-	MC+IT-1 & {\bf 13.5,13.8} & 11.9,12.6 & 9.2,10.8 & 2.4,3.4 & -0.5,0.4
-		& 0.5,5.9 \\
-	MC+CD-1 & {\bf 14.6,14.6} & -0.8,-0.4 & {\bf 14.1,14.3} & 11.7,12.8
-		& -1.3,-0.8 & {\bf 13.6,13.8} \\
-	MC+CD-2 & {\bf 14.6,14.6} & -0.3,2.9 & {\bf 14.6,14.6} & 8.6,9.7 & -0.6,3.2
-		& 13.3,{\bf 13.8} \\
-	MC+RA-1 & {\bf 13.8,14.1} & -0.8,2.4 & {\bf 13.5,13.9} & 0.0,1.5 & -1.3,-0.8
-		& 11.5-12.1 \\
-	MC+RA-2 & 13.4,{\bf 14.0} & -0.3,2.9 & 12.7.5,{\bf 13.6} & 0.6,0.9
-		& -0.6,3.0 & 4.4,6.6 \\
-	GE-1 & 0.3,1.5 & -0.1,0.4 & -0.1,0.6 & -0.2,0.1 & -1.2,-0.3 & 0.6,0.8 \\
-	GE-2 & 0.3,1.2 & -0.4,0.0 & 0.5,0.8 & 0.2,0.7 & -0.8,-0.2 & 0.6,1.3 \\
-	GE-3 & 0.3,1.6 & -0.2,0.4 & 0.4,0.8 & 0.1,0.5 & -0.8,-0.1 & 0.6,1.1 \\
-	GE-4 & 0.3,1.6 & 0.0,1.0 & -0.0,0.5 & -0.1,0.1 & -0.8,-0.1 & 0.5,0.9 \\
-	GE-5 & 0.8,2.2 & 0.1,0.8 & 0.8,1.4 & 0.2,0.5 & -0.9,-0.2 & 1.2,1.6 \\
-	GE-6 & 2.2,2.6 & -0.0,0.2 & 1.0,1.6 & 0.3,0.9 & -1.0,-0.1 & 0.9,1.4 \\
-	GE-7 & 0.8,1.2 & -0.3,0.1 & 0.5,0.9 & 0.2,0.5 & -0.9,-0.5 & 0.9,1.4 \\
-	GE-8 & 1.7,2.0 & 0.3,0.7 & 1.2,1.6 & 1.0,1.1 & -0.4,-0.0 & 1.2,1.6 \\
-	GE-9 & 1.0,1.4 & 0.1,0.5 & 0.9,1.1 & 0.5,0.8 & -0.9,-0.5 & 1.0,1.6 \\
-	GE-10 & 1.4,1.6 & 0.1,0.5 & 1.0,1.4 & 0.8,0.9 & -0.5,-0.2 & 1.2,1.3 \\
-	GE-11 & 1.4,1.7 & 0.1,0.6 & 1.0,1.3 & 0.7,1.1 & -0.8,-0.2 & 1.0,1.5
-}{Error de los métodos, estimado como $-\log_{10}\PA{d_{2500}}$, en los tests.
-En negrita se han remarcado los que han alcanzado la precisión de la máquina
-(aproximadamente 14 dígitos en doble precisión)}{TabTestResults}
+\FIGVI{Sphere-e.eps}{Ackley-e.eps}{Booth-e.eps}{Rosenbrock-e.eps}{Easom-e.eps}
+{Beale-e.eps}{Error de los métodos, estimado como $-\log_{10}\PA{d_{2500}}$, en
+los tests}{FigTestResults}
 
 \section{Practical applications}
 

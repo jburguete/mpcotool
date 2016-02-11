@@ -1,0 +1,26 @@
+set term pos eps enh 8
+set size 0.44,0.44
+set ylabel '-log_{10}(d_{2500})'
+#set xlabel 'method'
+set datafile separator ","
+set xtics border in scale 0,0 nomirror rotate by -90  autojustify
+set xrange [-1:31]
+set yrange [-2:15]
+set title 'g_{Sphere}'
+set out 'Sphere-e.eps'
+plot 'Sphere.dat' u 2:4:3:5:xtic(1) w yerrorbars not
+set title 'g_{Ackley}'
+set out 'Ackley-e.eps'
+plot 'Ackley.dat' u 2:4:3:5:xtic(1) w yerrorbars not
+set title 'g_{Booth}'
+set out 'Booth-e.eps'
+plot 'Booth.dat' u 2:4:3:5:xtic(1) w yerrorbars not
+set title 'g_{Rosenbrock}'
+set out 'Rosenbrock-e.eps'
+plot 'Rosenbrock.dat' u 2:4:3:5:xtic(1) w yerrorbars not
+set title 'g_{Easom}'
+set out 'Easom-e.eps'
+plot 'Easom.dat' u 2:4:3:5:xtic(1) w yerrorbars not
+set title 'g_{Beale}'
+set out 'Beale-e.eps'
+plot 'Beale.dat' u 2:4:3:5:xtic(1) w yerrorbars not

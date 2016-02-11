@@ -248,7 +248,7 @@ input_save (char *filename)
     xml_node_set_uint (node, XML_SEED, input->seed);
 
   // Setting the algorithm
-  buffer = (char *) g_malloc (64);
+  buffer = (char *) g_slice_alloc (64);
   switch (input->algorithm)
     {
     case ALGORITHM_MONTE_CARLO:
@@ -287,7 +287,7 @@ input_save (char *filename)
       xmlSetProp (node, XML_ADAPTATION, (xmlChar *) buffer);
       break;
     }
-  g_free (buffer);
+  g_slice_free1 (64, buffer);
   if (input->thresold != 0.)
     xml_node_set_float (node, XML_THRESOLD, input->thresold);
 
