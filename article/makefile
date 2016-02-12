@@ -16,7 +16,7 @@ figs = mpcotool-en.eps surcos-advance.eps surcos-depth.eps \
 	sphere-variables-ge-250-16-0.2-0.2-0.2-32.eps \
 	sphere-variables-mc-100-25-10-0.1.eps \
 	sphere-variables-mc-2500-1.eps \
-	sphere-variables-mc-r-100-1-600-4-0.1-1.eps \
+	sphere-variables-mc-ra-100-1-600-4-0.1-1.eps \
 	sphere-variables-sw-10-10-25-10-0.5.eps \
 	sphere-variables-sw-50-50-1.eps
 

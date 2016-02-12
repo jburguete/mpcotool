@@ -409,7 +409,7 @@ to zero. The method is iterated $N_{st}$ times.
 Although direction search method gets the fastest convergence, it is the method
 in MPCOTool that obtains the least advantages of parallelization. The method is
 almost sequential and parallelization can be only performed for each step in the
-$N_e$ simulations to estimate the gradient.
+$N_e$ simulations to estimate the direction.
 
 MPCOTool uses two methods to build the $\vec{t}_j$ vectors:
 
@@ -531,7 +531,7 @@ experiments set can be calculated by four different error norms:
 with $w_i$ the weight associated to the $i$-th experiment, specified in the
 \emph{main input file}. Note that these error norms are used to combine the
 error $o_i$ obtained for each experiment. The user is completely free to define
-the objective function for every experiment. Figure~\ref{FigStructure} is a
+the objective function for every experiment. Fig.~\ref{FigStructure} is a
 sketch of the structure.
 \psset{xunit=0.4mm,yunit=0.4mm}
 \PSPICTURE{-20}{-95}{280}{55}
@@ -670,7 +670,7 @@ with the objective function value):
 
 A more user friendly application with an interactive graphical user interface is
 named as \emph{MPCOTool}. This application plots a window as the represented
-in the figure~\ref{FigWindow}. The main window enable us to fit all algorithms,
+in the Fig.~\ref{FigWindow}. The main window enable us to fit all algorithms,
 parameters, data and executable files required in the simulation.
 \FIG{mpcotool-en.eps}{Main window of the interactive graphical user interface
 application}{FigWindow}
@@ -774,11 +774,11 @@ When presenting the results, the following notation is used:
     of an optimization problem with two variables).
 \end{description}
 
-The value of these functions in the $x-y$ plane is shown in figure~\ref{FigTests}.
+The value of these functions in the $x-y$ plane is shown in Fig.~\ref{FigTests}.
 \FIGVI{Sphere.eps}{Ackley.eps}{Booth.eps}{Rosenbrock.eps}{Easom.eps}{Beale.eps}
 {Map in the $x-y$ plane showing the values of the objective functions used as 
 test}{FigTests}
-Figure~\ref{FigTestsZoom} shows a zoomed area of some of these functions to 
+Fig.~\ref{FigTestsZoom} shows a zoomed area of some of these functions to 
 highlight their peculiarities.
 \PLOTII{Ackley2.eps}{Easom2.eps}{A zoom of (left) Ackley and (right) Easom
 objective functions}{FigTestsZoom}
@@ -795,42 +795,42 @@ for the sake of simplicity.
 	SW-1 & SW & $N_x=N_y=50$ \\
 	SW+IT-1 & SW+IT & $N_x=N_y=10$, $N_i=25$, $N_b=10$, $tol=0.5$ \\
 	SW+IT-2 & SW+IT & $N_x=N_y=10$, $N_i=25$, $N_b=4$, $tol=0$ \\
-	SW+CD-1 & SW+GB+CD & $N_x=N_y=10$, $N_{st}=600$, $st_x=st_y=0.1$, $rel=1$ \\
-	SW+CD-2 & SW+GB+CD & $N_x=N_y=40$, $N_{st}=225$, $st_x=st_y=0.01$,
+	SW+CD-1 & SW+DS+CD & $N_x=N_y=10$, $N_{st}=600$, $st_x=st_y=0.1$, $rel=1$ \\
+	SW+CD-2 & SW+DS+CD & $N_x=N_y=40$, $N_{st}=225$, $st_x=st_y=0.01$,
 		$rel=1$ \\
-	SW+RA-1 & SW+GB+RA & $N_x=N_y=10$, $N_{st}=1200$, $st_x=st_y=0.1$, $rel=1$,
+	SW+RA-1 & SW+DS+RA & $N_x=N_y=10$, $N_{st}=1200$, $st_x=st_y=0.1$, $rel=1$,
 		$N_e=2$ \\
-	SW+RA-2 & SW+GB+RA & $N_x=N_y=10$, $N_{st}=600$, $st_x=st_y=0.1$, $rel=1$,
+	SW+RA-2 & SW+DS+RA & $N_x=N_y=10$, $N_{st}=600$, $st_x=st_y=0.1$, $rel=1$,
 		$N_e=4$ \\
-	SW+RA-3 & SW+GB+RA & $N_x=N_y=10$, $N_{st}=240$, $st_x=st_y=0.1$, $rel=1$,
+	SW+RA-3 & SW+DS+RA & $N_x=N_y=10$, $N_{st}=240$, $st_x=st_y=0.1$, $rel=1$,
 		$N_e=10$ \\
-	SW+RA-4 & SW+GB+RA & $N_x=N_y=40$, $N_{st}=450$, $st_x=st_y=0.01$,
+	SW+RA-4 & SW+DS+RA & $N_x=N_y=40$, $N_{st}=450$, $st_x=st_y=0.01$,
 		$rel=1$, $N_e=2$ \\
-	SW+RA-5 & SW+GB+RA & $N_x=N_y=40$, $N_{st}=225$, $st_x=st_y=0.01$,
+	SW+RA-5 & SW+DS+RA & $N_x=N_y=40$, $N_{st}=225$, $st_x=st_y=0.01$,
 		$rel=1$, $N_e=4$ \\
-	SW+RA-6 & SW+GB+RA & $N_x=N_y=40$, $N_{st}=90$, $st_x=st_y=0.01$,
+	SW+RA-6 & SW+DS+RA & $N_x=N_y=40$, $N_{st}=90$, $st_x=st_y=0.01$,
 		$rel=1$, $N_e=10$ \\
 	MC-1 & MC & $N_s=2500$ \\
 	MC+IT-1 & MC+IT & $N_s=100$, $N_i=25$, $N_b=10$, $tol=0.1$ \\
 	MC+IT-2 & MC+IT & $N_s=100$, $N_i=25$, $N_b=4$, $tol=0$ \\
-	MC+CD-1 & MC+GB+CD & $N_s=100$, $N_{st}=600$, $st_x=st_y=0.1$, $rel=1$ \\
-	MC+CD-2 & MC+GB+CD & $N_s=1600$, $N_{st}=225$, $st_x=st_y=0.01$, $rel=1$ \\
-	MC+CD-3 & MC+GB+CD & $N_s=100$, $N_{st}=600$, $st_x=st_y=0.01$, $rel=0$ \\
-	MC+CD-4 & MC+GB+CD & $N_s=100$, $N_{st}=600$, $st_x=st_y=0.01$, $rel=1$ \\
-	MC+CD-5 & MC+GB+CD & $N_s=100$, $N_{st}=600$, $st_x=st_y=0.01$, $rel=2$ \\
-	MC+CD-6 & MC+GB+CD & $N_s=100$, $N_{st}=600$, $st_x=st_y=0.1$, $rel=0$ \\
-	MC+CD-7 & MC+GB+CD & $N_s=100$, $N_{st}=600$, $st_x=st_y=1$, $rel=0$ \\
-	MC+RA-1 & MC+GB+RA & $N_s=100$, $N_{st}=1200$, $st_x=st_y=0.1$, $rel=1$,
+	MC+CD-1 & MC+DS+CD & $N_s=100$, $N_{st}=600$, $st_x=st_y=0.1$, $rel=1$ \\
+	MC+CD-2 & MC+DS+CD & $N_s=1600$, $N_{st}=225$, $st_x=st_y=0.01$, $rel=1$ \\
+	MC+CD-3 & MC+DS+CD & $N_s=100$, $N_{st}=600$, $st_x=st_y=0.01$, $rel=0$ \\
+	MC+CD-4 & MC+DS+CD & $N_s=100$, $N_{st}=600$, $st_x=st_y=0.01$, $rel=1$ \\
+	MC+CD-5 & MC+DS+CD & $N_s=100$, $N_{st}=600$, $st_x=st_y=0.01$, $rel=2$ \\
+	MC+CD-6 & MC+DS+CD & $N_s=100$, $N_{st}=600$, $st_x=st_y=0.1$, $rel=0$ \\
+	MC+CD-7 & MC+DS+CD & $N_s=100$, $N_{st}=600$, $st_x=st_y=1$, $rel=0$ \\
+	MC+RA-1 & MC+DS+RA & $N_s=100$, $N_{st}=1200$, $st_x=st_y=0.1$, $rel=1$,
 		$N_e=2$ \\
-	MC+RA-2 & MC+GB+RA & $N_s=100$, $N_{st}=600$, $st_x=st_y=0.1$, $rel=1$,
+	MC+RA-2 & MC+DS+RA & $N_s=100$, $N_{st}=600$, $st_x=st_y=0.1$, $rel=1$,
 		$N_e=4$ \\
-	MC+RA-3 & MC+GB+RA & $N_s=100$, $N_{st}=240$, $st_x=st_y=0.1$, $rel=1$,
+	MC+RA-3 & MC+DS+RA & $N_s=100$, $N_{st}=240$, $st_x=st_y=0.1$, $rel=1$,
 		$N_e=10$ \\
-	MC+RA-4 & MC+GB+RA & $N_x=1600$, $N_{st}=450$, $st_x=st_y=0.01$, $rel=1$,
+	MC+RA-4 & MC+DS+RA & $N_x=1600$, $N_{st}=450$, $st_x=st_y=0.01$, $rel=1$,
 		$N_e=2$ \\
-	MC+RA-5 & MC+GB+RA & $N_x=1600$, $N_{st}=225$, $st_x=st_y=0.01$, $rel=1$,
+	MC+RA-5 & MC+DS+RA & $N_x=1600$, $N_{st}=225$, $st_x=st_y=0.01$, $rel=1$,
 		$N_e=4$ \\
-	MC+RA-6 & MC+GB+RA & $N_x=1600$, $N_{st}=90$, $st_x=st_y=0.01$, $rel=1$,
+	MC+RA-6 & MC+DS+RA & $N_x=1600$, $N_{st}=90$, $st_x=st_y=0.01$, $rel=1$,
 		$N_e=10$ \\
 	GE-1 & GE & $N_p=100$, $N_g=33$, $R_m=R_r=0$, $R_a=0.75$, $N_{bits}=32$ \\
 	GE-2 & GE & $N_p=100$, $N_g=33$, $R_m=R_a=0$, $R_r=0.75$, $N_{bits}=32$ \\
@@ -850,64 +850,60 @@ Next, the behavior of the different optimization algorithms for the sphere funct
 is analyzed, being a symmetric, convex, without local extrema and easy to optimize
 function.
 
-Figure~\ref{FigSphereVariables} displays all the possible combinations of the
+Fig.~\ref{FigSphereVariables} displays all the possible combinations of the
 simulated variables by the different algorithms in order to illustrate how
 each method operates. It can be observed the regular way of exploring the space
-of variables for the sweep method in contrast to the random method for the
-Monte-Carlo method. It is shown as well the progressive reduction of the search
-interval for the iterative algorithm in both cases. The genetic method also 
+of variables for SW in contrast to the random procedure for MC. It is shown as
+well the progressive reduction of the search
+interval for IT in both cases. GE also 
 performs a random search, but the likelihood of falling at points in the  
-vicinity of the optimum increases progressively. However, the gradient based
+vicinity of the optimum increases progressively. However, the DS
 method rapidly searches in the direction of the optimum, from the best value
 provided by the associated brute force method. 
 \FIGVI{sphere-variables-sw-50-50-1.eps}{sphere-variables-mc-2500-1.eps}
 {sphere-variables-sw-10-10-25-10-0.5.eps}{sphere-variables-mc-100-25-10-0.1.eps}
 {sphere-variables-ge-250-16-0.2-0.2-0.2-32.eps}
-{sphere-variables-mc-r-100-1-600-4-0.1-1.eps}
+{sphere-variables-mc-ra-100-1-600-4-0.1-1.eps}
 {Combination of variables simulated by different algorithms}{FigSphereVariables}
 
-Figure~\ref{FigSphereSWMC} shows the convergence obtained for the sweep brute force
-and Monte-Carlo methods and their combination with the iterative algorithm. It can
-be observed how the convergence improves with the iterative algorithm. It is important
-to note that, although theoretically the convergence increases with the iterative methods, 
+Fig.~\ref{FigSphereSWMC} shows the convergence obtained for SW and MC and their
+combination with IT. It can
+be observed how the convergence improves applying IT. It is important
+to note that, although theoretically the convergence increases with IT, 
 low values of $N_b$ and $tol$ can cause the optimum value to fall outside of the search
 interval ruining the convergence, as is the case of SW+IT-2 and MC+IT-2.
 \PLOTII{sphere-evolution-sw.eps}{sphere-evolution-mc.eps}
-{Convergence of the optimizacion for $g_{Sphere}$ with (left) the sweep algorithm
-and (right) Monte-Carlo, both combined with the iterative algorithm and different
-parameters}{FigSphereSWMC}
+{Convergence of the optimizacion for $g_{Sphere}$ with (left) SW and (right) MC,
+both combined with IT and different parameters}{FigSphereSWMC}
 
-Figure~\ref{FigSphereSWMCGR} displays the convergence obtained with the sweep
-brute force and Monte-Carlo methods coupled with the gradient based method. 
-It can be shown that the convergence of the gradient based method is vastly
-superior, so that in this function the the greater the number of simulations with 
+Fig.~\ref{FigSphereSWMCGR} displays the convergence obtained with SW and MC
+coupled with DS. It can be shown that the convergence of DS is vastly superior,
+so that in this function the the greater the number of simulations with 
 the brute force method, the lower the convergence. With regard to the method of
-estimating the gradient, the random method is shown superior to the coordinates
-descent method. 
+estimating the direction, RA is shown superior to CD.
 \PLOTII{sphere-evolution-sw-cdr.eps}{sphere-evolution-mc-cdr.eps}
-{Convergence of the optimizacion for $g_{Sphere}$ with (left) the sweep algorithm
-and (right) Monte-Carlo, both combined with gradient based method and different
-parameters}{FigSphereSWMCGR}
+{Convergence of the optimizacion for $g_{Sphere}$ with (left) SW and (right) MC,
+both combined with DS and different parameters}{FigSphereSWMCGR}
 
-The influence of the different parameters on the convergence for the gradient
-based method is depicted in figure~\ref{FigSphereMCCDR}.
+The influence of the different parameters on the convergence for the direction
+search method is depicted in Fig.~\ref{FigSphereMCCDR}.
 On the top left side, the effect of the parameter $rel$ is illustrated. With a
 small step size, null values of $rel$ result in lower values of the convergence.
 On the top right side, the influence of the step size is shown. In general,
 it is recommended to select a step size of around a few times the expected 
 approximated distance between the optimum and the best point obtained by the brute
-force method. Finally, in the bottom figure can be observed that a lower number of gradient
+force method. Finally, in the bottom figure can be observed that a lower number of direction
 estimates ($N_e=2$) results in the fastest convergence with the random value for the
-gradient based method. 
+direction search method. 
 \FIGIII{sphere-evolution-mc-cd-r.eps}{sphere-evolution-mc-cd-s.eps}
 {sphere-evolution-mc-r.eps}
-{Convergence of the optimizacion for $g_{Sphere}$ with Monte-Carlo and gradient based
-methods and different combinations of parameters}{FigSphereMCCDR}
+{Convergence of the optimizacion for $g_{Sphere}$ with Monte-Carlo and direction
+search methods and different combinations of parameters}{FigSphereMCCDR}
 
 Figure~\ref{FigSphereGE} displays the different convergences for the genetic 
 algorithm with 11 different combinations of parameters. The results, although
 slightly better than those of the brute force methods, are clearly inferior to
-those obtained with the iterative and gradient based methods. 
+those obtained with the iterative and direction search methods. 
 \FIGIII{sphere-evolution-ge-1-4.eps}{sphere-evolution-ge-5-8.eps}
 {sphere-evolution-ge-9-11.eps}{Convergence of the optimization for $g_{Sphere}$
 with the genetic algorithm and different combinations of parameters}{FigSphereGE}
@@ -930,12 +926,12 @@ improvement, with a substantial progress over the brute force methods in
 virtually all cases, even though some problems with the Rosenbrock function. 
 It outperforms slightly better coupled with MC, although it may also be
 a random fact related to the analyzed functions. Despite the fact that the
-convergence of GB for the sphere function is higher using a lower number of
+convergence of DS for the sphere function is higher using a lower number of
 simulations for the associated brute force method, reveals itself as a bad
 strategy with many local minima functions. In this case, a better approach
 consist of beginning with a sufficient number of simulations by the stochastic model,
 in order to obtain a point in the vicinity of the optimum, and subsequently use
-the GB for a fast convergence. As regards the method to estimate the gradient,
+the DS for a fast convergence. As regards the method to estimate the direction,
 although when RA with a low number of estimates is used, the convergence is accelerated,
 it does not success in finding the optimum in some cases. CD proves to be a 
 method somewhat slower but is deemed more secure. 
