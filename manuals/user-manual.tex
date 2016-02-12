@@ -147,6 +147,11 @@ bits version):
 > export PATH=$PATH:/usr/lib64/openmpi/bin
 \end{lstlisting}
 
+On FreeBSD 10, due to a wrong error in default gcc version, do in a terminal:
+\begin{lstlisting}[language=bash,basicstyle=\scriptsize]
+> export CC=gcc5 (or CC=clang)
+\end{lstlisting}
+
 Once all the tools installed, the Genetic source code must be downloaded and it must be compiled following on a terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > git clone https://github.com/jburguete/genetic.git

@@ -84,8 +84,6 @@ DragonFly BSD 4.2
 _________________
 Dyson Illumos
 _____________
-FreeBSD 10.2
-____________
 Linux Mint DE 2
 _______________
 NetBSD 7.0
@@ -139,6 +137,15 @@ _______________
 
 1. In order to use OpenMPI compilation do in a terminal (in 64 bits version):
 > $ export PATH=$PATH:/usr/lib64/openmpi/bin
+
+2. Then, follow steps 1 to 4 of the previous Debian 8 section.
+
+FreeBSD 10.2
+____________
+
+1. In order to build in FreeBSD, due to a wrong error in default gcc version,
+do in a terminal:
+> $ export CC=gcc5 (or CC=clang)
 
 2. Then, follow steps 1 to 4 of the previous Debian 8 section.
 

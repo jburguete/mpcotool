@@ -163,6 +163,12 @@ versión de 64 bits):
 > export PATH=$PATH:/usr/lib64/openmpi/bin
 \end{lstlisting}
 
+En FreeBSD 10, debido en un extraño error en la versión por defecto de gcc, hay
+que hacer en un terminal:
+\begin{lstlisting}[language=bash,basicstyle=\scriptsize]
+> export CC=gcc5 (or CC=clang)
+\end{lstlisting}
+
 Una vez que todas las utilidades necesarias han sido instaladas, hay que
 descargar el código de Genetic. Luego puede compilarse haciendo en un terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
@@ -698,18 +704,19 @@ incrementa exponencialmente con el número de variables.
 	\put(0,37){$y_{\min}$}
 	\qbezier[10](20,160)(35,160)(50,160)
 	\put(0,157){$y_{\max}$}
-}{Diagram showing an example of application of the sweep brute force method
-with two variables for $N_x=N_y=5$}{FigSweep}
+}{Diagrama de flujo ilustrando un ejempo de aplicación del método de fuerza
+bruta de barrido con dos variables para $N_x=N_y=5$}{FigSweep}
 
-Brute force algorithms present low convergence rates but they are strongly
-parallelizable because every simulation is completely independent. If the
-computer, or the computers cluster, can execute $N_{tasks}$ parallel tasks
-every task do $N_{total}/N_{tasks}$ simulations, obviously taking into account
-rounding effects (every task has to perform a natural number of simulations).
-In figure~\ref{FigBruteForceParallelization} a flowchart of this parallelization
-scheme is represented. Being independent each task, a distribution on different
-execution threads may be performed exploding the full parallel capabilities of
-the machine where MPCOTool is run.
+Los algoritmos de fuerza bruta presentan bajos ratios de convergencia pero son
+fuertemente paralelizables debido a que cada simulación es completamente
+independiente. Si la computadora, o el clúster de computadoras, puede ejecutar
+$N_{tasks}$ tareas paralelizadas cada tarea efectúa $N_{total}/N_{tasks}$
+simulaciones, obviamente teniendo en cuenta efectos de redondeo puesto que cada
+tarea debe realizar un número natural de simulaciones. En la
+figura~\ref{FigBruteForceParallelization} se presenta un diagrama de flujo del
+esquema de esta paralelización. Puesto que cada tarea es independiente, una
+distribución en las diferentes tareas permite explotar al máximo las
+capacidades computacionales de la máquina en la que se ejecuta MPCOTool.
 
 \psset{xunit=0.5mm,yunit=0.5mm}
 \PSPICTURE{-90}{-55}{90}{-15}
