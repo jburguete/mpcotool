@@ -48,7 +48,7 @@ OF SUCH DAMAGE.
 #include <glib/gstdio.h>
 #ifdef G_OS_WIN32
 #include <windows.h>
-#elif !defined (BSD)
+#elif !defined (__BSD_VISIBLE)
 #include <alloca.h>
 #endif
 #if HAVE_MPI
