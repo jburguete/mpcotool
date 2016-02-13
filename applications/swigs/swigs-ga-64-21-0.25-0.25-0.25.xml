@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
-<calibrate simulator="calibrate_swigs" algorithm="genetic" npopulation="64"
+<optimize simulator="calibrate_swigs" algorithm="genetic" npopulation="64"
 	ngenerations="21" mutation="0.25" reproduction="0.25" adaptation="0.25">
 	<experiment name="demands" template1="template.xml"/>
 	<variable name="delay1" minimum="0" absolute_minimum="0" maximum="3600"
 		format="%.3le" nbits="12"/>
 	<variable name="delay2" minimum="0" absolute_minimum="0" maximum="7200"
 		format="%.3le" nbits="13"/>
-</calibrate>
+</optimize>

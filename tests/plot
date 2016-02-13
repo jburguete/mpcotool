@@ -3,7 +3,7 @@ set size 0.44,0.44
 set ylabel '-log_{10}(d_{2500})'
 #set xlabel 'method'
 set datafile separator ","
-set xtics border in scale 0,0 nomirror rotate by -90  autojustify
+set xtics border in scale 0,0 nomirror rotate by -67.5  autojustify
 set xrange [-1:31]
 set yrange [-2:15]
 set title 'g_{Sphere}'

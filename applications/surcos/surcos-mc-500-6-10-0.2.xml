@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<calibrate simulator="calibrate_surcos" nsimulations="500" niterations="6"
-		nbest="10" tolerance="0.2">
+<optimize simulator="calibrate_surcos" algorithm="Monte-Carlo"
+	nsimulations="500" niterations="6" nbest="10" tolerance="0.2">
 	<experiment name="q1" template1="template.in" template2="input1.in"
 		template3="q1a" template4="q1h" template5="q1c1" template6="q1c2"
 		template7="q1c3" template8="q1c4"/>
@@ -19,4 +19,4 @@
 		format="%.3le"/>
 	<variable name="a" minimum="0.10" absolute_minimum="0" maximum="1.00"
 		format="%.3lf"/>
-</calibrate>
+</optimize>

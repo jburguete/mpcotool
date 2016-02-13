@@ -34,7 +34,7 @@ plot 'variables-mc-ra-100-1-600-4-0.1-1-14-777' not w d
 
 unset title
 set size noratio 0.47,0.47
-set xlabel 'N_{simulations}'
+set xlabel 'N_{simulated}'
 set ylabel 'log_{10}(d_i)'
 set xrange [0:2500]
 set yrange [-16:10]
@@ -53,13 +53,13 @@ set out 'sphere-evolution-sw-cdr.eps'
 plot 'v-sw-c-10-10-1-600-0.1-1-14' u 1:(log10($5)) t'SW+CD-1' w l,\
 	'v-sw-c-40-40-1-225-0.01-1-14' u 1:(log10($5)) t'SW+CD-2' w l,\
 	'v-sw-ra-10-10-1-1200-2-0.1-1-14-777' u 1:(log10($5)) t'SW+RA-1' w l,\
-	'v-sw-ra-40-40-1-450-2-0.01-1-14-777' u 1:(log10($5)) t'SW+RA-2' w l
+	'v-sw-ra-40-40-1-450-2-0.01-1-14-777' u 1:(log10($5)) t'SW+RA-4' w l
 
 set out 'sphere-evolution-mc-cdr.eps'
 plot 'v-mc-c-100-1-600-0.1-1-14-777' u 1:(log10($5)) t'MC+CD-1' w l,\
 	'v-mc-c-1600-1-225-0.01-1-14-777' u 1:(log10($5)) t'MC+CD-2' w l,\
 	'v-mc-ra-100-1-1200-2-0.1-1-14-777' u 1:(log10($5)) t'MC+RA-1' w l,\
-	'v-mc-ra-1600-1-450-2-0.01-1-14-777' u 1:(log10($5)) t'MC+RA-2' w l
+	'v-mc-ra-1600-1-450-2-0.01-1-14-777' u 1:(log10($5)) t'MC+RA-4' w l
 
 set out 'sphere-evolution-mc-cd-r.eps'
 plot [0:700]\
@@ -78,9 +78,8 @@ plot [0:700]\
 set out 'sphere-evolution-mc-r.eps'
 plot [0:700]\
 	'v-mc-ra-100-1-1200-2-0.1-1-14-777' u 1:(log10($5)) t'MC+RA-1 (N_e=2)' w l,\
-	'v-mc-ra-100-1-800-3-0.1-1-14-777' u 1:(log10($5)) t'MC+RA-3 (N_e=3)' w l,\
-	'v-mc-ra-100-1-600-4-0.1-1-14-777' u 1:(log10($5)) t'MC+RA-4 (N_e=4)' w l,\
-	'v-mc-ra-100-1-240-10-0.1-1-14-777' u 1:(log10($5)) t'MC+RA-5 (N_e=10)' w l
+	'v-mc-ra-100-1-600-4-0.1-1-14-777' u 1:(log10($5)) t'MC+RA-2 (N_e=4)' w l,\
+	'v-mc-ra-100-1-240-10-0.1-1-14-777' u 1:(log10($5)) t'MC+RA-3 (N_e=10)' w l
 
 set out 'sphere-evolution-ge-1-4.eps'
 plot 'v-ge-100-33-0-0-0.75-32-14-777' u 1:(log10($5)) t'GE-1' w l,\
@@ -98,3 +97,59 @@ set out 'sphere-evolution-ge-9-11.eps'
 plot 'v-ge-500-21-0.2-0-0-32-14-777' u 1:(log10($5)) t'GE-9' w l,\
 	'v-ge-625-11-0.1-0.1-0.1-32-14-777' u 1:(log10($5)) t'GE-10' w l,\
 	'v-ge-625-6-0.2-0.2-0.2-32-14-777' u 1:(log10($5)) t'GE-11' w l
+
+set xlabel 'Simulations per task'
+set xrange [0:700]
+
+set out 'sphere-task-1-4.eps'
+plot 'v-sw-c-10-10-1-600-0.1-1-14' u (ceil($1/4)):(log10($5)) t'SW+CD-1' w l,\
+	'v-sw-ra-10-10-1-1200-2-0.1-1-14-777' \
+		u ($1<100?ceil($1/4):25+ceil((($1-100)/2)*ceil(2/4.))):(log10($5)) \
+		t'SW+RA-1' w l,\
+	'v-sw-ra-10-10-1-600-4-0.1-1-14-777' \
+		u ($1<100?ceil($1/4):25+ceil((($1-100)/4)*ceil(4/4.))):(log10($5)) \
+		t'SW+RA-2' w l,\
+	'v-sw-ra-10-10-1-240-10-0.1-1-14-777' \
+		u ($1<100?ceil($1/4):25+ceil((($1-100)/10)*ceil(10/4.))):(log10($5)) \
+		t'SW+RA-3' w l
+
+set out 'sphere-task-2-4.eps'
+plot 'v-sw-c-40-40-1-225-0.01-1-14' u (ceil($1/4)):(log10($5)) t'SW+CD-2' w l,\
+	'v-sw-ra-40-40-1-450-2-0.01-1-14-777' \
+		u ($1<1600?ceil($1/4):400+ceil((($1-1600)/2)*ceil(2/4.))):(log10($5)) \
+		t'SW+RA-4' w l,\
+	'v-sw-ra-40-40-1-225-4-0.01-1-14-777' \
+		u ($1<1600?ceil($1/4):400+ceil((($1-1600)/4)*ceil(4/4.))):(log10($5)) \
+		t'SW+RA-5' w l,\
+	'v-sw-ra-40-40-1-90-10-0.01-1-14-777' \
+		u ($1<1600?ceil($1/4):400+ceil((($1-1600)/10)*ceil(10/4.))):(log10($5)) \
+		t'SW+RA-6' w l
+
+set xrange [0:200]
+set out 'sphere-task-1-64.eps'
+plot 'v-sw-c-10-10-1-600-0.1-1-14' \
+		u ($1<100?ceil($1/64):2+ceil((($1-100)/4)*ceil(4/64.))):(log10($5)) \
+		t'SW+CD-1' w l,\
+	'v-sw-ra-10-10-1-1200-2-0.1-1-14-777' \
+		u ($1<100?ceil($1/64):2+ceil((($1-100)/2)*ceil(2/64.))):(log10($5)) \
+		t'SW+RA-1' w l,\
+	'v-sw-ra-10-10-1-600-4-0.1-1-14-777' \
+		u ($1<100?ceil($1/64):2+ceil((($1-100)/4)*ceil(4/64.))):(log10($5)) \
+		t'SW+RA-2' w l,\
+	'v-sw-ra-10-10-1-240-10-0.1-1-14-777' \
+		u ($1<100?ceil($1/64):2+ceil((($1-100)/10)*ceil(10/64.))):(log10($5)) \
+		t'SW+RA-3' w l
+
+set out 'sphere-task-2-64.eps'
+plot 'v-sw-c-40-40-1-225-0.01-1-14' \
+		u ($1<1600?ceil($1/64):25+ceil((($1-1600)/4)*ceil(4/64.))):(log10($5)) \
+		t'SW+CD-2' w l,\
+	'v-sw-ra-40-40-1-450-2-0.01-1-14-777' \
+		u ($1<1600?ceil($1/64):25+ceil((($1-1600)/2)*ceil(2/64.))):(log10($5)) \
+		t'SW+RA-4' w l,\
+	'v-sw-ra-40-40-1-225-4-0.01-1-14-777' \
+		u ($1<1600?ceil($1/64):25+ceil((($1-1600)/4)*ceil(4/64.))):(log10($5)) \
+		t'SW+RA-5' w l,\
+	'v-sw-ra-40-40-1-90-10-0.01-1-14-777' \
+		u ($1<1600?ceil($1/64):25+ceil((($1-1600)/10)*ceil(10/64.))):(log10($5)) \
+		t'SW+RA-6' w l

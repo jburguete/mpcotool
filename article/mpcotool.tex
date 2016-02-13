@@ -423,9 +423,9 @@ variable:
 	\vec{t}_2=\MATRIX{c}{-st_1\\0\\\vdots\\0},\quad
 	\cdots\quad,\vec{t}_{N_e}=\MATRIX{c}{0\\0\\\vdots\\-st_{N_v}},
 }{EqtDescent}
-being $st_j$ the initial step size for the $j$-th variable defined by the user
-in the main input file. The number of estimates in this method depends on the
-variables number:
+being $N_v$ the variables number and $st_j$ the initial step size for the $j$-th
+variable defined by the user in the main input file. The number of estimates in
+this method depends on $N_v$:
 \EQ{N_e=2\,N_v}{EqNestimatesDescent}
 
 \subsubsection{Random (RA)}
@@ -900,13 +900,31 @@ direction search method.
 {Convergence of the optimizacion for $g_{Sphere}$ with Monte-Carlo and direction
 search methods and different combinations of parameters}{FigSphereMCCDR}
 
-Figure~\ref{FigSphereGE} displays the different convergences for the genetic 
-algorithm with 11 different combinations of parameters. The results, although
-slightly better than those of the brute force methods, are clearly inferior to
-those obtained with the iterative and direction search methods. 
+Todas las figuras de convergencia de la~\ref{FigSphereSWMC} a
+la~\ref{FigSphereMCCDR} se han presentado en modo secuencial. Esta convergencia
+se ve alterada cuando se utilizan máquinas con múltiples procesadores dada la
+diferente capacidad de paralelización de los distintos algoritmos de
+optimización. En la figura~\ref{FigSphereSWMCDS} presentamos la convergencia
+real, estimada frente al máximo número de simulaciones realizadas en una tarea,
+en dos máquinas con número de núcleos $N_{cores}=4$ y $N_{cores}=64$ para los
+algoritmos SW y MC acoplados a DS. Puesto que el costo computacional es el
+mismo para $N_e\leq N_{cores}$ la mayor convergencia en máquinas multiprocesador
+se obtiene para $N_e=\max\PA{N\leq N_{cores}}$, es decir, $N_e=4$ en la máquina
+de 4 núcleos y $N_e=10$ en la de 64 núcleos para los casos analizados.
+\FIGIV{sphere-task-1-4.eps}{sphere-task-1-64.eps}
+{sphere-task-2-4.eps}{sphere-task-2-64.eps}
+{Convergence of the optimizacion, estimated as the maximum number of simulations
+per task, for $g_{Sphere}$ with SW and MC coupled to DS and different
+combinations of parameters on a machine with (left) 4 and (right) 64 cores}
+{FigSphereSWMCDS}
+
+Figure~\ref{FigSphereGE} displays the different convergences for GE with 11
+different combinations of parameters. The results, although slightly better than
+those of pure SW and MC brute force methods, are clearly inferior to those
+obtained with IT and DS. 
 \FIGIII{sphere-evolution-ge-1-4.eps}{sphere-evolution-ge-5-8.eps}
 {sphere-evolution-ge-9-11.eps}{Convergence of the optimization for $g_{Sphere}$
-with the genetic algorithm and different combinations of parameters}{FigSphereGE}
+with GE and different combinations of parameters}{FigSphereGE}
 
 Finally, the results obtained by the 31 different combinations of algorithms
 and parameters for the 6 test functions are displayed in
@@ -914,30 +932,41 @@ Fig.~\ref{FigTestResults}.
 The result is presented as minus the decimal logarithm of the distance obtained
 to the optimum point. This value represents the number of decimal digits of 
 precision achieved.
-The results for the GE can be qualified as
-disappointing. Although GE gets slightly better results for a convex function
-like the sphere, its improvement over brute force method is highly questionable
-for all other cases. With regard to the brute force methods, the behavior of SW
-is slightly superior to MC; however, this may be a random fact. Indeed, theoretically,
-MC takes advantage of situations with many variables, where the influence of each 
-variable over the objective function is distinct, which is not the case for
-the analyzed cases. The MPCOTool iterative algorithm do lead to a significant
-improvement, with a substantial progress over the brute force methods in 
-virtually all cases, even though some problems with the Rosenbrock function. 
-It outperforms slightly better coupled with MC, although it may also be
-a random fact related to the analyzed functions. Despite the fact that the
-convergence of DS for the sphere function is higher using a lower number of
-simulations for the associated brute force method, reveals itself as a bad
-strategy with many local minima functions. In this case, a better approach
-consist of beginning with a sufficient number of simulations by the stochastic model,
-in order to obtain a point in the vicinity of the optimum, and subsequently use
-the DS for a fast convergence. As regards the method to estimate the direction,
-although when RA with a low number of estimates is used, the convergence is accelerated,
-it does not success in finding the optimum in some cases. CD proves to be a 
-method somewhat slower but is deemed more secure. 
+%%%%%%%%%%%%%%%%%%%%%%
+En los métodos que utilizan números aleatorios (MC, DS+RA y GE) se han usado 10
+semillas distintas en el generador de números pseudo-aleatorios. En la figura se
+presenta en estos casos el valor medio y los valores extremos de la norma de
+error obtenidos para estas 10 semillas.
+%%%%%%%%%%%%%%%%%%%%%%
+The results for the GE can be qualified as disappointing. GE only gets slightly
+better results than pure brute force SW and MC methods.
+With regard to the brute force methods, the behavior of SW seems to be as a
+particular case of MC. Indeed, theoretically, MC takes advantage of situations
+with many variables, where the influence of each  variable over the objective
+function is distinct, which is not the case for the analyzed cases.
+IT leads to a significant improvement, with a substantial progress over the
+brute force methods in virtually all cases, even though some problems with the
+Rosenbrock function. 
+Despite the fact that the convergence of DS for the sphere function is higher
+using a lower number of simulations for the associated brute force method,
+reveals itself as a bad strategy with many local minima functions. In this case,
+a better approach consists of beginning with a sufficient number of simulations
+by the stochastic model, in order to obtain a point in the vicinity of the
+optimum, and subsequently use the DS for a fast convergence. As regards the
+method to estimate the direction, although when RA with a low $N_e$ is used, the
+convergence is accelerated, it does not success in finding the optimum in some
+cases. CD or RA with $N_e=4$ prove to be methods somewhat slower but are deemed
+more secure. 
 \FIGVI{Sphere-e.eps}{Ackley-e.eps}{Booth-e.eps}{Rosenbrock-e.eps}{Easom-e.eps}
 {Beale-e.eps}{Error de los métodos, estimado como $-\log_{10}\PA{d_{2500}}$, en
 los tests}{FigTestResults}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Todos los casos presentados en esta sección suponen un total de 1705
+calibraciones y 42625000 simulaciones. The cases have been run on a laptop
+computer equipped with an Intel(R) Core(TM) i7 M620 2.67GHz processor. Total
+calculation time was about 3 hours.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Practical applications}
 
@@ -947,9 +976,11 @@ or calibration
 of variables in models used for open channel flow, surface irrigation, sprinkler irrigation and irrigation
 engines movement. All input data files can be downloaded from the web page \citep{MPCOToolGit}.
 
-Most of the cases have been run on a laptop computer equipped with an Intel(R) Core(TM) i7 M620 2.67GHz processor. 
-Then, the computation has been performed in four parallelized tasks to make the most of the processor's double nucleus with hyperthreading.
-Only the optimization of the management of the Canal de Violada, much more computationally expensive, has been performed in the BIFI cluster Memento.
+Most of the cases have been run on the laptop computer described in the previous
+section. Then, the computation has been performed in four parallelized tasks to
+make the most of the processor's double nucleus with hyperthreading.
+Only the optimization of the management of the Canal de Violada, much more computationally expensive, has been performed in the BIFI cluster Memento
+(\url{http://bifi.es/es/infrastructures/scientific-equipment/memento-caesaraugusta}) using 64 threads.
 
 \subsection{Optimization of a canal management}
 
@@ -1125,22 +1156,22 @@ value of the evaluation function, where the error norm is the same as in \citet{
 	Optimization & Optimization & Optimal empirical & Objective function
 	\\ algorithm & parameters & parameters & value
 	\\ \hline
-	Monte-Carlo & $N_s=3000$ & $n=0.0395$ & 0.3430
+	MC & $N_s=3000$ & $n=0.0395$ & 0.3430
 	\\ & $N_i=1$ & $K=7.861\cdot 10^{-4}$
 	\\ & & $a=0.534$
 	\\ \hline
-	Monte-Carlo & $N_s=500$ & $n=0.0422$ & 0.3321
+	MC+IT & $N_s=500$ & $n=0.0422$ & 0.3321
 	\\ & $N_i=6$ & $K=9.994\cdot 10^{-4}$
 	\\ & $N_b=10$ & $a=0.497$
 	\\ & $tol=0.2$
 	\\ \hline
-	Genetic & $N_p=750$ & $n=0.0399$ & 0.3339
+	GE & $N_p=750$ & $n=0.0399$ & 0.3339
 	\\ & $N_g=6$ & $K=9.907\cdot 10^{-4}$
 	\\ & $R_m=0.2$ & $a=0.498$
 	\\ & $R_r=0.2$
 	\\ & $R_a=0.2$
 	\\ \hline
-	Genetic & $N_p=300$ & $n=0.0417$ & 0.3322
+	GE & $N_p=300$ & $n=0.0417$ & 0.3322
 	\\ & $N_g=31$ & $K=9.989\cdot 10^{-4}$
 	\\ & $R_m=0.1$ & $a=0.496$
 	\\ & $R_r=0.1$
