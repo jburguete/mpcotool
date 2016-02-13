@@ -13,7 +13,10 @@
 	<experiment name="q4" template1="template.in" template2="input4.in"
 		template3="q4a" template4="q4h" template5="q4c1" template6="q4c2"
 		template7="q4c3" template8="q4c4"/>
-	<variable name="n" minimum="0.020" maximum="0.060" format="%.4lf"/>
-	<variable name="K" minimum="1e-5" maximum="1e-3" format="%.3le"/>
-	<variable name="a" minimum="0.10" maximum="1.00" format="%.3lf"/>
+	<variable name="n" absolute_minimum="0" minimum="0.0200" maximum="0.0600"
+		precision="4"/>
+	<variable name="K" absolute_minimum="0" minimum="1e-5" maximum="1e-3"
+		precision="7"/>
+	<variable name="a" absolute_minimum="0" minimum="0.100" maximum="1.000"
+		precision="3"/>
 </optimize>
