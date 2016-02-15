@@ -7,8 +7,8 @@ calibrations or optimizations of empirical parameters.
 VERSIONS
 --------
 
-* 2.2.2: Stable and recommended version.
-* 2.3.3: Developing version to do new features.
+* 2.4.0: Stable and recommended version.
+* 2.5.0: Developing version to do new features.
 
 AUTHORS
 -------
@@ -51,15 +51,15 @@ FILES
 -----
 
 The source code has to have the following files:
-* 2.2.2/configure.ac: configure generator.
-* 2.2.2/Makefile.in: Makefile generator.
-* 2.2.2/config.h.in: config header generator.
-* 2.2.2/mpcotool.c: main source code.
-* 2.2.2/mpcotool.h: main header code.
-* 2.2.2/interface.h: interface header code.
-* 2.2.2/build: script to build all.
-* 2.2.2/logo.png: logo figure.
-* 2.2.2/Doxyfile: configuration file to generate doxygen documentation.
+* 2.4.0/configure.ac: configure generator.
+* 2.4.0/Makefile.in: Makefile generator.
+* 2.4.0/config.h.in: config header generator.
+* 2.4.0/mpcotool.c: main source code.
+* 2.4.0/mpcotool.h: main header code.
+* 2.4.0/interface.h: interface header code.
+* 2.4.0/build: script to build all.
+* 2.4.0/logo.png: logo figure.
+* 2.4.0/Doxyfile: configuration file to generate doxygen documentation.
 * TODO: tasks to do.
 * README.md: this file.
 * license.md: license file.
@@ -101,9 +101,9 @@ a terminal:
 > $ git clone https://github.com/jburguete/mpcotool.git
 
 3. Link the latest genetic version to genetic:
-> $ cd mpcotool/2.2.2
+> $ cd mpcotool/2.4.0
 >
-> $ ln -s ../../genetic/2.0.0 genetic
+> $ ln -s ../../genetic/2.0.1 genetic
 
 4. Build doing on a terminal:
 > $ ./build
@@ -163,21 +163,21 @@ MAKING TESTS INSTRUCTIONS
 In order to build the tests follow the next instructions:
 
 1. Link some tests that needs genetic library doing in a terminal (assuming that
-you are in the directory mpcotool/2.2.2):
+you are in the directory mpcotool/2.4.0):
 > $ cd ../tests/test2
 >
-> $ ln -s ../../../genetic/2.0.0 genetic
+> $ ln -s ../../../genetic/2.0.1 genetic
 >
 > $ cd ../test3
 >
-> $ ln -s ../../../genetic/2.0.0 genetic
+> $ ln -s ../../../genetic/2.0.1 genetic
 >
 > $ cd ../test4
 >
-> $ ln -s ../../../genetic/2.0.0 genetic
+> $ ln -s ../../../genetic/2.0.1 genetic
 
 2. Build all tests doing in the same terminal:
-> $ cd ../../2.2.2
+> $ cd ../../2.4.0
 >
 > $ make tests
 
@@ -211,7 +211,7 @@ The format of the main input file is as:
 
 ```xml
 <?xml version="1.0"?>
-<optimize simulator="simulator_name" evaluator="evaluator_name" algorithm="algorithm_type" nsimulations="simulations_number" niterations="iterations_number" tolerance="tolerance_value" nbest="best_number" npopulation="population_number" ngenerations="generations_number" mutation="mutation_ratio" reproduction="reproduction_ratio" adaptation="adaptation_ratio" direction="direction_search_type" nsteps="steps_number" relaxation="relaxation_parameter" nestimates="estimates_number" thresold="thresold_parameter" norm="norm_type" p="p_parameter" seed="random_seed" result="result_file" variables="variables_file">
+<optimize simulator="simulator_name" evaluator="evaluator_name" algorithm="algorithm_type" nsimulations="simulations_number" niterations="iterations_number" tolerance="tolerance_value" nbest="best_number" npopulation="population_number" ngenerations="generations_number" mutation="mutation_ratio" reproduction="reproduction_ratio" adaptation="adaptation_ratio" direction="direction_search_type" nsteps="steps_number" relaxation="relaxation_parameter" nestimates="estimates_number" threshold="threshold_parameter" norm="norm_type" p="p_parameter" seed="random_seed" result="result_file" variables="variables_file">
     <experiment name="data_file_1" template1="template_1_1" template2="template_1_2" ... weight="weight_1"/>
     ...
     <experiment name="data_file_N" template1="template_N_1" template2="template_N_2" ... weight="weight_N"/>
@@ -236,8 +236,8 @@ to evaluate the variable. 0 apply for integer numbers (default value is 14).
 * **weight**: optional, defined for each experiment. Multiplies the objective
 value obtained for each experiment in the final objective function value
 (default value is 1).
-* **thresold**: optional, to stop the simulations if objective function value
-less than the thresold is obtained (default value is 0).
+* **threshold**: optional, to stop the simulations if objective function value
+less than the threshold is obtained (default value is 0).
 * **algorithm**: optimization algorithm type.
 * **norm**: error norm type.
 

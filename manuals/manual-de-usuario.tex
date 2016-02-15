@@ -173,7 +173,7 @@ Una vez que todas las utilidades necesarias han sido instaladas, hay que
 descargar el código de Genetic. Luego puede compilarse haciendo en un terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > git clone https://github.com/jburguete/genetic.git
-> cd genetic/1.0.0
+> cd genetic/2.0.1
 > ./build
 \end{lstlisting}
 
@@ -181,8 +181,8 @@ El siguiente paso es descargar el código fuente de MPCOTool, enlazarlo con el
 de Genetic y compilar todo junto haciendo:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > git clone https://github.com/jburguete/mpcotool.git
-> cd mpcotool/2.2.2
-> ln -s ../../genetic/1.0.0 genetic
+> cd mpcotool/2.4.0
+> ln -s ../../genetic/2.0.1 genetic
 > ./build
 \end{lstlisting}
 
@@ -191,12 +191,12 @@ optimización estándar, hay que hacer (los ejecutables de test2, test3 y test4
 usan también la librería \emph{Genetic}):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > cd ../tests/test2
-> ln -s ../../../genetic/1.0.0 genetic
+> ln -s ../../../genetic/2.0.1 genetic
 > cd ../test3
-> ln -s ../../../genetic/1.0.0 genetic
+> ln -s ../../../genetic/2.0.1 genetic
 > cd ../test4
-> ln -s ../../../genetic/1.0.0 genetic
-> cd ../../2.2.2
+> ln -s ../../../genetic/2.0.1 genetic
+> cd ../../2.4.0
 > make tests
 \end{lstlisting}
 
@@ -298,17 +298,18 @@ representada en la figura~\ref{FigMainFile}.
 	\psline(40,-5)(40,25)
 	\rput(20,20){\bf optimize}
 	\rput(60,20){\bf simulator}
-	\rput(100,20){\bf algorithm}
-	\rput(140,20){evaluator}
-	\rput(180,20){nsimulations}
-	\rput(220,20){niterations}
-	\rput(260,20){tolerance}
-	\rput(55,10){nbest}
-	\rput(85,10){npopulation}
-	\rput(125,10){ngenerations}
-	\rput(160,10){mutation}
-	\rput(195,10){reproduction}
-	\rput(235,10){adaptation}
+	\rput(95,20){\bf algorithm}
+	\rput(130,20){evaluator}
+	\rput(165,20){nsimulations}
+	\rput(205,20){niterations}
+	\rput(240,20){tolerance}
+	\rput(265,20){nbest}
+	\rput(60,10){threshold}
+	\rput(95,10){npopulation}
+	\rput(135,10){ngenerations}
+	\rput(170,10){mutation}
+	\rput(205,10){reproduction}
+	\rput(240,10){adaptation}
 	\rput(265,10){seed}
 	\rput(60,0){direction}
 	\rput(95,0){nsteps}
@@ -409,19 +410,21 @@ Las propiedades que se pueden definir son:
 		\end{description}
 	\end{description}
 	\item[niterations]: número de iteraciones (valor por defecto: 1) para
-		realizar el algoritmo iterativo.
+		realizar el algoritmo iterativo,
 	\item[nbest]: número de mejores simulaciones con las que calcular el
 		siguiente intervalo de convergencia en la siguiente iteración del
-		algoritmo iterativo (valor por defecto: 1).
+		algoritmo iterativo (valor por defecto: 1),
 	\item[tolerance]: parámetro de tolerancia para relajar el intervalo de
-		convergencia del algoritmo iterativo (valor por defecto: 0)
+		convergencia del algoritmo iterativo (valor por defecto: 0),
+	\item[threshold]: umbral en la función objetivo para detener la
+		optimización,
 	\item[seed]: semilla del generador de números pseudo-aleatorios (valor por
-		defecto 7007).
+		defecto 7007),
 	\item[direction]: método de buscar la dirección óptima (opcional para los
 		algoritmos de barrido y de Monte-Carlo). Dos valores están disponibles
 		actualmente:
 	\begin{description}
-		\item[coordinates]: búsqueda por descenso de coordenadas.
+		\item[coordinates]: búsqueda por descenso de coordenadas,
 		\item[random]: búsqueda aleatoria. Requiere:
 		\begin{description}
 			\item[nestimates]: número de pruebas aleatorias para buscar la
@@ -438,7 +441,7 @@ Las propiedades que se pueden definir son:
 	y para cada variable:
 	\begin{description}
 		\item[step]: tamaño de paso inicial para el método de búsqueda de
-			dirección.
+			dirección,
 	\end{description}
 	\item[norm]: selecciona la norma de error (valor por defecto:
 		``euclidian''). Actualmente se pueden escoger cuatro tipos:
@@ -456,7 +459,7 @@ Las propiedades que se pueden definir son:
 				(\ref{EqObjectiveFunctionLI}),
 		\end{description}
 	\item[result]: define el nombre del fichero de resultados óptimos. Es
-		opcional, si no se especifica se guarda con el nombre ``\emph{result}''.
+		opcional, si no se especifica se guarda con el nombre ``\emph{result}'';
 	\item[variables]: define el nombre del fichero donde se guardan todas
 		las combinaciones de variables simuladas. Es opcional, si no se
 		especifica se guarda con el nombre ``\emph{variables}''.

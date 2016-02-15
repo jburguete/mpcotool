@@ -155,15 +155,15 @@ On FreeBSD 10, due to a wrong error in default gcc version, do in a terminal:
 Once all the tools installed, the Genetic source code must be downloaded and it must be compiled following on a terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > git clone https://github.com/jburguete/genetic.git
-> cd genetic/1.0.0
+> cd genetic/2.0.1
 > ./build
 \end{lstlisting}
 
 The following step is to download the source code MPCOTool, to link it with Genetic and compile together by means of:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > git clone https://github.com/jburguete/mpcotool.git
-> cd mpcotool/2.2.2
-> ln -s ../../genetic/1.0.0 genetic
+> cd mpcotool/2.4.0
+> ln -s ../../genetic/2.0.1 genetic
 > ./build
 \end{lstlisting}
 
@@ -172,12 +172,12 @@ functions, you have to do (the executable files of test2, test3 and test4 use
 also the \emph{Genetic} library):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > cd ../tests/test2
-> ln -s ../../../genetic/1.0.0 genetic
+> ln -s ../../../genetic/2.0.1 genetic
 > cd ../test3
-> ln -s ../../../genetic/1.0.0 genetic
+> ln -s ../../../genetic/2.0.1 genetic
 > cd ../test4
-> ln -s ../../../genetic/1.0.0 genetic
-> cd ../../2.2.2
+> ln -s ../../../genetic/2.0.1 genetic
+> cd ../../2.4.0
 > make tests
 \end{lstlisting}
 
@@ -274,17 +274,18 @@ represented in figure~\ref{FigMainFile}.
 	\psline(40,-5)(40,25)
 	\rput(20,20){\bf optimize}
 	\rput(60,20){\bf simulator}
-	\rput(100,20){\bf algorithm}
-	\rput(140,20){evaluator}
-	\rput(180,20){nsimulations}
-	\rput(220,20){niterations}
-	\rput(260,20){tolerance}
-	\rput(55,10){nbest}
-	\rput(85,10){npopulation}
-	\rput(125,10){ngenerations}
-	\rput(160,10){mutation}
-	\rput(195,10){reproduction}
-	\rput(235,10){adaptation}
+	\rput(95,20){\bf algorithm}
+	\rput(130,20){evaluator}
+	\rput(165,20){nsimulations}
+	\rput(205,20){niterations}
+	\rput(240,20){tolerance}
+	\rput(265,20){nbest}
+	\rput(60,10){threshold}
+	\rput(95,10){npopulation}
+	\rput(135,10){ngenerations}
+	\rput(170,10){mutation}
+	\rput(205,10){reproduction}
+	\rput(240,10){adaptation}
 	\rput(265,10){seed}
 	\rput(60,0){direction}
 	\rput(95,0){nsteps}
@@ -388,6 +389,8 @@ available properties are:
 		on next iteration for the iterative algorithm (default 1),
 	\item[tolerance]: tolerance parameter to relax the convergence interval of
 		the iterative algorithm (default 0),
+	\item[threshold]: threshold in the objective function to stop the
+		optimization,
 	\item[seed]: seed of the pseudo-random numbers generator (default 7007),
 	\item[direction]: method to search the optimal direction (optional for sweep
 		and Monte-Carlo algorithms). Two values are currently available:
