@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <optimize simulator="calibrate_surcos" algorithm="Monte-Carlo"
-	nsimulations="2200" direction="random" nsteps="200" nestimates="4">
+	nsimulations="2200" direction="random" nsteps="200" nestimates="4"
+	relaxation="1">
 	<experiment name="q1" template1="template.in" template2="input1.in"
 		template3="q1a" template4="q1h" template5="q1c1" template6="q1c2"
 		template7="q1c3" template8="q1c4"/>

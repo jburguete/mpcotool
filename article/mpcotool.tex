@@ -1146,48 +1146,55 @@ opening times obtained in this work}{FigSwigs}
 MPCOTool has also been used to find out the empirical parameters required by the friction and infiltration
 models used in the open source software SURCOS \citep{Surcos,SurcosGit,JaviSurcos3} for the simulation of the four furrow fertigation experiments published in \citet{JaviSurcos2}. The furrows were $100$ m long and they were simulated using 100 computational cells per furrow. The furrows were close together, they had the same geometry and the experiments were almost simultaneous, hence the soil properties were assumed uniform. 
 
-The friction model used in SURCOS is the Gauckler-Manning model. The infiltration model is the Kostiakov-Lewis model. They require calibration of three coefficients: the Gauckler-Manning number $n$ and the infiltration parameters $K$ and $a$. In the original paper, a brute force method using 3000 simulations was applied, each of them including the four experiments. $L_2$ norm has been use to compose the final objective function from the four experiments. In the present work, the same number of simulations has been used with the calibration methods implemented in MPCOTool. The execution of 3000 simulations in the laptop computer took about 1h20m.
+The friction model used in SURCOS is the Gauckler-Manning model. The infiltration model is the Kostiakov-Lewis model. They require calibration of three coefficients: the Gauckler-Manning number $n$ (s$\cdot$m$^{-1/3}$) and the infiltration parameters $K$ (m$\cdot$s$^{-a}$) and $a$. In the original paper, a brute force method using 3000 simulations was applied, each of them including the four experiments. $L_2$ norm has been use to compose the final objective function from the four experiments. In the present work, the same number of simulations has been used with the calibration methods implemented in MPCOTool. The execution of 3000 simulations in the laptop computer took about 1h30m.
 
 Table~\ref{TabSurcos} displays the results obtained for the optimal coefficient values and the corresponding
-value of the evaluation function, where the error norm is the same as in \citet{JaviSurcos2}. The results are similar among the different methods and also similar to those in the original paper. This is due to the existence of a relatively large region of combinations of the empirical parameters producing similar values in the evaluation function, thus preventing from an accurate convergence to the optimum set. However, it can be noticed that both the iterative method and the genetic methods produce better results than the Monte-Carlo method without iterations with the same total number of simulations.
+value of the evaluation function, where the error norm is the same as in \citet{JaviSurcos2}. The results are similar among the different methods and also similar to those in the original paper. This is due to the existence of a relatively large region of combinations of the empirical parameters producing similar values in the evaluation function, thus preventing from an accurate convergence to the optimum set. However, it can be noticed that MC+IT is the best and MC-RA and GE produce better results than MC with the same total number of simulations.
 
 \TABLE{\scriptsize}{cccc}
 {
 	Optimization & Optimization & Optimal empirical & Objective function
 	\\ algorithm & parameters & parameters & value
 	\\ \hline
-	MC & $N_s=3000$ & $n=0.0395$ & 0.3430
-	\\ & $N_i=1$ & $K=7.861\cdot 10^{-4}$
-	\\ & & $a=0.534$
+	MC & $N_s=3000$ & $n=0.0444$ & 0.6971
+	\\ & $N_i=1$ & $K=9.690\cdot 10^{-4}$
+	\\ & & $a=0.503$
 	\\ \hline
-	MC+IT & $N_s=500$ & $n=0.0422$ & 0.3321
-	\\ & $N_i=6$ & $K=9.994\cdot 10^{-4}$
-	\\ & $N_b=10$ & $a=0.497$
+	MC+IT & $N_s=500$ & $n=0.0420$ & 0.6903
+	\\ & $N_i=6$ & $K=10.147\cdot 10^{-4}$
+	\\ & $N_b=10$ & $a=0.504$
 	\\ & $tol=0.2$
 	\\ \hline
-	GE & $N_p=750$ & $n=0.0399$ & 0.3339
-	\\ & $N_g=6$ & $K=9.907\cdot 10^{-4}$
-	\\ & $R_m=0.2$ & $a=0.498$
+	MC+RA & $N_s=2200$ & $n=0.0421$ & 0.6928
+	\\ & $N_i=1$ & $K=9.712\cdot 10^{-4}$
+	\\ & $N_{st}=200$ & $a=0.512$
+	\\ & $N_e=4$
+	\\ & $st_n=0.0010$
+	\\ & $st_K=10^{-6}$
+	\\ & $st_a=0.010$
+	\\ \hline
+	GE & $N_p=750$ & $n=0.0413$ & 0.6930
+	\\ & $N_g=6$ & $K=9.823\cdot 10^{-4}$
+	\\ & $R_m=0.2$ & $a=0.508$
 	\\ & $R_r=0.2$
 	\\ & $R_a=0.2$
 	\\ \hline
-	GE & $N_p=300$ & $n=0.0417$ & 0.3322
-	\\ & $N_g=31$ & $K=9.989\cdot 10^{-4}$
-	\\ & $R_m=0.1$ & $a=0.496$
+	GE & $N_p=300$ & $n=0.0420$ & 0.6918
+	\\ & $N_g=31$ & $K=9.903\cdot 10^{-4}$
+	\\ & $R_m=0.1$ & $a=0.508$
 	\\ & $R_r=0.1$
 	\\ & $R_a=0.1$
 	\\ \hline
 }{Optimal empirical parameters and value of the evaluation function in the simulation of the furrow irrigation cases in \citet{JaviSurcos2} using program SURCOS and several optimization algorithms in MPCOTool with the same total number of simulations ($N_{total}=3000$)}{TabSurcos}
 
-Figure~\ref{FigSurcos} shows the results of the water depths and solute concentration from the simulation using the coefficients obtained by the Monte-Carlo method with $N_i=6$, compared with the experimental values.
+Figure~\ref{FigSurcos} shows the results of the water depths and solute concentration from the simulation, using the coefficients obtained by the MC+IT method, compared with the experimental values.
 
 \FIGVI{surcos-advance.eps}{surcos-depth.eps}{surcos-solute-q1.eps}
 {surcos-solute-q2.eps}{surcos-solute-q3.eps}{surcos-solute-q4.eps}
 {(top left) Advance time profile, (top right) inlet depth evolution and
 (middle-bottom) solute concentration evolution at probes for the experiments
 Q1-Q4 described in \citet{JaviSurcos2} simulated with the optimal calibrated
-parameters obtained for the Monte-Carlo method with $N_i=6$ (see
-table~\ref{TabSurcos})}{FigSurcos}
+parameters obtained for the MC+IT method (see table~\ref{TabSurcos})}{FigSurcos}
 
 \subsection{Calibration of empirical parameters of the ballistic model on
 sprinkler irrigation}
