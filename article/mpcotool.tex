@@ -1144,12 +1144,91 @@ opening times obtained in this work}{FigSwigs}
 \subsection{Calibration of empirical parameters on surface irrigation}
 
 MPCOTool has also been used to find out the empirical parameters required by the friction and infiltration
-models used in the open source software SURCOS \citep{Surcos,SurcosGit,JaviSurcos3} for the simulation of the four furrow fertigation experiments published in \citet{JaviSurcos2}. The furrows were $100$ m long and they were simulated using 100 computational cells per furrow. The furrows were close together, they had the same geometry and the experiments were almost simultaneous, hence the soil properties were assumed uniform. 
+models used in the open source software SURCOS \citep{Surcos,SurcosGit,JaviSurcos3} for the simulation of the four furrow fertigation experiments published in \citet{JaviSurcos2}. The furrows were $100$ m long and they were simulated using 100 computational cells per furrow. The furrows were close together, they had the same geometry and the experiments were almost simultaneous, hence the soil properties were assumed uniform. En la Fig.~\ref{FigSurcosSketch} se ilustra la
+geometría de los surcos así como los puntos de medida de concentración de
+fertilizante.
+
+\psset{xunit=15mm,yunit=15mm}
+\PSPICTURE{-0.7}{-0.4}{6.5}{2.45}
+{
+	\tiny
+	\psline(0,0.27)(0.2,0.27)(0.53,0)(0.67,0)
+		(1,0.27)(1.2,0.27)(1.53,0)(1.67,0)
+		(2,0.27)(2.2,0.27)(2.53,0)(2.67,0)
+		(3,0.27)(3.2,0.27)(3.53,0)(3.67,0)(4,0.27)(4.2,0.27)
+	\psline(0,0.27)(2,2.27)
+	\psline(0.2,0.27)(2.2,2.27)
+	\psline(0.53,0)(2.53,2)
+	\psline(0.67,0)(2.67,2)
+	\psline(1,0.27)(3,2.27)
+	\psline(1.2,0.27)(3.2,2.27)
+	\psline(1.53,0)(3.53,2)
+	\psline(1.67,0)(3.67,2)
+	\psline(2,0.27)(4,2.27)
+	\psline(2.2,0.27)(4.2,2.27)
+	\psline(2.53,0)(4.53,2)
+	\psline(2.67,0)(4.67,2)
+	\psline(3,0.27)(5,2.27)
+	\psline(3.2,0.27)(5.2,2.27)
+	\psline(3.53,0)(5.53,2)
+	\psline(3.67,0)(5.67,2)
+	\psline(4,0.27)(6,2.27)
+	\psline(4.2,0.27)(6.2,2.27)
+	\psline(2,2.27)(2.2,2.27)(2.53,2)(2.67,2)
+		(3,2.27)(3.2,2.27)(3.53,2)(3.67,2)
+		(4,2.27)(4.2,2.27)(4.53,2)(4.67,2)
+		(5,2.27)(5.2,2.27)(5.53,2)(5.67,2)(6,2.27)(6.2,2.27)
+	\psline[linestyle=dashed, dash=2pt 1pt](0,0.27)(-0.2,0.27)
+	\psline[linestyle=dashed, dash=2pt 1pt](0.53,0)(-0.2,0)
+	\psline{<->}(-0.1,0.27)(-0.1,0)
+	\rput(-0.4,0.135){0.27m}
+	\psline[linestyle=dashed, dash=2pt 1pt](2,2.27)(1.8,2.27)
+	\psline{<->}(-0.1,0.27)(1.9,2.27)
+	\rput(0.6,1.27){100m}
+	\psline[linestyle=dashed, dash=2pt 1pt](0.53,0)(0.53,-0.2)
+	\psline[linestyle=dashed, dash=2pt 1pt](0.67,0)(0.67,-0.2)
+	\psline{->}(0.43,-0.1)(0.53,-0.1)
+	\psline{->}(0.77,-0.1)(0.67,-0.1)
+	\rput(0.6,-0.3){0.14m}
+	\psline[linestyle=dashed, dash=2pt 1pt](1.2,0.27)(1.2,-0.2)
+	\psline[linestyle=dashed, dash=2pt 1pt](2,0.27)(2,-0.2)
+	\psline{<->}(1.2,-0.1)(2,-0.1)
+	\rput(1.6,-0.3){0.80m}
+	\psline[linestyle=dashed, dash=2pt 1pt](2.2,0.27)(2.2,-0.2)
+	\psline{<->}(2,-0.1)(2.2,-0.1)
+	\rput(2.1,-0.3){0.20m}
+	\psline[linestyle=dashed, dash=2pt 1pt](4.2,0.27)(4.4,0.27)
+	\psline[linestyle=dashed, dash=2pt 1pt](0.4,0.67)(4.8,0.67)
+	\psline{<->}(4.3,0.27)(4.7,0.67)
+	\rput(4.8,0.47){20m}
+	\rput(5,0.67){S20}
+	\psline[linestyle=dashed, dash=2pt 1pt](0.8,1.07)(5.2,1.07)
+	\psline{<->}(4.7,0.67)(5.1,1.07)
+	\rput(5.2,0.87){20m}
+	\rput(5.4,1.07){S40}
+	\psline[linestyle=dashed, dash=2pt 1pt](1.2,1.47)(5.6,1.47)
+	\psline{<->}(5.1,1.07)(5.5,1.47)
+	\rput(5.6,1.27){20m}
+	\rput(5.8,1.47){S60}
+	\psline[linestyle=dashed, dash=2pt 1pt](1.6,1.87)(6,1.87)
+	\psline{<->}(5.5,1.47)(5.9,1.87)
+	\rput(6,1.67){20m}
+	\rput(6.2,1.87){S80}
+	\rput(2.6,2.3){Q1}
+	\rput(3.6,2.3){Q2}
+	\rput(4.6,2.3){Q3}
+	\rput(5.6,2.3){Q4}
+	\rput(4.5,0){INLET}
+}{Diagrama ilustrando las dimensiones de los experimentos en cuatro surcos
+aislados descrito en \citet{JaviSurcos2}. Q1, Q2, Q3 y Q4 tuvieron entradas de
+caudal de agua de  1, 2, 3 y 4 L/s respectivamente. S20, S40, S60 and S80
+are the locations where the fertilizer concentration was measured}
+{FigSurcosSketch}
 
 The friction model used in SURCOS is the Gauckler-Manning model. The infiltration model is the Kostiakov-Lewis model. They require calibration of three coefficients: the Gauckler-Manning number $n$ (s$\cdot$m$^{-1/3}$) and the infiltration parameters $K$ (m$\cdot$s$^{-a}$) and $a$. In the original paper, a brute force method using 3000 simulations was applied, each of them including the four experiments. $L_2$ norm has been use to compose the final objective function from the four experiments. In the present work, the same number of simulations has been used with the calibration methods implemented in MPCOTool. The execution of 3000 simulations in the laptop computer took about 1h30m.
 
 Table~\ref{TabSurcos} displays the results obtained for the optimal coefficient values and the corresponding
-value of the evaluation function, where the error norm is the same as in \citet{JaviSurcos2}. The results are similar among the different methods and also similar to those in the original paper. This is due to the existence of a relatively large region of combinations of the empirical parameters producing similar values in the evaluation function, thus preventing from an accurate convergence to the optimum set. However, it can be noticed that MC+IT is the best and MC-RA and GE produce better results than MC with the same total number of simulations.
+value of the evaluation function, where the error norm is the same as in \citet{JaviSurcos2}. The results are similar among the different methods and also similar to those in the original paper. This is due to the existence of a relatively large region of combinations of the empirical parameters producing similar values in the evaluation function, thus preventing from an accurate convergence to the optimum set. However, it can be noticed that MC+IT obtains the best results and MC-RA and GE produce better results than MC with the same total number of simulations.
 
 \TABLE{\scriptsize}{cccc}
 {

@@ -725,27 +725,27 @@ capacidades computacionales de la máquina en la que se ejecuta MPCOTool.
 \PSPICTURE{-90}{-55}{90}{-15}
 {
 	\tiny
-	\rput(0,-15){Generation of $N_{total}$ empirical parameters sets}
-	\psframe(-55,-20)(55,-10)
+	\rput(0,-15){Generación de $N_{total}$ conjuntos de parámetros empíricos}
+	\psframe(-65,-20)(65,-10)
 	\psline{->}(0,-20)(-50,-25)
 	\psline{->}(0,-20)(0,-25)
 	\psline{->}(0,-20)(55,-25)
-	\rput(-55,-30){1st task:}
-	\rput(-55,-35){$N_{total}/N_{tasks}$ simulations}
+	\rput(-55,-30){1$^a$ tarea:}
+	\rput(-55,-35){$N_{total}/N_{tasks}$ simulaciones}
 	\psframe(-90,-25)(-20,-40)
 	\rput(0,-32.5){$\cdots$}
-	\rput(55,-30){$N_{tasks}$-th task:}
-	\rput(55,-35){$N_{total}/N_{tasks}$ simulations}
+	\rput(55,-30){$N_{tasks}$-ésima tarea:}
+	\rput(55,-35){$N_{total}/N_{tasks}$ simulaciones}
 	\psframe(20,-25)(90,-40)
 	\psline{->}(-55,-40)(0,-45)
 	\psline{->}(0,-40)(0,-45)
 	\psline{->}(55,-40)(0,-45)
-	\rput(0,-50){Getting optimal empirical parameters set}
-	\psframe(-50,-45)(50,-55)
-}{Flowchart of the parallelization scheme in MPCOTool for brute force methods
-(sweep and Monte-Carlo)}{FigBruteForceParallelization}
+	\rput(0,-50){Obtención del conjunto óptimo de parámetros empíricos}
+	\psframe(-65,-45)(65,-55)
+}{Diagrama de flujo del esquema de la paralelización en MPCOTool para métodos de
+fuerza bruta (barrido y Monte-Carlo)}{FigBruteForceParallelization}
 
-\section{Monte-Carlo method}
+\section{Método de Monte-Carlo}
 
 Monte-Carlo based methods run simulations using aleatory values of the
 variables assuming  uniform probability within the extreme values range.
