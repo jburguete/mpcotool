@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<calibrate algorithm="sweep" simulator="pivot" evaluator="compare"
+<optimize algorithm="sweep" simulator="pivot" evaluator="compare"
 	niterations="16" nbest="10" tolerance="0.5">
 	<experiment name="Velocidad-Frecuencia-27,48.txt" template1="template1.js"/>
 	<experiment name="Velocidad-Frecuencia-42.txt" template1="template2.js"/>
@@ -13,4 +13,4 @@
 		maximum="0.400" precision="3" nsweeps="5"/>
 	<variable name="boot-time" minimum="0.00" absolute_minimum="0.00"
 		maximum="5.00" precision="2" nsweeps="5"/>
-</calibrate>
+</optimize>

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<calibrate simulator="pivot" evaluator="compare" algorithm="genetic"
+<optimize simulator="pivot" evaluator="compare" algorithm="genetic"
 	npopulation="1000" ngenerations="16" mutation="0.2" reproduction="0.2"
 	adaptation="0.2">
 	<experiment name="Velocidad-Frecuencia-27,48.txt" template1="template1.js"/>
@@ -14,4 +14,4 @@
 		nbits="9"/>
 	<variable name="boot-time" minimum="0.00" maximum="5.00" precision="2"
 		nbits="9"/>
-</calibrate>
+</optimize>
