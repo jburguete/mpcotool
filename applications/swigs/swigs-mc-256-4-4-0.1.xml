@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
-<optimize simulator="calibrate_swigs" nsimulations="256" niterations="4"
-		nbest="4" tolerance="0.1">
+<optimize simulator="calibrate_swigs" algorithm="Monte-Carlo" nsimulations="256"
+	niterations="4" nbest="4" tolerance="0.1">
 	<experiment name="demands" template1="template.xml"/>
 	<variable name="delay1" minimum="0" absolute_minimum="0" maximum="3600"
-		format="%.3le"/>
+		precision="0"/>
 	<variable name="delay2" minimum="0" absolute_minimum="0" maximum="7200"
-		format="%.3le"/>
+		precision="0"/>
 </optimize>

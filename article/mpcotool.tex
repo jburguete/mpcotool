@@ -1306,11 +1306,34 @@ parameters obtained for the MC+IT method (see table~\ref{TabSurcos})}{FigSurcos}
 \subsection{Calibration of empirical parameters of the ballistic model on
 sprinkler irrigation}
 
-The ballistic model \citep{Fukui80,Playan06} is the most widespread to characterize the behaviour and performance of sprinklers in sprinkler irrigation management. The model assumes that the travelling drops are approximately spherical and subject to the resulting effect of gravity and drag forces. The ejecting drop velocity is required by the model, and it is frequent to assume that the jet is compact enough to consider that all the drops carry the same velocity when leaving the sprinkler. This velocity can be estimated either by measuring the pressure and using Bernoulli's equation or, alternatively, by measuring the discharge and dividing by the outlet cross section. Other data required to characterize the water spread are related to the drop size distribution. The model used in the present work, described in \cite{Ouazaa14}, is based on three parameters $D_{50}$, $n$ and $P$. Furthermore, to include the influence of the wind, the model involves two more aerodynamic resistance coefficients:
-$k_1$ y $k_2$.
-The model is calibrated in two steps. First, the coefficients $D_{50}$, $n$ and $P$ are fitted to adjust the water distribution in windless conditions and are considered representative of the sprinkler model at a given pressure. In a second step, the coefficients $k_1$ and $k_2$ fitting better the water distribution in wind conditions are found.
+The ballistic model \citep{Fukui80,Playan06} is the most widespread to characterize the behaviour and performance of sprinklers in sprinkler irrigation management. The model assumes that the travelling drops are approximately spherical and subject to the resulting effect of gravity and drag forces. The ejecting drop velocity is required by the model, and it is frequent to assume that the jet is compact enough to consider that all the drops carry the same velocity when leaving the sprinkler. This velocity can be estimated either by measuring the pressure and using Bernoulli's equation or, alternatively, by measuring the discharge and dividing by the outlet cross section. Other data required to characterize the water spread are related to the drop size distribution. The model used in the present work, described in \cite{Ouazaa14}, is based on three parameters $D_{50}$ (mm), $n$ (dimensionless) and $P$ (dimensionless) to define the probability density of drop sizes ($p$):
+\[
+	f(D)=0.693\,n\,\PA{\frac{D}{D_{50}}}^{n-1}
+	\,\exp\C{-0.693\,\PA{\frac{D}{D_{50}}}^n},
+\]
+\EQ
+{
+	g(D)=\left\{\begin{array}{lc}0,&D\leq D_{min};\\
+	\max[P,\;f(D)],&D_{min}<D<D_{50};\\f(D),&D_{50}\leq D\leq D_{max};\\
+	0,&D>D_{max};\end{array}\right.\quad
+	p(D)=\frac{g(D)}{\int_0^\infty g(D)\,dD}.
+}{EqSprinklerDropSizes}
+with $D$ the drop diameter, and $D_{min}$ and $D_{max}$ the minimum and maximum
+drop diameters respectively.
 
-In the present example, a spray sprinkler Senninger N44 at a working pressure of 138 kPa will be calibrated. In this sprinkler model, the water jet impacts against a fixed plate. In order to estimate the water velocity after the impact, an image technique as described in \citet{Salvador09} was applied. According to this measurements, the head loss due to the impact against the plate was found to be of 50\%.
+Furthermore, to include the influence of the wind, the model involves two more dimensionless aerodynamic resistance coefficients ($k_1$ and $k_2$) modifying the drag resistance coefficient $c_d$ as:
+\EQ{c_d=c_s\,\PA{1+k_1\,\sin\beta-k_2\,\cos\alpha}}{EqSprinklerDrag}
+with $c_s$ the drag resistance coefficient of a solid sphere, $\beta$ the angle
+between the drop velocity relative to the wind and the wind velocity, and
+$\alpha$ the angle between the drop velocity relative to the wind and the drop
+absolute velocity.
+
+The model is calibrated in two steps. First, the coefficients $D_{50}$, $n$ and $P$ are fitted to adjust the water distribution in windless conditions and are considered representative of the sprinkler model at a given pressure. In a second step, the coefficients $k_1$ and $k_2$ fitting better the water distribution in windy conditions are found.
+
+In the present example, a spray sprinkler Senninger N44 at a working pressure of 138 kPa will be calibrated. In this sprinkler model, the water jet impacts against a fixed plate. In order to estimate the water velocity after the impact, an image technique as described in \citet{Salvador09} was applied. According to this measurements, the head loss due to the impact against the plate was found to be of 50\%. Extremal drop diameters have been fixed to $D_{min}=0.5$~mm and
+$D_{max}=7.0$~mm. A set of 360000 drop trajectories has been numerically calculated to simulate the sprinkler pluviometry. The objective function has been defined as:
+\EQ{o=\frac{RMSE}{1+R},}{EqSprinklerObjective}
+with $RMSE$ the root mean square error and $R$ el coeficiente estadístico obtenidos entre las pluviometrías medida y simulada para un conjunto de pluviómetros. Los pluviómetros fueron colocados cada 0.5~m en dos ejes orientados aproximadamente Este-Oeste (E-W) y Norte-Sur (N-S).
 
 Table~\ref{TabSprinklerI} shows the results from the calibration of parameters $D_{50}$, $n$ and $P$ in windless conditions using a total number of 1000 simulations with different optimization algorithms. The computation time was around 8 minutes in the laptop computer for each calibration. The results show that the best results are supplied by MC+IT followed by GE. In this case,
 %%%%%%%%%%
@@ -1386,12 +1409,12 @@ Next, using the optimal $D_{50}=3.05$ mm, $n=18.267$ and $P=0.389$ obtained by t
 	GE & $N_p=100$, $N_g=11$ & $k_1=0.322$ & 11.315 mm
 	\\ & $R_m=R_r=R_a=0.1$ & $k_2=0.060$
 	\\ \hline
-}{Optimal parameters and values of the evaluations function in the experiment of the sprinkler irrigation under wind conditions of 2.84 m/s using different optimization algorithms implemented in MPCOTool with the same total number of simulations ($N_{total}=400$)}{TabSprinklerII}
+}{Optimal parameters and values of the evaluations function in the experiment of the sprinkler irrigation under windy conditions of 2.84 m/s using different optimization algorithms implemented in MPCOTool with the same total number of simulations ($N_{total}=400$)}{TabSprinklerII}
 
-Finally, figure~\ref{FigSprinkler} shows the measured (in pluviometers) and simulated water distribution using the optimal parameters obtained by SW+IT in windless and wind conditions of average velocity 2.84 m/s.
+Finally, figure~\ref{FigSprinkler} shows the measured (in pluviometers) and simulated water distribution using the optimal parameters obtained by SW+IT in windless and windy conditions of average velocity 2.84 m/s.
 
 \FIGII{sprinkler-0.eps}{sprinkler-2,84.eps}
-{(top) Radial pluviometry for non-wind conditions and (bottom) pluviometry at
+{(top) Radial pluviometry for non-windy conditions and (bottom) pluviometry at
 the two pluviometers axes with wind average velocity 2.84 m/s}{FigSprinkler}
 
 \subsection{Calibration of empirical parameters of the movement of a
@@ -1461,7 +1484,7 @@ increases or decreases linearly (see figure~\ref{FigPivotVelocity}).
 
 The movement of a real pivot with four towers separated 50.11 m is next simulated and calibrated. The maximum linear velocity of each tower were measured to be: $v_1=0.02738$ m/s, $v_2=0.02824$ m/s, $v_3=0.03008$ m/s and $v_4=0.03753$ m/s.
 The exterior tower is considerably faster as it carries less weight and produces less friction.
-The start and stop times of each tower were measured in four experiments of 24 hours with the pivot working in cycles of 71s at 100\%, 52\%, 42\% y 27.48\%.
+The start and stop times of each tower were measured in four experiments of 24 hours with the pivot working in cycles of 71s at 100\%, 52\%, 42\% and 27.48\%.
 
 The times were grouped in four histograms and the evaluation function was defined as the mean square error between the measured and simulated histograms.
 Table~\ref{TabPivot} shows some of the results obtained in a total of 10000 simulations of each of the four experiments, taking around 50 minutes each in the same laptop computer used before.
