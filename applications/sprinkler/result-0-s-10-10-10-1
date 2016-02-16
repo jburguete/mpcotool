@@ -1,8 +1,9 @@
 D50 min=0.00377778 max=0.00377778
 N min=17.7778 max=17.7778
 P min=0.555556 max=0.555556
-THE BEST IS
-error=2.536075e-03
-D50=0.00378
-N=17.778
-P=0.556
+Best result
+error = 2.648347000000000e-03
+D50 = 0.00378
+N = 17.778
+P = 0.556
+Calculation time = 488.755 s

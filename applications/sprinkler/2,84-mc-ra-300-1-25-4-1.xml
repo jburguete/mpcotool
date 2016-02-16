@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
-<optimize simulator="aspersion" evaluator="compare" algorithm="genetic"
-	npopulation="100" ngenerations="6" mutation="0.2" reproduction="0.2"
-	adaptation="0.2">
+<optimize simulator="aspersion" evaluator="compare" algorithm="Monte-Carlo"
+	nsimulations="300" direction="random" nsteps="25" nestimates="4"
+	relaxation="1">
 	<experiment name="2,84.mea" template1="2,84.env" template2="2,84.sim"
 		template3="template-2,84" template4="2,84.mea"/>
 	<variable name="k1" minimum="0.000" maximum="1.000" precision="3"
-		nbits="10"/>
+		step="0.010"/>
 	<variable name="k2" minimum="0.000" maximum="1.000" precision="3"
-		nbits="10"/>
+		step="0.010"/>
 </optimize>

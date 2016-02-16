@@ -1,0 +1,29 @@
+./mpcotoolbin ../applications/sprinkler/0-ga-100-31-0.1-0.1-0.1.xml
+mv ../applications/sprinkler/result ../applications/sprinkler/result-0-ga-100-31-0.1-0.1-0.1
+mv ../applications/sprinkler/variables ../applications/sprinkler/variables-0-ga-100-31-0.1-0.1-0.1
+./mpcotoolbin ../applications/sprinkler/0-ga-250-6-0.2-0.2-0.2.xml
+mv ../applications/sprinkler/result ../applications/sprinkler/result-0-ga-250-6-0.2-0.2-0.2
+mv ../applications/sprinkler/variables ../applications/sprinkler/variables-0-ga-250-6-0.2-0.2-0.2
+./mpcotoolbin ../applications/sprinkler/0-mc-1000-1.xml
+mv ../applications/sprinkler/result ../applications/sprinkler/result-0-mc-1000-1
+mv ../applications/sprinkler/variables ../applications/sprinkler/variables-0-mc-1000-1
+./mpcotoolbin ../applications/sprinkler/0-mc-125-8-8-0.4.xml
+mv ../applications/sprinkler/result ../applications/sprinkler/result-0-mc-125-8-8-0.4
+mv ../applications/sprinkler/variables ../applications/sprinkler/variables-0-mc-125-8-8-0.4
+./mpcotoolbin ../applications/sprinkler/0-mc-ra-500-1-125-4-1.xml
+mv ../applications/sprinkler/result ../applications/sprinkler/result-0-mc-ra-500-1-125-4-1
+mv ../applications/sprinkler/variables ../applications/sprinkler/variables-0-mc-ra-500-1-125-4-1
+./mpcotoolbin ../applications/sprinkler/0-s-10-10-10-1.xml
+mv ../applications/sprinkler/result ../applications/sprinkler/result-0-s-10-10-10-1
+mv ../applications/sprinkler/variables ../applications/sprinkler/variables-0-s-10-10-10-1
+./mpcotoolbin ../applications/sprinkler/0-s-5-5-5-8-8-0.4.xml
+mv ../applications/sprinkler/result ../applications/sprinkler/result-0-s-5-5-5-8-8-0.4
+mv ../applications/sprinkler/variables ../applications/sprinkler/variables-0-s-5-5-5-8-8-0.4
+cd ../applications
+./process sprinkler/variables-0-ga-100-31-0.1-0.1-0.1 sprinkler/v-0-ga-100-31-0.1-0.1-0.1
+./process sprinkler/variables-0-ga-250-6-0.2-0.2-0.2 sprinkler/v-0-ga-250-6-0.2-0.2-0.2
+./process sprinkler/variables-0-mc-1000-1 sprinkler/v-0-mc-1000-1
+./process sprinkler/variables-0-mc-125-8-8-0.4 sprinkler/v-0-mc-125-8-8-0.4
+./process sprinkler/variables-0-mc-ra-500-1-125-4-1 sprinkler/v-0-mc-ra-500-1-125-4-1
+./process sprinkler/variables-0-s-10-10-10-1 sprinkler/v-0-s-10-10-10-1
+./process sprinkler/variables-0-s-5-5-5-8-8-0.4 sprinkler/v-0-s-5-5-5-8-8-0.4

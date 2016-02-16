@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
-<calibrate simulator="aspersion" evaluator="compare" algorithm="genetic"
+<optimize simulator="aspersion" evaluator="compare" algorithm="genetic"
 	npopulation="100" ngenerations="11" mutation="0.1" reproduction="0.1"
 	adaptation="0.1">
 	<experiment name="2,84.mea" template1="2,84.env" template2="2,84.sim"
 		template3="template-2,84" template4="2,84.mea"/>
-	<variable name="k1" minimum="0.000" maximum="1.000" format="%.3lf"
+	<variable name="k1" minimum="0.000" maximum="1.000" precision="3"
 		nbits="10"/>
-	<variable name="k2" minimum="0.000" maximum="1.000" format="%.3lf"
+	<variable name="k2" minimum="0.000" maximum="1.000" precision="3"
 		nbits="10"/>
-</calibrate>
+</optimize>

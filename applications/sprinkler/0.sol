@@ -22,6 +22,7 @@ NOZZLE
 Type(10:Experimental):                  10
 DischargeCoefficient(-):                0.98
 EnergyLosses(%):                        50
+EnergyLossesRMSE(%):                    0
 NozzleDiameter(m):                      0.0087
 Tilt(º):                                10
 MinimumDropDiameter(m):                 0.0002
@@ -33,6 +34,6 @@ k1k2Type(1:value,2:tendence):           1
 k1(-):                                  0
 k2(-):                                  0
 DropSizeDistribution(1:Weibull,2:ULLN): 1
-D50(m):                                 0.00306
-n(?):                                   20.878
-P(-):                                   0.388
+D50(m):                                 0.00305
+n(?):                                   18.267
+P(-):                                   0.389

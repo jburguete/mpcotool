@@ -529,33 +529,41 @@ experiments set can be calculated by four different error norms:
 \EQ{L_1:\quad J=\sum_{i=1}^{N_{experiments}}\ABS{w_i\,o_i},}
 {EqObjectiveFunctionLI}
 with $w_i$ the weight associated to the $i$-th experiment, specified in the
-\emph{main input file}. Note that these error norms are used to combine the
+\emph{main input file}.
+%%%%%%%%%%%%%%%%
+Note that all considered error norms are equivalent for only one experiment to
+optimize.
+Note also that these error norms are used to combine the
 error $o_i$ obtained for each experiment. The user is completely free to define
-the objective function for every experiment. Fig.~\ref{FigStructure} is a
-sketch of the structure.
+the objective function for every experiment.
+%%%%%%%%%%%%%%%%
+Fig.~\ref{FigStructure} is a sketch of the MPCOTool structure.
 \psset{xunit=0.4mm,yunit=0.4mm}
-\PSPICTURE{-20}{-95}{280}{55}
+\PSPICTURE{-20}{-115}{260}{55}
 {
 	\tiny
-	\rput(15,50){Main input file}
-	\psframe(-20,45)(50,55)
-	\psline{->}(50,50)(60,50)
-	\rput(15,25){1st template file}
-	\psframe(-20,20)(50,30)
-	\psline{->}(50,25)(60,25)
-	\psline[linestyle=dotted,dotsep=1pt]{->}(60,25)(90,25)
-	\rput(15,15){$\cdots$}
-	\rput(15,5){$n$-th template file}
-	\psframe(-20,0)(50,10)
-	\psline{->}(50,5)(60,5)
-	\psline[linestyle=dotted,dotsep=1pt]{->}(60,5)(90,5)
-	\rput(15,-35){$\cdots$}
-	\rput(15,-75){$(N\,n)$-th template file}
-	\psframe(-20,-70)(50,-80)
-	\psline{->}(50,-75)(60,-75)
-	\psline[linestyle=dotted,dotsep=1pt]{->}(60,-75)(90,-75)
-	\rput(75,50){MPCOTool}
-	\psframe(60,-95)(90,55)
+	\rput(10,50){Main input file}
+	\psframe(-20,45)(40,55)
+	\psline{->}(40,50)(50,50)
+	\rput(10,25){1st template file}
+	\psframe(-20,20)(40,30)
+	\psline{->}(40,25)(50,25)
+	\psline[linestyle=dotted,dotsep=1pt]{->}(50,25)(90,25)
+	\rput(10,15){$\cdots$}
+	\rput(10,5){$n$-th template file}
+	\psframe(-20,0)(40,10)
+	\psline{->}(40,5)(50,5)
+	\psline[linestyle=dotted,dotsep=1pt]{->}(50,5)(90,5)
+	\rput(10,-35){$\cdots$}
+	\rput(10,-75){$(N\,n)$-th template file}
+	\psframe(-20,-70)(40,-80)
+	\psline{->}(40,-75)(50,-75)
+	\psline[linestyle=dotted,dotsep=1pt]{->}(50,-75)(90,-75)
+	\rput(70,50){MPCOTool}
+	\psframe(50,-95)(90,55)
+	\rput(70,-110){Objective function value}
+	\psframe(35,-105)(105,-115)
+	\psline{->}(70,-95)(70,-105)
 	\psline{->}(90,25)(100,25)
 	\psline{->}(90,5)(100,5)
 	\psline{->}(90,-55)(100,-55)
@@ -567,31 +575,29 @@ sketch of the structure.
 	\rput(120,25){1st input file}
 	\psframe(100,20)(140,30)
 	\psline{->}(140,25)(145,25)(145,5)
-	\rput(185,5){Simulator}
-	\psframe(150,0)(220,10)
-	\psline[linestyle=dashed,dash=2pt 1pt]{->}(185,10)(185,20)
-	\psline[linestyle=dashed,dash=2pt 1pt]{->}(220,5)(230,7.5)
-	\rput(185,25){Results file}
-	\psframe[linestyle=dashed,dash=3pt 1pt](150,20)(220,30)
-	\psline[linestyle=dashed,dash=2pt 1pt]{->}(220,25)(230,30)
-	\rput(185,45){Experimental data file}
-	\psframe(150,40)(220,50)
-	\psline[linestyle=dashed,dash=2pt 1pt]{->}(220,45)(230,30)
-	\psline[linestyle=dashed,dash=2pt 1pt]{->}(150,45)(145,45)(145,25)
-	\rput(250,30){Evaluator}
-	\psline[linestyle=dashed,dash=2pt 1pt]{->}(250,25)(250,15)
-	\psframe[linestyle=dashed,dash=3pt 1pt](230,25)(270,35)
-	\rput(250,10){Objective}
-	\rput(250,5){value file}
-	\psframe(230,0)(270,15)
-	\psline{->}(270,7.5)(280,7.5)(280,-90)(90,-90)
-	\rput(15,-90){Objective function value}
-	\psframe(-20,-95)(50,-85)
-	\psline{->}(60,-90)(50,-90)
-	\psline[linestyle=dotted,dotsep=1pt]{->}(90,-90)(60,-90)
+	\rput(175,5){Simulator}
+	\psframe(150,0)(200,10)
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(175,10)(175,20)
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(200,5)(210,7.5)
+	\rput(175,25){Results file}
+	\psframe[linestyle=dashed,dash=3pt 1pt](150,20)(200,30)
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(200,25)(210,30)
+	\rput(175,45){Experimental}
+	\rput(175,40){data file}
+	\psframe(150,35)(200,50)
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(200,42.5)(210,30)
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(150,42.5)(145,42.5)(145,25)
+	\rput(230,30){Evaluator}
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(230,25)(230,15)
+	\psframe[linestyle=dashed,dash=3pt 1pt](210,25)(250,35)
+	\rput(230,10){Objective}
+	\rput(230,5){value file}
+	\psframe(210,0)(250,15)
+	\psline{->}(250,7.5)(260,7.5)(260,-90)(90,-90)
+	\psline[linestyle=dotted,dotsep=1pt]{->}(90,-90)(70,-90)(70,-95)
 	\rput(120,50){1st experiment}
-	\psframe[linestyle=dotted](95,-5)(275,55)
-	\rput(185,-15){$\cdots$}
+	\psframe[linestyle=dotted](95,-5)(255,55)
+	\rput(175,-15){$\cdots$}
 	\rput(120,-75){$n$-th input file}
 	\psframe(100,-80)(140,-70)
 	\psline{->}(140,-75)(150,-75)
@@ -599,26 +605,27 @@ sketch of the structure.
 	\rput(120,-55){1st input file}
 	\psframe(100,-60)(140,-50)
 	\psline{->}(140,-55)(145,-55)(145,-75)
-	\rput(185,-75){Simulator}
-	\psframe(150,-80)(220,-70)
-	\psline[linestyle=dashed,dash=2pt 1pt]{->}(185,-70)(185,-60)
-	\psline[linestyle=dashed,dash=2pt 1pt]{->}(220,-75)(230,-72.5)
-	\rput(185,-55){Results file}
-	\psframe[linestyle=dashed,dash=3pt 1pt](150,-60)(220,-50)
-	\psline[linestyle=dashed,dash=2pt 1pt]{->}(220,-55)(230,-50)
-	\rput(185,-35){Experimental data file}
-	\psframe(150,-40)(220,-30)
-	\psline[linestyle=dashed,dash=2pt 1pt]{->}(220,-35)(230,-50)
-	\psline[linestyle=dashed,dash=2pt 1pt]{->}(150,-35)(145,-35)(145,-55)
-	\rput(250,-50){Evaluator}
-	\psline[linestyle=dashed,dash=2pt 1pt]{->}(250,-55)(250,-65)
-	\psframe[linestyle=dashed,dash=3pt 1pt](230,-55)(270,-45)
-	\rput(250,-70){Objective}
-	\rput(250,-75){value file}
-	\psframe(230,-80)(270,-65)
-	\psline(270,-72.5)(280,-72.5)
+	\rput(175,-75){Simulator}
+	\psframe(150,-80)(200,-70)
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(175,-70)(175,-60)
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(200,-75)(210,-72.5)
+	\rput(175,-55){Results file}
+	\psframe[linestyle=dashed,dash=3pt 1pt](150,-60)(200,-50)
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(200,-55)(210,-50)
+	\rput(175,-35){Experimental}
+	\rput(175,-40){data file}
+	\psframe(150,-30)(200,-45)
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(200,-37.5)(210,-50)
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(150,-37.5)(145,-37.5)(145,-55)
+	\rput(230,-50){Evaluator}
+	\psline[linestyle=dashed,dash=2pt 1pt]{->}(230,-55)(230,-65)
+	\psframe[linestyle=dashed,dash=3pt 1pt](210,-55)(250,-45)
+	\rput(230,-70){Objective}
+	\rput(230,-75){value file}
+	\psframe(210,-80)(250,-65)
+	\psline(250,-72.5)(260,-72.5)
 	\rput(120,-30){$N$-th experiment}
-	\psframe[linestyle=dotted](95,-85)(275,-25)
+	\psframe[linestyle=dotted](95,-85)(255,-25)
 }{Flowchart of the interactions among MPCOTool, the input files and the
 simulation and evaluation programs to produce an objective function value for
 each empirical parameters combination generated by the optimization algorithm}
@@ -1061,16 +1068,27 @@ Two key optimization variables have been studied: $\Delta t_A$ and
 $\Delta t_{GT}$. Where $\Delta t_A$ takes into account the delay between the
 modification time of the inlet discharge and the modification time in the
 Almudévar gate and $\Delta t_{GT}$ takes into account the delay between the
-inlet and Gurrea and Temple gates modification. Before the development of this 
-study, the channel guards responsible for its management carried out the gates
-opening using fixed values $\Delta t_A=$1h and $\Delta t_{GT}=$3h30m.
+inlet and Gurrea and El Temple gates modification. Before the development of
+this  study, the channel guards responsible for its management carried out the
+gates opening using fixed values $\Delta t_A=$1h and $\Delta t_{GT}=$3h30m.
+It is important to stress that Gurrea and El Temple gates are only separated by
+a few meters and are located very close to the outlet gate.
 
 The initial conditions for the canal were a steady state with a discharge of
 2~m$^3$/s. The objective of this work was to provide
 the required daily discharge to the three important irrigation gates as well as
-to keep a constant discharge of 2 m$^3$/s at the outlet gate. It is important to 
-stress that Gurrea and Temple gates are only separated by a few meters and are located
-near the outlet gate.
+to keep a constant discharge of 2 m$^3$/s at the outlet gate.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Then, the objective function has been defined as:
+\EQ
+{
+	o=\frac{1}{N_{gates}\,N_{steps}}\,\sum_{i=1}^{N_{gates}}
+	\sum_{j=1}^{N_{steps}}\ABS{Q_{g,i,j}-Q_{s,i,j}}^2
+}{EqSwigsObjective}
+with $N_{gates}=4$ el número de puntos de demanda, $N_{steps}$ el número de
+pasos de tiempo y $Q_{d,i,j}$ and $Q_{s,i,j}$ los caudales demandado y simulado
+respectivamente en el $i$-th punto de demanda y en el $j$-th paso de tiempo.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 SWIGS open source software \citep{Swigs} has been used to simulate the channel
 flow. Each optimization executed a total number of 1024 simulations and took 
@@ -1092,39 +1110,32 @@ spillways of the canal.
 
 \TABLE{\scriptsize}{cccc}
 {
-	Optimization & Optimization & Optimal empirical & Objective function
-	\\ algorithm & parameters & parameters & value
+	Optimization & Optimization & Optimal empirical & Objective
+	\\ algorithm & parameters & parameters & function value
 	\\ \hline
-	\multicolumn{2}{c}{Manual management} & $\Delta t_A=3600$ s & 1.049056
+	\multicolumn{2}{c}{Manual management} & $\Delta t_A=3600$ s
+	& 1.049056 m$^6$/s$^2$
 	\\ & & $\Delta t_{GT}=12600$ s
 	\\ \hline
-	Sweeps & $N_s=1024$ & $\Delta t_A=3368$ s & 0.047170
-	\\ & $N_i=1$ & $\Delta t_{GT}=3716$ s
+	SW & $N_{\Delta t_A}=N_{\Delta t_{GT}}=32$ & $\Delta t_A=3368$ s
+	& 0.047170 m$^6$/s$^2$
+	\\ & & $\Delta t_{GT}=3716$ s
 	\\ \hline
-	Sweeps & $N_s=256$ & $\Delta t_A=3329$ s & 0.047148
-	\\ & $N_i=4$ & $\Delta t_{GT}=3742$ s
-	\\ & $N_b=20$ &
-	\\ & $tol=0.1$
+	SW+IT & $N_{\Delta t_A}=N_{\Delta t_{GT}}=16$ & $\Delta t_A=3329$ s
+	& 0.047148 m$^6$/s$^2$
+	\\ & $N_i=4$, $N_b=20$, $tol=0.1$ & $\Delta t_{GT}=3742$ s
 	\\ \hline
-	Monte-Carlo & $N_s=1024$ & $\Delta t_A=3193$ s & 0.047183
-	\\ & $N_i=1$ & $\Delta t_{GT}=3705$ s
+	MC & $N_s=1024$ & $\Delta t_A=3193$ s & 0.047183 m$^6$/s$^2$
+	\\ & & $\Delta t_{GT}=3705$ s
 	\\ \hline
-	Monte-Carlo & $N_s=256$ & $\Delta t_A=3250$ s & 0.047139
-	\\ & $N_i=4$ & $\Delta t_{GT}=3751$ s
-	\\ & $N_b=4$
-	\\ & $tol=0.1$
+	MC+IT & $N_s=256$ & $\Delta t_A=3250$ s & 0.047139 m$^6$/s$^2$
+	\\ & $N_i=N_b=4$, $tol=0.1$ & $\Delta t_{GT}=3751$ s
 	\\ \hline
-	Genetic & $N_p=256$ & $\Delta t_A=3363$ s & 0.047135
-	\\ & $N_g=9$ & $\Delta t_{GT}=3752$ s
-	\\ & $R_m=0.125$
-	\\ & $R_r=0.125$
-	\\ & $R_a=0.125$
+	GE & $N_p=256$, $N_g=9$ & $\Delta t_A=3363$ s & 0.047135 m$^6$/s$^2$
+	\\ & $R_m=R_r=R_a=0.125$ & $\Delta t_{GT}=3752$ s
 	\\ \hline
-	Genetic & $N_p=64$ & $\Delta t_A=3375$ s & 0.047252
-	\\ & $N_g=21$ & $\Delta t_{GT}=3599$ s
-	\\ & $R_m=0.25$
-	\\ & $R_r=0.25$
-	\\ & $R_a=0.25$
+	GE & $N_p=64$, $N_g=21$ & $\Delta t_A=3375$ s & 0.047252 m$^6$/s$^2$
+	\\ & $R_m=R_r=R_a=0.25$ & $\Delta t_{GT}=3599$ s
 	\\ \hline
 }{Optimal empirical parameters and value of the evaluation function in the simulation of the Canal de Violada using program SWIGS and several optimization algorithms in MPCOTool with the same total number of simulations ($N_{total}=1024$)}
 {TabSwigs}
@@ -1225,44 +1236,61 @@ caudal de agua de  1, 2, 3 y 4 L/s respectivamente. S20, S40, S60 and S80
 are the locations where the fertilizer concentration was measured}
 {FigSurcosSketch}
 
-The friction model used in SURCOS is the Gauckler-Manning model. The infiltration model is the Kostiakov-Lewis model. They require calibration of three coefficients: the Gauckler-Manning number $n$ (s$\cdot$m$^{-1/3}$) and the infiltration parameters $K$ (m$\cdot$s$^{-a}$) and $a$. In the original paper, a brute force method using 3000 simulations was applied, each of them including the four experiments. $L_2$ norm has been use to compose the final objective function from the four experiments. In the present work, the same number of simulations has been used with the calibration methods implemented in MPCOTool. The execution of 3000 simulations in the laptop computer took about 1h30m.
+The friction model used in SURCOS is the Gauckler-Manning model. The infiltration model is the Kostiakov model. They require calibration of three coefficients: the Gauckler-Manning number $n$ (s$\cdot$m$^{-1/3}$) and the Kostiakov infiltration parameters $K$ (m$\cdot$s$^{-a}$) and $a$ (dimensionless). In the original paper, a brute force method using 3000 simulations was applied, each of them including the four experiments.
+
+Defining $N_a$ the number of gauging stations for time of advance, calling
+$t_j$ the measured times at every $j$-th gauging station and $T_j$ those
+obtained from the simulation, the error in advance is defined as:
+\EQ{E_a=\frac{1}{N_a\,\PA{t_{N_a}}^2}\,\sum_{j=1}^{N_a}\PA{t_j-T_j}^2.}
+{EqSurcosErrorAdvance}
+On the other hand, having $N_c$ fertilizer concentration gauging stations and
+assuming that at every $k$-th gauging station $N_k$ concentration measurements
+$s_k^j$ have been obtained and there are $S_k^j$ numerical concentration values
+from the model, the error in concentration is defined as:
+\EQ
+{
+	E_c=\frac{1}{N_c\,(10.6)^2}\,\sum_{k=1}^{N_c}\frac{1}{N_k}\,
+	\sum_{j=1}^{N_k}\PA{s_k^j-S_k^j}^2,
+}{EqSurcosErrorConcentration}
+where $10.6$ kg/m$^3$ is the maximum experimental fertilizer concentration. If
+there are $N_h$ upstream water depth measurements denoted $h_i$ and $H_i$ water
+depth simulated values are available, the error in water depth is defined as:
+\EQ{E_h=\frac{1}{N_h\,\PA{h_{N_h}}^2}\,\sum_{j=1}^{N_h}\PA{h_j-H_j}^2.}
+{EqErrorDepth}
+The objective function for each furrow experiment has been defined as:
+\EQ{o=E_a+0.5\,\PA{E_c+E_h}.}{EqSurcosObjective}
+$L_2$ norm with weights $w_i=1$ has been use to compose the final objective function from the four experiments. In the present work, the same number of simulations has been used with the calibration methods implemented in MPCOTool. The execution of 3000 simulations in the laptop computer took about 1h30m.
 
 Table~\ref{TabSurcos} displays the results obtained for the optimal coefficient values and the corresponding
 value of the evaluation function, where the error norm is the same as in \citet{JaviSurcos2}. The results are similar among the different methods and also similar to those in the original paper. This is due to the existence of a relatively large region of combinations of the empirical parameters producing similar values in the evaluation function, thus preventing from an accurate convergence to the optimum set. However, it can be noticed that MC+IT obtains the best results and MC-RA and GE produce better results than MC with the same total number of simulations.
 
 \TABLE{\scriptsize}{cccc}
 {
-	Optimization & Optimization & Optimal empirical & Objective function
-	\\ algorithm & parameters & parameters & value
+	Optimization & Optimization & Optimal empirical & Objective
+	\\ algorithm & parameters & parameters & function value
 	\\ \hline
-	MC & $N_s=3000$ & $n=0.0444$ & 0.6971
-	\\ & $N_i=1$ & $K=9.690\cdot 10^{-4}$
+	MC & $N_s=3000$ & $n=0.0444$ s$\cdot$m$^{-1/3}$ & 0.6971
+	\\ & & $K=9.690\cdot 10^{-4}$ m$\cdot$s$^{-a}$
 	\\ & & $a=0.503$
 	\\ \hline
-	MC+IT & $N_s=500$ & $n=0.0420$ & 0.6903
-	\\ & $N_i=6$ & $K=10.147\cdot 10^{-4}$
-	\\ & $N_b=10$ & $a=0.504$
-	\\ & $tol=0.2$
+	MC+IT & $N_s=500$, $N_i=6$ & $n=0.0420$ s$\cdot$m$^{-1/3}$ & 0.6903
+	\\ & $N_b=10$ & $K=10.147\cdot 10^{-4}$ m$\cdot$s$^{-a}$
+	\\ & $tol=0.2$ & $a=0.504$
 	\\ \hline
-	MC+RA & $N_s=2200$ & $n=0.0421$ & 0.6928
-	\\ & $N_i=1$ & $K=9.712\cdot 10^{-4}$
-	\\ & $N_{st}=200$ & $a=0.512$
-	\\ & $N_e=4$
-	\\ & $st_n=0.0010$
-	\\ & $st_K=10^{-6}$
+	MC+DS+RA & $N_s=2200$, $N_i=1$ & $n=0.0421$ s$\cdot$m$^{-1/3}$ & 0.6928
+	\\ & $N_{st}=200$, $N_e=4$ & $K=9.712\cdot 10^{-4}$ m$\cdot$s$^{-a}$
+	\\ & $rel=1$ & $a=0.512$
+	\\ & $st_n=0.0010$ s$\cdot$m$^{-1/3}$
+	\\ & $st_K=10^{-6}$ m$\cdot$s$^{-a}$
 	\\ & $st_a=0.010$
 	\\ \hline
-	GE & $N_p=750$ & $n=0.0413$ & 0.6930
-	\\ & $N_g=6$ & $K=9.823\cdot 10^{-4}$
-	\\ & $R_m=0.2$ & $a=0.508$
-	\\ & $R_r=0.2$
-	\\ & $R_a=0.2$
+	GE & $N_p=750$ & $n=0.0413$ s$\cdot$m$^{-1/3}$  & 0.6930
+	\\ & $N_g=6$ & $K=9.823\cdot 10^{-4}$ m$\cdot$s$^{-a}$
+	\\ & $R_m=R_r=R_a=0.2$ & $a=0.508$
 	\\ \hline
-	GE & $N_p=300$ & $n=0.0420$ & 0.6918
-	\\ & $N_g=31$ & $K=9.903\cdot 10^{-4}$
-	\\ & $R_m=0.1$ & $a=0.508$
-	\\ & $R_r=0.1$
-	\\ & $R_a=0.1$
+	GE & $N_p=300$ & $n=0.0420$ s$\cdot$m$^{-1/3}$  & 0.6918
+	\\ & $N_g=31$ & $K=9.903\cdot 10^{-4}$ m$\cdot$s$^{-a}$
+	\\ & $R_m=R_r=R_a=0.1$ & $a=0.508$
 	\\ \hline
 }{Optimal empirical parameters and value of the evaluation function in the simulation of the furrow irrigation cases in \citet{JaviSurcos2} using program SURCOS and several optimization algorithms in MPCOTool with the same total number of simulations ($N_{total}=3000$)}{TabSurcos}
 
@@ -1284,80 +1312,79 @@ The model is calibrated in two steps. First, the coefficients $D_{50}$, $n$ and 
 
 In the present example, a spray sprinkler Senninger N44 at a working pressure of 138 kPa will be calibrated. In this sprinkler model, the water jet impacts against a fixed plate. In order to estimate the water velocity after the impact, an image technique as described in \citet{Salvador09} was applied. According to this measurements, the head loss due to the impact against the plate was found to be of 50\%.
 
-Table~\ref{TabSprinklerI} shows the results from the calibration of parameters $D_{50}$, $n$ and $P$ in windless conditions using a total number of 1000 simulations with different optimization algorithms. The computation time was around 7 minutes in the laptop computer. The results show that the best results are supplied by the iterative Monte-Carlo method followed by the genetic algorithms. In this case, the sweep method leads to worse results, mainly when supplied with the iterative method. 
+Table~\ref{TabSprinklerI} shows the results from the calibration of parameters $D_{50}$, $n$ and $P$ in windless conditions using a total number of 1000 simulations with different optimization algorithms. The computation time was around 8 minutes in the laptop computer for each calibration. The results show that the best results are supplied by MC+IT followed by GE. In this case,
+%%%%%%%%%%
+MC+DS+RA apenas mejora los resultados obtenidos por MC
+%%%%%%%%%%
+and SW leads to worse results, mainly when supplied with IT. 
 
 \TABLE{\scriptsize}{cccc}
 {
-	Optimization & Optimization & Optimal empirical & Objective function
-	\\ algorithm & parameters & parameters & value
+	Optimization & Optimization & Optimal empirical & Objective
+	\\ algorithm & parameters & parameters & function value
 	\\ \hline
-	Sweeps & $N_s=1000$ & $D_{50}=3.78$ mm & 2.54 mm
-	\\ & $N_i=1$ & $n=17.778$
+	SW & $N_{D_{50}}=N_n=N_P=10$ & $D_{50}=3.78$ mm & 2.65 mm
+	\\ & & $n=17.778$
 	\\ & & $P=0.556$
 	\\ \hline
-	Sweeps & $N_s=125$ & $D_{50}=3.50$ mm & 3.24 mm
-	\\ & $N_i=8$ & $n=10.225$
-	\\ & $N_b=8$ & $P=0.364$
-	\\ & $tol=0.4$
+	SW+IT & $N_{D_{50}}=N_n=N_P=5$ & $D_{50}=3.50$ mm & 3.32 mm
+	\\ & $N_i=N_b=8$ & $n=10.130$
+	\\ & $tol=0.4$ & $P=0.400$
 	\\ \hline
-	Monte-Carlo & $N_s=1000$ & $D_{50}=3.07$ mm & 2.01 mm
-	\\ & $N_i=1$ & $n=21.513$
+	MC & $N_s=1000$ & $D_{50}=3.07$ mm & 2.18 mm
+	\\ & & $n=21.513$
 	\\ & & $P=0.770$
 	\\ \hline
-	Monte-Carlo & $N_s=125$ & $D_{50}=3.06$ mm & 1.60 mm
-	\\ & $N_i=8$ & $n=20.878$
-	\\ & $N_b=8$ & $P=0.388$
-	\\ & $tol=0.4$
+	MC+IT & $N_s=125$ & $D_{50}=3.05$ mm & 1.83 mm
+	\\ & $N_i=N_b=8$ & $n=18.267$
+	\\ & $tol=0.4$ & $P=0.389$
 	\\ \hline
-	Genetic & $N_p=250$ & $D_{50}=3.06$ mm & 1.71 mm
-	\\ & $N_g=6$ & $n=21.001$
-	\\ & $R_m=0.2$ & $P=0.563$
-	\\ & $R_r=0.2$
-	\\ & $R_a=0.2$
+	MC+DS+RA & $N_s=500$ & $D_{50}=3.07$ mm & 2.17 mm
+	\\ & $N_{st}=125$, $N_e$=4 & $n=21.515$
+	\\ & $rel=1$ & $P=0.759$
+	\\ & $st_{D_{50}}=0.10$ mm
+	\\ & $st_N=0.010$
+	\\ & $st_P=0.010$
 	\\ \hline
-	Genetic & $N_p=100$ & $D_{50}=3.06$ mm & 1.62 mm
-	\\ & $N_g=31$ & $n=19.963$
-	\\ & $R_m=0.1$ & $P=0.377$
-	\\ & $R_r=0.1$
-	\\ & $R_a=0.1$
+	GE & $N_p=250$ & $D_{50}=3.02$ mm & 1.94 mm
+	\\ & $N_g=6$ & $n=16.204$
+	\\ & $R_m=R_r=R_a=0.2$ & $P=0.386$
+	\\ \hline
+	GE & $N_p=100$ & $D_{50}=3.06$ mm & 1.91 mm
+	\\ & $N_g=31$ & $n=20.170$
+	\\ & $R_m=R_r=R_a=0.1$ & $P=0.506$
 	\\ \hline
 }{Optimal empirical parameters and value of the evaluation function in the case of the sprinkler irrigation
 using different optimization algorithms in MPCOTool with the same number of total simulations ($N_{total}=1000$)}{TabSprinklerI}
 
-Next, using the optimal $D_{50}=3.06$ mm, $n=20.878$ and $P=0.388$ obtained by the Monte-Carlo method (Monte-Carlo with 8 iterations, see table~\ref{TabSprinklerI}) the values of $k_1$ and $k_2$ were calibrated in an experiment with medium wind velocity of 2.84 m/s. The different algorithms in MPCOTool were used with a total number of 400 simulations in all cases. Their computational time was around 4 minutes in the laptop computer. In this case, the genetic algorithms provided the best results  (note that they provided identical results in two different configurations), although the rest of the methods reached similar values.
+Next, using the optimal $D_{50}=3.05$ mm, $n=18.267$ and $P=0.389$ obtained by the Monte-Carlo method (Monte-Carlo with 8 iterations, see table~\ref{TabSprinklerI}) the values of $k_1$ and $k_2$ were calibrated in an experiment with medium wind velocity of 2.84 m/s. The different algorithms in MPCOTool were used with a total number of 400 simulations in all cases. Their computational time was around 4 minutes in the laptop computer for each calibration. In this case, SW+IT provided the best results, although the rest of the methods reached similar values.
 
 \TABLE{\scriptsize}{cccc}
 {
-	Optimization & Optimization & Optimal empirical & Objective function
-	\\ algorithm & parameters & parameters & value
+	Optimization & Optimization & Optimal empirical & Objective
+	\\ algorithm & parameters & parameters & function value
 	\\ \hline
-	Sweeps & $N_s=400$ & $k_1=0.263$ & 12.17 mm
-	\\ & $N_i=1$ & $k_2=0.105$
+	SW & $N_{k_1}=N_{k_2}=20$ & $k_1=0.316$ & 11.40 mm
+	\\ & & $k_2=0.053$
 	\\ \hline
-	Sweeps & $N_s=100$ & $k_1=0.284$ & 12.17 mm
-	\\ & $N_i=4$ & $k_2=0.098$
-	\\ & $N_b=11$
-	\\ & $tol=0.2$
+	SW+IT & $N_{k_1}=N_{k_2}=10$, $N_i=4$ & $k_1=0.344$ & 11.27 mm
+	\\ & $N_b=11$, $tol=0.2$ & $k_2=0.068$
 	\\ \hline
-	Monte-Carlo & $N_s=400$ & $k_1=0.396$ & 12.19 mm
-	\\ & $N_i=1$ & $k_2=0.067$
+	MC & $N_s=400$ & $k_1=0.203$ & 11.48 mm
+	\\ & & $k_2=0.106$
 	\\ \hline
-	Monte-Carlo & $N_s=100$ & $k_1=0.370$ & 12.15 mm
-	\\ & $N_i=4$ & $k_2=0.079$
-	\\ & $N_b=4$
-	\\ & $tol=0.2$
+	MC+IT & $N_s=100$, $N_i=N_b=4$ & $k_1=0.300$ & 11.27 mm
+	\\ & $tol=0.2$ & $k_2=0.084$
 	\\ \hline
-	Genetic & $N_p=100$ & $k_1=0.400$ & 12.09 mm
-	\\ & $N_g=6$ & $k_2=0.070$
-	\\ & $R_m=0.2$
-	\\ & $R_r=0.2$
-	\\ & $R_a=0.2$
+	MC+DS+RA & $N_s=300$, $N_{st}=25$ & $k_1=0.176$ & 11.34 mm
+	\\ & $N_e=4$, $rel=1$& $k_2=0.106$
+	\\ & $st_{k_1}=st_{k_2}=0.010$
 	\\ \hline
-	Genetic & $N_p=100$ & $k_1=0.400$ & 12.09 mm
-	\\ & $N_g=11$ & $k_2=0.070$
-	\\ & $R_m=0.1$
-	\\ & $R_r=0.1$
-	\\ & $R_a=0.1$
+	GE & $N_p=100$, $N_g=6$ & $k_1=0.099$ & 11.50 mm
+	\\ & $R_m=R_r=R_a=0.2$ & $k_2=0.128$
+	\\ \hline
+	GE & $N_p=100$, $N_g=11$ & $k_1=0.322$ & 11.31 mm
+	\\ & $R_m=R_r=R_a=0.1$ & $k_2=0.060$
 	\\ \hline
 }{Optimal parameters and values of the evaluations function in the experiment of the sprinkler irrigation under wind conditions of 2.84 m/s using different optimization algorithms implemented in MPCOTool with the same total number of simulations ($N_{total}=400$)}{TabSprinklerII}
 
@@ -1443,8 +1470,8 @@ The best results where obtained with the genetic algorithms. Note that in this c
 
 \TABLE{\scriptsize}{cccc}
 {
-	Optimization & Optimization & Optimal empirical & Objective function
-	\\ algorithm & parameters & parameters & value
+	Optimization & Optimization & Optimal empirical & Objective
+	\\ algorithm & parameters & parameters & function value
 	\\ \hline
 	Sweep & $N_s=10000$ & $\overline{\alpha_{start}}=179.910^\circ$
 	& 9924.1

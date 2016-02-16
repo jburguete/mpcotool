@@ -1,12 +1,14 @@
 <?xml version="1.0"?>
 <optimize simulator="aspersion" evaluator="compare" algorithm="Monte-Carlo"
-	nsimulations="125" niterations="8" nbest="8" tolerance="0.4">
+	nsimulations="500" direction="random" nsteps="125" nestimates="4"
+	relaxation="1">
 	<experiment name="0.mea" template1="0.env" template2="0.sim"
 		template3="template-0" template4="0.mea"/>
 	<variable name="D50" minimum="0.00100" absolute_minimum="0.000"
-		maximum="0.00600" absolute_maximum="0.00700" precision="5"/>
+		maximum="0.00600" absolute_maximum="0.00700" precision="5"
+		step="0.00010"/>
 	<variable name="N" minimum="0.000" absolute_minimum="0.000" maximum="40.000"
-		precision="3"/>
+		precision="3" step="0.010"/>
 	<variable name="P" minimum="0.000" absolute_minimum="0.000" maximum="1.000"
-		precision="3"/>
+		precision="3" step="0.010"/>
 </optimize>

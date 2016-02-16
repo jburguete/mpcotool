@@ -1,6 +1,7 @@
-k1 min=0.395655 max=0.395655
-k2 min=0.0669081 max=0.0669081
-THE BEST IS
-error=1.218697e-02
-k1=0.396
-k2=0.067
+k1 min=0.202915 max=0.202915
+k2 min=0.105894 max=0.105894
+Best result
+error = 1.147542000000000e-02
+k1 = 0.203
+k2 = 0.106
+Calculation time = 286.583 s

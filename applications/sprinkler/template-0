@@ -22,6 +22,7 @@ NOZZLE
 Type(10:Experimental):                  10
 DischargeCoefficient(-):                0.98
 EnergyLosses(%):                        50
+EnergyLossesRMSE(%):                    0
 NozzleDiameter(m):                      0.0087
 Tilt(º):                                10
 MinimumDropDiameter(m):                 0.0002
