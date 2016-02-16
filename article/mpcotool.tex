@@ -1364,31 +1364,31 @@ Next, using the optimal $D_{50}=3.05$ mm, $n=18.267$ and $P=0.389$ obtained by t
 	Optimization & Optimization & Optimal empirical & Objective
 	\\ algorithm & parameters & parameters & function value
 	\\ \hline
-	SW & $N_{k_1}=N_{k_2}=20$ & $k_1=0.316$ & 11.40 mm
+	SW & $N_{k_1}=N_{k_2}=20$ & $k_1=0.316$ & 11.402 mm
 	\\ & & $k_2=0.053$
 	\\ \hline
-	SW+IT & $N_{k_1}=N_{k_2}=10$, $N_i=4$ & $k_1=0.344$ & 11.27 mm
+	SW+IT & $N_{k_1}=N_{k_2}=10$, $N_i=4$ & $k_1=0.344$ & 11.266 mm
 	\\ & $N_b=11$, $tol=0.2$ & $k_2=0.068$
 	\\ \hline
-	MC & $N_s=400$ & $k_1=0.203$ & 11.48 mm
+	MC & $N_s=400$ & $k_1=0.203$ & 11.475 mm
 	\\ & & $k_2=0.106$
 	\\ \hline
-	MC+IT & $N_s=100$, $N_i=N_b=4$ & $k_1=0.300$ & 11.27 mm
+	MC+IT & $N_s=100$, $N_i=N_b=4$ & $k_1=0.300$ & 11.270 mm
 	\\ & $tol=0.2$ & $k_2=0.084$
 	\\ \hline
-	MC+DS+RA & $N_s=300$, $N_{st}=25$ & $k_1=0.176$ & 11.34 mm
+	MC+DS+RA & $N_s=300$, $N_{st}=25$ & $k_1=0.176$ & 11.337 mm
 	\\ & $N_e=4$, $rel=1$& $k_2=0.106$
 	\\ & $st_{k_1}=st_{k_2}=0.010$
 	\\ \hline
-	GE & $N_p=100$, $N_g=6$ & $k_1=0.099$ & 11.50 mm
+	GE & $N_p=100$, $N_g=6$ & $k_1=0.099$ & 11.499 mm
 	\\ & $R_m=R_r=R_a=0.2$ & $k_2=0.128$
 	\\ \hline
-	GE & $N_p=100$, $N_g=11$ & $k_1=0.322$ & 11.31 mm
+	GE & $N_p=100$, $N_g=11$ & $k_1=0.322$ & 11.315 mm
 	\\ & $R_m=R_r=R_a=0.1$ & $k_2=0.060$
 	\\ \hline
 }{Optimal parameters and values of the evaluations function in the experiment of the sprinkler irrigation under wind conditions of 2.84 m/s using different optimization algorithms implemented in MPCOTool with the same total number of simulations ($N_{total}=400$)}{TabSprinklerII}
 
-Finally, figure~\ref{FigSprinkler} shows the measured (in pluviometers) and simulated water distribution using the optimal parameters in windless and wind conditions of average velocity 2.84 m/s.
+Finally, figure~\ref{FigSprinkler} shows the measured (in pluviometers) and simulated water distribution using the optimal parameters obtained by SW+IT in windless and wind conditions of average velocity 2.84 m/s.
 
 \FIGII{sprinkler-0.eps}{sprinkler-2,84.eps}
 {(top) Radial pluviometry for non-wind conditions and (bottom) pluviometry at
