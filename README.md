@@ -150,6 +150,12 @@ do in a terminal:
 
 2. Then, follow steps 1 to 4 of the previous Debian 8 section.
 
+Building no-GUI version on servers
+__________________________________
+
+On servers or clusters, where no-GUI with MPI parallelization is desirable,
+replace the instruction *"./build"* by *"./build_without_gui"*.
+ 
 MAKING MANUALS INSTRUCTIONS
 ---------------------------
 
