@@ -260,7 +260,7 @@ input_save_xml (xmlDoc * doc)
   if (xmlStrcmp ((const xmlChar *) input->result, (const xmlChar *) result_name))
     xmlSetProp (node, (const xmlChar *) LABEL_RESULT_FILE, (xmlChar *) input->result);
   if (xmlStrcmp ((const xmlChar *) input->variables, (const xmlChar *) variables_name))
-    xmlSetProp (node, (const xmlChar *) LABEL_VARIABLES, (xmlChar *) input->variables);
+    xmlSetProp (node, (const xmlChar *) LABEL_VARIABLES_FILE, (xmlChar *) input->variables);
   file = g_file_new_for_path (input->directory);
   file2 = g_file_new_for_path (input->simulator);
   buffer = g_file_get_relative_path (file, file2);
@@ -407,7 +407,8 @@ input_save_json (JsonGenerator * generator)
   if (strcmp (input->result, result_name))
     json_object_set_string_member (object, LABEL_RESULT_FILE, input->result);
   if (strcmp (input->variables, variables_name))
-    json_object_set_string_member (object, LABEL_VARIABLES, input->variables);
+    json_object_set_string_member (object, LABEL_VARIABLES_FILE,
+		                           input->variables);
   file = g_file_new_for_path (input->directory);
   file2 = g_file_new_for_path (input->simulator);
   buffer = g_file_get_relative_path (file, file2);
@@ -841,8 +842,8 @@ window_save ()
   if (gtk_dialog_run (GTK_DIALOG (dlg)) == GTK_RESPONSE_OK)
     {
       // Setting input file type
-      filter = gtk_file_chooser_get_filter (GTK_FILE_CHOOSER (dlg));
-	  buffer = (char *) gtk_file_filter_get_name (filter);
+      filter1 = gtk_file_chooser_get_filter (GTK_FILE_CHOOSER (dlg));
+	  buffer = (char *) gtk_file_filter_get_name (filter1);
 	  if (!strcmp (buffer, "XML"))
         input->type = INPUT_TYPE_XML;
 	  else

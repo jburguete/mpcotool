@@ -125,6 +125,7 @@ In order to build the executable file from the source code, a C compiler (\citet
 \item\citet{libxml}: Library required to read the main input file in XML format.
 \item\citet{gsl}: Scientific library required to generate the pseudo-random numbers used by the genetic and the Monte-Carlo algorithms.
 \item\citet{glib}: Library required to parse the input file templates and to implement some data types and the routines used to parallelize the usage of the computer's processors.
+\item\citet{json-glib}: Library used to read the main input file in JSON format.
 \item\citet{gtk}: Optional library to build the interactive GUI application.
 \item\citet{openmpi} or \citet{mpich}: Optional libraries. When installed, one
 of them is used to allow parallelization in multiple computers.
@@ -264,7 +265,9 @@ figure~\ref{FigResult}.
 
 \subsection{Main input file}
 
-This file has to be in XML format with a tree type structure as the
+\subsubsection{XML format}
+
+This file can be written in XML format with a tree type structure as the
 represented in figure~\ref{FigMainFile}.
 \psset{xunit=0.4mm,yunit=0.4mm}
 \PSPICTURE{0}{-115}{280}{25}
@@ -456,6 +459,9 @@ On iterative methods, the tolerance can increase initial \emph{minimum} or
 compatible with the model parameter limits,
 \item[precision]: number of decimal digits of precision. 0 apply for integer numbers.
 \end{description}
+
+Alternatively, the main input file can be also written in JSON format. In the
+README file both formats, XML and JSON, can be seen more detailed.
 
 \subsection{Template files}
 

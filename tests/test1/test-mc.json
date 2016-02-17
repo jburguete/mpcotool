@@ -1,1 +1,34 @@
-{"result":"results","variables":[{"name":"var1","minimum":"1","maximum":"2","precision":"6"},{"name":"var2","minimum":"1","maximum":"2","precision":"6"}],"simulator":"simulator","evaluator":"evaluator","seed":"7","algorithm":"Monte-Carlo","nsimulations":"1000","niterations":"1","tolerance":"0","nbest":"1","experiments":[{"name":"test.exp","template1":"test.tmp"}]}
+{
+	"result_file":"results",
+	"variables_file":"variables",
+	"simulator":"simulator",
+	"evaluator":"evaluator",
+	"seed":"7",
+	"algorithm":"Monte-Carlo",
+	"nsimulations":"1000",
+	"niterations":"1",
+	"tolerance":"0",
+	"nbest":"1",
+	"experiments":
+	[
+		{
+			"name":"test.exp",
+			"template1":"test.tmp"
+		}
+	],
+	"variables":
+	[
+		{
+			"name":"var1",
+			"minimum":"1",
+			"maximum":"2",
+			"precision":"6"
+		},
+		{
+			"name":"var2",
+			"minimum":"1",
+			"maximum":"2",
+			"precision":"6"
+		}
+	]
+}

@@ -137,6 +137,8 @@ pseudo-aleatorios usados por los algoritmos genético y de Monte-Carlo.
 ficheros de entrada y para implementar algunos tipos de datos, funciones útiles
 y rutinas usadas para paralelizar la carga computacional en los diferentes
 procesadores de la máquina.
+\item\citet{json-glib}: Librería usada para leer el fichero principal de entrada
+en formato JSON.
 \item\citet{gtk}: Librería opcional usada para dibujar la interfaz gráfica
 interactiva.
 \item\citet{openmpi} o \citet{mpich}: Librerías opcionales. Cuando están
@@ -288,7 +290,7 @@ mostrado en la figura~\ref{FigResult}.
 
 \subsection{Fichero de entrada principal}
 
-Este fichero tiene que estar en formato XML con una estructura arbórea como la
+Este fichero puede escribirse en formato XML con una estructura arbórea como la
 representada en la figura~\ref{FigMainFile}.
 \psset{xunit=0.4mm,yunit=0.4mm}
 \PSPICTURE{0}{-115}{280}{25}
@@ -496,6 +498,9 @@ se definen con las propiedades siguientes:
 \item[precision]: número de dígitos decimales de precisión. 0 se aplica a los
 	números enteros.
 \end{description}
+
+Alternativamete, este fichero también puede escribirse en formato JSON. En el
+fichero README pueden verse ambos formatos, XML y JSON, con más detalle.
 
 \subsection{Ficheros de plantilla}
 
@@ -749,10 +754,10 @@ fuerza bruta (barrido y Monte-Carlo)}{FigBruteForceParallelization}
 
 \section{Método de Monte-Carlo}
 
-Monte-Carlo based methods run simulations using aleatory values of the
-variables assuming  uniform probability within the extreme values range.
-Figure~\ref{FigMonteCarlo} shows the structure of an example using two
-variables.
+Los métodos de Monte-Carlo realizan las simulaciones usando valores aleatorios
+de las varaibles suponiendo una probabilidad uniforme dentro de un intervalo
+permitido de valores. En la figura~\ref{FigMonteCarlo} se muestra la estructura
+de un ejemplo usando dos variables.
 
 \PICTURE{210}{200}
 {

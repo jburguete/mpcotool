@@ -562,6 +562,8 @@ input_open_json (JsonParser * parser)
 		buffer = result_name;
       input->result = g_strdup (buffer);
     }
+  else
+    input->result = g_strdup (result_name);
   if (!input->variables)
     {
       buffer = json_object_get_string_member (object, LABEL_VARIABLES_FILE);
@@ -569,6 +571,8 @@ input_open_json (JsonParser * parser)
 		buffer = variables_name;
       input->variables = g_strdup (buffer);
     }
+  else
+    input->variables = g_strdup (variables_name);
 
   // Opening simulator program name
   buffer = json_object_get_string_member (object, LABEL_SIMULATOR);

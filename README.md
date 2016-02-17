@@ -33,6 +33,7 @@ libraries to compile)
 * [glib](https://developer.gnome.org/glib) (extended utilities of C to work with
 data, lists, mapped files, regular expressions, using multicores in shared
 memory machines, ...)
+* [json-glib](https://github.com/ebassi/json-glib) (to deal with JSON files)
 * [genetic](https://github.com/jburguete/genetic) (genetic algorithm)
 
 OPTIONAL TOOLS AND LIBRARIES
@@ -314,7 +315,7 @@ Implemented error noms are:
   * *p*: p exponent.
 * **taxicab**: Taxicab norm.
 
-Alternatively, the input file can be also written in XML format as:
+Alternatively, the input file can be also written in JSON format as:
 
 ```json
 {
