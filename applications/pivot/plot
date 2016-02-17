@@ -137,15 +137,15 @@ set ylabel 'Number of stops'
 set xrange [-0.5:25.5]
 set yrange [0:1800]
 
-set title 'Measured'
-set out 'pivot-measured-stops-27,48.eps'
+set title 'Simulated'
+set out 'pivot-simulated-stops-27,48.eps'
 plot 'his-27,48' using 3:xtic(1) ti col w histogram fill solid border 1 lw 0.25, \
 	'' u 5 ti col w histogram fill empty border 1 lt 1 lw 0.25, \
 	'' u 7 ti col w histogram fill solid 0.5 border 1 lt 1 lw 0.25, \
 	'' u 9 ti col w histogram fill pattern 4 border 1 lt 1 lw 0.25
 
-set title 'Simulated'
-set out 'pivot-simulated-stops-27,48.eps'
+set title 'Measured'
+set out 'pivot-measured-stops-27,48.eps'
 plot 'mea-27,48' using 3:xtic(1) ti col w histogram fill solid border 1 lw 0.25, \
 	'' u 5 ti col w histogram fill empty border 1 lt 1 lw 0.25, \
 	'' u 7 ti col w histogram fill solid 0.5 border 1 lt 1 lw 0.25, \
