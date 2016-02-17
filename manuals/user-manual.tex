@@ -168,6 +168,12 @@ The following step is to download the source code MPCOTool, to link it with Gene
 > ./build
 \end{lstlisting}
 
+On servers or clusters, where no-GUI with MPI parallelization is desirable,
+replace the \emph{build} script by:
+\begin{lstlisting}[language=bash,basicstyle=\scriptsize]
+> ./build_without_gui
+\end{lstlisting}
+ 
 Optionally, to compile the tests with the standard analytical optimization
 functions, you have to do (the executable files of test2, test3 and test4 use
 also the \emph{Genetic} library):

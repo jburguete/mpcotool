@@ -188,6 +188,13 @@ de Genetic y compilar todo junto haciendo:
 > ./build
 \end{lstlisting}
 
+En sevidores o en clústers, en los que una versión sin interfaz gráfica
+paralelizada con MPI es lo más conveniente, reemplácese el script \emph{build}
+por:
+\begin{lstlisting}[language=bash,basicstyle=\scriptsize]
+> ./build_without_gui
+\end{lstlisting}
+ 
 Opcionalmente, si se quieren compilar los tests con las funciones analíticas de
 optimización estándar, hay que hacer (los ejecutables de test2, test3 y test4
 usan también la librería \emph{Genetic}):
@@ -670,13 +677,13 @@ disponibles en el sistema.
 A continuación se presentan los métodos de optimización implementados en
 MPCOTool. Se usará la siguiente notación:
 \begin{description}
-	\item[$N_{simulations}$]: número de simulaciones en cada iteración,
-	\item[$N_{iterations}$]: número de iteraciones en algoritmos iterativos,
+	\item[$N_{simulaciones}$]: número de simulaciones en cada iteración,
+	\item[$N_{iteraciones}$]: número de iteraciones en algoritmos iterativos,
 	\item[$N_{total}$]: número total de simulaciones.
 \end{description}
-En métodos iterativos $N_{total}=N_{simulations}\times N_{iterations}$.
+En métodos iterativos $N_{total}=N_{simulaciones}\times N_{iteraciones}$.
 En métodos de fuerza bruta puros
-$N_{iterations}=1\;\Rightarrow\;N_{total}=N_{simulations}$.
+$N_{iteraciones}=1\;\Rightarrow\;N_{total}=N_{simulaciones}$.
 
 \section{Método de fuerza bruta de barrido}
 
@@ -686,7 +693,7 @@ encontrar la solución óptima, el intervalo de dominio
 $x_i \in \PA{x_{i,min},\,x_{i,max}}$ se define para cada variable $x_i$.
 y se subdivide en una partición regular de $N_{x,i}$ subintervalos. El número de
 simulaciones que se requieren es:
-\EQ{N_{simulations}=N_{x,1}\times N_{x,2}\times\cdots,}
+\EQ{N_{simulaciones}=N_{x,1}\times N_{x,2}\times\cdots,}
 {EqNSweeps}
 donde $N_{x,i}$ es el número de barridos en la variable $x_i$.
 
@@ -798,8 +805,8 @@ de un ejemplo usando dos variables.
 	\put(0,37){$y_{\min}$}
 	\qbezier[50](20,160)(95,160)(170,160)
 	\put(0,157){$y_{\max}$}
-}{Diagram illustrating a Monte-Carlo brute force method with two variables and
-$N_{simulations}=25$}{FigMonteCarlo}
+}{Diagrama illustrativo de un método de fuerza bruta de Monte-Carlo con dos
+variables and $N_{simulaciones}=25$}{FigMonteCarlo}
 
 Monte-Carlo method is also easily parallelizable following a strategy as the
 flowchart represented in the figure~\ref{FigBruteForceParallelization}.
@@ -938,7 +945,7 @@ Figure~\ref{FigIterative} contains a sketch of the procedure used by the the ite
 	\qbezier[41](20,66.8)(82.05,66.8)(144.1,66.8)
 	\put(0,63.8){$y_{\min}^2$}
 }{Diagram representing an example of the iterative algorithm applied to a
-Monte-Carlo brute force method with two variables for $N_{simulations}= 25$,
+Monte-Carlo brute force method with two variables for $N_{simulaciones}= 25$,
 $N_{best}=4$ and two iterations}{FigIterative}
 
 The iterative algorithm can be also easily parallelized. However, this method is
@@ -951,17 +958,17 @@ figure~\ref{FigIterativeParallelization}).
 {
 	\tiny
 	\rput(0,-15){1st iteration:}
-	\rput(0,-20){Generation of $N_{simulations}$ empirical parameters sets}
+	\rput(0,-20){Generation of $N_{simulaciones}$ empirical parameters sets}
 	\psframe(-60,-25)(60,-10)
 	\psline{->}(0,-25)(-60,-30)
 	\psline{->}(0,-25)(0,-30)
 	\psline{->}(0,-25)(60,-30)
 	\rput(-60,-35){1st task:}
-	\rput(-60,-40){$N_{simulations}/N_{tasks}$ simulations}
+	\rput(-60,-40){$N_{simulaciones}/N_{tasks}$ simulations}
 	\psframe(-100,-30)(-20,-45)
 	\rput(0,-37.5){$\cdots$}
 	\rput(60,-35){$N_{tasks}$-th task:}
-	\rput(60,-40){$N_{simulations}/N_{tasks}$ simulations}
+	\rput(60,-40){$N_{simulaciones}/N_{tasks}$ simulations}
 	\psframe(20,-30)(100,-45)
 	\psline{->}(-60,-45)(0,-50)
 	\psline{->}(0,-45)(0,-50)
@@ -971,18 +978,18 @@ figure~\ref{FigIterativeParallelization}).
 	\psline{->}(0,-60)(0,-65)
 	\rput(0,-70){$\cdots$}
 	\psline{->}(0,-75)(0,-80)
-	\rput(0,-85){$N_{iterations}$-th iteration:}
-	\rput(0,-90){Generation of $N_{simulations}$ empirical parameters sets}
+	\rput(0,-85){$N_{iteraciones}$-th iteration:}
+	\rput(0,-90){Generation of $N_{simulaciones}$ empirical parameters sets}
 	\psframe(-60,-95)(60,-80)
 	\psline{->}(0,-95)(-60,-100)
 	\psline{->}(0,-95)(0,-100)
 	\psline{->}(0,-95)(60,-100)
 	\rput(-60,-105){1st task:}
-	\rput(-60,-110){$N_{simulations}/N_{tasks}$ simulations}
+	\rput(-60,-110){$N_{simulaciones}/N_{tasks}$ simulations}
 	\psframe(-100,-100)(-20,-115)
 	\rput(0,-107.5){$\cdots$}
 	\rput(60,-105){$N_{tasks}$-th task:}
-	\rput(60,-110){$N_{simulations}/N_{tasks}$ simulations}
+	\rput(60,-110){$N_{simulaciones}/N_{tasks}$ simulations}
 	\psframe(20,-100)(100,-115)
 	\psline{->}(-60,-115)(0,-120)
 	\psline{->}(0,-115)(0,-120)
