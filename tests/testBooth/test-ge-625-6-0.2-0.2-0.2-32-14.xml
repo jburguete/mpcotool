@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<optimize result="result-ge-625-6-0.2-0.2-0.2-32-14" variables="variables-ge-625-6-0.2-0.2-0.2-32-14" simulator="Booth" algorithm="genetic" npopulation="625" ngenerations="6" mutation="0.2" reproduction="0.2" adaptation="0.2">
+<optimize result_file="result-ge-625-6-0.2-0.2-0.2-32-14" variables_file="variables-ge-625-6-0.2-0.2-0.2-32-14" simulator="Booth" algorithm="genetic" npopulation="625" ngenerations="6" mutation="0.2" reproduction="0.2" adaptation="0.2">
   <experiment name="test.exp" template1="test.tmp"/>
   <variable name="x" minimum="-10" maximum="10" nbits="32"/>
   <variable name="y" minimum="-10" maximum="10" nbits="32"/>

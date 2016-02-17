@@ -166,13 +166,13 @@ input_open_xml (xmlDoc * doc)
   // Getting result and variables file names
   if (!input->result)
     {
-      input->result = (char *) xmlGetProp (node, (const xmlChar *) LABEL_RESULT);
+      input->result = (char *) xmlGetProp (node, (const xmlChar *) LABEL_RESULT_FILE);
       if (!input->result)
         input->result = (char *) xmlStrdup ((const xmlChar *) result_name);
     }
   if (!input->variables)
     {
-      input->variables = (char *) xmlGetProp (node, (const xmlChar *) LABEL_VARIABLES);
+      input->variables = (char *) xmlGetProp (node, (const xmlChar *) LABEL_VARIABLES_FILE);
       if (!input->variables)
         input->variables = (char *) xmlStrdup ((const xmlChar *) variables_name);
     }
@@ -557,14 +557,14 @@ input_open_json (JsonParser * parser)
   // Getting result and variables file names
   if (!input->result)
     {
-      buffer = json_object_get_string_member (object, LABEL_RESULT);
+      buffer = json_object_get_string_member (object, LABEL_RESULT_FILE);
       if (!buffer)
 		buffer = result_name;
       input->result = g_strdup (buffer);
     }
   if (!input->variables)
     {
-      buffer = json_object_get_string_member (object, LABEL_VARIABLES);
+      buffer = json_object_get_string_member (object, LABEL_VARIABLES_FILE);
       if (!buffer)
 		buffer = variables_name;
       input->variables = g_strdup (buffer);

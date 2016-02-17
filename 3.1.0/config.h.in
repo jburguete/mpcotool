@@ -94,7 +94,7 @@ OF SUCH DAMAGE.
 #define LABEL_RANDOM "random"   ///< random label.
 #define LABEL_RELAXATION "relaxation"   ///< relaxation label.
 #define LABEL_REPRODUCTION "reproduction"       ///< reproduction label.
-#define LABEL_RESULT "result"   ///< result label.
+#define LABEL_RESULT_FILE "result_file"   ///< result_file label.
 #define LABEL_SIMULATOR "simulator"     ///< simulator label.
 #define LABEL_SEED "seed"       ///< seed label.
 #define LABEL_STEP "step"       ///< step label.
@@ -112,6 +112,7 @@ OF SUCH DAMAGE.
 #define LABEL_TOLERANCE "tolerance"     ///< tolerance label.
 #define LABEL_VARIABLE "variable"       ///< variable label.
 #define LABEL_VARIABLES "variables"     ///< variables label.
+#define LABEL_VARIABLES_FILE "variables_file"     ///< variables label.
 #define LABEL_WEIGHT "weight"   ///< weight label.
 
 // Enumerations

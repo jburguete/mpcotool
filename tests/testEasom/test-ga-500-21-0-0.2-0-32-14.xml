@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<optimize simulator="Easom" algorithm="genetic" npopulation="500" ngenerations="21" mutation="0" reproduction="0.2" adaptation="0" result="result-ga-500-21-0-0.2-0-32-14" variables="variables-ga-500-21-0-0.2-0-32-14">
+<optimize simulator="Easom" algorithm="genetic" npopulation="500" ngenerations="21" mutation="0" reproduction="0.2" adaptation="0" result_file="result-ga-500-21-0-0.2-0-32-14" variables_file="variables-ga-500-21-0-0.2-0-32-14">
   <experiment name="test.exp" template1="test.tmp"/>
   <variable name="x" minimum="-40" maximum="1000" nbits="32" precision="14"/>
   <variable name="y" minimum="-40" maximum="1000" nbits="32" precision="14"/>

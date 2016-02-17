@@ -164,16 +164,16 @@ Window window[1];
   ///< Window struct to define the main interface window.
 
 /**
- * \fn void input_save_direction (xmlNode *node)
+ * \fn void input_save_direction_xml (xmlNode *node)
  * \brief Function to save the direction search method data in a XML node.
  * \param node
  * \brief XML node.
  */
 void
-input_save_direction (xmlNode * node)
+input_save_direction_xml (xmlNode * node)
 {
 #if DEBUG_INTERFACE
-  fprintf (stderr, "input_save_direction: start\n");
+  fprintf (stderr, "input_save_direction_xml: start\n");
 #endif
   if (input->nsteps)
     {
@@ -195,36 +195,62 @@ input_save_direction (xmlNode * node)
         }
     }
 #if DEBUG_INTERFACE
-  fprintf (stderr, "input_save_direction: end\n");
+  fprintf (stderr, "input_save_direction_xml: end\n");
 #endif
 }
 
 /**
- * \fn void input_save (char *filename)
- * \brief Function to save the input file.
- * \param filename
- * \brief Input file name.
+ * \fn void input_save_direction_json (JsonNode *node)
+ * \brief Function to save the direction search method data in a JSON node.
+ * \param node
+ * \brief JSON node.
  */
 void
-input_save (char *filename)
+input_save_direction_json (JsonNode * node)
+{
+  JsonObject *object;
+#if DEBUG_INTERFACE
+  fprintf (stderr, "input_save_direction_json: start\n");
+#endif
+  object = json_node_get_object (node);
+  if (input->nsteps)
+    {
+      json_object_set_uint (object, LABEL_NSTEPS, input->nsteps);
+      if (input->relaxation != DEFAULT_RELAXATION)
+        json_object_set_float (object, LABEL_RELAXATION, input->relaxation);
+      switch (input->direction)
+        {
+        case DIRECTION_METHOD_COORDINATES:
+          json_object_set_string_member (object, LABEL_DIRECTION,
+				                         LABEL_COORDINATES);
+          break;
+        default:
+          json_object_set_string_member (object, LABEL_DIRECTION, LABEL_RANDOM);
+          json_object_set_uint (object, LABEL_NESTIMATES, input->nestimates);
+        }
+    }
+#if DEBUG_INTERFACE
+  fprintf (stderr, "input_save_direction_json: end\n");
+#endif
+}
+
+/**
+ * \fn void input_save_xml (xmlDoc * doc)
+ * \brief Function to save the input file in XML format.
+ * \param doc
+ * \brief xmlDoc struct.
+ */
+void
+input_save_xml (xmlDoc * doc)
 {
   unsigned int i, j;
   char *buffer;
-  xmlDoc *doc;
   xmlNode *node, *child;
   GFile *file, *file2;
 
 #if DEBUG_INTERFACE
-  fprintf (stderr, "input_save: start\n");
+  fprintf (stderr, "input_save_xml: start\n");
 #endif
-
-  // Getting the input file directory
-  input->name = g_path_get_basename (filename);
-  input->directory = g_path_get_dirname (filename);
-  file = g_file_new_for_path (input->directory);
-
-  // Opening the input file
-  doc = xmlNewDoc ((const xmlChar *) "1.0");
 
   // Setting root XML node
   node = xmlNewDocNode (doc, 0, (const xmlChar *) LABEL_OPTIMIZE, 0);
@@ -232,9 +258,10 @@ input_save (char *filename)
 
   // Adding properties to the root XML node
   if (xmlStrcmp ((const xmlChar *) input->result, (const xmlChar *) result_name))
-    xmlSetProp (node, (const xmlChar *) LABEL_RESULT, (xmlChar *) input->result);
+    xmlSetProp (node, (const xmlChar *) LABEL_RESULT_FILE, (xmlChar *) input->result);
   if (xmlStrcmp ((const xmlChar *) input->variables, (const xmlChar *) variables_name))
     xmlSetProp (node, (const xmlChar *) LABEL_VARIABLES, (xmlChar *) input->variables);
+  file = g_file_new_for_path (input->directory);
   file2 = g_file_new_for_path (input->simulator);
   buffer = g_file_get_relative_path (file, file2);
   g_object_unref (file2);
@@ -266,7 +293,7 @@ input_save (char *filename)
       xmlSetProp (node, (const xmlChar *) LABEL_TOLERANCE, (xmlChar *) buffer);
       snprintf (buffer, 64, "%u", input->nbest);
       xmlSetProp (node, (const xmlChar *) LABEL_NBEST, (xmlChar *) buffer);
-      input_save_direction (node);
+      input_save_direction_xml (node);
       break;
     case ALGORITHM_SWEEP:
       xmlSetProp (node, (const xmlChar *) LABEL_ALGORITHM, (const xmlChar *) LABEL_SWEEP);
@@ -276,7 +303,7 @@ input_save (char *filename)
       xmlSetProp (node, (const xmlChar *) LABEL_TOLERANCE, (xmlChar *) buffer);
       snprintf (buffer, 64, "%u", input->nbest);
       xmlSetProp (node, (const xmlChar *) LABEL_NBEST, (xmlChar *) buffer);
-      input_save_direction (node);
+      input_save_direction_xml (node);
       break;
     default:
       xmlSetProp (node, (const xmlChar *) LABEL_ALGORITHM, (const xmlChar *) LABEL_GENETIC);
@@ -345,11 +372,221 @@ input_save (char *filename)
       xmlSetProp (node, (const xmlChar *) LABEL_NORM, (const xmlChar *) LABEL_TAXICAB);
     }
 
-  // Saving the XML file
-  xmlSaveFormatFile (filename, doc, 1);
+#if DEBUG_INTERFACE
+  fprintf (stderr, "input_save: end\n");
+#endif
+}
 
-  // Freeing memory
-  xmlFreeDoc (doc);
+/**
+ * \fn void input_save_json (JsonGenerator * generator)
+ * \brief Function to save the input file in JSON format.
+ * \param generator
+ * \brief JsonGenerator struct.
+ */
+void
+input_save_json (JsonGenerator * generator)
+{
+  unsigned int i, j;
+  char *buffer;
+  JsonNode *node, *child;
+  JsonObject *object, *object2;
+  JsonArray *array;
+  GFile *file, *file2;
+
+#if DEBUG_INTERFACE
+  fprintf (stderr, "input_save_json: start\n");
+#endif
+
+  // Setting root JSON node
+  node = json_node_alloc ();
+  object = json_object_new ();
+  json_node_init_object (node, object);
+  json_generator_set_root (generator, node);
+
+  // Adding properties to the root JSON node
+  if (strcmp (input->result, result_name))
+    json_object_set_string_member (object, LABEL_RESULT_FILE, input->result);
+  if (strcmp (input->variables, variables_name))
+    json_object_set_string_member (object, LABEL_VARIABLES, input->variables);
+  file = g_file_new_for_path (input->directory);
+  file2 = g_file_new_for_path (input->simulator);
+  buffer = g_file_get_relative_path (file, file2);
+  g_object_unref (file2);
+  json_object_set_string_member (object, LABEL_SIMULATOR, buffer);
+  g_free (buffer);
+  if (input->evaluator)
+    {
+      file2 = g_file_new_for_path (input->evaluator);
+      buffer = g_file_get_relative_path (file, file2);
+      g_object_unref (file2);
+      if (strlen (buffer))
+        json_object_set_string_member (object, LABEL_EVALUATOR, buffer);
+      g_free (buffer);
+    }
+  if (input->seed != DEFAULT_RANDOM_SEED)
+    json_object_set_uint (object, LABEL_SEED, input->seed);
+
+  // Setting the algorithm
+  buffer = (char *) g_slice_alloc (64);
+  switch (input->algorithm)
+    {
+    case ALGORITHM_MONTE_CARLO:
+      json_object_set_string_member (object, LABEL_ALGORITHM,
+			                         LABEL_MONTE_CARLO);
+      snprintf (buffer, 64, "%u", input->nsimulations);
+      json_object_set_string_member (object, LABEL_NSIMULATIONS, buffer);
+      snprintf (buffer, 64, "%u", input->niterations);
+      json_object_set_string_member (object, LABEL_NITERATIONS, buffer);
+      snprintf (buffer, 64, "%.3lg", input->tolerance);
+      json_object_set_string_member (object, LABEL_TOLERANCE, buffer);
+      snprintf (buffer, 64, "%u", input->nbest);
+      json_object_set_string_member (object, LABEL_NBEST, buffer);
+      input_save_direction_json (node);
+      break;
+    case ALGORITHM_SWEEP:
+      json_object_set_string_member (object, LABEL_ALGORITHM, LABEL_SWEEP);
+      snprintf (buffer, 64, "%u", input->niterations);
+      json_object_set_string_member (object, LABEL_NITERATIONS, buffer);
+      snprintf (buffer, 64, "%.3lg", input->tolerance);
+      json_object_set_string_member (object, LABEL_TOLERANCE, buffer);
+      snprintf (buffer, 64, "%u", input->nbest);
+      json_object_set_string_member (object, LABEL_NBEST, buffer);
+      input_save_direction_json (node);
+      break;
+    default:
+      json_object_set_string_member (object, LABEL_ALGORITHM, LABEL_GENETIC);
+      snprintf (buffer, 64, "%u", input->nsimulations);
+      json_object_set_string_member (object, LABEL_NPOPULATION, buffer);
+      snprintf (buffer, 64, "%u", input->niterations);
+      json_object_set_string_member (object, LABEL_NGENERATIONS, buffer);
+      snprintf (buffer, 64, "%.3lg", input->mutation_ratio);
+      json_object_set_string_member (object, LABEL_MUTATION, buffer);
+      snprintf (buffer, 64, "%.3lg", input->reproduction_ratio);
+      json_object_set_string_member (object, LABEL_REPRODUCTION, buffer);
+      snprintf (buffer, 64, "%.3lg", input->adaptation_ratio);
+      json_object_set_string_member (object, LABEL_ADAPTATION, buffer);
+      break;
+    }
+  g_slice_free1 (64, buffer);
+  if (input->threshold != 0.)
+    json_object_set_float (object, LABEL_THRESHOLD, input->threshold);
+
+  // Setting the experimental data
+  array = json_array_new ();
+  for (i = 0; i < input->nexperiments; ++i)
+    {
+	  child = json_node_alloc ();
+	  object2 = json_object_new ();
+      json_object_set_string_member (object2, LABEL_NAME,
+			                         input->experiment[i].name);
+      if (input->experiment[i].weight != 1.)
+        json_object_set_float (object2, LABEL_WEIGHT,
+				               input->experiment[i].weight);
+      for (j = 0; j < input->experiment->ninputs; ++j)
+        json_object_set_string_member (object2, template[j],
+                                       input->experiment[i].template[j]);
+	  json_node_set_object (child, object2);
+	  json_array_add_element (array, child);
+    }
+  json_object_set_array_member (object, LABEL_EXPERIMENTS, array);
+
+  // Setting the variables data
+  array = json_array_new ();
+  for (i = 0; i < input->nvariables; ++i)
+    {
+	  child = json_node_alloc ();
+	  object2 = json_object_new ();
+      json_object_set_string_member (object2, LABEL_NAME,
+			                         input->variable[i].name);
+      json_object_set_float (object2, LABEL_MINIMUM,
+			                 input->variable[i].rangemin);
+      if (input->variable[i].rangeminabs != -G_MAXDOUBLE)
+        json_object_set_float (object2, LABEL_ABSOLUTE_MINIMUM,
+                               input->variable[i].rangeminabs);
+      json_object_set_float (object2, LABEL_MAXIMUM,
+			                 input->variable[i].rangemax);
+      if (input->variable[i].rangemaxabs != G_MAXDOUBLE)
+        json_object_set_float (object2, LABEL_ABSOLUTE_MAXIMUM,
+                               input->variable[i].rangemaxabs);
+      if (input->variable[i].precision != DEFAULT_PRECISION)
+        json_object_set_uint (object2, LABEL_PRECISION,
+				              input->variable[i].precision);
+      if (input->algorithm == ALGORITHM_SWEEP)
+        json_object_set_uint (object2, LABEL_NSWEEPS,
+				              input->variable[i].nsweeps);
+      else if (input->algorithm == ALGORITHM_GENETIC)
+        json_object_set_uint (object2, LABEL_NBITS, input->variable[i].nbits);
+      if (input->nsteps)
+        json_object_set_float (object, LABEL_STEP, input->variable[i].step);
+	  json_node_set_object (child, object2);
+	  json_array_add_element (array, child);
+    }
+  json_object_set_array_member (object, LABEL_VARIABLES, array);
+
+  // Saving the error norm
+  switch (input->norm)
+    {
+    case ERROR_NORM_MAXIMUM:
+      json_object_set_string_member (object, LABEL_NORM, LABEL_MAXIMUM);
+      break;
+    case ERROR_NORM_P:
+      json_object_set_string_member (object, LABEL_NORM, LABEL_P);
+      json_object_set_float (object, LABEL_P, input->p);
+      break;
+    case ERROR_NORM_TAXICAB:
+      json_object_set_string_member (object, LABEL_NORM, LABEL_TAXICAB);
+    }
+
+#if DEBUG_INTERFACE
+  fprintf (stderr, "input_save_json: end\n");
+#endif
+}
+
+/**
+ * \fn void input_save (char *filename)
+ * \brief Function to save the input file.
+ * \param filename
+ * \brief Input file name.
+ */
+void
+input_save (char *filename)
+{
+  xmlDoc *doc;
+  JsonGenerator *generator;
+
+#if DEBUG_INTERFACE
+  fprintf (stderr, "input_save: start\n");
+#endif
+
+  // Getting the input file directory
+  input->name = g_path_get_basename (filename);
+  input->directory = g_path_get_dirname (filename);
+
+  if (input->type == INPUT_TYPE_XML)
+	{
+      // Opening the input file
+      doc = xmlNewDoc ((const xmlChar *) "1.0");
+	  input_save_xml (doc);
+
+      // Saving the XML file
+      xmlSaveFormatFile (filename, doc, 1);
+
+      // Freeing memory
+      xmlFreeDoc (doc);
+	}
+  else
+	{
+      // Opening the input file
+      generator = json_generator_new ();
+	  json_generator_set_pretty (generator, TRUE);
+	  input_save_json (generator);
+
+      // Saving the JSON file
+      json_generator_to_file (generator, filename, NULL);
+
+      // Freeing memory
+	  g_object_unref (generator);
+	}
 
 #if DEBUG_INTERFACE
   fprintf (stderr, "input_save: end\n");
@@ -559,7 +796,7 @@ int
 window_save ()
 {
   GtkFileChooserDialog *dlg;
-  GtkFileFilter *filter;
+  GtkFileFilter *filter1, *filter2;
   char *buffer;
 
 #if DEBUG_INTERFACE
@@ -580,17 +817,36 @@ window_save ()
   g_free (buffer);
 
   // Adding XML filter
-  filter = (GtkFileFilter *) gtk_file_filter_new ();
-  gtk_file_filter_set_name (filter, "XML");
-  gtk_file_filter_add_pattern (filter, "*.xml");
-  gtk_file_filter_add_pattern (filter, "*.XML");
-  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dlg), filter);
+  filter1 = (GtkFileFilter *) gtk_file_filter_new ();
+  gtk_file_filter_set_name (filter1, "XML");
+  gtk_file_filter_add_pattern (filter1, "*.xml");
+  gtk_file_filter_add_pattern (filter1, "*.XML");
+  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dlg), filter1);
+
+  // Adding JSON filter
+  filter2 = (GtkFileFilter *) gtk_file_filter_new ();
+  gtk_file_filter_set_name (filter2, "JSON");
+  gtk_file_filter_add_pattern (filter2, "*.json");
+  gtk_file_filter_add_pattern (filter2, "*.JSON");
+  gtk_file_filter_add_pattern (filter2, "*.js");
+  gtk_file_filter_add_pattern (filter2, "*.JS");
+  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dlg), filter2);
+
+  if (input->type == INPUT_TYPE_XML)
+	gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dlg), filter1);
+  else
+	gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dlg), filter2);
 
   // If OK response then saving
   if (gtk_dialog_run (GTK_DIALOG (dlg)) == GTK_RESPONSE_OK)
     {
       // Setting input file type
-	  input->type = INPUT_TYPE_XML;
+      filter = gtk_file_chooser_get_filter (GTK_FILE_CHOOSER (dlg));
+	  buffer = (char *) gtk_file_filter_get_name (filter);
+	  if (!strcmp (buffer, "XML"))
+        input->type = INPUT_TYPE_XML;
+	  else
+        input->type = INPUT_TYPE_JSON;
 
       // Adding properties to the root XML node
       input->simulator = gtk_file_chooser_get_filename

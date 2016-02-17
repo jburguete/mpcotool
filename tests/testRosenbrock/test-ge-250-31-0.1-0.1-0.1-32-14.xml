@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<optimize result="result-ge-250-31-0.1-0.1-0.1-32-14" variables="variables-ge-250-31-0.1-0.1-0.1-32-14" simulator="Rosenbrock" algorithm="genetic" npopulation="250" ngenerations="31" mutation="0.1" reproduction="0.1" adaptation="0.1">
+<optimize result_file="result-ge-250-31-0.1-0.1-0.1-32-14" variables_file="variables-ge-250-31-0.1-0.1-0.1-32-14" simulator="Rosenbrock" algorithm="genetic" npopulation="250" ngenerations="31" mutation="0.1" reproduction="0.1" adaptation="0.1">
   <experiment name="test.exp" template1="test.tmp"/>
   <variable name="x" minimum="-10" maximum="10" precision="14" nbits="32"/>
   <variable name="y" minimum="-10" maximum="10" precision="14" nbits="32"/>

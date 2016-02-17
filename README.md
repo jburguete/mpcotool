@@ -211,7 +211,7 @@ The format of the main input file is as:
 
 ```xml
 <?xml version="1.0"?>
-<optimize simulator="simulator_name" evaluator="evaluator_name" algorithm="algorithm_type" nsimulations="simulations_number" niterations="iterations_number" tolerance="tolerance_value" nbest="best_number" npopulation="population_number" ngenerations="generations_number" mutation="mutation_ratio" reproduction="reproduction_ratio" adaptation="adaptation_ratio" direction="direction_search_type" nsteps="steps_number" relaxation="relaxation_parameter" nestimates="estimates_number" threshold="threshold_parameter" norm="norm_type" p="p_parameter" seed="random_seed" result="result_file" variables="variables_file">
+<optimize simulator="simulator_name" evaluator="evaluator_name" algorithm="algorithm_type" nsimulations="simulations_number" niterations="iterations_number" tolerance="tolerance_value" nbest="best_number" npopulation="population_number" ngenerations="generations_number" mutation="mutation_ratio" reproduction="reproduction_ratio" adaptation="adaptation_ratio" direction="direction_search_type" nsteps="steps_number" relaxation="relaxation_parameter" nestimates="estimates_number" threshold="threshold_parameter" norm="norm_type" p="p_parameter" seed="random_seed" result_file="result_file" variables_file="variables_file">
     <experiment name="data_file_1" template1="template_1_1" template2="template_1_2" ... weight="weight_1"/>
     ...
     <experiment name="data_file_N" template1="template_N_1" template2="template_N_2" ... weight="weight_N"/>
@@ -227,9 +227,9 @@ with:
 * **evaluator**: optional. When needed is the evaluator executable file name.
 * **seed**: optional. Seed of the pseudo-random numbers generator (default value
 is 7007).
-* **result**: optional. It is the name of the optime result file (default name
+* **result_file**: optional. It is the name of the optime result file (default name
 is "result").
-* **variables**: optional. It is the name of all simulated variables file
+* **variables_file**: optional. It is the name of all simulated variables file
 (default name is "variables").
 * **precision**: optional, defined for each variable. Number of precision digits
 to evaluate the variable. 0 apply for integer numbers (default value is 14).
@@ -313,6 +313,76 @@ Implemented error noms are:
 * **p**: p-norm. It requires the parameter:
   * *p*: p exponent.
 * **taxicab**: Taxicab norm.
+
+Alternatively, the input file can be also written in XML format as:
+
+```json
+{
+	"simulator": "simulator_name",
+	"evaluator": "evaluator_name",
+	"algorithm": "algorithm_type",
+	"nsimulations": "simulations_number",
+	"niterations": "iterations_number",
+	"tolerance": "tolerance_value",
+	"nbest": "best_number",
+	"npopulation": "population_number",
+	"ngenerations": "generations_number",
+	"mutation": "mutation_ratio",
+	"reproduction": "reproduction_ratio",
+	"adaptation": "adaptation_ratio",
+	"direction": "direction_search_type",
+	"nsteps": "steps_number",
+	"relaxation": "relaxation_parameter",
+	"nestimates": "estimates_number",
+	"threshold": "threshold_parameter",
+	"norm": "norm_type",
+	"p": "p_parameter",
+	"seed": "random_seed",
+	"result_file": "result_file",
+	"variables_file": "variables_file",
+	"experiments":
+	[
+		{
+			"name": "data_file_1"
+			"template1": "template_1_1"
+			"template2": "template_1_2"
+			...
+			"weight": "weight_1"
+		},
+	    ...
+		{
+			"name": "data_file_N"
+			"template1": "template_N_1"
+			"template2": "template_N_2"
+			...
+			"weight": "weight_N"
+		}
+	],
+	"variables":
+	[
+		{
+
+			"name": "variable_1"
+			"minimum": "min_value"
+			"maximum": "max_value"
+			"precision": "precision_digits"
+			"sweeps": "sweeps_number"
+			"nbits": "bits_number"
+			"step": "step_size"
+		},
+		...
+		{
+			"name": "variable_M"
+			"minimum": "min_value"
+			"maximum": "max_value"
+			"precision": "precision_digits"
+			"sweeps": "sweeps_number"
+			"nbits": "bits_number"
+			"step": "step_size"
+		}
+	]
+}
+```
 
 SOME EXAMPLES OF INPUT FILES
 ----------------------------

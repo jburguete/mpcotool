@@ -74,20 +74,25 @@ void xml_node_set_int (xmlNode * node, const xmlChar * prop, int value);
 void xml_node_set_uint (xmlNode * node, const xmlChar * prop,
                         unsigned int value);
 void xml_node_set_float (xmlNode * node, const xmlChar * prop, double value);
-int json_object_get_int (JsonObject * object, const char * prop,
-		                 int *error_code);
-unsigned int json_object_get_uint (JsonObject * object, const char * prop,
+int json_object_get_int (JsonObject * object, const char *prop,
+                         int *error_code);
+unsigned int json_object_get_uint (JsonObject * object, const char *prop,
                                    int *error_code);
 unsigned int json_object_get_uint_with_default (JsonObject * object,
-                                                const char * prop,
+                                                const char *prop,
                                                 unsigned int default_value,
                                                 int *error_code);
-double json_object_get_float (JsonObject * object, const char * prop,
+double json_object_get_float (JsonObject * object, const char *prop,
                               int *error_code);
 double json_object_get_float_with_default (JsonObject * object,
-		                                   const char * prop,
+                                           const char *prop,
                                            double default_value,
-										   int *error_code);
+                                           int *error_code);
+void json_object_set_int (JsonObject * object, const char *prop, int value);
+void json_object_set_uint (JsonObject * object, const char *prop,
+                           unsigned int value);
+void json_object_set_float (JsonObject * object, const char *prop,
+                            double value);
 int cores_number ();
 #if HAVE_GTK
 unsigned int gtk_array_get_active (GtkRadioButton * array[], unsigned int n);

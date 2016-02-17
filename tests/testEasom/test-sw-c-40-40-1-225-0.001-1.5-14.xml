@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<optimize simulator="Easom" algorithm="sweep" nsteps="225" direction="coordinates" relaxation="1.5" result="result-sw-c-40-40-1-225-0.001-1.5-14" variables="variables-sw-c-40-40-1-225-0.001-1.5-14">
+<optimize simulator="Easom" algorithm="sweep" nsteps="225" direction="coordinates" relaxation="1.5" result_file="result-sw-c-40-40-1-225-0.001-1.5-14" variables_file="variables-sw-c-40-40-1-225-0.001-1.5-14">
   <experiment name="test.exp" template1="test.tmp"/>
   <variable name="x" minimum="-40" maximum="1000" precision="14" nsweeps="40" step="1e-3"/>
   <variable name="y" minimum="-40" maximum="1000" precision="14" nsweeps="40" step="1e-3"/>

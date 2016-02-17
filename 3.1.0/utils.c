@@ -472,6 +472,63 @@ json_object_get_float_with_default (JsonObject * object, const char *prop,
 }
 
 /**
+ * \fn void json_object_set_int (JsonObject *object, const char *prop, \
+ *   int value)
+ * \brief Function to set an integer number in a JSON object property.
+ * \param object
+ * \brief JSON object.
+ * \param prop
+ * \brief JSON property.
+ * \param value
+ * \brief Integer number value.
+ */
+void
+json_object_set_int (JsonObject * object, const char *prop, int value)
+{
+  char buffer[64];
+  snprintf (buffer, 64, "%d", value);
+  json_object_set_string_member (object, prop, buffer);
+}
+
+/**
+ * \fn void json_object_set_uint (JsonObject *object, const char *prop, \
+ *   unsigned int value)
+ * \brief Function to set an unsigned integer number in a JSON object property.
+ * \param object
+ * \brief JSON object.
+ * \param prop
+ * \brief JSON property.
+ * \param value
+ * \brief Unsigned integer number value.
+ */
+void
+json_object_set_uint (JsonObject * object, const char *prop, unsigned int value)
+{
+  char buffer[64];
+  snprintf (buffer, 64, "%u", value);
+  json_object_set_string_member (object, prop, buffer);
+}
+
+/**
+ * \fn void json_object_set_float (JsonObject *object, const char *prop, \
+ *   double value)
+ * \brief Function to set a floating point number in a JSON object property.
+ * \param object
+ * \brief JSON object.
+ * \param prop
+ * \brief JSON property.
+ * \param value
+ * \brief Floating point number value.
+ */
+void
+json_object_set_float (JsonObject * object, const char *prop, double value)
+{
+  char buffer[64];
+  snprintf (buffer, 64, "%.14lg", value);
+  json_object_set_string_member (object, prop, buffer);
+}
+
+/**
  * \fn int cores_number ()
  * \brief Function to obtain the cores number.
  * \return Cores number.
