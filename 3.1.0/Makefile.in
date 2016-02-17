@@ -37,7 +37,7 @@ M2 = $(MDIR)manual-de-usuario.pdf
 MANUALS = $(M1) $(M2) $(MDIR)reference-manual.pdf
 
 all: mpcotoolbin \
-	mpcotool \
+	@MPCOTOOL@ \
 	locales/$(ES)mpcotool.mo \
 	locales/$(FR)mpcotool.mo
 
@@ -96,11 +96,11 @@ interface.o: interface.c interface.h optimize.h input.h variable.h \
 mpcotoolbin: main.c $(OBJBIN)
 	$(CC) $(CFLAGS) main.c $(OBJBIN) $(LDFLAGS) -o mpcotoolbin
 
-mpcotool: main.c $(OBJGUI) @ICON@
+@MPCOTOOL@: main.c $(OBJGUI) @ICON@
 	$(CC) $(CFLAGS) @GTK_CFLAGS@ main.c $(OBJGUI) $(LDFLAGS) @GTK_LIBS@ \
 		-o mpcotool -DHAVE_GTK=1
 
-locales/mpcotool.pot: mpcotool
+locales/mpcotool.pot: @MPCOTOOL@
 	xgettext -d mpcotool -o locales/mpcotool.pot --from-code=UTF-8 $(SRC)
 
 locales/$(ES)mpcotool.po: locales/mpcotool.pot

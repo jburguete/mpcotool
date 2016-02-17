@@ -100,7 +100,7 @@ typedef struct
   unsigned int niterations;     ///< Number of algorithm iterations
   unsigned int nbest;           ///< Number of best simulations.
   unsigned int norm;            ///< Error norm type.
-  unsigned int type;      ///< Type of input file.
+  unsigned int type;            ///< Type of input file.
 } Input;
 
 extern Input input[1];

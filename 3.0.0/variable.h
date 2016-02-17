@@ -71,9 +71,11 @@ extern const double precision[NPRECISIONS];
 
 // Public functions
 void variable_new (Variable * variable);
-void variable_free (Variable * variable);
+void variable_free (Variable * variable, unsigned int type);
 void variable_error (Variable * variable, char *message);
-int variable_open (Variable * variable, xmlNode * node, unsigned int algorithm,
-                   unsigned int nsteps);
+int variable_open_xml (Variable * variable, xmlNode * node,
+                       unsigned int algorithm, unsigned int nsteps);
+int variable_open_json (Variable * variable, JsonNode * node,
+                        unsigned int algorithm, unsigned int nsteps);
 
 #endif

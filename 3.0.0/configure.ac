@@ -1,5 +1,5 @@
 AC_PREREQ([2.67])
-AC_INIT([mpcotool], [2.4.0], [https://github.com/jburguete/mpcotool])
+AC_INIT([mpcotool], [3.0.0], [https://github.com/jburguete/mpcotool])
 
 # Checks for operative systems
 AC_CANONICAL_SYSTEM
@@ -79,8 +79,15 @@ AC_SEARCH_LIBS([sqrt], [m])
 PKG_CHECK_MODULES([GSL], [gsl])
 PKG_CHECK_MODULES([XML], [libxml-2.0])
 PKG_CHECK_MODULES([GLIB], [glib-2.0])
+PKG_CHECK_MODULES([JSON], [json-glib-1.0])
 PKG_CHECK_MODULES([GTHREAD], [gthread-2.0])
-PKG_CHECK_MODULES([GTK], [gtk+-3.0])
+
+# Checks fot GTK+ interface
+AC_ARG_WITH([gtk], AS_HELP_STRING([--with-gtk], [Build with GTK+ interface]))
+if test "x$with_gtk" == "xyes"; then
+	PKG_CHECK_MODULES([GTK], [gtk+-3.0])
+	AC_SUBST(MPCOTOOL, "mpcotool")
+fi
 
 # Checks for header files
 AC_CHECK_HEADERS([stdlib.h string.h unistd.h pthread.h])

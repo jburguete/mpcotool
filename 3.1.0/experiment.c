@@ -280,8 +280,8 @@ experiment_open_json (Experiment * experiment, JsonNode * node,
   fprintf (stderr, "experiment_open_json: name=%s\n", experiment->name);
 #endif
   experiment->weight
-	= json_object_get_float_with_default (object, LABEL_WEIGHT, 1.,
-			                              &error_code);
+    = json_object_get_float_with_default (object, LABEL_WEIGHT, 1.,
+                                          &error_code);
   if (error_code)
     {
       experiment_error (experiment, gettext ("bad weight"));

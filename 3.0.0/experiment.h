@@ -50,13 +50,15 @@ typedef struct
   unsigned int ninputs;         ///< Number of input files to the simulator.
 } Experiment;
 
-extern const xmlChar *template[MAX_NINPUTS];
+extern const char *template[MAX_NINPUTS];
 
 // Public functions
 void experiment_new (Experiment * experiment);
-void experiment_free (Experiment * experiment);
+void experiment_free (Experiment * experiment, unsigned int type);
 void experiment_error (Experiment * experiment, char *message);
-int experiment_open (Experiment * experiment, xmlNode * node,
-                     unsigned int ninputs);
+int experiment_open_xml (Experiment * experiment, xmlNode * node,
+                         unsigned int ninputs);
+int experiment_open_json (Experiment * experiment, JsonNode * node,
+                          unsigned int ninputs);
 
 #endif

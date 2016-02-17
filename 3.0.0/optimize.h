@@ -134,8 +134,6 @@ extern double (*optimize_estimate_direction) (unsigned int variable,
                                               unsigned int estimate);
 extern double (*optimize_norm) (unsigned int simulation);
 extern Optimize optimize[1];
-extern const xmlChar *result_name;
-extern const xmlChar *variables_name;
 
 // Public functions
 void optimize_input (unsigned int simulation, char *input,
@@ -158,7 +156,7 @@ void optimize_synchronise ();
 void optimize_sweep ();
 void optimize_MonteCarlo ();
 void optimize_best_direction (unsigned int simulation, double value);
-void optimize_direction_sequential ();
+void optimize_direction_sequential (unsigned int simulation);
 void *optimize_direction_thread (ParallelData * data);
 double optimize_estimate_direction_random (unsigned int variable,
                                            unsigned int estimate);
