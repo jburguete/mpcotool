@@ -154,7 +154,8 @@ Building no-GUI version on servers
 __________________________________
 
 On servers or clusters, where no-GUI with MPI parallelization is desirable,
-replace the instruction *"./build"* by *"./build_without_gui"*.
+replace the 4th step of the previous Debian 8 section by:
+> $ ./build_without_gui
  
 MAKING MANUALS INSTRUCTIONS
 ---------------------------
