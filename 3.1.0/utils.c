@@ -41,6 +41,7 @@ OF SUCH DAMAGE.
 #include <unistd.h>
 #include <libxml/parser.h>
 #include <libintl.h>
+#include <json-glib/json-glib.h>
 #if HAVE_GTK
 #include <gtk/gtk.h>
 #endif
@@ -318,6 +319,156 @@ xml_node_set_float (xmlNode * node, const xmlChar * prop, double value)
   xmlChar buffer[64];
   snprintf ((char *) buffer, 64, "%.14lg", value);
   xmlSetProp (node, prop, buffer);
+}
+
+/**
+ * \fn int json_object_get_int (JsonObject *object, const char *prop, \
+ *   int *error_code)
+ * \brief Function to get an integer number of a JSON object property.
+ * \param object
+ * \brief JSON object.
+ * \param prop
+ * \brief JSON property.
+ * \param error_code
+ * \brief Error code.
+ * \return Integer number value.
+ */
+int
+json_object_get_int (JsonObject * object, const char *prop, int *error_code)
+{
+  const char *buffer;
+  int i = 0;
+  buffer = json_object_get_string_member (object, prop);
+  if (!buffer)
+    *error_code = 1;
+  else
+    {
+      if (sscanf (buffer, "%d", &i) != 1)
+        *error_code = 2;
+      else
+        *error_code = 0;
+    }
+  return i;
+}
+
+/**
+ * \fn int json_object_get_uint (JsonObject *object, const char *prop, \
+ *   int *error_code)
+ * \brief Function to get an unsigned integer number of a JSON object property.
+ * \param object
+ * \brief JSON object.
+ * \param prop
+ * \brief JSON property.
+ * \param error_code
+ * \brief Error code.
+ * \return Unsigned integer number value.
+ */
+unsigned int
+json_object_get_uint (JsonObject * object, const char *prop, int *error_code)
+{
+  const char *buffer;
+  unsigned int i = 0;
+  buffer = json_object_get_string_member (object, prop);
+  if (!buffer)
+    *error_code = 1;
+  else
+    {
+      if (sscanf (buffer, "%u", &i) != 1)
+        *error_code = 2;
+      else
+        *error_code = 0;
+    }
+  return i;
+}
+
+/**
+ * \fn int json_object_get_uint_with_default (JsonObject *object, \
+ *   const char *prop, unsigned int default_value, int *error_code)
+ * \brief Function to get an unsigned integer number of a JSON object property
+ *   with a default value.
+ * \param object
+ * \brief JSON object.
+ * \param prop
+ * \brief JSON property.
+ * \param default_value
+ * \brief default value.
+ * \param error_code
+ * \brief Error code.
+ * \return Unsigned integer number value.
+ */
+unsigned int
+json_object_get_uint_with_default (JsonObject * object, const char *prop,
+                                   unsigned int default_value, int *error_code)
+{
+  unsigned int i;
+  if (json_object_get_member (object, prop))
+    i = json_object_get_uint (object, prop, error_code);
+  else
+    {
+      i = default_value;
+      *error_code = 0;
+    }
+  return i;
+}
+
+/**
+ * \fn double json_object_get_float (JsonObject *object, const char *prop, \
+ *   int *error_code)
+ * \brief Function to get a floating point number of a JSON object property.
+ * \param object
+ * \brief JSON object.
+ * \param prop
+ * \brief JSON property.
+ * \param error_code
+ * \brief Error code.
+ * \return Floating point number value.
+ */
+double
+json_object_get_float (JsonObject * object, const char *prop, int *error_code)
+{
+  const char *buffer;
+  double x = 0.;
+  buffer = json_object_get_string_member (object, prop);
+  if (!buffer)
+    *error_code = 1;
+  else
+    {
+      if (sscanf (buffer, "%lf", &x) != 1)
+        *error_code = 2;
+      else
+        *error_code = 0;
+    }
+  return x;
+}
+
+/**
+ * \fn double json_object_get_float_with_default (JsonObject *object, \
+ *   const char *prop, double default_value, int *error_code)
+ * \brief Function to get a floating point number of a JSON object property with
+ *   a default value.
+ * \param object
+ * \brief JSON object.
+ * \param prop
+ * \brief JSON property.
+ * \param default_value
+ * \brief default value.
+ * \param error_code
+ * \brief Error code.
+ * \return Floating point number value.
+ */
+double
+json_object_get_float_with_default (JsonObject * object, const char *prop,
+                                    double default_value, int *error_code)
+{
+  double x;
+  if (json_object_get_member (object, prop))
+    x = json_object_get_float (object, prop, error_code);
+  else
+    {
+      x = default_value;
+      *error_code = 0;
+    }
+  return x;
 }
 
 /**

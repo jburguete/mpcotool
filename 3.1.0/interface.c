@@ -46,6 +46,7 @@ OF SUCH DAMAGE.
 #include <libintl.h>
 #include <glib.h>
 #include <glib/gstdio.h>
+#include <json-glib/json-glib.h>
 #ifdef G_OS_WIN32
 #include <windows.h>
 #elif !defined (__BSD_VISIBLE)
@@ -176,17 +177,21 @@ input_save_direction (xmlNode * node)
 #endif
   if (input->nsteps)
     {
-      xml_node_set_uint (node, XML_NSTEPS, input->nsteps);
+      xml_node_set_uint (node, (const xmlChar *) LABEL_NSTEPS, input->nsteps);
       if (input->relaxation != DEFAULT_RELAXATION)
-        xml_node_set_float (node, XML_RELAXATION, input->relaxation);
+        xml_node_set_float (node, (const xmlChar * ) LABEL_RELAXATION,
+				            input->relaxation);
       switch (input->direction)
         {
         case DIRECTION_METHOD_COORDINATES:
-          xmlSetProp (node, XML_DIRECTION, XML_COORDINATES);
+          xmlSetProp (node, (const xmlChar *) LABEL_DIRECTION,
+				      (const xmlChar *) LABEL_COORDINATES);
           break;
         default:
-          xmlSetProp (node, XML_DIRECTION, XML_RANDOM);
-          xml_node_set_uint (node, XML_NESTIMATES, input->nestimates);
+          xmlSetProp (node, (const xmlChar *) LABEL_DIRECTION,
+				      (const xmlChar *) LABEL_RANDOM);
+          xml_node_set_uint (node, (const xmlChar *) LABEL_NESTIMATES,
+				             input->nestimates);
         }
     }
 #if DEBUG_INTERFACE
@@ -222,18 +227,18 @@ input_save (char *filename)
   doc = xmlNewDoc ((const xmlChar *) "1.0");
 
   // Setting root XML node
-  node = xmlNewDocNode (doc, 0, XML_OPTIMIZE, 0);
+  node = xmlNewDocNode (doc, 0, (const xmlChar *) LABEL_OPTIMIZE, 0);
   xmlDocSetRootElement (doc, node);
 
   // Adding properties to the root XML node
-  if (xmlStrcmp ((const xmlChar *) input->result, result_name))
-    xmlSetProp (node, XML_RESULT, (xmlChar *) input->result);
-  if (xmlStrcmp ((const xmlChar *) input->variables, variables_name))
-    xmlSetProp (node, XML_VARIABLES, (xmlChar *) input->variables);
+  if (xmlStrcmp ((const xmlChar *) input->result, (const xmlChar *) result_name))
+    xmlSetProp (node, (const xmlChar *) LABEL_RESULT, (xmlChar *) input->result);
+  if (xmlStrcmp ((const xmlChar *) input->variables, (const xmlChar *) variables_name))
+    xmlSetProp (node, (const xmlChar *) LABEL_VARIABLES, (xmlChar *) input->variables);
   file2 = g_file_new_for_path (input->simulator);
   buffer = g_file_get_relative_path (file, file2);
   g_object_unref (file2);
-  xmlSetProp (node, XML_SIMULATOR, (xmlChar *) buffer);
+  xmlSetProp (node, (const xmlChar *) LABEL_SIMULATOR, (xmlChar *) buffer);
   g_free (buffer);
   if (input->evaluator)
     {
@@ -241,103 +246,103 @@ input_save (char *filename)
       buffer = g_file_get_relative_path (file, file2);
       g_object_unref (file2);
       if (xmlStrlen ((xmlChar *) buffer))
-        xmlSetProp (node, XML_EVALUATOR, (xmlChar *) buffer);
+        xmlSetProp (node, (const xmlChar *) LABEL_EVALUATOR, (xmlChar *) buffer);
       g_free (buffer);
     }
   if (input->seed != DEFAULT_RANDOM_SEED)
-    xml_node_set_uint (node, XML_SEED, input->seed);
+    xml_node_set_uint (node, (const xmlChar *) LABEL_SEED, input->seed);
 
   // Setting the algorithm
   buffer = (char *) g_slice_alloc (64);
   switch (input->algorithm)
     {
     case ALGORITHM_MONTE_CARLO:
-      xmlSetProp (node, XML_ALGORITHM, XML_MONTE_CARLO);
+      xmlSetProp (node, (const xmlChar *) LABEL_ALGORITHM, (const xmlChar *) LABEL_MONTE_CARLO);
       snprintf (buffer, 64, "%u", input->nsimulations);
-      xmlSetProp (node, XML_NSIMULATIONS, (xmlChar *) buffer);
+      xmlSetProp (node, (const xmlChar *) LABEL_NSIMULATIONS, (xmlChar *) buffer);
       snprintf (buffer, 64, "%u", input->niterations);
-      xmlSetProp (node, XML_NITERATIONS, (xmlChar *) buffer);
+      xmlSetProp (node, (const xmlChar *) LABEL_NITERATIONS, (xmlChar *) buffer);
       snprintf (buffer, 64, "%.3lg", input->tolerance);
-      xmlSetProp (node, XML_TOLERANCE, (xmlChar *) buffer);
+      xmlSetProp (node, (const xmlChar *) LABEL_TOLERANCE, (xmlChar *) buffer);
       snprintf (buffer, 64, "%u", input->nbest);
-      xmlSetProp (node, XML_NBEST, (xmlChar *) buffer);
+      xmlSetProp (node, (const xmlChar *) LABEL_NBEST, (xmlChar *) buffer);
       input_save_direction (node);
       break;
     case ALGORITHM_SWEEP:
-      xmlSetProp (node, XML_ALGORITHM, XML_SWEEP);
+      xmlSetProp (node, (const xmlChar *) LABEL_ALGORITHM, (const xmlChar *) LABEL_SWEEP);
       snprintf (buffer, 64, "%u", input->niterations);
-      xmlSetProp (node, XML_NITERATIONS, (xmlChar *) buffer);
+      xmlSetProp (node, (const xmlChar *) LABEL_NITERATIONS, (xmlChar *) buffer);
       snprintf (buffer, 64, "%.3lg", input->tolerance);
-      xmlSetProp (node, XML_TOLERANCE, (xmlChar *) buffer);
+      xmlSetProp (node, (const xmlChar *) LABEL_TOLERANCE, (xmlChar *) buffer);
       snprintf (buffer, 64, "%u", input->nbest);
-      xmlSetProp (node, XML_NBEST, (xmlChar *) buffer);
+      xmlSetProp (node, (const xmlChar *) LABEL_NBEST, (xmlChar *) buffer);
       input_save_direction (node);
       break;
     default:
-      xmlSetProp (node, XML_ALGORITHM, XML_GENETIC);
+      xmlSetProp (node, (const xmlChar *) LABEL_ALGORITHM, (const xmlChar *) LABEL_GENETIC);
       snprintf (buffer, 64, "%u", input->nsimulations);
-      xmlSetProp (node, XML_NPOPULATION, (xmlChar *) buffer);
+      xmlSetProp (node, (const xmlChar *) LABEL_NPOPULATION, (xmlChar *) buffer);
       snprintf (buffer, 64, "%u", input->niterations);
-      xmlSetProp (node, XML_NGENERATIONS, (xmlChar *) buffer);
+      xmlSetProp (node, (const xmlChar *) LABEL_NGENERATIONS, (xmlChar *) buffer);
       snprintf (buffer, 64, "%.3lg", input->mutation_ratio);
-      xmlSetProp (node, XML_MUTATION, (xmlChar *) buffer);
+      xmlSetProp (node, (const xmlChar *) LABEL_MUTATION, (xmlChar *) buffer);
       snprintf (buffer, 64, "%.3lg", input->reproduction_ratio);
-      xmlSetProp (node, XML_REPRODUCTION, (xmlChar *) buffer);
+      xmlSetProp (node, (const xmlChar *) LABEL_REPRODUCTION, (xmlChar *) buffer);
       snprintf (buffer, 64, "%.3lg", input->adaptation_ratio);
-      xmlSetProp (node, XML_ADAPTATION, (xmlChar *) buffer);
+      xmlSetProp (node, (const xmlChar *) LABEL_ADAPTATION, (xmlChar *) buffer);
       break;
     }
   g_slice_free1 (64, buffer);
   if (input->threshold != 0.)
-    xml_node_set_float (node, XML_THRESHOLD, input->threshold);
+    xml_node_set_float (node, (const xmlChar *) LABEL_THRESHOLD, input->threshold);
 
   // Setting the experimental data
   for (i = 0; i < input->nexperiments; ++i)
     {
-      child = xmlNewChild (node, 0, XML_EXPERIMENT, 0);
-      xmlSetProp (child, XML_NAME, (xmlChar *) input->experiment[i].name);
+      child = xmlNewChild (node, 0, (const xmlChar *) LABEL_EXPERIMENT, 0);
+      xmlSetProp (child, (const xmlChar *) LABEL_NAME, (xmlChar *) input->experiment[i].name);
       if (input->experiment[i].weight != 1.)
-        xml_node_set_float (child, XML_WEIGHT, input->experiment[i].weight);
+        xml_node_set_float (child, (const xmlChar *) LABEL_WEIGHT, input->experiment[i].weight);
       for (j = 0; j < input->experiment->ninputs; ++j)
-        xmlSetProp (child, template[j],
+        xmlSetProp (child, (const xmlChar *) template[j],
                     (xmlChar *) input->experiment[i].template[j]);
     }
 
   // Setting the variables data
   for (i = 0; i < input->nvariables; ++i)
     {
-      child = xmlNewChild (node, 0, XML_VARIABLE, 0);
-      xmlSetProp (child, XML_NAME, (xmlChar *) input->variable[i].name);
-      xml_node_set_float (child, XML_MINIMUM, input->variable[i].rangemin);
+      child = xmlNewChild (node, 0, (const xmlChar *) LABEL_VARIABLE, 0);
+      xmlSetProp (child, (const xmlChar *) LABEL_NAME, (xmlChar *) input->variable[i].name);
+      xml_node_set_float (child, (const xmlChar *) LABEL_MINIMUM, input->variable[i].rangemin);
       if (input->variable[i].rangeminabs != -G_MAXDOUBLE)
-        xml_node_set_float (child, XML_ABSOLUTE_MINIMUM,
+        xml_node_set_float (child, (const xmlChar *) LABEL_ABSOLUTE_MINIMUM,
                             input->variable[i].rangeminabs);
-      xml_node_set_float (child, XML_MAXIMUM, input->variable[i].rangemax);
+      xml_node_set_float (child, (const xmlChar *) LABEL_MAXIMUM, input->variable[i].rangemax);
       if (input->variable[i].rangemaxabs != G_MAXDOUBLE)
-        xml_node_set_float (child, XML_ABSOLUTE_MAXIMUM,
+        xml_node_set_float (child, (const xmlChar *) LABEL_ABSOLUTE_MAXIMUM,
                             input->variable[i].rangemaxabs);
       if (input->variable[i].precision != DEFAULT_PRECISION)
-        xml_node_set_uint (child, XML_PRECISION, input->variable[i].precision);
+        xml_node_set_uint (child, (const xmlChar *) LABEL_PRECISION, input->variable[i].precision);
       if (input->algorithm == ALGORITHM_SWEEP)
-        xml_node_set_uint (child, XML_NSWEEPS, input->variable[i].nsweeps);
+        xml_node_set_uint (child, (const xmlChar *) LABEL_NSWEEPS, input->variable[i].nsweeps);
       else if (input->algorithm == ALGORITHM_GENETIC)
-        xml_node_set_uint (child, XML_NBITS, input->variable[i].nbits);
+        xml_node_set_uint (child, (const xmlChar *) LABEL_NBITS, input->variable[i].nbits);
       if (input->nsteps)
-        xml_node_set_float (child, XML_STEP, input->variable[i].step);
+        xml_node_set_float (child, (const xmlChar *) LABEL_STEP, input->variable[i].step);
     }
 
   // Saving the error norm
   switch (input->norm)
     {
     case ERROR_NORM_MAXIMUM:
-      xmlSetProp (node, XML_NORM, XML_MAXIMUM);
+      xmlSetProp (node, (const xmlChar *) LABEL_NORM, (const xmlChar *) LABEL_MAXIMUM);
       break;
     case ERROR_NORM_P:
-      xmlSetProp (node, XML_NORM, XML_P);
-      xml_node_set_float (node, XML_P, input->p);
+      xmlSetProp (node, (const xmlChar *) LABEL_NORM, (const xmlChar *) LABEL_P);
+      xml_node_set_float (node, (const xmlChar *) LABEL_P, input->p);
       break;
     case ERROR_NORM_TAXICAB:
-      xmlSetProp (node, XML_NORM, XML_TAXICAB);
+      xmlSetProp (node, (const xmlChar *) LABEL_NORM, (const xmlChar *) LABEL_TAXICAB);
     }
 
   // Saving the XML file
@@ -584,6 +589,8 @@ window_save ()
   // If OK response then saving
   if (gtk_dialog_run (GTK_DIALOG (dlg)) == GTK_RESPONSE_OK)
     {
+      // Setting input file type
+	  input->type = INPUT_TYPE_XML;
 
       // Adding properties to the root XML node
       input->simulator = gtk_file_chooser_get_filename
@@ -594,12 +601,21 @@ window_save ()
           (GTK_FILE_CHOOSER (window->button_evaluator));
       else
         input->evaluator = NULL;
-      input->result
-        = (char *) xmlStrdup ((const xmlChar *)
-                              gtk_entry_get_text (window->entry_result));
-      input->variables
-        = (char *) xmlStrdup ((const xmlChar *)
-                              gtk_entry_get_text (window->entry_variables));
+	  if (input->type == INPUT_TYPE_XML)
+		{
+          input->result
+            = (char *) xmlStrdup ((const xmlChar *)
+                                  gtk_entry_get_text (window->entry_result));
+          input->variables
+            = (char *) xmlStrdup ((const xmlChar *)
+                                  gtk_entry_get_text (window->entry_variables));
+		}
+	  else
+		{
+          input->result = g_strdup (gtk_entry_get_text (window->entry_result));
+          input->variables
+            = g_strdup (gtk_entry_get_text (window->entry_variables));
+		}
 
       // Setting the algorithm
       switch (window_get_algorithm ())
@@ -766,7 +782,7 @@ window_about ()
               "empirical parameters"),
      "authors", authors,
      "translator-credits", "Javier Burguete Tolosa <jburguete@eead.csic.es>",
-     "version", "2.5.0",
+     "version", "3.1.0",
      "copyright", "Copyright 2012-2016 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/mpcotool",
@@ -1056,7 +1072,7 @@ window_remove_experiment ()
   g_signal_handler_block (window->combo_experiment, window->id_experiment);
   gtk_combo_box_text_remove (window->combo_experiment, i);
   g_signal_handler_unblock (window->combo_experiment, window->id_experiment);
-  experiment_free (input->experiment + i);
+  experiment_free (input->experiment + i, input->type);
   --input->nexperiments;
   for (j = i; j < input->nexperiments; ++j)
     memcpy (input->experiment + j, input->experiment + j + 1,
@@ -1100,13 +1116,23 @@ window_add_experiment ()
   for (j = input->nexperiments - 1; j > i; --j)
     memcpy (input->experiment + j + 1, input->experiment + j,
             sizeof (Experiment));
-  input->experiment[j + 1].name
-    = (char *) xmlStrdup ((xmlChar *) input->experiment[j].name);
   input->experiment[j + 1].weight = input->experiment[j].weight;
   input->experiment[j + 1].ninputs = input->experiment[j].ninputs;
-  for (j = 0; j < input->experiment->ninputs; ++j)
-    input->experiment[i + 1].template[j]
-      = (char *) xmlStrdup ((xmlChar *) input->experiment[i].template[j]);
+  if (input->type == INPUT_TYPE_XML)
+    {
+      input->experiment[j + 1].name
+        = (char *) xmlStrdup ((xmlChar *) input->experiment[j].name);
+      for (j = 0; j < input->experiment->ninputs; ++j)
+        input->experiment[i + 1].template[j]
+          = (char *) xmlStrdup ((xmlChar *) input->experiment[i].template[j]);
+	}
+  else
+    {
+      input->experiment[j + 1].name = g_strdup (input->experiment[j].name);
+      for (j = 0; j < input->experiment->ninputs; ++j)
+        input->experiment[i + 1].template[j]
+          = g_strdup (input->experiment[i].template[j]);
+	}
   ++input->nexperiments;
   for (j = 0; j < input->experiment->ninputs; ++j)
     g_signal_handler_block (window->button_template[j], window->id_input[j]);
@@ -1221,7 +1247,10 @@ window_template_experiment (void *data)
     = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (window->button_template[i]));
   file2 = g_file_new_for_path (input->directory);
   buffer = g_file_get_relative_path (file2, file1);
-  input->experiment[j].template[i] = (char *) xmlStrdup ((xmlChar *) buffer);
+  if (input->type == INPUT_TYPE_XML)
+    input->experiment[j].template[i] = (char *) xmlStrdup ((xmlChar *) buffer);
+  else
+    input->experiment[j].template[i] = g_strdup (buffer);
   g_free (buffer);
   g_object_unref (file2);
   g_object_unref (file1);
@@ -1359,8 +1388,11 @@ window_add_variable ()
   for (j = input->nvariables - 1; j > i; --j)
     memcpy (input->variable + j + 1, input->variable + j, sizeof (Variable));
   memcpy (input->variable + j + 1, input->variable + j, sizeof (Variable));
-  input->variable[j + 1].name
-    = (char *) xmlStrdup ((xmlChar *) input->variable[j].name);
+  if (input->type == INPUT_TYPE_XML)
+    input->variable[j + 1].name
+      = (char *) xmlStrdup ((xmlChar *) input->variable[j].name);
+  else
+    input->variable[j + 1].name = g_strdup (input->variable[j].name);
   ++input->nvariables;
   g_signal_handler_block (window->entry_variable, window->id_variable_label);
   gtk_combo_box_set_active (GTK_COMBO_BOX (window->combo_variable), i + 1);
@@ -1698,6 +1730,15 @@ window_open ()
   gtk_file_filter_set_name (filter, "XML");
   gtk_file_filter_add_pattern (filter, "*.xml");
   gtk_file_filter_add_pattern (filter, "*.XML");
+  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dlg), filter);
+
+  // Adding JSON filter
+  filter = (GtkFileFilter *) gtk_file_filter_new ();
+  gtk_file_filter_set_name (filter, "JSON");
+  gtk_file_filter_add_pattern (filter, "*.json");
+  gtk_file_filter_add_pattern (filter, "*.JSON");
+  gtk_file_filter_add_pattern (filter, "*.js");
+  gtk_file_filter_add_pattern (filter, "*.JS");
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dlg), filter);
 
   // If OK saving

@@ -134,8 +134,6 @@ extern double (*optimize_estimate_direction) (unsigned int variable,
                                               unsigned int estimate);
 extern double (*optimize_norm) (unsigned int simulation);
 extern Optimize optimize[1];
-extern const xmlChar *result_name;
-extern const xmlChar *variables_name;
 
 // Public functions
 void optimize_input (unsigned int simulation, char *input,

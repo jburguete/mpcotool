@@ -266,11 +266,14 @@ files used in the manuscript are also free and they can be downloaded in the
 cited web page.
 
 The present paper is organized as follows: First, the concepts of calibration
-and optimization are presented as the main goal. Then the methods used to
+and optimization are presented as the main goal. Then, the methods used to
 achieve them in MPCOTool are described. The tool structure and organization
-are next presented in detail. After, the performance is demonstrated using
-four different applications of interest in agriculture. Finally, the conclusions
-are drawn.
+are next presented in detail. After,
+%%%%%%%%%%%%%%%%%%%%%%%%%
+the software optimization methods are analysed in six standard analytical test
+functions. Subsequently,
+%%%%%%%%%%%%%%%%%%%%%%%%%
+the performance is demonstrated using four different applications of interest in agriculture. Finally, the conclusions are drawn.
 
 \section{Calibration and optimization}
 
@@ -532,10 +535,9 @@ with $w_i$ the weight associated to the $i$-th experiment, specified in the
 \emph{main input file}.
 %%%%%%%%%%%%%%%%
 Note that all considered error norms are equivalent for only one experiment to
-optimize.
-Note also that these error norms are used to combine the
-error $o_i$ obtained for each experiment. The user is completely free to define
-the objective function for every experiment.
+optimize ($J=\ABS{w_1\,o_1}$).
+Note also that these error norms are used to combine the objective value $o_i$
+for each experiment, but the user is completely free to define this function.
 %%%%%%%%%%%%%%%%
 Fig.~\ref{FigStructure} is a sketch of the MPCOTool structure.
 \psset{xunit=0.4mm,yunit=0.4mm}
@@ -1319,7 +1321,7 @@ The ballistic model \citep{Fukui80,Playan06} is the most widespread to character
 	p(D)=\frac{g(D)}{\int_0^\infty g(D)\,dD}.
 }{EqSprinklerDropSizes}
 with $D$ the drop diameter, and $D_{min}$ and $D_{max}$ the minimum and maximum
-drop diameters respectively.
+allowed drop diameters respectively.
 
 Furthermore, to include the influence of the wind, the model involves two more dimensionless aerodynamic resistance coefficients ($k_1$ and $k_2$) modifying the drag resistance coefficient $c_d$ as:
 \EQ{c_d=c_s\,\PA{1+k_1\,\sin\beta-k_2\,\cos\alpha}}{EqSprinklerDrag}
@@ -1486,8 +1488,23 @@ The movement of a real pivot with four towers separated 50.11 m is next simulate
 The exterior tower is considerably faster as it carries less weight and produces less friction.
 The start and stop times of each tower were measured in four experiments of 24 hours with the pivot working in cycles of 71s at 100\%, 52\%, 42\% and 27.48\%.
 
-The times were grouped in four histograms and the evaluation function was defined as the mean square error between the measured and simulated histograms.
-Table~\ref{TabPivot} shows some of the results obtained in a total of 10000 simulations of each of the four experiments, taking around 50 minutes each in the same laptop computer used before.
+%%%%%%%%%%%%%
+The run and stop time intervals were grouped every 10 minutes in histograms for each tower and the evaluation function was defined as:
+\EQ
+{
+	o=\sqrt{\frac{1}{N_{towers}}\,\sum_{i=1}^{N_{towers}}
+	\sum_{j=1}^{N_{intervals}}\PA{n_r-N_r}_{i,j}^2+\PA{n_s-N_s}_{i,j}^2}
+}{EqPivotObjective}
+with $N_{towers}=4$ the number of towers, $N_{intervals}$ the number of
+histograms time intervals, $\PA{n_r}_{i,j}$ and $\PA{N_r}_{i,j}$ the measured
+and the simulated number of runs respectively for the $i$-th tower and the
+$j$-th time interval, and $\PA{n_s}_{i,j}$ and $\PA{N_s}_{i,j}$ the measured
+and the simulated number of stops respectively for the $i$-th tower and the
+$j$-th time interval. $L_2$ norm with $w_i=1$ has been used to compose the
+objective function with the four experiments.
+%%%%%%%%%%%%%
+
+Table~\ref{TabPivot} shows some of the results obtained in a total of 10000 simulations for each of the four experiments, taking around 3 hours each in the same laptop computer used before.
 
 The best results where obtained with the genetic algorithms. Note that in this case again the genetic algorithm produces the results with the lowest $R$ coefficient values. It is also worth noting that the iterative algorithm improves the results when applied to the Monte Carlo method but it makes things slightly worse in the sweep method.
 
@@ -1496,45 +1513,51 @@ The best results where obtained with the genetic algorithms. Note that in this c
 	Optimization & Optimization & Optimal empirical & Objective
 	\\ algorithm & parameters & parameters & function value
 	\\ \hline
-	SW & $N_s=10000$ & $\overline{\alpha_{start}}=180.200^\circ$
-	& 104.98
-	\\ & & $\overline{\alpha_{stop}}=179.778^\circ$
+	SW & $N_x=10$ & $\overline{\alpha_{start}}=179.911^\circ$
+	& 53.052
+	\\ & & $\overline{\alpha_{stop}}=180.300^\circ$
 	\\ & & $\delta=0.133^\circ$
-	\\ & & $\tau=2.78$s
+	\\ & & $\tau=4.44$ s
 	\\ \hline
-	SW+IT & $N_s=625$ & $\overline{\alpha_{start}}=179.744^\circ$
-	& 94.34
-	\\ & $N_i=16$ & $\overline{\alpha_{stop}}=179.344^\circ$
-	\\ & $N_b=10$ & $\delta=0.118^\circ$
-	\\ & $tol=0.4$ & $\tau=3.94$s
+	SW+IT & $N_x=5$ & $\overline{\alpha_{start}}=179.583^\circ$
+	& 52.906
+	\\ & $N_i=16$ & $\overline{\alpha_{stop}}=179.983^\circ$
+	\\ & $N_b=10$ & $\delta=0.134^\circ$
+	\\ & $tol=0.4$ & $\tau=4.30$ s
 	\\ \hline
 	MC & $N_s=10000$
-	& $\overline{\alpha_{start}}=180.177^\circ$ & 109.92
-	\\ & $N_i=1$ & $\overline{\alpha_{stop}}=179.768^\circ$
+	& $\overline{\alpha_{start}}=179.768^\circ$ & 56.788
+	\\ & $N_i=1$ & $\overline{\alpha_{stop}}=180.177^\circ$
 	\\ & & $\delta=0.139^\circ$
 	\\ & & $\tau=3.77$s
 	\\ \hline
 	MC+IT & $N_s=625$
-	& $\overline{\alpha_{start}}=179.786^\circ$ & 97.42
+	& $\overline{\alpha_{start}}=179.786^\circ$ & 49.350
 	\\ & $N_i=16$ & $\overline{\alpha_{stop}}=180.194^\circ$
 	\\ & $N_b=10$ & $\delta=0.122^\circ$
 	\\ & $tol=0.1$ & $\tau=3.82$s
 	\\ \hline
-	Genetic & $N_p=1000$ & $\overline{\alpha_{start}}=179.800^\circ$
-	& 9552.8
+	MC+DS+CD & $N_s=9000$, $N_{st}=125$
+	& $\overline{\alpha_{start}}=179.768^\circ$ & 53.026
+	\\ & $rel=1$ & $\overline{\alpha_{stop}}=180.174^\circ$
+	\\ & $st_{\overline{\alpha_{start}}}=0.4$ & $\delta=0.139^\circ$
+	\\ & $st_{\overline{\alpha_{stop}}}=0.3$ & $\tau=3.77$s
+	\\ & $st_\delta=0.004$
+	\\ & $st_\tau=0.05$
+	\\ \hline
+	GE & $N_p=1000$ & $\overline{\alpha_{start}}=179.800^\circ$
+	& 49.947
 	\\ & $N_g=16$ & $\overline{\alpha_{stop}}=180.190^\circ$
-	\\ & $R_m=0.2$ & $\delta=0.137^\circ$
-	\\ & $R_r=0.2$ & $\tau=4.39$s
-	\\ & $R_a=0.2$
+	\\ & $R_m=R_r=R_a=0.2$ & $\delta=0.137^\circ$
+	\\ & & $\tau=4.39$s
 	\\ \hline
-	Genetic & $N_p=400$ & $\overline{\alpha_{start}}=179.751^\circ$
-	& 9187.5
-	\\ & $N_g=81$ & $\overline{\alpha_{stop}}=180.166^\circ$
-	\\ & $R_m=0.1$ & $\delta=0.136^\circ$
-	\\ & $R_r=0.1$ & $\tau=3.32$s
-	\\ & $R_a=0.1$
+	GE & $N_p=400$ & $\overline{\alpha_{start}}=179.979^\circ$
+	& 49.862
+	\\ & $N_g=81$ & $\overline{\alpha_{stop}}=180.374^\circ$
+	\\ & $R_m=R_r=R_a=0.1$ & $\delta=0.129^\circ$
+	\\ & & $\tau=4.28$s
 	\\ \hline
-}{Optimal parameters and values of the evaluation function in the four towers pivot case in \citet{Ouazaa15} using different optimization algorithms implemented in MPCOTool with the same number of total simulations ($N_{total}=10000$)}{TabPivot}
+}{Optimal parameters and values of the evaluation function in the four towers pivot case in \citet{Ouazaa15} using different optimization algorithms implemented in MPCOTool with the same number of total simulations ($N_{total}=10000$). $N_x$ is the sweeps number for every variable in SW}{TabPivot}
 
 In figures \ref{FigPivot100} to \ref{FigPivot27} the histograms of the number
 of measured and simulated starts and stops are represented for the different

@@ -1,5 +1,5 @@
 AC_PREREQ([2.67])
-AC_INIT([mpcotool], [2.5.0], [https://github.com/jburguete/mpcotool])
+AC_INIT([mpcotool], [3.1.0], [https://github.com/jburguete/mpcotool])
 
 # Checks for operative systems
 AC_CANONICAL_SYSTEM
@@ -79,6 +79,7 @@ AC_SEARCH_LIBS([sqrt], [m])
 PKG_CHECK_MODULES([GSL], [gsl])
 PKG_CHECK_MODULES([XML], [libxml-2.0])
 PKG_CHECK_MODULES([GLIB], [glib-2.0])
+PKG_CHECK_MODULES([JSON], [json-glib-1.0])
 PKG_CHECK_MODULES([GTHREAD], [gthread-2.0])
 PKG_CHECK_MODULES([GTK], [gtk+-3.0])
 

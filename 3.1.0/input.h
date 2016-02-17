@@ -100,16 +100,19 @@ typedef struct
   unsigned int niterations;     ///< Number of algorithm iterations
   unsigned int nbest;           ///< Number of best simulations.
   unsigned int norm;            ///< Error norm type.
+  unsigned int type;      ///< Type of input file.
 } Input;
 
 extern Input input[1];
-extern const xmlChar *result_name;
-extern const xmlChar *variables_name;
+extern const char *result_name;
+extern const char *variables_name;
 
 // Public functions
 void input_new ();
 void input_free ();
 void input_error (char *message);
+int input_open_xml (xmlDoc * doc);
+int input_open_json (JsonParser * parser);
 int input_open (char *filename);
 
 #endif

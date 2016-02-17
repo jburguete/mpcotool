@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <optimize algorithm="Monte-Carlo" simulator="pivot" evaluator="compare"
-	nsimulations="9000" nsteps="125" gradient_method="coordinates"
-	relaxation="1">
+	nsimulations="9000" nsteps="125" direction="coordinates" relaxation="1">
 	<experiment name="Velocidad-Frecuencia-27,48.txt" template1="template1.js"/>
 	<experiment name="Velocidad-Frecuencia-42.txt" template1="template2.js"/>
 	<experiment name="Velocidad-Frecuencia-52.txt" template1="template3.js"/>

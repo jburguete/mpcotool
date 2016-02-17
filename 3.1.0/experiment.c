@@ -41,14 +41,15 @@ OF SUCH DAMAGE.
 #include <libxml/parser.h>
 #include <libintl.h>
 #include <glib.h>
+#include <json-glib/json-glib.h>
 #include "utils.h"
 #include "experiment.h"
 
 #define DEBUG_EXPERIMENT 0      ///< Macro to debug experiment functions.
 
-const xmlChar *template[MAX_NINPUTS] = {
-  XML_TEMPLATE1, XML_TEMPLATE2, XML_TEMPLATE3, XML_TEMPLATE4,
-  XML_TEMPLATE5, XML_TEMPLATE6, XML_TEMPLATE7, XML_TEMPLATE8
+const char *template[MAX_NINPUTS] = {
+  LABEL_TEMPLATE1, LABEL_TEMPLATE2, LABEL_TEMPLATE3, LABEL_TEMPLATE4,
+  LABEL_TEMPLATE5, LABEL_TEMPLATE6, LABEL_TEMPLATE7, LABEL_TEMPLATE8
 };
 
 ///< Array of xmlChar strings with template labels.
@@ -76,21 +77,32 @@ experiment_new (Experiment * experiment)
 }
 
 /**
- * \fn void experiment_free (Experiment * experiment)
+ * \fn void experiment_free (Experiment * experiment, unsigned int type)
  * \brief Function to free the memory of an Experiment struct.
  * \param experiment
  * \brief Experiment struct.
+ * \param type
+ * \brief Type of input file.
  */
 void
-experiment_free (Experiment * experiment)
+experiment_free (Experiment * experiment, unsigned int type)
 {
   unsigned int i;
 #if DEBUG_EXPERIMENT
   fprintf (stderr, "experiment_free: start\n");
 #endif
-  for (i = 0; i < experiment->ninputs; ++i)
-    xmlFree (experiment->template[i]);
-  xmlFree (experiment->name);
+  if (type == INPUT_TYPE_XML)
+    {
+      for (i = 0; i < experiment->ninputs; ++i)
+        xmlFree (experiment->template[i]);
+      xmlFree (experiment->name);
+    }
+  else
+    {
+      for (i = 0; i < experiment->ninputs; ++i)
+        g_free (experiment->template[i]);
+      g_free (experiment->name);
+    }
   experiment->ninputs = 0;
 #if DEBUG_EXPERIMENT
   fprintf (stderr, "experiment_free: end\n");
@@ -118,7 +130,7 @@ experiment_error (Experiment * experiment, char *message)
 }
 
 /**
- * \fn int experiment_open (Experiment * experiment, xmlNode * node, \
+ * \fn int experiment_open_xml (Experiment * experiment, xmlNode * node, \
  *   unsigned int ninputs)
  * \brief Function to open the Experiment struct on a XML node.
  * \param experiment
@@ -130,45 +142,48 @@ experiment_error (Experiment * experiment, char *message)
  * \return 1 on success, 0 on error.
  */
 int
-experiment_open (Experiment * experiment, xmlNode * node, unsigned int ninputs)
+experiment_open_xml (Experiment * experiment, xmlNode * node,
+                     unsigned int ninputs)
 {
   char buffer[64];
   int error_code;
   unsigned int i;
 
 #if DEBUG_EXPERIMENT
-  fprintf (stderr, "experiment_open: start\n");
+  fprintf (stderr, "experiment_open_xml: start\n");
 #endif
 
   // Resetting experiment data
   experiment_new (experiment);
 
   // Reading the experimental data
-  experiment->name = (char *) xmlGetProp (node, XML_NAME);
+  experiment->name = (char *) xmlGetProp (node, (const xmlChar *) LABEL_NAME);
   if (!experiment->name)
     {
       experiment_error (experiment, gettext ("no data file name"));
       goto exit_on_error;
     }
 #if DEBUG_EXPERIMENT
-  fprintf (stderr, "experiment_open: name=%s\n", experiment->name);
+  fprintf (stderr, "experiment_open_xml: name=%s\n", experiment->name);
 #endif
   experiment->weight
-    = xml_node_get_float_with_default (node, XML_WEIGHT, 1., &error_code);
+    = xml_node_get_float_with_default (node, (const xmlChar *) LABEL_WEIGHT, 1.,
+                                       &error_code);
   if (error_code)
     {
       experiment_error (experiment, gettext ("bad weight"));
       goto exit_on_error;
     }
 #if DEBUG_EXPERIMENT
-  fprintf (stderr, "experiment_open: weight=%lg\n", experiment->weight);
+  fprintf (stderr, "experiment_open_xml: weight=%lg\n", experiment->weight);
 #endif
-  experiment->template[0] = (char *) xmlGetProp (node, template[0]);
+  experiment->template[0]
+    = (char *) xmlGetProp (node, (const xmlChar *) template[0]);
   if (experiment->template[0])
     {
 #if DEBUG_EXPERIMENT
-      fprintf (stderr, "experiment_open: experiment=%s template1=%s\n",
-               experiment->name, buffer2[0]);
+      fprintf (stderr, "experiment_open_xml: experiment=%s template1=%s\n",
+               experiment->name, template[0]);
 #endif
       ++experiment->ninputs;
     }
@@ -180,18 +195,19 @@ experiment_open (Experiment * experiment, xmlNode * node, unsigned int ninputs)
   for (i = 1; i < MAX_NINPUTS; ++i)
     {
 #if DEBUG_EXPERIMENT
-      fprintf (stderr, "experiment_open: template%u\n", i + 1);
+      fprintf (stderr, "experiment_open_xml: template%u\n", i + 1);
 #endif
-      if (xmlHasProp (node, template[i]))
+      if (xmlHasProp (node, (const xmlChar *) template[i]))
         {
           if (ninputs && ninputs <= i)
             {
               experiment_error (experiment, gettext ("bad templates number"));
               goto exit_on_error;
             }
-          experiment->template[i] = (char *) xmlGetProp (node, template[i]);
+          experiment->template[i]
+            = (char *) xmlGetProp (node, (const xmlChar *) template[i]);
 #if DEBUG_EXPERIMENT
-          fprintf (stderr, "experiment_open: experiment=%s template%u=%s\n",
+          fprintf (stderr, "experiment_open_xml: experiment=%s template%u=%s\n",
                    experiment->nexperiments, experiment->name,
                    experiment->template[i]);
 #endif
@@ -208,14 +224,127 @@ experiment_open (Experiment * experiment, xmlNode * node, unsigned int ninputs)
     }
 
 #if DEBUG_EXPERIMENT
-  fprintf (stderr, "experiment_open: end\n");
+  fprintf (stderr, "experiment_open_xml: end\n");
 #endif
   return 1;
 
 exit_on_error:
-  experiment_free (experiment);
+  experiment_free (experiment, INPUT_TYPE_XML);
 #if DEBUG_EXPERIMENT
-  fprintf (stderr, "experiment_open: end\n");
+  fprintf (stderr, "experiment_open_xml: end\n");
+#endif
+  return 0;
+}
+
+/**
+ * \fn int experiment_open_json (Experiment * experiment, JsonNode * node, \
+ *   unsigned int ninputs)
+ * \brief Function to open the Experiment struct on a XML node.
+ * \param experiment
+ * \brief Experiment struct.
+ * \param node
+ * \brief JSON node.
+ * \param ninputs
+ * \brief Number of the simulator input files.
+ * \return 1 on success, 0 on error.
+ */
+int
+experiment_open_json (Experiment * experiment, JsonNode * node,
+                      unsigned int ninputs)
+{
+  char buffer[64];
+  JsonObject *object;
+  const char *name;
+  int error_code;
+  unsigned int i;
+
+#if DEBUG_EXPERIMENT
+  fprintf (stderr, "experiment_open_json: start\n");
+#endif
+
+  // Resetting experiment data
+  experiment_new (experiment);
+
+  // Getting JSON object
+  object = json_node_get_object (node);
+
+  // Reading the experimental data
+  name = json_object_get_string_member (object, LABEL_NAME);
+  if (!name)
+    {
+      experiment_error (experiment, gettext ("no data file name"));
+      goto exit_on_error;
+    }
+  experiment->name = g_strdup (name);
+#if DEBUG_EXPERIMENT
+  fprintf (stderr, "experiment_open_json: name=%s\n", experiment->name);
+#endif
+  experiment->weight
+	= json_object_get_float_with_default (object, LABEL_WEIGHT, 1.,
+			                              &error_code);
+  if (error_code)
+    {
+      experiment_error (experiment, gettext ("bad weight"));
+      goto exit_on_error;
+    }
+#if DEBUG_EXPERIMENT
+  fprintf (stderr, "experiment_open_json: weight=%lg\n", experiment->weight);
+#endif
+  name = json_object_get_string_member (object, template[0]);
+  if (name)
+    {
+#if DEBUG_EXPERIMENT
+      fprintf (stderr, "experiment_open_json: experiment=%s template1=%s\n",
+               name, template[0]);
+#endif
+      ++experiment->ninputs;
+    }
+  else
+    {
+      experiment_error (experiment, gettext ("no template"));
+      goto exit_on_error;
+    }
+  experiment->template[0] = g_strdup (name);
+  for (i = 1; i < MAX_NINPUTS; ++i)
+    {
+#if DEBUG_EXPERIMENT
+      fprintf (stderr, "experiment_open_json: template%u\n", i + 1);
+#endif
+      if (json_object_get_member (object, template[i]))
+        {
+          if (ninputs && ninputs <= i)
+            {
+              experiment_error (experiment, gettext ("bad templates number"));
+              goto exit_on_error;
+            }
+          name = json_object_get_string_member (object, template[i]);
+#if DEBUG_EXPERIMENT
+          fprintf (stderr,
+                   "experiment_open_json: experiment=%s template%u=%s\n",
+                   experiment->nexperiments, name, template[i]);
+#endif
+          experiment->template[i] = g_strdup (name);
+          ++experiment->ninputs;
+        }
+      else if (ninputs && ninputs > i)
+        {
+          snprintf (buffer, 64, "%s%u", gettext ("no template"), i + 1);
+          experiment_error (experiment, buffer);
+          goto exit_on_error;
+        }
+      else
+        break;
+    }
+
+#if DEBUG_EXPERIMENT
+  fprintf (stderr, "experiment_open_json: end\n");
+#endif
+  return 1;
+
+exit_on_error:
+  experiment_free (experiment, INPUT_TYPE_JSON);
+#if DEBUG_EXPERIMENT
+  fprintf (stderr, "experiment_open_json: end\n");
 #endif
   return 0;
 }

@@ -1,7 +1,8 @@
 CC = @CC@ @ARCH@ @LTO@ @STD@
 CFLAGS = -g -Wall -O3 @CPPFLAGS@ @GSL_CFLAGS@ @XML_CFLAGS@ @GLIB_CFLAGS@ \
-	@GTHREAD_CFLAGS@ @MPI@
-LDFLAGS = @LDFLAGS@ @LIBS@ @GSL_LIBS@ @XML_LIBS@ @GLIB_LIBS@ @GTHREAD_LIBS@
+	@JSON_CFLAGS@ @GTHREAD_CFLAGS@ @MPI@
+LDFLAGS = @LDFLAGS@ @LIBS@ @GSL_LIBS@ @XML_LIBS@ @GLIB_LIBS@ @JSON_LIBS@ \
+	@GTHREAD_LIBS@
 
 SRC = genetic/entity.c genetic/population.c genetic/reproduction.c \
 	genetic/selection.c genetic/evolution.c genetic/genetic.c utils.c \

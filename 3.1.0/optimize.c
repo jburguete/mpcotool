@@ -46,6 +46,7 @@ OF SUCH DAMAGE.
 #include <libintl.h>
 #include <glib.h>
 #include <glib/gstdio.h>
+#include <json-glib/json-glib.h>
 #ifdef G_OS_WIN32
 #include <windows.h>
 #elif !defined(__BSD_VISIBLE)
