@@ -343,42 +343,42 @@ Alternatively, the input file can be also written in XML format as:
 	"experiments":
 	[
 		{
-			"name": "data_file_1"
-			"template1": "template_1_1"
-			"template2": "template_1_2"
+			"name": "data_file_1",
+			"template1": "template_1_1",
+			"template2": "template_1_2",
 			...
-			"weight": "weight_1"
+			"weight": "weight_1",
 		},
 	    ...
 		{
-			"name": "data_file_N"
-			"template1": "template_N_1"
-			"template2": "template_N_2"
+			"name": "data_file_N",
+			"template1": "template_N_1",
+			"template2": "template_N_2",
 			...
-			"weight": "weight_N"
+			"weight": "weight_N",
 		}
 	],
 	"variables":
 	[
 		{
 
-			"name": "variable_1"
-			"minimum": "min_value"
-			"maximum": "max_value"
-			"precision": "precision_digits"
-			"sweeps": "sweeps_number"
-			"nbits": "bits_number"
-			"step": "step_size"
+			"name": "variable_1",
+			"minimum": "min_value",
+			"maximum": "max_value",
+			"precision": "precision_digits",
+			"sweeps": "sweeps_number",
+			"nbits": "bits_number",
+			"step": "step_size",
 		},
 		...
 		{
-			"name": "variable_M"
-			"minimum": "min_value"
-			"maximum": "max_value"
-			"precision": "precision_digits"
-			"sweeps": "sweeps_number"
-			"nbits": "bits_number"
-			"step": "step_size"
+			"name": "variable_M",
+			"minimum": "min_value",
+			"maximum": "max_value",
+			"precision": "precision_digits",
+			"sweeps": "sweeps_number",
+			"nbits": "bits_number",
+			"step": "step_size",
 		}
 	]
 }
