@@ -9,34 +9,36 @@ set boxwidth 1
 set xtic rotate by -90 scale 0
 
 set ylabel 'Number of starts'
+set xrange [-0.5:28.5]
 set yrange [0:600]
 
-set title 'Measured'
-set out 'pivot-measured-starts-100.eps'
+set title 'Simulated'
+set out 'pivot-simulated-starts-100.eps'
 plot 'his-100' using 2:xtic(1) ti col w histogram fill solid border 1, \
 	'' u 4 ti col w histogram fill empty border 1 lt 1 lw 0.25, \
 	'' u 6 ti col w histogram fill solid 0.5 border 1 lt 1 lw 0.25, \
 	'' u 8 ti col w histogram fill pattern 4 border 1 lt 1 lw 0.25
 
-set title 'Simulated'
-set out 'pivot-simulated-starts-100.eps'
+set title 'Measured'
+set out 'pivot-measured-starts-100.eps'
 plot 'mea-100' using 2:xtic(1) ti col w histogram fill solid border 1 lw 0.25, \
 	'' u 4 ti col w histogram fill empty border 1 lt 1 lw 0.25, \
 	'' u 6 ti col w histogram fill solid 0.5 border 1 lt 1 lw 0.25, \
 	'' u 8 ti col w histogram fill pattern 4 border 1 lt 1 lw 0.25
 
 set ylabel 'Number of stops'
+set xrange [-0.5:5.5]
 set yrange [0:500]
 
-set title 'Measured'
-set out 'pivot-measured-stops-100.eps'
+set title 'Simulated'
+set out 'pivot-simulated-stops-100.eps'
 plot 'his-100' using 3:xtic(1) ti col w histogram fill solid border 1 lw 0.25, \
 	'' u 5 ti col w histogram fill empty border 1 lt 1 lw 0.25, \
 	'' u 7 ti col w histogram fill solid 0.5 border 1 lt 1 lw 0.25, \
 	'' u 9 ti col w histogram fill pattern 4 border 1 lt 1 lw 0.25
 
-set title 'Simulated'
-set out 'pivot-simulated-stops-100.eps'
+set title 'Measured'
+set out 'pivot-measured-stops-100.eps'
 plot 'mea-100' using 3:xtic(1) ti col w histogram fill solid border 1 lw 0.25, \
 	'' u 5 ti col w histogram fill empty border 1 lt 1 lw 0.25, \
 	'' u 7 ti col w histogram fill solid 0.5 border 1 lt 1 lw 0.25, \
@@ -45,89 +47,94 @@ plot 'mea-100' using 3:xtic(1) ti col w histogram fill solid border 1 lw 0.25, \
 set ylabel 'Number of starts'
 set yrange [0:1000]
 
-set title 'Measured'
-set out 'pivot-measured-starts-52.eps'
+set title 'Simulated'
+set out 'pivot-simulated-starts-52.eps'
 plot 'his-52' using 2:xtic(1) ti col w histogram fill solid border 1 lw 0.25, \
 	'' u 4 ti col w histogram fill empty border 1 lt 1 lw 0.25, \
 	'' u 6 ti col w histogram fill solid 0.5 border 1 lt 1 lw 0.25, \
 	'' u 8 ti col w histogram fill pattern 4 border 1 lt 1 lw 0.25
 
-set title 'Simulated'
-set out 'pivot-simulated-starts-52.eps'
+set title 'Measured'
+set out 'pivot-measured-starts-52.eps'
 plot 'mea-52' using 2:xtic(1) ti col w histogram fill solid border 1 lw 0.25, \
 	'' u 4 ti col w histogram fill empty border 1 lt 1 lw 0.25, \
 	'' u 6 ti col w histogram fill solid 0.5 border 1 lt 1 lw 0.25, \
 	'' u 8 ti col w histogram fill pattern 4 border 1 lt 1 lw 0.25
 
 set ylabel 'Number of stops'
+set xrange [-0.5:12.5]
 set yrange [0:1000]
 
-set title 'Measured'
-set out 'pivot-measured-stops-52.eps'
+set title 'Simulated'
+set out 'pivot-simulated-stops-52.eps'
 plot 'his-52' using 3:xtic(1) ti col w histogram fill solid border 1 lw 0.25, \
 	'' u 5 ti col w histogram fill empty border 1 lt 1 lw 0.25, \
 	'' u 7 ti col w histogram fill solid 0.5 border 1 lt 1 lw 0.25, \
 	'' u 9 ti col w histogram fill pattern 4 border 1 lt 1 lw 0.25
 
-set title 'Simulated'
-set out 'pivot-simulated-stops-52.eps'
+set title 'Measured'
+set out 'pivot-measured-stops-52.eps'
 plot 'mea-52' using 3:xtic(1) ti col w histogram fill solid border 1 lw 0.25, \
 	'' u 5 ti col w histogram fill empty border 1 lt 1 lw 0.25, \
 	'' u 7 ti col w histogram fill solid 0.5 border 1 lt 1 lw 0.25, \
 	'' u 9 ti col w histogram fill pattern 4 border 1 lt 1 lw 0.25
 
 set ylabel 'Number of starts'
+set xrange [-0.5:4.5]
 set yrange [0:1200]
 
-set title 'Measured'
-set out 'pivot-measured-starts-42.eps'
+set title 'Simulated'
+set out 'pivot-simulated-starts-42.eps'
 plot 'his-42' using 2:xtic(1) ti col w histogram fill solid border 1 lw 0.25, \
 	'' u 4 ti col w histogram fill empty border 1 lt 1 lw 0.25, \
 	'' u 6 ti col w histogram fill solid 0.5 border 1 lt 1 lw 0.25, \
 	'' u 8 ti col w histogram fill pattern 4 border 1 lt 1 lw 0.25
 
-set title 'Simulated'
-set out 'pivot-simulated-starts-42.eps'
+set title 'Measured'
+set out 'pivot-measured-starts-42.eps'
 plot 'mea-42' using 2:xtic(1) ti col w histogram fill solid border 1 lw 0.25, \
 	'' u 4 ti col w histogram fill empty border 1 lt 1 lw 0.25, \
 	'' u 6 ti col w histogram fill solid 0.5 border 1 lt 1 lw 0.25, \
 	'' u 8 ti col w histogram fill pattern 4 border 1 lt 1 lw 0.25
 
 set ylabel 'Number of stops'
+set xrange [-0.5:17.5]
 set yrange [0:1200]
 
-set title 'Measured'
-set out 'pivot-measured-stops-42.eps'
+set title 'Simulated'
+set out 'pivot-simulated-stops-42.eps'
 plot 'his-42' using 3:xtic(1) ti col w histogram fill solid border 1 lw 0.25, \
 	'' u 5 ti col w histogram fill empty border 1 lt 1 lw 0.25, \
 	'' u 7 ti col w histogram fill solid 0.5 border 1 lt 1 lw 0.25, \
 	'' u 9 ti col w histogram fill pattern 4 border 1 lt 1 lw 0.25
 
-set title 'Simulated'
-set out 'pivot-simulated-stops-42.eps'
+set title 'Measured'
+set out 'pivot-measured-stops-42.eps'
 plot 'mea-42' using 3:xtic(1) ti col w histogram fill solid border 1 lw 0.25, \
 	'' u 5 ti col w histogram fill empty border 1 lt 1 lw 0.25, \
 	'' u 7 ti col w histogram fill solid 0.5 border 1 lt 1 lw 0.25, \
 	'' u 9 ti col w histogram fill pattern 4 border 1 lt 1 lw 0.25
 
 set ylabel 'Number of starts'
+set xrange [-0.5:3.5]
 set yrange [0:1800]
 
-set title 'Measured'
-set out 'pivot-measured-starts-27,48.eps'
+set title 'Simulated'
+set out 'pivot-simulated-starts-27,48.eps'
 plot 'his-27,48' using 2:xtic(1) ti col w histogram fill solid border 1 lw 0.25, \
 	'' u 4 ti col w histogram fill empty border 1 lt 1 lw 0.25, \
 	'' u 6 ti col w histogram fill solid 0.5 border 1 lt 1 lw 0.25, \
 	'' u 8 ti col w histogram fill pattern 4 border 1 lt 1 lw 0.25
 
-set title 'Simulated'
-set out 'pivot-simulated-starts-27,48.eps'
+set title 'Measured'
+set out 'pivot-measured-starts-27,48.eps'
 plot 'mea-27,48' using 2:xtic(1) ti col w histogram fill solid border 1 lw 0.25, \
 	'' u 4 ti col w histogram fill empty border 1 lt 1 lw 0.25, \
 	'' u 6 ti col w histogram fill solid 0.5 border 1 lt 1 lw 0.25, \
 	'' u 8 ti col w histogram fill pattern 4 border 1 lt 1 lw 0.25
 
 set ylabel 'Number of stops'
+set xrange [-0.5:25.5]
 set yrange [0:1800]
 
 set title 'Measured'

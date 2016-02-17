@@ -1,7 +1,7 @@
 %!PS-Adobe-2.0 EPSF-2.0
 %%Title: pivot-simulated-starts-100.eps
-%%Creator: gnuplot 5.0 patchlevel rc2
-%%CreationDate: Thu May 14 10:34:26 2015
+%%Creator: gnuplot 5.0 patchlevel 2
+%%CreationDate: Wed Feb 17 14:40:00 2016
 %%DocumentFonts: (atend)
 %%BoundingBox: 50 50 208 160
 %%EndComments
@@ -48,7 +48,7 @@ gnudict begin
   } if
 } def
 %
-% Gnuplot Prolog Version 5.0 (Apr 2014)
+% Gnuplot Prolog Version 5.1 (Oct 2015)
 %
 %/SuppressPDFMark true def
 %
@@ -83,7 +83,7 @@ gnudict begin
 /PL {stroke userlinewidth setlinewidth
 	Rounded {1 setlinejoin 1 setlinecap} if} def
 3.8 setmiterlimit
-% Default Line colors
+% Classic Line colors (version 5.0)
 /LCw {1 1 1} def
 /LCb {0 0 0} def
 /LCa {0 0 0} def
@@ -96,19 +96,20 @@ gnudict begin
 /LC6 {0 0 0} def
 /LC7 {1 0.3 0} def
 /LC8 {0.5 0.5 0.5} def
-% Default Line Types
+% Default dash patterns (version 5.0)
+/LTB {BL [] LCb DL} def
 /LTw {PL [] 1 setgray} def
-/LTb {BL [] LCb DL} def
+/LTb {PL [] LCb DL} def
 /LTa {AL [1 udl mul 2 udl mul] 0 setdash LCa setrgbcolor} def
 /LT0 {PL [] LC0 DL} def
-/LT1 {PL [4 dl1 2 dl2] LC1 DL} def
-/LT2 {PL [2 dl1 3 dl2] LC2 DL} def
-/LT3 {PL [1 dl1 1.5 dl2] LC3 DL} def
-/LT4 {PL [6 dl1 2 dl2 1 dl1 2 dl2] LC4 DL} def
-/LT5 {PL [3 dl1 3 dl2 1 dl1 3 dl2] LC5 DL} def
-/LT6 {PL [2 dl1 2 dl2 2 dl1 6 dl2] LC6 DL} def
-/LT7 {PL [1 dl1 2 dl2 6 dl1 2 dl2 1 dl1 2 dl2] LC7 DL} def
-/LT8 {PL [2 dl1 2 dl2 2 dl1 2 dl2 2 dl1 2 dl2 2 dl1 4 dl2] LC8 DL} def
+/LT1 {PL [2 dl1 3 dl2] LC1 DL} def
+/LT2 {PL [1 dl1 1.5 dl2] LC2 DL} def
+/LT3 {PL [6 dl1 2 dl2 1 dl1 2 dl2] LC3 DL} def
+/LT4 {PL [1 dl1 2 dl2 6 dl1 2 dl2 1 dl1 2 dl2] LC4 DL} def
+/LT5 {PL [4 dl1 2 dl2] LC5 DL} def
+/LT6 {PL [1.5 dl1 1.5 dl2 1.5 dl1 1.5 dl2 1.5 dl1 6 dl2] LC6 DL} def
+/LT7 {PL [3 dl1 3 dl2 1 dl1 3 dl2] LC7 DL} def
+/LT8 {PL [2 dl1 2 dl2 2 dl1 6 dl2] LC8 DL} def
 /SL {[] 0 setdash} def
 /Pnt {stroke [] 0 setdash gsave 1 setlinecap M 0 0 V stroke grestore} def
 /Dia {stroke [] 0 setdash 2 copy vpt add M
@@ -465,15 +466,14 @@ systemdict /pdfmark known not {
 SDict begin [
   /Title (pivot-simulated-starts-100.eps)
   /Subject (gnuplot plot)
-  /Creator (gnuplot 5.0 patchlevel rc2)
+  /Creator (gnuplot 5.0 patchlevel 2)
   /Author (javi)
 %  /Producer (gnuplot)
 %  /Keywords ()
-  /CreationDate (Thu May 14 10:34:26 2015)
+  /CreationDate (Wed Feb 17 14:40:00 2016)
   /DOCINFO pdfmark
 end
 } ifelse
-end
 %
 % Support for boxed text - Ethan A Merritt May 2005
 %
@@ -499,6 +499,10 @@ end
 /Boxing false def
 /textshow { ExtendTextBox Gshow } def
 %
+% redundant definitions for compatibility with prologue.ps older than 5.0.2
+/LTB {BL [] LCb DL} def
+/LTb {PL [] LCb DL} def
+end
 %%EndProlog
 %%Page: 1 1
 gnudict begin
@@ -512,6 +516,7 @@ newpath
 BackgroundColor 0 lt 3 1 roll 0 lt exch 0 lt or or not {BackgroundColor C 1.000 0 0 3168.00 2217.60 BoxColFill} if
 1.000 UL
 LTb
+LCb setrgbcolor
 392 512 M
 63 0 V
 2568 0 R
@@ -522,6 +527,7 @@ stroke
 ] -26.7 MRshow
 1.000 UL
 LTb
+LCb setrgbcolor
 392 756 M
 63 0 V
 2568 0 R
@@ -532,6 +538,7 @@ stroke
 ] -26.7 MRshow
 1.000 UL
 LTb
+LCb setrgbcolor
 392 1000 M
 63 0 V
 2568 0 R
@@ -542,6 +549,7 @@ stroke
 ] -26.7 MRshow
 1.000 UL
 LTb
+LCb setrgbcolor
 392 1245 M
 63 0 V
 2568 0 R
@@ -552,6 +560,7 @@ stroke
 ] -26.7 MRshow
 1.000 UL
 LTb
+LCb setrgbcolor
 392 1489 M
 63 0 V
 2568 0 R
@@ -562,6 +571,7 @@ stroke
 ] -26.7 MRshow
 1.000 UL
 LTb
+LCb setrgbcolor
 392 1733 M
 63 0 V
 2568 0 R
@@ -572,6 +582,7 @@ stroke
 ] -26.7 MRshow
 1.000 UL
 LTb
+LCb setrgbcolor
 392 1977 M
 63 0 V
 2568 0 R
@@ -582,308 +593,329 @@ stroke
 ] -26.7 MRshow
 1.000 UL
 LTb
-477 512 M
+LCb setrgbcolor
+437 512 M
 0 1465 R
 stroke
-477 464 M
+437 464 M
 currentpoint gsave translate -90 rotate 0 0 moveto
 [ [(Helvetica) 80.0 0.0 true true 0 (0-10)]
 ] -26.7 MLshow
 grestore
 1.000 UL
 LTb
-562 512 M
+LCb setrgbcolor
+528 512 M
 0 1465 R
 stroke
-562 464 M
+528 464 M
 currentpoint gsave translate -90 rotate 0 0 moveto
 [ [(Helvetica) 80.0 0.0 true true 0 (10-20)]
 ] -26.7 MLshow
 grestore
 1.000 UL
 LTb
-647 512 M
+LCb setrgbcolor
+619 512 M
 0 1465 R
 stroke
-647 464 M
+619 464 M
 currentpoint gsave translate -90 rotate 0 0 moveto
 [ [(Helvetica) 80.0 0.0 true true 0 (20-30)]
 ] -26.7 MLshow
 grestore
 1.000 UL
 LTb
-731 512 M
+LCb setrgbcolor
+710 512 M
 0 1465 R
 stroke
-731 464 M
+710 464 M
 currentpoint gsave translate -90 rotate 0 0 moveto
 [ [(Helvetica) 80.0 0.0 true true 0 (30-40)]
 ] -26.7 MLshow
 grestore
 1.000 UL
 LTb
-816 512 M
+LCb setrgbcolor
+800 512 M
 0 1465 R
 stroke
-816 464 M
+800 464 M
 currentpoint gsave translate -90 rotate 0 0 moveto
 [ [(Helvetica) 80.0 0.0 true true 0 (40-50)]
 ] -26.7 MLshow
 grestore
 1.000 UL
 LTb
-901 512 M
+LCb setrgbcolor
+891 512 M
 0 1465 R
 stroke
-901 464 M
+891 464 M
 currentpoint gsave translate -90 rotate 0 0 moveto
 [ [(Helvetica) 80.0 0.0 true true 0 (50-60)]
 ] -26.7 MLshow
 grestore
 1.000 UL
 LTb
-986 512 M
+LCb setrgbcolor
+982 512 M
 0 1465 R
 stroke
-986 464 M
+982 464 M
 currentpoint gsave translate -90 rotate 0 0 moveto
 [ [(Helvetica) 80.0 0.0 true true 0 (60-70)]
 ] -26.7 MLshow
 grestore
 1.000 UL
 LTb
-1071 512 M
+LCb setrgbcolor
+1072 512 M
 0 1465 R
 stroke
-1071 464 M
+1072 464 M
 currentpoint gsave translate -90 rotate 0 0 moveto
 [ [(Helvetica) 80.0 0.0 true true 0 (70-80)]
 ] -26.7 MLshow
 grestore
 1.000 UL
 LTb
-1156 512 M
+LCb setrgbcolor
+1163 512 M
 0 1465 R
 stroke
-1156 464 M
+1163 464 M
 currentpoint gsave translate -90 rotate 0 0 moveto
 [ [(Helvetica) 80.0 0.0 true true 0 (80-90)]
 ] -26.7 MLshow
 grestore
 1.000 UL
 LTb
-1241 512 M
+LCb setrgbcolor
+1254 512 M
 0 1465 R
 stroke
-1241 464 M
+1254 464 M
 currentpoint gsave translate -90 rotate 0 0 moveto
 [ [(Helvetica) 80.0 0.0 true true 0 (90-100)]
 ] -26.7 MLshow
 grestore
 1.000 UL
 LTb
-1326 512 M
+LCb setrgbcolor
+1345 512 M
 0 1465 R
 stroke
-1326 464 M
+1345 464 M
 currentpoint gsave translate -90 rotate 0 0 moveto
 [ [(Helvetica) 80.0 0.0 true true 0 (100-110)]
 ] -26.7 MLshow
 grestore
 1.000 UL
 LTb
-1410 512 M
+LCb setrgbcolor
+1435 512 M
 0 1465 R
 stroke
-1410 464 M
+1435 464 M
 currentpoint gsave translate -90 rotate 0 0 moveto
 [ [(Helvetica) 80.0 0.0 true true 0 (110-120)]
 ] -26.7 MLshow
 grestore
 1.000 UL
 LTb
-1495 512 M
+LCb setrgbcolor
+1526 512 M
 0 1465 R
 stroke
-1495 464 M
+1526 464 M
 currentpoint gsave translate -90 rotate 0 0 moveto
 [ [(Helvetica) 80.0 0.0 true true 0 (120-130)]
 ] -26.7 MLshow
 grestore
 1.000 UL
 LTb
-1580 512 M
+LCb setrgbcolor
+1617 512 M
 0 1465 R
 stroke
-1580 464 M
+1617 464 M
 currentpoint gsave translate -90 rotate 0 0 moveto
 [ [(Helvetica) 80.0 0.0 true true 0 (130-140)]
 ] -26.7 MLshow
 grestore
 1.000 UL
 LTb
-1665 512 M
+LCb setrgbcolor
+1708 512 M
 0 1465 R
 stroke
-1665 464 M
+1708 464 M
 currentpoint gsave translate -90 rotate 0 0 moveto
 [ [(Helvetica) 80.0 0.0 true true 0 (140-150)]
 ] -26.7 MLshow
 grestore
 1.000 UL
 LTb
-1750 512 M
+LCb setrgbcolor
+1798 512 M
 0 1465 R
 stroke
-1750 464 M
+1798 464 M
 currentpoint gsave translate -90 rotate 0 0 moveto
 [ [(Helvetica) 80.0 0.0 true true 0 (150-160)]
 ] -26.7 MLshow
 grestore
 1.000 UL
 LTb
-1835 512 M
+LCb setrgbcolor
+1889 512 M
 0 1465 R
 stroke
-1835 464 M
+1889 464 M
 currentpoint gsave translate -90 rotate 0 0 moveto
 [ [(Helvetica) 80.0 0.0 true true 0 (160-170)]
 ] -26.7 MLshow
 grestore
 1.000 UL
 LTb
-1920 512 M
+LCb setrgbcolor
+1980 512 M
 0 1465 R
 stroke
-1920 464 M
+1980 464 M
 currentpoint gsave translate -90 rotate 0 0 moveto
 [ [(Helvetica) 80.0 0.0 true true 0 (170-180)]
 ] -26.7 MLshow
 grestore
 1.000 UL
 LTb
-2005 512 M
+LCb setrgbcolor
+2070 512 M
 0 1465 R
 stroke
-2005 464 M
+2070 464 M
 currentpoint gsave translate -90 rotate 0 0 moveto
 [ [(Helvetica) 80.0 0.0 true true 0 (180-190)]
 ] -26.7 MLshow
 grestore
 1.000 UL
 LTb
-2089 512 M
+LCb setrgbcolor
+2161 512 M
 0 1465 R
 stroke
-2089 464 M
+2161 464 M
 currentpoint gsave translate -90 rotate 0 0 moveto
 [ [(Helvetica) 80.0 0.0 true true 0 (190-200)]
 ] -26.7 MLshow
 grestore
 1.000 UL
 LTb
-2174 512 M
+LCb setrgbcolor
+2252 512 M
 0 1465 R
 stroke
-2174 464 M
+2252 464 M
 currentpoint gsave translate -90 rotate 0 0 moveto
 [ [(Helvetica) 80.0 0.0 true true 0 (200-210)]
 ] -26.7 MLshow
 grestore
 1.000 UL
 LTb
-2259 512 M
+LCb setrgbcolor
+2343 512 M
 0 1465 R
 stroke
-2259 464 M
+2343 464 M
 currentpoint gsave translate -90 rotate 0 0 moveto
 [ [(Helvetica) 80.0 0.0 true true 0 (210-220)]
 ] -26.7 MLshow
 grestore
 1.000 UL
 LTb
-2344 512 M
+LCb setrgbcolor
+2433 512 M
 0 1465 R
 stroke
-2344 464 M
+2433 464 M
 currentpoint gsave translate -90 rotate 0 0 moveto
 [ [(Helvetica) 80.0 0.0 true true 0 (220-230)]
 ] -26.7 MLshow
 grestore
 1.000 UL
 LTb
-2429 512 M
+LCb setrgbcolor
+2524 512 M
 0 1465 R
 stroke
-2429 464 M
+2524 464 M
 currentpoint gsave translate -90 rotate 0 0 moveto
 [ [(Helvetica) 80.0 0.0 true true 0 (230-240)]
 ] -26.7 MLshow
 grestore
 1.000 UL
 LTb
-2514 512 M
+LCb setrgbcolor
+2615 512 M
 0 1465 R
 stroke
-2514 464 M
+2615 464 M
 currentpoint gsave translate -90 rotate 0 0 moveto
 [ [(Helvetica) 80.0 0.0 true true 0 (240-250)]
 ] -26.7 MLshow
 grestore
 1.000 UL
 LTb
-2599 512 M
+LCb setrgbcolor
+2705 512 M
 0 1465 R
 stroke
-2599 464 M
+2705 464 M
 currentpoint gsave translate -90 rotate 0 0 moveto
 [ [(Helvetica) 80.0 0.0 true true 0 (250-260)]
 ] -26.7 MLshow
 grestore
 1.000 UL
 LTb
-2684 512 M
+LCb setrgbcolor
+2796 512 M
 0 1465 R
 stroke
-2684 464 M
+2796 464 M
 currentpoint gsave translate -90 rotate 0 0 moveto
 [ [(Helvetica) 80.0 0.0 true true 0 (260-270)]
 ] -26.7 MLshow
 grestore
 1.000 UL
 LTb
-2768 512 M
+LCb setrgbcolor
+2887 512 M
 0 1465 R
 stroke
-2768 464 M
+2887 464 M
 currentpoint gsave translate -90 rotate 0 0 moveto
 [ [(Helvetica) 80.0 0.0 true true 0 (270-280)]
 ] -26.7 MLshow
 grestore
 1.000 UL
 LTb
-2853 512 M
+LCb setrgbcolor
+2978 512 M
 0 1465 R
 stroke
-2853 464 M
+2978 464 M
 currentpoint gsave translate -90 rotate 0 0 moveto
 [ [(Helvetica) 80.0 0.0 true true 0 (280-290)]
 ] -26.7 MLshow
 grestore
 1.000 UL
 LTb
-2938 512 M
-0 1465 R
-stroke
-2938 464 M
-currentpoint gsave translate -90 rotate 0 0 moveto
-[ [(Helvetica) 80.0 0.0 true true 0 (290-300)]
-] -26.7 MLshow
-grestore
+LCb setrgbcolor
 1.000 UL
-LTb
-1.000 UL
-LTb
+LTB
+LCb setrgbcolor
 392 1977 N
 392 512 L
 2631 0 V
@@ -893,26 +925,32 @@ Z stroke
 1.000 UP
 1.000 UL
 LTb
+LCb setrgbcolor
+LCb setrgbcolor
 64 1244 M
 currentpoint gsave translate -270 rotate 0 0 moveto
 [ [(Helvetica) 80.0 0.0 true true 0 (Number of starts)]
 ] -26.7 MCshow
 grestore
+LTb
+LCb setrgbcolor
 1707 56 M
 [ [(Helvetica) 80.0 0.0 true true 0 (Duration \(min\))]
 ] -26.7 MCshow
+LTb
 LCb setrgbcolor
 1707 2097 M
 [ [(Helvetica) 80.0 0.0 true true 0 (Simulated)]
 ] -26.7 MCshow
 % Begin plot #1
-0.250 UL
+1.000 UL
 LTb
+LCb setrgbcolor
 LCb setrgbcolor
 2624 1874 M
 [ [(Helvetica) 80.0 0.0 true true 0 (T1)]
 ] -26.7 MRshow
-0.250 UL
+1.000 UL
 LTb
 LCb setrgbcolor
 1.000 2672 1854 255 40 BoxColFill
@@ -923,35 +961,47 @@ LCb setrgbcolor
 -255 0 V
 0 -40 V
 Z stroke
-0.250 UL
+1.000 UL
 LTb
 LCb setrgbcolor
-1.000 528 512 18 853 BoxColFill
+1.000 401 512 19 238 BoxColFill
 LCb setrgbcolor
-528 512 N
-0 852 V
-17 0 V
-0 -852 V
--17 0 V
+401 512 N
+0 237 V
+18 0 V
+0 -237 V
+-18 0 V
 Z stroke
-0.250 UL
+1.000 UL
 LTb
 LCb setrgbcolor
-1.000 613 512 18 223 BoxColFill
+1.000 492 512 19 1310 BoxColFill
 LCb setrgbcolor
-613 512 N
-0 222 V
-17 0 V
-0 -222 V
--17 0 V
+492 512 N
+0 1309 V
+18 0 V
+510 512 L
+-18 0 V
 Z stroke
-0.250 UL
+1.000 UL
+LTb
+LCb setrgbcolor
+1.000 583 512 19 245 BoxColFill
+LCb setrgbcolor
+583 512 N
+0 244 V
+18 0 V
+0 -244 V
+-18 0 V
+Z stroke
+1.000 UL
 LTb
 LCb setrgbcolor
 % End plot #1
 % Begin plot #2
 0.250 UL
 LTb
+LCb setrgbcolor
 LCb setrgbcolor
 2624 1794 M
 [ [(Helvetica) 80.0 0.0 true true 0 (T2)]
@@ -965,29 +1015,65 @@ LCb setrgbcolor
 -255 0 V
 0 -40 V
 Z stroke
-545 512 N
-0 574 V
-17 0 V
-0 -574 V
--17 0 V
+419 512 N
+0 103 V
+18 0 V
+0 -103 V
+-18 0 V
 Z stroke
 0.250 UL
 LTb
 LCb setrgbcolor
-630 512 N
-0 527 V
-17 0 V
-0 -527 V
--17 0 V
+510 512 N
+0 227 V
+18 0 V
+0 -227 V
+-18 0 V
 Z stroke
 0.250 UL
 LTb
 LCb setrgbcolor
-715 512 N
-0 300 V
-16 0 V
-0 -300 V
--16 0 V
+601 512 N
+0 200 V
+18 0 V
+0 -200 V
+-18 0 V
+Z stroke
+0.250 UL
+LTb
+LCb setrgbcolor
+691 512 N
+0 940 V
+19 0 V
+0 -940 V
+-19 0 V
+Z stroke
+0.250 UL
+LTb
+LCb setrgbcolor
+782 512 N
+0 222 V
+18 0 V
+0 -222 V
+-18 0 V
+Z stroke
+0.250 UL
+LTb
+LCb setrgbcolor
+873 512 N
+0 44 V
+18 0 V
+0 -44 V
+-18 0 V
+Z stroke
+0.250 UL
+LTb
+LCb setrgbcolor
+964 512 N
+0 2 V
+18 0 V
+0 -2 V
+-18 0 V
 Z stroke
 0.250 UL
 LTb
@@ -996,6 +1082,7 @@ LCb setrgbcolor
 % Begin plot #3
 0.250 UL
 LTb
+LCb setrgbcolor
 LCb setrgbcolor
 2624 1714 M
 [ [(Helvetica) 80.0 0.0 true true 0 (T3)]
@@ -1014,244 +1101,255 @@ Z stroke
 0.250 UL
 LTb
 LCb setrgbcolor
-0.500 731 512 18 6 BoxColFill
+0.500 619 512 19 3 BoxColFill
 LCb setrgbcolor
-731 512 N
-0 5 V
-17 0 V
-0 -5 V
--17 0 V
-Z stroke
-0.250 UL
-LTb
-LCb setrgbcolor
-0.500 816 512 18 6 BoxColFill
-LCb setrgbcolor
-816 512 N
-0 5 V
-17 0 V
-0 -5 V
--17 0 V
-Z stroke
-0.250 UL
-LTb
-LCb setrgbcolor
-0.500 901 512 18 3 BoxColFill
-LCb setrgbcolor
-901 512 N
+619 512 N
 0 2 V
-17 0 V
+18 0 V
 0 -2 V
--17 0 V
+-18 0 V
 Z stroke
 0.250 UL
 LTb
 LCb setrgbcolor
-0.500 986 512 18 23 BoxColFill
+0.500 982 512 19 25 BoxColFill
 LCb setrgbcolor
-986 512 N
-0 22 V
-17 0 V
-0 -22 V
--17 0 V
-Z stroke
-0.250 UL
-LTb
-LCb setrgbcolor
-0.500 1071 512 18 18 BoxColFill
-LCb setrgbcolor
-1071 512 N
-0 17 V
-17 0 V
-0 -17 V
--17 0 V
-Z stroke
-0.250 UL
-LTb
-LCb setrgbcolor
-0.500 1156 512 18 16 BoxColFill
-LCb setrgbcolor
-1156 512 N
-0 15 V
-17 0 V
-0 -15 V
--17 0 V
-Z stroke
-0.250 UL
-LTb
-LCb setrgbcolor
-0.500 1241 512 18 30 BoxColFill
-LCb setrgbcolor
-1241 512 N
-0 29 V
-17 0 V
-0 -29 V
--17 0 V
-Z stroke
-0.250 UL
-LTb
-LCb setrgbcolor
-0.500 1326 512 18 38 BoxColFill
-LCb setrgbcolor
-1326 512 N
-0 37 V
-17 0 V
-0 -37 V
--17 0 V
-Z stroke
-0.250 UL
-LTb
-LCb setrgbcolor
-0.500 1410 512 18 3 BoxColFill
-LCb setrgbcolor
-1410 512 N
-0 2 V
-17 0 V
-0 -2 V
--17 0 V
-Z stroke
-0.250 UL
-LTb
-LCb setrgbcolor
-0.500 1495 512 18 33 BoxColFill
-LCb setrgbcolor
-1495 512 N
-0 32 V
-17 0 V
-0 -32 V
--17 0 V
-Z stroke
-0.250 UL
-LTb
-LCb setrgbcolor
-0.500 1580 512 18 23 BoxColFill
-LCb setrgbcolor
-1580 512 N
-0 22 V
-17 0 V
-0 -22 V
--17 0 V
-Z stroke
-0.250 UL
-LTb
-LCb setrgbcolor
-0.500 1665 512 18 25 BoxColFill
-LCb setrgbcolor
-1665 512 N
+982 512 N
 0 24 V
-17 0 V
+18 0 V
 0 -24 V
--17 0 V
+-18 0 V
 Z stroke
 0.250 UL
 LTb
 LCb setrgbcolor
-0.500 1750 512 18 21 BoxColFill
+0.500 1072 512 20 23 BoxColFill
 LCb setrgbcolor
-1750 512 N
-0 20 V
-17 0 V
-0 -20 V
--17 0 V
+1072 512 N
+0 22 V
+19 0 V
+0 -22 V
+-19 0 V
 Z stroke
 0.250 UL
 LTb
 LCb setrgbcolor
-0.500 1835 512 18 13 BoxColFill
+0.500 1163 512 19 13 BoxColFill
 LCb setrgbcolor
-1835 512 N
+1163 512 N
 0 12 V
-17 0 V
+18 0 V
 0 -12 V
--17 0 V
+-18 0 V
 Z stroke
 0.250 UL
 LTb
 LCb setrgbcolor
-0.500 1920 512 18 16 BoxColFill
+0.500 1254 512 19 23 BoxColFill
 LCb setrgbcolor
-1920 512 N
+1254 512 N
+0 22 V
+18 0 V
+0 -22 V
+-18 0 V
+Z stroke
+0.250 UL
+LTb
+LCb setrgbcolor
+0.500 1345 512 19 16 BoxColFill
+LCb setrgbcolor
+1345 512 N
 0 15 V
-17 0 V
+18 0 V
 0 -15 V
--17 0 V
+-18 0 V
 Z stroke
 0.250 UL
 LTb
 LCb setrgbcolor
-0.500 2005 512 18 13 BoxColFill
+0.500 1435 512 19 43 BoxColFill
 LCb setrgbcolor
-2005 512 N
-0 12 V
-17 0 V
-0 -12 V
--17 0 V
+1435 512 N
+0 42 V
+18 0 V
+0 -42 V
+-18 0 V
 Z stroke
 0.250 UL
 LTb
 LCb setrgbcolor
-0.500 2089 512 18 13 BoxColFill
+0.500 1526 512 19 35 BoxColFill
 LCb setrgbcolor
-2089 512 N
-0 12 V
-17 0 V
-0 -12 V
--17 0 V
+1526 512 N
+0 34 V
+18 0 V
+0 -34 V
+-18 0 V
 Z stroke
 0.250 UL
 LTb
 LCb setrgbcolor
-0.500 2174 512 18 6 BoxColFill
+0.500 1617 512 19 25 BoxColFill
 LCb setrgbcolor
-2174 512 N
-0 5 V
-17 0 V
-0 -5 V
--17 0 V
+1617 512 N
+0 24 V
+18 0 V
+0 -24 V
+-18 0 V
 Z stroke
 0.250 UL
 LTb
 LCb setrgbcolor
-0.500 2259 512 18 11 BoxColFill
+0.500 1708 512 19 47 BoxColFill
 LCb setrgbcolor
-2259 512 N
+1708 512 N
+0 46 V
+18 0 V
+0 -46 V
+-18 0 V
+Z stroke
+0.250 UL
+LTb
+LCb setrgbcolor
+0.500 1798 512 19 69 BoxColFill
+LCb setrgbcolor
+1798 512 N
+0 68 V
+18 0 V
+0 -68 V
+-18 0 V
+Z stroke
+0.250 UL
+LTb
+LCb setrgbcolor
+0.500 1889 512 19 38 BoxColFill
+LCb setrgbcolor
+1889 512 N
+0 37 V
+18 0 V
+0 -37 V
+-18 0 V
+Z stroke
+0.250 UL
+LTb
+LCb setrgbcolor
+0.500 1980 512 19 33 BoxColFill
+LCb setrgbcolor
+1980 512 N
+0 32 V
+18 0 V
+0 -32 V
+-18 0 V
+Z stroke
+0.250 UL
+LTb
+LCb setrgbcolor
+0.500 2070 512 20 11 BoxColFill
+LCb setrgbcolor
+2070 512 N
 0 10 V
-17 0 V
+19 0 V
 0 -10 V
--17 0 V
+-19 0 V
 Z stroke
 0.250 UL
 LTb
 LCb setrgbcolor
-0.500 2429 512 18 6 BoxColFill
+0.500 2161 512 19 35 BoxColFill
 LCb setrgbcolor
-2429 512 N
+2161 512 N
+0 34 V
+18 0 V
+0 -34 V
+-18 0 V
+Z stroke
+0.250 UL
+LTb
+LCb setrgbcolor
+0.500 2252 512 19 25 BoxColFill
+LCb setrgbcolor
+2252 512 N
+0 24 V
+18 0 V
+0 -24 V
+-18 0 V
+Z stroke
+0.250 UL
+LTb
+LCb setrgbcolor
+0.500 2343 512 19 16 BoxColFill
+LCb setrgbcolor
+2343 512 N
+0 15 V
+18 0 V
+0 -15 V
+-18 0 V
+Z stroke
+0.250 UL
+LTb
+LCb setrgbcolor
+0.500 2433 512 19 18 BoxColFill
+LCb setrgbcolor
+2433 512 N
+0 17 V
+18 0 V
+0 -17 V
+-18 0 V
+Z stroke
+0.250 UL
+LTb
+LCb setrgbcolor
+0.500 2524 512 19 16 BoxColFill
+LCb setrgbcolor
+2524 512 N
+0 15 V
+18 0 V
+0 -15 V
+-18 0 V
+Z stroke
+0.250 UL
+LTb
+LCb setrgbcolor
+0.500 2615 512 19 6 BoxColFill
+LCb setrgbcolor
+2615 512 N
 0 5 V
-17 0 V
+18 0 V
 0 -5 V
--17 0 V
+-18 0 V
 Z stroke
 0.250 UL
 LTb
 LCb setrgbcolor
-0.500 2514 512 18 6 BoxColFill
+0.500 2796 512 19 3 BoxColFill
 LCb setrgbcolor
-2514 512 N
-0 5 V
-17 0 V
-0 -5 V
--17 0 V
-Z stroke
-0.250 UL
-LTb
-LCb setrgbcolor
-0.500 2599 512 18 3 BoxColFill
-LCb setrgbcolor
-2599 512 N
+2796 512 N
 0 2 V
-17 0 V
+18 0 V
 0 -2 V
--17 0 V
+-18 0 V
+Z stroke
+0.250 UL
+LTb
+LCb setrgbcolor
+0.500 2887 512 19 3 BoxColFill
+LCb setrgbcolor
+2887 512 N
+0 2 V
+18 0 V
+0 -2 V
+-18 0 V
+Z stroke
+0.250 UL
+LTb
+LCb setrgbcolor
+0.500 2978 512 19 3 BoxColFill
+LCb setrgbcolor
+2978 512 N
+0 2 V
+18 0 V
+0 -2 V
+-18 0 V
 Z stroke
 0.250 UL
 LTb
@@ -1260,6 +1358,7 @@ LCb setrgbcolor
 % Begin plot #4
 0.250 UL
 LTb
+LCb setrgbcolor
 LCb setrgbcolor
 2624 1634 M
 [ [(Helvetica) 80.0 0.0 true true 0 (T4)]
@@ -1281,8 +1380,10 @@ LCb setrgbcolor
 % End plot #4
 2.000 UL
 LTb
+LCb setrgbcolor
 1.000 UL
-LTb
+LTB
+LCb setrgbcolor
 392 1977 N
 392 512 L
 2631 0 V
@@ -1292,6 +1393,7 @@ Z stroke
 1.000 UP
 1.000 UL
 LTb
+LCb setrgbcolor
 stroke
 grestore
 end

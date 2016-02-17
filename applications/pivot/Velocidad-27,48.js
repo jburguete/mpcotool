@@ -4,34 +4,34 @@
     {
       "length"      : 50.11,
       "velocity"    : 0.02738,
-      "alpha1"      : 180.166,
-      "alpha2"      : 179.751,
-      "random"      : 0.136,
-      "boot-time"   : 3.32
+      "alpha1"      : 180.194,
+      "alpha2"      : 179.786,
+      "random"      : 0.122,
+      "boot-time"   : 3.82
     },
     {
       "length"    : 50.11,
       "velocity"  : 0.02824,
-      "alpha1"      : 180.166,
-      "alpha2"      : 179.751,
-      "random"      : 0.136,
-      "boot-time"   : 3.32
+      "alpha1"      : 180.194,
+      "alpha2"      : 179.786,
+      "random"      : 0.122,
+      "boot-time"   : 3.82
     },
     {
       "length"    : 50.11,
       "velocity"  : 0.03008,
-      "alpha1"      : 180.166,
-      "alpha2"      : 179.751,
-      "random"      : 0.136,
-      "boot-time"   : 3.32
+      "alpha1"      : 180.194,
+      "alpha2"      : 179.786,
+      "random"      : 0.122,
+      "boot-time"   : 3.82
     },
     {
       "length"    : 50.11,
       "velocity"  : 0.03753,
-      "alpha1"      : 180.166,
-      "alpha2"      : 179.751,
-      "random"      : 0.136,
-      "boot-time"   : 3.32
+      "alpha1"      : 180.194,
+      "alpha2"      : 179.786,
+      "random"      : 0.122,
+      "boot-time"   : 3.82
     }
   ],
   "cycle-time"     : 71.0,
