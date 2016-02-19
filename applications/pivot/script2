@@ -1,8 +1,8 @@
-./pivot Velocidad-100.js out-100 dyn-100 sum-100
+./pivot Velocidad-100.js out-100 dyn-100
 ./histogram out-100 his-100 2 Duration T1 T2 T3 T4
-./pivot Velocidad-52.js out-52 dyn-52 sum-52
+./pivot Velocidad-52.js out-52 dyn-52
 ./histogram out-52 his-52 2 Duration T1 T2 T3 T4
-./pivot Velocidad-42.js out-42 dyn-42 sum-42
+./pivot Velocidad-42.js out-42 dyn-42
 ./histogram out-42 his-42 2 Duration T1 T2 T3 T4
-./pivot Velocidad-27,48.js out-27,48 dyn-27,48 sum-27,48
+./pivot Velocidad-27,48.js out-27,48 dyn-27,48
 ./histogram out-27,48 his-27,48 2 Duration T1 T2 T3 T4

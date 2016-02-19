@@ -41,7 +41,7 @@ OPTIONAL TOOLS AND LIBRARIES
 
 * [gettext](http://www.gnu.org/software/gettext) (to work with different
 locales)
-* [gtk+](http://www.gtk.org) (to create the interactive GUI tool)
+* [gtk+3](http://www.gtk.org) (to create the interactive GUI tool)
 * [openmpi](http://www.open-mpi.org) or [mpich](http://www.mpich.org) (to run in
 parallelized tasks on multiple computers)
 * [doxygen](http://www.stack.nl/~dimitri/doxygen) (standard comments format to
@@ -456,7 +456,7 @@ are:
 
 * A template file as *template1.js*:
 
-```
+```json
     {
       "towers" :
       [

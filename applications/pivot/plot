@@ -10,7 +10,7 @@ set xtic rotate by -90 scale 0
 
 set ylabel 'Number of starts'
 set xrange [-0.5:28.5]
-set yrange [0:600]
+set yrange [0:500]
 
 set title 'Simulated'
 set out 'pivot-simulated-starts-100.eps'
@@ -27,8 +27,7 @@ plot 'mea-100' using 2:xtic(1) ti col w histogram fill solid border 1 lw 0.25, \
 	'' u 8 ti col w histogram fill pattern 4 border 1 lt 1 lw 0.25
 
 set ylabel 'Number of stops'
-set xrange [-0.5:5.5]
-set yrange [0:500]
+set xrange [-0.5:6.5]
 
 set title 'Simulated'
 set out 'pivot-simulated-stops-100.eps'
@@ -45,7 +44,7 @@ plot 'mea-100' using 3:xtic(1) ti col w histogram fill solid border 1 lw 0.25, \
 	'' u 9 ti col w histogram fill pattern 4 border 1 lt 1 lw 0.25
 
 set ylabel 'Number of starts'
-set yrange [0:1000]
+set xrange [-0.5:5.5]
 
 set title 'Simulated'
 set out 'pivot-simulated-starts-52.eps'
@@ -62,8 +61,7 @@ plot 'mea-52' using 2:xtic(1) ti col w histogram fill solid border 1 lw 0.25, \
 	'' u 8 ti col w histogram fill pattern 4 border 1 lt 1 lw 0.25
 
 set ylabel 'Number of stops'
-set xrange [-0.5:12.5]
-set yrange [0:1000]
+set xrange [-0.5:16.5]
 
 set title 'Simulated'
 set out 'pivot-simulated-stops-52.eps'
@@ -81,7 +79,7 @@ plot 'mea-52' using 3:xtic(1) ti col w histogram fill solid border 1 lw 0.25, \
 
 set ylabel 'Number of starts'
 set xrange [-0.5:4.5]
-set yrange [0:1200]
+set yrange [0:600]
 
 set title 'Simulated'
 set out 'pivot-simulated-starts-42.eps'
@@ -98,8 +96,7 @@ plot 'mea-42' using 2:xtic(1) ti col w histogram fill solid border 1 lw 0.25, \
 	'' u 8 ti col w histogram fill pattern 4 border 1 lt 1 lw 0.25
 
 set ylabel 'Number of stops'
-set xrange [-0.5:17.5]
-set yrange [0:1200]
+set xrange [-0.5:18.5]
 
 set title 'Simulated'
 set out 'pivot-simulated-stops-42.eps'
@@ -117,7 +114,7 @@ plot 'mea-42' using 3:xtic(1) ti col w histogram fill solid border 1 lw 0.25, \
 
 set ylabel 'Number of starts'
 set xrange [-0.5:3.5]
-set yrange [0:1800]
+set yrange [0:1000]
 
 set title 'Simulated'
 set out 'pivot-simulated-starts-27,48.eps'
@@ -135,7 +132,6 @@ plot 'mea-27,48' using 2:xtic(1) ti col w histogram fill solid border 1 lw 0.25,
 
 set ylabel 'Number of stops'
 set xrange [-0.5:25.5]
-set yrange [0:1800]
 
 set title 'Simulated'
 set out 'pivot-simulated-stops-27,48.eps'
