@@ -1,12 +1,39 @@
 \documentclass[a4paper]{report}
 
 \usepackage[utf8]{inputenc}
-\usepackage{listings}
 \usepackage{pstricks}
 \usepackage{multido}
 \usepackage{amsfonts}
 \usepackage{natbib}
 \usepackage{graphicx}
+\usepackage{listings}
+\lstdefinelanguage{json}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  keywordstyle=\bfseries,
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  ndkeywordstyle=\bfseries,
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\ttfamily,
+  stringstyle=\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+\lstset{
+   language=json,
+   extendedchars=true,
+   basicstyle=\footnotesize\ttfamily,
+   showstringspaces=false,
+   showspaces=false,
+   numbers=left,
+   numberstyle=\footnotesize,
+   numbersep=9pt,
+   tabsize=2,
+   breaklines=true,
+   showtabs=false,
+   captionpos=b
+}
 
 \newcommand{\EQ}[2]
 {\begin{equation}#1\label{#2}\end{equation}}
@@ -467,8 +494,103 @@ compatible with the model parameter limits,
 \end{description}
 
 %%%%%%%%%%%%%%%%%%%%%%
-Alternatively, the main input file can be also written in JSON format. In the
-README file both formats, XML and JSON, can be seen more detailed.
+In this format the file is written as:
+\begin{lstlisting}[language=xml,basicstyle=\scriptsize]
+<?xml version="1.0"?>
+<optimize simulator="simulator_name" evaluator="evaluator_name"
+	algorithm="algorithm_type" nsimulations="simulations_number"
+	niterations="iterations_number" tolerance="tolerance_value"
+	nbest="best_number" npopulation="population_number"
+	ngenerations="generations_number" mutation="mutation_ratio"
+	reproduction="reproduction_ratio" adaptation="adaptation_ratio"
+	direction="direction_search_type" nsteps="steps_number"
+	relaxation="relaxation_parameter" nestimates="estimates_number"
+	threshold="threshold_parameter" norm="norm_type" p="p_parameter"
+	seed="random_seed" result_file="result_file"
+	variables_file="variables_file">
+    <experiment name="data_file_1" template1="template_1_1"
+		template2="template_1_2" ... weight="weight_1"/>
+    ...
+    <experiment name="data_file_N" template1="template_N_1"
+		template2="template_N_2" ... weight="weight_N"/>
+    <variable name="variable_1" minimum="min_value" maximum="max_value"
+		precision="precision_digits" sweeps="sweeps_number"
+		nbits="bits_number" step="step_size"/>
+    ...
+    <variable name="variable_M" minimum="min_value" maximum="max_value"
+		precision="precision_digits" sweeps="sweeps_number"
+		nbits="bits_number" step="step_size"/>
+</optimize>
+\end{lstlisting}
+
+Alternatively, the main input file can be also written in JSON format:
+\begin{lstlisting}[language=json,basicstyle=\scriptsize]
+{
+	"simulator": "simulator_name",
+	"evaluator": "evaluator_name",
+	"algorithm": "algorithm_type",
+	"nsimulations": "simulations_number",
+	"niterations": "iterations_number",
+	"tolerance": "tolerance_value",
+	"nbest": "best_number",
+	"npopulation": "population_number",
+	"ngenerations": "generations_number",
+	"mutation": "mutation_ratio",
+	"reproduction": "reproduction_ratio",
+	"adaptation": "adaptation_ratio",
+	"direction": "direction_search_type",
+	"nsteps": "steps_number",
+	"relaxation": "relaxation_parameter",
+	"nestimates": "estimates_number",
+	"threshold": "threshold_parameter",
+	"norm": "norm_type",
+	"p": "p_parameter",
+	"seed": "random_seed",
+	"result_file": "result_file",
+	"variables_file": "variables_file",
+	"experiments":
+	[
+		{
+			"name": "data_file_1",
+			"template1": "template_1_1",
+			"template2": "template_1_2",
+			...
+			"weight": "weight_1",
+		},
+	    ...
+		{
+			"name": "data_file_N",
+			"template1": "template_N_1",
+			"template2": "template_N_2",
+			...
+			"weight": "weight_N",
+		}
+	],
+	"variables":
+	[
+		{
+
+			"name": "variable_1",
+			"minimum": "min_value",
+			"maximum": "max_value",
+			"precision": "precision_digits",
+			"sweeps": "sweeps_number",
+			"nbits": "bits_number",
+			"step": "step_size",
+		},
+		...
+		{
+			"name": "variable_M",
+			"minimum": "min_value",
+			"maximum": "max_value",
+			"precision": "precision_digits",
+			"sweeps": "sweeps_number",
+			"nbits": "bits_number",
+			"step": "step_size",
+		}
+	]
+}
+\end{lstlisting}
 %%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Template files}
