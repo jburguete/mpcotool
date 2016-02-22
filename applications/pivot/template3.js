@@ -35,8 +35,9 @@
     }
   ],
   "cycle-time"     : 71.0,
-  "plot-time"     : 1.0,
-  "comp-time-step": 0.1,
-  "active-percent" : 52.0
+  "plot-time"      : 1.0,
+  "comp-time-step" : 0.1,
+  "active-percent" : 52.0,
+  "simulation-time": 32847
 }
 
