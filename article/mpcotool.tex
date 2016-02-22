@@ -184,13 +184,18 @@ optimization or calibration of empirical parameters required in the
 formulation of numerical simulation models. The structure is such that it can be
 easily adapted to different external simulation codes.
 One genetic algorithm, two brute force optimization algorithms (sweep and
-Monte-Carlo) and an iterative algorithm to improve the brute force methods are
-included as alternative methods.
+Monte-Carlo) and,
+%%%%%%%%%%%%%%%%%%%%%%%%%
+to improve the brute force methods, one iterative algorithm and one direction
+search algorithm are included as alternative methods.
+%%%%%%%%%%%%%%%%%%%%%%%%%
 Parallel computations are enabled in a simple way so that the work load can be
 distributed among the different processors available in one computer or in
 multiple computers of a cluster.
+%%%%%%%%%%%%%%%%%%%%%%%%%
 The software optimization methods are analysed in six standard analytical test
 functions.
+%%%%%%%%%%%%%%%%%%%%%%%%%
 The MPCOTool usage and possibilities are illustrated by showing four practical
 applications in agriculture: optimization of a canal management; calibration of
 the empirical coefficients in a surface irrigation model; calibration in a
@@ -639,7 +644,7 @@ The required format for the main input file and the template files are described
 
 \subsection{Command line format}
 
-The code of MPCOTool is written in C code using standard open source libraries. The software can be compiled in the most widely used operative systems (Windows, Linux, FreeBSD, ...). Instructions to build the executable can be read in the user manual. The optional arguments for the command line will be typed in square brackets.
+The code of MPCOTool is written in C using standard open source libraries. The software can be compiled in the most widely used operative systems (Windows, Linux, FreeBSD, ...). Instructions to build the executable can be read in the user manual. The optional arguments for the command line will be typed in square brackets.
 
 \begin{itemize}
 
@@ -965,12 +970,13 @@ optimum, and subsequently use the DS for a fast convergence. As regards the
 method to estimate the direction, although when RA with a low $N_e$ is used, the
 convergence is accelerated, it does not success in finding the optimum in some
 cases. CD or RA with $N_e=4$ prove to be methods somewhat slower but are deemed
-more secure. 
-\FIGVI{Sphere-e.eps}{Ackley-e.eps}{Booth-e.eps}{Rosenbrock-e.eps}{Easom-e.eps}
-{Beale-e.eps}{Error de los métodos, estimado como $-\log_{10}\PA{d_{2500}}$, en
-los tests}{FigTestResults}
-
+more secure.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\FIGVI{Sphere-e.eps}{Ackley-e.eps}{Booth-e.eps}{Rosenbrock-e.eps}{Easom-e.eps}
+{Beale-e.eps}{Precisión de los métodos, estimada como $-\log_{10}\PA{d_{2500}}$,
+en todos tests para un amplio conjunto de algoritmos y parámetros de
+configuración}{FigTestResults}
+
 Todos los casos presentados en esta sección suponen un total de 1705
 calibraciones y 42625000 simulaciones. The cases have been run on a laptop
 computer equipped with an Intel(R) Core(TM) i7 M620 2.67GHz processor. Total
