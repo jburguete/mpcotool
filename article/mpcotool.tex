@@ -1521,49 +1521,49 @@ The best results where obtained with the genetic algorithms. Note that in this c
 	Optimization & Optimization & Optimal empirical & Objective
 	\\ algorithm & parameters & parameters & function value
 	\\ \hline
-	SW & $N_x=10$ & $\overline{\alpha_{start}}=179.822^\circ$
-	& 60.08
-	\\ & & $\overline{\alpha_{stop}}=180.267^\circ$
+	SW & $N_x=10$ & $\overline{\alpha_{start}}=179.956^\circ$
+	& 63.03
+	\\ & & $\overline{\alpha_{stop}}=180.367^\circ$
 	\\ & & $\delta=0.133^\circ$
-	\\ & & $\tau=2.28$ s
+	\\ & & $\tau=1.73$ s
 	\\ \hline
-	SW+IT & $N_x=5$ & $\overline{\alpha_{start}}=181.124^\circ$
-	& 61.70
-	\\ & $N_i=16$ & $\overline{\alpha_{stop}}=181.524^\circ$
-	\\ & $N_b=10$ & $\delta=0.056^\circ$
-	\\ & $tol=0.5$ & $\tau=4.26$ s
+	SW+IT & $N_x=5$ & $\overline{\alpha_{start}}=180.448^\circ$
+	& 44.30
+	\\ & $N_i=16$ & $\overline{\alpha_{stop}}=180.848^\circ$
+	\\ & $N_b=10$ & $\delta=0.098^\circ$
+	\\ & $tol=0.5$ & $\tau=2.24$ s
 	\\ \hline
 	MC & $N_s=10000$
-	& $\overline{\alpha_{start}}=179.843^\circ$ & 58.16
-	\\ & $N_i=1$ & $\overline{\alpha_{stop}}=180.285^\circ$
-	\\ & & $\delta=0.132^\circ$
-	\\ & & $\tau=2.24$ s
+	& $\overline{\alpha_{start}}=179.739^\circ$ & 61.49
+	\\ & $N_i=1$ & $\overline{\alpha_{stop}}=180.139^\circ$
+	\\ & & $\delta=0.120^\circ$
+	\\ & & $\tau=2.35$ s
 	\\ \hline
 	MC+IT & $N_s=625$
-	& $\overline{\alpha_{start}}=179.797^\circ$ & 52.89
-	\\ & $N_i=16$ & $\overline{\alpha_{stop}}=180.230^\circ$
-	\\ & $N_b=10$ & $\delta=0.134^\circ$
-	\\ & $tol=0.1$ & $\tau=2.51$ s
+	& $\overline{\alpha_{start}}=179.760^\circ$ & 49.14
+	\\ & $N_i=16$ & $\overline{\alpha_{stop}}=180.159^\circ$
+	\\ & $N_b=10$ & $\delta=0.101^\circ$
+	\\ & $tol=0.1$ & $\tau=2.29$ s
 	\\ \hline
 	MC+DS+CD & $N_s=9000$, $N_{st}=125$
-	& $\overline{\alpha_{start}}=179.843^\circ$ & 57.48
-	\\ & $rel=1$ & $\overline{\alpha_{stop}}=180.285^\circ$
-	\\ & $st_{\overline{\alpha_{start}}}=0.4$ & $\delta=0.132^\circ$
-	\\ & $st_{\overline{\alpha_{stop}}}=0.3$ & $\tau=2.21$ s
+	& $\overline{\alpha_{start}}=179.743^\circ$ & 54.42
+	\\ & $rel=1$ & $\overline{\alpha_{stop}}=180.138^\circ$
+	\\ & $st_{\overline{\alpha_{start}}}=0.4$ & $\delta=0.120^\circ$
+	\\ & $st_{\overline{\alpha_{stop}}}=0.3$ & $\tau=2.36$ s
 	\\ & $st_\delta=0.004$
 	\\ & $st_\tau=0.05$
 	\\ \hline
-	GE & $N_p=1000$ & $\overline{\alpha_{start}}=179.724^\circ$
-	& 48.29
-	\\ & $N_g=16$ & $\overline{\alpha_{stop}}=180.176^\circ$
-	\\ & $R_m=R_r=R_a=0.2$ & $\delta=0.109^\circ$
-	\\ & & $\tau=2.13$s
+	GE & $N_p=1000$ & $\overline{\alpha_{start}}=179.967^\circ$
+	& 49.41
+	\\ & $N_g=16$ & $\overline{\alpha_{stop}}=180.367^\circ$
+	\\ & $R_m=R_r=R_a=0.2$ & $\delta=0.101^\circ$
+	\\ & & $\tau=2.22$ s
 	\\ \hline
-	GE & $N_p=400$ & $\overline{\alpha_{start}}=179.724^\circ$
-	& 48.29
-	\\ & $N_g=81$ & $\overline{\alpha_{stop}}=180.176^\circ$
-	\\ & $R_m=R_r=R_a=0.1$ & $\delta=0.109^\circ$
-	\\ & & $\tau=2.13$s
+	GE & $N_p=400$ & $\overline{\alpha_{start}}=179.933^\circ$
+	& 48.08
+	\\ & $N_g=81$ & $\overline{\alpha_{stop}}=180.327^\circ$
+	\\ & $R_m=R_r=R_a=0.1$ & $\delta=0.112^\circ$
+	\\ & & $\tau=2.60$s
 	\\ \hline
 }{Optimal parameters and values of the evaluation function in the four towers pivot case in \citet{Ouazaa15} using different optimization algorithms implemented in MPCOTool with the same number of total simulations ($N_{total}=10000$). $N_x$ is the sweeps number for every variable in SW}{TabPivot}
 
@@ -1600,11 +1600,11 @@ simulated starts and (bottom right)simulated stops for the pivot towers working 
 
 %%%%%%%%%%%%%%%%%%%%
 To illustrate the chaotic movement of inner towers, in
-Fig.~\ref{FigPivotVelocity} the towers velocity is presented at an interval of
+Fig.~\ref{FigPivotV} the towers velocity is presented at an interval of
 central working time.
 \FIG{pivot-velocity.eps}
 {Towers velocity in an interval of ten minutes at central working times for the
-pivot working at 25\% velocity}{FigPivotVelocity}
+pivot working at 25\% velocity}{FigPivotV}
 %%%%%%%%%%%%%%%%%%%%
 
 \section{Conclusions}
