@@ -1,11 +1,11 @@
-alpha1 min=180.285 max=180.285
-alpha2 min=179.843 max=179.843
-random min=0.131782 max=0.131782
-boot-time min=2.21444 max=2.21444
+alpha1 min=180.138 max=180.138
+alpha2 min=179.743 max=179.743
+random min=0.119857 max=0.119857
+boot-time min=2.35958 max=2.35958
 Best result
-error = 5.748183851983946e+01
-alpha1 = 180.285
-alpha2 = 179.843
-random = 0.132
-boot-time = 2.21
-Calculation time = 4311.37 s
+error = 5.442485270814979e+01
+alpha1 = 180.138
+alpha2 = 179.743
+random = 0.120
+boot-time = 2.36
+Calculation time = 3027.32 s

@@ -1462,8 +1462,10 @@ The model includes four empirical parameters to calibrate: the average angles of
 	\alpha_{start}=\overline{\alpha_{start}}+(r-0.5)\,\delta,\quad
 	\alpha_{stop}=\overline{\alpha_{stop}}+(r-0.5)\,\delta,
 }{EqPivotStartStop}
-with $r$ a random number defined with uniform probability in the range $r\in[0,1)$. The same time $\tau$ is considered for start and stop, and the velocity
-increases or decreases linearly (see figure~\ref{FigPivotVelocity}).
+with $r$ a random number defined with sinusoidal probability, to favor central
+angles, in the range $r\in[0,1)$. The same time $\tau$ is considered for start
+and stop, and the velocity increases or decreases linearly (see
+Fig.~\ref{FigPivotVelocity}).
 
 \psset{unit=1mm}
 \PSPICTURE{-16}{-6}{75}{39}
@@ -1490,9 +1492,9 @@ increases or decreases linearly (see figure~\ref{FigPivotVelocity}).
 	\rput(37.5,26){time}
 }{Linear velocity of a centre-pivot tower on starts and stops}{FigPivotVelocity}
 
-The movement of a real pivot with four towers separated 50.11 m is next simulated and calibrated. The maximum linear velocity of each tower were measured to be: $v_1=0.02738$ m/s, $v_2=0.02824$ m/s, $v_3=0.03008$ m/s and $v_4=0.03753$ m/s.
+The movement of a real pivot with four towers separated 50.11 m is next simulated and calibrated. The maximum linear velocity of each tower were measured to be: $v_1=0.02738$ m/s, $v_2=0.02824$ m/s, $v_3=0.03008$ m/s and $v_4=0.03779$ m/s.
 The exterior tower is considerably faster as it carries less weight and produces less friction.
-The start and stop times of each tower were measured in four experiments of 24 hours with the pivot working in cycles of 71s at 100\%, 52\%, 42\% and 27.48\%.
+The start and stop times of each tower were measured in four experiments of 24 hours with the pivot working in cycles of 71s at 100\%, 50\%, 40\% and 25\%.
 
 %%%%%%%%%%%%%
 The run and stop time intervals were grouped every 10 minutes in histograms for each tower and the evaluation function was defined as:
@@ -1510,7 +1512,7 @@ $j$-th time interval. $L_2$ norm with $w_i=1$ has been used to compose the
 objective function with the four experiments.
 %%%%%%%%%%%%%
 
-Table~\ref{TabPivot} shows some of the results obtained in a total of 10000 simulations for each of the four experiments, taking around 3 hours each in the same laptop computer used before.
+Table~\ref{TabPivot} shows some of the results obtained in a total of 10000 simulations for each of the four experiments, taking around 50 minutes each in the same laptop computer used before.
 
 The best results where obtained with the genetic algorithms. Note that in this case again the genetic algorithm produces the results with the lowest $R$ coefficient values. It is also worth noting that the iterative algorithm improves the results when applied to the Monte Carlo method but it makes things slightly worse in the sweep method.
 
@@ -1565,7 +1567,7 @@ The best results where obtained with the genetic algorithms. Note that in this c
 	\\ \hline
 }{Optimal parameters and values of the evaluation function in the four towers pivot case in \citet{Ouazaa15} using different optimization algorithms implemented in MPCOTool with the same number of total simulations ($N_{total}=10000$). $N_x$ is the sweeps number for every variable in SW}{TabPivot}
 
-In figures \ref{FigPivot100} to \ref{FigPivot27} the histograms of the number
+In figures \ref{FigPivot100} to \ref{FigPivot25} the histograms of the number
 of measured and simulated starts and stops are represented for the different
 machine workings.
 Note that the figures are not represented with uniform scales to better
@@ -1579,22 +1581,31 @@ However, coupling a sprinkler irrigation model, it could be concluded that losse
 simulated starts and (bottom right) simulated stops for the pivot towers working at 100\%
 velocity}{FigPivot100}
 
-\FIGIV{pivot-measured-starts-52.eps}{pivot-measured-stops-52.eps}
-{pivot-simulated-starts-52.eps}{pivot-simulated-stops-52.eps}
+\FIGIV{pivot-measured-starts-50.eps}{pivot-measured-stops-50.eps}
+{pivot-simulated-starts-50.eps}{pivot-simulated-stops-50.eps}
 {Histogram of the number of (top left) measured starts, (top right) measured stops, (bottom left)
-simulated starts and (bottom right) simulated stops for the pivot towers working at 52\%
-velocity}{FigPivot52}
+simulated starts and (bottom right) simulated stops for the pivot towers working at 50\%
+velocity}{FigPivot50}
 
-\FIGIV{pivot-measured-starts-42.eps}{pivot-measured-stops-42.eps}
-{pivot-simulated-starts-42.eps}{pivot-simulated-stops-42.eps}
+\FIGIV{pivot-measured-starts-40.eps}{pivot-measured-stops-40.eps}
+{pivot-simulated-starts-40.eps}{pivot-simulated-stops-40.eps}
 {Histogram of the number of (top left) measured starts, (top right) measured stops, (bottom left)
-simulated starts and (bottom right) simulated stops for the pivot towers working at 42\%
-velocity}{FigPivot42}
+simulated starts and (bottom right) simulated stops for the pivot towers working at 40\%
+velocity}{FigPivot40}
 
-\FIGIV{pivot-measured-starts-27,48.eps}{pivot-measured-stops-27,48.eps}
-{pivot-simulated-starts-27,48.eps}{pivot-simulated-stops-27,48.eps}
+\FIGIV{pivot-measured-starts-25.eps}{pivot-measured-stops-25.eps}
+{pivot-simulated-starts-25.eps}{pivot-simulated-stops-25.eps}
 {Histogram of the number of (top left) measured starts, (top right) measured stops, (bottom left)
-simulated starts and (bottom right)simulated stops for the pivot towers working at 27.48\% velocity}{FigPivot27}
+simulated starts and (bottom right)simulated stops for the pivot towers working at 25\% velocity}{FigPivot25}
+
+%%%%%%%%%%%%%%%%%%%%
+To illustrate the chaotic movement of inner towers, in
+Fig.~\ref{FigPivotVelocity} the towers velocity is presented at an interval of
+central working time.
+\FIG{pivot-velocity.eps}
+{Towers velocity in an interval of ten minutes at central working times for the
+pivot working at 25\% velocity}{FigPivotVelocity}
+%%%%%%%%%%%%%%%%%%%%
 
 \section{Conclusions}
 

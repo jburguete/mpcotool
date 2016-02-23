@@ -27,7 +27,7 @@
     },
     {
       "length"    : 50.11,
-      "velocity"  : 0.03753,
+      "velocity"  : 0.037786,
       "@variable1@" : @value1@,
       "@variable2@" : @value2@,
       "@variable3@" : @value3@,

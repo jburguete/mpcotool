@@ -27,7 +27,7 @@
     },
     {
       "length"    : 50.11,
-      "velocity"  : 0.03753,
+      "velocity"  : 0.037786,
       "@variable1@" : @value1@,
       "@variable2@" : @value2@,
       "@variable3@" : @value3@,
@@ -37,6 +37,6 @@
   "cycle-time"     : 71.0,
   "plot-time"      : 1.0,
   "comp-time-step" : 0.1,
-  "active-percent" : 27.48,
+  "active-percent" : 25.0,
   "simulation-time": 66366
 }

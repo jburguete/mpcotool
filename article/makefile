@@ -19,12 +19,13 @@ figs = mpcotool-en.eps surcos-advance.eps surcos-depth.eps \
 	surcos-solute-q4.eps sprinkler-0.eps sprinkler-2,84.eps \
 	pivot-simulated-starts-100.eps pivot-simulated-stops-100.eps \
 	pivot-measured-starts-100.eps pivot-measured-stops-100.eps \
-	pivot-simulated-starts-52.eps pivot-simulated-stops-52.eps \
-	pivot-measured-starts-52.eps pivot-measured-stops-52.eps \
-	pivot-simulated-starts-42.eps pivot-simulated-stops-42.eps \
-	pivot-measured-starts-42.eps pivot-measured-stops-42.eps \
-	pivot-simulated-starts-27,48.eps pivot-simulated-stops-27,48.eps \
-	pivot-measured-starts-27,48.eps pivot-measured-stops-27,48.eps \
+	pivot-simulated-starts-50.eps pivot-simulated-stops-50.eps \
+	pivot-measured-starts-50.eps pivot-measured-stops-50.eps \
+	pivot-simulated-starts-40.eps pivot-simulated-stops-40.eps \
+	pivot-measured-starts-40.eps pivot-measured-stops-40.eps \
+	pivot-simulated-starts-25.eps pivot-simulated-stops-25.eps \
+	pivot-measured-starts-25.eps pivot-measured-stops-25.eps \
+	pivot-velocity.eps \
 	Violada-contributions.eps Violada-optimized-contributions.eps \
 
 plots = Beale.eps
