@@ -395,7 +395,7 @@ has to be performed for each iteration.
 Brute force optimization methods, SW and MC, can be also combined
 with a direction search algorithm. Defining the vector $\vec{r}_i$ as the optime
 variables combination obtained in the $i$-th step, $\vec{r}_1$ as the optime
-varaibles combination vector obtained by the brute force method and defining
+variables combination vector obtained by the brute force method and defining
 the vector $\vec{s}_i$ as:
 \EQ
 {
@@ -913,18 +913,17 @@ direction search method.
 {sphere-evolution-mc-r.eps}
 {Convergence of the optimizacion for $g_{Sphere}$ with Monte-Carlo and direction
 search methods and different combinations of parameters}{FigSphereMCCDR}
-
-Todas las figuras de convergencia de la~\ref{FigSphereSWMC} a
-la~\ref{FigSphereMCCDR} se han presentado en modo secuencial. Esta convergencia
-se ve alterada cuando se utilizan máquinas con múltiples procesadores dada la
-diferente capacidad de paralelización de los distintos algoritmos de
-optimización. En la figura~\ref{FigSphereSWMCDS} presentamos la convergencia
-real, estimada frente al máximo número de simulaciones realizadas en una tarea,
-en dos máquinas con número de núcleos $N_{cores}=4$ y $N_{cores}=64$ para los
-algoritmos SW y MC acoplados a DS. Puesto que el costo computacional es el
-mismo para $N_e\leq N_{cores}$ la mayor convergencia en máquinas multiprocesador
-se obtiene para $N_e=\max\PA{N\leq N_{cores}}$, es decir, $N_e=4$ en la máquina
-de 4 núcleos y $N_e=10$ en la de 64 núcleos para los casos analizados.
+ 
+All figures of convergence from~\ref{FigSphereSWMC} to~\ref{FigSphereMCCDR}
+have been presented sequentially. This convergence is altered when machines with 
+multiple processors are used, due to the distinct parallelization capacity of the 
+optimization algorithms. Figure~\ref{FigSphereSWMCDS} displays the real convergence,
+estimated as the maximum number of simulations per task, for $g_{Sphere}$ with SW 
+and MC coupled to DS and different combinations of parameters on two machines with 4 
+and 64 cores respectively. Given that the computational cost is identical for 
+$N_e\leq N_{cores}$, the higher convergence on multiprocessor machines is achieved
+for $N_e=\max\PA{N\leq N_{cores}}$, i.e., $N_e=4$ on the 4 core machine and $N_e=10$
+on the 64 core machine for the analyzed cases.
 \FIGIV{sphere-task-1-4.eps}{sphere-task-1-64.eps}
 {sphere-task-2-4.eps}{sphere-task-2-64.eps}
 {Convergence of the optimizacion, estimated as the maximum number of simulations
@@ -947,10 +946,10 @@ The result is presented as minus the decimal logarithm of the distance obtained
 to the optimum point. This value represents the number of decimal digits of 
 precision achieved.
 %%%%%%%%%%%%%%%%%%%%%%
-En los métodos que utilizan números aleatorios (MC, DS+RA y GE) se han usado 10
-semillas distintas en el generador de números pseudo-aleatorios. En la figura se
-presenta en estos casos el valor medio y los valores extremos de la norma de
-error obtenidos para estas 10 semillas.
+For the methods which utilized random numbers (MC, DS+RA y GE) 10 different
+seeds for the pseudo-random number generator have been used. Figure (FALTA LA FIGURA!!!) 
+shows, for these cases, the 
+average value and the extreme values of the error norm obtained by these seeds. 
 %%%%%%%%%%%%%%%%%%%%%%
 The results for the GE can be qualified as disappointing. GE only gets slightly
 better results than pure brute force SW and MC methods.
@@ -973,12 +972,12 @@ cases. CD or RA with $N_e=4$ prove to be methods somewhat slower but are deemed
 more secure.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \FIGVI{Sphere-e.eps}{Ackley-e.eps}{Booth-e.eps}{Rosenbrock-e.eps}{Easom-e.eps}
-{Beale-e.eps}{Precisión de los métodos, estimada como $-\log_{10}\PA{d_{2500}}$,
-en todos tests para un amplio conjunto de algoritmos y parámetros de
-configuración}{FigTestResults}
+{Beale-e.eps}{Precision of the methods, estimated as $-\log_{10}\PA{d_{2500}}$,
+in all test cases for a wide set of algorithms and configuration parameters}
+{FigTestResults}
 
-Todos los casos presentados en esta sección suponen un total de 1705
-calibraciones y 42625000 simulaciones. The cases have been run on a laptop
+All cases presented in this section involve a total of 1705 calibrations and
+42625000 simulations. The cases have been run on a laptop
 computer equipped with an Intel(R) Core(TM) i7 M620 2.67GHz processor. Total
 calculation time was about 3 hours.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1093,9 +1092,9 @@ Then, the objective function has been defined as:
 	o=\frac{1}{N_{gates}\,N_{steps}}\,\sum_{i=1}^{N_{gates}}
 	\sum_{j=1}^{N_{steps}}\ABS{Q_{g,i,j}-Q_{s,i,j}}^2
 }{EqSwigsObjective}
-with $N_{gates}=4$ el número de puntos de demanda, $N_{steps}$ el número de
-pasos de tiempo y $Q_{d,i,j}$ and $Q_{s,i,j}$ los caudales demandado y simulado
-respectivamente en el $i$-th punto de demanda y en el $j$-th paso de tiempo.
+with $N_{gates}=4$ the number of points of demand, $N_{steps}$ the number of 
+time steps and $Q_{d,i,j}$ and $Q_{s,i,j}$ the demanded and simulated discharges
+respectively at the $i$-th point of demand in the $j$-th time step. 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 SWIGS open source software \citep{Swigs} has been used to simulate the channel
@@ -1163,9 +1162,9 @@ opening times obtained in this work}{FigSwigs}
 \subsection{Calibration of empirical parameters on surface irrigation}
 
 MPCOTool has also been used to find out the empirical parameters required by the friction and infiltration
-models used in the open source software SURCOS \citep{Surcos,SurcosGit,JaviSurcos3} for the simulation of the four furrow fertigation experiments published in \citet{JaviSurcos2}. The furrows were $100$ m long and they were simulated using 100 computational cells per furrow. The furrows were close together, they had the same geometry and the experiments were almost simultaneous, hence the soil properties were assumed uniform. En la Fig.~\ref{FigSurcosSketch} se ilustra la
-geometría de los surcos así como los puntos de medida de concentración de
-fertilizante.
+models used in the open source software SURCOS \citep{Surcos,SurcosGit,JaviSurcos3} for the simulation of the four furrow fertigation experiments published in \citet{JaviSurcos2}. The furrows were $100$ m long and they were simulated using 100 computational cells per furrow. The furrows were close together, they had the same geometry and the experiments were almost simultaneous, hence the soil properties were assumed uniform. 
+Figure~\ref{FigSurcosSketch} displays the furrows geometry as well as the measurement points of the fertilizer 
+concentration. 
 
 \psset{xunit=15mm,yunit=15mm}
 \PSPICTURE{-0.7}{-0.4}{6.5}{2.45}
@@ -1238,9 +1237,9 @@ fertilizante.
 	\rput(4.6,2.3){Q3}
 	\rput(5.6,2.3){Q4}
 	\rput(4.5,0){INLET}
-}{Diagrama ilustrando las dimensiones de los experimentos en cuatro surcos
-aislados descrito en \citet{JaviSurcos2}. Q1, Q2, Q3 y Q4 tuvieron entradas de
-caudal de agua de  1, 2, 3 y 4 L/s respectivamente. S20, S40, S60 and S80
+}{Illustrative diagram of the dimensions of the experiments at four isolated
+furrows as described in \citet{JaviSurcos2}. Q1, Q2, Q3 and Q4 are the 
+respective discharges of 1, 2, 3 and 4 l/s. S20, S40, S60 and S80
 are the locations where the fertilizer concentration was measured}
 {FigSurcosSketch}
 
@@ -1341,11 +1340,13 @@ The model is calibrated in two steps. First, the coefficients $D_{50}$, $n$ and 
 In the present example, a spray sprinkler Senninger N44 at a working pressure of 138 kPa will be calibrated. In this sprinkler model, the water jet impacts against a fixed plate. In order to estimate the water velocity after the impact, an image technique as described in \citet{Salvador09} was applied. According to this measurements, the head loss due to the impact against the plate was found to be of 50\%. Extremal drop diameters have been fixed to $D_{min}=0.5$~mm and
 $D_{max}=7.0$~mm. A set of 360000 drop trajectories has been numerically calculated to simulate the sprinkler pluviometry. The objective function has been defined as:
 \EQ{o=\frac{RMSE}{1+R},}{EqSprinklerObjective}
-with $RMSE$ the root mean square error and $R$ el coeficiente estadístico obtenidos entre las pluviometrías medida y simulada para un conjunto de pluviómetros. Los pluviómetros fueron colocados cada 0.5~m en dos ejes orientados aproximadamente Este-Oeste (E-W) y Norte-Sur (N-S).
+with $RMSE$ the root mean square error and $R$ the statistical coefficient obtained by the
+measured and simulated pluviometries. The pluviometers were placed every 0.5~m along two axes
+oriented East-West (E-W) and North-South (N-S) approximately.
 
 Table~\ref{TabSprinklerI} shows the results from the calibration of parameters $D_{50}$, $n$ and $P$ in windless conditions using a total number of 1000 simulations with different optimization algorithms. The computation time was around 8 minutes in the laptop computer for each calibration. The results show that the best results are supplied by MC+IT followed by GE. In this case,
 %%%%%%%%%%
-MC+DS+RA apenas mejora los resultados obtenidos por MC
+MC+DS+RA barely improves the results obtained by MC 
 %%%%%%%%%%
 and SW leads to worse results, mainly when supplied with IT. 
 
