@@ -184,18 +184,13 @@ optimization or calibration of empirical parameters required in the
 formulation of numerical simulation models. The structure is such that it can be
 easily adapted to different external simulation codes.
 One genetic algorithm, two brute force optimization algorithms (sweep and
-Monte-Carlo) and,
-%%%%%%%%%%%%%%%%%%%%%%%%%
-to improve the brute force methods, one iterative algorithm and one direction
-search algorithm are included as alternative methods.
-%%%%%%%%%%%%%%%%%%%%%%%%%
+Monte-Carlo) and, to improve the brute force methods, one iterative algorithm
+and one direction search algorithm are included as alternative methods.
 Parallel computations are enabled in a simple way so that the work load can be
 distributed among the different processors available in one computer or in
 multiple computers of a cluster.
-%%%%%%%%%%%%%%%%%%%%%%%%%
 The software optimization methods are analysed in six standard analytical test
 functions.
-%%%%%%%%%%%%%%%%%%%%%%%%%
 The MPCOTool usage and possibilities are illustrated by showing four practical
 applications in agriculture: optimization of a canal management; calibration of
 the empirical coefficients in a surface irrigation model; calibration in a
@@ -251,11 +246,9 @@ Nonetheless, when calibration is understood as the adjustment of empirical
 values, gradient-based methods may fail due to the location of local minimums.
 Stochastic based optimization algorithms (as sweep, Monte-Carlo or genetic) are
 not affected by local minimum presence. 
-%%%%%%%%%%%%%
 Detailed analysis of the properties and performance of several stochastic
 optimization algorithms can be seen, for instance, in \citet{Back96} or in
 \citet{HauptHaupt04}.
-%%%%%%%%%%%%%
 Applications of these methods in
 agriculture can be seen for instance in \citet{JaviSurcos2} (sweep),
 \citet{Ouazaa15} (Monte-Carlo) or \citet{Ebrahimiam13} (genetic). Moreover,
@@ -274,10 +267,8 @@ The present paper is organized as follows: First, the concepts of calibration
 and optimization are presented as the main goal. Then, the methods used to
 achieve them in MPCOTool are described. The tool structure and organization
 are next presented in detail. After,
-%%%%%%%%%%%%%%%%%%%%%%%%%
 the software optimization methods are analysed in six standard analytical test
 functions. Subsequently,
-%%%%%%%%%%%%%%%%%%%%%%%%%
 the performance is demonstrated using four different applications of interest in agriculture. Finally, the conclusions are drawn.
 
 \section{Calibration and optimization}
@@ -538,12 +529,10 @@ experiments set can be calculated by four different error norms:
 {EqObjectiveFunctionLI}
 with $w_i$ the weight associated to the $i$-th experiment, specified in the
 \emph{main input file}.
-%%%%%%%%%%%%%%%%
 Note that all considered error norms are equivalent for only one experiment to
 optimize ($J=\ABS{w_1\,o_1}$).
 Note also that these error norms are used to combine the objective value $o_i$
 for each experiment, but the user is completely free to define this function.
-%%%%%%%%%%%%%%%%
 Fig.~\ref{FigStructure} is a sketch of the MPCOTool structure.
 \psset{xunit=0.4mm,yunit=0.4mm}
 \PSPICTURE{-20}{-115}{260}{55}
@@ -945,12 +934,10 @@ Fig.~\ref{FigTestResults}.
 The result is presented as minus the decimal logarithm of the distance obtained
 to the optimum point. This value represents the number of decimal digits of 
 precision achieved.
-%%%%%%%%%%%%%%%%%%%%%%
 For the methods which utilize random numbers (MC, DS+RA y GE) 10 different
-seeds for the pseudo-random number generator have been used. Figure (FALTA LA FIGURA!!!) 
-shows, for these cases, the 
-average value and the extreme values of the error norm obtained by these seeds. 
-%%%%%%%%%%%%%%%%%%%%%%
+seeds for the pseudo-random number generator have been used. Figure shows, for
+these cases, the average value and the extreme values of the error norm obtained
+by these seeds. 
 The results for the GE can be qualified as disappointing. GE only gets slightly
 better results than pure brute force SW and MC methods.
 With regard to the brute force methods, the behavior of SW seems to be as a
@@ -970,7 +957,6 @@ method to estimate the direction, although when RA with a low $N_e$ is used, the
 convergence is accelerated, it does not success in finding the optimum in some
 cases. CD or RA with $N_e=4$ prove to be methods somewhat slower but are deemed
 more secure.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \FIGVI{Sphere-e.eps}{Ackley-e.eps}{Booth-e.eps}{Rosenbrock-e.eps}{Easom-e.eps}
 {Beale-e.eps}{Precision of the methods, estimated as $-\log_{10}\PA{d_{2500}}$,
 in all test cases for a wide set of algorithms and configuration parameters}
@@ -980,7 +966,6 @@ All cases presented in this section involve a total of 1705 calibrations and
 42625000 simulations. The cases have been run on a laptop
 computer equipped with an Intel(R) Core(TM) i7 M620 2.67GHz processor. Total
 calculation time was about 3 hours.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Practical applications}
 
@@ -1085,7 +1070,6 @@ The initial conditions for the canal were a steady state with a discharge of
 2~m$^3$/s. The objective of this work was to provide
 the required daily discharge to the three important irrigation gates as well as
 to keep a constant discharge of 2 m$^3$/s at the outlet gate.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Then, the objective function has been defined as:
 \EQ
 {
@@ -1095,7 +1079,6 @@ Then, the objective function has been defined as:
 with $N_{gates}=4$ the number of points of demand, $N_{steps}$ the number of 
 time steps and $Q_{d,i,j}$ and $Q_{s,i,j}$ the demanded and simulated discharges
 respectively at the $i$-th point of demand in the $j$-th time step. 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 SWIGS open source software \citep{Swigs} has been used to simulate the channel
 flow. Each optimization executed a total number of 1024 simulations and took 
@@ -1345,9 +1328,7 @@ measured and simulated pluviometries. The pluviometers were placed every 0.5~m a
 oriented East-West (E-W) and North-South (N-S) approximately.
 
 Table~\ref{TabSprinklerI} shows the results from the calibration of parameters $D_{50}$, $n$ and $P$ in windless conditions using a total number of 1000 simulations with different optimization algorithms. The computation time was around 8 minutes in the laptop computer for each calibration. The results show that the best results are supplied by MC+IT followed by GE. In this case,
-%%%%%%%%%%
 MC+DS+RA barely improves the results obtained by MC 
-%%%%%%%%%%
 and SW leads to worse results, mainly when supplied with IT. 
 
 \TABLE{\scriptsize}{cccc}
@@ -1497,7 +1478,6 @@ The movement of a real pivot with four towers separated 50.11 m is next simulate
 The exterior tower is considerably faster as it carries less weight and produces less friction.
 The start and stop times of each tower were measured in four experiments of 24 hours with the pivot working in cycles of 71s at 100\%, 50\%, 40\% and 25\%.
 
-%%%%%%%%%%%%%
 The run and stop time intervals were grouped every 10 minutes in histograms for each tower and the evaluation function was defined as:
 \EQ
 {
@@ -1511,7 +1491,6 @@ $j$-th time interval, and $\PA{n_s}_{i,j}$ and $\PA{N_s}_{i,j}$ the measured
 and the simulated number of stops respectively for the $i$-th tower and the
 $j$-th time interval. $L_2$ norm with $w_i=1$ has been used to compose the
 objective function with the four experiments.
-%%%%%%%%%%%%%
 
 Table~\ref{TabPivot} shows some of the results obtained in a total of 10000 simulations for each of the four experiments, taking around 50 minutes each in the same laptop computer used before.
 
@@ -1599,14 +1578,12 @@ velocity}{FigPivot40}
 {Histogram of the number of (top left) measured starts, (top right) measured stops, (bottom left)
 simulated starts and (bottom right)simulated stops for the pivot towers working at 25\% velocity}{FigPivot25}
 
-%%%%%%%%%%%%%%%%%%%%
 To illustrate the chaotic movement of inner towers, in
 Fig.~\ref{FigPivotV} the towers velocity is presented at an interval of
 central working time.
 \FIG{pivot-velocity.eps}
 {Towers velocity in an interval of 10 minutes after 10 hours of operation for
 the pivot working at 25\% velocity}{FigPivotV}
-%%%%%%%%%%%%%%%%%%%%
 
 \section{Conclusions}
 

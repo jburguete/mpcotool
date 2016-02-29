@@ -931,25 +931,26 @@ variables and $N_{simulaciones}=25$}{FigMonteCarlo}
 Monte-Carlo method is also easily parallelizable following a strategy as the
 flowchart represented in the figure~\ref{FigBruteForceParallelization}.
 
-\section{Iterative algorithm applied to brute force methods}
+\section{Algoritmo iterativo aplicado a los métodos de fuerza bruta}
 
-MPCOTool allows to iterate both sweep or Monte-Carlo brute force methods in
-order to seek convergence. In this case, the best results from the previous
-iteration are used to force new intervals in the variables for the following
-iteration. Then for $N_{best}^j$, the subset of the best simulation results in
-the $j$-th iteration, the following quantities are defined:
+MPCOTool permite iterar ambos métodos de fuerza bruta, Monte-Carlo o barrido,
+para mejorar la convergencia. En este algoritmo se seleccionan un conjunto de
+$N_{best}^j$ mejores resultados en cada iteración $j$-ésima y se usan para
+forzar nuevos intervalos para la búsqueda de valores óptimos en la siguiente
+iteración. Definiendo:
 \begin{description}
-\item[$\displaystyle x_{\max}^b=\max_{i\in N_{best}}x_i^j$]: Maximum value of
-	variable $x$ in the subset of the best simulation results from the $j$-th
-	iteration.
-\item[$\displaystyle x_{\min}^b=\max_{i\in N_{best}}x_i^j$]: Minimum value of
-	variable $x$ in the subset of the best simulation results from the $j$-th
-	iteration.
+\item[$\displaystyle x_{\max}^b=\max_{i\in N_{best}}x_i^j$]: Valor máximo de la
+	variable $x$ en el subconjunto de $N_{best}^j$ mejores resultados de la
+	iteración $j$-ésima.
+\item[$\displaystyle x_{\min}^b=\max_{i\in N_{best}}x_i^j$]: Valor mínimo de la
+	variable $x$ en el subconjunto de $N_{best}^j$ mejores resultados de la
+	iteración $j$-ésima.
 \end{description}
-A new interval in the variable $x$ is defined to build the optimization values in the next $(j+1)$ iteration so that:
+Entonces se usará el nuevo intervalo para la variable $x$ para buscar valores
+óptimos en la siguiente $(j+1)$-ésima iteración:
 \EQ{x_i^{j+1}\in\left[x_{\min}^{j+1},\;x_{\max}^{j+1}\right],}
 {EqIterationInterval}
-with:
+con:
 \[
 	\mathrm{Sweep}\;\Rightarrow\;\left\{\begin{array}{c}
 	\displaystyle
@@ -967,9 +968,11 @@ with:
 	-\left(x_{\max}^b-x_{\min}^b\right)(1+tolerance)}{2},
 	\end{array}\right.
 }{EqIterationIntervalII}
-being $tolerance$ a factor increasing the size of the variable intervals to
-simulate the next iteration.
-Figure~\ref{FigIterative} contains a sketch of the procedure used by the the iterative algorithm to modify the variables intervals in order to enforce convergence. 
+siendo $tolerance$ un factor que incremente el tamaño del intervalo de variables
+a simular en la siguiente iteración.
+En la figura~\ref{FigIterative} se muestra un esquema del procedimiento que usa
+el algoritmo iterativo para modificar los intervalos de variables para mejorar
+la convergencia.
 
 \PICTURE{210}{400}
 {
@@ -981,8 +984,8 @@ Figure~\ref{FigIterative} contains a sketch of the procedure used by the the ite
 		\put(10,190){$y$}
 		\put(200,0){$x$}
 	}
-	\put(90,380){1st iteration}
-	\put(50,370){*: best results}
+	\put(90,380){1ª iteración}
+	\put(50,370){*: mejores resultados}
 	\put(69,359){\circle*{2}}
 	\put(163,273){\circle*{2}}
 	\put(108,267){*}
@@ -1030,7 +1033,7 @@ Figure~\ref{FigIterative} contains a sketch of the procedure used by the the ite
 	\qbezier[20](140,272)(142.05,241)(144.1,210)
 	\qbezier[26](99,272)(69.5,269.4)(20,266.8)
 	\qbezier[26](99,324)(69.5,326.6)(20,329.2)
-	\put(80,180){2nd iteration}
+	\put(80,180){2ª iteración}
 	\put(102,123){\circle*{2}}
 	\put(141,83){\circle*{2}}
 	\put(118,80){\circle*{2}}
@@ -1064,31 +1067,32 @@ Figure~\ref{FigIterative} contains a sketch of the procedure used by the the ite
 	\put(0,126.2){$y_{\max}^2$}
 	\qbezier[41](20,66.8)(82.05,66.8)(144.1,66.8)
 	\put(0,63.8){$y_{\min}^2$}
-}{Diagram representing an example of the iterative algorithm applied to a
-Monte-Carlo brute force method with two variables for $N_{simulaciones}= 25$,
-$N_{best}=4$ and two iterations}{FigIterative}
+}{Diagrama representando un ejemplo del algoritmo iterativo aplicado al método
+de fuerza bruta de Monte-Carlo con dos variables para $N_{simulaciones}= 25$,
+$N_{best}=4$ y dos iteraciones}{FigIterative}
 
-The iterative algorithm can be also easily parallelized. However, this method is
-less parallelizable than pure brute force methods because the parallelization
-has to be performed for each iteration (see a flowchart in the
-figure~\ref{FigIterativeParallelization}).
+El algoritmo iterativo puede ser también fácilmente paralelizdo. No obstante,
+este método es menos paralelizable con los de fuerza bruta puros puesto que la
+paralelización debe ejecutarse en cada iteración (véase un diagrama de flujo en
+la figura~\ref{FigIterativeParallelization}).
 
 \psset{xunit=0.5mm,yunit=0.5mm}
 \PSPICTURE{-100}{-130}{100}{-15}
 {
 	\tiny
-	\rput(0,-15){1st iteration:}
-	\rput(0,-20){Generation of $N_{simulaciones}$ empirical parameters sets}
+	\rput(0,-15){1º iteración:}
+	\rput(0,-20){Generación de $N_{simulaciones}$ conjuntos de parámetros
+		empíricos}
 	\psframe(-60,-25)(60,-10)
 	\psline{->}(0,-25)(-60,-30)
 	\psline{->}(0,-25)(0,-30)
 	\psline{->}(0,-25)(60,-30)
-	\rput(-60,-35){1st task:}
-	\rput(-60,-40){$N_{simulaciones}/N_{tasks}$ simulations}
+	\rput(-60,-35){1ª tarea:}
+	\rput(-60,-40){$N_{simulaciones}/N_{tasks}$ simulaciones}
 	\psframe(-100,-30)(-20,-45)
 	\rput(0,-37.5){$\cdots$}
-	\rput(60,-35){$N_{tasks}$-th task:}
-	\rput(60,-40){$N_{simulaciones}/N_{tasks}$ simulations}
+	\rput(60,-35){$N_{tasks}$-ésima tarea:}
+	\rput(60,-40){$N_{simulaciones}/N_{tasks}$ simulaciones}
 	\psframe(20,-30)(100,-45)
 	\psline{->}(-60,-45)(0,-50)
 	\psline{->}(0,-45)(0,-50)
