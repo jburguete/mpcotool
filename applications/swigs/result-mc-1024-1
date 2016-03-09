@@ -1,6 +1,7 @@
 delay1 min=3193.3 max=3193.3
 delay2 min=3704.79 max=3704.79
-THE BEST IS
-error=4.718263e-02
-delay1=3.193e+03
-delay2=3.705e+03
+Best result
+error = 4.718262988969320e-02
+delay1 = 3193
+delay2 = 3705
+Calculation time = 49090.7 s
