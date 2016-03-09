@@ -13,6 +13,7 @@ OBJ = genetic/entity.o genetic/population.o genetic/reproduction.o \
 OBJBIN = utilsbin.o $(OBJ)
 OBJGUI = interface.o utils.o $(OBJ) @ICON@
 DEP = Makefile
+DE = de/LC_MESSAGES/
 ES = es/LC_MESSAGES/
 FR = fr/LC_MESSAGES/
 GB = en_GB/LC_MESSAGES/
@@ -38,6 +39,7 @@ MANUALS = $(M1) $(M2) $(MDIR)reference-manual.pdf
 
 all: mpcotoolbin \
 	@MPCOTOOL@ \
+	locales/$(DE)mpcotool.mo \
 	locales/$(ES)mpcotool.mo \
 	locales/$(FR)mpcotool.mo
 
@@ -102,6 +104,18 @@ mpcotoolbin: main.c $(OBJBIN)
 
 locales/mpcotool.pot: @MPCOTOOL@
 	xgettext -d mpcotool -o locales/mpcotool.pot --from-code=UTF-8 $(SRC)
+
+locales/$(DE)mpcotool.po: locales/mpcotool.pot
+	test -d locales/$(DE) || mkdir -p locales/$(DE)
+	test -f locales/$(DE)mpcotool.po || \
+		msginit -l de -o locales/$(DE)mpcotool.po -i locales/mpcotool.pot \
+		--no-translator
+	msgmerge -U locales/$(DE)mpcotool.po locales/mpcotool.pot
+	vim -p locales/$(DE)mpcotool.po
+	touch locales/$(DE)mpcotool.po
+
+locales/$(DE)mpcotool.mo: locales/$(DE)mpcotool.po locales/mpcotool.pot
+	msgfmt -c -v -o locales/$(DE)mpcotool.mo locales/$(DE)mpcotool.po
 
 locales/$(ES)mpcotool.po: locales/mpcotool.pot
 	test -d locales/$(ES) || mkdir -p locales/$(ES)
@@ -224,16 +238,17 @@ DLL = $(BIN)libatk-1.0-0.dll\
 	$(BIN)zlib1.dll
 SHARE = @PREFIX@/share/
 LOCALE = $(SHARE)locale/
-MOGB = $(LOCALE)en_GB/LC_MESSAGES/gtk30.mo
+MODE = $(LOCALE)de/LC_MESSAGES/gtk30.mo
 MOES = $(LOCALE)es/LC_MESSAGES/gtk30.mo
 MOFR = $(LOCALE)fr/LC_MESSAGES/gtk30.mo
+MOGB = $(LOCALE)en_GB/LC_MESSAGES/gtk30.mo
 MO = $(MOGB) $(MOES) $(MOFR)
 
 windist: mpcotool.exe $(DLL) $(MO)
 	test -d win || rm -rf win
 	mkdir -p win/bin/locales \
 		win/share/locale \
-		win/share/locale/{en_GB,es,fr}/LC_MESSAGES \
+		win/share/locale/{de,en_GB,es,fr}/LC_MESSAGES \
 		win/share/glib-2.0/schemas
 	cp *.exe $(DLL) win/bin
 	cp --parents tests/*/*{.exe,.exp,.tmp,win.xml} win
@@ -244,4 +259,5 @@ windist: mpcotool.exe $(DLL) $(MO)
 		win/share/glib-2.0/schemas
 	cd win/share; cp -r $(SHARE)icons .
 	cd win/share/locale; cp $(MOGB) $(GB); cp $(MOES) $(ES); cp $(MOFR) $(FR); \
-		ln -s es es_ES@UTF8; ln -s fr fr_FR@UTF8
+		cp $(MODE) $(DE); ln -s en_GB en_GB@UTF8; ln -s es es_ES@UTF8; \
+		ln -s fr fr_FR@UTF8; ln -s de de_DE@UTF8
