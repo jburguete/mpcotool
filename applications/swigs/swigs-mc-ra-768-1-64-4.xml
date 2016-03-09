@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<optimize simulator="calibrate_swigs" algorithm="Monte-Carlo"
+	nsimulations="768" direction="random" nsteps="4" nestimates="64"
+	relaxation="1">
+	<experiment name="demands" template1="template.xml"/>
+	<variable name="delay1" minimum="0" absolute_minimum="0" maximum="3600"
+		precision="0" step="10"/>
+	<variable name="delay2" minimum="0" absolute_minimum="0" maximum="7200"
+		precision="0" step="10"/>
+</optimize>
