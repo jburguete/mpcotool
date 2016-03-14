@@ -1419,7 +1419,7 @@ simulated starts and (bottom right)simulated stops for the pivot towers working 
 To illustrate the chaotic movement of inner towers, in
 Fig.~\ref{FigPivotV} the towers velocity is presented at an interval of
 central working time.
-\FIG{pivot-velocity.eps}
+\PLOT{pivot-velocity.eps}
 {Towers velocity in an interval of 10 minutes after 10 hours of operation for
 the pivot working at 25\% velocity}{FigPivotV}
 
@@ -1553,9 +1553,9 @@ spillways of the canal.
 	& 0.047170 m$^6$/s$^2$
 	\\ & & $\Delta t_{GT}=3716$ s
 	\\ \hline
-	SW+IT & $N_{\Delta t_A}=N_{\Delta t_{GT}}=16$ & $\Delta t_A=3329$ s
-	& 0.047148 m$^6$/s$^2$
-	\\ & $N_i=4$, $N_b=20$, $tol=0.1$ & $\Delta t_{GT}=3742$ s
+	SW+IT & $N_{\Delta t_A}=N_{\Delta t_{GT}}=16$ & $\Delta t_A=3266$ s
+	& 0.047413 m$^6$/s$^2$
+	\\ & $N_i=4$, $N_b=4$, $tol=0.5$ & $\Delta t_{GT}=3840$ s
 	\\ \hline
 	MC & $N_s=1024$ & $\Delta t_A=3193$ s & 0.047183 m$^6$/s$^2$
 	\\ & & $\Delta t_{GT}=3705$ s
@@ -1563,11 +1563,15 @@ spillways of the canal.
 	MC+IT & $N_s=256$ & $\Delta t_A=3250$ s & 0.047139 m$^6$/s$^2$
 	\\ & $N_i=N_b=4$, $tol=0.1$ & $\Delta t_{GT}=3751$ s
 	\\ \hline
-	GE & $N_p=256$, $N_g=9$ & $\Delta t_A=3363$ s & 0.047135 m$^6$/s$^2$
-	\\ & $R_m=R_r=R_a=0.125$ & $\Delta t_{GT}=3752$ s
+	MC+DS+RA & $N_s=768$, $N_{st}=4$, $N_e=64$ & $\Delta t_A=3211$ s
+		& 0.047129 m$^6$/s$^2$
+	\\ & $st_{\Delta t_A}=st_{\Delta t_{GT}}=10$ s & $\Delta t_{GT}=3754$ s
 	\\ \hline
-	GE & $N_p=64$, $N_g=21$ & $\Delta t_A=3375$ s & 0.047252 m$^6$/s$^2$
-	\\ & $R_m=R_r=R_a=0.25$ & $\Delta t_{GT}=3599$ s
+	GE & $N_p=256$, $N_g=9$ & $\Delta t_A=3274$ s & 0.047134 m$^6$/s$^2$
+	\\ & $R_m=R_r=R_a=0.125$ & $\Delta t_{GT}=3753$ s
+	\\ \hline
+	GE & $N_p=64$, $N_g=21$ & $\Delta t_A=3338$ s & 0.047150 m$^6$/s$^2$
+	\\ & $R_m=R_r=R_a=0.25$ & $\Delta t_{GT}=3740$ s
 	\\ \hline
 }{Optimal empirical parameters and value of the evaluation function in the simulation of the Canal de Violada using program SWIGS and several optimization algorithms in MPCOTool with the same total number of simulations ($N_{total}=1024$)}
 {TabSwigs}
@@ -1587,19 +1591,19 @@ opening times obtained in this work}{FigSwigs}
 Para ilustrar las diferencias en la capacidad de paralelización de los
 algoritmos, en la Fig.~\ref{FigSwigsLoad} se muestra la evolución del número de
 núcleos activos en función del tiempo de cálculo en el clúster Memento para el
-método MC+CD+RA. Se ha separado con una línea vertical el momento en el que
-finaliza el algoritmo inicial MC del algoritmo CD+RA. En este caso MC realiza
+método MC+DS+RA. Se ha separado con una línea vertical el momento en el que
+finaliza el algoritmo inicial MC del algoritmo DS+RA. En este caso MC realiza
 768 simulaciones, repartiendo 12 en cada núcleo, lo que permite una
 paralelización bastante equilibrada, manteniendo una media de 60.3 núcleos
 activos. Al final, algunos núcleos finalizan sus simulaciones antes que otros,
 lo que se traduce en algunos núcleos inactivos hasta completar el cálculo.
-Aproximadamente a las 11 horas de cálculo comienza el algoritmo CD+RA ejecutando
+Aproximadamente a las 11 horas de cálculo comienza el algoritmo DS+RA ejecutando
 64 sumulaciones (sólo una por núcleo) e iterando 4 veces el proceso. Se
 comprueba cómo esto causa mayores desequilibrios en la carga, puesto que las
 simulaciones más lentas y más rápidas se compesan más ejecutando 12 simulaciones
 que una por núcleo. De media este algoritmo sólo mantiene 41.2 núcleos activos.
 El algoritmo en conjunto a mantenido de media 52.7 núcleos activos.
-\FIG{load-swigs-mc-ra-768-1-64-4.eps}
+\PLOT{load-swigs-mc-ra-768-1-64-4.eps}
 {}{FigSwigsLoad}
 
 \section{Conclusions}
