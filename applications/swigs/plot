@@ -1,0 +1,7 @@
+set term pos eps enh
+f(d,h,m,s)=((((d-11)*24+(h-14))*60+m-40)*60+s-1)/3600.
+set xlabel 'Calculation time (hours)'
+set ylabel 'Active cores'
+set arrow from f(12,1,52,1),0 to f(12,1,52,1),70 nohead
+set out 'load-swigs-mc-ra-768-1-64-4.eps'
+plot [0:][0:70] 'load-swigs-mc-ra-768-1-64-4' u (f($1,$2,$3,$4)):5 w l lt 2 not
