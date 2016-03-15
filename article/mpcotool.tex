@@ -141,11 +141,11 @@ required in simulation models}
 \author[eead,bifi]{J. Burguete\corref{cor1}}
 \ead{jburguete@eead.csic.es}
 
-\author[eead]{B. Latorre}
-\ead{borja.latorre@csic.es}
-
 \author[kit]{S. Ambroj}
 \ead{samuel.ambroj@kit.edu}
+
+\author[eead]{B. Latorre}
+\ead{borja.latorre@csic.es}
 
 \author[unizar]{A. Lacasta}
 \ead{alacasta@unizar.es}
@@ -213,7 +213,7 @@ sensitive to parameters and their ability increases when the quality of the
 calibration improves. In some way, the model may acquire a true predictive
 character when calibrated. The calibration can be understood as an optimization
 process where the error between the estimation of the model and the data set is
-minimized \citep{Lacasta15}.
+minimized \citep{Lacasta16}.
 
 There are many fields where calibration is required. Traditionally, fields such
 as hydrology or weather forecasting have used mathematical models with empirical
@@ -240,7 +240,7 @@ optimization may be performed using two optimizer families: gradient based
 methods and gradient-free optimizers. While the latter do not require gradient
 information to perform the optimization, the former must have information about
 the variation of the objective with respect to the controlled variable
-\citep{Lacasta15}. Therefore, although gradient based methods exhibit superior
+\citep{Lacasta16}. Therefore, although gradient based methods exhibit superior
 convergences, they are more difficult to implement in general purpose software.
 Nonetheless, when calibration is understood as the adjustment of empirical
 values, gradient-based methods may fail due to the location of local minimums.
@@ -253,7 +253,7 @@ Applications of these methods in
 agriculture can be seen for instance in \citet{JaviSurcos2} (sweep),
 \citet{Ouazaa15} (Monte-Carlo) or \citet{Ebrahimiam13} (genetic). Moreover,
 these methods are easily parallelizable increasing the performance when executed
-on machines with multiple processors. In \cite{Lacasta15} a deeper comparison of
+on machines with multiple processors. In \cite{Lacasta16} a deeper comparison of
 both, gradient based and stochastic optimization methods can be found.
 
 In this work MPCOTool, the Multi-Purposes Calibration and Optimization Tool
