@@ -1594,28 +1594,29 @@ and the duration of these undesired peaks.
 using the opening times applied by the canal guards and (bottom) the optimum
 opening times obtained in this work}{FigSwigs}
 
-Para ilustrar las diferencias en la capacidad de paralelización de los
-algoritmos, en la Fig.~\ref{FigSwigsLoad} se muestra la evolución del número de
-núcleos activos en función del tiempo de cálculo en el clúster Memento para el
-método MC+DS+RA. Se ha separado con una línea vertical el momento en el que
-finaliza el algoritmo inicial MC del algoritmo DS+RA. En este caso MC realiza
-768 simulaciones, repartiendo 12 en cada uno de los 64 núcleos utilizados, lo
-que permite una paralelización bastante equilibrada, manteniendo una media de
-60.3 núcleos activos y realizando casi 70 simulaciones por hora. Al final,
-algunos núcleos finalizan sus simulaciones antes que otros, por lo que se van
-inactivando núcleos hasta completar el cálculo. Aproximadamente a las 11 horas
-de cálculo comienza el algoritmo DS+RA ejecutando 64 sumulaciones (sólo una por
-núcleo) e iterando 4 veces el proceso. De media este algoritmo sólo logra
-mantener 41.2 núcleos activos realizando menos de 40 simulaciones por hora. Este
-peor resultado de la paralelización se debe a que las simulaciones más lentas y
-más rápidas se compesan más ejecutando 12 simulaciones que una por núcleo. El
-algoritmo en conjunto ha mantenido de media 52.7 núcleos activos y ha tardado
-algo más de 18 horas en realizar las 1024 simulaciones, siendo uno de los más
-lentos de todos los algoritmos utilizados.
+In order to illustrate the differences of the different algorithms, with regard 
+to the ability of parallelization, in Fig.~\ref{FigSwigsLoad} the evolution 
+of the number of active cores as a function of the calculation time at the
+Memento cluster is shown for the method MC+DS+RA. A vertical line has been
+drawn to distinguish between the end of the initial MC algorithm and the
+beginning of the DS+RA algorithm. In this case, 768 simulations were carried out by MC, 
+distributing 12 simulations on each one of the 64 utilized cores, which allowed 
+quite an equilibrated parallelization, obtaining an average of 60.3 active
+cores and approximately 70 simulations per hour. Ultimately, some cores 
+finalized their simulations faster than others, so that some cores were 
+deactivated until the calculation of the others was performed. Approximately after 11 hours of
+calculation, the DS+RA commenced carrying out 64 simulations (only one per core)
+and this process was iterated 4 times. On average, this algorithm only achieved
+41.2 active cores performing less than 40 simulations per hour. This inferior 
+result is due to the fact that the faster and slower simulations are more 
+easily compensated when executing 12 simulations per core than one. Overall, the
+algorithm has maintained 52.7 active cores on average and lasted about
+18 hours to complete the 1024 simulations, being one of the slowest of all
+used algorithms. 
 \PLOT{load-swigs-mc-ra-768-1-64-4.eps}
-{Evolución temporal del número de núcleos activos ejecutando la optimización
-con MC+DS+RA. Con una línea vertical se marca el instante de tiempo en el que
-finaliza el algoritmo MC y comienza el DS+RA}{FigSwigsLoad}
+{Temporal evolution of the number of active cores for the MC+DS+RA optimization.
+A vertical line has been drawn to distinguish between the end of the initial MC algorithm and the
+beginning of the DS+RA algorithm}{FigSwigsLoad}
 
 \section{Conclusions}
 
