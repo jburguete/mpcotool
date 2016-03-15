@@ -342,7 +342,7 @@ The algorithm is parallelizable in the same way as sweep algorithm.
 MPCOTool allows to iterate both SW or MC brute force methods in
 order to seek convergence. In this case, the best results from the previous
 iteration are used to force new intervals in the variables for the following
-iteration. Then for $N_b^j$, the subset of the best simulation results in
+iteration. Then, for $N_b^j$, the subset of the best simulation results in
 the $j$-th iteration, the following quantities are defined:
 \begin{description}
 \item[$\displaystyle x_{\max}^b=\max_{i\in N_b}x_i^j$]: Maximum value of
@@ -439,9 +439,11 @@ with $r_{j,k}\in[0,1)$ random numbers.
 
 \subsection{Genetic method (GE)}
 
-MPCOTool also offers the use of a genetic method Genetic \citep{genetic} with its default algorithms.
-It is inspired on the ideas in \citet{gaul}, but it has been fully reprogrammed involving more modern external libraries.
-The code in Genetic is also open source under a BSD license.
+Genetic method bases have been established in \citet{Holland75}. MPCOTool also
+offers the use of a genetic method Genetic \citep{genetic} with its default
+algorithms. It is inspired on the ideas in \citet{gaul}, but it has been fully
+reprogrammed involving more modern external libraries. The code in Genetic is
+also open source under a BSD license.
 
 \subsubsection{The genome}
 
@@ -519,13 +521,13 @@ error value. In both cases this error value is saved in an
 \emph{objective value file}. Then for each experiment, an objective value $o_i$
 is obtained. The final value of the objective function ($J$) associated with the
 experiments set can be calculated by four different error norms:
-\EQ{L_2:\quad J=\sqrt{\sum_{i=1}^{N_{experiments}}\ABS{w_i\,o_i}^2},}
+\EQ{L_2:\quad J=\sqrt{\sum_{i=1}^{N_{exp}}\ABS{w_i\,o_i}^2},}
 {EqObjectiveFunctionLII}
-\EQ{L_\infty:\quad J=\max_{i=1}^{N_{experiments}}\ABS{w_i\,o_i},}
+\EQ{L_\infty:\quad J=\max_{i=1}^{N_{exp}}\ABS{w_i\,o_i},}
 {EqObjectiveFunctionLi}
-\EQ{L_p:\quad J=\sqrt[p]{\sum_{i=1}^{N_{experiments}}\ABS{w_i\,o_i}^p},}
+\EQ{L_p:\quad J=\sqrt[p]{\sum_{i=1}^{N_{exp}}\ABS{w_i\,o_i}^p},}
 {EqObjectiveFunctionLp}
-\EQ{L_1:\quad J=\sum_{i=1}^{N_{experiments}}\ABS{w_i\,o_i},}
+\EQ{L_1:\quad J=\sum_{i=1}^{N_{exp}}\ABS{w_i\,o_i},}
 {EqObjectiveFunctionLI}
 with $w_i$ the weight associated to the $i$-th experiment, specified in the
 \emph{main input file}.
@@ -1524,7 +1526,7 @@ respectively at the $i$-th point of demand in the $j$-th time step.
 
 SWIGS open source software \citep{Swigs} has been used to simulate the channel
 flow. Each optimization executed a total number of 1024 simulations and took 
-approximately 14 hours using 64 cores in the Memento cluster housed at BIFI.
+approximately between 14 and 19 hours using 64 cores in the Memento cluster.
 
 Table~\ref{TabSwigs} displays the results obtained for the optimal coefficient
 values and the corresponding value of the evaluation function, where the error
@@ -1563,9 +1565,10 @@ spillways of the canal.
 	MC+IT & $N_s=256$ & $\Delta t_A=3250$ s & 0.047139 m$^6$/s$^2$
 	\\ & $N_i=N_b=4$, $tol=0.1$ & $\Delta t_{GT}=3751$ s
 	\\ \hline
-	MC+DS+RA & $N_s=768$, $N_{st}=4$, $N_e=64$ & $\Delta t_A=3211$ s
+	MC+DS+RA & $N_s=768$, $N_{st}=4$ & $\Delta t_A=3211$ s
 		& 0.047129 m$^6$/s$^2$
-	\\ & $st_{\Delta t_A}=st_{\Delta t_{GT}}=10$ s & $\Delta t_{GT}=3754$ s
+	\\ & $N_e=64$, $rel=1$ & $\Delta t_{GT}=3754$ s
+	\\ & $st_{\Delta t_A}=st_{\Delta t_{GT}}=10$ s 
 	\\ \hline
 	GE & $N_p=256$, $N_g=9$ & $\Delta t_A=3274$ s & 0.047134 m$^6$/s$^2$
 	\\ & $R_m=R_r=R_a=0.125$ & $\Delta t_{GT}=3753$ s
@@ -1598,13 +1601,15 @@ paralelización bastante equilibrada, manteniendo una media de 60.3 núcleos
 activos. Al final, algunos núcleos finalizan sus simulaciones antes que otros,
 lo que se traduce en algunos núcleos inactivos hasta completar el cálculo.
 Aproximadamente a las 11 horas de cálculo comienza el algoritmo DS+RA ejecutando
-64 sumulaciones (sólo una por núcleo) e iterando 4 veces el proceso. Se
-comprueba cómo esto causa mayores desequilibrios en la carga, puesto que las
-simulaciones más lentas y más rápidas se compesan más ejecutando 12 simulaciones
-que una por núcleo. De media este algoritmo sólo mantiene 41.2 núcleos activos.
-El algoritmo en conjunto a mantenido de media 52.7 núcleos activos.
+64 sumulaciones (sólo una por núcleo) e iterando 4 veces el proceso. De media
+este algoritmo sólo mantiene 41.2 núcleos activos. Este peor resultado de la
+paralelización se deba a que las simulaciones más lentas y más rápidas se
+compesan más ejecutando 12 simulaciones que una por núcleo. El algoritmo en
+conjunto a mantenido de media 52.7 núcleos activos.
 \PLOT{load-swigs-mc-ra-768-1-64-4.eps}
-{}{FigSwigsLoad}
+{Evolución temporal del número de núcleos activos ejecutando la optimización
+con MC+DS+RA. Con una línea vertical se marca el instante de tiempo en el que
+finaliza el algoritmo MC y comienza el DS+RA}{FigSwigsLoad}
 
 \section{Conclusions}
 
