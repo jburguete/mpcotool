@@ -44,14 +44,14 @@ set cbrange [0:46444]
 set out 'Rosenbrock2.eps'
 splot [-3:5][-3:5][0:46444] g(x,y) with pm3d not
 
-g(x,y)=-cos(x)*cos(y)*exp(-((x-pi)**2+(y-pi)**2))
-set title 'f_{Easom}'
+g(x,y)=1-cos(x)*cos(y)*exp(-((x-pi)**2+(y-pi)**2))
+set title 'g_{Easom}'
 set isosamples 200,200
-set cbrange [-1:0.2]
+set cbrange [0:1.2]
 set out 'Easom.eps'
-splot [-100:100][-100:100][-1:0.2] g(x,y) with pm3d not
+splot [-100:100][-100:100][0:1.2] g(x,y) with pm3d not
 set out 'Easom2.eps'
-splot [0:2*pi][0:2*pi][-1:0.2] g(x,y) with pm3d not
+splot [0:2*pi][0:2*pi][0:1.2] g(x,y) with pm3d not
 unset cbrange
 
 f(x,y)=(1.5-x+x*y)**2+(2.25-x+x*y**2)**2+(2.625-x+x*y**3)**2

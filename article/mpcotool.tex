@@ -5,9 +5,15 @@
 \usepackage{pstricks}
 \usepackage{multido}
 \usepackage{amsfonts}
-\usepackage{url}
+\usepackage[hyphens]{url}
+\expandafter\def\expandafter\UrlBreaks\expandafter{\UrlBreaks
+  \do\a\do\b\do\c\do\d\do\e\do\f\do\g\do\h\do\i\do\j
+  \do\k\do\l\do\m\do\n\do\o\do\p\do\q\do\r\do\s\do\t
+  \do\u\do\v\do\w\do\x\do\y\do\z\do\A\do\B\do\C\do\D
+  \do\E\do\F\do\G\do\H\do\I\do\J\do\K\do\L\do\M\do\N
+  \do\O\do\P\do\Q\do\R\do\S\do\T\do\U\do\V\do\W\do\X
+  \do\Y\do\Z}
 \usepackage{multirow}
-
 \usepackage{lineno}
 \linenumbers
 
@@ -1533,14 +1539,10 @@ values and the corresponding value of the evaluation function, where the error
 norm is defined as the root mean square error between demanded discharges and
 supplied discharges multiplied by a factor of 10 in cases of channel overflow.
 The results are similar when comparing the different optimization methods.
-Nevertheless, it can be observed that the iterative algorithm, applied to the 
-brute force methods, improves slightly the results for this canal management.
-It is also remarkable that the genetic algorithm obtains the best
-and the worst of the results, hence indicating that this method
-is sensitive to the election of the genetic parameters. With the channel
-guards management pattern this error norm is much higher, due not only to a greater error
-in the desired outlet discharge but also to a slight overflow in one of the 
-spillways of the canal.
+MC+DS+RA achieves the best result. With the channel guards management pattern
+this error norm is much higher, due not only to a greater error in the desired
+outlet discharge but also to a slight overflow in one of the spillways of the
+canal.
 
 \TABLE{\scriptsize}{cccc}
 {
@@ -1579,12 +1581,13 @@ spillways of the canal.
 }{Optimal empirical parameters and value of the evaluation function in the simulation of the Canal de Violada using program SWIGS and several optimization algorithms in MPCOTool with the same total number of simulations ($N_{total}=1024$)}
 {TabSwigs}
 
-Fig.~\ref{FigSwigs} shows the supplied discharges at the inlet and at the different
-gates using the default schedule developed by the channel guards and that 
-obtained in the best of our simulations. It can be observed that in both cases 
-the desired discharge at the different gates in Almudévar, Gurrea and El Temple is supplied,
-with some transient peaks affecting the outlet discharge.
-This work confirms that an optimized management reduces remarkably the amplitude and the duration of these undesired peaks.
+Fig.~\ref{FigSwigs} shows the supplied discharges at the inlet and at the
+different gates using the default schedule developed by the channel guards and
+that obtained in the best of our simulations. It can be observed that in both
+cases the desired discharge at the different gates in Almudévar, Gurrea and El
+Temple is supplied, with some transient peaks affecting the outlet discharge.
+This work confirms that an optimized management reduces remarkably the amplitude
+and the duration of these undesired peaks.
 
 \FIGII{Violada-contributions.eps}{Violada-optimized-contributions.eps}
 {Temporal evolution of discharges supplied at inlet, outlet and gates as (top)
@@ -1596,16 +1599,19 @@ algoritmos, en la Fig.~\ref{FigSwigsLoad} se muestra la evolución del número d
 núcleos activos en función del tiempo de cálculo en el clúster Memento para el
 método MC+DS+RA. Se ha separado con una línea vertical el momento en el que
 finaliza el algoritmo inicial MC del algoritmo DS+RA. En este caso MC realiza
-768 simulaciones, repartiendo 12 en cada núcleo, lo que permite una
-paralelización bastante equilibrada, manteniendo una media de 60.3 núcleos
-activos. Al final, algunos núcleos finalizan sus simulaciones antes que otros,
-lo que se traduce en algunos núcleos inactivos hasta completar el cálculo.
-Aproximadamente a las 11 horas de cálculo comienza el algoritmo DS+RA ejecutando
-64 sumulaciones (sólo una por núcleo) e iterando 4 veces el proceso. De media
-este algoritmo sólo mantiene 41.2 núcleos activos. Este peor resultado de la
-paralelización se debe a que las simulaciones más lentas y más rápidas se
-compesan más ejecutando 12 simulaciones que una por núcleo. El algoritmo en
-conjunto ha mantenido de media 52.7 núcleos activos.
+768 simulaciones, repartiendo 12 en cada uno de los 64 núcleos utilizados, lo
+que permite una paralelización bastante equilibrada, manteniendo una media de
+60.3 núcleos activos y realizando casi 70 simulaciones por hora. Al final,
+algunos núcleos finalizan sus simulaciones antes que otros, por lo que se van
+inactivando núcleos hasta completar el cálculo. Aproximadamente a las 11 horas
+de cálculo comienza el algoritmo DS+RA ejecutando 64 sumulaciones (sólo una por
+núcleo) e iterando 4 veces el proceso. De media este algoritmo sólo logra
+mantener 41.2 núcleos activos realizando menos de 40 simulaciones por hora. Este
+peor resultado de la paralelización se debe a que las simulaciones más lentas y
+más rápidas se compesan más ejecutando 12 simulaciones que una por núcleo. El
+algoritmo en conjunto ha mantenido de media 52.7 núcleos activos y ha tardado
+algo más de 18 horas en realizar las 1024 simulaciones, siendo uno de los más
+lentos de todos los algoritmos utilizados.
 \PLOT{load-swigs-mc-ra-768-1-64-4.eps}
 {Evolución temporal del número de núcleos activos ejecutando la optimización
 con MC+DS+RA. Con una línea vertical se marca el instante de tiempo en el que
