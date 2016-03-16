@@ -1,4 +1,4 @@
-set term pos eps enh 9
+set term pos eps enh 11
 set size 0.44,0.44
 
 set xlabel 'Distance (m)'
@@ -12,12 +12,13 @@ plot 'q1a' t'Q1 measured' w p pt 3,'q1/00b.out' t'Q1 simulated' w l lt 1, \
 	'q4a' t'Q4 measured' w p pt 8,'q4/00b.out' t'Q2 simulated' w l lt 4
 
 set key right
-set xrange [0:3600]
+set xrange [0:4500]
+set xtics 1000
 set xlabel 'Time (s)'
 set ylabel 'Inlet depth (m)'
 
 set out 'surcos-depth.eps'
-plot [][0:0.2] 'q1h' t'Q1 measured' w p pt 3, \
+plot [][0:0.25] 'q1h' t'Q1 measured' w p pt 3, \
 	'q1/probes.out' u ($1>3335?1/0:$1):2 t'Q1 simulated' w l lt 1, \
 	'q2h' t'Q2 measured' w p pt 4, \
 	'q2/probes.out' u ($1>2403?1/0:$1):2 t'Q2 simulated' w l lt 2, \

@@ -1,4 +1,4 @@
-set term pos eps enh mono 8
+set term pos eps enh mono 9
 set size 0.44,0.44
 
 set xlabel 'Duration (min)'
@@ -149,6 +149,7 @@ plot 'mea-25' using 3:xtic(1) ti col w histogram fill solid border 1 lw 0.25, \
 	'' u 7 ti col w histogram fill solid 0.5 border 1 lt 1 lw 0.25, \
 	'' u 9 ti col w histogram fill pattern 4 border 1 lt 1 lw 0.25
 
+set term pos eps enh mono 12
 set size 0.7,0.7
 unset title
 set xrange [600:610]

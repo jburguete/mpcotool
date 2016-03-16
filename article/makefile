@@ -14,8 +14,8 @@ figs = mpcotool-en.eps surcos-advance.eps surcos-depth.eps \
 	sphere-evolution-ge-1-4.eps sphere-evolution-ge-5-8.eps \
 	sphere-evolution-ge-9-11.eps \
 	Sphere-e.eps Ackley-e.eps Booth-e.eps Rosenbrock-e.eps Easom-e.eps \
-	Beale-e.eps \
-	surcos-solute-q1.eps surcos-solute-q2.eps surcos-solute-q3.eps \
+	Beale-e.eps
+figs2 = surcos-solute-q1.eps surcos-solute-q2.eps surcos-solute-q3.eps \
 	surcos-solute-q4.eps sprinkler-0.eps sprinkler-2,84.eps \
 	pivot-simulated-starts-100.eps pivot-simulated-stops-100.eps \
 	pivot-measured-starts-100.eps pivot-measured-stops-100.eps \
@@ -30,12 +30,21 @@ figs = mpcotool-en.eps surcos-advance.eps surcos-depth.eps \
 
 plots = Beale.eps
 
+all: mpcotool.pdf mpcotool2.pdf
+
 mpcotool.pdf: mpcotool.tex bib.bib makefile $(figs) $(plots)
 	latex mpcotool
 	bibtex mpcotool
 	latex mpcotool
 	latex mpcotool
 	dvipdf mpcotool
+
+mpcotool2.pdf: mpcotool2.tex bib.bib makefile $(figs2)
+	latex mpcotool2
+	bibtex mpcotool2
+	latex mpcotool2
+	latex mpcotool2
+	dvipdf mpcotool2
 
 Beale.eps: plot
 	gnuplot plot
