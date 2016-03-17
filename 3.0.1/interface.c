@@ -425,9 +425,14 @@ input_save_json (JsonGenerator * generator)
 #endif
 
   // Setting root JSON node
+#if JSON_MAJOR_VERSION < 1 && JSON_MINOR_VERSION < 16
+  node = json_node_new (JSON_OBJECT);
+  object = json_node_get_object (node);
+#else
   node = json_node_alloc ();
   object = json_object_new ();
   json_node_init_object (node, object);
+#endif
   json_generator_set_root (generator, node);
 
   // Adding properties to the root JSON node
@@ -503,8 +508,14 @@ input_save_json (JsonGenerator * generator)
   array = json_array_new ();
   for (i = 0; i < input->nexperiments; ++i)
     {
+#if JSON_MAJOR_VERSION < 1 && JSON_MINOR_VERSION < 16
+      child = json_node_new (JSON_OBJECT);
+      object = json_node_get_object (child);
+#else
       child = json_node_alloc ();
       object2 = json_object_new ();
+      json_node_set_object (child, object2);
+#endif
       json_object_set_string_member (object2, LABEL_NAME,
                                      input->experiment[i].name);
       if (input->experiment[i].weight != 1.)
@@ -513,7 +524,6 @@ input_save_json (JsonGenerator * generator)
       for (j = 0; j < input->experiment->ninputs; ++j)
         json_object_set_string_member (object2, template[j],
                                        input->experiment[i].template[j]);
-      json_node_set_object (child, object2);
       json_array_add_element (array, child);
     }
   json_object_set_array_member (object, LABEL_EXPERIMENTS, array);
@@ -522,8 +532,14 @@ input_save_json (JsonGenerator * generator)
   array = json_array_new ();
   for (i = 0; i < input->nvariables; ++i)
     {
+#if JSON_MAJOR_VERSION < 1 && JSON_MINOR_VERSION < 16
+      child = json_node_new (JSON_OBJECT);
+      object = json_node_get_object (child);
+#else
       child = json_node_alloc ();
       object2 = json_object_new ();
+      json_node_set_object (child, object2);
+#endif
       json_object_set_string_member (object2, LABEL_NAME,
                                      input->variable[i].name);
       json_object_set_float (object2, LABEL_MINIMUM,
@@ -546,7 +562,6 @@ input_save_json (JsonGenerator * generator)
         json_object_set_uint (object2, LABEL_NBITS, input->variable[i].nbits);
       if (input->nsteps)
         json_object_set_float (object, LABEL_STEP, input->variable[i].step);
-      json_node_set_object (child, object2);
       json_array_add_element (array, child);
     }
   json_object_set_array_member (object, LABEL_VARIABLES, array);
@@ -1066,7 +1081,7 @@ window_about ()
               "empirical parameters"),
      "authors", authors,
      "translator-credits", "Javier Burguete Tolosa <jburguete@eead.csic.es>",
-     "version", "3.0.0",
+     "version", "3.0.1",
      "copyright", "Copyright 2012-2016 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/mpcotool",
