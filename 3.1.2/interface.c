@@ -425,14 +425,8 @@ input_save_json (JsonGenerator * generator)
 #endif
 
   // Setting root JSON node
-#if JSON_MAJOR_VERSION < 1 && JSON_MINOR_VERSION < 16
   node = json_node_new (JSON_NODE_OBJECT);
   object = json_node_get_object (node);
-#else
-  node = json_node_alloc ();
-  object = json_object_new ();
-  json_node_init_object (node, object);
-#endif
   json_generator_set_root (generator, node);
 
   // Adding properties to the root JSON node
@@ -508,14 +502,8 @@ input_save_json (JsonGenerator * generator)
   array = json_array_new ();
   for (i = 0; i < input->nexperiments; ++i)
     {
-#if JSON_MAJOR_VERSION < 1 && JSON_MINOR_VERSION < 16
       child = json_node_new (JSON_NODE_OBJECT);
       object = json_node_get_object (child);
-#else
-      child = json_node_alloc ();
-      object2 = json_object_new ();
-      json_node_set_object (child, object2);
-#endif
       json_object_set_string_member (object2, LABEL_NAME,
                                      input->experiment[i].name);
       if (input->experiment[i].weight != 1.)
@@ -532,14 +520,8 @@ input_save_json (JsonGenerator * generator)
   array = json_array_new ();
   for (i = 0; i < input->nvariables; ++i)
     {
-#if JSON_MAJOR_VERSION < 1 && JSON_MINOR_VERSION < 16
       child = json_node_new (JSON_NODE_OBJECT);
       object = json_node_get_object (child);
-#else
-      child = json_node_alloc ();
-      object2 = json_object_new ();
-      json_node_set_object (child, object2);
-#endif
       json_object_set_string_member (object2, LABEL_NAME,
                                      input->variable[i].name);
       json_object_set_float (object2, LABEL_MINIMUM,
@@ -1081,7 +1063,7 @@ window_about ()
               "empirical parameters"),
      "authors", authors,
      "translator-credits", "Javier Burguete Tolosa <jburguete@eead.csic.es>",
-     "version", "3.0.1",
+     "version", "3.1.2",
      "copyright", "Copyright 2012-2016 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/mpcotool",
