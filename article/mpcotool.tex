@@ -197,7 +197,7 @@ and one direction search algorithm are included as alternative methods.
 Parallel computations are enabled in a simple way so that the work load can be
 distributed among the different processors available in one computer or in
 multiple computers of a cluster.
-The software optimization methods are analysed in six standard analytical test
+The software optimization methods are analyzed in six standard analytic test
 functions.
 This software is open source and is distributed with a BSD (Berkeley Software
 Distribution) type license.
@@ -272,7 +272,7 @@ The present paper is organized as follows: First, the concepts of calibration
 and optimization are presented as the main goal. Then, the methods used to
 achieve them in MPCOTool are described. The tool structure and organization
 are next presented in detail. After,
-the software optimization methods are analysed in six standard analytical test
+the software optimization methods are analyzed in six standard analytic test
 functions. Finally, the conclusions are drawn. 
 Subsequently, in a companion paper the performance is demonstrated using four
 different applications of interest in agriculture.
@@ -327,7 +327,7 @@ be seen in the user manual provided with the software.
 
 \subsection{Sweep brute force method (SW)}
 
-The sweep brute force method finds the optimal set of parameters within a solution region by dividing it into regular subdomains. To find the optimal solution, the domain interval $x_i \in \PA{x_{i,min},\,x_{i,max}}$ is first defined for each variable $x_i$. Then, a regular partition in  $N_{x,i}$ subintervals is made. This method is the most obvious and simplest algorithm of optimization. Moreover, it is so old that it is difficult to find references of first applications. Note that the computational cost increases exponentially as the number of variables to optimize grows.
+The sweep brute force method finds the optimal set of parameters within a solution region by dividing it into regular sub-domains. To find the optimal solution, the domain interval $x_i \in \PA{x_{i,min},\,x_{i,max}}$ is first defined for each variable $x_i$. Then, a regular partition in  $N_{x,i}$ sub-intervals is made. This method is the most obvious and simplest algorithm of optimization. Moreover, it is so old that it is difficult to find references of first applications. Note that the computational cost increases exponentially as the number of variables to optimize grows.
 
 Brute force algorithms present low convergence rates but they are strongly
 parallelizable because every simulation is completely independent. If the
@@ -686,14 +686,14 @@ parameters, data and executable files required in the simulation.
 \FIG{mpcotool-en.eps}{Main window of the interactive graphical user interface
 application}{FigWindow}
 
-\section{Optimization analytical tests}
+\section{Optimization analytic tests}
 
 Several common tests are presented below (as can be seen in Wikipedia
 \url{https://en.wikipedia.org/wiki/Test_functions_for_optimization})
 in order to test the performance of the different optimization 
 algorithms. In all cases, the optimization of two parameters which minimizes
-an analytical function is attempted, having each problem an 
-analytical solution as well. The tests were obtained from \citet{SurjanovicBingam15},
+an analytic function is attempted, having each problem an 
+analytic solution as well. The tests were obtained from \citet{SurjanovicBingam15},
 where they are classified as follows:
 \begin{itemize}
 \item Bowl-shaped function: Sphere function.
@@ -858,7 +858,7 @@ for the sake of simplicity.
 {TabMethods}
 
 Next, the behavior of the different optimization algorithms for the sphere function
-is analyzed, being a symmetric, convex, without local extrema and easy to optimize
+is analyzed, being a symmetric, convex, without local extremes and easy to optimize
 function.
 
 Fig.~\ref{FigSphereVariables} displays all the possible combinations of the
@@ -884,7 +884,7 @@ to note that, although theoretically the convergence increases with IT,
 low values of $N_b$ and $tol$ can cause the optimum value to fall outside of the search
 interval ruining the convergence, as is the case of SW+IT-2 and MC+IT-2.
 \PLOTII{sphere-evolution-sw.eps}{sphere-evolution-mc.eps}
-{Convergence of the optimizacion for $g_{Sphere}$ with (left) SW and (right) MC,
+{Convergence of the optimization for $g_{Sphere}$ with (left) SW and (right) MC,
 both combined with IT and different parameters}{FigSphereSWMC}
 
 Fig.~\ref{FigSphereSWMCGR} displays the convergence obtained with SW and MC
@@ -893,7 +893,7 @@ so that in this function the the greater the number of simulations with
 the brute force method, the lower the convergence. With regard to the method of
 estimating the direction, RA is shown superior to CD.
 \PLOTII{sphere-evolution-sw-cdr.eps}{sphere-evolution-mc-cdr.eps}
-{Convergence of the optimizacion for $g_{Sphere}$ with (left) SW and (right) MC,
+{Convergence of the optimization for $g_{Sphere}$ with (left) SW and (right) MC,
 both combined with DS and different parameters}{FigSphereSWMCGR}
 
 The influence of the different parameters on the convergence for the direction
@@ -908,7 +908,7 @@ estimates ($N_e=2$) results in the fastest convergence with the random value for
 direction search method. 
 \FIGIII{sphere-evolution-mc-cd-r.eps}{sphere-evolution-mc-cd-s.eps}
 {sphere-evolution-mc-r.eps}
-{Convergence of the optimizacion for $g_{Sphere}$ with Monte-Carlo and direction
+{Convergence of the optimization for $g_{Sphere}$ with Monte-Carlo and direction
 search methods and different combinations of parameters}{FigSphereMCCDR}
  
 All figures of convergence from~\ref{FigSphereSWMC} to~\ref{FigSphereMCCDR}
@@ -923,7 +923,7 @@ for $N_e=\max\PA{N\leq N_{cores}}$, i.e., $N_e=4$ on the 4 core machine and $N_e
 on the 64 core machine for the analyzed cases.
 \FIGIV{sphere-task-1-4.eps}{sphere-task-1-64.eps}
 {sphere-task-2-4.eps}{sphere-task-2-64.eps}
-{Convergence of the optimizacion, estimated as the maximum number of simulations
+{Convergence of the optimization, estimated as the maximum number of simulations
 per task, for $g_{Sphere}$ with SW and MC coupled to DS and different
 combinations of parameters on a machine with (left) 4 and (right) 64 cores}
 {FigSphereSWMCDS}
@@ -957,7 +957,7 @@ brute force methods in virtually all cases, even though some problems with the
 Rosenbrock function. 
 Despite the fact that the convergence of DS for the sphere function is higher
 using a lower number of simulations for the associated brute force method,
-reveals itself as a bad strategy with many local minima functions. In this case,
+reveals itself as a bad strategy with functions having many local minima. In this case,
 a better approach consists of beginning with a sufficient number of simulations
 by the stochastic model, in order to obtain a point in the vicinity of the
 optimum, and subsequently use the DS for a fast convergence. As regards the
@@ -977,7 +977,7 @@ calculation time was about 3 hours.
 
 \section{Conclusions}
 
-The features and design of MPCOTool, a new open source software tool to enable efficient calibration and optimization of empirical coefficients present in simulation models, has been presented. The program includes the option of two classic brute force models, the sweep and the Monte-Carlo method, both supplied with the option of an iterative procedure to improve convergence. Also, MPCOTool offers the alternative of a genetic algorithm as implemented in Genetic.
+The features and design of MPCOTool, a new open source software tool to enable efficient calibration and optimization of empirical coefficients present in simulation models, has been presented. The program includes the option of two classic brute force models, the sweep and the Monte-Carlo methods, both supplied with the option of an iterative or a direction search procedures to improve convergence. Also, MPCOTool offers the alternative of a genetic algorithm as implemented in Genetic.
 
 The new tool allows an efficient performance, making the most of the processors present in a single computer and allowing an easy extension to parallelization distributed among different computers. In whole, a considerable data capacity and computational speed are achieved with independence of the physical problem under study or the algorithm chosen.
 
