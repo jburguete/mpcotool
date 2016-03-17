@@ -426,7 +426,7 @@ input_save_json (JsonGenerator * generator)
 
   // Setting root JSON node
 #if JSON_MAJOR_VERSION < 1 && JSON_MINOR_VERSION < 16
-  node = json_node_new (JSON_OBJECT);
+  node = json_node_new (JSON_NODE_OBJECT);
   object = json_node_get_object (node);
 #else
   node = json_node_alloc ();
@@ -509,7 +509,7 @@ input_save_json (JsonGenerator * generator)
   for (i = 0; i < input->nexperiments; ++i)
     {
 #if JSON_MAJOR_VERSION < 1 && JSON_MINOR_VERSION < 16
-      child = json_node_new (JSON_OBJECT);
+      child = json_node_new (JSON_NODE_OBJECT);
       object = json_node_get_object (child);
 #else
       child = json_node_alloc ();
@@ -533,7 +533,7 @@ input_save_json (JsonGenerator * generator)
   for (i = 0; i < input->nvariables; ++i)
     {
 #if JSON_MAJOR_VERSION < 1 && JSON_MINOR_VERSION < 16
-      child = json_node_new (JSON_OBJECT);
+      child = json_node_new (JSON_NODE_OBJECT);
       object = json_node_get_object (child);
 #else
       child = json_node_alloc ();
