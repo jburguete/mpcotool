@@ -187,7 +187,7 @@ furrow, canal
 \end{keyword}
 
 \begin{abstract}
-In a companion paper MPCOTool, a new software program to perform
+In a previous companion paper MPCOTool, a new open source software to perform
 optimization or calibration of empirical parameters required in the
 formulation of numerical simulation models, is described.
 The MPCOTool usage and possibilities are illustrated in this paper by showing
@@ -196,16 +196,26 @@ applications in agriculture: calibration of the empirical coefficients in a
 surface irrigation model; calibration in a ballistic sprinkler irrigation model,
 calibration in an irrigation engines movement model and optimization of a canal
 management.
+%%%%%%%%%%%%
+También se muestra la capacidad de MPCOTool de extraer la máxima potencia de
+cálculo disponible paralelizando la optimización en un clúster de computadoras.
+%%%%%%%%%%%%
 \end{abstract}
 
 \maketitle
 
 \section{Introduction}
 
-In what follows, a few cases of practical application of MPCOTool in combination with
-different simulation codes are presented. They deal with the optimization
-or calibration 
-of variables in models used for surface irrigation, sprinkler irrigation, irrigation engines movement and open channel flow. All input data files can be downloaded from the web page \citep{MPCOToolGit}.
+MPCOTool, the Multi-Purposes Calibration or Optimization Tool, a new open source
+software to perform optimizations or calibrations of empirical parameters
+required in the formulation of numerical simulation models is presented in a
+previous companion paper.
+
+In what follows, a few cases of practical application of MPCOTool in combination
+with different simulation codes are presented. They deal with the optimization
+or calibration of variables in models used for surface irrigation, sprinkler
+irrigation, irrigation engines movement and open channel flow. All input data
+files can be downloaded from the web page \citep{MPCOToolGit}.
 
 Most of the cases have been run on the laptop computer described in the previous
 section. Then, the computation has been performed in four parallelized tasks to
@@ -213,7 +223,9 @@ make the most of the processor's double nucleus with hyperthreading.
 Only the optimization of the management of the Canal de Violada, much more computationally expensive, has been performed in the BIFI cluster Memento
 (\url{http://bifi.es/es/infrastructures/scientific-equipment/memento-caesaraugusta}) using 64 threads.
 
-\section{Calibration of empirical parameters on surface irrigation}
+\section{Practical applications}
+
+\subsection{Calibration of empirical parameters on surface irrigation}
 
 MPCOTool has also been used to find out the empirical parameters required by the friction and infiltration
 models used in the open source software SURCOS \citep{Surcos,SurcosGit,JaviSurcos3} for the simulation of the four furrow fertigation experiments published in \citet{JaviSurcos2}. The furrows were $100$ m long and they were simulated using 100 computational cells per furrow. The furrows were close together, they had the same geometry and the experiments were almost simultaneous, hence the soil properties were assumed uniform. 
@@ -364,7 +376,7 @@ Fig.~\ref{FigSurcos} shows the results of the water depths and solute concentrat
 Q1-Q4 described in \citet{JaviSurcos2} simulated with the optimal calibrated
 parameters obtained for the MC+IT method (see table~\ref{TabSurcos})}{FigSurcos}
 
-\section{Calibration of empirical parameters of the ballistic model on
+\subsection{Calibration of empirical parameters of the ballistic model on
 sprinkler irrigation}
 
 The ballistic model \citep{Fukui80,Playan06} is the most widespread to characterize the behaviour and performance of sprinklers in sprinkler irrigation management. The model assumes that the travelling drops are approximately spherical and subject to the resulting effect of gravity and drag forces. The ejecting drop velocity is required by the model, and it is frequent to assume that the jet is compact enough to consider that all the drops carry the same velocity when leaving the sprinkler. This velocity can be estimated either by measuring the pressure and using Bernoulli's equation or, alternatively, by measuring the discharge and dividing by the outlet cross section. Other data required to characterize the water spread are related to the drop size distribution. The model used in the present work, described in \cite{Ouazaa14}, is based on three parameters $D_{50}$ (mm), $n$ (dimensionless) and $P$ (dimensionless) to define the probability density of drop sizes ($p$):
@@ -441,7 +453,7 @@ and SW leads to worse results, mainly when supplied with IT.
 }{Optimal empirical parameters and value of the evaluation function in the case of the sprinkler irrigation
 using different optimization algorithms in MPCOTool with the same number of total simulations ($N_{total}=1000$)}{TabSprinklerI}
 
-Next, using the optimal $D_{50}=3.05$ mm, $n=18.267$ and $P=0.389$ obtained by the Monte-Carlo method (Monte-Carlo with 8 iterations, see table~\ref{TabSprinklerI}) the values of $k_1$ and $k_2$ were calibrated in an experiment with medium wind velocity of 2.84 m/s. The different algorithms in MPCOTool were used with a total number of 400 simulations in all cases. Their computational time was around 4 minutes in the laptop computer for each calibration. In this case, SW+IT provided the best results, although the rest of the methods reached similar values.
+Next, using the optimal $D_{50}=3.05$ mm, $n=18.267$ and $P=0.389$ obtained by MC+IT the values of $k_1$ and $k_2$ were calibrated in an experiment with medium wind velocity of 2.84 m/s. The different algorithms in MPCOTool were used with a total number of 400 simulations in all cases. Their computational time was around 4 minutes in the laptop computer for each calibration. In this case, SW+IT provided the best results, although the rest of the methods reached similar values.
 
 \TABLE{\footnotesize}{cccc}
 {
@@ -478,7 +490,7 @@ Finally, figure~\ref{FigSprinkler} shows the measured (in pluviometers) and simu
 {(top) Radial pluviometry for non-windy conditions and (bottom) pluviometry at
 the two pluviometers axes with wind average velocity 2.84 m/s}{FigSprinkler}
 
-\section{Calibration of empirical parameters of the movement of a
+\subsection{Calibration of empirical parameters of the movement of a
 sprinkler center-pivot}
 
 The movement of a center-pivot tower follows a chaotic pattern depending on the movement of the exterior tower, the tower start and stop angles and the start and stop velocities. In \citet{Ouazaa15} a model was proposed to simulate the tower movements and several controlled experiments  were carried out to measure them in a real field center-pivot. The exterior tower controls the movement, with a sequence of working periods that depend on the cycle period and the working percentage, both adjustable to reach a desired irrigation service. The rest of the towers move according to a complex pattern (see figure~\ref{FigPivotDiagram}). 
@@ -547,7 +559,7 @@ Fig.~\ref{FigPivotVelocity}).
 
 The movement of a real pivot with four towers separated 50.11 m is next simulated and calibrated. The maximum linear velocity of each tower were measured to be: $v_1=0.02738$ m/s, $v_2=0.02824$ m/s, $v_3=0.03008$ m/s and $v_4=0.03779$ m/s.
 The exterior tower is considerably faster as it carries less weight and produces less friction.
-The start and stop times of each tower were measured in four experiments of 24 hours with the pivot working in cycles of 71s at 100\%, 50\%, 40\% and 25\%.
+The start and stop times of each tower were measured in four experiments of 24 hours with the pivot working in cycles of 71 s at 100\%, 50\%, 40\% and 25\%.
 
 The run and stop time intervals were grouped every 10 minutes in histograms for each tower and the evaluation function was defined as:
 \EQ
@@ -563,9 +575,8 @@ and the simulated number of stops respectively for the $i$-th tower and the
 $j$-th time interval. $L_2$ norm with $w_i=1$ has been used to compose the
 objective function with the four experiments.
 
-Table~\ref{TabPivot} shows some of the results obtained in a total of 10000 simulations for each of the four experiments, taking around 50 minutes each in the same laptop computer used before.
-
-The best results where obtained with the genetic algorithms. Note that in this case again the genetic algorithm produces the results with the lowest $R$ coefficient values. It is also worth noting that the iterative algorithm improves the results when applied to the Monte Carlo method but it makes things slightly worse in the sweep method.
+Table~\ref{TabPivot} shows some of the results obtained in a total of 10000 simulations for each of the four experiments, taking around 50 minutes each in the same laptop computer used before. The best results where obtained with SW+IT.
+Pure brute force algorithms obtain the worst results.
 
 \TABLE{\footnotesize}{cccc}
 {
@@ -656,7 +667,7 @@ central working time.
 {Towers velocity in an interval of 10 minutes after 10 hours of operation for
 the pivot working at 25\% velocity}{FigPivotV}
 
-\section{Optimization of a canal management}
+\subsection{Optimization of a canal management}
 
 A real irrigation canal has been analyzed in order to find out the optimal
 values of two variables of interest which take into account the daily gate
@@ -697,12 +708,6 @@ gates and spillways locations is shown.
 Canal de Violada. The dimensions are not on scale for a better visualization}
 {FigViolada}
 
-The required discharge at every gate for a modernization scenario to sprinkler irrigation was obtained after an elaborate 
-field analysis. Taking into account the crop distribution, soil water retention properties, the electricity cost depending on the hour of the day and the design of a 
-reservoir in the area, seven different scenarios were obtained as a function of the historical irrigation requirements for 
-the same period using real data \citet{Zapata09}. A 14 days period was selected from
-one of these scenarios in order to optimize the channel management.
-
 Two cross sections can be distinguished in the channel, the longer 13353 meters initial reach
 and the last 304 meters. Both share the same bottom slope, $S_0$ = 0.00059 but
 they differ in the cross section dimensions, as shown in
@@ -730,6 +735,12 @@ coarse concrete \citep{Chow59}.
 	\psline{<->}(11.2,1.5)(11.2,1.8)
 	\rput(11.95,1.65){0.300 m}
 }{Channel cross sections for the first stretch of 13353 m (left) and the last part of 304 m (right)}{FigCrossSections}
+
+The required discharge at every gate for a modernization scenario to sprinkler irrigation was obtained after an elaborate 
+field analysis. Taking into account the crop distribution, soil water retention properties, the electricity cost depending on the hour of the day and the design of a 
+reservoir in the area, seven different scenarios were obtained as a function of the historical irrigation requirements for 
+the same period using real data \citep{Zapata09}. A 14 days period was selected from
+one of these scenarios in order to optimize the channel management.
 
 Two key optimization variables have been studied: $\Delta t_A$ and
 $\Delta t_{GT}$. Where $\Delta t_A$ takes into account the delay between the
@@ -845,13 +856,11 @@ beginning of the DS+RA algorithm}{FigSwigsLoad}
 
 \section{Conclusions}
 
-The features and design of MPCOTool, a new open source software tool to enable efficient calibration and optimization of empirical coefficients present in simulation models, has been presented. The program includes the option of two classic brute force models, the sweep and the Monte-Carlo method, both supplied with the option of an iterative procedure to improve convergence. Also, MPCOTool offers the alternative of a genetic algorithm as implemented in Genetic.
+MPCOTool has proved to be flexible in the adaptation to the syntax of diverse simulation codes and useful in the calibration and optimization of parameters involved in rather different irrigation problems. In the present work it has been shown successful for practical applications such as open channel flow management, furrow fertigation, sprinkler irrigation and sprinkler tower movement design.
 
 The new tool allows an efficient performance, making the most of the processors present in a single computer and allowing an easy extension to parallelization distributed among different computers. In whole, a considerable data capacity and computational speed are achieved with independence of the physical problem under study or the algorithm chosen.
 
 For the analyzed cases, all the implemented optimization algorithms have reached similar results with the same total number of simulations. However, the iterative algorithm applied in combination with the Monte-Carlo method and the genetic algorithm leads to slightly better results than the pure brute force techniques. On the other hand, the iterative algorithm does not improve significantly the sweep method results.
-
-MPCOTool has proved to be flexible in the adaptation to the syntax of diverse simulation codes and useful in the calibration and optimization of parameters involved in rather different irrigation problems. In the present work it has been shown successful for practical applications such as open channel flow management, furrow fertigation, sprinkler irrigation and sprinkler tower movement design.
 
 \section*{Acknowledgements}
 

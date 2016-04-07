@@ -187,7 +187,8 @@ furrow, canal
 \end{keyword}
 
 \begin{abstract}
-The present work describes MPCOTool, a new software program to perform
+The present work describes MPCOTool, the Multi-Purposes Calibration or
+Optimization Tool, a new software program to perform
 optimization or calibration of empirical parameters required in the
 formulation of numerical simulation models. The structure is such that it can be
 easily adapted to different external simulation codes.
@@ -201,8 +202,8 @@ The software optimization methods are analyzed in six standard analytic test
 functions.
 This software is open source and is distributed with a BSD (Berkeley Software
 Distribution) type license.
-In a companion paper the MPCOTool usage and possibilities are illustrated by
-showing four practical applications in agriculture.
+In a next companion paper the MPCOTool usage and possibilities are illustrated
+by showing four practical applications in agriculture.
 \end{abstract}
 
 \maketitle
@@ -266,7 +267,8 @@ In this work MPCOTool, the Multi-Purposes Calibration and Optimization Tool
 empirical parameters required in simulation models, is presented. It implements
 one genetic algorithm, two brute force algorithms (sweep and Monte-Carlo) and,
 to improve the brute force methods, one iterative algorithm and one direction
-search algorithm. The software is open source with a BSD type license. All inputdata files used in the manuscript are also free and they can be downloaded in
+search algorithm. The software is open source with a BSD type license. All input
+data files used in the manuscript are also free and they can be downloaded in
 the cited web page.
 
 The present paper is organized as follows: First, the concepts of calibration
@@ -275,8 +277,8 @@ achieve them in MPCOTool are described. The tool structure and organization
 are next presented in detail. After,
 the software optimization methods are analyzed in six standard analytic test
 functions. Finally, the conclusions are drawn. 
-Subsequently, in a companion paper the performance is demonstrated using four
-different applications of interest in agriculture.
+Subsequently, in a next companion paper the performance is demonstrated using
+four different applications of interest in agriculture.
 
 \section{Calibration and optimization}
 
@@ -742,7 +744,8 @@ is traversed at regular intervals, are likely to exactly fall in the minimum
 of the function when the parameters to be minimized are integer or rational
 numbers. In those cases, the function has been modified in order always to get 
 the minimum with irrational parameters. Moreover, negative functions will be
-translated because the error norms have to be defined positive.
+translated because the error norms have to be defined positive. Modified
+functions are presented in Table~\ref{TabModifiedTests}.
 \TABLE{\footnotesize}{ccc}
 {
 	Objective function & Minimum & Domain \\
@@ -772,7 +775,8 @@ translated because the error norms have to be defined positive.
 		=f_{Beale}\PA{x-\frac{\pi}{4},\,y-\frac{\pi}{4}}$} &
 	\multirow{2}{*}{$g_{Beale}\PA{3+\frac{\pi}{4},\,\frac12+\frac{\pi}{4}}=0$} &
 	$x\in[-5,5]$ \\ & & $y\in[-5,5]$
-}{Modified standard function to work in MPCOTool}{TabModifiedTests}
+}{Modified standard functions to analyze the optimization algorithms performance
+in MPCOTool}{TabModifiedTests}
 
 When presenting the results, the following notation is used:
 \begin{description}
@@ -786,7 +790,8 @@ When presenting the results, the following notation is used:
     of an optimization problem with two variables).
 \end{description}
 
-The value of these functions in the $x-y$ plane is shown in Fig.~\ref{FigTests}.
+The value of the modified functions in the $x-y$ plane is shown in
+Fig.~\ref{FigTests}.
 \FIGVI{Sphere.eps}{Ackley.eps}{Booth.eps}{Rosenbrock.eps}{Easom.eps}{Beale.eps}
 {Map in the $x-y$ plane showing the values of the objective functions used as 
 test}{FigTests}
