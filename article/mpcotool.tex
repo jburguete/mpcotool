@@ -321,7 +321,7 @@ MPCOTool allows to achieve them by means of different methods. In addition,
 the metric used to evaluate the functional is open and may be defined by the
 user.
 
-\section{Methods}
+\section{Optimization methods}
 
 The optimization methods implemented in MPCOTool are next presented.
 Details of the algorithm and parallelization characteristics, as well as
@@ -538,8 +538,8 @@ experiments set can be calculated by four different error norms:
 {EqObjectiveFunctionLp}
 \EQ{L_1:\quad J=\sum_{i=1}^{N_{exp}}\ABS{w_i\,o_i},}
 {EqObjectiveFunctionLI}
-with $w_i$ the weight associated to the $i$-th experiment, specified in the
-\emph{main input file}.
+with $w_i$ the weight associated to the $i$-th experiment and $p$ the exponent
+of the $L_p$ norm, specified both in the \emph{main input file}.
 Note that all considered error norms are equivalent for only one experiment to
 optimize ($J=\ABS{w_1\,o_1}$).
 Note also that these error norms are used to combine the objective value $o_i$
@@ -985,7 +985,22 @@ calculation time was about 3 hours.
 
 The features and design of MPCOTool, a new open source software tool to enable efficient calibration and optimization of empirical coefficients present in simulation models, has been presented. The program includes the option of two classic brute force models, the sweep and the Monte-Carlo methods, both supplied with the option of an iterative or a direction search procedures to improve convergence. Also, MPCOTool offers the alternative of a genetic algorithm as implemented in Genetic.
 
-The new tool allows an efficient performance, making the most of the processors present in a single computer and allowing an easy extension to parallelization distributed among different computers. In whole, a considerable data capacity and computational speed are achieved with independence of the physical problem under study or the algorithm chosen.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+El programa muestra una gran facilidad de uso y de adaptación para resolver
+diferentes problemas de optimización/calibración  realizando de forma automática
+para el usuario una paralelización para utilizar todos los recursos
+computacionales disponibles.
+
+Como puede observarse en los resultados de las diferentes combinaciones de
+funciones y métodos realizadas en este trabajo, la optimización es todo un arte
+donde la elección del método y la configuración de parámetros es fuertemente
+dependiente de la forma de la función objetivo.
+
+Tanto el algoritmo iterativo propuesto como el algoritmo de búsqueda de
+dirección, acoplados a un método de fuerza bruta, han mostrado una adecuada
+convergencia en las funciones objetivo analizadas, mejorando notablemente los
+resultados de los métodos puros de fuerza bruta y de los algoritmos genéticos.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section*{Acknowledgements}
 
