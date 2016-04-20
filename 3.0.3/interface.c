@@ -1062,8 +1062,11 @@ window_about ()
               "A software to perform calibrations or optimizations of "
               "empirical parameters"),
      "authors", authors,
-     "translator-credits", "Javier Burguete Tolosa <jburguete@eead.csic.es>",
-     "version", "3.1.2",
+     "translator-credits",
+	 "Javier Burguete Tolosa <jburguete@eead.csic.es> "
+	 "(english, french and spanish)\n"
+	 "Uğur Çayoğlu (german)",
+     "version", "3.0.3",
      "copyright", "Copyright 2012-2016 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/mpcotool",
