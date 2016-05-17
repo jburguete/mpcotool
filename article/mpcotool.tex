@@ -193,7 +193,7 @@ optimization or calibration of empirical parameters required in the
 formulation of numerical simulation models. The structure is such that it can be
 easily adapted to different external simulation codes.
 One genetic algorithm, two brute force optimization algorithms (sweep and
-Monte-Carlo) and, to improve the brute force methods, one iterative algorithm
+Monte-Carlo), one iterative algorithm
 and one direction search algorithm are included as alternative methods.
 Parallel computations are enabled in a simple way so that the work load can be
 distributed among the different processors available in one computer or in
@@ -224,22 +224,20 @@ minimized \citep{Lacasta16}.
 There are many fields where calibration is required. Traditionally, fields such
 as hydrology or weather forecasting have used mathematical models with empirical
 parameters which require to be adjusted. For example, watershed models usually
-estimates initial parameter values for sediment fractions, instream water
+estimate initial parameter values for sediment fractions, instream water
 temperature or infiltration rates \citep{Duan04}. Within agriculture, there are
-many phenomena that can be modelled using differential equations that
-participate in conservation laws
+many phenomena that can be modelled using differential equations
 \citep{Playan06,JaviSurcos2,Ebrahimiam13,Ouazaa14,Ouazaa15,SedagatdoostEbraimian15}.
 The application of
 mathematical models to describe physical processes is helpful to perform
 simulations of possible scenarios using computational facilities. Despite the
 quality of these mathematical models for predictive purposes, calibration is
-usually required to provide them useful properties. The application of the
+usually required to provide them with useful properties. The
 shallow-water equations for the simulation of open-channel flow, for instance,
-has been widely used, in particular for irrigation water delivery analysis. To
+have been widely used, in particular for irrigation water delivery analysis. To
 complete the equations with regulation elements, it is accepted that some
 simplifications can be applied. These simplifications usually include parameters
-that make possible to model simpler the phenomena that occur on those regulation
-elements.
+to model those regulation elements.
 
 Because of the mathematical model, differential equations constrained
 optimization may be performed using two optimizer families: gradient based
@@ -249,7 +247,7 @@ the variation of the objective with respect to the controlled variable
 \citep{Lacasta16}. Therefore, although gradient based methods exhibit superior
 convergences, they are more difficult to implement in general purpose software.
 Nonetheless, when calibration is understood as the adjustment of empirical
-values, gradient-based methods may fail due to the location of local minimums.
+values, gradient-based methods may fail due to the location of local minima.
 Stochastic based optimization algorithms (as sweep, Monte-Carlo or genetic) are
 not affected by local minimum presence. 
 Detailed analysis of the properties and performance of several stochastic
@@ -272,9 +270,8 @@ data files used in the manuscript are also free and they can be downloaded in
 the cited web page.
 
 The present paper is organized as follows: First, the concepts of calibration
-and optimization are presented as the main goal. Then, the methods used to
-achieve them in MPCOTool are described. The tool structure and organization
-are next presented in detail. After,
+and optimization are presented as the main goal. Then, the methods used in MPCOTool are described. The tool structure and organization
+are next presented in detail. After that,
 the software optimization methods are analyzed in six standard analytic test
 functions. Finally, the conclusions are drawn. 
 Subsequently, in a next companion paper the performance is demonstrated using
@@ -287,37 +284,34 @@ Calibration can be considered a particular case of optimization
 setting the parameters that allow to represent correctly the behavior of a
 component or model. It is very common to describe physical phenomena using
 complex mathematical models including all the possible scales. Nevertheless, it
-is very useful to simplify them including adjustable parameters that enclose
-smaller scales.
+is very useful to simplify them including adjustable parameters.
 
 Optimization can be understood as the minimization process of some functional
 that evaluates the objective of a model. Therefore, a functional $J$ must be
-defined in order to evaluate the deviation between your model results
-$\mathbf{x}$ and your objectives $\mathbf{x}_o$, with
-$\mathbf{x},\mathbf{x}_o\in\mathbb{R}^n$ real vectors of $n\ge 1$
-components ($x_i$ and $x_{o,i}$ respectively) and
-$J:\mathbb{R}^n \rightarrow \mathbb{R}$. 
+defined in order to evaluate the deviation between the model results
+$\mathbf{x}$ and the objectives $\mathbf{x}_o$, with
+$\mathbf{x},\mathbf{x}_o$ real vectors of $n$
+components ($x_i$ and $x_{o,i}$ respectively). 
 Infinite ways of defining $J$ can be used, for example penalizing different
-variables with different weights according to their importance to our
-objectives. The aim is to find the minimum of this functional:
-\EQ{\min_{\mathbf{x}}\;J\PA{\mathbf{x}}.}{EqFunctionalMin}
+variables with different weights according to their importance.
+The aim is to find the minimum of this functional.
 
 In order to meet the optimal solution it is important to keep in mind that
 $\mathbf{x}\equiv\mathbf{x}\PA{\mathbf{y}}$ may be directly or indirectly
-related with another tunable quantity: $\mathbf{y}\in\mathbb{R}^m$  ($m$
+related with another tunable quantity: $\mathbf{y}$  ($m$
 parameters which can be optimized in the model). The complexity of the
 optimization process comes from the relation that may be established between the
 model and this tunable set of parameters. Bearing in mind that relation, the
 optimization is the minimization of the functional by means of the modification
 of those parameters. Moreover, those parameters are usually defined in a range
 $y_i\in\PA{y_{i,min},\,y_{i,max}}$ so the minimization problem is formally
-defined as:
+to find the optimum set of parameters $\mathbf{y}_o$ that:
 \EQ
 {
-	\mathbf{y}_o=\arg\min_{\mathbf{y}}J\PA{\mathbf{x}\PA{\mathbf{y}}},
+	J\PA{\mathbf{x}\PA{\mathbf{y}_o}}
+	=\min_{\mathbf{y}}J\PA{\mathbf{x}\PA{\mathbf{y}}}.
 }{EqParametersOptimal}
-being $\mathbf{y}_o$ the optimum set of parameters obtained by the model.
-MPCOTool allows to achieve them by means of different methods. In addition,
+MPCOTool allows to find them by means of different methods. In addition,
 the metric used to evaluate the functional is open and may be defined by the
 user.
 
@@ -330,12 +324,12 @@ be seen in the user manual provided with the software.
 
 \subsection{Sweep brute force method (SW)}
 
-The sweep brute force method finds the optimal set of parameters within a solution region by dividing it into regular sub-domains. To find the optimal solution, the domain interval $x_i \in \PA{x_{i,min},\,x_{i,max}}$ is first defined for each variable $x_i$. Then, a regular partition in  $N_{x,i}$ sub-intervals is made. This method is the most obvious and simplest algorithm of optimization. Moreover, it is so old that it is difficult to find references of first applications. Note that the computational cost increases exponentially as the number of variables to optimize grows.
+The sweep brute force method finds the optimal set of parameters within a solution region by dividing it into regular sub-domains. To find the optimal solution, the domain interval is first defined for each variable $x_i \in \PA{x_{i,min},\,x_{i,max}}$. Then, a regular partition in  $N_{x,i}$ sub-intervals is made. This method is the most obvious and simplest algorithm of optimization. Moreover, it is so old that it is difficult to find references of first applications. Note that the computational cost increases exponentially as the number of variables to optimize grows.
 
 Brute force algorithms present low convergence rates but they are strongly
 parallelizable because every simulation is completely independent. If the
 computer, or the computers cluster, can execute $N_{tasks}$ parallel tasks
-every task do $N_{total}/N_{tasks}$ simulations, obviously taking into account
+every task does $N_{total}/N_{tasks}$ simulations, obviously taking into account
 rounding effects (every task has to perform a natural number of simulations).
 
 \subsection{Monte-Carlo method (MC)}
@@ -344,7 +338,7 @@ Monte-Carlo based methods run $N_s$ simulations using aleatory values of the
 variables assuming uniform probability within the extreme values range. This is
 another old brute force method attributed to different authors. In
 \citet{AtanassovDimov08} an interesting analysis of this method is presented.
-The algorithm is parallelizable in the same way as sweep algorithm.
+The algorithm is parallelizable in the same way as the sweep algorithm.
 
 \subsection{Iterative algorithm (IT) applied to brute force methods}
 
@@ -354,10 +348,10 @@ iteration are used to force new intervals in the variables for the following
 iteration. Then, for $N_b^j$, the subset of the best simulation results in
 the $j$-th iteration, the following quantities are defined:
 \begin{description}
-\item[$\displaystyle x_{\max}^b=\max_{i\in N_b}x_i^j$]: Maximum value of
+\item[$\displaystyle x_{\max}^b=\max_{i\in N_b}x_i^j$]: Maximum value of the
 	variable $x$ in the subset of the best simulation results from the $j$-th
 	iteration.
-\item[$\displaystyle x_{\min}^b=\max_{i\in N_b}x_i^j$]: Minimum value of
+\item[$\displaystyle x_{\min}^b=\max_{i\in N_b}x_i^j$]: Minimum value of the
 	variable $x$ in the subset of the best simulation results from the $j$-th
 	iteration.
 \end{description}
@@ -383,8 +377,8 @@ with:
 	\end{array}\right.
 }{EqIterationTolerance}
 being $tol$ a tolerance factor increasing the size of the variable intervals to
-simulate the next iteration. Note that this factor affect in different manner to
-SW and MC algorithms. The method is repeated $N_i$ times.
+simulate the next iteration. Note that this factor affects in different manner
+to SW and MC algorithms. The method is repeated $N_i$ times.
 
 The iterative algorithm can be also easily parallelized. However, this method is
 less parallelizable than pure brute force methods because the parallelization
@@ -393,10 +387,9 @@ has to be performed for each iteration.
 \subsection{Direction search method (DS)}
 
 Brute force optimization methods, SW and MC, can be also combined
-with a direction search algorithm. Defining the vector $\vec{r}_i$ as the optime
-variables combination obtained in the $i$-th step, $\vec{r}_1$ as the optime
-variables combination vector obtained by the brute force method and defining
-the vector $\vec{s}_i$ as:
+with a direction search algorithm. Defining the vector $\vec{r}_i$ as the optimum
+variables combination obtained in the $i$-th step, $\vec{r}_1$ as the optimum
+variables combination vector obtained by the brute force method and $\vec{s}_i$ as:
 \EQ
 {
 	\vec{s}_1=\vec{0},\qquad
@@ -404,10 +397,11 @@ the vector $\vec{s}_i$ as:
 }{Eqs}
 with $\Delta\vec{r}_{i-1}=\vec{r}_i+\vec{r}_{i-1}$ and $rel$ the
 relaxation parameter, the DS method checks $N_e$
-variable combinations and choice the optimum as:
+variable combinations and selects the optimum as:
 \EQ
 {
-	\vec{r}_{i+1}=\mathrm{optime}\PA{\vec{r}_i,\;\vec{r}_i+\vec{s}_i+\vec{t}_j},
+	\vec{r}_{i+1}
+	=\mathrm{optimum}\PA{\vec{r}_i,\;\vec{r}_i+\vec{s}_i+\vec{t}_j},
 	\;j=1,\cdots,N_e.
 }{EqDirection}
 If the step does not improve the optimum ($\vec{r}_i=\vec{r}_{i+1}$) then the
@@ -415,7 +409,7 @@ direction step vectors $\vec{t}_j$ are divided by two and $\vec{s}_{i+1}$ is set
 to zero. The method is iterated $N_{st}$ times.
 
 Although direction search method gets the fastest convergence, it is the method
-in MPCOTool that obtains the least advantages of parallelization. The method is
+in MPCOTool that obtains the least advantages from parallelization. The method is
 almost sequential and parallelization can be only performed for each step in the
 $N_e$ simulations to estimate the direction.
 
@@ -460,7 +454,7 @@ The variables to calibrate/optimize are coded in Genetic using a bit chain: the
 genome. The larger the number of bits assigned to a variable the higher the resolution.
 The number of bits assigned to each variable, and therefore the genome size, is fixed and the same for all the 
 simulations.
-The value assigned to a variable $x$ is determined by the allowed extreme values $x_{\min}$ and $x_{\max}$, the binary number assigned in the genome to variable $I_x$ and by the number of bits assigned to variable $N_x$ according to
+The value assigned to a variable $x$ is determined by the extreme values $x_{\min}$ and $x_{\max}$, the binary number assigned in the genome to variable $I_x$ and by the number of bits assigned to variable $N_x$ according to
 the following formula:
 \EQ{x=x_{\min}+\frac{I_x}{2^{N_x}}\,\left(x_{\max}-x_{\min}\right).}{EqGenome}
 
@@ -471,7 +465,7 @@ taken from the genome of each individual. Next, in every generation, $N_p\,R_m$ 
 taking into account rounding. On second and further generations only simulations
 associated to this new individuals ($N_{new}$) have to be run:
 \EQ{N_{new}=N_p\,\left(R_m+R_r+R_a\right).}{EqNew}
-Then, total number of simulations performed by the genetic algorithm is:
+Then, the total number of simulations performed by the genetic algorithm is:
 \EQ{N_{total}=N_p+\left(N_g-1\right)\,N_{new},}{EqGeneticNumber}
 with $N_g$ the number of generations of new entities.
 The individuals of the former population that obtained lower values in the evaluation function are replaced so that the best $N_{survival}$ individuals survive:
@@ -489,18 +483,18 @@ In the mutation algorithm an identical copy of the parent genome is made except 
 The default algorithm in Genetic selects two different parents with one of the least errors after the 
 complete simulation of one generation. 
 A new individual is then generated by sharing the common bits of both parents and a random choice in the others.
-The new child has the same number of bits as the parents and different genome.
+The new child has the same number of bits as the parents but different genome.
 
 \subsubsection{Adaptation algorithm}
 
 Another algorithm is included in Genetic called "adaptation" although, in the
-biological sense, it would be rather be a smooth mutation. First, one of the
+biological sense, it would rather be a smooth mutation. First, one of the
 variables codified in the genome is randomly selected with uniform probability.
 Then, a bit is randomly chosen assuming a probability linearly decreasing with
 the significance of the bit. The new individual receives a copy of the parent
 genome with the selected bit inverted.
 
-This algorithm is rather similar to the mutation algorithm previously described but, since the probability to affect bits less significant is larger, so is the probability to produce smaller changes.
+This algorithm is rather similar to the mutation algorithm previously described but, since the probability to affect less significant bits is larger, so is the probability to produce smaller changes.
 
 \subsubsection{Parallelization}
 
@@ -513,7 +507,7 @@ generation.
 
 \subsection{Organization of MPCOTool}
 
-Let us assume that $N_{par}$ empirical parameters are sought desired so
+Let us assume that $N_{par}$ empirical parameters are desired so
 that the results from a simulation model are the best fit to $N_{exp}$
 experimental data and that the simulator requires $N_{in}$ input files. The
 structure followed by MPCOTool is summarized in the \emph{main input file},
@@ -683,8 +677,8 @@ with the objective function value):
 \subsection{Graphical user interface application}
 
 A more user friendly application with an interactive graphical user interface is
-named as \emph{MPCOTool}. This application plots a window as the represented
-in the Fig.~\ref{FigWindow}. The main window enable us to fit all algorithms,
+named as \emph{MPCOTool}. This application displays a window, as the one
+represented in Fig.~\ref{FigWindow}, to select all algorithms,
 parameters, data and executable files required in the simulation.
 \FIG{mpcotool-en.eps}{Main window of the interactive graphical user interface
 application}{FigWindow}
@@ -694,7 +688,7 @@ application}{FigWindow}
 Several common tests are presented below (as can be seen in Wikipedia
 \url{https://en.wikipedia.org/wiki/Test_functions_for_optimization})
 in order to test the performance of the different optimization 
-algorithms. In all cases, the optimization of two parameters which minimizes
+algorithms. In all cases, the optimization of two parameters which minimize
 an analytic function is attempted, having each problem an 
 analytic solution as well. The tests were obtained from \citet{SurjanovicBingam15},
 where they are classified as follows:
@@ -742,7 +736,7 @@ algorithms}{TabOriginalTests}
 The algorithms based on the sweep method, as the space between the variables
 is traversed at regular intervals, are likely to exactly fall in the minimum
 of the function when the parameters to be minimized are integer or rational
-numbers. In those cases, the function has been modified in order always to get 
+numbers. In those cases, the function has been modified in order to get 
 the minimum with irrational parameters. Moreover, negative functions will be
 translated because the error norms have to be defined positive. Modified
 functions are presented in Table~\ref{TabModifiedTests}.
@@ -800,7 +794,7 @@ highlight their peculiarities.
 \PLOTII{Ackley2.eps}{Easom2.eps}{A zoom of (left) Ackley and (right) Easom
 objective functions}{FigTestsZoom}
 
-The ability of the different algorithms in order to obtain the optimum
+The ability of the different algorithms to obtain the optimum
 value for all the tests, using a fixed number of total simulations of 2500 in each method,
 is then presented. The abbreviations shown in table~\ref{TabMethods}, related 
 to the different combinations of algorithms and configuration parameters, are used
@@ -870,9 +864,8 @@ function.
 Fig.~\ref{FigSphereVariables} displays all the possible combinations of the
 simulated variables by the different algorithms in order to illustrate how
 each method operates. It can be observed the regular way of exploring the space
-of variables for SW in contrast to the random procedure for MC. It is shown as
-well the progressive reduction of the search
-interval for IT in both cases. GE also 
+of variables for SW in contrast to the random procedure for MC. The progressive reduction of the search
+interval for IT in both cases is shown. GE also 
 performs a random search, but the likelihood of falling at points in the  
 vicinity of the optimum increases progressively. However, the DS
 method rapidly searches in the direction of the optimum, from the best value
@@ -885,7 +878,7 @@ provided by the associated brute force method.
 
 Fig.~\ref{FigSphereSWMC} shows the convergence obtained for SW and MC and their
 combination with IT. It can
-be observed how the convergence improves applying IT. It is important
+be observed that the convergence improves applying IT. It is important
 to note that, although theoretically the convergence increases with IT, 
 low values of $N_b$ and $tol$ can cause the optimum value to fall outside of the search
 interval ruining the convergence, as is the case of SW+IT-2 and MC+IT-2.
@@ -895,7 +888,7 @@ both combined with IT and different parameters}{FigSphereSWMC}
 
 Fig.~\ref{FigSphereSWMCGR} displays the convergence obtained with SW and MC
 coupled with DS. It can be shown that the convergence of DS is vastly superior,
-so that in this function the the greater the number of simulations with 
+so that in this function the greater the number of simulations with 
 the brute force method, the lower the convergence. With regard to the method of
 estimating the direction, RA is shown superior to CD.
 \PLOTII{sphere-evolution-sw-cdr.eps}{sphere-evolution-mc-cdr.eps}
@@ -909,7 +902,7 @@ small step size, null values of $rel$ result in lower values of the convergence.
 On the top right side, the influence of the step size is shown. In general,
 it is recommended to select a step size of around a few times the expected 
 approximated distance between the optimum and the best point obtained by the brute
-force method. Finally, in the bottom figure can be observed that a lower number of direction
+force method. Finally, in the bottom figure it can be observed that a lower number of direction
 estimates ($N_e=2$) results in the fastest convergence with the random value for the
 direction search method. 
 \FIGIII{sphere-evolution-mc-cd-r.eps}{sphere-evolution-mc-cd-s.eps}
@@ -924,7 +917,7 @@ optimization algorithms. Fig.~\ref{FigSphereSWMCDS} displays the real convergenc
 estimated as the maximum number of simulations per task, for $g_{Sphere}$ with SW 
 and MC coupled to DS and different combinations of parameters on two machines with 4 
 and 64 cores respectively. Given that the computational cost is identical for 
-$N_e\leq N_{cores}$, the higher convergence on multiprocessor machines is achieved
+$N_e\leq N_{cores}$, the highest convergence on multiprocessor machines is achieved
 for $N_e=\max\PA{N\leq N_{cores}}$, i.e., $N_e=4$ on the 4 core machine and $N_e=10$
 on the 64 core machine for the analyzed cases.
 \FIGIV{sphere-task-1-4.eps}{sphere-task-1-64.eps}
@@ -948,7 +941,7 @@ Fig.~\ref{FigTestResults}.
 The result is presented as minus the decimal logarithm of the distance obtained
 to the optimum point. This value represents the number of decimal digits of 
 precision achieved.
-For the methods which utilize random numbers (MC, DS+RA y GE) 10 different
+For the methods using random numbers (MC, DS+RA y GE) 10 different
 seeds for the pseudo-random number generator have been used. Figure shows, for
 these cases, the average value and the extreme values of the error norm obtained
 by these seeds. 
@@ -957,8 +950,8 @@ better results than pure brute force SW and MC methods.
 With regard to the brute force methods, the behavior of SW seems to be as a
 particular case of MC. Indeed, theoretically, MC takes advantage of situations
 with many variables, where the influence of each  variable over the objective
-function is distinct, which is not the case for the analyzed cases.
-IT leads to a significant improvement, with a substantial progress over the
+function is different, which is not the case for the analyzed cases.
+IT leads to a significant improvement, with a substantial advantage over the
 brute force methods in virtually all cases, even though some problems with the
 Rosenbrock function. 
 Despite the fact that the convergence of DS for the sphere function is higher
@@ -968,7 +961,7 @@ a better approach consists of beginning with a sufficient number of simulations
 by the stochastic model, in order to obtain a point in the vicinity of the
 optimum, and subsequently use the DS for a fast convergence. As regards the
 method to estimate the direction, although when RA with a low $N_e$ is used, the
-convergence is accelerated, it does not success in finding the optimum in some
+convergence is accelerated, it does not succeed in finding the optimum in some
 cases. CD or RA with $N_e=4$ prove to be methods somewhat slower but are deemed
 more secure.
 \FIGVI{Sphere-e.eps}{Ackley-e.eps}{Booth-e.eps}{Rosenbrock-e.eps}{Easom-e.eps}

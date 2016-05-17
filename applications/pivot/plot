@@ -1,5 +1,5 @@
 set term pos eps enh mono 9
-set size 0.44,0.44
+set size 0.8,0.8
 
 set xlabel 'Duration (min)'
 
@@ -10,7 +10,7 @@ set xtic rotate by -90 scale 0
 
 set ylabel 'Number of starts'
 set xrange [-0.5:28.5]
-set yrange [0:500]
+set yrange [0:400]
 
 set title 'Simulated'
 set out 'pivot-simulated-starts-100.eps'
@@ -28,6 +28,7 @@ plot 'mea-100' using 2:xtic(1) ti col w histogram fill solid border 1 lw 0.25, \
 
 set ylabel 'Number of stops'
 set xrange [-0.5:6.5]
+set yrange [0:500]
 
 set title 'Simulated'
 set out 'pivot-simulated-stops-100.eps'
