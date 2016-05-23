@@ -194,7 +194,7 @@ formulation of numerical simulation models. The structure is such that it can be
 easily adapted to different external simulation codes.
 One genetic algorithm, two brute force optimization algorithms (sweep and
 Monte-Carlo), one iterative algorithm
-and one direction search algorithm are included as alternative methods.
+and two direction search algorithms are included as alternative methods.
 Parallel computations are enabled in a simple way so that the work load can be
 distributed among the different processors available in one computer or in
 multiple computers of a cluster.
@@ -387,7 +387,8 @@ has to be performed for each iteration.
 \subsection{Direction search method (DS)}
 
 Brute force optimization methods, SW and MC, can be also combined
-with a direction search algorithm. Defining the vector $\vec{r}_i$ as the optimum
+with a direction search algorithm. In MPCOTool a new direction search based
+method has been proposed. Defining the vector $\vec{r}_i$ as the optimum
 variables combination obtained in the $i$-th step, $\vec{r}_1$ as the optimum
 variables combination vector obtained by the brute force method and $\vec{s}_i$ as:
 \EQ
@@ -413,7 +414,7 @@ in MPCOTool that obtains the least advantages from parallelization. The method i
 almost sequential and parallelization can be only performed for each step in the
 $N_e$ simulations to estimate the direction.
 
-MPCOTool uses two methods to build the $\vec{t}_j$ vectors:
+MPCOTool uses two methods to build the $\vec{t}_j$ vectors that are next outlined:
 
 \subsubsection{Coordinates descent (CD)}
 
@@ -487,7 +488,7 @@ The new child has the same number of bits as the parents but different genome.
 
 \subsubsection{Adaptation algorithm}
 
-Another algorithm is included in Genetic called "adaptation" although, in the
+Another algorithm is included in Genetic called \emph{adaptation} although, in the
 biological sense, it would rather be a smooth mutation. First, one of the
 variables codified in the genome is randomly selected with uniform probability.
 Then, a bit is randomly chosen assuming a probability linearly decreasing with
@@ -677,7 +678,7 @@ with the objective function value):
 \subsection{Graphical user interface application}
 
 A more user friendly application with an interactive graphical user interface is
-named as \emph{MPCOTool}. This application displays a window, as the one
+named as \emph{mpcotool}. This application displays a window, as the one
 represented in Fig.~\ref{FigWindow}, to select all algorithms,
 parameters, data and executable files required in the simulation.
 \FIG{mpcotool-en.eps}{Main window of the interactive graphical user interface
@@ -947,7 +948,7 @@ these cases, the average value and the extreme values of the error norm obtained
 by these seeds. 
 The results for the GE can be qualified as disappointing. GE only gets slightly
 better results than pure brute force SW and MC methods.
-With regard to the brute force methods, the behavior of SW seems to be as a
+With regard to the brute force methods, the behavior of SW seems to be a
 particular case of MC. Indeed, theoretically, MC takes advantage of situations
 with many variables, where the influence of each  variable over the objective
 function is different, which is not the case for the analyzed cases.
@@ -976,13 +977,13 @@ calculation time was about 3 hours.
 
 \section{Conclusions}
 
-The features and design of MPCOTool, a new open source software tool to enable efficient calibration and optimization of empirical coefficients present in simulation models, has been presented. The program includes the option of two classic brute force models, the sweep and the Monte-Carlo methods, both supplied with the option of an iterative or a direction search procedures to improve convergence. Also, MPCOTool offers the alternative of a genetic algorithm as implemented in Genetic.
+The features and design of MPCOTool, a new open source software tool to enable efficient calibration and optimization of empirical coefficients present in simulation models, has been presented. The program includes the option of two classic brute force models, the sweep and the Monte-Carlo methods, both supplied with the option of an iterative or two direction search procedures to improve convergence. Also, MPCOTool offers the alternative of a genetic algorithm as implemented in Genetic.
 
 The program is easy to use and widely adapted to solve  different optimization/calibration problems offering the user an automatic parallelization to use all available computing resources.
 
 As can be seen in the results of different combinations of functions and methods made in this work, optimization is an art where the selected method and the parameter configuration is strongly conditioned by the objective function properties.
 
-Both the iterative algorithm proposed as the direction search algorithm, coupled to a brute force method, have shown adequate convergence in the objective functions analyzed , dramatically improving the results of pure brute force methods and genetic algorithms.
+The iterative algorithm and the direction search algorithms, as proposed in this paper and coupled to a brute force method, have shown adequate convergence in the objective functions analyzed, dramatically improving the results of pure brute force methods and genetic algorithms.
 
 \section*{Acknowledgements}
 
