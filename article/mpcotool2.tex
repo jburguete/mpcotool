@@ -221,7 +221,7 @@ hyperthreading. Only the optimization of the management of the Canal de Violada,
 much more computationally expensive, has been performed in the BIFI cluster
 Memento
 (\url{http://bifi.es/es/infrastructures/scientific-equipment/memento-caesaraugusta})
-using 64 threads.
+using 64 cores.
 
 \section{Practical applications}
 
@@ -330,12 +330,13 @@ there are $N_h$ upstream water depth measurements denoted $h_i$ and $H_i$ water
 depth simulated values are available, the error in water depth is defined as:
 \EQ{E_h=\frac{1}{N_h\,\PA{h_{N_h}}^2}\,\sum_{j=1}^{N_h}\PA{h_j-H_j}^2.}
 {EqErrorDepth}
-The objective function for each furrow experiment has been defined as:
+The objective function for each furrow experiment has been defined as in the
+original paper \citep{JaviSurcos2}:
 \EQ{o=E_a+0.5\,\PA{E_c+E_h}.}{EqSurcosObjective}
 $L_2$ norm with weights $w_i=1$ has been use to compose the final objective function from the four experiments. In the present work, the same number of simulations has been used with the calibration methods implemented in MPCOTool. The execution of 3000 simulations in the laptop computer took about 1h30m.
 
 Table~\ref{TabSurcos} displays the results obtained for the optimal coefficient values and the corresponding
-value of the evaluation function, where the error norm is the same as in \citet{JaviSurcos2}. The results are similar among the different methods and also similar to those in the original paper. This is due to the existence of a relatively large region of combinations of the empirical parameters producing similar values in the evaluation function, thus preventing from an accurate convergence to the optimum set. However, it can be noticed that MC+IT obtains the best results and MC+DS+RA and GE produce better results than MC with the same total number of simulations.
+value of the evaluation function. The results are similar among the different methods and also similar to those in the original paper. This is due to the existence of a relatively large region of combinations of the empirical parameters producing similar values in the evaluation function, thus preventing from an accurate convergence to the optimum set. However, it can be noticed that MC+IT obtains the best results and MC+DS+RA and GE produce better results than MC with the same total number of simulations.
 
 \TABLE{\footnotesize}{cccc}
 {
@@ -405,8 +406,8 @@ The model is calibrated in two steps. First, the coefficients $D_{50}$, $n$ and 
 
 In the present example, a spray sprinkler Senninger N44 at a working pressure of 138 kPa will be calibrated. In this sprinkler model, the water jet impacts against a fixed plate. In order to estimate the water velocity after the impact, an image technique as described in \citet{Salvador09} was applied. According to this measurements, the head loss due to the inelastic impact against the plate was found to be of 50\%. Extremal drop diameters have been fixed to $D_{min}=0.5$~mm and
 $D_{max}=7.0$~mm. A set of 360000 drop trajectories has been numerically calculated to simulate the sprinkler pluviometry. The objective function has been defined as:
-\EQ{o=\frac{RMSE}{1+R},}{EqSprinklerObjective}
-with $RMSE$ the root mean square error and $R$ the statistical coefficient obtained by the
+\EQ{o=\frac{RMSE}{1+R^2},}{EqSprinklerObjective}
+with $RMSE$ the root mean square error and $R^2$ the statistical coefficient obtained by the
 measured and simulated pluviometries. The pluviometers were placed every 0.5~m along two axes
 oriented East-West (E-W) and North-South (N-S) approximately.
 
@@ -493,7 +494,7 @@ the two pluviometers axes with wind average velocity 2.84 m/s}{FigSprinkler}
 \subsection{Calibration of empirical parameters of the movement of a
 sprinkler center-pivot}
 
-The movement of a center-pivot tower follows a chaotic pattern depending on the movement of the exterior tower, the tower start and stop angles and the start and stop velocities. In \citet{Ouazaa15} a model was proposed to simulate the tower movements and several controlled experiments  were carried out to measure them in a real field center-pivot. The exterior tower controls the movement, with a sequence of working periods that depend on the cycle period and the working percentage, both adjustable to reach a desired irrigation service. The rest of the towers move according to a complex pattern (see figure~\ref{FigPivotDiagram}). 
+The movement of a center-pivot tower follows a chaotic pattern depending on the movement of the exterior tower, the tower start and stop angles and the start and stop velocities. In \citet{Ouazaa15} a model was proposed to simulate the tower movements and several controlled experiments  were carried out to measure them in a real field center-pivot. The exterior tower controls the movement, with a sequence of working periods that depend on the cycle period and the working percentage, both adjustable to reach a desired irrigation service. The rest of the towers move according to a complex pattern (see Fig.~\ref{FigPivotDiagram}). 
 
 \psset{unit=1mm}
 \PSPICTURE{-10}{-6}{93}{20}
@@ -776,21 +777,19 @@ to keep a constant discharge of 2 m$^3$/s at the outlet gate.
 Then, the objective function has been defined as:
 \EQ
 {
-	o=\frac{1}{N_{gates}\,N_{steps}}\,\sum_{i=1}^{N_{gates}}
+	o=\frac{K}{N_{gates}\,N_{steps}}\,\sum_{i=1}^{N_{gates}}
 	\sum_{j=1}^{N_{steps}}\ABS{Q_{g,i,j}-Q_{s,i,j}}^2
 }{EqSwigsObjective}
 with $N_{gates}=4$ the number of points of demand, $N_{steps}$ the number of 
 time steps and $Q_{d,i,j}$ and $Q_{s,i,j}$ the demanded and simulated discharges
-respectively at the $i$-th point of demand in the $j$-th time step. 
+respectively at the $i$-th point of demand in the $j$-th time step. $K$ is 1 in cases of channel bounded flow and 10 in cases of channel overflow.
 
 SWIGS open source software \citep{Swigs} has been used to simulate the channel
 flow. Each optimization executed a total number of 1024 simulations and took 
 approximately between 14 and 19 hours using 64 cores in the Memento cluster.
 
 Table~\ref{TabSwigs} displays the results obtained for the optimal coefficient
-values and the corresponding value of the evaluation function, where the error
-norm is defined as the root mean square error between demanded discharges and
-supplied discharges multiplied by a factor of 10 in cases of channel overflow.
+values and the corresponding value of the evaluation function.
 The results are similar when comparing the different optimization methods.
 MC+DS+RA achieves the best result. With the channel guards management pattern
 this error norm is much higher, due not only to a greater error in the desired
