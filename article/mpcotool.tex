@@ -264,10 +264,10 @@ In this work MPCOTool, the Multi-Purposes Calibration and Optimization Tool
 \citep{MPCOToolGit}, a software to perform optimization or calibration of
 empirical parameters required in simulation models, is presented. It implements
 one genetic algorithm, two brute force algorithms (sweep and Monte-Carlo) and,
-to improve the brute force methods, one iterative algorithm and one direction
-search algorithm. The software is open source with a BSD type license. All input
-data files used in the manuscript are also free and they can be downloaded in
-the cited web page.
+to improve the brute force methods, one iterative algorithm and two direction
+search algorithms. The software is open source with a BSD type license. All
+input data files used in the manuscript are also free and they can be downloaded
+in the cited web page.
 
 The present paper is organized as follows: First, the concepts of calibration
 and optimization are presented as the main goal. Then, the methods used in MPCOTool are described. The tool structure and organization
@@ -328,7 +328,7 @@ The sweep brute force method finds the optimal set of parameters within a soluti
 
 Brute force algorithms present low convergence rates but they are strongly
 parallelizable because every simulation is completely independent. If the
-computer, or the computers cluster, can execute $N_{tasks}$ parallel tasks
+computer, or the computers cluster, can execute $N_{tasks}$ parallel tasks,
 every task does $N_{total}/N_{tasks}$ simulations, obviously taking into account
 rounding effects (every task has to perform a natural number of simulations).
 
@@ -979,7 +979,7 @@ calculation time was about 3 hours.
 
 The features and design of MPCOTool, a new open source software tool to enable efficient calibration and optimization of empirical coefficients present in simulation models, has been presented. The program includes the option of two classic brute force models, the sweep and the Monte-Carlo methods, both supplied with the option of an iterative or two direction search procedures to improve convergence. Also, MPCOTool offers the alternative of a genetic algorithm as implemented in Genetic.
 
-The program is easy to use and widely adapted to solve  different optimization/calibration problems offering the user an automatic parallelization to use all available computing resources.
+The program is easy to use and widely adapted to solve  different optimization/calibration problems offering to the user an automatic parallelization to use all available computing resources.
 
 As can be seen in the results of different combinations of functions and methods made in this work, optimization is an art where the selected method and the parameter configuration is strongly conditioned by the objective function properties.
 
