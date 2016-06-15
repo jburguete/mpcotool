@@ -41,7 +41,11 @@ OF SUCH DAMAGE.
 #include <unistd.h>
 #include <libxml/parser.h>
 #include <libintl.h>
+#include <glib.h>
 #include <json-glib/json-glib.h>
+#ifdef G_OS_WIN32
+#include <windows.h>
+#endif
 #if HAVE_GTK
 #include <gtk/gtk.h>
 #endif

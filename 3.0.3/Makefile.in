@@ -183,8 +183,7 @@ $(EASOM)Easom: $(EASOM)Easom.c $(EASOM)Makefile
 $(BEALE)Beale: $(BEALE)Beale.c $(BEALE)Makefile
 	cd $(BEALE); make
 
-@ICON@: mpcotool.rc logo.png
-	convert logo.png mpcotool.ico
+@ICON@: mpcotool.rc mpcotool.ico
 	@WINDRES@ mpcotool.rc -o @ICON@
 
 $(M1): $(MDIR)user-manual.tex $(MDIR)bib.bib \
