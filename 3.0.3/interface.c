@@ -2775,6 +2775,7 @@ window_new ()
   buffer2 = g_get_current_dir ();
   buffer = g_build_filename (buffer2, "..", "tests", "test1", INPUT_FILE, NULL);
   g_free (buffer2);
+printf ("Initial file=%s\n", buffer);
   window_read (buffer);
   g_free (buffer);
 
