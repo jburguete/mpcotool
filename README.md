@@ -57,6 +57,7 @@ The source code has to have the following files:
 * 3.0.3/config.h.in: config header generator.
 * 3.0.3/mpcotool.c: main source code.
 * 3.0.3/mpcotool.h: main header code.
+* 3.0.3/mpcotool.ico: icon file.
 * 3.0.3/interface.h: interface header code.
 * 3.0.3/build: script to build all.
 * 3.0.3/logo.png: logo figure.
@@ -81,7 +82,7 @@ has not been tested.
 
 Debian 8 (Linux, kFreeBSD or Hurd)
 __________________________________
-DragonFly BSD 4.2
+DragonFly BSD 4.4
 _________________
 Dyson Illumos
 _____________
@@ -109,7 +110,7 @@ a terminal:
 4. Build doing on a terminal:
 > $ ./build
 
-OpenBSD 5.8
+OpenBSD 5.9
 ___________
 
 1. Select adequate versions:
