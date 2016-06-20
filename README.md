@@ -92,8 +92,8 @@ NetBSD 7.0
 __________
 OpenSUSE Linux 13
 _________________
-Ubuntu Linux 12, 14, and 15
-___________________________
+Ubuntu Linux 15.04
+__________________
 
 1. Download the latest [genetic](https://github.com/jburguete/genetic) doing on
 a terminal:
@@ -118,10 +118,10 @@ ___________
 
 2. Then, in a terminal, follow steps 1 to 4 of the previous Debian 8 section.
 
-Microsoft Windows 7 (with MSYS2)
-________________________________
-Microsoft Windows 8.1 (with MSYS2)
-__________________________________
+Microsoft Windows 7
+___________________
+Microsoft Windows 8.1
+_____________________
 
 1. Install [MSYS2](http://sourceforge.net/projects/msys2) and the required
 libraries and utilities. You can follow detailed instructions in
@@ -142,7 +142,7 @@ _______________
 
 2. Then, follow steps 1 to 4 of the previous Debian 8 section.
 
-FreeBSD 10.2
+FreeBSD 10.3
 ____________
 
 1. In order to build in FreeBSD, due to a wrong error in default gcc version,
