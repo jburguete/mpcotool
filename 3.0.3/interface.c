@@ -65,7 +65,7 @@ OF SUCH DAMAGE.
 #include "optimize.h"
 #include "interface.h"
 
-#define DEBUG_INTERFACE 1       ///< Macro to debug interface functions.
+#define DEBUG_INTERFACE 0       ///< Macro to debug interface functions.
 
 /**
  * \def INPUT_FILE
