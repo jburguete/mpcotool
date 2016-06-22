@@ -136,7 +136,7 @@ section.
 3. Optional Windows binary package can be built doing in the terminal:
 > $ make windist
 
-Fedora Linux 23
+Fedora Linux 24
 _______________
 
 1. In order to use OpenMPI compilation do in a terminal (in 64 bits version):
