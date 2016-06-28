@@ -112,13 +112,13 @@ a terminal:
 4. Build doing on a terminal:
 > $ ./build
 
-OpenBSD 5.9
-___________
+Fedora Linux 24
+_______________
 
-1. Select adequate versions:
-> $ export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.15
+1. In order to use OpenMPI compilation do in a terminal (in 64 bits version):
+> $ export PATH=$PATH:/usr/lib64/openmpi/bin
 
-2. Then, in a terminal, follow steps 1 to 4 of the previous Debian 8 section.
+2. Then, follow steps 1 to 4 of the previous Debian 8 section.
 
 Microsoft Windows 7
 ___________________
@@ -136,11 +136,19 @@ section.
 3. Optional Windows binary package can be built doing in the terminal:
 > $ make windist
 
-Fedora Linux 24
-_______________
+OpenBSD 5.9
+___________
 
-1. In order to use OpenMPI compilation do in a terminal (in 64 bits version):
-> $ export PATH=$PATH:/usr/lib64/openmpi/bin
+1. Select adequate versions:
+> $ export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.15
+
+2. Then, in a terminal, follow steps 1 to 4 of the previous Debian 8 section.
+
+OpenIndiana Hipster
+___________________
+
+1. In order to use OpenMPI compilation do in a terminal:
+> $ export PATH=/usr/lib/openmpi/gcc/bin:$PATH
 
 2. Then, follow steps 1 to 4 of the previous Debian 8 section.
 
