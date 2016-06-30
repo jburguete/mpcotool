@@ -41,6 +41,7 @@ OF SUCH DAMAGE.
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <sys/param.h>
 #include <gsl/gsl_rng.h>
 #include <libxml/parser.h>
 #include <libintl.h>
@@ -49,7 +50,7 @@ OF SUCH DAMAGE.
 #include <json-glib/json-glib.h>
 #ifdef G_OS_WIN32
 #include <windows.h>
-#elif !defined(__BSD_VISIBLE)
+#elif !defined(__BSD_VISIBLE) && !defined(NetBSD)
 #include <alloca.h>
 #endif
 #if HAVE_MPI

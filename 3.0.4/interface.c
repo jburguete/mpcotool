@@ -49,8 +49,6 @@ OF SUCH DAMAGE.
 #include <json-glib/json-glib.h>
 #ifdef G_OS_WIN32
 #include <windows.h>
-#elif !defined (__BSD_VISIBLE)
-#include <alloca.h>
 #endif
 #if HAVE_MPI
 #include <mpi.h>
@@ -1066,7 +1064,7 @@ window_about ()
 	 "Javier Burguete Tolosa <jburguete@eead.csic.es> "
 	 "(english, french and spanish)\n"
 	 "Uğur Çayoğlu (german)",
-     "version", "3.0.3",
+     "version", "3.0.4",
      "copyright", "Copyright 2012-2016 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/mpcotool",
@@ -2775,7 +2773,6 @@ window_new ()
   buffer2 = g_get_current_dir ();
   buffer = g_build_filename (buffer2, "..", "tests", "test1", INPUT_FILE, NULL);
   g_free (buffer2);
-printf ("Initial file=%s\n", buffer);
   window_read (buffer);
   g_free (buffer);
 

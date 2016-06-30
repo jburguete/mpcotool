@@ -1,5 +1,5 @@
 AC_PREREQ([2.67])
-AC_INIT([mpcotool], [3.0.3], [https://github.com/jburguete/mpcotool])
+AC_INIT([mpcotool], [3.1.4], [https://github.com/jburguete/mpcotool])
 
 # Checks for operative systems
 AC_CANONICAL_SYSTEM
@@ -84,7 +84,7 @@ PKG_CHECK_MODULES([GTHREAD], [gthread-2.0])
 
 # Checks fot GTK+ interface
 AC_ARG_WITH([gtk], AS_HELP_STRING([--with-gtk], [Build with GTK+ interface]))
-if test "x$with_gtk" == "xyes"; then
+if test "x$with_gtk" = "xyes"; then
 	PKG_CHECK_MODULES([GTK], [gtk+-3.0])
 	AC_SUBST(MPCOTOOL, "mpcotool")
 fi

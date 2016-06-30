@@ -7,8 +7,8 @@ calibrations or optimizations of empirical parameters.
 VERSIONS
 --------
 
-* 3.0.3: Stable and recommended version.
-* 3.1.3: Developing version to do new features.
+* 3.0.4: Stable and recommended version.
+* 3.1.4: Developing version to do new features.
 
 AUTHORS
 -------
@@ -52,16 +52,16 @@ FILES
 -----
 
 The source code has to have the following files:
-* 3.0.3/configure.ac: configure generator.
-* 3.0.3/Makefile.in: Makefile generator.
-* 3.0.3/config.h.in: config header generator.
-* 3.0.3/mpcotool.c: main source code.
-* 3.0.3/mpcotool.h: main header code.
-* 3.0.3/mpcotool.ico: icon file.
-* 3.0.3/interface.h: interface header code.
-* 3.0.3/build: script to build all.
-* 3.0.3/logo.png: logo figure.
-* 3.0.3/Doxyfile: configuration file to generate doxygen documentation.
+* 3.0.4/configure.ac: configure generator.
+* 3.0.4/Makefile.in: Makefile generator.
+* 3.0.4/config.h.in: config header generator.
+* 3.0.4/mpcotool.c: main source code.
+* 3.0.4/mpcotool.h: main header code.
+* 3.0.4/mpcotool.ico: icon file.
+* 3.0.4/interface.h: interface header code.
+* 3.0.4/build: script to build all.
+* 3.0.4/logo.png: logo figure.
+* 3.0.4/Doxyfile: configuration file to generate doxygen documentation.
 * TODO: tasks to do.
 * README.md: this file.
 * license.md: license file.
@@ -90,8 +90,6 @@ FreeBSD 10.3
 ____________
 Linux Mint DE 2
 _______________
-NetBSD 7.0
-__________
 OpenSUSE Linux 13
 _________________
 Ubuntu Linux 16.04
@@ -105,7 +103,7 @@ a terminal:
 > $ git clone https://github.com/jburguete/mpcotool.git
 
 3. Link the latest genetic version to genetic:
-> $ cd mpcotool/3.0.3
+> $ cd mpcotool/3.0.4
 >
 > $ ln -s ../../genetic/2.0.1 genetic
 
@@ -135,6 +133,13 @@ section.
 
 3. Optional Windows binary package can be built doing in the terminal:
 > $ make windist
+
+NetBSD 7.0
+__________
+
+1. MPI does not work. Follow steps 1 to 3 of the previous Debian 8 section and
+do in the terminal:
+> $ CC=/usr/pkg/gcc5/bin/gcc ./build
 
 OpenBSD 5.9
 ___________
@@ -173,7 +178,7 @@ MAKING TESTS INSTRUCTIONS
 In order to build the tests follow the next instructions:
 
 1. Link some tests that needs genetic library doing in a terminal (assuming that
-you are in the directory mpcotool/3.0.3):
+you are in the directory mpcotool/3.0.4):
 > $ cd ../tests/test2
 >
 > $ ln -s ../../../genetic/2.0.1 genetic
@@ -187,7 +192,7 @@ you are in the directory mpcotool/3.0.3):
 > $ ln -s ../../../genetic/2.0.1 genetic
 
 2. Build all tests doing in the same terminal:
-> $ cd ../../3.0.3
+> $ cd ../../3.0.4
 >
 > $ make tests
 

@@ -49,8 +49,6 @@ OF SUCH DAMAGE.
 #include <json-glib/json-glib.h>
 #ifdef G_OS_WIN32
 #include <windows.h>
-#elif !defined (__BSD_VISIBLE)
-#include <alloca.h>
 #endif
 #if HAVE_MPI
 #include <mpi.h>
@@ -65,7 +63,7 @@ OF SUCH DAMAGE.
 #include "optimize.h"
 #include "interface.h"
 
-#define DEBUG_INTERFACE 1       ///< Macro to debug interface functions.
+#define DEBUG_INTERFACE 0       ///< Macro to debug interface functions.
 
 /**
  * \def INPUT_FILE
@@ -1066,7 +1064,7 @@ window_about ()
 	 "Javier Burguete Tolosa <jburguete@eead.csic.es> "
 	 "(english, french and spanish)\n"
 	 "Uğur Çayoğlu (german)",
-     "version", "3.1.3",
+     "version", "3.1.4",
      "copyright", "Copyright 2012-2016 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/mpcotool",
