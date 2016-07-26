@@ -219,19 +219,24 @@ DLL = $(BIN)libatk-1.0-0.dll\
 	$(BIN)libglib-2.0-0.dll\
 	$(BIN)libgmodule-2.0-0.dll\
 	$(BIN)libgobject-2.0-0.dll\
-	$(BIN)libgsl-0.dll\
+	$(BIN)libgraphite2.dll\
+	$(BIN)libgsl-19.dll\
 	$(BIN)libgslcblas-0.dll\
 	$(BIN)libgthread-2.0-0.dll\
 	$(BIN)libgtk-3-0.dll\
 	$(BIN)libharfbuzz-0.dll\
 	$(BIN)libiconv-2.dll\
 	$(BIN)libintl-8.dll\
+	$(BIN)libjson-glib-1.0-0.dll\
+	$(BIN)liblzma-5.dll\
 	$(BIN)libpango-1.0-0.dll\
 	$(BIN)libpangocairo-1.0-0.dll\
 	$(BIN)libpangoft2-1.0-0.dll\
 	$(BIN)libpangowin32-1.0-0.dll\
+	$(BIN)libpcre-1.dll\
 	$(BIN)libpixman-1-0.dll\
 	$(BIN)libpng16-16.dll\
+	$(BIN)libstdc++-6.dll\
 	$(BIN)libwinpthread-1.dll\
 	$(BIN)libxml2-2.dll\
 	$(BIN)zlib1.dll
