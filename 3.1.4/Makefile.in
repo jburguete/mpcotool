@@ -212,7 +212,7 @@ DLL = $(BIN)libatk-1.0-0.dll\
 	$(BIN)libffi-6.dll\
 	$(BIN)libfontconfig-1.dll\
 	$(BIN)libfreetype-6.dll\
-	$(BIN)libgcc_s_seh-1.dll\
+	$(BIN)libgcc_s_*.dll\
 	$(BIN)libgdk_pixbuf-2.0-0.dll\
 	$(BIN)libgdk-3-0.dll\
 	$(BIN)libgio-2.0-0.dll\
