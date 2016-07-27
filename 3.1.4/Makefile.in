@@ -255,8 +255,8 @@ windist: mpcotool.exe $(DLL) $(MO)
 		win/share/locale/{de,en_GB,es,fr}/LC_MESSAGES \
 		win/share/glib-2.0/schemas
 	cp *.exe $(DLL) win/bin
-	cp --parents tests/*/*{.exe,.exp,.tmp,win.xml} win
-	cp --parents manuals/*.pdf win
+	cd ..; cp --parents tests/*/*{.exe,.exp,.tmp,win.xml} win
+	cd ..; cp --parents manuals/*.pdf win
 	strip win/bin/*.{exe,dll} win/tests/*/*.exe
 	cd locales; cp --parents {$(ES),$(FR)}mpcotool.mo ../win/bin/locales
 	cp $(SHARE)glib-2.0/schemas/gschema{.dtd,s.compiled} \
