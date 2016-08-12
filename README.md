@@ -82,7 +82,7 @@ has not been tested.
 
 Debian 8 (Linux, kFreeBSD or Hurd)
 __________________________________
-DragonFly BSD 4.4
+DragonFly BSD 4.6
 _________________
 Dyson Illumos
 _____________
