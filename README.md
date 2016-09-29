@@ -90,8 +90,8 @@ FreeBSD 10.3
 ____________
 Linux Mint DE 2
 _______________
-OpenSUSE Linux 13
-_________________
+OpenSUSE Linux Tumbleweed
+_________________________
 Ubuntu Linux 16.04
 __________________
 
@@ -122,6 +122,8 @@ Microsoft Windows 7
 ___________________
 Microsoft Windows 8.1
 _____________________
+Microsoft Windows 10
+____________________
 
 1. Install [MSYS2](http://sourceforge.net/projects/msys2) and the required
 libraries and utilities. You can follow detailed instructions in
@@ -141,7 +143,7 @@ __________
 do in the terminal:
 > $ CC=/usr/pkg/gcc5/bin/gcc ./build
 
-OpenBSD 5.9
+OpenBSD 6.0
 ___________
 
 1. Select adequate versions:
