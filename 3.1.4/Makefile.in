@@ -240,6 +240,7 @@ DLL = $(BIN)libatk-1.0-0.dll\
 	$(BIN)libwinpthread-1.dll\
 	$(BIN)libxml2-2.dll\
 	$(BIN)zlib1.dll
+GDKPIXBUF = lib/gdk-pixbuf-2.0/2.10.0/
 SHARE = @PREFIX@/share/
 LOCALE = $(SHARE)locale/
 MODE = $(LOCALE)de/LC_MESSAGES/gtk30.mo
@@ -253,15 +254,16 @@ windist: mpcotool.exe $(DLL) $(MO)
 	mkdir -p win/bin/locales \
 		win/share/locale \
 		win/share/locale/{de,en_GB,es,fr}/LC_MESSAGES \
-		win/share/glib-2.0/schemas
+		win/share/glib-2.0/schemas win/$(GDKPIXBUF)loaders
 	cp *.exe $(DLL) win/bin
 	cd ..; cp --parents tests/*/*{.exe,.exp,.tmp,win.xml} */win
 	cd ..; cp --parents manuals/*.pdf */win
-	strip win/bin/*.{exe,dll} win/tests/*/*.exe
+	cp @PREFIX@/$(GDKPIXBUF)loaders.cache win/$(GDKPIXBUF)
+	cp @PREFIX@/$(GDKPIXBUF)loaders/*.dll win/$(GDKPIXBUF)loaders
+	strip win/bin/*.{exe,dll} win/tests/*/*.exe win/$(GDKPIXBUF)loaders/*.dll
 	cd locales; cp --parents {$(ES),$(FR)}mpcotool.mo ../win/bin/locales
 	cp $(SHARE)glib-2.0/schemas/gschema{.dtd,s.compiled} \
 		win/share/glib-2.0/schemas
 	cd win/share; cp -r $(SHARE)icons .
 	cd win/share/locale; cp $(MOGB) $(GB); cp $(MOES) $(ES); cp $(MOFR) $(FR); \
 		cp $(MODE) $(DE); ln -s en_GB en_GB@UTF8; ln -s es es_ES@UTF8; \
-		ln -s fr fr_FR@UTF8; ln -s de de_DE@UTF8
