@@ -86,7 +86,7 @@ DragonFly BSD 4.6
 _________________
 Dyson Illumos
 _____________
-FreeBSD 10.3
+FreeBSD 11.0
 ____________
 Linux Mint DE 2
 _______________
