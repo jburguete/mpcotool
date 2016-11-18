@@ -457,7 +457,7 @@ The number of bits assigned to each variable, and therefore the genome size, is 
 simulations.
 The value assigned to a variable $x$ is determined by the extreme values $x_{\min}$ and $x_{\max}$, the binary number assigned in the genome to variable $I_x$ and by the number of bits assigned to variable $N_x$ according to
 the following formula:
-\EQ{x=x_{\min}+\frac{I_x}{2^{N_x}}\,\left(x_{\max}-x_{\min}\right).}{EqGenome}
+\EQ{x=x_{\min}+\frac{I_x}{2^{N_x}-1}\,\left(x_{\max}-x_{\min}\right).}{EqGenome}
 
 \subsubsection{Survival of the best individuals}
 

@@ -135,18 +135,20 @@ compilado y probado en los siguientes sistemas operativos:
 \item DragonFly BSD 4.6;
 \item Dyson Illumos;
 \item Fedora Linux 24;
-\item FreeBSD 10.3;
-\item Microsoft Windows 7\footnotemark[1] y 8.1\footnotemark[1];
+\item FreeBSD 11.0;
+\item Microsoft Windows 7\footnotemark[1], 8.1\footnotemark[1] y
+	10\footnotemark[1];
 \item NetBSD 7.0;
 \item OpenBSD 5.9;
+\item OpenIndiana Hipster;
 \item OpenSUSE Linux 13;
 \item y Ubuntu Linux 16.04.
 \end{itemize}
 Es probable que también puede compilarse y funcione en otros sistemas
 operativos, otras distribuciones de software y otras versiones pero no ha sido
 probado.
-\footnotetext[1]{Windows 7 y Windows 8.1 son marcas registradas de Microsoft
-Corporation.}
+\footnotetext[1]{Windows 7, Windows 8.1 y Windows 10 son marcas registradas de
+Microsoft Corporation.}
 
 Para generar el fichero ejecutable a partir de código fuente, un compilador de C
 (\citet{gcc} o \citet{clang}), los sistemas de configuración \citet{autoconf},
@@ -1369,7 +1371,7 @@ genome. The larger the number of bits assigned to a variable the higher the reso
 The number of bits assigned to each variable, and therefore the genome size, is fixed and the same for all the 
 simulations. Figure~\ref{FigGenome} shows an example for the coding of three variables. The value assigned to a variable $x$ is determined by the allowed extreme values $x_{\min}$ and $x_{\max}$, the binary number assigned in the genome to variable $I_x$ and by the number of bits assigned to variable $N_x$ according to
 the following formula:
-\EQ{x=x_{\min}+\frac{I_x}{2^{N_x}}\,\left(x_{\max}-x_{\min}\right).}{EqGenome}
+\EQ{x=x_{\min}+\frac{I_x}{2^{N_x}-1}\,\left(x_{\max}-x_{\min}\right).}{EqGenome}
 
 \psset{unit=1mm}
 \PSPICTURE{0}{0}{80}{30}
