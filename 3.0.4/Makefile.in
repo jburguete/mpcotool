@@ -207,6 +207,7 @@ DLL = $(BIN)libatk-1.0-0.dll\
 	$(BIN)libbz2-1.dll\
 	$(BIN)libcairo-2.dll\
 	$(BIN)libcairo-gobject-2.dll\
+	$(BIN)libcroco-0.6-3.dll\
 	$(BIN)libepoxy-0.dll\
 	$(BIN)libexpat-1.dll\
 	$(BIN)libffi-6.dll\
@@ -236,6 +237,7 @@ DLL = $(BIN)libatk-1.0-0.dll\
 	$(BIN)libpcre-1.dll\
 	$(BIN)libpixman-1-0.dll\
 	$(BIN)libpng16-16.dll\
+	$(BIN)librsvg-2-2.dll\
 	$(BIN)libstdc++-6.dll\
 	$(BIN)libwinpthread-1.dll\
 	$(BIN)libxml2-2.dll\
@@ -249,8 +251,8 @@ MOFR = $(LOCALE)fr/LC_MESSAGES/gtk30.mo
 MOGB = $(LOCALE)en_GB/LC_MESSAGES/gtk30.mo
 MO = $(MOGB) $(MOES) $(MOFR)
 WINLIBS = atk bzip2 cairo libepoxy expat libffi fontconfig freetype gcc \
-		  gdk-pixbuf2 gtk3 glib2 graphite2 gsl harfbuzz libiconv gettext \
-		  json-glib xz pango pcre pixman libpng libxml2 zlib
+	  gdk-pixbuf2 gtk3 glib2 graphite2 gsl harfbuzz libiconv gettext \
+	  json-glib xz pango pcre pixman libpng libxml2 zlib librsvg libcroco
 
 windist: mpcotool.exe $(DLL) $(MO)
 	test -d win && rm -rf win
