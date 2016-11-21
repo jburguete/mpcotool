@@ -248,13 +248,16 @@ MOES = $(LOCALE)es/LC_MESSAGES/gtk30.mo
 MOFR = $(LOCALE)fr/LC_MESSAGES/gtk30.mo
 MOGB = $(LOCALE)en_GB/LC_MESSAGES/gtk30.mo
 MO = $(MOGB) $(MOES) $(MOFR)
+WINLIBS = atk bzip2 cairo libepoxy expat libffi fontconfig freetype gcc \
+		  gdk-pixbuf2 gtk3 glib2 graphite2 gsl harfbuzz libiconv gettext \
+		  json-glib xz pango pcre pixman libpng libxml2 zlib
 
 windist: mpcotool.exe $(DLL) $(MO)
 	test -d win || rm -rf win
 	mkdir -p win/bin/locales \
 		win/share/locale \
 		win/share/locale/{de,en_GB,es,fr}/LC_MESSAGES \
-		win/share/glib-2.0/schemas win/$(GDKPIXBUF)loaders
+		win/share/glib-2.0/schemas win/$(GDKPIXBUF)loaders win/src
 	cp *.exe $(DLL) win/bin
 	cd ..; cp --parents tests/*/*{.exe,.exp,.tmp,win.xml} */win
 	cd ..; cp --parents manuals/*.pdf */win
@@ -266,4 +269,13 @@ windist: mpcotool.exe $(DLL) $(MO)
 		win/share/glib-2.0/schemas
 	cd win/share; cp -r $(SHARE)icons .
 	cd win/share/locale; cp $(MOGB) $(GB); cp $(MOES) $(ES); cp $(MOFR) $(FR); \
-		cp $(MODE) $(DE); ln -s en_GB en_GB@UTF8; ln -s es es_ES@UTF8; \
+		cp $(MODE) $(DE); ln -s en_GB en_GB@UTF8; ln -s es es_ES@UTF8;
+	cd win/src; perl ../../fetch.pl $(WINLIBS)
+	zip win/src/check_errors ../check_errors/*.xml
+	zip win/src/tests $(T1)*.c $(T1)*.in $(T1)*.exp $(T1)*.tmp $(T1)test*.xml \
+		$(T1)test*.json \
+		$(T2)*.c $(T2)*.in $(T2)*.exp $(T2)*.tmp $(T2)test*.xml \
+		$(T3)*.c $(T3)*.in $(T3)*.exp $(T3)*.tmp $(T3)test*.xml \
+		$(T4)*.c $(T4)*.in $(T4)*.exp $(T4)*.tmp $(T4)test*.xml \
+		$(T5)*.c $(T5)*.in $(T5)*.exp $(T5)*.tmp $(T5)test*.xml \
+	zip win/src/sources *.c *.h *.in *.ac *.ico *.rc Doxyfile
