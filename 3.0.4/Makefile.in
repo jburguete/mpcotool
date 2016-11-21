@@ -253,7 +253,7 @@ WINLIBS = atk bzip2 cairo libepoxy expat libffi fontconfig freetype gcc \
 		  json-glib xz pango pcre pixman libpng libxml2 zlib
 
 windist: mpcotool.exe $(DLL) $(MO)
-	test -d win || rm -rf win
+	test -d win && rm -rf win
 	mkdir -p win/bin/locales \
 		win/share/locale \
 		win/share/locale/{de,en_GB,es,fr}/LC_MESSAGES \
@@ -277,5 +277,5 @@ windist: mpcotool.exe $(DLL) $(MO)
 		$(T2)*.c $(T2)*.in $(T2)*.exp $(T2)*.tmp $(T2)test*.xml \
 		$(T3)*.c $(T3)*.in $(T3)*.exp $(T3)*.tmp $(T3)test*.xml \
 		$(T4)*.c $(T4)*.in $(T4)*.exp $(T4)*.tmp $(T4)test*.xml \
-		$(T5)*.c $(T5)*.in $(T5)*.exp $(T5)*.tmp $(T5)test*.xml \
+		$(T5)*.c $(T5)*.in $(T5)*.exp $(T5)*.tmp $(T5)test*.xml
 	zip win/src/sources *.c *.h *.in *.ac *.ico *.rc Doxyfile
