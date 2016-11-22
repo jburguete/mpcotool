@@ -255,29 +255,30 @@ WINLIBS = atk bzip2 cairo libepoxy expat libffi fontconfig freetype gcc \
 	  json-glib xz pango pcre pixman libpng libxml2 zlib librsvg libcroco
 
 windist: mpcotool.exe $(DLL) $(MO)
-	test -d win && rm -rf win
-	mkdir -p win/bin/locales \
-		win/share/locale \
-		win/share/locale/{de,en_GB,es,fr}/LC_MESSAGES \
-		win/share/glib-2.0/schemas win/$(GDKPIXBUF)loaders win/src
-	cp *.exe $(DLL) win/bin
-	cd ..; cp --parents tests/*/*{.exe,.exp,.tmp,win.xml} */win
-	cd ..; cp --parents manuals/*.pdf */win
-	cp @PREFIX@/$(GDKPIXBUF)loaders.cache win/$(GDKPIXBUF)
-	cp @PREFIX@/$(GDKPIXBUF)loaders/*.dll win/$(GDKPIXBUF)loaders
-	strip win/bin/*.{exe,dll} win/tests/*/*.exe win/$(GDKPIXBUF)loaders/*.dll
-	cd locales; cp --parents {$(ES),$(FR)}mpcotool.mo ../win/bin/locales
+	test -d @WIN@ && rm -rf @WIN@
+	mkdir -p @WIN@/bin/locales \
+		@WIN@/share/locale \
+		@WIN@/share/locale/{de,en_GB,es,fr}/LC_MESSAGES \
+		@WIN@/share/glib-2.0/schemas @WIN@/$(GDKPIXBUF)loaders @WIN@/src
+	cp *.exe $(DLL) @WIN@/bin
+	cd ..; cp --parents tests/*/*{.exe,.exp,.tmp,win.xml} */@WIN@
+	cd ..; cp --parents manuals/*.pdf */@WIN@
+	cp @PREFIX@/$(GDKPIXBUF)loaders.cache @WIN@/$(GDKPIXBUF)
+	cp @PREFIX@/$(GDKPIXBUF)loaders/*.dll @WIN@/$(GDKPIXBUF)loaders
+	strip @WIN@/bin/*.{exe,dll} @WIN@/tests/*/*.exe @WIN@/$(GDKPIXBUF)loaders/*.dll
+	cd locales; cp --parents {$(ES),$(FR)}mpcotool.mo ../@WIN@/bin/locales
 	cp $(SHARE)glib-2.0/schemas/gschema{.dtd,s.compiled} \
-		win/share/glib-2.0/schemas
-	cd win/share; cp -r $(SHARE)icons .
-	cd win/share/locale; cp $(MOGB) $(GB); cp $(MOES) $(ES); cp $(MOFR) $(FR); \
-		cp $(MODE) $(DE); ln -s en_GB en_GB@UTF8; ln -s es es_ES@UTF8;
-	cd win/src; perl ../../fetch.pl $(WINLIBS)
-	zip win/src/check_errors ../check_errors/*.xml
-	zip win/src/tests $(T1)*.c $(T1)*.in $(T1)*.exp $(T1)*.tmp $(T1)test*.xml \
+		@WIN@/share/glib-2.0/schemas
+	cd @WIN@/share; cp -r $(SHARE)icons .
+	cd @WIN@/share/locale; cp $(MOGB) $(GB); cp $(MOES) $(ES); \
+		cp $(MOFR) $(FR); cp $(MODE) $(DE); ln -s en_GB en_GB@UTF8; \
+		ln -s es es_ES@UTF8;
+	cd @WIN@/src; perl ../../fetch.pl $(WINLIBS)
+	zip @WIN@/src/check_errors ../check_errors/*.xml
+	zip @WIN@/src/tests $(T1)*.c $(T1)*.in $(T1)*.exp $(T1)*.tmp $(T1)test*.xml \
 		$(T1)test*.json \
 		$(T2)*.c $(T2)*.in $(T2)*.exp $(T2)*.tmp $(T2)test*.xml \
 		$(T3)*.c $(T3)*.in $(T3)*.exp $(T3)*.tmp $(T3)test*.xml \
 		$(T4)*.c $(T4)*.in $(T4)*.exp $(T4)*.tmp $(T4)test*.xml \
 		$(T5)*.c $(T5)*.in $(T5)*.exp $(T5)*.tmp $(T5)test*.xml
-	zip win/src/sources *.c *.h *.in *.ac *.ico *.rc Doxyfile
+	zip @WIN@/src/sources *.c *.h *.in *.ac *.ico *.rc Doxyfile
