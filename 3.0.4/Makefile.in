@@ -253,17 +253,17 @@ MO = $(MOGB) $(MOES) $(MOFR)
 WINLIBS = atk bzip2 cairo libepoxy expat libffi fontconfig freetype gcc \
 	  gdk-pixbuf2 gtk3 glib2 graphite2 gsl harfbuzz libiconv gettext \
 	  json-glib xz pango pcre pixman libpng libxml2 zlib librsvg libcroco
-T1 = tests/test1/
-T2 = tests/test2/
-T3 = tests/test3/
-T4 = tests/test4/
-T5 = tests/test5/
-ACKLEY = tests/testAckley/
-SPHERE = tests/testSphere/
-BOOTH = tests/testBooth/
-ROSENBROCK = tests/testRosenbrock/
-EASOM = tests/testEasom/
-BEALE = tests/testBeale/
+TT1 = tests/test1/
+TT2 = tests/test2/
+TT3 = tests/test3/
+TT4 = tests/test4/
+TT5 = tests/test5/
+TACKLEY = tests/testAckley/
+TSPHERE = tests/testSphere/
+TBOOTH = tests/testBooth/
+TROSENBROCK = tests/testRosenbrock/
+TEASOM = tests/testEasom/
+TBEALE = tests/testBeale/
 
 windist: mpcotool.exe $(DLL) $(MO)
 	$(shell if test -d @WIN@; then rm -rf @WIN@; fi)
@@ -286,19 +286,23 @@ windist: mpcotool.exe $(DLL) $(MO)
 		ln -s es es_ES@UTF8;
 	cd ..; zip mpcotool-check-errors check_errors/*.xml
 	mv ../mpcotool-check-errors.zip @WIN@/src
-	cd ..; zip mpcotool-tests-@WIN@ $(T1)*.exe $(T1)*.c $(T1)*.in \
-		$(T1)*.exp $(T1)*.tmp $(T1)test*.xml $(T1)test*.json \
-		$(T2)*.exe $(T2)*.c $(T2)*.in $(T2)*.exp $(T2)*.tmp $(T2)test*.xml \
-		$(T3)*.exe $(T3)*.c $(T3)*.in $(T3)*.exp $(T3)*.tmp $(T3)test*.xml \
-		$(T4)*.exe $(T4)*.c $(T4)*.in $(T4)*.exp $(T4)*.tmp $(T4)test*.xml \
-		$(T5)*.exe $(T5)*.c $(T5)*.in $(T5)*.exp $(T5)*.tmp $(T5)test*.xml \
-		$(ACKLEY)*.exe $(ACKLEY)*.c $(ACKLEY)*.in $(ACKLEY)*.tmp \
-		$(BEALE)*.exe $(BEALE)*.c $(BEALE)*.in $(BEALE)*.tmp \
-		$(BOOTH)*.exe $(BOOTH)*.c $(BOOTH)*.in $(BOOTH)*.tmp \
-		$(EASOM)*.exe $(EASOM)*.c $(EASOM)*.in $(EASOM)*.tmp \
-		$(ROSENBROCK)*.exe $(ROSENBROCK)*.c $(ROSENBROCK)*.in \
-			$(ROSENBROCK)*.tmp \
-		$(SPHERE)*.exe $(SPHERE)*.c $(SPHERE)*.in $(SPHERE)*.tmp
+	cd ..; zip mpcotool-tests-@WIN@ $(TT1)*.exe $(TT1)*.c $(TT1)*.in \
+		$(TT1)*.exp $(TT1)*.tmp $(TT1)test*.xml $(TT1)test*.json \
+		$(TT2)*.exe $(TT2)*.c $(TT2)*.in $(TT2)*.exp $(TT2)*.tmp \
+			$(TT2)test*.xml \
+		$(TT3)*.exe $(TT3)*.c $(TT3)*.in $(TT3)*.exp $(TT3)*.tmp \
+			$(TT3)test*.xml \
+		$(TT4)*.exe $(TT4)*.c $(TT4)*.in $(TT4)*.exp $(TT4)*.tmp \
+			$(TT4)test*.xml \
+		$(TT5)*.exe $(TT5)*.c $(TT5)*.in $(TT5)*.exp $(TT5)*.tmp \
+			$(TT5)test*.xml \
+		$(TACKLEY)*.exe $(TACKLEY)*.c $(TACKLEY)*.in $(TACKLEY)*.tmp \
+		$(TBEALE)*.exe $(TBEALE)*.c $(TBEALE)*.in $(TBEALE)*.tmp \
+		$(TBOOTH)*.exe $(TBOOTH)*.c $(TBOOTH)*.in $(TBOOTH)*.tmp \
+		$(TEASOM)*.exe $(TEASOM)*.c $(TEASOM)*.in $(TEASOM)*.tmp \
+		$(TROSENBROCK)*.exe $(TROSENBROCK)*.c $(TROSENBROCK)*.in \
+			$(TROSENBROCK)*.tmp \
+		$(TSPHERE)*.exe $(TSPHERE)*.c $(TSPHERE)*.in $(TSPHERE)*.tmp
 	mv ../mpcotool-tests-@WIN@.zip @WIN@/src
 	zip @WIN@/src/mpcotool-sources *.c *.h *.in *.ac *.ico *.rc Doxyfile
 	zip @WIN@/src/mpcotool-manuals ../manuals/*.pdf

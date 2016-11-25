@@ -92,7 +92,7 @@ Linux Mint DE 2
 _______________
 OpenSUSE Linux Tumbleweed
 _________________________
-Ubuntu Linux 16.04
+Ubuntu Linux 16.10
 __________________
 
 1. Download the latest [genetic](https://github.com/jburguete/genetic) doing on
@@ -110,7 +110,7 @@ a terminal:
 4. Build doing on a terminal:
 > $ ./build
 
-Fedora Linux 24
+Fedora Linux 25
 _______________
 
 1. In order to use OpenMPI compilation do in a terminal (in 64 bits version):
