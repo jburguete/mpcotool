@@ -134,15 +134,15 @@ compilado y probado en los siguientes sistemas operativos:
 \item Debian Hurd, kFreeBSD y Linux 8;
 \item DragonFly BSD 4.6;
 \item Dyson Illumos;
-\item Fedora Linux 24;
+\item Fedora Linux 25;
 \item FreeBSD 11.0;
 \item Microsoft Windows 7\footnotemark[1], 8.1\footnotemark[1] y
 	10\footnotemark[1];
 \item NetBSD 7.0;
-\item OpenBSD 5.9;
+\item OpenBSD 6.0;
 \item OpenIndiana Hipster;
-\item OpenSUSE Linux 13;
-\item y Ubuntu Linux 16.04.
+\item OpenSUSE Linux Tumbleweed;
+\item y Ubuntu Linux 16.10.
 \end{itemize}
 Es probable que también puede compilarse y funcione en otros sistemas
 operativos, otras distribuciones de software y otras versiones pero no ha sido
@@ -175,7 +175,7 @@ del cálculo en múltiples computadoras.
 Las indicaciones proporcionadas en \citet{install-unix} pueden seguirse para
 instalar todas estas utilidades.
 
-En OpenBSD 5.8, antes de generar el código, deben seleccionarse versiones
+En OpenBSD 6.0, antes de generar el código, deben seleccionarse versiones
 adecuadas de Autoconf y Automake haciendo en un terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.15
@@ -186,14 +186,13 @@ En sistemas Windows hay que instalar MSYS2
 Para ello se pueden seguir las instrucciones detalladas en
 https://github.com/jburguete/install-unix.
 
-En Fedora Linux 23, para usar OpenMPI hay que hacer en un terminal (en la
+En Fedora Linux 25, para usar OpenMPI hay que hacer en un terminal (en la
 versión de 64 bits):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > export PATH=$PATH:/usr/lib64/openmpi/bin
 \end{lstlisting}
 
-En FreeBSD 10, debido en un extraño error en la versión por defecto de gcc, hay
-que hacer en un terminal:
+En FreeBSD 11.0, debido en un extraño error en la versión por defecto de gcc, hay que hacer en un terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > export CC=gcc5 (or CC=clang)
 \end{lstlisting}
@@ -1909,6 +1908,6 @@ method}{FigGeneticParallelization}
 \clearpage
 \renewcommand{\bibname}{Referencias}
 \addcontentsline{toc}{chapter}{\bibname}
-\bibliography{bib}
+\bibliography{../article/bib}
 
 \end{document}

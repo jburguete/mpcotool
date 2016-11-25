@@ -131,15 +131,15 @@ been built and tested in the following operative systems:
 \item Debian Hurd, kFreeBSD and Linux 8;
 \item DragonFly BSD 4.6;
 \item Dyson Illumos;
-\item Fedora Linux 24;
+\item Fedora Linux 25;
 \item FreeBSD 11.0;
 \item Microsoft Windows 7\footnotemark[1], 8.1\footnotemark[1] and
 	10\footnotemark[1];
 \item NetBSD 7.0;
-\item OpenBSD 5.9;
+\item OpenBSD 6.0;
 \item OpenIndiana Hipster;
-\item OpenSUSE Linux 13;
-\item and Ubuntu Linux 16.04.
+\item OpenSUSE Tumbleweed;
+\item and Ubuntu Linux 16.10.
 \end{itemize}
 Probably, this software can be built and it works in other operative systems,
 software distributions or versions but it has not been tested.
@@ -158,7 +158,7 @@ of them is used to allow parallelization in multiple computers.
 \end{itemize}
 The indications provided in \citet{install-unix} can be followed in order to install all these utilities.
 
-On OpenBSD 5.8, prior to build the code, you have to select adequate version of Autoconf and Automake doing on a terminal:
+On OpenBSD 6.0, prior to build the code, you have to select adequate version of Autoconf and Automake doing on a terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.15
 \end{lstlisting}
@@ -168,13 +168,13 @@ On Window systems, you have to install MSYS2
 utilities. You can follow detailed instructions in
 https://github.com/jburguete/install-unix.
 
-On Fedora Linux 23, in order to use OpenMPI compilation, do in a terminal (in 64
+On Fedora Linux 25, in order to use OpenMPI compilation, do in a terminal (in 64
 bits version):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > export PATH=$PATH:/usr/lib64/openmpi/bin
 \end{lstlisting}
 
-On FreeBSD 10, due to a wrong error in default gcc version, do in a terminal:
+On FreeBSD 11.0, due to a wrong error in default gcc version, do in a terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > export CC=gcc5 (or CC=clang)
 \end{lstlisting}
@@ -1843,6 +1843,6 @@ method}{FigGeneticParallelization}
 \clearpage
 \renewcommand{\bibname}{References}
 \addcontentsline{toc}{chapter}{\bibname}
-\bibliography{bib}
+\bibliography{../article/bib}
 
 \end{document}

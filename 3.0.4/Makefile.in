@@ -33,6 +33,7 @@ TESTS = $(T1)simulator $(T1)evaluator $(T2)simulator $(T2)evaluator \
 	$(ACKLEY)Ackley $(SPHERE)Sphere $(BOOTH)Booth $(ROSENBROCK)Rosenbrock \
 	$(EASOM)Easom $(BEALE)Beale
 MDIR = ../manuals/
+ADIR = ../article/
 M1 = $(MDIR)user-manual.pdf
 M2 = $(MDIR)manual-de-usuario.pdf
 MANUALS = $(M1) $(M2) $(MDIR)reference-manual.pdf
@@ -186,12 +187,12 @@ $(BEALE)Beale: $(BEALE)Beale.c $(BEALE)Makefile
 @ICON@: mpcotool.rc mpcotool.ico
 	@WINDRES@ mpcotool.rc -o @ICON@
 
-$(M1): $(MDIR)user-manual.tex $(MDIR)bib.bib \
+$(M1): $(MDIR)user-manual.tex $(ADIR)bib.bib \
 	$(MDIR)mpcotool-en.eps $(MDIR)result-en.eps Makefile
 	cd $(MDIR); latex user-manual; bibtex user-manual; latex user-manual; \
 		latex user-manual; dvipdf user-manual
 
-$(M2): $(MDIR)manual-de-usuario.tex $(MDIR)bib.bib \
+$(M2): $(MDIR)manual-de-usuario.tex $(ADIR)bib.bib \
 	$(MDIR)mpcotool-es.eps Makefile
 	cd $(MDIR); latex manual-de-usuario; bibtex manual-de-usuario; \
 		latex manual-de-usuario; latex manual-de-usuario; \
@@ -304,7 +305,11 @@ windist: mpcotool.exe $(DLL) $(MO)
 			$(TROSENBROCK)*.tmp \
 		$(TSPHERE)*.exe $(TSPHERE)*.c $(TSPHERE)*.in $(TSPHERE)*.tmp
 	mv ../mpcotool-tests-@WIN@.zip @WIN@/src
-	zip @WIN@/src/mpcotool-sources *.c *.h *.in *.ac *.ico *.rc Doxyfile
+	cd ..; zip mpcotool-sources $(PACKAGE_VERSION)/*.c $(PACKAGE_VERSION)/*.h \
+		$(PACKAGE_VERSION)/*.in $(PACKAGE_VERSION)/*.ac \
+		$(PACKAGE_VERSION)/*.ico $(PACKAGE_VERSION)/*.rc \
+		$(PACKAGE_VERSION)/Doxyfile
+	mv ../mpcotool-sources.zip @WIN@/src
 	zip @WIN@/src/mpcotool-manuals ../manuals/*.pdf
 	zip -r @WIN@/src/mpcotool-binaries-@WIN@ @WIN@/bin @WIN@/lib @WIN@/share
 	cd @WIN@/src; perl ../../fetch.pl $(WINLIBS)
