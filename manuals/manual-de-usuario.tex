@@ -848,7 +848,7 @@ bruta de barrido con dos variables para $N_x=N_y=5$}{FigSweep}
 Los algoritmos de fuerza bruta presentan bajos ratios de convergencia pero son
 fuertemente paralelizables debido a que cada simulación es completamente
 independiente. Si la computadora, o el clúster de computadoras, puede ejecutar
-$N_{tasks}$ tareas paralelizadas cada tarea efectúa $N_{total}/N_{tasks}$
+$N_{tareas}$ tareas paralelizadas cada tarea efectúa $N_{total}/N_{tareas}$
 simulaciones, obviamente teniendo en cuenta efectos de redondeo puesto que cada
 tarea debe realizar un número natural de simulaciones. En la
 figura~\ref{FigBruteForceParallelization} se presenta un diagrama de flujo del
@@ -866,11 +866,11 @@ capacidades computacionales de la máquina en la que se ejecuta MPCOTool.
 	\psline{->}(0,-20)(0,-25)
 	\psline{->}(0,-20)(55,-25)
 	\rput(-55,-30){1$^a$ tarea:}
-	\rput(-55,-35){$N_{total}/N_{tasks}$ simulaciones}
+	\rput(-55,-35){$N_{total}/N_{tareas}$ simulaciones}
 	\psframe(-90,-25)(-20,-40)
 	\rput(0,-32.5){$\cdots$}
-	\rput(55,-30){$N_{tasks}$-ésima tarea:}
-	\rput(55,-35){$N_{total}/N_{tasks}$ simulaciones}
+	\rput(55,-30){$N_{tareas}$-ésima tarea:}
+	\rput(55,-35){$N_{total}/N_{tareas}$ simulaciones}
 	\psframe(20,-25)(90,-40)
 	\psline{->}(-55,-40)(0,-45)
 	\psline{->}(0,-40)(0,-45)
@@ -1079,165 +1079,169 @@ paralelización debe ejecutarse en cada iteración (véase un diagrama de flujo 
 la figura~\ref{FigIterativeParallelization}).
 
 \psset{xunit=0.5mm,yunit=0.5mm}
-\PSPICTURE{-100}{-130}{100}{-15}
+\PSPICTURE{-105}{-130}{105}{-15}
 {
 	\tiny
 	\rput(0,-15){1º iteración:}
 	\rput(0,-20){Generación de $N_{simulaciones}$ conjuntos de parámetros
 		empíricos}
-	\psframe(-60,-25)(60,-10)
+	\psframe(-75,-25)(75,-10)
 	\psline{->}(0,-25)(-60,-30)
 	\psline{->}(0,-25)(0,-30)
 	\psline{->}(0,-25)(60,-30)
 	\rput(-60,-35){1ª tarea:}
-	\rput(-60,-40){$N_{simulaciones}/N_{tasks}$ simulaciones}
-	\psframe(-100,-30)(-20,-45)
+	\rput(-60,-40){$N_{simulaciones}/N_{tareas}$ simulaciones}
+	\psframe(-105,-30)(-15,-45)
 	\rput(0,-37.5){$\cdots$}
-	\rput(60,-35){$N_{tasks}$-ésima tarea:}
-	\rput(60,-40){$N_{simulaciones}/N_{tasks}$ simulaciones}
-	\psframe(20,-30)(100,-45)
+	\rput(60,-35){$N_{tareas}$-ésima tarea:}
+	\rput(60,-40){$N_{simulaciones}/N_{tareas}$ simulaciones}
+	\psframe(15,-30)(105,-45)
 	\psline{->}(-60,-45)(0,-50)
 	\psline{->}(0,-45)(0,-50)
 	\psline{->}(60,-45)(0,-50)
-	\rput(0,-55){Getting $N_{best}$ empirical parameters sets}
-	\psframe(-55,-50)(55,-60)
+	\rput(0,-55){Obtención de $N_{best}$ conjuntos de parámetros empíricos}
+	\psframe(-65,-50)(65,-60)
 	\psline{->}(0,-60)(0,-65)
 	\rput(0,-70){$\cdots$}
 	\psline{->}(0,-75)(0,-80)
-	\rput(0,-85){$N_{iteraciones}$-th iteration:}
-	\rput(0,-90){Generation of $N_{simulaciones}$ empirical parameters sets}
-	\psframe(-60,-95)(60,-80)
+	\rput(0,-85){$N_{iteraciones}$-ésima iteración:}
+	\rput(0,-90){Generación de $N_{simulaciones}$ conjuntos de parámetros
+		empíricos}
+	\psframe(-75,-95)(75,-80)
 	\psline{->}(0,-95)(-60,-100)
 	\psline{->}(0,-95)(0,-100)
 	\psline{->}(0,-95)(60,-100)
-	\rput(-60,-105){1st task:}
-	\rput(-60,-110){$N_{simulaciones}/N_{tasks}$ simulations}
-	\psframe(-100,-100)(-20,-115)
+	\rput(-60,-105){1ª tarea:}
+	\rput(-60,-110){$N_{simulaciones}/N_{tareas}$ simulaciones}
+	\psframe(-105,-100)(-15,-115)
 	\rput(0,-107.5){$\cdots$}
-	\rput(60,-105){$N_{tasks}$-th task:}
-	\rput(60,-110){$N_{simulaciones}/N_{tasks}$ simulations}
-	\psframe(20,-100)(100,-115)
+	\rput(60,-105){$N_{tareas}$-ésima tarea:}
+	\rput(60,-110){$N_{simulaciones}/N_{tareas}$ simulaciones}
+	\psframe(15,-100)(105,-115)
 	\psline{->}(-60,-115)(0,-120)
 	\psline{->}(0,-115)(0,-120)
 	\psline{->}(60,-115)(0,-120)
-	\rput(0,-125){Getting optimal empirical parameters set}
-	\psframe(-55,-120)(55,-130)
-}{Flowchart of the parallelization scheme in MPCOTool for the iterative
-method}{FigIterativeParallelization}
+	\rput(0,-125){Obtención del conjunto óptimo de parámetros empíricos}
+	\psframe(-65,-120)(65,-130)
+}{Diagrama de flujo del esquema de paralelización seguido en MPCOTool para el
+método iterativo}{FigIterativeParallelization}
 
-\section{Direction search method}
+\section{Método de búsqueda de dirección}
 
-Brute force optimization methods, sweep and Monte-Carlo, can be also combined
-with a direction search algorithm. Defining the vector $\vec{r}_i$ as the optime
-variables combination obtained in the $i$-th step, $\vec{r}_1$ as the optime
-varaibles combination vector obtained by the brute force method and defining
-the vector $\vec{s}_i$ as:
+Los métodos de fuerza bruta, barrido y Monte-Carlo, pueden combinarse también
+con un algoritmo de búsqueda de dirección. Definiendo el vector $\vec{r}_i$ como
+la combinación óptima de variables obtenida en el paso $i$-ésimo, $\vec{r}_1$
+como la combinación óptima de variables obtenida por el método de fuerza bruta y
+definiendo el vector $\vec{s}_i$ como:
 \EQ
 {
 	\vec{s}_1=\vec{0},\qquad
 	\vec{s}_i=(1-relaxation)\,\vec{s}_{i-1}+relaxation\,\Delta\vec{r}_{i-1},
 }{Eqs}
-with $\Delta\vec{r}_{i-1}=\vec{r}_i+\vec{r}_{i-1}$ and $relaxtion$ the
-relaxation parameter, the direction search method checks $N_{estimates}$
-variable combinations and choice the optimum as:
+con $\Delta\vec{r}_{i-1}=\vec{r}_i+\vec{r}_{i-1}$ y $relaxtion$ el parámetro de
+relajación, el método de búsqueda de dirección prueba $N_{estimaciones}$
+combinaciones de variables y elige el óptimo como:
 \EQ
 {
-	\vec{r}_{i+1}=\mathrm{optime}\PA{\vec{r}_i,\;\vec{r}_i+\vec{s}_i+\vec{t}_j},
-	\;j=1,\cdots,N_{estimates}.
+	\vec{r}_{i+1}=\mathrm{optimo}\PA{\vec{r}_i,\;\vec{r}_i+\vec{s}_i+\vec{t}_j},
+	\;j=1,\cdots,N_{estimaciones}.
 }{EqDirection}
-If the step does not improve the optimum ($\vec{r}_i=\vec{r}_{i+1}$) then the
-direction step vectors $\vec{t}_j$ are divided by two and $\vec{s}_{i+1}$ is set
-to zero. The method is iterated $N_{steps}$ times.
+Si en un paso no se mejora el óptimo ($\vec{r}_i=\vec{r}_{i+1}$) entonces las
+componentes del vector de dirección $\vec{t}_j$ se dividen por dos y
+las $\vec{s}_{i+1}$ se anulan. El método se itera $N_{pasos}$ veces.
 
-Although direction search method gets the fastest convergence, is the method in
-MPCOTool that obtains the least advantages of parallelization. The method is
-almost sequential and parallelization only can be performed for each step in
-the $N_{estimates}$ simulations to estimate the optimal direction. In the
-figure~\ref{FigDirectionParallelization} a flowchart of the parallelization
-scheme for this method is shown.
+Aunque teóricamente el método de búsqueda de dirección es el de convergencia más
+rápida, también es el método de los implementados en MPCOTool que menores
+ventajas obtiene de la paralelización. El método el casi secuencial y la
+paralelización sólo puede hacerse en cada paso en las $N_{estimaciones}$
+simulaciones necesarias para estimar la dirección óptima. El la
+figura~\ref{FigDirectionParallelization} se muestra un diagrama de flujo del
+esquma de paralelización seguido para este método.
 
 \psset{xunit=0.5mm,yunit=0.5mm}
-\PSPICTURE{-100}{-130}{100}{-15}
+\PSPICTURE{-105}{-130}{105}{-15}
 {
 	\tiny
-	\rput(0,-15){1st step:}
-	\rput(0,-20){Generation of $N_{estimates}$ empirical parameters sets}
-	\psframe(-60,-25)(60,-10)
+	\rput(0,-15){Paso 1º}
+	\rput(0,-20){Generación de $N_{estimaciones}$ conjuntos de parámetros
+		empíricos}
+	\psframe(-75,-25)(75,-10)
 	\psline{->}(0,-25)(-60,-30)
 	\psline{->}(0,-25)(0,-30)
 	\psline{->}(0,-25)(60,-30)
-	\rput(-60,-35){1st task:}
-	\rput(-60,-40){$N_{estimates}/N_{tasks}$ simulations}
-	\psframe(-100,-30)(-20,-45)
+	\rput(-60,-35){Tarea 1ª:}
+	\rput(-60,-40){$N_{estimaciones}/N_{tareas}$ simulaciones}
+	\psframe(-105,-30)(-15,-45)
 	\rput(0,-37.5){$\cdots$}
-	\rput(60,-35){$N_{tasks}$-th task:}
-	\rput(60,-40){$N_{estimates}/N_{tasks}$ simulations}
-	\psframe(20,-30)(100,-45)
+	\rput(60,-35){Tarea $N_{tareas}$-ésima:}
+	\rput(60,-40){$N_{estimaciones}/N_{tareas}$ simulaciones}
+	\psframe(15,-30)(105,-45)
 	\psline{->}(-60,-45)(0,-50)
 	\psline{->}(0,-45)(0,-50)
 	\psline{->}(60,-45)(0,-50)
-	\rput(0,-55){Getting optimal empirical parameters set}
-	\psframe(-55,-50)(55,-60)
+	\rput(0,-55){Obtención del conjunto óptimo de parámetros empíricos}
+	\psframe(-65,-50)(65,-60)
 	\psline{->}(0,-60)(0,-65)
 	\rput(0,-70){$\cdots$}
 	\psline{->}(0,-75)(0,-80)
-	\rput(0,-85){$N_{steps}$-th step:}
-	\rput(0,-90){Generation of $N_{estimates}$ empirical parameters sets}
-	\psframe(-60,-95)(60,-80)
+	\rput(0,-85){Paso $N_{pasos}$-ésimo:}
+	\rput(0,-90){Generación de $N_{estimaciones}$ conjuntos de parámetros
+		empíricos}
+	\psframe(-75,-95)(75,-80)
 	\psline{->}(0,-95)(-60,-100)
 	\psline{->}(0,-95)(0,-100)
 	\psline{->}(0,-95)(60,-100)
-	\rput(-60,-105){1st task:}
-	\rput(-60,-110){$N_{estimates}/N_{tasks}$ simulations}
-	\psframe(-100,-100)(-20,-115)
+	\rput(-60,-105){Tarea 1ª:}
+	\rput(-60,-110){$N_{estimaciones}/N_{tareas}$ simulaciones}
+	\psframe(-105,-100)(-15,-115)
 	\rput(0,-107.5){$\cdots$}
-	\rput(60,-105){$N_{tasks}$-th task:}
-	\rput(60,-110){$N_{estimates}/N_{tasks}$ simulations}
-	\psframe(20,-100)(100,-115)
+	\rput(60,-105){Tarea $N_{tareas}$-ésima:}
+	\rput(60,-110){$N_{estimaciones}/N_{tareas}$ simulaciones}
+	\psframe(15,-100)(105,-115)
 	\psline{->}(-60,-115)(0,-120)
 	\psline{->}(0,-115)(0,-120)
 	\psline{->}(60,-115)(0,-120)
-	\rput(0,-125){Getting optimal empirical parameters set}
-	\psframe(-55,-120)(55,-130)
-}{Flowchart of the parallelization scheme in MPCOTool for the direction search
-method}{FigDirectionParallelization}
+	\rput(0,-125){Obtención del conjunto óptimo de parámetros empíricos}
+	\psframe(-65,-120)(65,-130)
+}{Diagrama de flujo del esquema de paralelización seguido en MPCOTool para el
+método de búsqueda de dirección}{FigDirectionParallelization}
 
-MPCOTool uses two methods to build the $\vec{t}_j$ vectors:
+MPCOTool usa dos métodos para construir los vectores $\vec{t}_j$:
 
-\subsection{Coordinates descent}
+\subsection{Descenso de coordenadas}
 
-This method builds the $\vec{t}_j$ vectors by increasing or decreasing only one
+El método genera los vectores $\vec{t}_j$ incrementando o decreciendo una sóla
 variable:
 \[
-	\vec{t}_1=\MATRIX{c}{step_1\\0\\0\\\vdots\\0},\quad
-	\vec{t}_2=\MATRIX{c}{-step_1\\0\\0\\\vdots\\0},\quad
-	\vec{t}_3=\MATRIX{c}{0\\step_2\\0\\\vdots\\0},
+	\vec{t}_1=\MATRIX{c}{paso_1\\0\\0\\\vdots\\0},\quad
+	\vec{t}_2=\MATRIX{c}{-paso_1\\0\\0\\\vdots\\0},\quad
+	\vec{t}_3=\MATRIX{c}{0\\paso_2\\0\\\vdots\\0},
 \]
 \EQ
 {
-	\vec{t}_4=\MATRIX{c}{0\\-step_2\\0\\\vdots\\0},\quad\cdots\quad,
-	\vec{t}_{N_{estimates}}=\MATRIX{c}{0\\0\\0\\\vdots\\
-	-step_{N_{variables}}},
+	\vec{t}_4=\MATRIX{c}{0\\-paso_2\\0\\\vdots\\0},\quad\cdots,\quad
+	\vec{t}_{N_{estimaciones}}=\MATRIX{c}{0\\0\\0\\\vdots\\
+	-paso_{N_{variables}}},
 }{EqtDescent}
-being $step_j$ the initial step size for the $j$-th variable defined by the user
-in the main input file. The number of estimates in this method depends on the
-variables number:
-\EQ{N_{estimates}=2\,N_{variables}}{EqNestimatesDescent}
+siendo $paso_j$ el tamaño de paso inicial para la variable $j$-ésima definido
+por el usuario en el fichero principal de entrada. El número total de
+estimaciones depende del número de variables:
+\EQ{N_{estimaciones}=2\,N_{variables}}{EqNestimatesDescent}
 
-\subsection{Random}
+\subsection{Aleatorio}
 
-The vectors $\vec{t}_j$ are built randomly as:
+Los vectores $\vec{t}_j$ se construyen aleatoriamente:
 \EQ
 {
-	\vec{t}_j=\MATRIX{c}{\PA{1-2\,r_{j,1}}\,step_1\\\vdots\\
-	\PA{1-2\,r_{j,k}}\,step_k\\\vdots\\
-	\PA{1-2\,r_{j,N_{variables}}}\,step_{N_{variables}}},
+	\vec{t}_j=\MATRIX{c}{\PA{1-2\,r_{j,1}}\,paso_1\\\vdots\\
+	\PA{1-2\,r_{j,k}}\,paso_k\\\vdots\\
+	\PA{1-2\,r_{j,N_{variables}}}\,paso_{N_{variables}}},
 }{EqtRandom}
-with $r_{j,k}\in[0,1)$ random numbers.
+con $r_{j,k}\in[0,1)$ números aleatorios.
 
-In the figure~\ref{FigDirection} a sketch for a system with two variables is
-presented to illustrate the working mode of coordinates descent and random
-algorithms.
+En la figura~\ref{FigDirection} se presenta un esquema para un sistema con dos
+variables para ilustrar el modo de funcionamiento de los algoritmos de descenso
+de coordenadas y aleatorio.
 \psset{xunit=0.45mm,yunit=0.45mm,runit=0.5mm}
 \PSPICTURE{0}{0}{260}{100}
 {
@@ -1286,97 +1290,105 @@ algorithms.
 	\psline{->}(220,65)(212,49)
 	\pscircle*(212,49){1}
 	\rput(212,43){$\vec{t}_2$}
-}{(Left) coordinates descent and (right) random with $N_{estimates}=3$ direction
-search method checks of variables combination in a system with two variables}
-{FigDirection}
+}{Pruebas de combinaciones de variables con los algoritmos de (izquierda)
+descenso de coordenadas y (derecha) aleatorio con $N_{estimaciones}=3$ en un
+sistema de dos variables}{FigDirection}
 
-\section{Genetic method}
+\section{Método genético}
 
-MPCOTool also offers the use of a genetic method Genetic \cite{genetic} with its default algorithms.
-It is inspired on the ideas in \citet{gaul}, but it has been fully reprogrammed involving more modern external libraries.
-The code in Genetic is also open source under BSD license. Figure~\ref{FigGeneticFlow} shows the flowchart of the genetic method implemented in Genetic.
+MPCOTool también permite el uso de un método genético \cite{genetic} con sus
+algoritmos por defecto. Está inspirado en las ideas de \citet{gaul}, pero ha
+sido completamente reprogramado de cero usando librerías externas modernas. El
+código en Genetic es también libre bajo una licencia de tipo BSD. La
+figure~\ref{FigGeneticFlow} muestra el diagrama de flujo del método genético
+por defecto implementado en Genetic.
 
 \psset{xunit=0.5mm,yunit=0.5mm}
 \PSPICTURE{-120}{-185}{120}{20}
 {
 	\tiny
-	\rput(0,15){Generation of $N_{population}$}
-	\rput(0,10){random genomes}
+	\rput(0,15){Generación de $N_{poblacion}$}
+	\rput(0,10){genomas aleatorios}
 	\psframe(-35,5)(35,20)
 	\psline{->}(0,5)(0,0)
-	\rput(0,-5){$generation=1$}
+	\rput(0,-5){$generacion=1$}
 	\psframe(-25,-10)(25,0)
 	\psline{->}(0,-10)(0,-15)
-	\rput(0,-20){Simulation of the $N_{population}$}
-	\rput(0,-25){entities}
+	\rput(0,-20){Simulación de $N_{poblacion}$}
+	\rput(0,-25){seres}
 	\psframe(-40,-30)(40,-15)
 	\psline{->}(0,-30)(0,-35)
-	\rput(0,-40){Sorting the $N_{population}$}
-	\rput(0,-45){entities by objective function value}
+	\rput(0,-40){Ordenación de $N_{poblacion}$ seres}
+	\rput(0,-45){según el valor de la función objetivo}
 	\psframe(-45,-50)(45,-35)
 	\psline{->}(0,-50)(0,-55)
-	\rput(0,-60){Eliminating the worst}
-	\rput(0,-65){$N_{mutation}+N_{reproduction}+N_{adaptation}$ entities}
+	\rput(0,-60){Eliminación de los peores}
+	\rput(0,-65){$N_{mutacion}+N_{reproduccion}+N_{adaptacion}$ seres}
 	\psframe(-65,-70)(65,-55)
 	\psline{->}(0,-70)(-80,-75)
-	\rput(-80,-80){Generation of $N_{mutation}$}
-	\rput(-80,-85){new entities by mutation}
+	\rput(-80,-80){Generación de $N_{mutacion}$}
+	\rput(-80,-85){nuevos seres por mutación}
 	\psframe(-115,-90)(-45,-75)
 	\psline{->}(-80,-90)(-80,-95)
-	\rput(-80,-100){Simulation of the $N_{mutation}$}
-	\rput(-80,-105){new mutated entities}
+	\rput(-80,-100){Simulación de $N_{mutacion}$}
+	\rput(-80,-105){nuevos seres mutados}
 	\psframe(-115,-110)(-45,-95)
 	\psline{->}(0,-70)(0,-75)
-	\rput(0,-80){Generation of $N_{reproduction}$}
-	\rput(0,-85){new entities by reproduction}
+	\rput(0,-80){Generación de $N_{reproduccion}$}
+	\rput(0,-85){nuevos seres por reproducción}
 	\psframe(-40,-90)(40,-75)
 	\psline{->}(0,-90)(0,-95)
-	\rput(0,-100){Simulation of the $N_{reproduction}$}
-	\rput(0,-105){new reproduced entities}
+	\rput(0,-100){Simulación de $N_{reproduccion}$}
+	\rput(0,-105){nuevos seres reproducidos}
 	\psframe(-40,-110)(40,-95)
 	\psline{->}(0,-70)(82.5,-75)
-	\rput(82.5,-80){Generation of $N_{adaptation}$}
-	\rput(82.5,-85){new entities by adaptation}
+	\rput(82.5,-80){Generación de $N_{adaptacion}$}
+	\rput(82.5,-85){nuevos seres por adaptación}
 	\psframe(120,-90)(45,-75)
 	\psline{->}(82.5,-90)(82.5,-95)
-	\rput(82.5,-100){Simulation of the $N_{adaptation}$}
-	\rput(82.5,-105){new adapted entities}
+	\rput(82.5,-100){Simulación de $N_{adaptacion}$}
+	\rput(82.5,-105){nuevos seres adaptados}
 	\psframe(120,-110)(45,-95)
 	\psline{->}(-80,-110)(0,-115)
 	\psline{->}(0,-110)(0,-115)
 	\psline{->}(82.5,-110)(0,-115)
-	\rput(0,-120){Sorting the old $N_{survival}$ entities and the new}
-	\rput(0,-125){$N_{mutation}+N_{reproduction}+N_{adaptation}$ entities}
-	\rput(0,-130){by objective function values}
+	\rput(0,-120){Ordenación de los viejos $N_{supervivientes}$ seres y de los}
+	\rput(0,-125){nuevos $N_{mutacion}+N_{reproduccion}+N_{adaptacion}$}
+	\rput(0,-130){seres según los valores de la función objetivo}
 	\psframe(-65,-115)(65,-135)
 	\psline{->}(0,-135)(0,-140)
-	\rput(0,-145){Increase $+1$ $generation$}
-	\psframe(-30,-140)(30,-150)
+	\rput(0,-145){Incrementar $+1$ $generation$}
+	\psframe(-35,-140)(35,-150)
 	\psline{->}(0,-150)(0,-155)
-	\rput(0,-162.5){$generation<N_{generations}$?}
-	\pspolygon(-50,-162.5)(0,-170)(50,-162.5)(0,-155)
-	\psline{->}(-50,-162.5)(-120,-162.5)(-120,-62.5)(-65,-62.5)
-	\rput(-60,-160){Yes}
+	\rput(0,-162.5){¿$generation<N_{generaciones}$?}
+	\pspolygon(-55,-162.5)(0,-170)(55,-162.5)(0,-155)
+	\psline{->}(-55,-162.5)(-120,-162.5)(-120,-62.5)(-65,-62.5)
+	\rput(-55,-160){Sí}
 	\rput(-5,-172.5){No}
 	\psline{->}(0,-170)(0,-175)
-	\rput(0,-180){Select the best entity}
+	\rput(0,-180){Selección del mejor ser}
 	\psframe(-30,-185)(30,-175)
-}{Flow diagram of the genetic method implemented in Genetic}{FigGeneticFlow}
+}{Diagrama de flujo del método genético por defecto implementado en Genetic}
+{FigGeneticFlow}
 
-\subsection{The genome}
+\subsection{El genoma}
 
-The variables to calibrate/optimize are coded in Genetic using a bit chain: the
-genome. The larger the number of bits assigned to a variable the higher the resolution.
-The number of bits assigned to each variable, and therefore the genome size, is fixed and the same for all the 
-simulations. Figure~\ref{FigGenome} shows an example for the coding of three variables. The value assigned to a variable $x$ is determined by the allowed extreme values $x_{\min}$ and $x_{\max}$, the binary number assigned in the genome to variable $I_x$ and by the number of bits assigned to variable $N_x$ according to
-the following formula:
+Las varaibles a calibrar/optimizar son codificadas en Genetic usando una cadena
+de bits: el genoma. Cuanto mayor es el número de bits asignado a una variable
+mayor es su resolución. El número de bits asignado a cada variable, y de ahí el
+tamaño del genoma, son fijos e iguales para todas las simulaciones. En la
+figura~\ref{FigGenome} se muestra un ejemplo codificando tres variables. El
+valor asignado a cada variable $x$ está determinado por los valores extremos
+permitidos $x_{\min}$ and $x_{\max}$, el número binario asignado a la variable
+en la región correspondiente del genoma $I_x$ y por el número de bits asignado a
+la variable $N_x$ según la siguiente fórmula:
 \EQ{x=x_{\min}+\frac{I_x}{2^{N_x}-1}\,\left(x_{\max}-x_{\min}\right).}{EqGenome}
 
 \psset{unit=1mm}
-\PSPICTURE{0}{0}{80}{30}
+\PSPICTURE{0}{3}{80}{30}
 {
 	\scriptsize
-	\rput(40,27){Genome}
+	\rput(40,27){Genoma}
 	\rput(15,23){Variable 1}
 	\pspolygon(0,15)(30,15)(30,20)(0,20)
 	\rput(40,23){Variable 2}
@@ -1384,13 +1396,11 @@ the following formula:
 	\rput(65,23){Variable 3}
 	\pspolygon(50,15)(80,15)(80,20)(50,20)
 	\psline{->}(10,12)(0,12)
-	\rput(5,9){Less}
-	\rput(5,6){significant}
-	\rput(5,3){bit}
+	\rput(5,9){Bit menos}
+	\rput(5,6){significativo}
 	\psline{->}(20,12)(30,12)
-	\rput(25,9){More}
-	\rput(25,6){significant}
-	\rput(25,3){bit}
+	\rput(25,9){Bit más}
+	\rput(25,6){significativo}
 	\rput(2,17.5){1}
 	\rput(4,17.5){0}
 	\rput(6,17.5){0}
@@ -1428,34 +1438,38 @@ the following formula:
 	\rput(74,17.5){1}
 	\rput(76,17.5){1}
 	\rput(78,17.5){1}
-}{Example coding three variables to optimize into a
-genome. The first and third variables have been coded with 14 bits, and the second
-variable has been coded with 9 bits}{FigGenome}
+}{Ejemplo codificando tres variables a optimizar en un genoma. Primera y tercera
+variables han sido codificadas con 14 bits y la segunda con 9 bits en este
+ejemplo}{FigGenome}
 
-\subsection{Survival of the best individuals}
+\subsection{Supervivencia de los mejores individuos}
 
-In a population with $N_{population}$ individuals, in the first generation all the cases are simulated. The input variables are
-taken from the genome of each individual. Next, in every generation, $N_{population}\times R_{mutation}$ individuals are generated by mutation, $N_{population}\times R_{reproduction}$ individuals are generated by reproduction and $N_{population}\times R_{adaptation}$ individuals are generated by adaptation, obviously
-taking into account rounding. On second and further generations only simulations
-associated to this new individuals ($N_{new}$) have to be run:
+En una población con $N_{poblacion}$ individuos, en la primera generación se
+simulan todos los casos. Las variables de entrada se obtienen del genoma de cada
+individuo. Despueés, en cada generación, $N_{poblacion}\times R_{mutacion}$
+individuos se generan por mutation, $N_{poblacion}\times R_{reproduccion}$ por
+reproducción y $N_{poblacion}\times R_{adaptacion}$ por adaptación, obviamente
+teniendo en cuenta redondeos. A partir de la segunda generación sólo se
+se simulan los casos asociados a estos nuevos individuos ($N_{new}$):
 \EQ
 {
-	N_{new}=N_{population}
-	\times\left(R_{mutation}+R_{reproduction}+R_{adaptation}\right).
+	N_{new}=N_{poblacion}
+	\times\left(R_{mutacion}+R_{reproduccion}+R_{adaptacion}\right).
 }{EqNew}
-Then, total number of simulations performed by the genetic algorithm is:
+Por lo tanto, el número total de simulaciones ejecutadas por el algoritmo
+genético es:
 \EQ
 {
-	N_{total}=N_{population}+\left(N_{generations}-1\right)\times N_{new},
+	N_{total}=N_{poblacion}+\left(N_{generaciones}-1\right)\times N_{new},
 }{EqGeneticNumber}
-with $N_{generations}$ the number of generations of new entities.
-The individuals of the former population that obtained lower values in the evaluation function are replaced so that the best $N_{survival}$ individuals survive:
+con $N_{generaciones}$ el número de generaciones de nuevos individuos.
+The individuals of the former population that obtained lower values in the evaluation function are replaced so that the best $N_{supervivientes}$ individuals survive:
 \EQ
 {
-	N_{survival}=N_{population}-N_{new}.
+	N_{supervivientes}=N_{poblacion}-N_{new}.
 }{EqSurvival}
 Furthermore, the ancestors to generate new individuals are chosen among the surviving population. Obviously, to have survival population, the following condition has to be enforced:
-\EQ{R_{mutation}+R_{reproduction}+R_{adaptation}<1}{EqSurvivalCondition}
+\EQ{R_{mutacion}+R_{reproduccion}+R_{adaptacion}<1}{EqSurvivalCondition}
 MPCOTool uses a default aleatory criterion in Genetic, with a probability linearly decreasing with the ordinal in the ordered set of surviving individuals (see figure~\ref{FigSelection}).
 
 \PICTURE{250}{110}
@@ -1492,7 +1506,7 @@ MPCOTool uses a default aleatory criterion in Genetic, with a probability linear
 	\put(200,32){\line(1,0){10}}
 	\multiput(220,20)(10,0){2}{\line(0,1){6}}
 	\put(220,26){\line(1,0){10}}
-	\put(205,10){$N_{survival}$-th}
+	\put(205,10){$N_{supervivientes}$-th}
 	\qbezier[54](10,90.5)(127.5,50.25)(245,20)
 }{Probability of a survival entity to be selected as parent
 of the new entities generated by mutation, reproduction or adaptation
@@ -1845,22 +1859,22 @@ figure~\ref{FigGeneticParallelization}.
 {
 	\tiny
 	\rput(0,-15){1st generation:}
-	\rput(0,-20){Generation of $N_{population}$ empirical parameters sets}
+	\rput(0,-20){Generation of $N_{poblacion}$ empirical parameters sets}
 	\psframe(-60,-25)(60,-10)
 	\psline{->}(0,-25)(-60,-30)
 	\psline{->}(0,-25)(0,-30)
 	\psline{->}(0,-25)(60,-30)
 	\rput(-60,-35){1st task:}
-	\rput(-60,-40){$N_{population}/N_{tasks}$ simulations}
+	\rput(-60,-40){$N_{poblacion}/N_{tareas}$ simulations}
 	\psframe(-100,-30)(-20,-45)
 	\rput(0,-37.5){$\cdots$}
-	\rput(60,-35){$N_{tasks}$-th task:}
-	\rput(60,-40){$N_{population}/N_{tasks}$ simulations}
+	\rput(60,-35){$N_{tareas}$-th task:}
+	\rput(60,-40){$N_{poblacion}/N_{tareas}$ simulations}
 	\psframe(20,-30)(100,-45)
 	\psline{->}(-60,-45)(0,-50)
 	\psline{->}(0,-45)(0,-50)
 	\psline{->}(60,-45)(0,-50)
-	\rput(0,-55){Getting $N_{survival}$ empirical parameters sets}
+	\rput(0,-55){Getting $N_{supervivientes}$ empirical parameters sets}
 	\psframe(-55,-50)(55,-60)
 	\psline{->}(0,-60)(0,-65)
 	\rput(0,-70){2nd generation:}
@@ -1870,32 +1884,32 @@ figure~\ref{FigGeneticParallelization}.
 	\psline{->}(0,-80)(0,-85)
 	\psline{->}(0,-80)(60,-85)
 	\rput(-55,-90){1st task:}
-	\rput(-55,-95){$N_{new}/N_{tasks}$ simulations}
+	\rput(-55,-95){$N_{new}/N_{tareas}$ simulations}
 	\psframe(-90,-85)(-20,-100)
 	\rput(0,-92.5){$\cdots$}
-	\rput(55,-90){$N_{tasks}$-th task:}
-	\rput(55,-95){$N_{new}/N_{tasks}$ simulations}
+	\rput(55,-90){$N_{tareas}$-th task:}
+	\rput(55,-95){$N_{new}/N_{tareas}$ simulations}
 	\psframe(20,-85)(90,-100)
 	\psline{->}(-55,-100)(0,-105)
 	\psline{->}(0,-100)(0,-105)
 	\psline{->}(55,-100)(0,-105)
-	\rput(0,-110){Getting $N_{survival}$ empirical parameters sets}
+	\rput(0,-110){Getting $N_{supervivientes}$ empirical parameters sets}
 	\psframe(-55,-105)(55,-115)
 	\psline{->}(0,-115)(0,-120)
 	\rput(0,-125){$\cdots$}
 	\psline{->}(0,-130)(0,-135)
-	\rput(0,-140){$N_{generations}$-th generation:}
+	\rput(0,-140){$N_{generaciones}$-th generation:}
 	\rput(0,-145){Generation of $N_{new}$ empirical parameters sets}
 	\psframe(-55,-150)(55,-135)
 	\psline{->}(0,-150)(-60,-155)
 	\psline{->}(0,-150)(0,-155)
 	\psline{->}(0,-150)(60,-155)
 	\rput(-55,-160){1st task:}
-	\rput(-55,-165){$N_{new}/N_{tasks}$ simulations}
+	\rput(-55,-165){$N_{new}/N_{tareas}$ simulations}
 	\psframe(-90,-155)(-20,-170)
 	\rput(0,-162.5){$\cdots$}
-	\rput(55,-160){$N_{tasks}$-th task:}
-	\rput(55,-165){$N_{new}/N_{tasks}$ simulations}
+	\rput(55,-160){$N_{tareas}$-th task:}
+	\rput(55,-165){$N_{new}/N_{tareas}$ simulations}
 	\psframe(20,-155)(90,-170)
 	\psline{->}(-55,-170)(0,-175)
 	\psline{->}(0,-170)(0,-175)
