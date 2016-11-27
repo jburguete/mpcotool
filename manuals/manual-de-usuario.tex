@@ -1463,12 +1463,16 @@ genético es:
 	N_{total}=N_{poblacion}+\left(N_{generaciones}-1\right)\times N_{new},
 }{EqGeneticNumber}
 con $N_{generaciones}$ el número de generaciones de nuevos individuos.
-The individuals of the former population that obtained lower values in the evaluation function are replaced so that the best $N_{supervivientes}$ individuals survive:
+Los individuos de la anterior población que han obtenido peores valores en la
+función objetivo son son reemplazados así que sólo los mejores
+$N_{supervivientes}$ individuos sobreviven:
 \EQ
 {
 	N_{supervivientes}=N_{poblacion}-N_{new}.
 }{EqSurvival}
-Furthermore, the ancestors to generate new individuals are chosen among the surviving population. Obviously, to have survival population, the following condition has to be enforced:
+Además, los ancestros que generan los nuevos individuos son elegidos entre los
+supervivientes. Obviamente, para tener población superviviente con la que
+generar nuevos individuos se debe cumplir:
 \EQ{R_{mutacion}+R_{reproduccion}+R_{adaptacion}<1}{EqSurvivalCondition}
 MPCOTool uses a default aleatory criterion in Genetic, with a probability linearly decreasing with the ordinal in the ordered set of surviving individuals (see figure~\ref{FigSelection}).
 
