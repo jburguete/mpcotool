@@ -308,6 +308,8 @@ windist: mpcotool.exe $(DLL) $(MO)
 	zip mpcotool-sources-@PACKAGE_VERSION@.zip *.c *.h *.in *.ac *.ico *.rc \
 		Doxyfile
 	mv mpcotool-sources-@PACKAGE_VERSION@.zip @WIN@/src
+	zip genetic-sources genetic/*.c genetic/*.h
+	mv genetic-sources.zip @WIN@/src
 	zip @WIN@/src/mpcotool-manuals ../manuals/*.pdf
 	zip -r @WIN@/src/mpcotool-binaries-@WIN@-@PACKAGE_VERSION@.zip @WIN@/bin \
 		@WIN@/lib @WIN@/share
