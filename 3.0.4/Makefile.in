@@ -305,9 +305,10 @@ windist: mpcotool.exe $(DLL) $(MO)
 			$(TROSENBROCK)*.tmp \
 		$(TSPHERE)*.exe $(TSPHERE)*.c $(TSPHERE)*.in $(TSPHERE)*.tmp
 	mv ../mpcotool-tests-@WIN@.zip @WIN@/src
-	zip mpcotool-sources-@PACKAGE_VERSION@ *.c *.h *.in *.ac *.ico *.rc \
+	zip mpcotool-sources-@PACKAGE_VERSION@.zip *.c *.h *.in *.ac *.ico *.rc \
 		Doxyfile
+	mv mpcotool-sources-@PACKAGE_VERSION@.zip @WIN@/src
 	zip @WIN@/src/mpcotool-manuals ../manuals/*.pdf
-	zip -r @WIN@/src/mpcotool-binaries-@WIN@-@PACKAGE_VERSION@ @WIN@/bin \
+	zip -r @WIN@/src/mpcotool-binaries-@WIN@-@PACKAGE_VERSION@.zip @WIN@/bin \
 		@WIN@/lib @WIN@/share
 	cd @WIN@/src; perl ../../fetch.pl $(WINLIBS)
