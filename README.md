@@ -7,8 +7,8 @@ calibrations or optimizations of empirical parameters.
 VERSIONS
 --------
 
-* 3.0.4: Stable and recommended version.
-* 3.1.4: Developing version to do new features.
+* 3.2.0: Stable and recommended version.
+* 3.3.0: Developing version to do new features.
 
 AUTHORS
 -------
@@ -52,16 +52,16 @@ FILES
 -----
 
 The source code has to have the following files:
-* 3.0.4/configure.ac: configure generator.
-* 3.0.4/Makefile.in: Makefile generator.
-* 3.0.4/config.h.in: config header generator.
-* 3.0.4/mpcotool.c: main source code.
-* 3.0.4/mpcotool.h: main header code.
-* 3.0.4/mpcotool.ico: icon file.
-* 3.0.4/interface.h: interface header code.
-* 3.0.4/build: script to build all.
-* 3.0.4/logo.png: logo figure.
-* 3.0.4/Doxyfile: configuration file to generate doxygen documentation.
+* 3.2.0/configure.ac: configure generator.
+* 3.2.0/Makefile.in: Makefile generator.
+* 3.2.0/config.h.in: config header generator.
+* 3.2.0/mpcotool.c: main source code.
+* 3.2.0/mpcotool.h: main header code.
+* 3.2.0/mpcotool.ico: icon file.
+* 3.2.0/interface.h: interface header code.
+* 3.2.0/build: script to build all.
+* 3.2.0/logo.png: logo figure.
+* 3.2.0/Doxyfile: configuration file to generate doxygen documentation.
 * TODO: tasks to do.
 * README.md: this file.
 * license.md: license file.
@@ -103,7 +103,7 @@ a terminal:
 > $ git clone https://github.com/jburguete/mpcotool.git
 
 3. Link the latest genetic version to genetic:
-> $ cd mpcotool/3.0.4
+> $ cd mpcotool/3.2.0
 >
 > $ ln -s ../../genetic/2.0.1 genetic
 
@@ -180,7 +180,7 @@ MAKING TESTS INSTRUCTIONS
 In order to build the tests follow the next instructions:
 
 1. Link some tests that needs genetic library doing in a terminal (assuming that
-you are in the directory mpcotool/3.0.4):
+you are in the directory mpcotool/3.2.0):
 > $ cd ../tests/test2
 >
 > $ ln -s ../../../genetic/2.0.1 genetic
@@ -194,7 +194,7 @@ you are in the directory mpcotool/3.0.4):
 > $ ln -s ../../../genetic/2.0.1 genetic
 
 2. Build all tests doing in the same terminal:
-> $ cd ../../3.0.4
+> $ cd ../../3.2.0
 >
 > $ make tests
 

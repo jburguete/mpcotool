@@ -1,0 +1,269 @@
+CC = @CC@ @ARCH@ @LTO@ @STD@
+CFLAGS = -g -Wall -O3 -fPIC @CPPFLAGS@ @GSL_CFLAGS@ @XML_CFLAGS@ @GLIB_CFLAGS@ \
+	@JSON_CFLAGS@ @GTHREAD_CFLAGS@ @MPI@
+LDFLAGS = @LDFLAGS@ @LIBS@ @GSL_LIBS@ @XML_LIBS@ @GLIB_LIBS@ @JSON_LIBS@ \
+	@GTHREAD_LIBS@
+
+SRC = genetic/entity.c genetic/population.c genetic/reproduction.c \
+	genetic/selection.c genetic/evolution.c genetic/genetic.c utils.c \
+	experiment.c variable.c input.c optimize.c interface.c main.c
+OBJ = genetic/entity.o genetic/population.o genetic/reproduction.o \
+	genetic/selection.o genetic/evolution.o genetic/genetic.o experiment.o \
+	variable.o input.o optimize.o
+OBJBIN = utilsbin.o $(OBJ)
+OBJGUI = interface.o utils.o $(OBJ) @ICON@
+DEP = Makefile
+DE = de/LC_MESSAGES/
+ES = es/LC_MESSAGES/
+FR = fr/LC_MESSAGES/
+GB = en_GB/LC_MESSAGES/
+T1 = ../tests/test1/
+T2 = ../tests/test2/
+T3 = ../tests/test3/
+T4 = ../tests/test4/
+T5 = ../tests/test5/
+ACKLEY = ../tests/testAckley/
+SPHERE = ../tests/testSphere/
+BOOTH = ../tests/testBooth/
+ROSENBROCK = ../tests/testRosenbrock/
+EASOM = ../tests/testEasom/
+BEALE = ../tests/testBeale/
+TESTS = $(T1)simulator $(T1)evaluator $(T2)simulator $(T2)evaluator \
+	$(T3)simulator $(T3)evaluator $(T4)simulator $(T5)simulator \
+	$(ACKLEY)Ackley $(SPHERE)Sphere $(BOOTH)Booth $(ROSENBROCK)Rosenbrock \
+	$(EASOM)Easom $(BEALE)Beale
+MDIR = ../manuals/
+M1 = $(MDIR)user-manual.pdf
+M2 = $(MDIR)manual-de-usuario.pdf
+MANUALS = $(M1) $(M2) $(MDIR)reference-manual.pdf
+
+all: mpcotoolbin \
+	@MPCOTOOL@ \
+	locales/$(DE)mpcotool.mo \
+	locales/$(ES)mpcotool.mo \
+	locales/$(FR)mpcotool.mo
+
+manuals: $(MANUALS)
+
+tests: $(TESTS)
+
+genetic/entity.o: genetic/entity.c genetic/entity.h $(DEP)
+	$(CC) $(CFLAGS) -c genetic/entity.c -o genetic/entity.o
+
+genetic/population.o: genetic/population.c genetic/population.h \
+	genetic/entity.h genetic/bits.h $(DEP)
+	$(CC) $(CFLAGS) -c genetic/population.c -o genetic/population.o
+
+genetic/reproduction.o: genetic/reproduction.c genetic/reproduction.h \
+	genetic/entity.h genetic/bits.h $(DEP)
+	$(CC) $(CFLAGS) -c genetic/reproduction.c -o genetic/reproduction.o
+
+genetic/selection.o: genetic/selection.c genetic/selection.h \
+	genetic/population.h genetic/entity.h $(DEP)
+	$(CC) $(CFLAGS) -c genetic/selection.c -o genetic/selection.o
+
+genetic/evolution.o: genetic/evolution.c genetic/evolution.h \
+	genetic/selection.h genetic/reproduction.h genetic/mutation.h \
+	genetic/population.h genetic/entity.h genetic/sort.h genetic/bits.h $(DEP)
+	$(CC) $(CFLAGS) -c genetic/evolution.c -o genetic/evolution.o
+
+genetic/genetic.o: genetic/genetic.c genetic/genetic.h genetic/evolution.h \
+	genetic/selection.h genetic/reproduction.h genetic/population.h \
+	genetic/entity.h genetic/bits.h $(DEP)
+	$(CC) $(CFLAGS) -c genetic/genetic.c -o genetic/genetic.o
+
+utilsbin.o: utils.c utils.h config.h $(DEP)
+	$(CC) -c $(CFLAGS) utils.c -o utilsbin.o
+
+utils.o: utils.c utils.h config.h $(DEP)
+	$(CC) -c $(CFLAGS) @GTK_CFLAGS@ utils.c -o utils.o -DHAVE_GTK=1
+
+experiment.o: experiment.c experiment.h utils.h config.h $(DEP)
+	$(CC) -c $(CFLAGS) experiment.c -o experiment.o
+
+variable.o: variable.c variable.h utils.h config.h $(DEP)
+	$(CC) -c $(CFLAGS) variable.c -o variable.o
+
+input.o: input.c input.h variable.h experiment.h utils.h config.h $(DEP)
+	$(CC) -c $(CFLAGS) input.c -o input.o
+
+optimize.o: optimize.c optimize.h input.h variable.h experiment.h utils.h \
+	config.h $(DEP)
+	$(CC) -c $(CFLAGS) optimize.c -o optimize.o
+
+interface.o: interface.c interface.h optimize.h input.h variable.h \
+	experiment.h utils.h config.h $(DEP)
+	$(CC) -c $(CFLAGS) @GTK_CFLAGS@ interface.c -o interface.o -DHAVE_GTK=1
+
+mpcotoolbin: main.c $(OBJBIN)
+	$(CC) $(CFLAGS) main.c $(OBJBIN) $(LDFLAGS) -o mpcotoolbin
+
+@MPCOTOOL@: main.c $(OBJGUI) @ICON@
+	$(CC) $(CFLAGS) @GTK_CFLAGS@ main.c $(OBJGUI) $(LDFLAGS) @GTK_LIBS@ \
+		-o mpcotool -DHAVE_GTK=1
+
+locales/mpcotool.pot: @MPCOTOOL@
+	xgettext -d mpcotool -o locales/mpcotool.pot --from-code=UTF-8 $(SRC)
+
+locales/$(DE)mpcotool.po: locales/mpcotool.pot
+	test -d locales/$(DE) || mkdir -p locales/$(DE)
+	test -f locales/$(DE)mpcotool.po || \
+		msginit -l de -o locales/$(DE)mpcotool.po -i locales/mpcotool.pot \
+		--no-translator
+	msgmerge -U locales/$(DE)mpcotool.po locales/mpcotool.pot
+	vim -p locales/$(DE)mpcotool.po
+	touch locales/$(DE)mpcotool.po
+
+locales/$(DE)mpcotool.mo: locales/$(DE)mpcotool.po locales/mpcotool.pot
+	msgfmt -c -v -o locales/$(DE)mpcotool.mo locales/$(DE)mpcotool.po
+
+locales/$(ES)mpcotool.po: locales/mpcotool.pot
+	test -d locales/$(ES) || mkdir -p locales/$(ES)
+	test -f locales/$(ES)mpcotool.po || \
+		msginit -l es -o locales/$(ES)mpcotool.po -i locales/mpcotool.pot \
+		--no-translator
+	msgmerge -U locales/$(ES)mpcotool.po locales/mpcotool.pot
+	vim -p locales/$(ES)mpcotool.po
+	touch locales/$(ES)mpcotool.po
+
+locales/$(ES)mpcotool.mo: locales/$(ES)mpcotool.po locales/mpcotool.pot
+	msgfmt -c -v -o locales/$(ES)mpcotool.mo locales/$(ES)mpcotool.po
+
+locales/$(FR)mpcotool.po: locales/mpcotool.pot
+	test -d locales/$(FR) || mkdir -p locales/$(FR)
+	test -f locales/$(FR)mpcotool.po || \
+		msginit -l fr -o locales/$(FR)mpcotool.po -i locales/mpcotool.pot \
+		--no-translator
+	msgmerge -U locales/$(FR)mpcotool.po locales/mpcotool.pot
+	vim -p locales/$(FR)mpcotool.po
+	touch locales/$(FR)mpcotool.po
+
+locales/$(FR)mpcotool.mo: locales/$(FR)mpcotool.po locales/mpcotool.pot
+	msgfmt -c -v -o locales/$(FR)mpcotool.mo locales/$(FR)mpcotool.po
+
+$(T1)simulator: $(T1)simulator.c $(T1)Makefile
+	cd $(T1); make
+
+$(T1)evaluator: $(T1)evaluator.c $(T1)Makefile
+	cd $(T1); make
+
+$(T2)simulator: $(T2)simulator.c $(T2)Makefile
+	cd $(T2); make
+
+$(T2)evaluator: $(T2)evaluator.c $(T2)Makefile
+	cd $(T2); make
+
+$(T3)simulator: $(T3)simulator.c $(T3)Makefile
+	cd $(T3); make
+
+$(T3)evaluator: $(T3)evaluator.c $(T3)Makefile
+	cd $(T3); make
+
+$(T4)simulator: $(T4)simulator.c $(T4)Makefile
+	cd $(T4); make
+
+$(T5)simulator: $(T5)simulator.c $(T5)Makefile
+	cd $(T5); make
+
+$(ACKLEY)Ackley: $(ACKLEY)Ackley.c $(ACKLEY)Makefile
+	cd $(ACKLEY); make
+
+$(SPHERE)Sphere: $(SPHERE)Sphere.c $(SPHERE)Makefile
+	cd $(SPHERE); make
+
+$(BOOTH)Booth: $(BOOTH)Booth.c $(BOOTH)Makefile
+	cd $(BOOTH); make
+
+$(ROSENBROCK)Rosenbrock: $(ROSENBROCK)Rosenbrock.c $(ROSENBROCK)Makefile
+	cd $(ROSENBROCK); make
+
+$(EASOM)Easom: $(EASOM)Easom.c $(EASOM)Makefile
+	cd $(EASOM); make
+
+$(BEALE)Beale: $(BEALE)Beale.c $(BEALE)Makefile
+	cd $(BEALE); make
+
+@ICON@: mpcotool.rc mpcotool.ico
+	@WINDRES@ mpcotool.rc -o @ICON@
+
+$(M1): $(MDIR)user-manual.tex $(MDIR)bib.bib \
+	$(MDIR)mpcotool-en.eps $(MDIR)result-en.eps Makefile
+	cd $(MDIR); latex user-manual; bibtex user-manual; latex user-manual; \
+		latex user-manual; dvipdf user-manual
+
+$(M2): $(MDIR)manual-de-usuario.tex $(MDIR)bib.bib \
+	$(MDIR)mpcotool-es.eps Makefile
+	cd $(MDIR); latex manual-de-usuario; bibtex manual-de-usuario; \
+		latex manual-de-usuario; latex manual-de-usuario; \
+		dvipdf manual-de-usuario
+
+$(MDIR)reference-manual.pdf: mpcotool README.md Doxyfile
+	doxygen
+	cd latex; sed -i 's/∞//g' *.tex; make; \
+		mv refman.pdf ../$(MDIR)reference-manual.pdf
+
+BIN = @PREFIX@/bin/
+DLL = $(BIN)libatk-1.0-0.dll\
+	$(BIN)libbz2-1.dll\
+	$(BIN)libcairo-2.dll\
+	$(BIN)libcairo-gobject-2.dll\
+	$(BIN)libepoxy-0.dll\
+	$(BIN)libexpat-1.dll\
+	$(BIN)libffi-6.dll\
+	$(BIN)libfontconfig-1.dll\
+	$(BIN)libfreetype-6.dll\
+	$(BIN)libgcc_s_*.dll\
+	$(BIN)libgdk_pixbuf-2.0-0.dll\
+	$(BIN)libgdk-3-0.dll\
+	$(BIN)libgio-2.0-0.dll\
+	$(BIN)libglib-2.0-0.dll\
+	$(BIN)libgmodule-2.0-0.dll\
+	$(BIN)libgobject-2.0-0.dll\
+	$(BIN)libgraphite2.dll\
+	$(BIN)libgsl-19.dll\
+	$(BIN)libgslcblas-0.dll\
+	$(BIN)libgthread-2.0-0.dll\
+	$(BIN)libgtk-3-0.dll\
+	$(BIN)libharfbuzz-0.dll\
+	$(BIN)libiconv-2.dll\
+	$(BIN)libintl-8.dll\
+	$(BIN)libjson-glib-1.0-0.dll\
+	$(BIN)liblzma-5.dll\
+	$(BIN)libpango-1.0-0.dll\
+	$(BIN)libpangocairo-1.0-0.dll\
+	$(BIN)libpangoft2-1.0-0.dll\
+	$(BIN)libpangowin32-1.0-0.dll\
+	$(BIN)libpcre-1.dll\
+	$(BIN)libpixman-1-0.dll\
+	$(BIN)libpng16-16.dll\
+	$(BIN)libstdc++-6.dll\
+	$(BIN)libwinpthread-1.dll\
+	$(BIN)libxml2-2.dll\
+	$(BIN)zlib1.dll
+GDKPIXBUF = lib/gdk-pixbuf-2.0/2.10.0/
+SHARE = @PREFIX@/share/
+LOCALE = $(SHARE)locale/
+MODE = $(LOCALE)de/LC_MESSAGES/gtk30.mo
+MOES = $(LOCALE)es/LC_MESSAGES/gtk30.mo
+MOFR = $(LOCALE)fr/LC_MESSAGES/gtk30.mo
+MOGB = $(LOCALE)en_GB/LC_MESSAGES/gtk30.mo
+MO = $(MOGB) $(MOES) $(MOFR)
+
+windist: mpcotool.exe $(DLL) $(MO)
+	test -d win || rm -rf win
+	mkdir -p win/bin/locales \
+		win/share/locale \
+		win/share/locale/{de,en_GB,es,fr}/LC_MESSAGES \
+		win/share/glib-2.0/schemas win/$(GDKPIXBUF)loaders
+	cp *.exe $(DLL) win/bin
+	cd ..; cp --parents tests/*/*{.exe,.exp,.tmp,win.xml} */win
+	cd ..; cp --parents manuals/*.pdf */win
+	cp @PREFIX@/$(GDKPIXBUF)loaders.cache win/$(GDKPIXBUF)
+	cp @PREFIX@/$(GDKPIXBUF)loaders/*.dll win/$(GDKPIXBUF)loaders
+	strip win/bin/*.{exe,dll} win/tests/*/*.exe win/$(GDKPIXBUF)loaders/*.dll
+	cd locales; cp --parents {$(ES),$(FR)}mpcotool.mo ../win/bin/locales
+	cp $(SHARE)glib-2.0/schemas/gschema{.dtd,s.compiled} \
+		win/share/glib-2.0/schemas
+	cd win/share; cp -r $(SHARE)icons .
+	cd win/share/locale; cp $(MOGB) $(GB); cp $(MOES) $(ES); cp $(MOFR) $(FR); \
+		cp $(MODE) $(DE); ln -s en_GB en_GB@UTF8; ln -s es es_ES@UTF8; \
