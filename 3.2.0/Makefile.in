@@ -102,7 +102,7 @@ mpcotoolbin: main.c $(OBJBIN)
 
 mpcotool@DLL@: main.c $(OBJBIN)
 	$(CC) $(CFLAGS) -shared -DEXTERNAL_LIBRARY=1 main.c $(OBJBIN) \
-		$(LDFLAGS) -o mpcotool@DLL@
+		$(LDFLAGS) -o libmpcotool@DLL@
 
 @MPCOTOOL@: main.c $(OBJGUI) @ICON@
 	$(CC) $(CFLAGS) @GTK_CFLAGS@ main.c $(OBJGUI) $(LDFLAGS) @GTK_LIBS@ \
