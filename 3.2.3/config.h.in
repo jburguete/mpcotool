@@ -1,0 +1,133 @@
+/*
+MPCOTool:
+The Multi-Purposes Calibration and Optimization Tool. A software to perform
+calibrations or optimizations of empirical parameters.
+
+AUTHORS: Javier Burguete and Borja Latorre.
+
+Copyright 2012-2016, AUTHORS.
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+	1. Redistributions of source code must retain the above copyright notice,
+		this list of conditions and the following disclaimer.
+
+	2. Redistributions in binary form must reproduce the above copyright notice,
+		this list of conditions and the following disclaimer in the
+		documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY AUTHORS ``AS IS'' AND ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+SHALL AUTHORS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+OF SUCH DAMAGE.
+*/
+
+/**
+ * \file config.h
+ * \brief Configuration header file.
+ * \authors Javier Burguete and Borja Latorre.
+ * \copyright Copyright 2012-2016, all rights reserved.
+ */
+#ifndef CONFIG__H
+#define CONFIG__H 1
+
+// Gettext simplification
+#define _(string) (gettext(string))
+
+// Array sizes
+
+#define MAX_NINPUTS 8
+  ///< Maximum number of input files in the simulator program.
+#define NALGORITHMS 3           ///< Number of stochastic algorithms.
+#define NDIRECTIONS 2           ///< Number of direction estimate methods.
+#define NNORMS 4                ///< Number of error norms.
+#define NPRECISIONS 15          ///< Number of precisions.
+
+// Default choices
+
+#define DEFAULT_PRECISION (NPRECISIONS - 1)     ///< Default precision digits.
+#define DEFAULT_RANDOM_SEED 7007        ///< Default pseudo-random numbers seed.
+#define DEFAULT_RELAXATION 1.   ///< Default relaxation parameter.
+
+// Interface labels
+
+#define LOCALE_DIR "locales"    ///< Locales directory.
+#define PROGRAM_INTERFACE "mpcotool"    ///< Name of the interface program.
+
+// Labels
+
+#define LABEL_ABSOLUTE_MINIMUM "absolute_minimum"
+  ///< absolute minimum label.
+#define LABEL_ABSOLUTE_MAXIMUM "absolute_maximum"
+  ///< absolute maximum label.
+#define LABEL_ADAPTATION "adaptation"   ///< adaption label.
+#define LABEL_ALGORITHM "algorithm"     ///< algoritm label.
+#define LABEL_OPTIMIZE "optimize"       ///< optimize label.
+#define LABEL_COORDINATES "coordinates" ///< coordinates label.
+#define LABEL_DIRECTION "direction"     ///< direction label.
+#define LABEL_EUCLIDIAN "euclidian"     ///< euclidian label.
+#define LABEL_EVALUATOR "evaluator"     ///< evaluator label.
+#define LABEL_EXPERIMENT "experiment"   ///< experiment label.
+#define LABEL_EXPERIMENTS "experiments" ///< experiment label.
+#define LABEL_GENETIC "genetic" ///< genetic label.
+#define LABEL_MINIMUM "minimum" ///< minimum label.
+#define LABEL_MAXIMUM "maximum" ///< maximum label.
+#define LABEL_MONTE_CARLO "Monte-Carlo" ///< Monte-Carlo label.
+#define LABEL_MUTATION "mutation"       ///< mutation label.
+#define LABEL_NAME "name"       ///< name label.
+#define LABEL_NBEST "nbest"     ///< nbest label.
+#define LABEL_NBITS "nbits"     ///< nbits label.
+#define LABEL_NESTIMATES "nestimates"   ///< nestimates label.
+#define LABEL_NGENERATIONS "ngenerations"       ///< ngenerations label.
+#define LABEL_NITERATIONS "niterations" ///< niterations label.
+#define LABEL_NORM "norm"       ///< norm label.
+#define LABEL_NPOPULATION "npopulation" ///< npopulation label.
+#define LABEL_NSIMULATIONS "nsimulations"       ///< nsimulations label.
+#define LABEL_NSTEPS "nsteps"   ///< nsteps label.
+#define LABEL_NSWEEPS "nsweeps" ///< nsweeps label.
+#define LABEL_P "p"             ///< p label.
+#define LABEL_PRECISION "precision"     ///< precision label.
+#define LABEL_RANDOM "random"   ///< random label.
+#define LABEL_RELAXATION "relaxation"   ///< relaxation label.
+#define LABEL_REPRODUCTION "reproduction"       ///< reproduction label.
+#define LABEL_RESULT_FILE "result_file" ///< result_file label.
+#define LABEL_SIMULATOR "simulator"     ///< simulator label.
+#define LABEL_SEED "seed"       ///< seed label.
+#define LABEL_STEP "step"       ///< step label.
+#define LABEL_SWEEP "sweep"     ///< sweep label.
+#define LABEL_TAXICAB "taxicab" ///< taxicab label.
+#define LABEL_TEMPLATE1 "template1"     ///< template1 label.
+#define LABEL_TEMPLATE2 "template2"     ///< template2 label.
+#define LABEL_TEMPLATE3 "template3"     ///< template3 label.
+#define LABEL_TEMPLATE4 "template4"     ///< template4 label.
+#define LABEL_TEMPLATE5 "template5"     ///< template5 label.
+#define LABEL_TEMPLATE6 "template6"     ///< template6 label.
+#define LABEL_TEMPLATE7 "template7"     ///< template7 label.
+#define LABEL_TEMPLATE8 "template8"     ///< template8 label.
+#define LABEL_THRESHOLD "threshold"     ///< threshold label.
+#define LABEL_TOLERANCE "tolerance"     ///< tolerance label.
+#define LABEL_VARIABLE "variable"       ///< variable label.
+#define LABEL_VARIABLES "variables"     ///< variables label.
+#define LABEL_VARIABLES_FILE "variables_file"   ///< variables label.
+#define LABEL_WEIGHT "weight"   ///< weight label.
+
+// Enumerations
+
+/**
+ * \enum INPUT_TYPE
+ * \brief Enum to define the input file types.
+ */
+enum INPUT_TYPE
+{
+  INPUT_TYPE_XML = 0,           ///< XML input file.
+  INPUT_TYPE_JSON = 1           ///< JSON input file.
+};
+
+#endif
