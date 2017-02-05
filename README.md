@@ -19,19 +19,19 @@ TOOLS AND LIBRARIES REQUIRED TO BUILD THE EXECUTABLE
 ----------------------------------------------------
 
 * [gcc](https://gcc.gnu.org) or [clang](http://clang.llvm.org) (to compile the
-source code)
+  source code)
 * [make](http://www.gnu.org/software/make) (to build the executable file)
 * [autoconf](http://www.gnu.org/software/autoconf) (to generate the Makefile in
-different operative systems)
+  different operative systems)
 * [automake](http://www.gnu.org/software/automake) (to check the operative
-system)
+  system)
 * [pkg-config](http://www.freedesktop.org/wiki/Software/pkg-config) (to find the
-libraries to compile)
+  libraries to compile)
 * [gsl](http://www.gnu.org/software/gsl) (to generate random numbers)
 * [libxml](http://xmlsoft.org) (to deal with XML files)
 * [glib](https://developer.gnome.org/glib) (extended utilities of C to work with
-data, lists, mapped files, regular expressions, using multicores in shared
-memory machines, ...)
+  data, lists, mapped files, regular expressions, using multicores in shared
+  memory machines, ...)
 * [json-glib](https://github.com/ebassi/json-glib) (to deal with JSON files)
 * [genetic](https://github.com/jburguete/genetic) (genetic algorithm)
 
@@ -39,12 +39,12 @@ OPTIONAL TOOLS AND LIBRARIES
 ----------------------------
 
 * [gettext](http://www.gnu.org/software/gettext) (to work with different
-locales)
+  locales)
 * [gtk+3](http://www.gtk.org) (to create the interactive GUI tool)
 * [openmpi](http://www.open-mpi.org) or [mpich](http://www.mpich.org) (to run in
-parallelized tasks on multiple computers)
+  parallelized tasks on multiple computers)
 * [doxygen](http://www.stack.nl/~dimitri/doxygen) (standard comments format to
-generate documentation)
+  generate documentation)
 * [latex](https://www.latex-project.org/) (to build the PDF manuals)
 
 FILES
@@ -203,18 +203,18 @@ USER INSTRUCTIONS
 Optional arguments are typed in square brackets.
 
 * Command line in sequential mode (where X is the number of threads to execute
-and S is a seed for the pseudo-random numbers generator):
+  and S is a seed for the pseudo-random numbers generator):
 > $ ./mpcotoolbin [-nthreads X] [-seed S] input_file.xml [result_file] [variables_file]
 
 * Command line in parallelized mode (where X is the number of threads to
-open for every node and S is a seed for the pseudo-random numbers generator):
+  open for every node and S is a seed for the pseudo-random numbers generator):
 > $ mpirun [MPI options] ./mpcotoolbin [-nthreads X] [-seed S] input_file.xml [result_file] [variables_file]
 
 * The syntax of the simulator has to be:
 > $ ./simulator_name input_file_1 [input_file_2] [input_file_3] [input_file_4] output_file
 
 * The syntax of the program to evaluate the objetive function has to be (where
-the first data in the results file has to be the objective function value):
+  the first data in the results file has to be the objective function value):
 > $ ./evaluator_name simulated_file data_file results_file
 
 * On UNIX type systems the GUI application can be open doing on a terminal:
@@ -242,18 +242,18 @@ with:
 * **simulator**: simulator executable file name.
 * **evaluator**: optional. When needed is the evaluator executable file name.
 * **seed**: optional. Seed of the pseudo-random numbers generator (default value
-is 7007).
-* **result_file**: optional. It is the name of the optime result file (default name
-is "result").
+  is 7007).
+* **result_file**: optional. It is the name of the optime result file (default 
+  name is "result").
 * **variables_file**: optional. It is the name of all simulated variables file
-(default name is "variables").
+  (default name is "variables").
 * **precision**: optional, defined for each variable. Number of precision digits
-to evaluate the variable. 0 apply for integer numbers (default value is 14).
+  to evaluate the variable. 0 apply for integer numbers (default value is 14).
 * **weight**: optional, defined for each experiment. Multiplies the objective
-value obtained for each experiment in the final objective function value
-(default value is 1).
+  value obtained for each experiment in the final objective function value
+  (default value is 1).
 * **threshold**: optional, to stop the simulations if objective function value
-less than the threshold is obtained (default value is 0).
+  less than the threshold is obtained (default value is 0).
 * **algorithm**: optimization algorithm type.
 * **norm**: error norm type.
 
@@ -261,7 +261,7 @@ Implemented algorithms are:
 
 * **sweep**: Sweep brute force algorithm. It requires for each variable:
   * *sweeps*: number of sweeps to generate for each variable in every
-  experiment. 
+    experiment. 
 
     The total number of simulations to run is:
 > (number of experiments) x (variable 1 number of sweeps) x ... x
@@ -274,20 +274,20 @@ Implemented algorithms are:
 > (number of experiments) x (number of simulations) x (number of iterations)
 
 * Both brute force algorithms can be iterated to improve convergence by using
-the following parameters:
+  the following parameters:
   * *nbest*: number of best simulations to calculate convergence interval on
-  next iteration (default 1).
+    next iteration (default 1).
   * *tolerance*: tolerance parameter to increase convergence interval (default
-  0).
+    0).
   * *niterations*: number of iterations (default 1).
 
      It multiplies the total number of simulations:
 > x (number of iterations)
 
 * Moreover, both brute force algorithms can be coupled with a direction search
-method by using:
+  method by using:
   * *direction*: method to estimate the optimal direction. Two options are
-  currently available:
+    currently available:
     * coordinates: coordinates descent method.
 
       It increases the total number of simulations by:
