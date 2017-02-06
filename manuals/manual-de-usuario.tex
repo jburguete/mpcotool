@@ -201,7 +201,7 @@ Una vez que todas las utilidades necesarias han sido instaladas, hay que
 descargar el código de Genetic. Luego puede compilarse haciendo en un terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > git clone https://github.com/jburguete/genetic.git
-> cd genetic/2.0.1
+> cd genetic/2.2.0
 > ./build
 \end{lstlisting}
 
@@ -209,8 +209,9 @@ El siguiente paso es descargar el código fuente de MPCOTool, enlazarlo con el
 de Genetic y compilar todo junto haciendo:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > git clone https://github.com/jburguete/mpcotool.git
-> cd mpcotool/3.2.3
-> ln -s ../../genetic/2.0.1 genetic
+> cd mpcotool/3.4.0
+> ln -s ../../genetic/2.2.0 genetic
+> ln -s genetic/libgenetic.so (o .dll en sistemas Windows)
 > ./build
 \end{lstlisting}
 
@@ -226,12 +227,12 @@ optimización estándar, hay que hacer (los ejecutables de test2, test3 y test4
 usan también la librería \emph{Genetic}):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > cd ../tests/test2
-> ln -s ../../../genetic/2.0.1 genetic
+> ln -s ../../../genetic/2.2.0/libgenetic.so (.dll en sistemas Windows)
 > cd ../test3
-> ln -s ../../../genetic/2.0.1 genetic
+> ln -s ../../../genetic/2.2.0/libgenetic.so (.dll en sistemas Windows)
 > cd ../test4
-> ln -s ../../../genetic/2.0.1 genetic
-> cd ../../3.2.3
+> ln -s ../../../genetic/2.2.0/libgenetic.so (.dll en sistemas Windows)
+> cd ../../3.4.0
 > make tests
 \end{lstlisting}
 
@@ -293,6 +294,39 @@ en un terminal:
 \end{lstlisting}
 
 \end{itemize}
+
+\section{Uso de MPCOTool como una librería externa}
+
+\emph{MPCOTool} se puede usar también como una librería externa haciendo:
+
+\begin{enumerate}
+
+\item Cópiese la librería dinámica (``libmpcotool.so'' en sistemas Unix o
+``libmpcotool.dll'' en sistemas Windows) a la ruta de su programa.
+
+\item Inclúyase la cabecera de la función en su código fuente:
+\begin{lstlisting}[language=c,basicstyle=\scriptsize]
+> extern int mpcotool (int argn, char **argc);
+\end{lstlisting}
+
+\item Constrúyase el fichero ejecutable de su programa incluyendo los flags del
+enlazador:
+\begin{lstlisting}[language=bash,basicstyle=\scriptsize]
+> $ gcc ... -L. -Wl,-rpath=. -lmpcotool ...
+\end{lstlisting}
+
+\item La llamada a esta función es equivalente a la orden en modo de línea de
+comandos (véase la sección anterior):
+	\begin{itemize}
+		\item argn: número de argumentos incluyendo el nombre del programa.
+		\item argc$[0]$: "mpcotool" (nombre del programa).
+		\item argc$[1]$: primer argumento de la línea de comandos.
+
+	  ...
+
+		\item argc$[argn-1]$: último argumento de la línea de comandos.
+	\end{itemize}
+\end{enumerate}
 
 \section{Aplicación con interfaz gráfica de usuario interactiva}
 

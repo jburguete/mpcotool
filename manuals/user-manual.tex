@@ -182,15 +182,16 @@ On FreeBSD 11.0, due to a wrong error in default gcc version, do in a terminal:
 Once all the tools installed, the Genetic source code must be downloaded and it must be compiled following on a terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > git clone https://github.com/jburguete/genetic.git
-> cd genetic/2.0.1
+> cd genetic/2.2.0
 > ./build
 \end{lstlisting}
 
 The following step is to download the source code MPCOTool, to link it with Genetic and compile together by means of:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > git clone https://github.com/jburguete/mpcotool.git
-> cd mpcotool/3.2.3
-> ln -s ../../genetic/2.0.1 genetic
+> cd mpcotool/3.4.0
+> ln -s ../../genetic/2.2.0 genetic
+> ln -s genetic/libgenetic.so (or .dll on Windows systems)
 > ./build
 \end{lstlisting}
 
@@ -205,12 +206,12 @@ functions, you have to do (the executable files of test2, test3 and test4 use
 also the \emph{Genetic} library):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > cd ../tests/test2
-> ln -s ../../../genetic/2.0.1 genetic
+> ln -s ../../../genetic/2.2.0/libgenetic.so (.dll on Windows systems)
 > cd ../test3
-> ln -s ../../../genetic/2.0.1 genetic
+> ln -s ../../../genetic/2.2.0/libgenetic.so (.dll on Windows systems)
 > cd ../test4
-> ln -s ../../../genetic/2.0.1 genetic
-> cd ../../3.2.3
+> ln -s ../../../genetic/2.2.0/libgenetic.so (.dll on Windows systems)
+> cd ../../3.4.0
 > make tests
 \end{lstlisting}
 
@@ -268,11 +269,43 @@ with the objective function value):
 
 \end{itemize}
 
+\section{Using MPCOTool as an external library}
+
+\emph{MPCOTool} can also be used as an external library by doing:
+
+\begin{enumerate}
+
+\item Copy the dynamic library ("libmpcotool.so" on Unix systems or
+"libmpcotool.dll" on Windows systems) to your program directory.
+
+\item Include the function header in your source code:
+\begin{lstlisting}[language=c,basicstyle=\scriptsize]
+> extern int mpcotool (int argn, char **argc);
+\end{lstlisting}
+
+\item Build the executable file with the linker flags:
+\begin{lstlisting}[language=bash,basicstyle=\scriptsize]
+> $ gcc ... -L. -Wl,-rpath=. -lmpcotool ...
+\end{lstlisting}
+
+\item Calling to this function is equivalent to command line order (see previous
+section):
+	\begin{itemize}
+		\item argn: number of arguments including the program name.
+		\item argc$[0]$: "mpcotool" (program name).
+		\item argc$[1]$: first command line argument.
+
+	  ...
+
+		\item argc$[argn-1]$: last command line argument.
+	\end{itemize}
+\end{enumerate}
+
 \section{Interactive graphical user interface application}
 
 An alternative form to execute the software is to perform the interactive
 graphical user interface application, called \emph{MPCOTool}. In this
-application the parallalization in multiple computers with OpenMPI or MPICH is
+application the parallelization in multiple computers with OpenMPI or MPICH is
 deactivated, it can be only used in command line execution. In the
 figure~\ref{FigWindow} a plot of the main window of this tool is represented.
 The main windows enable us to access to every variable, coefficient, algorithm

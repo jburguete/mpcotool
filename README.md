@@ -7,7 +7,7 @@ calibrations or optimizations of empirical parameters.
 VERSIONS
 --------
 
-* 3.2.3: Stable and recommended version.
+* 3.4.0: Stable and recommended version.
 
 AUTHORS
 -------
@@ -51,16 +51,16 @@ FILES
 -----
 
 The source code has to have the following files:
-* 3.2.3/configure.ac: configure generator.
-* 3.2.3/Makefile.in: Makefile generator.
-* 3.2.3/config.h.in: config header generator.
-* 3.2.3/mpcotool.c: main source code.
-* 3.2.3/mpcotool.h: main header code.
-* 3.2.3/mpcotool.ico: icon file.
-* 3.2.3/interface.h: interface header code.
-* 3.2.3/build: script to build all.
-* 3.2.3/logo.png: logo figure.
-* 3.2.3/Doxyfile: configuration file to generate doxygen documentation.
+* 3.4.0/configure.ac: configure generator.
+* 3.4.0/Makefile.in: Makefile generator.
+* 3.4.0/config.h.in: config header generator.
+* 3.4.0/mpcotool.c: main source code.
+* 3.4.0/mpcotool.h: main header code.
+* 3.4.0/mpcotool.ico: icon file.
+* 3.4.0/interface.h: interface header code.
+* 3.4.0/build: script to build all.
+* 3.4.0/logo.png: logo figure.
+* 3.4.0/Doxyfile: configuration file to generate doxygen documentation.
 * TODO: tasks to do.
 * README.md: this file.
 * license.md: license file.
@@ -102,9 +102,13 @@ a terminal:
 > $ git clone https://github.com/jburguete/mpcotool.git
 
 3. Link the latest genetic version to genetic:
-> $ cd mpcotool/3.2.3
+> $ cd mpcotool/3.4.0
 >
-> $ ln -s ../../genetic/2.0.1 genetic
+> $ ln -s ../../genetic/2.2.0 genetic
+> 
+> $ ln -s genetic/libgenetic.so
+  or in Windows systems:
+> $ ln -s genetic/libgenetic.dll
 
 4. Build doing on a terminal:
 > $ ./build
@@ -165,6 +169,30 @@ On servers or clusters, where no-GUI with MPI parallelization is desirable,
 replace the 4th step of the previous Debian 8 section by:
 > $ ./build_with_mpi
  
+Linking as an external library
+______________________________
+
+MPCOTool can also be used as an external library:
+
+1. First copy the dynamic library (libmpcotool.so on Unix systems or
+  libmpcotool.dll on Windows systems) to your program directory.
+
+2. Include the function header in your source code:
+> extern int mpcotool (int argn, char **argc);
+
+3. Build the executable file with the linker flags:
+> $ gcc -L. -Wl,-rpath=. -lmpcotool ...
+
+4. Calling to this function is equivalent to command line order (see next 
+  chapter USER INSTRUCTIONS):
+  * argn: number of arguments
+  * argc[0]: "mpcotool"
+  * argc[1]: first command line argument.
+
+  ...
+
+  * argc[argn-1]: last argument.
+
 MAKING MANUALS INSTRUCTIONS
 ---------------------------
 
@@ -179,7 +207,7 @@ MAKING TESTS INSTRUCTIONS
 In order to build the tests follow the next instructions:
 
 1. Link some tests that needs genetic library doing in a terminal (assuming that
-you are in the directory mpcotool/3.2.3):
+you are in the directory mpcotool/3.4.0):
 > $ cd ../tests/test2
 >
 > $ ln -s ../../../genetic/2.0.1 genetic
@@ -193,7 +221,7 @@ you are in the directory mpcotool/3.2.3):
 > $ ln -s ../../../genetic/2.0.1 genetic
 
 2. Build all tests doing in the same terminal:
-> $ cd ../../3.2.3
+> $ cd ../../3.4.0
 >
 > $ make tests
 

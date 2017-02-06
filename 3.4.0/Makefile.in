@@ -7,6 +7,7 @@ LDFLAGS = @LDFLAGS@ @LIBS@ @GSL_LIBS@ @XML_LIBS@ @GLIB_LIBS@ @JSON_LIBS@ \
 SRC = genetic/entity.c genetic/population.c genetic/reproduction.c \
 	genetic/selection.c genetic/evolution.c genetic/genetic.c utils.c \
 	experiment.c variable.c input.c optimize.c interface.c main.c
+OBJLIB = experiment.o variable.o input.o optimize.o utilsbin.o
 OBJ = genetic/entity.o genetic/population.o genetic/reproduction.o \
 	genetic/selection.o genetic/evolution.o genetic/genetic.o experiment.o \
 	variable.o input.o optimize.o
@@ -101,8 +102,8 @@ mpcotoolbin: main.c $(OBJBIN)
 	$(CC) $(CFLAGS) main.c $(OBJBIN) $(LDFLAGS) -o mpcotoolbin
 
 libmpcotool@DLL@: main.c $(OBJBIN)
-	$(CC) $(CFLAGS) -shared -DEXTERNAL_LIBRARY=1 main.c $(OBJBIN) \
-		$(LDFLAGS) -o libmpcotool@DLL@
+	$(CC) $(CFLAGS) -shared -DEXTERNAL_LIBRARY=1 main.c $(OBJLIB) \
+		$(LDFLAG) -L. -Wl,-rpath=. -lgenetic -o libmpcotool@DLL@
 
 @MPCOTOOL@: main.c $(OBJGUI) @ICON@
 	$(CC) $(CFLAGS) @GTK_CFLAGS@ main.c $(OBJGUI) $(LDFLAGS) @GTK_LIBS@ \
