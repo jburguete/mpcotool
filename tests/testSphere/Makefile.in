@@ -1,4 +1,4 @@
 CC = @CC@ @ARCH@ @LTO@ @STD@ @WINCFLAGS@ -O3 -lm #-pg 
 
-Sphere: Sphere.c Makefile
-	$(CC) Sphere.c -lm -o Sphere
+Sphere@EXE@: Sphere.c Makefile
+	$(CC) Sphere.c -lm -o Sphere@EXE@

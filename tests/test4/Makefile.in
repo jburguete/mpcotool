@@ -3,5 +3,6 @@ CFLAGS = -Wall -O3 @CPPFLAGS@ @GSL_CFLAGS@ @XML_CFLAGS@ @GLIB_CFLAGS@ \
 LIBS = @LDFLAGS@ @LIBS@ @GSL_LIBS@ @XML_LIBS@ @GLIB_LIBS@ @GTHREAD_LIBS@
 CC = @CC@ @ARCH@ @LTO@ @STD@ @MPI@ @WINCFLAGS@ #-pg 
 
-simulator: simulator.c libgenetic@SO@ Makefile
-	$(CC) $(CFLAGS) simulator.c $(LIBS) -L. -Wl,-rpath=. -lgenetic -o simulator
+simulator@EXE@: simulator.c libgenetic@SO@ Makefile
+	$(CC) $(CFLAGS) simulator.c $(LIBS) -L. -Wl,-rpath=. -lgenetic \
+		-o simulator@EXE@

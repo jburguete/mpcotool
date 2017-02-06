@@ -1,10 +1,9 @@
 CC = @CC@ @ARCH@ @LTO@ @STD@ @WINCFLAGS@ -O3 -lm #-pg 
 
-all: simulator evaluator
+all: simulator@EXE@ evaluator@EXE@
 
-simulator: simulator.c Makefile
-	$(CC) simulator.c -lm -o simulator
+simulator@EXE@: simulator.c Makefile
+	$(CC) simulator.c -lm -o simulator@EXE@
 
-evaluator: evaluator.c Makefile
-	$(CC) evaluator.c -lm -o evaluator
-
+evaluator@EXE@: evaluator.c Makefile
+	$(CC) evaluator.c -lm -o evaluator@EXE@

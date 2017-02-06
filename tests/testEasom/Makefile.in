@@ -1,4 +1,4 @@
 CC = @CC@ @ARCH@ @LTO@ @STD@ @WINCFLAGS@ -O3 -lm #-pg 
 
-Easom: Easom.c Makefile
-	$(CC) Easom.c -lm -o Easom
+Easom@EXE@: Easom.c Makefile
+	$(CC) Easom.c -lm -o Easom@EXE@

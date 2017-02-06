@@ -39,9 +39,9 @@ M1 = $(MDIR)user-manual.pdf
 M2 = $(MDIR)manual-de-usuario.pdf
 MANUALS = $(M1) $(M2) $(MDIR)reference-manual.pdf
 
-all: mpcotoolbin \
+all: mpcotoolbin@EXE@ \
 	libmpcotool@SO@ \
-	@MPCOTOOL@ \
+	@MPCOTOOL@@EXE@ \
 	locales/$(DE)mpcotool.mo \
 	locales/$(ES)mpcotool.mo \
 	locales/$(FR)mpcotool.mo
@@ -101,16 +101,16 @@ interface.o: interface.c interface.h optimize.h input.h variable.h \
 	experiment.h utils.h config.h $(DEP)
 	$(CC) -c $(CFLAGS) @GTK_CFLAGS@ interface.c -o interface.o -DHAVE_GTK=1
 
-mpcotoolbin: main.c $(OBJBIN)
-	$(CC) $(CFLAGS) main.c $(OBJBIN) $(LDFLAGS) -o mpcotoolbin
+mpcotoolbin@EXE@: main.c $(OBJBIN)
+	$(CC) $(CFLAGS) main.c $(OBJBIN) $(LDFLAGS) -o mpcotoolbin@EXE@
 
 libmpcotool@SO@: main.c $(OBJBIN)
 	$(CC) $(CFLAGS) -shared -DEXTERNAL_LIBRARY=1 main.c $(OBJLIB) \
 		$(LDFLAG) -L. -Wl,-rpath=. -lgenetic -o libmpcotool@SO@
 
-@MPCOTOOL@: main.c $(OBJGUI) @ICON@
+@MPCOTOOL@@EXE@: main.c $(OBJGUI) @ICON@
 	$(CC) $(CFLAGS) @GTK_CFLAGS@ main.c $(OBJGUI) $(LDFLAGS) @GTK_LIBS@ \
-		-o mpcotool -DHAVE_GTK=1
+		-o mpcotool@EXE@ -DHAVE_GTK=1
 
 locales/mpcotool.pot: @MPCOTOOL@
 	xgettext -k_ -d mpcotool -o locales/mpcotool.pot --from-code=UTF-8 $(SRC)

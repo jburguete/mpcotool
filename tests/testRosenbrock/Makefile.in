@@ -1,4 +1,4 @@
 CC = @CC@ @ARCH@ @LTO@ @STD@ @WINCFLAGS@ -O3 -lm #-pg 
 
-Rosenbrock: Rosenbrock.c Makefile
-	$(CC) Rosenbrock.c -lm -o Rosenbrock
+Rosenbrock@EXE@: Rosenbrock.c Makefile
+	$(CC) Rosenbrock.c -lm -o Rosenbrock@EXE@
