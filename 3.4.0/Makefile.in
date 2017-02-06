@@ -8,9 +8,9 @@ SRC = genetic/entity.c genetic/population.c genetic/reproduction.c \
 	genetic/selection.c genetic/evolution.c genetic/genetic.c utils.c \
 	experiment.c variable.c input.c optimize.c interface.c main.c
 OBJLIB = experiment.o variable.o input.o optimize.o utilsbin.o
-OBJ = genetic/entity.o genetic/population.o genetic/reproduction.o \
-	genetic/selection.o genetic/evolution.o genetic/genetic.o experiment.o \
-	variable.o input.o optimize.o
+GENETICOBJ = genetic/entity.o genetic/population.o genetic/reproduction.o \
+	genetic/selection.o genetic/evolution.o genetic/genetic.o 
+OBJ = $(GENETICOBJ) experiment.o variable.o input.o optimize.o
 OBJBIN = utilsbin.o $(OBJ)
 OBJGUI = interface.o utils.o $(OBJ) @ICON@
 DEP = Makefile
@@ -40,7 +40,7 @@ M2 = $(MDIR)manual-de-usuario.pdf
 MANUALS = $(M1) $(M2) $(MDIR)reference-manual.pdf
 
 all: mpcotoolbin \
-	libmpcotool@DLL@ \
+	libmpcotool@SO@ \
 	@MPCOTOOL@ \
 	locales/$(DE)mpcotool.mo \
 	locales/$(ES)mpcotool.mo \
@@ -75,6 +75,9 @@ genetic/genetic.o: genetic/genetic.c genetic/genetic.h genetic/evolution.h \
 	genetic/entity.h genetic/bits.h $(DEP)
 	$(CC) $(CFLAGS) -c genetic/genetic.c -o genetic/genetic.o
 
+libgenetic@SO@: $(GENETICOBJ)
+	$(CC) -shared $(GENETICOBJ) -o $(libgenetic) $(LDFLAGS)
+
 utilsbin.o: utils.c utils.h config.h $(DEP)
 	$(CC) -c $(CFLAGS) utils.c -o utilsbin.o
 
@@ -101,9 +104,9 @@ interface.o: interface.c interface.h optimize.h input.h variable.h \
 mpcotoolbin: main.c $(OBJBIN)
 	$(CC) $(CFLAGS) main.c $(OBJBIN) $(LDFLAGS) -o mpcotoolbin
 
-libmpcotool@DLL@: main.c $(OBJBIN)
+libmpcotool@SO@: main.c $(OBJBIN)
 	$(CC) $(CFLAGS) -shared -DEXTERNAL_LIBRARY=1 main.c $(OBJLIB) \
-		$(LDFLAG) -L. -Wl,-rpath=. -lgenetic -o libmpcotool@DLL@
+		$(LDFLAG) -L. -Wl,-rpath=. -lgenetic -o libmpcotool@SO@
 
 @MPCOTOOL@: main.c $(OBJGUI) @ICON@
 	$(CC) $(CFLAGS) @GTK_CFLAGS@ main.c $(OBJGUI) $(LDFLAGS) @GTK_LIBS@ \
@@ -283,7 +286,8 @@ windist: mpcotool.exe $(DLL) $(MO)
 	cd ..; cp --parents manuals/*.pdf */@WIN@
 	cp @PREFIX@/$(GDKPIXBUF)loaders.cache @WIN@/$(GDKPIXBUF)
 	cp @PREFIX@/$(GDKPIXBUF)loaders/*.dll @WIN@/$(GDKPIXBUF)loaders
-	strip @WIN@/bin/*.{exe,dll} @WIN@/tests/*/*.exe @WIN@/$(GDKPIXBUF)loaders/*.dll
+	strip @WIN@/bin/*.{exe,dll} @WIN@/tests/*/*.exe \
+		@WIN@/$(GDKPIXBUF)loaders/*.dll
 	cd locales; cp --parents {$(ES),$(FR)}mpcotool.mo ../@WIN@/bin/locales
 	cp $(SHARE)glib-2.0/schemas/gschema{.dtd,s.compiled} \
 		@WIN@/share/glib-2.0/schemas
@@ -295,11 +299,11 @@ windist: mpcotool.exe $(DLL) $(MO)
 	mv ../mpcotool-check-errors.zip @WIN@/src
 	cd ..; zip mpcotool-tests-@WIN@ $(TT1)*.exe $(TT1)*.c $(TT1)*.in \
 		$(TT1)*.exp $(TT1)*.tmp $(TT1)test*.xml $(TT1)test*.json \
-		$(TT2)*.exe $(TT2)*.c $(TT2)*.in $(TT2)*.exp $(TT2)*.tmp \
+		$(TT2)*.exe $(TT2)*.dll $(TT2)*.c $(TT2)*.in $(TT2)*.exp $(TT2)*.tmp \
 			$(TT2)test*.xml \
-		$(TT3)*.exe $(TT3)*.c $(TT3)*.in $(TT3)*.exp $(TT3)*.tmp \
+		$(TT3)*.exe $(TT3)*.dll $(TT3)*.c $(TT3)*.in $(TT3)*.exp $(TT3)*.tmp \
 			$(TT3)test*.xml \
-		$(TT4)*.exe $(TT4)*.c $(TT4)*.in $(TT4)*.exp $(TT4)*.tmp \
+		$(TT4)*.exe $(TT4)*.dll $(TT4)*.c $(TT4)*.in $(TT4)*.exp $(TT4)*.tmp \
 			$(TT4)test*.xml \
 		$(TT5)*.exe $(TT5)*.c $(TT5)*.in $(TT5)*.exp $(TT5)*.tmp \
 			$(TT5)test*.xml \

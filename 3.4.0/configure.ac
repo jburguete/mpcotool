@@ -44,9 +44,9 @@ AC_LANG([C])
 PKG_PROG_PKG_CONFIG
 if test $win = 1; then
 	AC_CHECK_TOOL(WINDRES, windres)
-	AC_SUBST(DLL, ".dll")
+	AC_SUBST(SO, ".dll")
 else
-	AC_SUBST(DLL, ".so")
+	AC_SUBST(SO, ".so")
 fi
 
 # Checking MPI
