@@ -107,6 +107,7 @@ a terminal:
 > $ ln -s ../../genetic/2.2.0 genetic
 > 
 > $ ln -s genetic/libgenetic.so
+
   or in Windows systems:
 > $ ln -s genetic/libgenetic.dll
 
@@ -174,14 +175,16 @@ ______________________________
 
 MPCOTool can also be used as an external library:
 
-1. First copy the dynamic library (libmpcotool.so on Unix systems or
-  libmpcotool.dll on Windows systems) to your program directory.
+1. First copy the dynamic libraries (libmpcotool.so and libgenetic.so on Unix 
+  systems or libmpcotool.dll and libgenetic.dll on Windows systems) to your 
+  program directory.
 
 2. Include the function header in your source code:
 > extern int mpcotool (int argn, char **argc);
 
-3. Build the executable file with the linker flags:
-> $ gcc -L. -Wl,-rpath=. -lmpcotool ...
+3. Build the executable file with the linker and compiler flags:
+> $ gcc -L. -Wl,-rpath=. -lmpcotool -lgenetic ...
+> \`pkg-config --cflags --libs gsl glib-2.0 json-glib-1.0 ...\'
 
 4. Calling to this function is equivalent to command line order (see next 
   chapter USER INSTRUCTIONS):
@@ -210,15 +213,15 @@ In order to build the tests follow the next instructions:
 you are in the directory mpcotool/3.4.0):
 > $ cd ../tests/test2
 >
-> $ ln -s ../../../genetic/2.0.1 genetic
+> $ ln -s ../../../genetic/2.2.0/libgenetic.so (or .dll on Windows systems)
 >
 > $ cd ../test3
 >
-> $ ln -s ../../../genetic/2.0.1 genetic
+> $ ln -s ../../../genetic/2.2.0/libgenetic.so (or .dll on Windows systems)
 >
 > $ cd ../test4
 >
-> $ ln -s ../../../genetic/2.0.1 genetic
+> $ ln -s ../../../genetic/2.2.0/libgenetic.so (or .dll on Windows systems)
 
 2. Build all tests doing in the same terminal:
 > $ cd ../../3.4.0
@@ -232,14 +235,17 @@ Optional arguments are typed in square brackets.
 
 * Command line in sequential mode (where X is the number of threads to execute
   and S is a seed for the pseudo-random numbers generator):
-> $ ./mpcotoolbin [-nthreads X] [-seed S] input_file.xml [result_file] [variables_file]
+> $ ./mpcotoolbin [-nthreads X] [-seed S] input_file.xml [result_file]
+> [variables_file]
 
 * Command line in parallelized mode (where X is the number of threads to
   open for every node and S is a seed for the pseudo-random numbers generator):
-> $ mpirun [MPI options] ./mpcotoolbin [-nthreads X] [-seed S] input_file.xml [result_file] [variables_file]
+> $ mpirun [MPI options] ./mpcotoolbin [-nthreads X] [-seed S] input_file.xml
+> [result_file] [variables_file]
 
 * The syntax of the simulator has to be:
-> $ ./simulator_name input_file_1 [input_file_2] [input_file_3] [input_file_4] output_file
+> $ ./simulator_name input_file_1 [input_file_2] [input_file_3] [input_file_4]
+> output_file
 
 * The syntax of the program to evaluate the objetive function has to be (where
   the first data in the results file has to be the objective function value):
