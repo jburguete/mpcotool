@@ -106,7 +106,7 @@ mpcotoolbin@EXE@: main.c $(OBJBIN)
 
 libmpcotool@SO@: main.c $(OBJBIN)
 	$(CC) $(CFLAGS) -shared -DEXTERNAL_LIBRARY=1 main.c $(OBJLIB) \
-		$(LDFLAG) -L. -Wl,-rpath=. -lgenetic -o libmpcotool@SO@
+		$(LDFLAGS) -L. -Wl,-rpath=. -lgenetic -o libmpcotool@SO@
 
 @MPCOTOOL@@EXE@: main.c $(OBJGUI) @ICON@
 	$(CC) $(CFLAGS) @GTK_CFLAGS@ main.c $(OBJGUI) $(LDFLAGS) @GTK_LIBS@ \

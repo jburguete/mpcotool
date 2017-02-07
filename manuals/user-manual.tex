@@ -182,7 +182,7 @@ On FreeBSD 11.0, due to a wrong error in default gcc version, do in a terminal:
 Once all the tools installed, the Genetic source code must be downloaded and it must be compiled following on a terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > git clone https://github.com/jburguete/genetic.git
-> cd genetic/2.2.0
+> cd genetic/2.2.1
 > ./build
 \end{lstlisting}
 
@@ -190,7 +190,7 @@ The following step is to download the source code MPCOTool, to link it with Gene
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > git clone https://github.com/jburguete/mpcotool.git
 > cd mpcotool/3.4.0
-> ln -s ../../genetic/2.2.0 genetic
+> ln -s ../../genetic/2.2.1 genetic
 > ln -s genetic/libgenetic.so (or .dll on Windows systems)
 > ./build
 \end{lstlisting}
@@ -206,11 +206,11 @@ functions, you have to do (the executable files of test2, test3 and test4 use
 also the \emph{Genetic} library):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > cd ../tests/test2
-> ln -s ../../../genetic/2.2.0/libgenetic.so (.dll on Windows systems)
+> ln -s ../../../genetic/2.2.1/libgenetic.so (.dll on Windows systems)
 > cd ../test3
-> ln -s ../../../genetic/2.2.0/libgenetic.so (.dll on Windows systems)
+> ln -s ../../../genetic/2.2.1/libgenetic.so (.dll on Windows systems)
 > cd ../test4
-> ln -s ../../../genetic/2.2.0/libgenetic.so (.dll on Windows systems)
+> ln -s ../../../genetic/2.2.1/libgenetic.so (.dll on Windows systems)
 > cd ../../3.4.0
 > make tests
 \end{lstlisting}
