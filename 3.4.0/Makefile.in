@@ -282,8 +282,8 @@ windist: mpcotool.exe $(DLL) $(MO)
 		@WIN@/share/locale/{de,en_GB,es,fr}/LC_MESSAGES \
 		@WIN@/share/glib-2.0/schemas @WIN@/$(GDKPIXBUF)loaders @WIN@/src
 	cp *.exe *.dll $(DLL) @WIN@/bin
-	cd ..; cp --parents tests/*/*{.exe,.exp,.tmp,win.xml} 3.4.0/@WIN@
-	cd ..; cp --parents manuals/*.pdf 3.4.0/@WIN@
+	cd ..; cp --parents tests/*/*{.exe,.exp,.tmp,win.xml} @PACKAGE_VERSION@/@WIN@
+	cd ..; cp --parents manuals/*.pdf @PACKAGE_VERSION@/@WIN@
 	cp @PREFIX@/$(GDKPIXBUF)loaders.cache @WIN@/$(GDKPIXBUF)
 	cp @PREFIX@/$(GDKPIXBUF)loaders/*.dll @WIN@/$(GDKPIXBUF)loaders
 	strip @WIN@/bin/*.{exe,dll} @WIN@/tests/*/*.exe \
@@ -318,8 +318,8 @@ windist: mpcotool.exe $(DLL) $(MO)
 	zip mpcotool-sources-@PACKAGE_VERSION@.zip *.c *.h *.in *.ac *.ico *.rc \
 		Doxyfile
 	mv mpcotool-sources-@PACKAGE_VERSION@.zip @WIN@/src
-	zip genetic-sources genetic/*.c genetic/*.h
-	mv genetic-sources.zip @WIN@/src
+	zip genetic-sources-2.2.1 genetic/*.c genetic/*.h
+	mv genetic-sources-2.2.1.zip @WIN@/src
 	zip @WIN@/src/mpcotool-manuals ../manuals/*.pdf
 	zip -r @WIN@/src/mpcotool-binaries-@WIN@-@PACKAGE_VERSION@.zip @WIN@/bin \
 		@WIN@/lib @WIN@/share
