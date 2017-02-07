@@ -282,8 +282,8 @@ windist: mpcotool.exe $(DLL) $(MO)
 		@WIN@/share/locale/{de,en_GB,es,fr}/LC_MESSAGES \
 		@WIN@/share/glib-2.0/schemas @WIN@/$(GDKPIXBUF)loaders @WIN@/src
 	cp *.exe $(DLL) @WIN@/bin
-	cd ..; cp --parents tests/*/*{.exe,.exp,.tmp,win.xml} */@WIN@
-	cd ..; cp --parents manuals/*.pdf */@WIN@
+	cd ..; cp --parents tests/*/*{.exe,.exp,.tmp,win.xml} @WIN@
+	cd ..; cp --parents manuals/*.pdf @WIN@
 	cp @PREFIX@/$(GDKPIXBUF)loaders.cache @WIN@/$(GDKPIXBUF)
 	cp @PREFIX@/$(GDKPIXBUF)loaders/*.dll @WIN@/$(GDKPIXBUF)loaders
 	strip @WIN@/bin/*.{exe,dll} @WIN@/tests/*/*.exe \
