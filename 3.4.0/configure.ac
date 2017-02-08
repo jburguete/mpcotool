@@ -73,10 +73,23 @@ if test "x$with_mpi" = "xyes"; then
 fi
 	
 # Checks for libraries
-if test -d "genetic"; then
-	AC_MSG_NOTICE([genetic library installed])
+if test -f "genetic/genetic.h"; then
+	AC_MSG_NOTICE([genetic header installed])
 else
-	AC_MSG_ERROR([genetic library not installed])
+	AC_MSG_ERROR([genetic header not installed])
+fi
+if test $win = 0; then
+	if test -x "libgenetic.so"; then
+		AC_MSG_NOTICE([genetic library installed])
+	else
+		AC_MSG_ERROR([genetic library not installed])
+	fi
+else
+	if test -x "libgenetic.dll"; then
+		AC_MSG_NOTICE([genetic library installed])
+	else
+		AC_MSG_ERROR([genetic library not installed])
+	fi
 fi
 AC_SEARCH_LIBS([sqrt], [m])
 PKG_CHECK_MODULES([GSL], [gsl])
