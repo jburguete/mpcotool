@@ -5,7 +5,7 @@ calibrations or optimizations of empirical parameters.
 
 AUTHORS: Javier Burguete and Borja Latorre.
 
-Copyright 2012-2016, AUTHORS.
+Copyright 2012-2017, AUTHORS.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -33,7 +33,7 @@ OF SUCH DAMAGE.
  * \file utils.h
  * \brief Header file to define some useful functions.
  * \authors Javier Burguete.
- * \copyright Copyright 2012-2016, all rights reserved.
+ * \copyright Copyright 2012-2017, all rights reserved.
  */
 #ifndef UTILS__H
 #define UTILS__H 1

@@ -5,7 +5,7 @@ calibrations or optimizations of empirical parameters.
 
 AUTHORS: Javier Burguete and Borja Latorre.
 
-Copyright 2012-2016, AUTHORS.
+Copyright 2012-2017, AUTHORS.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -33,7 +33,7 @@ OF SUCH DAMAGE.
  * \file interface.c
  * \brief Source file to define the graphical interface functions.
  * \authors Javier Burguete and Borja Latorre.
- * \copyright Copyright 2012-2016, all rights reserved.
+ * \copyright Copyright 2012-2017, all rights reserved.
  */
 #define _GNU_SOURCE
 #include "config.h"
@@ -1079,7 +1079,7 @@ window_about ()
      "(english, french and spanish)\n"
      "Uğur Çayoğlu (german)",
      "version", "3.4.0",
-     "copyright", "Copyright 2012-2016 Javier Burguete Tolosa",
+     "copyright", "Copyright 2012-2017 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/mpcotool",
      "license-type", GTK_LICENSE_BSD, NULL);
