@@ -7,7 +7,7 @@ LDFLAGS = @LDFLAGS@ @LIBS@ @GSL_LIBS@ @XML_LIBS@ @GLIB_LIBS@ @JSON_LIBS@ \
 SRC = genetic/entity.c genetic/population.c genetic/reproduction.c \
 	genetic/selection.c genetic/evolution.c genetic/genetic.c utils.c \
 	experiment.c variable.c input.c optimize.c interface.c mpcotool.c main.c
-OBJLIB = experiment.o variable.o input.o optimize.o utilsbin.o
+OBJLIB = mpcotoolbin.o experiment.o variable.o input.o optimize.o utilsbin.o
 GENETICOBJ = genetic/entity.o genetic/population.o genetic/reproduction.o \
 	genetic/selection.o genetic/evolution.o genetic/genetic.o 
 OBJ = $(GENETICOBJ) experiment.o variable.o input.o optimize.o
