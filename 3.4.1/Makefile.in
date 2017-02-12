@@ -1,18 +1,18 @@
 CC = @CC@ @ARCH@ @LTO@ @STD@
-CFLAGS = -g -Wall -O3 -fPIC @CPPFLAGS@ @GSL_CFLAGS@ @XML_CFLAGS@ @GLIB_CFLAGS@ \
-	@JSON_CFLAGS@ @GTHREAD_CFLAGS@ @MPI@
+CFLAGS = -g -pedantic -Wall -Wextra -O3 -fPIC @CPPFLAGS@ @GSL_CFLAGS@ \
+	@XML_CFLAGS@ @GLIB_CFLAGS@ @JSON_CFLAGS@ @GTHREAD_CFLAGS@ @MPI@
 LDFLAGS = @LDFLAGS@ @LIBS@ @GSL_LIBS@ @XML_LIBS@ @GLIB_LIBS@ @JSON_LIBS@ \
 	@GTHREAD_LIBS@
 
 SRC = genetic/entity.c genetic/population.c genetic/reproduction.c \
 	genetic/selection.c genetic/evolution.c genetic/genetic.c utils.c \
-	experiment.c variable.c input.c optimize.c interface.c main.c
+	experiment.c variable.c input.c optimize.c interface.c mpcotool.c main.c
 OBJLIB = experiment.o variable.o input.o optimize.o utilsbin.o
 GENETICOBJ = genetic/entity.o genetic/population.o genetic/reproduction.o \
 	genetic/selection.o genetic/evolution.o genetic/genetic.o 
 OBJ = $(GENETICOBJ) experiment.o variable.o input.o optimize.o
-OBJBIN = utilsbin.o $(OBJ)
-OBJGUI = interface.o utils.o $(OBJ) @ICON@
+OBJBIN = mpcotoolbin.o utilsbin.o $(OBJ)
+OBJGUI = mpcotool.o interface.o utils.o $(OBJ) @ICON@
 DEP = Makefile
 DE = de/LC_MESSAGES/
 ES = es/LC_MESSAGES/
@@ -101,6 +101,14 @@ interface.o: interface.c interface.h optimize.h input.h variable.h \
 	experiment.h utils.h config.h $(DEP)
 	$(CC) -c $(CFLAGS) @GTK_CFLAGS@ interface.c -o interface.o -DHAVE_GTK=1
 
+mpcotoolbin.o: mpcotool.c mpcotool.h optimize.h input.h variable.h \
+	experiment.h utils.h config.h $(DEP)
+	$(CC) -c $(CFLAGS) mpcotool.c -o mpcotoolbin.o
+
+mpcotool.o: mpcotool.c mpcotool.h interface.h optimize.h input.h variable.h \
+	experiment.h utils.h config.h $(DEP)
+	$(CC) -c $(CFLAGS) @GTK_CFLAGS@ mpcotool.c -o mpcotool.o -DHAVE_GTK=1
+
 mpcotoolbin@EXE@: main.c $(OBJBIN)
 	$(CC) $(CFLAGS) main.c $(OBJBIN) $(LDFLAGS) -o mpcotoolbin@EXE@
 
@@ -112,7 +120,7 @@ libmpcotool@SO@: main.c $(OBJBIN)
 	$(CC) $(CFLAGS) @GTK_CFLAGS@ main.c $(OBJGUI) $(LDFLAGS) @GTK_LIBS@ \
 		-o mpcotool@EXE@ -DHAVE_GTK=1
 
-locales/mpcotool.pot: @MPCOTOOL@
+locales/mpcotool.pot: $(SRC) Makefile
 	xgettext -k_ -d mpcotool -o locales/mpcotool.pot --from-code=UTF-8 $(SRC)
 
 locales/$(DE)mpcotool.po: locales/mpcotool.pot
