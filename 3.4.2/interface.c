@@ -418,7 +418,7 @@ input_save_json (JsonGenerator * generator)
   unsigned int i, j;
   char *buffer;
   JsonNode *node, *child;
-  JsonObject *object, *object2;
+  JsonObject *object;
   JsonArray *array;
   GFile *file, *file2;
 
@@ -506,13 +506,13 @@ input_save_json (JsonGenerator * generator)
     {
       child = json_node_new (JSON_NODE_OBJECT);
       object = json_node_get_object (child);
-      json_object_set_string_member (object2, LABEL_NAME,
+      json_object_set_string_member (object, LABEL_NAME,
                                      input->experiment[i].name);
       if (input->experiment[i].weight != 1.)
-        json_object_set_float (object2, LABEL_WEIGHT,
+        json_object_set_float (object, LABEL_WEIGHT,
                                input->experiment[i].weight);
       for (j = 0; j < input->experiment->ninputs; ++j)
-        json_object_set_string_member (object2, template[j],
+        json_object_set_string_member (object, template[j],
                                        input->experiment[i].template[j]);
       json_array_add_element (array, child);
     }
@@ -524,26 +524,26 @@ input_save_json (JsonGenerator * generator)
     {
       child = json_node_new (JSON_NODE_OBJECT);
       object = json_node_get_object (child);
-      json_object_set_string_member (object2, LABEL_NAME,
+      json_object_set_string_member (object, LABEL_NAME,
                                      input->variable[i].name);
-      json_object_set_float (object2, LABEL_MINIMUM,
+      json_object_set_float (object, LABEL_MINIMUM,
                              input->variable[i].rangemin);
       if (input->variable[i].rangeminabs != -G_MAXDOUBLE)
-        json_object_set_float (object2, LABEL_ABSOLUTE_MINIMUM,
+        json_object_set_float (object, LABEL_ABSOLUTE_MINIMUM,
                                input->variable[i].rangeminabs);
-      json_object_set_float (object2, LABEL_MAXIMUM,
+      json_object_set_float (object, LABEL_MAXIMUM,
                              input->variable[i].rangemax);
       if (input->variable[i].rangemaxabs != G_MAXDOUBLE)
-        json_object_set_float (object2, LABEL_ABSOLUTE_MAXIMUM,
+        json_object_set_float (object, LABEL_ABSOLUTE_MAXIMUM,
                                input->variable[i].rangemaxabs);
       if (input->variable[i].precision != DEFAULT_PRECISION)
-        json_object_set_uint (object2, LABEL_PRECISION,
+        json_object_set_uint (object, LABEL_PRECISION,
                               input->variable[i].precision);
       if (input->algorithm == ALGORITHM_SWEEP)
-        json_object_set_uint (object2, LABEL_NSWEEPS,
+        json_object_set_uint (object, LABEL_NSWEEPS,
                               input->variable[i].nsweeps);
       else if (input->algorithm == ALGORITHM_GENETIC)
-        json_object_set_uint (object2, LABEL_NBITS, input->variable[i].nbits);
+        json_object_set_uint (object, LABEL_NBITS, input->variable[i].nbits);
       if (input->nsteps)
         json_object_set_float (object, LABEL_STEP, input->variable[i].step);
       json_array_add_element (array, child);
@@ -1078,7 +1078,7 @@ window_about ()
      "Javier Burguete Tolosa <jburguete@eead.csic.es> "
      "(english, french and spanish)\n"
      "Uğur Çayoğlu (german)",
-     "version", "3.4.1",
+     "version", "3.4.2",
      "copyright", "Copyright 2012-2017 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/mpcotool",
