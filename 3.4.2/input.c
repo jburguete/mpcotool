@@ -417,8 +417,7 @@ input_open_xml (xmlDoc * doc)
             = xml_node_get_float_with_default (node,
                                                (const xmlChar *)
                                                LABEL_RELAXATION,
-                                               DEFAULT_RELAXATION,
-                                               &error_code);
+                                               DEFAULT_RELAXATION, &error_code);
           if (error_code || input->relaxation < 0. || input->relaxation > 2.)
             {
               input_error (_("Invalid relaxation parameter"));
@@ -514,8 +513,7 @@ input_open_xml (xmlDoc * doc)
         {
           input->norm = ERROR_NORM_P;
           input->p
-            =
-            xml_node_get_float (node, (const xmlChar *) LABEL_P, &error_code);
+            = xml_node_get_float (node, (const xmlChar *) LABEL_P, &error_code);
           if (!error_code)
             {
               input_error (_("Bad P parameter"));
@@ -804,8 +802,7 @@ input_open_json (JsonParser * parser)
             {
               input->direction = DIRECTION_METHOD_RANDOM;
               input->nestimates
-                =
-                json_object_get_uint (object, LABEL_NESTIMATES, &error_code);
+                = json_object_get_uint (object, LABEL_NESTIMATES, &error_code);
               if (error_code || !input->nestimates)
                 {
                   input_error (_("Invalid estimates number"));

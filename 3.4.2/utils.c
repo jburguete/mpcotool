@@ -391,8 +391,7 @@ json_object_get_uint (JsonObject * object, const char *prop, int *error_code)
  */
 unsigned int
 json_object_get_uint_with_default (JsonObject * object, const char *prop,
-                                   unsigned int default_value,
-                                   int *error_code)
+                                   unsigned int default_value, int *error_code)
 {
   unsigned int i;
   if (json_object_get_member (object, prop))
@@ -496,8 +495,7 @@ json_object_set_int (JsonObject * object, const char *prop, int value)
  * \brief Unsigned integer number value.
  */
 void
-json_object_set_uint (JsonObject * object, const char *prop,
-                      unsigned int value)
+json_object_set_uint (JsonObject * object, const char *prop, unsigned int value)
 {
   char buffer[64];
   snprintf (buffer, 64, "%u", value);

@@ -68,7 +68,7 @@ OF SUCH DAMAGE.
 #endif
 #include "mpcotool.h"
 
-#define DEBUG_MPCOTOOL 0            ///< Macro to debug main functions.
+#define DEBUG_MPCOTOOL 0        ///< Macro to debug main functions.
 
 /**
  * \fn int mpcotool (int argn, char **argc)

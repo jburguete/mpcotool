@@ -69,8 +69,7 @@ unsigned int xml_node_get_uint_with_default (xmlNode * node,
 double xml_node_get_float (xmlNode * node, const xmlChar * prop,
                            int *error_code);
 double xml_node_get_float_with_default (xmlNode * node, const xmlChar * prop,
-                                        double default_value,
-                                        int *error_code);
+                                        double default_value, int *error_code);
 void xml_node_set_int (xmlNode * node, const xmlChar * prop, int value);
 void xml_node_set_uint (xmlNode * node, const xmlChar * prop,
                         unsigned int value);

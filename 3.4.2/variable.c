@@ -113,8 +113,7 @@ variable_error (Variable * variable, char *message)
   if (!variable->name)
     snprintf (buffer, 64, "%s: %s", _("Variable"), message);
   else
-    snprintf (buffer, 64, "%s %s: %s", _("Variable"), variable->name,
-              message);
+    snprintf (buffer, 64, "%s %s: %s", _("Variable"), variable->name, message);
   error_message = g_strdup (buffer);
 }
 
@@ -264,8 +263,7 @@ variable_open_xml (Variable * variable, xmlNode * node,
   else if (nsteps)
     {
       variable->step
-        =
-        xml_node_get_float (node, (const xmlChar *) LABEL_STEP, &error_code);
+        = xml_node_get_float (node, (const xmlChar *) LABEL_STEP, &error_code);
       if (error_code || variable->step < 0.)
         {
           variable_error (variable, _("bad step size"));
@@ -428,8 +426,7 @@ variable_open_json (Variable * variable, JsonNode * node,
     }
   else if (nsteps)
     {
-      variable->step =
-        json_object_get_float (object, LABEL_STEP, &error_code);
+      variable->step = json_object_get_float (object, LABEL_STEP, &error_code);
       if (error_code || variable->step < 0.)
         {
           variable_error (variable, _("bad step size"));

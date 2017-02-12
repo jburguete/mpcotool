@@ -112,8 +112,8 @@ mpcotool.o: mpcotool.c mpcotool.h interface.h optimize.h input.h variable.h \
 mpcotoolbin@EXE@: main.c $(OBJBIN)
 	$(CC) $(CFLAGS) main.c $(OBJBIN) $(LDFLAGS) -o mpcotoolbin@EXE@
 
-libmpcotool@SO@: main.c $(OBJBIN)
-	$(CC) $(CFLAGS) -shared -DEXTERNAL_LIBRARY=1 main.c $(OBJLIB) \
+libmpcotool@SO@: $(OBJLIB)
+	$(CC) $(CFLAGS) -shared -DEXTERNAL_LIBRARY=1 $(OBJLIB) \
 		$(LDFLAGS) -L. -Wl,-rpath=. -lgenetic -o libmpcotool@SO@
 
 @MPCOTOOL@@EXE@: main.c $(OBJGUI) @ICON@

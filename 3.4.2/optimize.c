@@ -121,8 +121,7 @@ optimize_input (unsigned int simulation, char *input, GMappedFile * template)
   content = g_mapped_file_get_contents (template);
   length = g_mapped_file_get_length (template);
 #if DEBUG_OPTIMIZE
-  fprintf (stderr, "optimize_input: length=%lu\ncontent:\n%s", length,
-           content);
+  fprintf (stderr, "optimize_input: length=%lu\ncontent:\n%s", length, content);
 #endif
   file = g_fopen (input, "w");
 
@@ -205,13 +204,11 @@ optimize_parse (unsigned int simulation, unsigned int experiment)
   // Opening input files
   for (i = 0; i < optimize->ninputs; ++i)
     {
-      snprintf (&input[i][0], 32, "input-%u-%u-%u", i, simulation,
-                experiment);
+      snprintf (&input[i][0], 32, "input-%u-%u-%u", i, simulation, experiment);
 #if DEBUG_OPTIMIZE
       fprintf (stderr, "optimize_parse: i=%u input=%s\n", i, &input[i][0]);
 #endif
-      optimize_input (simulation, &input[i][0],
-                      optimize->file[i][experiment]);
+      optimize_input (simulation, &input[i][0], optimize->file[i][experiment]);
     }
   for (; i < MAX_NINPUTS; ++i)
     strcpy (&input[i][0], "");
@@ -249,6 +246,7 @@ optimize_parse (unsigned int simulation, unsigned int experiment)
       g_free (buffer2);
 #if DEBUG_OPTIMIZE
       fprintf (stderr, "optimize_parse: %s\n", buffer);
+      fprintf (stderr, "optimize_parse: result=%s\n", result);
 #endif
       system (buffer);
       file_result = g_fopen (result, "r");
@@ -257,6 +255,9 @@ optimize_parse (unsigned int simulation, unsigned int experiment)
     }
   else
     {
+#if DEBUG_OPTIMIZE
+      fprintf (stderr, "optimize_parse: output=%s\n", output);
+#endif
       strcpy (result, "");
       file_result = g_fopen (output, "r");
       e = atof (fgets (buffer, 512, file_result));
@@ -726,8 +727,7 @@ optimize_sweep ()
       for (i = 0; i < nthreads; ++i)
         {
           data[i].thread = i;
-          thread[i] =
-            g_thread_new (NULL, (void (*)) optimize_thread, &data[i]);
+          thread[i] = g_thread_new (NULL, (void (*)) optimize_thread, &data[i]);
         }
       for (i = 0; i < nthreads; ++i)
         g_thread_join (thread[i]);
@@ -767,8 +767,7 @@ optimize_MonteCarlo ()
       for (i = 0; i < nthreads; ++i)
         {
           data[i].thread = i;
-          thread[i] =
-            g_thread_new (NULL, (void (*)) optimize_thread, &data[i]);
+          thread[i] = g_thread_new (NULL, (void (*)) optimize_thread, &data[i]);
         }
       for (i = 0; i < nthreads; ++i)
         g_thread_join (thread[i]);
@@ -1145,8 +1144,7 @@ optimize_genetic ()
            nthreads);
   fprintf (stderr,
            "optimize_genetic: nvariables=%u population=%u generations=%u\n",
-           optimize->nvariables, optimize->nsimulations,
-           optimize->niterations);
+           optimize->nvariables, optimize->nsimulations, optimize->niterations);
   fprintf (stderr,
            "optimize_genetic: mutation=%lg reproduction=%lg adaptation=%lg\n",
            optimize->mutation_ratio, optimize->reproduction_ratio,
@@ -1376,8 +1374,7 @@ optimize_iterate ()
 #if DEBUG_OPTIMIZE
   fprintf (stderr, "optimize_iterate: start\n");
 #endif
-  optimize->error_old =
-    (double *) g_malloc (optimize->nbest * sizeof (double));
+  optimize->error_old = (double *) g_malloc (optimize->nbest * sizeof (double));
   optimize->value_old =
     (double *) g_malloc (optimize->nbest * optimize->nvariables *
                          sizeof (double));
@@ -1502,8 +1499,7 @@ optimize_open ()
         {
         case DIRECTION_METHOD_COORDINATES:
           optimize->nestimates = 2 * optimize->nvariables;
-          optimize_estimate_direction =
-            optimize_estimate_direction_coordinates;
+          optimize_estimate_direction = optimize_estimate_direction_coordinates;
           break;
         default:
           optimize->nestimates = input->nestimates;
@@ -1516,8 +1512,7 @@ optimize_open ()
 #endif
   optimize->simulation_best
     = (unsigned int *) alloca (optimize->nbest * sizeof (unsigned int));
-  optimize->error_best =
-    (double *) alloca (optimize->nbest * sizeof (double));
+  optimize->error_best = (double *) alloca (optimize->nbest * sizeof (double));
 
   // Reading the experimental data
 #if DEBUG_OPTIMIZE
@@ -1529,8 +1524,7 @@ optimize_open ()
   optimize->ninputs = input->experiment->ninputs;
   optimize->experiment
     = (char **) alloca (input->nexperiments * sizeof (char *));
-  optimize->weight =
-    (double *) alloca (input->nexperiments * sizeof (double));
+  optimize->weight = (double *) alloca (input->nexperiments * sizeof (double));
   for (i = 0; i < input->experiment->ninputs; ++i)
     optimize->file[i] = (GMappedFile **)
       g_malloc (input->nexperiments * sizeof (GMappedFile *));
@@ -1718,8 +1712,7 @@ optimize_open ()
   g_date_time_unref (t);
   g_date_time_unref (t0);
   g_time_zone_unref (tz);
-  printf ("%s = %.6lg s\n",
-          _("Calculation time"), optimize->calculation_time);
+  printf ("%s = %.6lg s\n", _("Calculation time"), optimize->calculation_time);
   fprintf (optimize->file_result, "%s = %.6lg s\n",
            _("Calculation time"), optimize->calculation_time);
 
