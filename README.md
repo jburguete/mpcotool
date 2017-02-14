@@ -104,7 +104,7 @@ a terminal:
 3. Link the latest genetic version to genetic:
 > $ cd mpcotool/3.4.2
 >
-> $ ln -s ../../genetic/2.2.1 genetic
+> $ ln -s ../../genetic/2.2.2 genetic
 > 
 > $ ln -s genetic/libgenetic.so
 
@@ -213,19 +213,19 @@ In order to build the tests follow the next instructions:
 you are in the directory mpcotool/3.4.2):
 > $ cd ../tests/test2
 >
-> $ ln -s ../../../genetic/2.2.1 genetic
+> $ ln -s ../../../genetic/2.2.2 genetic
 >
 > $ ln -s genetic/libgenetic.so (or .dll on Windows systems)
 >
 > $ cd ../test3
 >
-> $ ln -s ../../../genetic/2.2.1 genetic
+> $ ln -s ../../../genetic/2.2.2 genetic
 >
 > $ ln -s genetic/libgenetic.so (or .dll on Windows systems)
 >
 > $ cd ../test4
 >
-> $ ln -s ../../../genetic/2.2.1 genetic
+> $ ln -s ../../../genetic/2.2.2 genetic
 >
 > $ ln -s genetic/libgenetic.so (or .dll on Windows systems)
 
