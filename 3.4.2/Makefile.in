@@ -326,7 +326,7 @@ windist: mpcotool.exe $(DLL) $(MO)
 	zip mpcotool-sources-@PACKAGE_VERSION@.zip *.c *.h *.in *.ac *.ico *.rc \
 		Doxyfile
 	mv mpcotool-sources-@PACKAGE_VERSION@.zip @WIN@/src
-	zip genetic-sources-2.2.1 genetic/*.c genetic/*.h
+	zip genetic-sources-2.2.1.zip genetic/*.c genetic/*.h
 	mv genetic-sources-2.2.1.zip @WIN@/src
 	zip @WIN@/src/mpcotool-manuals ../manuals/*.pdf
 	zip -r @WIN@/src/mpcotool-binaries-@WIN@-@PACKAGE_VERSION@.zip @WIN@/bin \
