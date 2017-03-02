@@ -13,6 +13,7 @@ if test $host = "x86_64-w64-mingw32"; then
 	AC_SUBST(ICON, "logo.o")
 	AC_SUBST(WINCFLAGS, "-mwindows")
 	AC_SUBST(WIN,"win64")
+	AC_SUBST(SED, [sed])
 	win=1
 elif test $host = "i686-w64-mingw32"; then
 	AC_MSG_NOTICE([Microsoft Windows 32 bits])
@@ -20,19 +21,28 @@ elif test $host = "i686-w64-mingw32"; then
 	AC_SUBST(ICON, "logo.o")
 	AC_SUBST(WINCFLAGS, "-mwindows")
 	AC_SUBST(WIN,"win32")
+	AC_SUBST(SED, [sed])
 	win=1
+elif test `uname -s` = "FreeBSD"; then
+	AC_MSG_NOTICE([FreeBSD])
+	AC_SUBST(PREFIX, [/usr/local])
+	AC_SUBST(SED, [gsed])
 elif test `uname -s` = "NetBSD"; then
 	AC_MSG_NOTICE([NetBSD])
-	AC_SUBST(PREFIX,"/usr/pkg")
+	AC_SUBST(PREFIX, [/usr/pkg])
+	AC_SUBST(SED, [gsed])
 elif test `uname -s` = "OpenBSD"; then
 	AC_MSG_NOTICE([OpenBSD])
-	AC_SUBST(PREFIX,"/usr/local")
+	AC_SUBST(PREFIX, [/usr/local])
+	AC_SUBST(SED, [gsed])
 	openbsd=1
 elif test `uname -s` = "DragonFly"; then
 	AC_MSG_NOTICE([DragonFly BSD])
-	AC_SUBST(PREFIX,"/usr/local")
+	AC_SUBST(PREFIX, [/usr/local])
+	AC_SUBST(SED, [gsed])
 else
-	AC_SUBST(PREFIX, "/usr")
+	AC_SUBST(PREFIX, [/usr])
+	AC_SUBST(SED, [sed])
 fi
 AC_MSG_NOTICE([prefix=$PREFIX])
 
