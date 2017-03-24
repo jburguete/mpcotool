@@ -45,12 +45,12 @@ OF SUCH DAMAGE.
 typedef struct
 {
   char *name;                   ///< File name.
-  char *template[MAX_NINPUTS];  ///< Array of template names of input files.
+  char *stencil[MAX_NINPUTS];   ///< Array of template names of input files.
   double weight;                ///< Objective function weight.
   unsigned int ninputs;         ///< Number of input files to the simulator.
 } Experiment;
 
-extern const char *template[MAX_NINPUTS];
+extern const char *stencil[MAX_NINPUTS];
 
 // Public functions
 void experiment_new (Experiment * experiment);

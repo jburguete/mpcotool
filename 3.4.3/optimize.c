@@ -91,17 +91,17 @@ Optimize optimize[1];           ///< Optimization data.
 
 /**
  * \fn void optimize_input (unsigned int simulation, char *input, \
- *   GMappedFile *template)
+ *   GMappedFile *stencil)
  * \brief Function to write the simulation input file.
  * \param simulation
  * \brief Simulation number.
  * \param input
  * \brief Input file name.
- * \param template
+ * \param stencil
  * \brief Template of the input file name.
  */
 void
-optimize_input (unsigned int simulation, char *input, GMappedFile * template)
+optimize_input (unsigned int simulation, char *input, GMappedFile * stencil)
 {
   unsigned int i;
   char buffer[32], value[32], *buffer2, *buffer3, *content;
@@ -114,18 +114,18 @@ optimize_input (unsigned int simulation, char *input, GMappedFile * template)
 #endif
 
   // Checking the file
-  if (!template)
+  if (!stencil)
     goto optimize_input_end;
 
-  // Opening template
-  content = g_mapped_file_get_contents (template);
-  length = g_mapped_file_get_length (template);
+  // Opening stencil
+  content = g_mapped_file_get_contents (stencil);
+  length = g_mapped_file_get_length (stencil);
 #if DEBUG_OPTIMIZE
   fprintf (stderr, "optimize_input: length=%lu\ncontent:\n%s", length, content);
 #endif
   file = g_fopen (input, "w");
 
-  // Parsing template
+  // Parsing stencil
   for (i = 0; i < optimize->nvariables; ++i)
     {
 #if DEBUG_OPTIMIZE
@@ -727,7 +727,8 @@ optimize_sweep ()
       for (i = 0; i < nthreads; ++i)
         {
           data[i].thread = i;
-          thread[i] = g_thread_new (NULL, (void (*)) optimize_thread, &data[i]);
+          thread[i] 
+            = g_thread_new (NULL, (GThreadFunc) optimize_thread, &data[i]);
         }
       for (i = 0; i < nthreads; ++i)
         g_thread_join (thread[i]);
@@ -767,7 +768,8 @@ optimize_MonteCarlo ()
       for (i = 0; i < nthreads; ++i)
         {
           data[i].thread = i;
-          thread[i] = g_thread_new (NULL, (void (*)) optimize_thread, &data[i]);
+          thread[i] 
+            = g_thread_new (NULL, (GThreadFunc) optimize_thread, &data[i]);
         }
       for (i = 0; i < nthreads; ++i)
         g_thread_join (thread[i]);
@@ -1019,7 +1021,7 @@ optimize_step_direction (unsigned int simulation)
         {
           data[i].thread = i;
           thread[i] = g_thread_new
-            (NULL, (void (*)) optimize_direction_thread, &data[i]);
+            (NULL, (GThreadFunc) optimize_direction_thread, &data[i]);
         }
       for (i = 0; i < nthreads_direction; ++i)
         g_thread_join (thread[i]);
@@ -1542,10 +1544,10 @@ optimize_open ()
       for (j = 0; j < input->experiment->ninputs; ++j)
         {
 #if DEBUG_OPTIMIZE
-          fprintf (stderr, "optimize_open: template%u\n", j + 1);
+          fprintf (stderr, "optimize_open: stencil%u\n", j + 1);
 #endif
           optimize->file[j][i]
-            = g_mapped_file_new (input->experiment[i].template[j], 0, NULL);
+            = g_mapped_file_new (input->experiment[i].stencil[j], 0, NULL);
         }
     }
 

@@ -47,12 +47,12 @@ OF SUCH DAMAGE.
 
 #define DEBUG_EXPERIMENT 0      ///< Macro to debug experiment functions.
 
-const char *template[MAX_NINPUTS] = {
+const char *stencil[MAX_NINPUTS] = {
   LABEL_TEMPLATE1, LABEL_TEMPLATE2, LABEL_TEMPLATE3, LABEL_TEMPLATE4,
   LABEL_TEMPLATE5, LABEL_TEMPLATE6, LABEL_TEMPLATE7, LABEL_TEMPLATE8
 };
 
-///< Array of xmlChar strings with template labels.
+///< Array of xmlChar strings with stencil labels.
 
 /**
  * \fn void experiment_new (Experiment * experiment)
@@ -70,7 +70,7 @@ experiment_new (Experiment * experiment)
   experiment->name = NULL;
   experiment->ninputs = 0;
   for (i = 0; i < MAX_NINPUTS; ++i)
-    experiment->template[i] = NULL;
+    experiment->stencil[i] = NULL;
 #if DEBUG_EXPERIMENT
   fprintf (stderr, "input_new: end\n");
 #endif
@@ -94,13 +94,13 @@ experiment_free (Experiment * experiment, unsigned int type)
   if (type == INPUT_TYPE_XML)
     {
       for (i = 0; i < experiment->ninputs; ++i)
-        xmlFree (experiment->template[i]);
+        xmlFree (experiment->stencil[i]);
       xmlFree (experiment->name);
     }
   else
     {
       for (i = 0; i < experiment->ninputs; ++i)
-        g_free (experiment->template[i]);
+        g_free (experiment->stencil[i]);
       g_free (experiment->name);
     }
   experiment->ninputs = 0;
@@ -178,13 +178,13 @@ experiment_open_xml (Experiment * experiment, xmlNode * node,
 #if DEBUG_EXPERIMENT
   fprintf (stderr, "experiment_open_xml: weight=%lg\n", experiment->weight);
 #endif
-  experiment->template[0]
-    = (char *) xmlGetProp (node, (const xmlChar *) template[0]);
-  if (experiment->template[0])
+  experiment->stencil[0]
+    = (char *) xmlGetProp (node, (const xmlChar *) stencil[0]);
+  if (experiment->stencil[0])
     {
 #if DEBUG_EXPERIMENT
-      fprintf (stderr, "experiment_open_xml: experiment=%s template1=%s\n",
-               experiment->name, template[0]);
+      fprintf (stderr, "experiment_open_xml: experiment=%s stencil1=%s\n",
+               experiment->name, stencil[0]);
 #endif
       ++experiment->ninputs;
     }
@@ -196,22 +196,22 @@ experiment_open_xml (Experiment * experiment, xmlNode * node,
   for (i = 1; i < MAX_NINPUTS; ++i)
     {
 #if DEBUG_EXPERIMENT
-      fprintf (stderr, "experiment_open_xml: template%u\n", i + 1);
+      fprintf (stderr, "experiment_open_xml: stencil%u\n", i + 1);
 #endif
-      if (xmlHasProp (node, (const xmlChar *) template[i]))
+      if (xmlHasProp (node, (const xmlChar *) stencil[i]))
         {
           if (ninputs && ninputs <= i)
             {
               experiment_error (experiment, _("bad templates number"));
               goto exit_on_error;
             }
-          experiment->template[i]
-            = (char *) xmlGetProp (node, (const xmlChar *) template[i]);
+          experiment->stencil[i]
+            = (char *) xmlGetProp (node, (const xmlChar *) stencil[i]);
 #if DEBUG_EXPERIMENT
           fprintf (stderr,
-                   "experiment_open_xml: experiment=%s template%u=%s\n",
+                   "experiment_open_xml: experiment=%s stencil%u=%s\n",
                    experiment->nexperiments, experiment->name,
-                   experiment->template[i]);
+                   experiment->stencil[i]);
 #endif
           ++experiment->ninputs;
         }
@@ -292,12 +292,12 @@ experiment_open_json (Experiment * experiment, JsonNode * node,
 #if DEBUG_EXPERIMENT
   fprintf (stderr, "experiment_open_json: weight=%lg\n", experiment->weight);
 #endif
-  name = json_object_get_string_member (object, template[0]);
+  name = json_object_get_string_member (object, stencil[0]);
   if (name)
     {
 #if DEBUG_EXPERIMENT
       fprintf (stderr, "experiment_open_json: experiment=%s template1=%s\n",
-               name, template[0]);
+               name, stencil[0]);
 #endif
       ++experiment->ninputs;
     }
@@ -306,26 +306,26 @@ experiment_open_json (Experiment * experiment, JsonNode * node,
       experiment_error (experiment, _("no template"));
       goto exit_on_error;
     }
-  experiment->template[0] = g_strdup (name);
+  experiment->stencil[0] = g_strdup (name);
   for (i = 1; i < MAX_NINPUTS; ++i)
     {
 #if DEBUG_EXPERIMENT
-      fprintf (stderr, "experiment_open_json: template%u\n", i + 1);
+      fprintf (stderr, "experiment_open_json: stencil%u\n", i + 1);
 #endif
-      if (json_object_get_member (object, template[i]))
+      if (json_object_get_member (object, stencil[i]))
         {
           if (ninputs && ninputs <= i)
             {
               experiment_error (experiment, _("bad templates number"));
               goto exit_on_error;
             }
-          name = json_object_get_string_member (object, template[i]);
+          name = json_object_get_string_member (object, stencil[i]);
 #if DEBUG_EXPERIMENT
           fprintf (stderr,
-                   "experiment_open_json: experiment=%s template%u=%s\n",
-                   experiment->nexperiments, name, template[i]);
+                   "experiment_open_json: experiment=%s stencil%u=%s\n",
+                   experiment->nexperiments, name, stencil[i]);
 #endif
-          experiment->template[i] = g_strdup (name);
+          experiment->stencil[i] = g_strdup (name);
           ++experiment->ninputs;
         }
       else if (ninputs && ninputs > i)

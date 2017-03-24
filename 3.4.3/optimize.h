@@ -137,7 +137,7 @@ extern Optimize optimize[1];
 
 // Public functions
 void optimize_input (unsigned int simulation, char *input,
-                     GMappedFile * template);
+                     GMappedFile * stencil);
 double optimize_parse (unsigned int simulation, unsigned int experiment);
 double optimize_norm_euclidian (unsigned int simulation);
 double optimize_norm_maximum (unsigned int simulation);
