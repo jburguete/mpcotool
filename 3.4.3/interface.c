@@ -346,8 +346,8 @@ input_save_xml (xmlDoc * doc)
         xml_node_set_float (child, (const xmlChar *) LABEL_WEIGHT,
                             input->experiment[i].weight);
       for (j = 0; j < input->experiment->ninputs; ++j)
-        xmlSetProp (child, (const xmlChar *) template[j],
-                    (xmlChar *) input->experiment[i].template[j]);
+        xmlSetProp (child, (const xmlChar *) stencil[j],
+                    (xmlChar *) input->experiment[i].stencil[j]);
     }
 
   // Setting the variables data
@@ -508,8 +508,8 @@ input_save_json (JsonGenerator * generator)
         json_object_set_float (object, LABEL_WEIGHT,
                                input->experiment[i].weight);
       for (j = 0; j < input->experiment->ninputs; ++j)
-        json_object_set_string_member (object, template[j],
-                                       input->experiment[i].template[j]);
+        json_object_set_string_member (object, stencil[j],
+                                       input->experiment[i].stencil[j]);
       json_array_add_element (array, child);
     }
   json_object_set_array_member (object, LABEL_EXPERIMENTS, array);
@@ -1325,7 +1325,7 @@ window_set_experiment ()
     {
       g_signal_handler_block (window->button_template[j], window->id_input[j]);
       buffer2 =
-        g_build_filename (input->directory, input->experiment[i].template[j],
+        g_build_filename (input->directory, input->experiment[i].stencil[j],
                           NULL);
       gtk_file_chooser_set_filename (GTK_FILE_CHOOSER
                                      (window->button_template[j]), buffer2);
@@ -1404,15 +1404,15 @@ window_add_experiment ()
       input->experiment[j + 1].name
         = (char *) xmlStrdup ((xmlChar *) input->experiment[j].name);
       for (j = 0; j < input->experiment->ninputs; ++j)
-        input->experiment[i + 1].template[j]
-          = (char *) xmlStrdup ((xmlChar *) input->experiment[i].template[j]);
+        input->experiment[i + 1].stencil[j]
+          = (char *) xmlStrdup ((xmlChar *) input->experiment[i].stencil[j]);
     }
   else
     {
       input->experiment[j + 1].name = g_strdup (input->experiment[j].name);
       for (j = 0; j < input->experiment->ninputs; ++j)
-        input->experiment[i + 1].template[j]
-          = g_strdup (input->experiment[i].template[j]);
+        input->experiment[i + 1].stencil[j]
+          = g_strdup (input->experiment[i].stencil[j]);
     }
   ++input->nexperiments;
   for (j = 0; j < input->experiment->ninputs; ++j)
@@ -1529,9 +1529,9 @@ window_template_experiment (void *data)
   file2 = g_file_new_for_path (input->directory);
   buffer = g_file_get_relative_path (file2, file1);
   if (input->type == INPUT_TYPE_XML)
-    input->experiment[j].template[i] = (char *) xmlStrdup ((xmlChar *) buffer);
+    input->experiment[j].stencil[i] = (char *) xmlStrdup ((xmlChar *) buffer);
   else
-    input->experiment[j].template[i] = g_strdup (buffer);
+    input->experiment[j].stencil[i] = g_strdup (buffer);
   g_free (buffer);
   g_object_unref (file2);
   g_object_unref (file1);
