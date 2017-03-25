@@ -192,9 +192,9 @@ versión de 64 bits):
 > export PATH=$PATH:/usr/lib64/openmpi/bin
 \end{lstlisting}
 
-En FreeBSD 11.0, debido en un extraño error en la versión por defecto de gcc, hay que hacer en un terminal:
+En FreeBSD 11.0, debido a un extraño error en la versión por defecto de gcc, hay que hacer en un terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-> export CC=gcc5 (or CC=clang)
+> export CC=gcc5 (o CC=clang)
 \end{lstlisting}
 
 Una vez que todas las utilidades necesarias han sido instaladas, hay que
@@ -227,11 +227,14 @@ optimización estándar, hay que hacer (los ejecutables de test2, test3 y test4
 usan también la librería \emph{Genetic}):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > cd ../tests/test2
-> ln -s ../../../genetic/2.2.2/libgenetic.so (.dll en sistemas Windows)
+> ln -s ../../../genetic/2.2.2 genetic
+> ln -s genetic/libgenetic.so (.dll en sistemas Windows)
 > cd ../test3
-> ln -s ../../../genetic/2.2.2/libgenetic.so (.dll en sistemas Windows)
+> ln -s ../../../genetic/2.2.2 genetic
+> ln -s genetic/libgenetic.so (.dll en sistemas Windows)
 > cd ../test4
-> ln -s ../../../genetic/2.2.2/libgenetic.so (.dll en sistemas Windows)
+> ln -s ../../../genetic/2.2.2 genetic
+> ln -s genetic/libgenetic.so (.dll en sistemas Windows)
 > cd ../../3.4.3
 > make tests
 \end{lstlisting}
@@ -1334,7 +1337,7 @@ MPCOTool también permite el uso de un método genético \cite{genetic} con sus
 algoritmos por defecto. Está inspirado en las ideas de \citet{gaul}, pero ha
 sido completamente reprogramado de cero usando librerías externas modernas. El
 código en Genetic es también libre bajo una licencia de tipo BSD. La
-figure~\ref{FigGeneticFlow} muestra el diagrama de flujo del método genético
+figura~\ref{FigGeneticFlow} muestra el diagrama de flujo del método genético
 por defecto implementado en Genetic.
 
 \psset{xunit=0.5mm,yunit=0.5mm}

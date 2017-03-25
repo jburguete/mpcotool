@@ -206,11 +206,14 @@ functions, you have to do (the executable files of test2, test3 and test4 use
 also the \emph{Genetic} library):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > cd ../tests/test2
-> ln -s ../../../genetic/2.2.2/libgenetic.so (.dll on Windows systems)
+> ln -s ../../../genetic/2.2.2 genetic
+> ln -s genetic/libgenetic.so (.dll on Windows systems)
 > cd ../test3
-> ln -s ../../../genetic/2.2.2/libgenetic.so (.dll on Windows systems)
+> ln -s ../../../genetic/2.2.2 genetic
+> ln -s genetic/libgenetic.so (.dll on Windows systems)
 > cd ../test4
-> ln -s ../../../genetic/2.2.2/libgenetic.so (.dll on Windows systems)
+> ln -s ../../../genetic/2.2.2 genetic
+> ln -s genetic/libgenetic.so (.dll on Windows systems)
 > cd ../../3.4.3
 > make tests
 \end{lstlisting}
