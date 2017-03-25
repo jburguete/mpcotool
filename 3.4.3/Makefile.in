@@ -215,7 +215,7 @@ $(M2): $(MDIR)manual-de-usuario.tex $(ADIR)bib.bib \
 		latex manual-de-usuario; latex manual-de-usuario; \
 		dvipdf manual-de-usuario
 
-$(MDIR)reference-manual.pdf: mpcotool README.md Doxyfile
+$(MDIR)reference-manual.pdf: $(SRC) README.md Doxyfile
 	doxygen
 	cd latex; @SED@ -i 's/∞//g' *.tex; make; \
 		mv refman.pdf ../$(MDIR)reference-manual.pdf

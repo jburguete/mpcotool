@@ -76,8 +76,9 @@ show_message (char *title, char *msg, int type)
   GtkMessageDialog *dlg;
 
   // Creating the dialog
-  dlg = (GtkMessageDialog *) gtk_message_dialog_new
-    (main_window, GTK_DIALOG_MODAL, type, GTK_BUTTONS_OK, "%s", msg);
+  dlg = (GtkMessageDialog *)
+    gtk_message_dialog_new (main_window, GTK_DIALOG_MODAL,
+                            (GtkMessageType) type, GTK_BUTTONS_OK, "%s", msg);
 
   // Setting the dialog title
   gtk_window_set_title (GTK_WINDOW (dlg), title);

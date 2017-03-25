@@ -75,11 +75,8 @@ OF SUCH DAMAGE.
 #define RM "rm"
 #endif
 
-int ntasks;                     ///< Number of tasks.
-unsigned int nthreads;          ///< Number of threads.
 unsigned int nthreads_direction;
   ///< Number of threads for the direction search method.
-GMutex mutex[1];                ///< Mutex struct.
 void (*optimize_algorithm) ();
   ///< Pointer to the function to perform a optimization algorithm step.
 double (*optimize_estimate_direction) (unsigned int variable,
@@ -132,11 +129,13 @@ optimize_input (unsigned int simulation, char *input, GMappedFile * stencil)
       fprintf (stderr, "optimize_input: variable=%u\n", i);
 #endif
       snprintf (buffer, 32, "@variable%u@", i + 1);
-      regex = g_regex_new (buffer, 0, 0, NULL);
+      regex = g_regex_new (buffer, (GRegexCompileFlags) 0, (GRegexMatchFlags) 0,
+                           NULL);
       if (i == 0)
         {
           buffer2 = g_regex_replace_literal (regex, content, length, 0,
-                                             optimize->label[i], 0, NULL);
+                                             optimize->label[i],
+                                             (GRegexMatchFlags) 0, NULL);
 #if DEBUG_OPTIMIZE
           fprintf (stderr, "optimize_input: buffer2\n%s", buffer2);
 #endif
@@ -145,13 +144,15 @@ optimize_input (unsigned int simulation, char *input, GMappedFile * stencil)
         {
           length = strlen (buffer3);
           buffer2 = g_regex_replace_literal (regex, buffer3, length, 0,
-                                             optimize->label[i], 0, NULL);
+                                             optimize->label[i],
+                                             (GRegexMatchFlags) 0, NULL);
           g_free (buffer3);
         }
       g_regex_unref (regex);
       length = strlen (buffer2);
       snprintf (buffer, 32, "@value%u@", i + 1);
-      regex = g_regex_new (buffer, 0, 0, NULL);
+      regex = g_regex_new (buffer, (GRegexCompileFlags) 0, (GRegexMatchFlags) 0,
+                           NULL);
       snprintf (value, 32, format[optimize->precision[i]],
                 optimize->value[simulation * optimize->nvariables + i]);
 
@@ -159,7 +160,7 @@ optimize_input (unsigned int simulation, char *input, GMappedFile * stencil)
       fprintf (stderr, "optimize_input: value=%s\n", value);
 #endif
       buffer3 = g_regex_replace_literal (regex, buffer2, length, 0, value,
-                                         0, NULL);
+                                         (GRegexMatchFlags) 0, NULL);
       g_free (buffer2);
       g_regex_unref (regex);
     }
@@ -727,7 +728,7 @@ optimize_sweep ()
       for (i = 0; i < nthreads; ++i)
         {
           data[i].thread = i;
-          thread[i] 
+          thread[i]
             = g_thread_new (NULL, (GThreadFunc) optimize_thread, &data[i]);
         }
       for (i = 0; i < nthreads; ++i)
@@ -768,7 +769,7 @@ optimize_MonteCarlo ()
       for (i = 0; i < nthreads; ++i)
         {
           data[i].thread = i;
-          thread[i] 
+          thread[i]
             = g_thread_new (NULL, (GThreadFunc) optimize_thread, &data[i]);
         }
       for (i = 0; i < nthreads; ++i)

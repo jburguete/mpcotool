@@ -1025,7 +1025,7 @@ window_help ()
                               _("user-manual.pdf"), NULL);
   buffer = g_filename_to_uri (buffer2, NULL, NULL);
   g_free (buffer2);
-  gtk_show_uri (NULL, buffer, GDK_CURRENT_TIME, NULL);
+  gtk_show_uri_on_window (window->window, buffer, GDK_CURRENT_TIME, NULL);
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_help: uri=%s\n", buffer);
 #endif
@@ -2125,7 +2125,7 @@ window_new (GtkApplication * application)
   window->button_save = (GtkToolButton *) gtk_tool_button_new
     (gtk_image_new_from_icon_name ("document-save",
                                    GTK_ICON_SIZE_LARGE_TOOLBAR), _("Save"));
-  g_signal_connect (window->button_save, "clicked", (void (*)) window_save,
+  g_signal_connect (window->button_save, "clicked", (GCallback) window_save,
                     NULL);
 
   // Creating the run button
@@ -2682,7 +2682,7 @@ window_new (GtkApplication * application)
       window->id_input[i] =
         g_signal_connect_swapped (window->button_template[i],
                                   "selection-changed",
-                                  (void (*)) window_template_experiment,
+                                  (GCallback) window_template_experiment,
                                   (void *) (size_t) i);
       gtk_grid_attach (window->grid_experiment,
                        GTK_WIDGET (window->button_template[i]), 1, 3 + i, 3, 1);
