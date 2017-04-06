@@ -97,7 +97,7 @@
 
 \section{Introduction}
 
-\begin{frame}
+\begin{frame}{Introduction}
 	\begin{itemize}
 		\item Models: necessity of empirical paramters
 		\item Calibration: fit empirical parameters by optimization
@@ -109,7 +109,7 @@
 
 \subsection{Algorithms}
 
-\begin{frame}
+\begin{frame}{Optimization}
 	\begin{itemize}
 		\item Stochastics
 			\begin{itemize}
@@ -125,8 +125,7 @@
 	\end{itemize}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Sweep}
+\begin{frame}{Sweep}
 \PICTURE{210,200}
 {
 	\put(20,10){\vector(0,1){180}}
@@ -147,8 +146,7 @@
 }
 \end{frame}
 
-\begin{frame}
-	\frametitle{Monte-Carlo}
+\begin{frame}{Monte-Carlo}
 \PICTURE{210,200}
 {
 	\put(20,10){\vector(0,1){180}}
@@ -191,8 +189,7 @@
 }
 \end{frame}
 
-\begin{frame}
-	\frametitle{Iterative}
+\begin{frame}{Iterative}
 \PICTURE{210,200}
 {
 	\small
@@ -252,8 +249,7 @@
 }
 \end{frame}
 
-\begin{frame}
-	\frametitle{Iterative}
+\begin{frame}{Iterative}
 \PICTURE{210,200}
 {
 	\small
@@ -298,8 +294,7 @@
 }
 \end{frame}
 
-\begin{frame}
-	\frametitle{Direction search}
+\begin{frame}{Direction search}
 \psset{xunit=0.45mm,yunit=0.45mm,runit=0.5mm}
 \PSPICTURE{0}{0}{260}{100}
 {
@@ -351,8 +346,76 @@
 }
 \end{frame}
 
-\begin{frame}
-	\frametitle{Genetic}
+\begin{frame}{Genetic: flowchart}
+\psset{xunit=0.35mm,yunit=0.35mm}
+\PSPICTURE{-120}{-185}{120}{20}
+{
+	\tiny
+	\rput(0,15){Generation of $N_{population}$}
+	\rput(0,10){random genomes}
+	\psframe(-35,5)(35,20)
+	\psline{->}(0,5)(0,0)
+	\rput(0,-5){$generation=1$}
+	\psframe(-25,-10)(25,0)
+	\psline{->}(0,-10)(0,-15)
+	\rput(0,-20){Simulation of the $N_{population}$}
+	\rput(0,-25){entities}
+	\psframe(-40,-30)(40,-15)
+	\psline{->}(0,-30)(0,-35)
+	\rput(0,-40){Sorting the $N_{population}$}
+	\rput(0,-45){entities by objective function value}
+	\psframe(-45,-50)(45,-35)
+	\psline{->}(0,-50)(0,-55)
+	\rput(0,-60){Eliminating the worst}
+	\rput(0,-65){$N_{mutation}+N_{reproduction}+N_{adaptation}$ entities}
+	\psframe(-65,-70)(65,-55)
+	\psline{->}(0,-70)(-80,-75)
+	\rput(-80,-80){Generation of $N_{mutation}$}
+	\rput(-80,-85){new entities by mutation}
+	\psframe(-115,-90)(-45,-75)
+	\psline{->}(-80,-90)(-80,-95)
+	\rput(-80,-100){Simulation of the $N_{mutation}$}
+	\rput(-80,-105){new mutated entities}
+	\psframe(-115,-110)(-45,-95)
+	\psline{->}(0,-70)(0,-75)
+	\rput(0,-80){Generation of $N_{reproduction}$}
+	\rput(0,-85){new entities by reproduction}
+	\psframe(-40,-90)(40,-75)
+	\psline{->}(0,-90)(0,-95)
+	\rput(0,-100){Simulation of the $N_{reproduction}$}
+	\rput(0,-105){new reproduced entities}
+	\psframe(-40,-110)(40,-95)
+	\psline{->}(0,-70)(82.5,-75)
+	\rput(82.5,-80){Generation of $N_{adaptation}$}
+	\rput(82.5,-85){new entities by adaptation}
+	\psframe(120,-90)(45,-75)
+	\psline{->}(82.5,-90)(82.5,-95)
+	\rput(82.5,-100){Simulation of the $N_{adaptation}$}
+	\rput(82.5,-105){new adapted entities}
+	\psframe(120,-110)(45,-95)
+	\psline{->}(-80,-110)(0,-115)
+	\psline{->}(0,-110)(0,-115)
+	\psline{->}(82.5,-110)(0,-115)
+	\rput(0,-120){Sorting the old $N_{survival}$ entities and the new}
+	\rput(0,-125){$N_{mutation}+N_{reproduction}+N_{adaptation}$ entities}
+	\rput(0,-130){by objective function values}
+	\psframe(-65,-115)(65,-135)
+	\psline{->}(0,-135)(0,-140)
+	\rput(0,-145){Increase $+1$ $generation$}
+	\psframe(-30,-140)(30,-150)
+	\psline{->}(0,-150)(0,-155)
+	\rput(0,-162.5){$generation<N_{generations}$?}
+	\pspolygon(-50,-162.5)(0,-170)(50,-162.5)(0,-155)
+	\psline{->}(-50,-162.5)(-120,-162.5)(-120,-62.5)(-65,-62.5)
+	\rput(-60,-160){Yes}
+	\rput(-5,-172.5){No}
+	\psline{->}(0,-170)(0,-175)
+	\rput(0,-180){Select the best entity}
+	\psframe(-30,-185)(30,-175)
+}
+\end{frame}
+
+\begin{frame}{Genetic}
 	\framesubtitle{Genome}
 \psset{unit=1mm}
 \PSPICTURE{0}{0}{80}{30}
@@ -413,8 +476,7 @@
 \[x=x_{\min}+\frac{I_x}{2^{N_x}-1}\,\left(x_{\max}-x_{\min}\right)\]
 \end{frame}
 
-\begin{frame}
-	\frametitle{Genetic}
+\begin{frame}{Genetic}
 	\framesubtitle{Survival and reproduction}
 \PICTURE{250,110}
 {
@@ -455,8 +517,7 @@
 }
 \end{frame}
 
-\begin{frame}
-	\frametitle{Genetic}
+\begin{frame}{Genetic}
 	\framesubtitle{Mutation}
 \psset{unit=1mm}
 \PSPICTURE{0}{0}{80}{20}
@@ -534,8 +595,7 @@
 }
 \end{frame}
 
-\begin{frame}
-	\frametitle{Genetic}
+\begin{frame}{Genetic}
 	\framesubtitle{Reproduction}
 \psset{unit=1mm}
 \PSPICTURE{0}{0}{80}{20}
@@ -651,8 +711,7 @@
 }
 \end{frame}
 
-\begin{frame}
-	\frametitle{Genetic}
+\begin{frame}{Genetic}
 	\framesubtitle{Adaptation}
 \psset{unit=1mm}
 \PSPICTURE{-30}{-7.5}{80}{30}
@@ -777,39 +836,33 @@
 }
 \end{frame}
 
-\begin{frame}
-	\frametitle{Sweep}
+\begin{frame}{Sweep}
 	\FIGURE{width=0.65\textwidth}{sphere-variables-sw-50-50-1.eps}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Monte-Carlo}
+\begin{frame}{Monte-Carlo}
 	\FIGURE{width=0.65\textwidth}{sphere-variables-mc-2500-1.eps}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Sweep + Iterative}
+\begin{frame}{Sweep + Iterative}
 	\FIGURE{width=0.65\textwidth}{sphere-variables-sw-10-10-25-10-0.5.eps}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Monte-Carlo + Iterative}
+\begin{frame}{Monte-Carlo + Iterative}
 	\FIGURE{width=0.65\textwidth}{sphere-variables-mc-100-25-10-0.1.eps}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Genetic}
+\begin{frame}{Genetic}
 	\FIGURE{width=0.65\textwidth}{sphere-variables-ge-250-16-0.2-0.2-0.2-32.eps}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Monte-Carlo + Direction search}
+\begin{frame}{Monte-Carlo + Direction search}
 	\FIGURE{width=0.65\textwidth}{sphere-variables-mc-ra-100-1-600-4-0.1-1.eps}
 \end{frame}
 
 \subsection{Standard tests functions}
 
-\begin{frame}
+\begin{frame}{Optimization}
 \begin{itemize}
 \item Bowl-shaped function: Sphere function.
 \item Many local minima function: Ackley's function.
@@ -884,73 +937,273 @@
 }
 \end{frame}
 
-\begin{frame}
-	\frametitle{Sphere function}
+\begin{frame}{Sphere function}
 	\includegraphics[width=0.9\textwidth]{sphere-function.eps}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Sphere function}
+\begin{frame}{Sphere function}
 	\includegraphics[width=\textwidth]{Sphere-e.eps}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Ackley's function}
+\begin{frame}{Ackley's function}
 	\includegraphics[width=0.9\textwidth]{ackley-function.eps}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Ackley's function}
+\begin{frame}{Ackley's function}
 	\includegraphics[width=\textwidth]{Ackley-e.eps}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Booth's function}
+\begin{frame}{Booth's function}
 	\includegraphics[width=0.9\textwidth]{booth-function.eps}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Booth's function}
+\begin{frame}{Booth's function}
 	\includegraphics[width=\textwidth]{Booth-e.eps}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Rosenbrock's function}
+\begin{frame}{Rosenbrock's function}
 	\includegraphics[width=0.9\textwidth]{rosenbrock-function.eps}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Rosenbrock's function}
+\begin{frame}{Rosenbrock's function}
 	\includegraphics[width=\textwidth]{Rosenbrock-e.eps}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Easom's function}
+\begin{frame}{Easom's function}
 	\includegraphics[width=0.9\textwidth]{easom-function.eps}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Easom's function}
+\begin{frame}{Easom's function}
 	\includegraphics[width=\textwidth]{Easom-e.eps}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Beale's function}
+\begin{frame}{Beale's function}
 	\includegraphics[width=0.9\textwidth]{beale-function.eps}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Beale's function}
+\begin{frame}{Beale's function}
 	\includegraphics[width=\textwidth]{Beale-e.eps}
+\end{frame}
+
+\subsection{Parallelization}
+
+\begin{frame}{Brute force algorithms: sweep and Monte-Carlo}
+\psset{xunit=0.5mm,yunit=0.5mm}
+\PSPICTURE{-90}{-55}{90}{-15}
+{
+	\tiny
+	\rput(0,-15){Generation of $N_{total}$ empirical parameters sets}
+	\psframe(-55,-20)(55,-10)
+	\psline{->}(0,-20)(-50,-25)
+	\psline{->}(0,-20)(0,-25)
+	\psline{->}(0,-20)(55,-25)
+	\rput(-55,-30){1st task:}
+	\rput(-55,-35){$N_{total}/N_{tasks}$ simulations}
+	\psframe(-90,-25)(-20,-40)
+	\rput(0,-32.5){$\cdots$}
+	\rput(55,-30){$N_{tasks}$-th task:}
+	\rput(55,-35){$N_{total}/N_{tasks}$ simulations}
+	\psframe(20,-25)(90,-40)
+	\psline{->}(-55,-40)(0,-45)
+	\psline{->}(0,-40)(0,-45)
+	\psline{->}(55,-40)(0,-45)
+	\rput(0,-50){Getting optimal empirical parameters set}
+	\psframe(-50,-45)(50,-55)
+}
+\end{frame}
+
+\begin{frame}{Iterative algorithm}
+\psset{xunit=0.5mm,yunit=0.5mm}
+\PSPICTURE{-100}{-130}{100}{-15}
+{
+	\tiny
+	\rput(0,-15){1st iteration:}
+	\rput(0,-20){Generation of $N_{simulations}$ empirical parameters sets}
+	\psframe(-60,-25)(60,-10)
+	\psline{->}(0,-25)(-60,-30)
+	\psline{->}(0,-25)(0,-30)
+	\psline{->}(0,-25)(60,-30)
+	\rput(-60,-35){1st task:}
+	\rput(-60,-40){$N_{simulations}/N_{tasks}$ simulations}
+	\psframe(-100,-30)(-20,-45)
+	\rput(0,-37.5){$\cdots$}
+	\rput(60,-35){$N_{tasks}$-th task:}
+	\rput(60,-40){$N_{simulations}/N_{tasks}$ simulations}
+	\psframe(20,-30)(100,-45)
+	\psline{->}(-60,-45)(0,-50)
+	\psline{->}(0,-45)(0,-50)
+	\psline{->}(60,-45)(0,-50)
+	\rput(0,-55){Getting $N_{best}$ empirical parameters sets}
+	\psframe(-55,-50)(55,-60)
+	\psline{->}(0,-60)(0,-65)
+	\rput(0,-70){$\cdots$}
+	\psline{->}(0,-75)(0,-80)
+	\rput(0,-85){$N_{iterations}$-th iteration:}
+	\rput(0,-90){Generation of $N_{simulations}$ empirical parameters sets}
+	\psframe(-60,-95)(60,-80)
+	\psline{->}(0,-95)(-60,-100)
+	\psline{->}(0,-95)(0,-100)
+	\psline{->}(0,-95)(60,-100)
+	\rput(-60,-105){1st task:}
+	\rput(-60,-110){$N_{simulations}/N_{tasks}$ simulations}
+	\psframe(-100,-100)(-20,-115)
+	\rput(0,-107.5){$\cdots$}
+	\rput(60,-105){$N_{tasks}$-th task:}
+	\rput(60,-110){$N_{simulations}/N_{tasks}$ simulations}
+	\psframe(20,-100)(100,-115)
+	\psline{->}(-60,-115)(0,-120)
+	\psline{->}(0,-115)(0,-120)
+	\psline{->}(60,-115)(0,-120)
+	\rput(0,-125){Getting optimal empirical parameters set}
+	\psframe(-55,-120)(55,-130)
+}
+\end{frame}
+
+\begin{frame}{Direction search algorithms}
+\psset{xunit=0.5mm,yunit=0.5mm}
+\PSPICTURE{-100}{-130}{100}{-15}
+{
+	\tiny
+	\rput(0,-15){1st step:}
+	\rput(0,-20){Generation of $N_{estimates}$ empirical parameters sets}
+	\psframe(-60,-25)(60,-10)
+	\psline{->}(0,-25)(-60,-30)
+	\psline{->}(0,-25)(0,-30)
+	\psline{->}(0,-25)(60,-30)
+	\rput(-60,-35){1st task:}
+	\rput(-60,-40){$N_{estimates}/N_{tasks}$ simulations}
+	\psframe(-100,-30)(-20,-45)
+	\rput(0,-37.5){$\cdots$}
+	\rput(60,-35){$N_{tasks}$-th task:}
+	\rput(60,-40){$N_{estimates}/N_{tasks}$ simulations}
+	\psframe(20,-30)(100,-45)
+	\psline{->}(-60,-45)(0,-50)
+	\psline{->}(0,-45)(0,-50)
+	\psline{->}(60,-45)(0,-50)
+	\rput(0,-55){Getting optimal empirical parameters set}
+	\psframe(-55,-50)(55,-60)
+	\psline{->}(0,-60)(0,-65)
+	\rput(0,-70){$\cdots$}
+	\psline{->}(0,-75)(0,-80)
+	\rput(0,-85){$N_{steps}$-th step:}
+	\rput(0,-90){Generation of $N_{estimates}$ empirical parameters sets}
+	\psframe(-60,-95)(60,-80)
+	\psline{->}(0,-95)(-60,-100)
+	\psline{->}(0,-95)(0,-100)
+	\psline{->}(0,-95)(60,-100)
+	\rput(-60,-105){1st task:}
+	\rput(-60,-110){$N_{estimates}/N_{tasks}$ simulations}
+	\psframe(-100,-100)(-20,-115)
+	\rput(0,-107.5){$\cdots$}
+	\rput(60,-105){$N_{tasks}$-th task:}
+	\rput(60,-110){$N_{estimates}/N_{tasks}$ simulations}
+	\psframe(20,-100)(100,-115)
+	\psline{->}(-60,-115)(0,-120)
+	\psline{->}(0,-115)(0,-120)
+	\psline{->}(60,-115)(0,-120)
+	\rput(0,-125){Getting optimal empirical parameters set}
+	\psframe(-55,-120)(55,-130)
+}
+\end{frame}
+
+\begin{frame}{Genetic}
+\psset{xunit=0.4mm,yunit=0.4mm}
+\PSPICTURE{-100}{-185}{100}{-15}
+{
+	\tiny
+	\rput(0,-15){1st generation:}
+	\rput(0,-20){Generation of $N_{population}$ empirical parameters sets}
+	\psframe(-60,-25)(60,-10)
+	\psline{->}(0,-25)(-60,-30)
+	\psline{->}(0,-25)(0,-30)
+	\psline{->}(0,-25)(60,-30)
+	\rput(-60,-35){1st task:}
+	\rput(-60,-40){$N_{population}/N_{tasks}$ simulations}
+	\psframe(-100,-30)(-20,-45)
+	\rput(0,-37.5){$\cdots$}
+	\rput(60,-35){$N_{tasks}$-th task:}
+	\rput(60,-40){$N_{population}/N_{tasks}$ simulations}
+	\psframe(20,-30)(100,-45)
+	\psline{->}(-60,-45)(0,-50)
+	\psline{->}(0,-45)(0,-50)
+	\psline{->}(60,-45)(0,-50)
+	\rput(0,-55){Getting $N_{survival}$ empirical parameters sets}
+	\psframe(-55,-50)(55,-60)
+	\psline{->}(0,-60)(0,-65)
+	\rput(0,-70){2nd generation:}
+	\rput(0,-75){Generation of $N_{new}$ empirical parameters sets}
+	\psframe(-55,-80)(55,-65)
+	\psline{->}(0,-80)(-60,-85)
+	\psline{->}(0,-80)(0,-85)
+	\psline{->}(0,-80)(60,-85)
+	\rput(-55,-90){1st task:}
+	\rput(-55,-95){$N_{new}/N_{tasks}$ simulations}
+	\psframe(-90,-85)(-20,-100)
+	\rput(0,-92.5){$\cdots$}
+	\rput(55,-90){$N_{tasks}$-th task:}
+	\rput(55,-95){$N_{new}/N_{tasks}$ simulations}
+	\psframe(20,-85)(90,-100)
+	\psline{->}(-55,-100)(0,-105)
+	\psline{->}(0,-100)(0,-105)
+	\psline{->}(55,-100)(0,-105)
+	\rput(0,-110){Getting $N_{survival}$ empirical parameters sets}
+	\psframe(-55,-105)(55,-115)
+	\psline{->}(0,-115)(0,-120)
+	\rput(0,-125){$\cdots$}
+	\psline{->}(0,-130)(0,-135)
+	\rput(0,-140){$N_{generations}$-th generation:}
+	\rput(0,-145){Generation of $N_{new}$ empirical parameters sets}
+	\psframe(-55,-150)(55,-135)
+	\psline{->}(0,-150)(-60,-155)
+	\psline{->}(0,-150)(0,-155)
+	\psline{->}(0,-150)(60,-155)
+	\rput(-55,-160){1st task:}
+	\rput(-55,-165){$N_{new}/N_{tasks}$ simulations}
+	\psframe(-90,-155)(-20,-170)
+	\rput(0,-162.5){$\cdots$}
+	\rput(55,-160){$N_{tasks}$-th task:}
+	\rput(55,-165){$N_{new}/N_{tasks}$ simulations}
+	\psframe(20,-155)(90,-170)
+	\psline{->}(-55,-170)(0,-175)
+	\psline{->}(0,-170)(0,-175)
+	\psline{->}(55,-170)(0,-175)
+	\rput(0,-180){Getting optimal empirical parameters set}
+	\psframe(-55,-175)(55,-185)
+}
+\end{frame}
+
+\subsection{Convergence}
+
+\begin{frame}{Iterative algorithm: best number and tolerance values}
+	\includegraphics[width=0.9\textwidth]{sphere-evolution-mc.eps}
+\end{frame}
+
+\begin{frame}{Iterative algorithm: brute force simulations number}
+	\includegraphics[width=0.9\textwidth]{sphere-evolution-mc-cdr.eps}
+\end{frame}
+
+\begin{frame}{Direction search algorithm: relaxation parameter}
+	\includegraphics[width=0.9\textwidth]{sphere-evolution-mc-cd-r.eps}
+\end{frame}
+
+\begin{frame}{Direction search algorithm: step size}
+	\includegraphics[width=0.9\textwidth]{sphere-evolution-mc-cd-s.eps}
+\end{frame}
+
+\begin{frame}{Random direction search algorithm: number of estimates}
+	\includegraphics[width=0.9\textwidth]{sphere-evolution-mc-r.eps}
+\end{frame}
+
+\begin{frame}{Parallelization}
+	\includegraphics[width=0.49\textwidth]{sphere-task-2-4.eps}
+	\includegraphics[width=0.49\textwidth]{sphere-task-2-64.eps}
 \end{frame}
 
 \section{MPCOTool}
 
-\subsection{Input files}
+\subsection{Organization}
 
-\begin{frame}
-	\frametitle{Multi-Purposes Calibration and Optimization Tool}
-	\framesubtitle{Organization}
+\begin{frame}{Multi-Purposes Calibration and Optimization Tool}
 \psset{xunit=0.4mm,yunit=0.4mm}
 \PSPICTURE{-20}{-115}{260}{55}
 {
@@ -1042,17 +1295,16 @@
 }
 \end{frame}
 
-\begin{frame}
-	\frametitle{Multi-Purposes Calibration and Optimization Tool}
-	\framesubtitle{Error norms}
+\subsection{Error norms}
+
+\begin{frame}{Multi-Purposes Calibration and Optimization Tool}
 	\[L_2:\quad J=\sqrt{\sum_{i=1}^{N_{exp}}\ABS{w_i\,o_i}^2},\]
 	\[L_\infty:\quad J=\max_{i=1}^{N_{exp}}\ABS{w_i\,o_i},\]
 	\[L_p:\quad J=\sqrt[p]{\sum_{i=1}^{N_{exp}}\ABS{w_i\,o_i}^p},\]
 	\[L_1:\quad J=\sum_{i=1}^{N_{exp}}\ABS{w_i\,o_i},\]
 \end{frame}
 
-\begin{frame}
-	\frametitle{Main input file}
+\begin{frame}{Main input file}
 \psset{xunit=0.4mm,yunit=0.4mm}
 \PSPICTURE{0}{-115}{280}{25}
 {
@@ -1177,8 +1429,9 @@
 \end{lstlisting}
 }
 
-\begin{frame}
-	\frametitle{Main input file: XML format}
+\subsection{Input files}
+
+\begin{frame}{Main input file: XML format}
 	\makeseti
 \end{frame}
 
@@ -1265,13 +1518,11 @@
 \end{lstlisting}
 }
 
-\begin{frame}
-	\frametitle{Main input file: JSON format}
+\begin{frame}{Main input file: JSON format}
 	\makesetii
 \end{frame}
 
-\begin{frame}
-	\frametitle {Template files}
+\begin{frame}{Template files}
 	\begin{itemize}
 		\item $N_{experiments}\times N_{inputs}$ template files are required
 		\item MPCOTool parses the templates to generate the input files for
@@ -1288,8 +1539,7 @@
 
 \subsection{User instructions}
 
-\begin{frame}
-	\frametitle{MPCOTool: building}
+\begin{frame}{MPCOTool: building}
 	\begin{itemize}
 		\item Code in C
 		\item Repository \url{https://github.com/jburguete/mpcotool}
@@ -1302,8 +1552,7 @@
 	\end{itemize}
 \end{frame}
 
-\begin{frame}
-	\frametitle{MPCOTool: building}
+\begin{frame}{MPCOTool: building}
 	\begin{itemize}
 		\item Code in C
 		\item Repository \url{https://github.com/jburguete/mpcotool}
@@ -1323,8 +1572,7 @@
 	\end{itemize}
 \end{frame}
 
-\begin{frame}
-	\frametitle{MPCOTool: building}
+\begin{frame}{MPCOTool: building}
 	\begin{itemize}
 		\item Code in C
 		\item Repository \url{https://github.com/jburguete/mpcotool}
@@ -1341,8 +1589,24 @@
 	\end{itemize}
 \end{frame}
 
-\begin{frame}
-	\frametitle{MPCOTool: command line}
+\begin{frame}{MPCOTool: building}
+	\begin{itemize}
+		\item Code in C
+		\item Repository \url{https://github.com/jburguete/mpcotool}
+		\item Tools required to build the executable
+		\item Free external libraries
+		\item Multiplatform
+		\item Languages
+		\begin{itemize}
+			\item English
+			\item Spanish
+			\item French
+			\item German
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{MPCOTool: command line}
 	\begin{itemize}
 		\item Running in one computer
 	\end{itemize}
@@ -1363,25 +1627,283 @@ main\_input\_file.xml [results\_file] [variables\_file]
 .$/$evaluator simulated\_file experiment\_file results\_file
 \end{frame}
 
-\begin{frame}
-	\frametitle{MPCOTool: graphic user interface application}
+\begin{frame}{MPCOTool: graphic user interface application}
 	\includegraphics[width=\textwidth]{mpcotool-en.eps}
+\end{frame}
+
+\begin{frame}{MPCOTool: output files}
+	\begin{itemize}
+		\item Results: optimal objective function and variable values, and
+			calculation time
+		\item Variables: all objective function and variable values tried by the
+			optimization algorithm
+	\end{itemize}
 \end{frame}
 
 \section{Practical applications}
 
 \subsection{Optimization of gate times in a canal}
 
-\begin{frame}
+\begin{frame}{Canal ``La Violada''}
+	\includegraphics[width=0.9\textwidth]{CanalLaViolada.eps}
+\end{frame}
+
+\begin{frame}{Canal ``La Violada''}
+\psset{xunit=9mm,yunit=6mm}
+\PSPICTURE{-1}{-2}{11.4}{2}
+{
+	\scriptsize
+	\rput(-0.5,0){Inlet}
+	\rput(10.7,0){Outlet}
+	\psline(0,0)(10,0)
+	\psline{->}(7.5,0)(7.5,-1)
+	\rput(7.5,-1.4){Spillway}
+	\psline{->}(10,0)(10,-1)
+	\rput(10,-1.4){Spillway}
+	\psline{->}(3,0)(3,1)
+	\rput(3,1.4){Almudévar}
+	\psline{->}(8.5,0)(7.5,1)
+	\rput(7.5,1.4){Gurrea}
+	\psline{->}(9,0)(10,1)
+	\rput(10,1.4){El Temple}
+	\psline{<->}(0,-0.3)(3,-0.3)
+	\rput(1.5,-0.7){5007 m}
+	\psline{<->}(3,-0.3)(7.5,-0.3)
+	\rput(5.25,-0.7){8346 m}
+	\psline{<->}(7.5,-0.3)(8.5,-0.3)
+	\rput(8,-0.7){270 m}
+	\psline{<->}(8.5,-0.3)(9,-0.3)
+	\rput(8.75,-0.7){7 m}
+	\psline{<->}(9,-0.3)(10,-0.3)
+	\rput(9.5,-0.7){27 m}
+}
+\psset{xunit=9mm,yunit=9mm}
+\PSPICTURE{0}{-0.6}{12.7}{2.450}
+{
+	\psline(0,2.050)(0.615,0)(3.259,0)(3.874,2.050)
+	\psline{<->}(0.615,-0.2)(3.259,-0.2)
+	\rput(1.937,-0.4){2.644 m}
+	\psline{<->}(0,2.250)(3.874,2.250)
+	\rput(1.937,2.450){3.874 m}
+	\psline{<->}(4.074,0)(4.074,2.050)
+	\rput(4.774,1.025){2.050 m}
+	\psline(5.5,1.8)(5.5,1.5)(7,0)(9.5,0)(11,1.5)(11,1.8)
+	\psline{<->}(5.5,2)(11,2)
+	\rput(8.25,2.2){5.500 m}
+	\psline{<->}(7,-0.2)(9.5,-0.2)
+	\rput(8.25,-0.4){2.500 m}
+	\psline{<->}(11.2,0)(11.2,1.5)
+	\rput(11.9,0.75){1.500 m}
+	\psline{<->}(11.2,1.5)(11.2,1.8)
+	\rput(11.95,1.65){0.300 m}
+}
+\end{frame}
+
+\begin{frame}{Canal ``La Violada''}
+	\framesubtitle{Optimization}
 	\begin{itemize}
-		\item Canal ``La Violada''
+		\item 1024 simulations
+		\item $\approx$ 14-19h using 64 cores in the Memento cluster from the BIFI
 	\end{itemize}
+\end{frame}
+
+\begin{frame}{Canal ``La Violada''}
+\TABLE{\tiny}{cccc}
+{
+	Optimization & Optimization & Optimal empirical & Objective
+	\\ algorithm & parameters & parameters & function value
+	\\ \hline
+	\multicolumn{2}{c}{Manual management} & $\Delta t_A=3600$ s
+	& 1.049056 m$^6$/s$^2$
+	\\ & & $\Delta t_{GT}=12600$ s
+	\\ \hline
+	SW & $N_{\Delta t_A}=N_{\Delta t_{GT}}=32$ & $\Delta t_A=3368$ s
+	& 0.047170 m$^6$/s$^2$
+	\\ & & $\Delta t_{GT}=3716$ s
+	\\ \hline
+	SW+IT & $N_{\Delta t_A}=N_{\Delta t_{GT}}=16$ & $\Delta t_A=3266$ s
+	& 0.047413 m$^6$/s$^2$
+	\\ & $N_i=4$, $N_b=4$, $tol=0.5$ & $\Delta t_{GT}=3840$ s
+	\\ \hline
+	MC & $N_s=1024$ & $\Delta t_A=3193$ s & 0.047183 m$^6$/s$^2$
+	\\ & & $\Delta t_{GT}=3705$ s
+	\\ \hline
+	MC+IT & $N_s=256$ & $\Delta t_A=3250$ s & 0.047139 m$^6$/s$^2$
+	\\ & $N_i=N_b=4$, $tol=0.1$ & $\Delta t_{GT}=3751$ s
+	\\ \hline
+	MC+DS+RA & $N_s=768$, $N_{st}=4$ & $\Delta t_A=3211$ s
+		& 0.047129 m$^6$/s$^2$
+	\\ & $N_e=64$, $rel=1$ & $\Delta t_{GT}=3754$ s
+	\\ & $st_{\Delta t_A}=st_{\Delta t_{GT}}=10$ s 
+	\\ \hline
+	GE & $N_p=256$, $N_g=9$ & $\Delta t_A=3274$ s & 0.047134 m$^6$/s$^2$
+	\\ & $R_m=R_r=R_a=0.125$ & $\Delta t_{GT}=3753$ s
+	\\ \hline
+	GE & $N_p=64$, $N_g=21$ & $\Delta t_A=3338$ s & 0.047150 m$^6$/s$^2$
+	\\ & $R_m=R_r=R_a=0.25$ & $\Delta t_{GT}=3740$ s
+	\\ \hline
+}
+\end{frame}
+
+\begin{frame}{Canal ``La Violada''}
+	\framesubtitle{Direction search algorithm: parallelization}
+	\begin{itemize}
+		\item Monte-Carlo: 768 simulations, 12 per core, $\approx 60.3$ active cores
+		\item Random direction search: 64 estimates, 1 per core, 4 iterations
+			$\approx 41.2$ active cores
+	\end{itemize}
+	\includegraphics[width=0.8\textwidth]{load-swigs-mc-ra-768-1-64-4.eps}
+\end{frame}
+
+\begin{frame}{Canal ``La Violada''}
+	\framesubtitle{Manual management}
+	\includegraphics[width=0.9\textwidth]{Violada-contributions.eps}
+\end{frame}
+
+\begin{frame}{Canal ``La Violada''}
+	\framesubtitle{Optimal management}
+	\includegraphics[width=0.9\textwidth]{Violada-optimized-contributions.eps}
 \end{frame}
 
 \subsection{Calibration of roughness and infiltration
 coefficients in furrows}
 
 \begin{frame}
+\psset{xunit=15mm,yunit=15mm}
+\PSPICTURE{-0.7}{-0.4}{6.5}{2.45}
+{
+	\scriptsize
+	\psline(0,0.27)(0.2,0.27)(0.53,0)(0.67,0)
+		(1,0.27)(1.2,0.27)(1.53,0)(1.67,0)
+		(2,0.27)(2.2,0.27)(2.53,0)(2.67,0)
+		(3,0.27)(3.2,0.27)(3.53,0)(3.67,0)(4,0.27)(4.2,0.27)
+	\psline(0,0.27)(2,2.27)
+	\psline(0.2,0.27)(2.2,2.27)
+	\psline(0.53,0)(2.53,2)
+	\psline(0.67,0)(2.67,2)
+	\psline(1,0.27)(3,2.27)
+	\psline(1.2,0.27)(3.2,2.27)
+	\psline(1.53,0)(3.53,2)
+	\psline(1.67,0)(3.67,2)
+	\psline(2,0.27)(4,2.27)
+	\psline(2.2,0.27)(4.2,2.27)
+	\psline(2.53,0)(4.53,2)
+	\psline(2.67,0)(4.67,2)
+	\psline(3,0.27)(5,2.27)
+	\psline(3.2,0.27)(5.2,2.27)
+	\psline(3.53,0)(5.53,2)
+	\psline(3.67,0)(5.67,2)
+	\psline(4,0.27)(6,2.27)
+	\psline(4.2,0.27)(6.2,2.27)
+	\psline(2,2.27)(2.2,2.27)(2.53,2)(2.67,2)
+		(3,2.27)(3.2,2.27)(3.53,2)(3.67,2)
+		(4,2.27)(4.2,2.27)(4.53,2)(4.67,2)
+		(5,2.27)(5.2,2.27)(5.53,2)(5.67,2)(6,2.27)(6.2,2.27)
+	\psline[linestyle=dashed, dash=2pt 1pt](0,0.27)(-0.2,0.27)
+	\psline[linestyle=dashed, dash=2pt 1pt](0.53,0)(-0.2,0)
+	\psline{<->}(-0.1,0.27)(-0.1,0)
+	\rput(-0.4,0.135){0.27m}
+	\psline[linestyle=dashed, dash=2pt 1pt](2,2.27)(1.8,2.27)
+	\psline{<->}(-0.1,0.27)(1.9,2.27)
+	\rput(0.6,1.27){100m}
+	\psline[linestyle=dashed, dash=2pt 1pt](0.53,0)(0.53,-0.2)
+	\psline[linestyle=dashed, dash=2pt 1pt](0.67,0)(0.67,-0.2)
+	\psline{->}(0.43,-0.1)(0.53,-0.1)
+	\psline{->}(0.77,-0.1)(0.67,-0.1)
+	\rput(0.6,-0.3){0.14m}
+	\psline[linestyle=dashed, dash=2pt 1pt](1.2,0.27)(1.2,-0.2)
+	\psline[linestyle=dashed, dash=2pt 1pt](2,0.27)(2,-0.2)
+	\psline{<->}(1.2,-0.1)(2,-0.1)
+	\rput(1.6,-0.3){0.80m}
+	\psline[linestyle=dashed, dash=2pt 1pt](2.2,0.27)(2.2,-0.2)
+	\psline{<->}(2,-0.1)(2.2,-0.1)
+	\rput(2.1,-0.3){0.20m}
+	\psline[linestyle=dashed, dash=2pt 1pt](4.2,0.27)(4.4,0.27)
+	\psline[linestyle=dashed, dash=2pt 1pt](0.4,0.67)(4.8,0.67)
+	\psline{<->}(4.3,0.27)(4.7,0.67)
+	\rput(4.8,0.47){20m}
+	\rput(5,0.67){S20}
+	\psline[linestyle=dashed, dash=2pt 1pt](0.8,1.07)(5.2,1.07)
+	\psline{<->}(4.7,0.67)(5.1,1.07)
+	\rput(5.2,0.87){20m}
+	\rput(5.4,1.07){S40}
+	\psline[linestyle=dashed, dash=2pt 1pt](1.2,1.47)(5.6,1.47)
+	\psline{<->}(5.1,1.07)(5.5,1.47)
+	\rput(5.6,1.27){20m}
+	\rput(5.8,1.47){S60}
+	\psline[linestyle=dashed, dash=2pt 1pt](1.6,1.87)(6,1.87)
+	\psline{<->}(5.5,1.47)(5.9,1.87)
+	\rput(6,1.67){20m}
+	\rput(6.2,1.87){S80}
+	\rput(2.6,2.3){Q1}
+	\rput(3.6,2.3){Q2}
+	\rput(4.6,2.3){Q3}
+	\rput(5.6,2.3){Q4}
+	\rput(4.5,0){INLET}
+}
+\end{frame}
+
+\begin{frame}{Calibration}
+	\begin{itemize}
+		\item 3000 simulations
+		\item $\approx$ 1h30m in a laptop computer.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+\TABLE{\tiny}{cccc}
+{
+	Optimization & Optimization & Optimal empirical & Objective
+	\\ algorithm & parameters & parameters & function value
+	\\ \hline
+	MC & $N_s=3000$ & $n=0.0444$ s$\cdot$m$^{-1/3}$ & 0.6971
+	\\ & & $K=9.690\cdot 10^{-4}$ m$\cdot$s$^{-a}$
+	\\ & & $a=0.503$
+	\\ \hline
+	MC+IT & $N_s=500$, $N_i=6$ & $n=0.0420$ s$\cdot$m$^{-1/3}$ & 0.6903
+	\\ & $N_b=10$ & $K=10.147\cdot 10^{-4}$ m$\cdot$s$^{-a}$
+	\\ & $tol=0.2$ & $a=0.504$
+	\\ \hline
+	MC+DS+RA & $N_s=2200$, $N_i=1$ & $n=0.0421$ s$\cdot$m$^{-1/3}$ & 0.6928
+	\\ & $N_{st}=200$, $N_e=4$ & $K=9.712\cdot 10^{-4}$ m$\cdot$s$^{-a}$
+	\\ & $rel=1$ & $a=0.512$
+	\\ & $st_n=0.0010$ s$\cdot$m$^{-1/3}$
+	\\ & $st_K=10^{-6}$ m$\cdot$s$^{-a}$
+	\\ & $st_a=0.010$
+	\\ \hline
+	GE & $N_p=750$ & $n=0.0413$ s$\cdot$m$^{-1/3}$  & 0.6930
+	\\ & $N_g=6$ & $K=9.823\cdot 10^{-4}$ m$\cdot$s$^{-a}$
+	\\ & $R_m=R_r=R_a=0.2$ & $a=0.508$
+	\\ \hline
+	GE & $N_p=300$ & $n=0.0420$ s$\cdot$m$^{-1/3}$  & 0.6918
+	\\ & $N_g=31$ & $K=9.903\cdot 10^{-4}$ m$\cdot$s$^{-a}$
+	\\ & $R_m=R_r=R_a=0.1$ & $a=0.508$
+	\\ \hline
+}
+\end{frame}
+
+\begin{frame}
+	\includegraphics[width=\textwidth]{surcos-advance.eps}
+\end{frame}
+
+\begin{frame}
+	\includegraphics[width=\textwidth]{surcos-depth.eps}
+\end{frame}
+
+\begin{frame}
+	\includegraphics[width=\textwidth]{surcos-solute-q1.eps}
+\end{frame}
+
+\begin{frame}
+	\includegraphics[width=\textwidth]{surcos-solute-q2.eps}
+\end{frame}
+
+\begin{frame}
+	\includegraphics[width=\textwidth]{surcos-solute-q3.eps}
+\end{frame}
+
+\begin{frame}
+	\includegraphics[width=\textwidth]{surcos-solute-q4.eps}
 \end{frame}
 
 \subsection{Calibration of size and friction coefficients in
@@ -1393,18 +1915,177 @@ sprinklers}
 \subsection{Calibration of movement coefficients in pivots}
 
 \begin{frame}
+	\includegraphics[width=\textwidth]{Pivot.eps}
+\psset{unit=1mm}
+\PSPICTURE{-10}{-6}{93}{20}
+{
+	\rput(25,17){$\alpha_i<\alpha_{start}\;\Rightarrow\;T_i$ start}
+	\rput(65,17){$\alpha_i>\alpha_{stop}\;\Rightarrow\;T_i$ stop}
+	\psarc{->}(0,0){93}{0}{7}
+	\psline(0,0)(20,0)(40,1)(60,2.5)(90,5.5)
+	\pscircle*(20,0){0.5}
+	\pscircle*(40,1){0.5}
+	\pscircle*(60,2.5){0.5}
+	\pscircle*(80,4.5){0.5}
+	\pscircle*(0,0){1.0}
+	\rput(0,-3){Centre}
+	\rput(20,-3){$T_1$}
+	\rput(40,-2){$T_2$}
+	\rput(60,-0.5){$T_3$}
+	\rput(80,1.5){$T_4$}
+	\psarc(20,0){3}{2.86}{180}
+	\psarc(40,1){3}{4.29}{177.14}
+	\psarc(60,2.5){3}{5.71}{175.71}
+	\rput(20,6){$\alpha_1$}
+	\rput(40,7){$\alpha_2$}
+	\rput(60,8.5){$\alpha_3$}
+}\end{frame}
+
+\begin{frame}{Empirical parameters}
+\psset{unit=1mm}
+\PSPICTURE{-16}{-6}{75}{39}
+{
+	\footnotesize
+	\psline{->}(0,0)(0,30)
+	\psline{->}(0,0)(70,0)
+	\rput(0,36){Tower}
+	\rput(0,32){linear velocity}
+	\rput(70,-3){Time}
+	\psline(0,0)(10,0)(15,20)(25,20)(30,0)(45,0)(50,20)(60,20)(65,0)
+	\rput(-8,22){Maximum}
+	\rput(-8,18){velocity}
+	\psline[linestyle=dotted](0,20)(15,20)
+	\psline{<->}(10,23)(15,23)
+	\rput(12.5,26){$\tau$}
+	\psline{<->}(10,29)(30,29)
+	\rput(20,35){Start}
+	\rput(20,32){time}
+	\psline{<->}(25,23)(30,23)
+	\rput(27.5,26){$\tau$}
+	\psline{<->}(30,23)(45,23)
+	\rput(37.5,29){Stop}
+	\rput(37.5,26){time}
+}
+\end{frame}
+
+\begin{frame}{Chaotic regime of starts and stops}
+	\includegraphics[width=0.9\textwidth]{pivot-velocity.eps}
+\end{frame}
+
+\begin{frame}{Calibration}
+	\begin{itemize}
+		\item 10000 simulations
+		\item $\approx$ 50m in a laptop computer.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+\TABLE{\tiny}{cccc}
+{
+	Optimization & Optimization & Optimal empirical & Objective
+	\\ algorithm & parameters & parameters & function value
+	\\ \hline
+	SW & $N_x=10$ & $\overline{\alpha_{start}}=179.956^\circ$
+	& 63.03
+	\\ & & $\overline{\alpha_{stop}}=180.367^\circ$
+	\\ & & $\delta=0.133^\circ$
+	\\ & & $\tau=1.73$ s
+	\\ \hline
+	SW+IT & $N_x=5$ & $\overline{\alpha_{start}}=180.448^\circ$
+	& 44.30
+	\\ & $N_i=16$ & $\overline{\alpha_{stop}}=180.848^\circ$
+	\\ & $N_b=10$ & $\delta=0.098^\circ$
+	\\ & $tol=0.5$ & $\tau=2.24$ s
+	\\ \hline
+	MC & $N_s=10000$
+	& $\overline{\alpha_{start}}=179.739^\circ$ & 61.49
+	\\ & $N_i=1$ & $\overline{\alpha_{stop}}=180.139^\circ$
+	\\ & & $\delta=0.120^\circ$
+	\\ & & $\tau=2.35$ s
+	\\ \hline
+	MC+IT & $N_s=625$
+	& $\overline{\alpha_{start}}=179.760^\circ$ & 49.14
+	\\ & $N_i=16$ & $\overline{\alpha_{stop}}=180.159^\circ$
+	\\ & $N_b=10$ & $\delta=0.101^\circ$
+	\\ & $tol=0.1$ & $\tau=2.29$ s
+	\\ \hline
+	MC+DS+CD & $N_s=9000$, $N_{st}=125$
+	& $\overline{\alpha_{start}}=179.743^\circ$ & 54.42
+	\\ & $rel=1$ & $\overline{\alpha_{stop}}=180.138^\circ$
+	\\ & $st_{\overline{\alpha_{start}}}=0.4$ & $\delta=0.120^\circ$
+	\\ & $st_{\overline{\alpha_{stop}}}=0.3$ & $\tau=2.36$ s
+	\\ & $st_\delta=0.004$
+	\\ & $st_\tau=0.05$
+	\\ \hline
+	GE & $N_p=1000$ & $\overline{\alpha_{start}}=179.967^\circ$
+	& 49.41
+	\\ & $N_g=16$ & $\overline{\alpha_{stop}}=180.367^\circ$
+	\\ & $R_m=R_r=R_a=0.2$ & $\delta=0.101^\circ$
+	\\ & & $\tau=2.22$ s
+	\\ \hline
+	GE & $N_p=400$ & $\overline{\alpha_{start}}=179.933^\circ$
+	& 48.08
+	\\ & $N_g=81$ & $\overline{\alpha_{stop}}=180.327^\circ$
+	\\ & $R_m=R_r=R_a=0.1$ & $\delta=0.112^\circ$
+	\\ & & $\tau=2.60$s
+	\\ \hline
+}
+\end{frame}
+
+\begin{frame}{Start histograms: 100\%}
+	\includegraphics[width=0.49\textwidth]{pivot-measured-starts-100.eps}
+	\includegraphics[width=0.49\textwidth]{pivot-simulated-starts-100.eps}
+\end{frame}
+
+\begin{frame}{Stop histograms: 100\%}
+	\includegraphics[width=0.49\textwidth]{pivot-measured-stops-100.eps}
+	\includegraphics[width=0.49\textwidth]{pivot-simulated-stops-100.eps}
+\end{frame}
+
+\begin{frame}{Start histograms: 50\%}
+	\includegraphics[width=0.49\textwidth]{pivot-measured-starts-50.eps}
+	\includegraphics[width=0.49\textwidth]{pivot-simulated-starts-50.eps}
+\end{frame}
+
+\begin{frame}{Stop histograms: 50\%}
+	\includegraphics[width=0.49\textwidth]{pivot-measured-stops-50.eps}
+	\includegraphics[width=0.49\textwidth]{pivot-simulated-stops-50.eps}
+\end{frame}
+
+\begin{frame}{Start histograms: 40\%}
+	\includegraphics[width=0.49\textwidth]{pivot-measured-starts-40.eps}
+	\includegraphics[width=0.49\textwidth]{pivot-simulated-starts-40.eps}
+\end{frame}
+
+\begin{frame}{Stop histograms: 40\%}
+	\includegraphics[width=0.49\textwidth]{pivot-measured-stops-40.eps}
+	\includegraphics[width=0.49\textwidth]{pivot-simulated-stops-40.eps}
+\end{frame}
+
+\begin{frame}{Start histograms: 25\%}
+	\includegraphics[width=0.49\textwidth]{pivot-measured-starts-25.eps}
+	\includegraphics[width=0.49\textwidth]{pivot-simulated-starts-25.eps}
+\end{frame}
+
+\begin{frame}{Stop histograms: 25\%}
+	\includegraphics[width=0.49\textwidth]{pivot-measured-stops-25.eps}
+	\includegraphics[width=0.49\textwidth]{pivot-simulated-stops-25.eps}
 \end{frame}
 
 \section{Conclusions}
 
-\begin{frame}
+\begin{frame}{Conclusions}
 \begin{itemize}
+	\item Optimization, and calibration as a particular case, is an art. Results
+		depend on the shape of the objective function
+	\item Practical problems in agricultural are not well conditioned to be
+		calibrated/optimized
 	\item MPCOTool is a easy, flexible, intuitive, robust, ..., tool for
 		calibration/optimization
-	\item Implements several of the most useful general algorithms of
+	\item MPCOTool implements several of the most useful general algorithms of
 		optimization
-	\item Is able to use parallelized all available computational resources in
-		an easy manner
+	\item MPCOTool is able to use parallelized all available computational
+		resources in an easy manner
 \end{itemize}
 \end{frame}
 

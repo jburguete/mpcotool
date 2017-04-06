@@ -30,7 +30,7 @@ figs2 = surcos-solute-q1.eps surcos-solute-q2.eps surcos-solute-q3.eps \
 
 plots = Beale.eps
 
-all: mpcotool.pdf mpcotool2.pdf
+all: mpcotool.pdf mpcotool2.pdf seminar.pdf
 
 mpcotool.pdf: mpcotool.tex bib.bib makefile $(figs) $(plots)
 	latex mpcotool
@@ -48,3 +48,8 @@ mpcotool2.pdf: mpcotool2.tex bib.bib makefile $(figs2)
 
 Beale.eps: plot
 	gnuplot plot
+
+seminar.pdf: seminar.tex bib.bib makefile
+	latex seminar
+	latex seminar
+	dvipdf seminar
