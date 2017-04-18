@@ -147,7 +147,7 @@ __________
 do in the terminal:
 > $ CC=/usr/pkg/gcc5/bin/gcc ./build
 
-OpenBSD 6.0
+OpenBSD 6.1
 ___________
 
 1. Select adequate versions:
