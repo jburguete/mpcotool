@@ -15,6 +15,14 @@ AUTHORS
 * Javier Burguete Tolosa (jburguete@eead.csic.es)
 * Borja Latorre Garcés (borja.latorre@csic.es)
 
+WINDOWS EXECUTABLE FILES
+------------------------
+
+This repository contains source and example files with the latest version of 
+MPCOTool. Stable versions with executable files and manuals for Microsoft
+Windows systems can be downloaded in 
+[digital.csic](http://hdl.handle.net/148471/)
+
 TOOLS AND LIBRARIES REQUIRED TO BUILD THE EXECUTABLE
 ----------------------------------------------------
 
