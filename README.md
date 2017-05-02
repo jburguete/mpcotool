@@ -97,9 +97,7 @@ FreeBSD 11.0
 ____________
 Linux Mint DE 2
 _______________
-OpenSUSE Linux Tumbleweed
-_________________________
-Ubuntu Linux 16.10
+Ubuntu Linux 17.04
 __________________
 
 1. Download the latest [genetic](https://github.com/jburguete/genetic) doing on
@@ -168,6 +166,14 @@ ___________________
 
 1. In order to use OpenMPI compilation do in a terminal:
 > $ export PATH=/usr/lib/openmpi/gcc/bin:$PATH
+
+2. Then, follow steps 1 to 4 of the previous Debian 8 section.
+
+OpenSUSE Linux Tumbleweed
+_________________________
+
+1. In order to use OpenMPI compilation do in a terminal (in 64 bits version):
+> $ export PATH=/usr/lib64/mpi/gcc/openmpi/bin:$PATH
 
 2. Then, follow steps 1 to 4 of the previous Debian 8 section.
 
