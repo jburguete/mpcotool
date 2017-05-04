@@ -48,7 +48,7 @@
 \title{MPCOTool: a tool for optimization and calibration of models}
 \author{Javier Burguete}
 \institute{Soil and Water Department. EEAD/CSIC}
-\date{\today}
+\date{5th May 2017}
 
 \newcommand{\PICTURE}[2]
 {
@@ -92,6 +92,7 @@
 \begin{document}
 
 \begin{frame}
+	\FIGURE{width=1cm}{logo.eps}
 	\titlepage
 \end{frame}
 
@@ -114,7 +115,7 @@
 
 \subsection{Algorithms}
 
-\begin{frame}{Optimization}
+\begin{frame}{Optimization: algorithms}{Types}
 	\begin{itemize}
 		\item Stochastics
 			\begin{itemize}
@@ -130,7 +131,7 @@
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{Sweep}
+\begin{frame}{Optimization: algorithms}{Sweep}
 \PICTURE{210,200}
 {
 	\put(20,10){\vector(0,1){180}}
@@ -151,7 +152,7 @@
 }
 \end{frame}
 
-\begin{frame}{Monte-Carlo}
+\begin{frame}{Optimization: algorithms}{Monte-Carlo}
 \PICTURE{210,200}
 {
 	\put(20,10){\vector(0,1){180}}
@@ -194,7 +195,7 @@
 }
 \end{frame}
 
-\begin{frame}{Iterative}
+\begin{frame}{Optimization: algorithms}{Iterative}
 \PICTURE{210,200}
 {
 	\small
@@ -254,7 +255,7 @@
 }
 \end{frame}
 
-\begin{frame}{Iterative}
+\begin{frame}{Optimization: algorithms}{Iterative}
 \PICTURE{210,200}
 {
 	\small
@@ -299,9 +300,32 @@
 }
 \end{frame}
 
-\begin{frame}{Direction search}
-\psset{xunit=0.4mm,yunit=0.4mm,runit=0.4mm}
-\PSPICTURE{0}{0}{260}{100}
+\begin{frame}{Optimization: algorithms}{Direction search: coordinates descent}
+\psset{xunit=0.5mm,yunit=0.5mm,runit=0.5mm}
+\PSPICTURE{0}{0}{130}{100}
+{
+	\psline{->}(10,10)(10,90)
+	\rput(15,95){$variable_2$}
+	\psline{->}(10,10)(120,10)
+	\rput(110,5){$variable_1$}
+	\psline{->}(50,45)(50,65)
+	\pscircle*(50,65){1}
+	\rput(55,61){$\vec{t}_3$}
+	\psline{->}(50,45)(70,45)
+	\pscircle*(70,45){1}
+	\rput(65,51){$\vec{t}_1$}
+	\psline{->}(50,45)(30,45)
+	\pscircle*(30,45){1}
+	\rput(35,50){$\vec{t}_2$}
+	\psline{->}(50,45)(50,25)
+	\pscircle*(50,25){1}
+	\rput(55,30){$\vec{t}_4$}
+}
+\end{frame}
+
+\begin{frame}{Optimization: algorithms}{Direction search: coordinates descent}
+\psset{xunit=0.5mm,yunit=0.5mm,runit=0.5mm}
+\PSPICTURE{0}{0}{130}{100}
 {
 	\psline{->}(10,10)(10,90)
 	\rput(15,95){$variable_2$}
@@ -327,6 +351,22 @@
 	\psline{->}(90,65)(90,45)
 	\pscircle*(90,45){1}
 	\rput(95,50){$\vec{t}_4$}
+}
+\[
+	\vec{s}_1=\vec{0},\qquad
+	\vec{s}_i=(1-rel)\,\vec{s}_{i-1}+rel\,\Delta\vec{r}_{i-1},
+\]
+\[
+	\vec{r}_{i+1}
+	=\mathrm{optimum}\PA{\vec{r}_i,\;\vec{r}_i+\vec{s}_i+\vec{t}_j},
+	\;j=1,\cdots,N_e.
+\]
+\end{frame}
+
+\begin{frame}{Optimization: algorithms}{Direction search: random}
+\psset{xunit=0.5mm,yunit=0.5mm,runit=0.5mm}
+\PSPICTURE{130}{0}{260}{100}
+{
 	\psline{->}(140,10)(140,90)
 	\rput(145,95){$variable_2$}
 	\psline{->}(140,10)(250,10)
@@ -350,6 +390,8 @@
 	\rput(212,43){$\vec{t}_2$}
 }
 \end{frame}
+
+
 
 \begin{frame}{Genetic: flowchart}
 \psset{xunit=0.35mm,yunit=0.35mm}
@@ -1546,8 +1588,9 @@
 
 \begin{frame}{MPCOTool: building}
 	\begin{itemize}
-		\item Code in C
+		\item Free software, BSD type license.
 		\item Repository \url{https://github.com/jburguete/mpcotool}
+		\item Code in C
 		\item Tools required to build the executable
 			\begin{itemize}
 				\item C compiler: GCC or CLang
@@ -1559,8 +1602,9 @@
 
 \begin{frame}{MPCOTool: building}
 	\begin{itemize}
-		\item Code in C
+		\item Free software, BSD type license.
 		\item Repository \url{https://github.com/jburguete/mpcotool}
+		\item Code in C
 		\item Tools required to build the executable
 		\item Free external libraries
 		\begin{itemize}
@@ -1579,13 +1623,14 @@
 
 \begin{frame}{MPCOTool: building}
 	\begin{itemize}
-		\item Code in C
+		\item Free software, BSD type license.
 		\item Repository \url{https://github.com/jburguete/mpcotool}
+		\item Code in C
 		\item Tools required to build the executable
 		\item Free external libraries
 		\item Multiplatform
 		\begin{itemize}
-			\item Linux (Debian, Ubuntu, Fedora, OpenSUSE)
+			\item Linux (Debian, Ubuntu, Fedora, OpenSUSE, Mint)
 			\item Microsoft Windows (7, 8.1, 10)
 			\item BSD (FreeBSD, OpenBSD, NetBSD, DragonflyBSD, Debian kFreeBSD)
 			\item Illumos (Dyson, OpenIndiana)
@@ -1596,8 +1641,9 @@
 
 \begin{frame}{MPCOTool: building}
 	\begin{itemize}
-		\item Code in C
+		\item Free software, BSD type license.
 		\item Repository \url{https://github.com/jburguete/mpcotool}
+		\item Code in C
 		\item Tools required to build the executable
 		\item Free external libraries
 		\item Multiplatform
@@ -2115,6 +2161,7 @@ sprinklers}
 		optimization
 	\item MPCOTool is able to use parallelized all available computational
 		resources in an easy manner
+	\item MPCOTool is free software with a BSD type license
 \end{itemize}
 \end{frame}
 
