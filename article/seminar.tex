@@ -108,6 +108,7 @@
 		\item Models: necessity of empirical paramters
 		\item Calibration: fit empirical parameters by optimization
 		\item Optimization: minimization of an objective function
+		\item Necessity of a calibration tool
 	\end{itemize}
 \end{frame}
 
@@ -363,6 +364,529 @@
 \]
 \end{frame}
 
+\begin{frame}{Optimization algorithms}{Direction search: coordinates descent}
+\psset{xunit=50mm,yunit=50mm,runit=50mm}
+\PSPICTURE{-0.5}{0.4}{1.1}{2}
+{
+	\psline{->}(-0.4,0.5)(-0.4,1.9)
+	\rput(-0.45,1.95){$y$}
+	\psline{->}(-0.4,0.5)(1.0,0.5)
+	\rput(1.05,0.45){$x$}
+	\pscircle*(0,1.66667){0.01}
+	\pscircle(0.785398,0.785398){0.02}
+}
+\end{frame}
+
+\begin{frame}{Optimization algorithms}{Direction search: coordinates descent}
+\psset{xunit=50mm,yunit=50mm,runit=50mm}
+\PSPICTURE{-0.5}{0.4}{1.1}{2}
+{
+	\psline{->}(-0.4,0.5)(-0.4,1.9)
+	\rput(-0.45,1.95){$y$}
+	\psline{->}(-0.4,0.5)(1.0,0.5)
+	\rput(1.05,0.45){$x$}
+	\pscircle*(0,1.70667){0.01}
+	\pscircle*(-0.04,1.66667){0.01}
+	\pscircle*(0.04,1.66667){0.01}
+	\pscircle*(0,1.62667){0.01}
+	\psline(0,1.66667)(0,1.62667)
+	\pscircle(0.785398,0.785398){0.02}
+}
+\end{frame}
+
+\begin{frame}{Optimization algorithms}{Direction search: coordinates descent}
+\psset{xunit=50mm,yunit=50mm,runit=50mm}
+\PSPICTURE{-0.5}{0.4}{1.1}{2}
+{
+	\psline{->}(-0.4,0.5)(-0.4,1.9)
+	\rput(-0.45,1.95){$y$}
+	\psline{->}(-0.4,0.5)(1.0,0.5)
+	\rput(1.05,0.45){$x$}
+	\pscircle*(0.04,1.58667){0.01}
+	\pscircle*(-0.04,1.58667){0.01}
+	\pscircle*(0,1.62667){0.01}
+	\pscircle*(0,1.54667){0.01}
+	\psline(0,1.66667)(0,1.62667)(0,1.54667)
+	\pscircle(0.785398,0.785398){0.02}
+}
+\end{frame}
+
+\begin{frame}{Optimization algorithms}{Direction search: coordinates descent}
+\psset{xunit=50mm,yunit=50mm,runit=50mm}
+\PSPICTURE{-0.5}{0.4}{1.1}{2}
+{
+	\psline{->}(-0.4,0.5)(-0.4,1.9)
+	\rput(-0.45,1.95){$y$}
+	\psline{->}(-0.4,0.5)(1.0,0.5)
+	\rput(1.05,0.45){$x$}
+	\pscircle*(0,1.42667){0.01}
+	\pscircle*(-0.04,1.46667){0.01}
+	\pscircle*(0,1.50667){0.01}
+	\pscircle*(0.04,1.46667){0.01}
+	\psline(0,1.66667)(0,1.62667)(0,1.54667)(0.04,1.46667)
+	\pscircle(0.785398,0.785398){0.02}
+}
+\end{frame}
+
+\begin{frame}{Optimization algorithms}{Direction search: coordinates descent}
+\psset{xunit=50mm,yunit=50mm,runit=50mm}
+\PSPICTURE{-0.5}{0.4}{1.1}{2}
+{
+	\psline{->}(-0.4,0.5)(-0.4,1.9)
+	\rput(-0.45,1.95){$y$}
+	\psline{->}(-0.4,0.5)(1.0,0.5)
+	\rput(1.05,0.45){$x$}
+	\pscircle*(0.08,1.34667){0.01}
+	\pscircle*(0.12,1.38667){0.01}
+	\pscircle*(0.04,1.38667){0.01}
+	\pscircle*(0.08,1.42667){0.01}
+	\psline(0,1.66667)(0,1.62667)(0,1.54667)(0.04,1.46667)(0.12,1.38667)
+	\pscircle(0.785398,0.785398){0.02}
+}
+\end{frame}
+
+\begin{frame}{Optimization algorithms}{Direction search: coordinates descent}
+\psset{xunit=50mm,yunit=50mm,runit=50mm}
+\PSPICTURE{-0.5}{0.4}{1.1}{2}
+{
+	\psline{->}(-0.4,0.5)(-0.4,1.9)
+	\rput(-0.45,1.95){$y$}
+	\psline{->}(-0.4,0.5)(1.0,0.5)
+	\rput(1.05,0.45){$x$}
+	\pscircle*(0.2,1.34667){0.01}
+	\pscircle*(0.16,1.30667){0.01}
+	\pscircle*(0.24,1.30667){0.01}
+	\pscircle*(0.2,1.26667){0.01}
+	\psline(0,1.66667)(0,1.62667)(0,1.54667)(0.04,1.46667)(0.12,1.38667)(0.24,1.30667)
+	\pscircle(0.785398,0.785398){0.02}
+}
+\end{frame}
+
+\begin{frame}{Optimization algorithms}{Direction search: coordinates descent}
+\psset{xunit=50mm,yunit=50mm,runit=50mm}
+\PSPICTURE{-0.5}{0.4}{1.1}{2}
+{
+	\psline{->}(-0.4,0.5)(-0.4,1.9)
+	\rput(-0.45,1.95){$y$}
+	\psline{->}(-0.4,0.5)(1.0,0.5)
+	\rput(1.05,0.45){$x$}
+	\pscircle*(0.36,1.26667){0.01}
+	\pscircle*(0.32,1.22667){0.01}
+	\pscircle*(0.4,1.22667){0.01}
+	\pscircle*(0.36,1.18667){0.01}
+	\psline(0,1.66667)(0,1.62667)(0,1.54667)(0.04,1.46667)(0.12,1.38667)(0.24,1.30667)(0.36,1.18667)
+	\pscircle(0.785398,0.785398){0.02}
+}
+\end{frame}
+
+\begin{frame}{Optimization algorithms}{Direction search: coordinates descent}
+\psset{xunit=50mm,yunit=50mm,runit=50mm}
+\PSPICTURE{-0.5}{0.4}{1.1}{2}
+{
+	\psline{->}(-0.4,0.5)(-0.4,1.9)
+	\rput(-0.45,1.95){$y$}
+	\psline{->}(-0.4,0.5)(1.0,0.5)
+	\rput(1.05,0.45){$x$}
+	\pscircle*(0.52,1.06667){0.01}
+	\pscircle*(0.44,1.06667){0.01}
+	\pscircle*(0.48,1.10667){0.01}
+	\pscircle*(0.48,1.02667){0.01}
+	\psline(0,1.66667)(0,1.62667)(0,1.54667)(0.04,1.46667)(0.12,1.38667)(0.24,1.30667)(0.36,1.18667)(0.52,1.06667)
+	\pscircle(0.785398,0.785398){0.02}
+}
+\end{frame}
+
+\begin{frame}{Optimization algorithms}{Direction search: coordinates descent}
+\psset{xunit=50mm,yunit=50mm,runit=50mm}
+\PSPICTURE{-0.5}{0.4}{1.1}{2}
+{
+	\psline{->}(-0.4,0.5)(-0.4,1.9)
+	\rput(-0.45,1.95){$y$}
+	\psline{->}(-0.4,0.5)(1.0,0.5)
+	\rput(1.05,0.45){$x$}
+	\pscircle*(0.68,0.986667){0.01}
+	\pscircle*(0.72,0.946667){0.01}
+	\pscircle*(0.64,0.946667){0.01}
+	\pscircle*(0.68,0.906667){0.01}
+	\psline(0,1.66667)(0,1.62667)(0,1.54667)(0.04,1.46667)(0.12,1.38667)(0.24,1.30667)(0.36,1.18667)(0.52,1.06667)(0.68,0.906667)
+	\pscircle(0.785398,0.785398){0.02}
+}
+\end{frame}
+
+\begin{frame}{Optimization algorithms}{Direction search: coordinates descent}
+\psset{xunit=50mm,yunit=50mm,runit=50mm}
+\PSPICTURE{-0.5}{0.4}{1.1}{2}
+{
+	\psline{->}(-0.4,0.5)(-0.4,1.9)
+	\rput(-0.45,1.95){$y$}
+	\psline{->}(-0.4,0.5)(1.0,0.5)
+	\rput(1.05,0.45){$x$}
+	\pscircle*(0.84,0.706667){0.01}
+	\pscircle*(0.84,0.786667){0.01}
+	\pscircle*(0.88,0.746667){0.01}
+	\pscircle*(0.8,0.746667){0.01}
+	\psline(0,1.66667)(0,1.62667)(0,1.54667)(0.04,1.46667)(0.12,1.38667)(0.24,1.30667)(0.36,1.18667)(0.52,1.06667)(0.68,0.906667)(0.8,0.746667)
+	\pscircle(0.785398,0.785398){0.02}
+}
+\end{frame}
+
+\begin{frame}{Optimization algorithms}{Direction search: coordinates descent}
+\psset{xunit=50mm,yunit=50mm,runit=50mm}
+\PSPICTURE{-0.5}{0.4}{1.1}{2}
+{
+	\psline{->}(-0.4,0.5)(-0.4,1.9)
+	\rput(-0.45,1.95){$y$}
+	\psline{->}(-0.4,0.5)(1.0,0.5)
+	\rput(1.05,0.45){$x$}
+	\pscircle*(0.92,0.546667){0.01}
+	\pscircle*(0.88,0.586667){0.01}
+	\pscircle*(0.96,0.586667){0.01}
+	\pscircle*(0.92,0.626667){0.01}
+	\psline(0,1.66667)(0,1.62667)(0,1.54667)(0.04,1.46667)(0.12,1.38667)(0.24,1.30667)(0.36,1.18667)(0.52,1.06667)(0.68,0.906667)(0.8,0.746667)
+	\pscircle(0.785398,0.785398){0.02}
+}
+\end{frame}
+
+\begin{frame}{Optimization algorithms}{Direction search: coordinates descent}
+\psset{xunit=50mm,yunit=50mm,runit=50mm}
+\PSPICTURE{-0.5}{0.4}{1.1}{2}
+{
+	\psline{->}(-0.4,0.5)(-0.4,1.9)
+	\rput(-0.45,1.95){$y$}
+	\psline{->}(-0.4,0.5)(1.0,0.5)
+	\rput(1.05,0.45){$x$}
+	\pscircle*(0.84,0.746667){0.01}
+	\pscircle*(0.8,0.786667){0.01}
+	\pscircle*(0.8,0.706667){0.01}
+	\pscircle*(0.76,0.746667){0.01}
+	\psline(0,1.66667)(0,1.62667)(0,1.54667)(0.04,1.46667)(0.12,1.38667)(0.24,1.30667)(0.36,1.18667)(0.52,1.06667)(0.68,0.906667)(0.8,0.746667)(0.8,0.786667)
+	\pscircle(0.785398,0.785398){0.02}
+}
+\end{frame}
+
+\begin{frame}{Optimization algorithms}{Direction search: coordinates descent}
+\psset{xunit=50mm,yunit=50mm,runit=50mm}
+\PSPICTURE{-0.5}{0.4}{1.1}{2}
+{
+	\psline{->}(-0.4,0.5)(-0.4,1.9)
+	\rput(-0.45,1.95){$y$}
+	\psline{->}(-0.4,0.5)(1.0,0.5)
+	\rput(1.05,0.45){$x$}
+	\pscircle*(0.8,0.866667){0.01}
+	\pscircle*(0.84,0.826667){0.01}
+	\pscircle*(0.8,0.786667){0.01}
+	\pscircle*(0.76,0.826667){0.01}
+	\psline(0,1.66667)(0,1.62667)(0,1.54667)(0.04,1.46667)(0.12,1.38667)(0.24,1.30667)(0.36,1.18667)(0.52,1.06667)(0.68,0.906667)(0.8,0.746667)(0.8,0.786667)
+	\pscircle(0.785398,0.785398){0.02}
+}
+\end{frame}
+
+\begin{frame}{Optimization algorithms}{Direction search: coordinates descent}
+\psset{xunit=50mm,yunit=50mm,runit=50mm}
+\PSPICTURE{-0.5}{0.4}{1.1}{2}
+{
+	\psline{->}(-0.4,0.5)(-0.4,1.9)
+	\rput(-0.45,1.95){$y$}
+	\psline{->}(-0.4,0.5)(1.0,0.5)
+	\rput(1.05,0.45){$x$}
+	\pscircle*(0.84,0.786667){0.01}
+	\pscircle*(0.8,0.746667){0.01}
+	\pscircle*(0.76,0.786667){0.01}
+	\pscircle*(0.8,0.826667){0.01}
+	\psline(0,1.66667)(0,1.62667)(0,1.54667)(0.04,1.46667)(0.12,1.38667)(0.24,1.30667)(0.36,1.18667)(0.52,1.06667)(0.68,0.906667)(0.8,0.746667)(0.8,0.786667)
+	\pscircle(0.785398,0.785398){0.02}
+}
+\end{frame}
+
+\begin{frame}{Optimization algorithms}{Direction search: coordinates descent}
+\psset{xunit=50mm,yunit=50mm,runit=50mm}
+\PSPICTURE{-0.5}{0.4}{1.1}{2}
+{
+	\psline{->}(-0.4,0.5)(-0.4,1.9)
+	\rput(-0.45,1.95){$y$}
+	\psline{->}(-0.4,0.5)(1.0,0.5)
+	\rput(1.05,0.45){$x$}
+	\pscircle*(0.8,0.806667){0.01}
+	\pscircle*(0.8,0.766667){0.01}
+	\pscircle*(0.82,0.786667){0.01}
+	\pscircle*(0.78,0.786667){0.01}
+	\psline(0,1.66667)(0,1.62667)(0,1.54667)(0.04,1.46667)(0.12,1.38667)(0.24,1.30667)(0.36,1.18667)(0.52,1.06667)(0.68,0.906667)(0.8,0.746667)(0.8,0.786667)(0.78,0.786667)
+	\pscircle(0.785398,0.785398){0.02}
+}
+\end{frame}
+
+\begin{frame}{Optimization algorithms}{Direction search: coordinates descent}
+\psset{xunit=50mm,yunit=50mm,runit=50mm}
+\PSPICTURE{-0.5}{0.4}{1.1}{2}
+{
+	\psline{->}(-0.4,0.5)(-0.4,1.9)
+	\rput(-0.45,1.95){$y$}
+	\psline{->}(-0.4,0.5)(1.0,0.5)
+	\rput(1.05,0.45){$x$}
+	\pscircle*(0.76,0.766667){0.01}
+	\pscircle*(0.74,0.786667){0.01}
+	\pscircle*(0.76,0.806667){0.01}
+	\pscircle*(0.78,0.786667){0.01}
+	\psline(0,1.66667)(0,1.62667)(0,1.54667)(0.04,1.46667)(0.12,1.38667)(0.24,1.30667)(0.36,1.18667)(0.52,1.06667)(0.68,0.906667)(0.8,0.746667)(0.8,0.786667)(0.78,0.786667)
+	\pscircle(0.785398,0.785398){0.02}
+}
+\end{frame}
+
+\begin{frame}{Optimization algorithms}{Direction search: coordinates descent}
+\psset{xunit=50mm,yunit=50mm,runit=50mm}
+\PSPICTURE{-0.5}{0.4}{1.1}{2}
+{
+	\psline{->}(-0.4,0.5)(-0.4,1.9)
+	\rput(-0.45,1.95){$y$}
+	\psline{->}(-0.4,0.5)(1.0,0.5)
+	\rput(1.05,0.45){$x$}
+	\pscircle*(0.78,0.806667){0.01}
+	\pscircle*(0.78,0.766667){0.01}
+	\pscircle*(0.8,0.786667){0.01}
+	\pscircle*(0.76,0.786667){0.01}
+	\psline(0,1.66667)(0,1.62667)(0,1.54667)(0.04,1.46667)(0.12,1.38667)(0.24,1.30667)(0.36,1.18667)(0.52,1.06667)(0.68,0.906667)(0.8,0.746667)(0.8,0.786667)(0.78,0.786667)
+	\pscircle(0.785398,0.785398){0.02}
+}
+\end{frame}
+
+\begin{frame}{Optimization algorithms}{Direction search: coordinates descent}
+\psset{xunit=50mm,yunit=50mm,runit=50mm}
+\PSPICTURE{-0.5}{0.4}{1.1}{2}
+{
+	\psline{->}(-0.4,0.5)(-0.4,1.9)
+	\rput(-0.45,1.95){$y$}
+	\psline{->}(-0.4,0.5)(1.0,0.5)
+	\rput(1.05,0.45){$x$}
+	\pscircle*(0.78,0.776667){0.01}
+	\pscircle*(0.77,0.786667){0.01}
+	\pscircle*(0.79,0.786667){0.01}
+	\pscircle*(0.78,0.796667){0.01}
+	\psline(0,1.66667)(0,1.62667)(0,1.54667)(0.04,1.46667)(0.12,1.38667)(0.24,1.30667)(0.36,1.18667)(0.52,1.06667)(0.68,0.906667)(0.8,0.746667)(0.8,0.786667)(0.78,0.786667)(0.79,0.786667)
+	\pscircle(0.785398,0.785398){0.02}
+}
+\end{frame}
+
+\begin{frame}{Optimization algorithms}{Direction search: coordinates descent}
+\psset{xunit=50mm,yunit=50mm,runit=50mm}
+\PSPICTURE{-0.5}{0.4}{1.1}{2}
+{
+	\psline{->}(-0.4,0.5)(-0.4,1.9)
+	\rput(-0.45,1.95){$y$}
+	\psline{->}(-0.4,0.5)(1.0,0.5)
+	\rput(1.05,0.45){$x$}
+	\pscircle*(0.8,0.796667){0.01}
+	\pscircle*(0.79,0.786667){0.01}
+	\pscircle*(0.81,0.786667){0.01}
+	\pscircle*(0.8,0.776667){0.01}
+	\psline(0,1.66667)(0,1.62667)(0,1.54667)(0.04,1.46667)(0.12,1.38667)(0.24,1.30667)(0.36,1.18667)(0.52,1.06667)(0.68,0.906667)(0.8,0.746667)(0.8,0.786667)(0.78,0.786667)(0.79,0.786667)
+	\pscircle(0.785398,0.785398){0.02}
+}
+\end{frame}
+
+\begin{frame}{Optimization algorithms}{Direction search: coordinates descent}
+\psset{xunit=50mm,yunit=50mm,runit=50mm}
+\PSPICTURE{-0.5}{0.4}{1.1}{2}
+{
+	\psline{->}(-0.4,0.5)(-0.4,1.9)
+	\rput(-0.45,1.95){$y$}
+	\psline{->}(-0.4,0.5)(1.0,0.5)
+	\rput(1.05,0.45){$x$}
+	\pscircle*(0.8,0.786667){0.01}
+	\pscircle*(0.79,0.776667){0.01}
+	\pscircle*(0.78,0.786667){0.01}
+	\pscircle*(0.79,0.796667){0.01}
+	\psline(0,1.66667)(0,1.62667)(0,1.54667)(0.04,1.46667)(0.12,1.38667)(0.24,1.30667)(0.36,1.18667)(0.52,1.06667)(0.68,0.906667)(0.8,0.746667)(0.8,0.786667)(0.78,0.786667)(0.79,0.786667)
+	\pscircle(0.785398,0.785398){0.02}
+}
+\end{frame}
+
+\begin{frame}{Optimization algorithms}{Direction search: coordinates descent}
+\psset{xunit=50mm,yunit=50mm,runit=50mm}
+\PSPICTURE{-0.5}{0.4}{1.1}{2}
+{
+	\psline{->}(-0.4,0.5)(-0.4,1.9)
+	\rput(-0.45,1.95){$y$}
+	\psline{->}(-0.4,0.5)(1.0,0.5)
+	\rput(1.05,0.45){$x$}
+	\pscircle*(0.785,0.786667){0.01}
+	\pscircle*(0.79,0.781667){0.01}
+	\pscircle*(0.79,0.791667){0.01}
+	\pscircle*(0.795,0.786667){0.01}
+	\psline(0,1.66667)(0,1.62667)(0,1.54667)(0.04,1.46667)(0.12,1.38667)(0.24,1.30667)(0.36,1.18667)(0.52,1.06667)(0.68,0.906667)(0.8,0.746667)(0.8,0.786667)(0.78,0.786667)(0.79,0.786667)(0.785,0.786667)
+	\pscircle(0.785398,0.785398){0.02}
+}
+\end{frame}
+
+\begin{frame}{Optimization algorithms}{Direction search: coordinates descent}
+\psset{xunit=50mm,yunit=50mm,runit=50mm}
+\PSPICTURE{-0.5}{0.4}{1.1}{2}
+{
+	\psline{->}(-0.4,0.5)(-0.4,1.9)
+	\rput(-0.45,1.95){$y$}
+	\psline{->}(-0.4,0.5)(1.0,0.5)
+	\rput(1.05,0.45){$x$}
+	\pscircle*(0.78,0.791667){0.01}
+	\pscircle*(0.775,0.786667){0.01}
+	\pscircle*(0.78,0.781667){0.01}
+	\pscircle*(0.785,0.786667){0.01}
+	\psline(0,1.66667)(0,1.62667)(0,1.54667)(0.04,1.46667)(0.12,1.38667)(0.24,1.30667)(0.36,1.18667)(0.52,1.06667)(0.68,0.906667)(0.8,0.746667)(0.8,0.786667)(0.78,0.786667)(0.79,0.786667)(0.785,0.786667)
+	\pscircle(0.785398,0.785398){0.02}
+}
+\end{frame}
+
+\begin{frame}{Optimization algorithms}{Direction search: coordinates descent}
+\psset{xunit=50mm,yunit=50mm,runit=50mm}
+\PSPICTURE{-0.5}{0.4}{1.1}{2}
+{
+	\psline{->}(-0.4,0.5)(-0.4,1.9)
+	\rput(-0.45,1.95){$y$}
+	\psline{->}(-0.4,0.5)(1.0,0.5)
+	\rput(1.05,0.45){$x$}
+	\pscircle*(0.79,0.786667){0.01}
+	\pscircle*(0.78,0.786667){0.01}
+	\pscircle*(0.785,0.781667){0.01}
+	\pscircle*(0.785,0.791667){0.01}
+	\psline(0,1.66667)(0,1.62667)(0,1.54667)(0.04,1.46667)(0.12,1.38667)(0.24,1.30667)(0.36,1.18667)(0.52,1.06667)(0.68,0.906667)(0.8,0.746667)(0.8,0.786667)(0.78,0.786667)(0.79,0.786667)(0.785,0.786667)
+	\pscircle(0.785398,0.785398){0.02}
+}
+\end{frame}
+
+\begin{frame}{Optimization algorithms}{Direction search: coordinates descent}
+\psset{xunit=50mm,yunit=50mm,runit=50mm}
+\PSPICTURE{-0.5}{0.4}{1.1}{2}
+{
+	\psline{->}(-0.4,0.5)(-0.4,1.9)
+	\rput(-0.45,1.95){$y$}
+	\psline{->}(-0.4,0.5)(1.0,0.5)
+	\rput(1.05,0.45){$x$}
+	\pscircle*(0.7825,0.786667){0.01}
+	\pscircle*(0.785,0.784167){0.01}
+	\pscircle*(0.7875,0.786667){0.01}
+	\pscircle*(0.785,0.789167){0.01}
+	\psline(0,1.66667)(0,1.62667)(0,1.54667)(0.04,1.46667)(0.12,1.38667)(0.24,1.30667)(0.36,1.18667)(0.52,1.06667)(0.68,0.906667)(0.8,0.746667)(0.8,0.786667)(0.78,0.786667)(0.79,0.786667)(0.785,0.786667)(0.785,0.784167)
+	\pscircle(0.785398,0.785398){0.02}
+}
+\end{frame}
+
+\begin{frame}{Optimization algorithms}{Direction search: coordinates descent}
+\psset{xunit=50mm,yunit=50mm,runit=50mm}
+\PSPICTURE{-0.5}{0.4}{1.1}{2}
+{
+	\psline{->}(-0.4,0.5)(-0.4,1.9)
+	\rput(-0.45,1.95){$y$}
+	\psline{->}(-0.4,0.5)(1.0,0.5)
+	\rput(1.05,0.45){$x$}
+	\pscircle*(0.785,0.784167){0.01}
+	\pscircle*(0.785,0.779167){0.01}
+	\pscircle*(0.7825,0.781667){0.01}
+	\pscircle*(0.7875,0.781667){0.01}
+	\psline(0,1.66667)(0,1.62667)(0,1.54667)(0.04,1.46667)(0.12,1.38667)(0.24,1.30667)(0.36,1.18667)(0.52,1.06667)(0.68,0.906667)(0.8,0.746667)(0.8,0.786667)(0.78,0.786667)(0.79,0.786667)(0.785,0.786667)(0.785,0.784167)
+	\pscircle(0.785398,0.785398){0.02}
+}
+\end{frame}
+
+\begin{frame}{Optimization algorithms}{Direction search: coordinates descent}
+\psset{xunit=50mm,yunit=50mm,runit=50mm}
+\PSPICTURE{-0.5}{0.4}{1.1}{2}
+{
+	\psline{->}(-0.4,0.5)(-0.4,1.9)
+	\rput(-0.45,1.95){$y$}
+	\psline{->}(-0.4,0.5)(1.0,0.5)
+	\rput(1.05,0.45){$x$}
+	\pscircle*(0.7875,0.784167){0.01}
+	\pscircle*(0.785,0.781667){0.01}
+	\pscircle*(0.7825,0.784167){0.01}
+	\pscircle*(0.785,0.786667){0.01}
+	\psline(0,1.66667)(0,1.62667)(0,1.54667)(0.04,1.46667)(0.12,1.38667)(0.24,1.30667)(0.36,1.18667)(0.52,1.06667)(0.68,0.906667)(0.8,0.746667)(0.8,0.786667)(0.78,0.786667)(0.79,0.786667)(0.785,0.786667)(0.785,0.784167)
+	\pscircle(0.785398,0.785398){0.02}
+}
+\end{frame}
+
+\begin{frame}{Optimization algorithms}{Direction search: coordinates descent}
+\psset{xunit=50mm,yunit=50mm,runit=50mm}
+\PSPICTURE{-0.5}{0.4}{1.1}{2}
+{
+	\psline{->}(-0.4,0.5)(-0.4,1.9)
+	\rput(-0.45,1.95){$y$}
+	\psline{->}(-0.4,0.5)(1.0,0.5)
+	\rput(1.05,0.45){$x$}
+	\pscircle*(0.78375,0.784167){0.01}
+	\pscircle*(0.785,0.782917){0.01}
+	\pscircle*(0.785,0.785417){0.01}
+	\pscircle*(0.78625,0.784167){0.01}
+	\psline(0,1.66667)(0,1.62667)(0,1.54667)(0.04,1.46667)(0.12,1.38667)(0.24,1.30667)(0.36,1.18667)(0.52,1.06667)(0.68,0.906667)(0.8,0.746667)(0.8,0.786667)(0.78,0.786667)(0.79,0.786667)(0.785,0.786667)(0.785,0.784167)(0.785,0.785417)
+	\pscircle(0.785398,0.785398){0.02}
+}
+\end{frame}
+
+\begin{frame}{Optimization algorithms}{Direction search: coordinates descent}
+\psset{xunit=50mm,yunit=50mm,runit=50mm}
+\PSPICTURE{-0.5}{0.4}{1.1}{2}
+{
+	\psline{->}(-0.4,0.5)(-0.4,1.9)
+	\rput(-0.45,1.95){$y$}
+	\psline{->}(-0.4,0.5)(1.0,0.5)
+	\rput(1.05,0.45){$x$}
+	\pscircle*(0.785,0.787917){0.01}
+	\pscircle*(0.78375,0.786667){0.01}
+	\pscircle*(0.78625,0.786667){0.01}
+	\pscircle*(0.785,0.785417){0.01}
+	\psline(0,1.66667)(0,1.62667)(0,1.54667)(0.04,1.46667)(0.12,1.38667)(0.24,1.30667)(0.36,1.18667)(0.52,1.06667)(0.68,0.906667)(0.8,0.746667)(0.8,0.786667)(0.78,0.786667)(0.79,0.786667)(0.785,0.786667)(0.785,0.784167)(0.785,0.785417)
+	\pscircle(0.785398,0.785398){0.02}
+}
+\end{frame}
+
+\begin{frame}{Optimization algorithms}{Direction search: coordinates descent}
+\psset{xunit=50mm,yunit=50mm,runit=50mm}
+\PSPICTURE{-0.5}{0.4}{1.1}{2}
+{
+	\psline{->}(-0.4,0.5)(-0.4,1.9)
+	\rput(-0.45,1.95){$y$}
+	\psline{->}(-0.4,0.5)(1.0,0.5)
+	\rput(1.05,0.45){$x$}
+	\pscircle*(0.78375,0.785417){0.01}
+	\pscircle*(0.78625,0.785417){0.01}
+	\pscircle*(0.785,0.786667){0.01}
+	\pscircle*(0.785,0.784167){0.01}
+	\psline(0,1.66667)(0,1.62667)(0,1.54667)(0.04,1.46667)(0.12,1.38667)(0.24,1.30667)(0.36,1.18667)(0.52,1.06667)(0.68,0.906667)(0.8,0.746667)(0.8,0.786667)(0.78,0.786667)(0.79,0.786667)(0.785,0.786667)(0.785,0.784167)(0.785,0.785417)
+	\pscircle(0.785398,0.785398){0.02}
+}
+\end{frame}
+
+\begin{frame}{Optimization algorithms}{Direction search: coordinates descent}
+\psset{xunit=50mm,yunit=50mm,runit=50mm}
+\PSPICTURE{-0.5}{0.4}{1.1}{2}
+{
+	\psline{->}(-0.4,0.5)(-0.4,1.9)
+	\rput(-0.45,1.95){$y$}
+	\psline{->}(-0.4,0.5)(1.0,0.5)
+	\rput(1.05,0.45){$x$}
+	\pscircle*(0.785,0.784792){0.01}
+	\pscircle*(0.785,0.786042){0.01}
+	\pscircle*(0.785625,0.785417){0.01}
+	\pscircle*(0.784375,0.785417){0.01}
+	\psline(0,1.66667)(0,1.62667)(0,1.54667)(0.04,1.46667)(0.12,1.38667)(0.24,1.30667)(0.36,1.18667)(0.52,1.06667)(0.68,0.906667)(0.8,0.746667)(0.8,0.786667)(0.78,0.786667)(0.79,0.786667)(0.785,0.786667)(0.785,0.784167)(0.785,0.785417)(0.785625,0.785417)
+	\pscircle(0.785398,0.785398){0.02}
+}
+\end{frame}
+
+\begin{frame}{Optimization algorithms}{Direction search: coordinates descent}
+\psset{xunit=50mm,yunit=50mm,runit=50mm}
+\PSPICTURE{-0.5}{0.4}{1.1}{2}
+{
+	\psline{->}(-0.4,0.5)(-0.4,1.9)
+	\rput(-0.45,1.95){$y$}
+	\psline{->}(-0.4,0.5)(1.0,0.5)
+	\rput(1.05,0.45){$x$}
+	\pscircle*(0.785625,0.785417){0.01}
+	\pscircle*(0.78625,0.786042){0.01}
+	\pscircle*(0.78625,0.784792){0.01}
+	\pscircle*(0.786875,0.785417){0.01}
+	\psline(0,1.66667)(0,1.62667)(0,1.54667)(0.04,1.46667)(0.12,1.38667)(0.24,1.30667)(0.36,1.18667)(0.52,1.06667)(0.68,0.906667)(0.8,0.746667)(0.8,0.786667)(0.78,0.786667)(0.79,0.786667)(0.785,0.786667)(0.785,0.784167)(0.785,0.785417)(0.785625,0.785417)
+	\pscircle(0.785398,0.785398){0.02}
+}
+\end{frame}
+
 \begin{frame}{Optimization: algorithms}{Direction search: random}
 \psset{xunit=0.5mm,yunit=0.5mm,runit=0.5mm}
 \PSPICTURE{130}{0}{260}{100}
@@ -393,7 +917,7 @@
 
 
 
-\begin{frame}{Genetic: flowchart}
+\begin{frame}{Optimization: algorithms}{Genetic: flowchart}
 \psset{xunit=0.35mm,yunit=0.35mm}
 \PSPICTURE{-120}{-185}{120}{20}
 {
@@ -462,8 +986,7 @@
 }
 \end{frame}
 
-\begin{frame}{Genetic}
-	\framesubtitle{Genome}
+\begin{frame}{Optimization: algorithms}{Genetic: genome}
 \psset{unit=1mm}
 \PSPICTURE{0}{0}{80}{30}
 {
@@ -523,8 +1046,7 @@
 \[x=x_{\min}+\frac{I_x}{2^{N_x}-1}\,\left(x_{\max}-x_{\min}\right)\]
 \end{frame}
 
-\begin{frame}{Genetic}
-	\framesubtitle{Survival and reproduction}
+\begin{frame}{Optimization: algorithms}{Genetic: survival and reproduction}
 \PICTURE{250,110}
 {
 	\scriptsize
@@ -564,8 +1086,7 @@
 }
 \end{frame}
 
-\begin{frame}{Genetic}
-	\framesubtitle{Mutation}
+\begin{frame}{Optimization: algorithms}{Genetic: mutation}
 \psset{unit=1mm}
 \PSPICTURE{0}{0}{80}{20}
 {
@@ -642,8 +1163,7 @@
 }
 \end{frame}
 
-\begin{frame}{Genetic}
-	\framesubtitle{Reproduction}
+\begin{frame}{Optimization: algorithms}{Genetic: reproduction}
 \psset{unit=1mm}
 \PSPICTURE{0}{0}{80}{20}
 {
@@ -758,8 +1278,7 @@
 }
 \end{frame}
 
-\begin{frame}{Genetic}
-	\framesubtitle{Adaptation}
+\begin{frame}{Optimization: algorithms}{Genetic: adaptation}
 \psset{unit=0.9mm}
 \PSPICTURE{-30}{-7.5}{80}{30}
 {
@@ -883,33 +1402,33 @@
 }
 \end{frame}
 
-\begin{frame}{Sweep}
+\begin{frame}{Optimization: algorithms}{Sweep}
 	\FIGURE{width=0.65\textwidth}{sphere-variables-sw-50-50-1.eps}
 \end{frame}
 
-\begin{frame}{Monte-Carlo}
+\begin{frame}{Optimization: algorithms}{Monte-Carlo}
 	\FIGURE{width=0.65\textwidth}{sphere-variables-mc-2500-1.eps}
 \end{frame}
 
-\begin{frame}{Sweep + Iterative}
+\begin{frame}{Optimization: algorithms}{Sweep + Iterative}
 	\FIGURE{width=0.65\textwidth}{sphere-variables-sw-10-10-25-10-0.5.eps}
 \end{frame}
 
-\begin{frame}{Monte-Carlo + Iterative}
+\begin{frame}{Optimization: algorithms}{Monte-Carlo + Iterative}
 	\FIGURE{width=0.65\textwidth}{sphere-variables-mc-100-25-10-0.1.eps}
 \end{frame}
 
-\begin{frame}{Genetic}
+\begin{frame}{Optimization: algorithms}{Genetic}
 	\FIGURE{width=0.65\textwidth}{sphere-variables-ge-250-16-0.2-0.2-0.2-32.eps}
 \end{frame}
 
-\begin{frame}{Monte-Carlo + Direction search}
+\begin{frame}{Optimization: algorithms}{Monte-Carlo + Direction search}
 	\FIGURE{width=0.65\textwidth}{sphere-variables-mc-ra-100-1-600-4-0.1-1.eps}
 \end{frame}
 
 \subsection{Standard tests functions}
 
-\begin{frame}{Optimization}
+\begin{frame}{Optimization: standard tests functions}{Types}
 \begin{itemize}
 \item Bowl-shaped function: Sphere function.
 \item Many local minima function: Ackley's function.
@@ -920,7 +1439,7 @@
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Standard tests functions}
+\begin{frame}{Optimization: standard tests functions}
 \TABLE{\tiny}{ccc}
 {
 	Objective function & Minimum & Domain \\
@@ -952,7 +1471,7 @@
 }
 \end{frame}
 
-\begin{frame}{Translated standard tests functions}
+\begin{frame}{Optimization: translated standard tests functions}
 \TABLE{\tiny}{ccc}
 {
 	Objective function & Minimum & Domain \\
@@ -984,57 +1503,58 @@
 }
 \end{frame}
 
-\begin{frame}{Sphere function}
+\begin{frame}{Optimization: standard tests functions}{Sphere function}
 	\includegraphics[width=0.9\textwidth]{sphere-function.eps}
 \end{frame}
 
-\begin{frame}{Sphere function}
+\begin{frame}{Optimization: standard tests functions}{Sphere function}
 	\includegraphics[width=\textwidth]{Sphere-e.eps}
 \end{frame}
 
-\begin{frame}{Ackley's function}
+\begin{frame}{Optimization: standard tests functions}{Ackley's function}
 	\includegraphics[width=0.9\textwidth]{ackley-function.eps}
 \end{frame}
 
-\begin{frame}{Ackley's function}
+\begin{frame}{Optimization: standard tests functions}{Ackley's function}
 	\includegraphics[width=\textwidth]{Ackley-e.eps}
 \end{frame}
 
-\begin{frame}{Booth's function}
+\begin{frame}{Optimization: standard tests functions}{Booth's function}
 	\includegraphics[width=0.9\textwidth]{booth-function.eps}
 \end{frame}
 
-\begin{frame}{Booth's function}
+\begin{frame}{Optimization: standard tests functions}{Booth's function}
 	\includegraphics[width=\textwidth]{Booth-e.eps}
 \end{frame}
 
-\begin{frame}{Rosenbrock's function}
+\begin{frame}{Optimization: standard tests functions}{Rosenbrock's function}
 	\includegraphics[width=0.9\textwidth]{rosenbrock-function.eps}
 \end{frame}
 
-\begin{frame}{Rosenbrock's function}
+\begin{frame}{Optimization: standard tests functions}{Rosenbrock's function}
 	\includegraphics[width=\textwidth]{Rosenbrock-e.eps}
 \end{frame}
 
-\begin{frame}{Easom's function}
+\begin{frame}{Optimization: standard tests functions}{Easom's function}
 	\includegraphics[width=0.9\textwidth]{easom-function.eps}
 \end{frame}
 
-\begin{frame}{Easom's function}
+\begin{frame}{Optimization: standard tests functions}{Easom's function}
 	\includegraphics[width=\textwidth]{Easom-e.eps}
 \end{frame}
 
-\begin{frame}{Beale's function}
+\begin{frame}{Optimization: standard tests functions}{Beale's function}
 	\includegraphics[width=0.9\textwidth]{beale-function.eps}
 \end{frame}
 
-\begin{frame}{Beale's function}
+\begin{frame}{Optimization: standard tests functions}{Beale's function}
 	\includegraphics[width=\textwidth]{Beale-e.eps}
 \end{frame}
 
 \subsection{Parallelization}
 
-\begin{frame}{Brute force algorithms: sweep and Monte-Carlo}
+\begin{frame}{Optimization: parallelization}
+{Brute force algorithms: sweep and Monte-Carlo}
 \psset{xunit=0.5mm,yunit=0.5mm}
 \PSPICTURE{-90}{-55}{90}{-15}
 {
@@ -1059,7 +1579,7 @@
 }
 \end{frame}
 
-\begin{frame}{Iterative algorithm}
+\begin{frame}{Optimization: parallelization}{Iterative algorithm}
 \psset{xunit=0.5mm,yunit=0.5mm}
 \PSPICTURE{-100}{-130}{100}{-15}
 {
@@ -1106,54 +1626,7 @@
 }
 \end{frame}
 
-\begin{frame}{Direction search algorithms}
-\psset{xunit=0.5mm,yunit=0.5mm}
-\PSPICTURE{-100}{-130}{100}{-15}
-{
-	\tiny
-	\rput(0,-15){1st step:}
-	\rput(0,-20){Generation of $N_{estimates}$ empirical parameters sets}
-	\psframe(-60,-25)(60,-10)
-	\psline{->}(0,-25)(-60,-30)
-	\psline{->}(0,-25)(0,-30)
-	\psline{->}(0,-25)(60,-30)
-	\rput(-60,-35){1st task:}
-	\rput(-60,-40){$N_{estimates}/N_{tasks}$ simulations}
-	\psframe(-100,-30)(-20,-45)
-	\rput(0,-37.5){$\cdots$}
-	\rput(60,-35){$N_{tasks}$-th task:}
-	\rput(60,-40){$N_{estimates}/N_{tasks}$ simulations}
-	\psframe(20,-30)(100,-45)
-	\psline{->}(-60,-45)(0,-50)
-	\psline{->}(0,-45)(0,-50)
-	\psline{->}(60,-45)(0,-50)
-	\rput(0,-55){Getting optimal empirical parameters set}
-	\psframe(-55,-50)(55,-60)
-	\psline{->}(0,-60)(0,-65)
-	\rput(0,-70){$\cdots$}
-	\psline{->}(0,-75)(0,-80)
-	\rput(0,-85){$N_{steps}$-th step:}
-	\rput(0,-90){Generation of $N_{estimates}$ empirical parameters sets}
-	\psframe(-60,-95)(60,-80)
-	\psline{->}(0,-95)(-60,-100)
-	\psline{->}(0,-95)(0,-100)
-	\psline{->}(0,-95)(60,-100)
-	\rput(-60,-105){1st task:}
-	\rput(-60,-110){$N_{estimates}/N_{tasks}$ simulations}
-	\psframe(-100,-100)(-20,-115)
-	\rput(0,-107.5){$\cdots$}
-	\rput(60,-105){$N_{tasks}$-th task:}
-	\rput(60,-110){$N_{estimates}/N_{tasks}$ simulations}
-	\psframe(20,-100)(100,-115)
-	\psline{->}(-60,-115)(0,-120)
-	\psline{->}(0,-115)(0,-120)
-	\psline{->}(60,-115)(0,-120)
-	\rput(0,-125){Getting optimal empirical parameters set}
-	\psframe(-55,-120)(55,-130)
-}
-\end{frame}
-
-\begin{frame}{Genetic}
+\begin{frame}{Optimization: parallelization}{Genetic}
 \psset{xunit=0.4mm,yunit=0.4mm}
 \PSPICTURE{-100}{-185}{100}{-15}
 {
@@ -1219,38 +1692,90 @@
 }
 \end{frame}
 
+\begin{frame}{Optimization: parallelization}{Direction search algorithms}
+\psset{xunit=0.5mm,yunit=0.5mm}
+\PSPICTURE{-100}{-130}{100}{-15}
+{
+	\tiny
+	\rput(0,-15){1st step:}
+	\rput(0,-20){Generation of $N_{estimates}$ empirical parameters sets}
+	\psframe(-60,-25)(60,-10)
+	\psline{->}(0,-25)(-60,-30)
+	\psline{->}(0,-25)(0,-30)
+	\psline{->}(0,-25)(60,-30)
+	\rput(-60,-35){1st task:}
+	\rput(-60,-40){$N_{estimates}/N_{tasks}$ simulations}
+	\psframe(-100,-30)(-20,-45)
+	\rput(0,-37.5){$\cdots$}
+	\rput(60,-35){$N_{tasks}$-th task:}
+	\rput(60,-40){$N_{estimates}/N_{tasks}$ simulations}
+	\psframe(20,-30)(100,-45)
+	\psline{->}(-60,-45)(0,-50)
+	\psline{->}(0,-45)(0,-50)
+	\psline{->}(60,-45)(0,-50)
+	\rput(0,-55){Getting optimal empirical parameters set}
+	\psframe(-55,-50)(55,-60)
+	\psline{->}(0,-60)(0,-65)
+	\rput(0,-70){$\cdots$}
+	\psline{->}(0,-75)(0,-80)
+	\rput(0,-85){$N_{steps}$-th step:}
+	\rput(0,-90){Generation of $N_{estimates}$ empirical parameters sets}
+	\psframe(-60,-95)(60,-80)
+	\psline{->}(0,-95)(-60,-100)
+	\psline{->}(0,-95)(0,-100)
+	\psline{->}(0,-95)(60,-100)
+	\rput(-60,-105){1st task:}
+	\rput(-60,-110){$N_{estimates}/N_{tasks}$ simulations}
+	\psframe(-100,-100)(-20,-115)
+	\rput(0,-107.5){$\cdots$}
+	\rput(60,-105){$N_{tasks}$-th task:}
+	\rput(60,-110){$N_{estimates}/N_{tasks}$ simulations}
+	\psframe(20,-100)(100,-115)
+	\psline{->}(-60,-115)(0,-120)
+	\psline{->}(0,-115)(0,-120)
+	\psline{->}(60,-115)(0,-120)
+	\rput(0,-125){Getting optimal empirical parameters set}
+	\psframe(-55,-120)(55,-130)
+}
+\end{frame}
+
 \subsection{Convergence}
 
-\begin{frame}{Iterative algorithm: best number and tolerance values}
+\begin{frame}{Optimization: convergence}
+{Iterative algorithm: best number and tolerance values}
 	\includegraphics[width=0.9\textwidth]{sphere-evolution-mc.eps}
 \end{frame}
 
-\begin{frame}{Iterative algorithm: brute force simulations number}
+\begin{frame}{Optimization: convergence}
+{Iterative algorithm: brute force simulations number}
 	\includegraphics[width=0.9\textwidth]{sphere-evolution-mc-cdr.eps}
 \end{frame}
 
-\begin{frame}{Direction search algorithm: relaxation parameter}
+\begin{frame}{Optimization: convergence}
+{Direction search algorithm: relaxation parameter}
 	\includegraphics[width=0.9\textwidth]{sphere-evolution-mc-cd-r.eps}
 \end{frame}
 
-\begin{frame}{Direction search algorithm: step size}
+\begin{frame}{Optimization: convergence}
+{Direction search algorithm: step size}
 	\includegraphics[width=0.9\textwidth]{sphere-evolution-mc-cd-s.eps}
 \end{frame}
 
-\begin{frame}{Random direction search algorithm: number of estimates}
+\begin{frame}{Optimization: convergence}
+{Random direction search algorithm: number of estimates}
 	\includegraphics[width=0.9\textwidth]{sphere-evolution-mc-r.eps}
 \end{frame}
 
-\begin{frame}{Parallelization}
-	\includegraphics[width=0.49\textwidth]{sphere-task-2-4.eps}
-	\includegraphics[width=0.49\textwidth]{sphere-task-2-64.eps}
+\begin{frame}{Optimization: convergence}{Parallelization}
+	\includegraphics[width=0.6\textwidth]{sphere-task-2-4.eps}\\
+	\includegraphics[width=0.6\textwidth]{sphere-task-2-64.eps}
 \end{frame}
 
 \section{MPCOTool}
 
 \subsection{Organization}
 
-\begin{frame}{Multi-Purposes Calibration and Optimization Tool}
+\begin{frame}{MPCOTool}{Organization}
 \psset{xunit=0.35mm,yunit=0.35mm}
 \PSPICTURE{-20}{-115}{260}{55}
 {
@@ -1344,14 +1869,14 @@
 
 \subsection{Error norms}
 
-\begin{frame}{Multi-Purposes Calibration and Optimization Tool}
+\begin{frame}{MPCOTool}{Error norms}
 	\[L_2:\quad J=\sqrt{\sum_{i=1}^{N_{exp}}\ABS{w_i\,o_i}^2},\]
 	\[L_\infty:\quad J=\max_{i=1}^{N_{exp}}\ABS{w_i\,o_i},\]
 	\[L_p:\quad J=\sqrt[p]{\sum_{i=1}^{N_{exp}}\ABS{w_i\,o_i}^p},\]
 	\[L_1:\quad J=\sum_{i=1}^{N_{exp}}\ABS{w_i\,o_i},\]
 \end{frame}
 
-\begin{frame}{Main input file}
+\begin{frame}{MPCOTool: input files}{Main input file}
 \psset{xunit=0.35mm,yunit=0.35mm}
 \PSPICTURE{0}{-115}{280}{25}
 {
@@ -1478,7 +2003,7 @@
 
 \subsection{Input files}
 
-\begin{frame}{Main input file: XML format}
+\begin{frame}{MPCOTool: input files}{Main input file: XML format}
 	\makeseti
 \end{frame}
 
@@ -1565,11 +2090,11 @@
 \end{lstlisting}
 }
 
-\begin{frame}{Main input file: JSON format}
+\begin{frame}{MPCOTool: input files}{Main input file: JSON format}
 	\makesetii
 \end{frame}
 
-\begin{frame}{Template files}
+\begin{frame}{MPCOTool: input files}{Template files}
 	\begin{itemize}
 		\item $N_{experiments}\times N_{inputs}$ template files are required
 		\item MPCOTool parses the templates to generate the input files for
@@ -1586,7 +2111,7 @@
 
 \subsection{User instructions}
 
-\begin{frame}{MPCOTool: building}
+\begin{frame}{MPCOTool: user instructions}{Building}
 	\begin{itemize}
 		\item Free software, BSD type license.
 		\item Repository \url{https://github.com/jburguete/mpcotool}
@@ -1600,7 +2125,7 @@
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{MPCOTool: building}
+\begin{frame}{MPCOTool: user instructions}{Building}
 	\begin{itemize}
 		\item Free software, BSD type license.
 		\item Repository \url{https://github.com/jburguete/mpcotool}
@@ -1611,17 +2136,15 @@
 			\item Libxml2: main input file in XML format
 			\item JSON-GLib: main input file in JSON format
 			\item GSL: to generate pseudo-random numbers
-			\item GLib: to parse input templates and to parallelize in the CPU
-				cores
+			\item GLib: to parse input templates and to parallelize in the CPU cores
 			\item Gettext: to work with different international languages
 			\item GTK+3: interactive graphic interface (optional)
-			\item OpenMPI or MPICH: to parallelize in computer clusters
-				(optional)
+			\item OpenMPI or MPICH: to parallelize in computer clusters (optional)
 		\end{itemize}
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{MPCOTool: building}
+\begin{frame}{MPCOTool: user instructions}{Building}
 	\begin{itemize}
 		\item Free software, BSD type license.
 		\item Repository \url{https://github.com/jburguete/mpcotool}
@@ -1639,7 +2162,7 @@
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{MPCOTool: building}
+\begin{frame}{MPCOTool: user instructions}{Building}
 	\begin{itemize}
 		\item Free software, BSD type license.
 		\item Repository \url{https://github.com/jburguete/mpcotool}
@@ -1657,7 +2180,7 @@
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{MPCOTool: command line}
+\begin{frame}{MPCOTool: user instructions}{Command line}
 	\begin{itemize}
 		\item Running in one computer
 	\end{itemize}
@@ -1678,11 +2201,11 @@ main\_input\_file.xml [results\_file] [variables\_file]
 .$/$evaluator simulated\_file experiment\_file results\_file
 \end{frame}
 
-\begin{frame}{MPCOTool: graphic user interface application}
+\begin{frame}{MPCOTool: user instructions}{Graphic user interface application}
 	\includegraphics[width=\textwidth]{mpcotool-en.eps}
 \end{frame}
 
-\begin{frame}{MPCOTool: output files}
+\begin{frame}{MPCOTool: user instructions}{Output files}
 	\begin{itemize}
 		\item Results: optimal objective function and variable values, and
 			calculation time
@@ -1695,11 +2218,17 @@ main\_input\_file.xml [results\_file] [variables\_file]
 
 \subsection{Optimization of gate times in a canal}
 
-\begin{frame}{Canal ``La Violada''}
+\begin{frame}{Practical applications}{Optimization of gate times in a canal}
+	\begin{itemize}
+	  \item Canal ``La Violada''
+	\end{itemize}
 	\includegraphics[width=\textwidth]{CanalLaViolada.eps}
 \end{frame}
 
-\begin{frame}{Canal ``La Violada''}
+\begin{frame}{Practical applications}{Optimization of gate times in a canal}
+	\begin{itemize}
+	  \item Canal ``La Violada''
+	\end{itemize}
 \psset{xunit=8mm,yunit=5mm}
 \PSPICTURE{-1}{-2}{11.4}{2}
 {
@@ -1751,16 +2280,19 @@ main\_input\_file.xml [results\_file] [variables\_file]
 }
 \end{frame}
 
-\begin{frame}{Canal ``La Violada''}
-	\framesubtitle{Optimization}
+\begin{frame}{Practical applications}{Optimization of gate times in a canal}
 	\begin{itemize}
-		\item 15 days of simulation
-		\item 1024 simulations
-		\item $\approx$ 14-19h using 64 cores in the Memento cluster from the BIFI
+	  \item Canal ``La Violada''
+		\item Optimization
+		\begin{itemize}
+			\item 15 days of simulation
+			\item 1024 simulations
+			\item $\approx$ 14-19h using 64 cores in the Memento cluster from the BIFI
+		\end{itemize}
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{Canal ``La Violada''}
+\begin{frame}{Practical applications}{Optimization of gate times in a canal}
 \TABLE{\tiny}{cccc}
 {
 	Optimization & Optimization & Optimal empirical & Objective
@@ -1798,7 +2330,7 @@ main\_input\_file.xml [results\_file] [variables\_file]
 }
 \end{frame}
 
-\begin{frame}{Canal ``La Violada''}
+\begin{frame}{Practical applications}{Optimization of gate times in a canal}
 	\framesubtitle{Direction search algorithm: parallelization}
 	\begin{itemize}
 		\item Monte-Carlo: 768 simulations, 12 per core, $\approx 60.3$ active cores
@@ -1808,12 +2340,12 @@ main\_input\_file.xml [results\_file] [variables\_file]
 	\includegraphics[width=0.8\textwidth]{load-swigs-mc-ra-768-1-64-4.eps}
 \end{frame}
 
-\begin{frame}{Canal ``La Violada''}
+\begin{frame}{Practical applications}{Optimization of gate times in a canal}
 	\framesubtitle{Manual management}
 	\includegraphics[width=0.9\textwidth]{Violada-contributions.eps}
 \end{frame}
 
-\begin{frame}{Canal ``La Violada''}
+\begin{frame}{Practical applications}{Optimization of gate times in a canal}
 	\framesubtitle{Optimal management}
 	\includegraphics[width=0.9\textwidth]{Violada-optimized-contributions.eps}
 \end{frame}
@@ -1821,7 +2353,8 @@ main\_input\_file.xml [results\_file] [variables\_file]
 \subsection{Calibration of roughness and infiltration
 coefficients in furrows}
 
-\begin{frame}{Furrow irrigation}
+\begin{frame}{Calibration of roughness and infiltration coefficients in furrows}
+{Furrow irrigation}
 \psset{xunit=13mm,yunit=13mm}
 \PSPICTURE{-0.7}{-0.4}{6.5}{2.45}
 {
@@ -1896,8 +2429,8 @@ coefficients in furrows}
 }
 \end{frame}
 
-\begin{frame}{Furrow irrigation}
-	\framesubtitle{Calibration}
+\begin{frame}{Calibration of roughness and infiltration coefficients in furrows}
+{Calibration}
 	\begin{itemize}
 		\item 24 hours of simulation
 		\item 3000 simulations
@@ -1905,8 +2438,8 @@ coefficients in furrows}
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{Furrow irrigation}
-	\framesubtitle{Calibration}
+\begin{frame}{Calibration of roughness and infiltration coefficients in furrows}
+{Calibration}
 \TABLE{\tiny}{cccc}
 {
 	Optimization & Optimization & Optimal empirical & Objective
@@ -1938,47 +2471,47 @@ coefficients in furrows}
 }
 \end{frame}
 
-\begin{frame}{Furrow irrigation}
-	\framesubtitle{Advance times}
+\begin{frame}{Calibration of roughness and infiltration coefficients in furrows}
+{Advance times}
 	\includegraphics[width=\textwidth]{surcos-advance.eps}
 \end{frame}
 
-\begin{frame}{Furrow irrigation}
-	\framesubtitle{Inlet depth evolution}
+\begin{frame}{Calibration of roughness and infiltration coefficients in furrows}
+{Inlet depth evolution}
 	\includegraphics[width=\textwidth]{surcos-depth.eps}
 \end{frame}
 
-\begin{frame}{Furrow irrigation}
-	\framesubtitle{Fertilizer concentration}
+\begin{frame}{Calibration of roughness and infiltration coefficients in furrows}
+{Fertilizer concentration}
 	\includegraphics[width=\textwidth]{surcos-solute-q1.eps}
 \end{frame}
 
-\begin{frame}{Furrow irrigation}
-	\framesubtitle{Fertilizer concentration}
+\begin{frame}{Calibration of roughness and infiltration coefficients in furrows}
+{Fertilizer concentration}
 	\includegraphics[width=\textwidth]{surcos-solute-q2.eps}
 \end{frame}
 
-\begin{frame}{Furrow irrigation}
-	\framesubtitle{Fertilizer concentration}
+\begin{frame}{Calibration of roughness and infiltration coefficients in furrows}
+{Fertilizer concentration}
 	\includegraphics[width=\textwidth]{surcos-solute-q3.eps}
 \end{frame}
 
-\begin{frame}{Furrow irrigation}
-	\framesubtitle{Fertilizer concentration}
+\begin{frame}{Calibration of roughness and infiltration coefficients in furrows}
+{Fertilizer concentration}
 	\includegraphics[width=\textwidth]{surcos-solute-q4.eps}
 \end{frame}
 
-\subsection{Calibration of size and friction coefficients in
-sprinklers}
+\subsection{Calibration of size and friction coefficients in sprinklers}
 
 \begin{frame}
 \end{frame}
 
 \subsection{Calibration of movement coefficients in pivots}
 
-\begin{frame}{Pivot irrigation machines movement}
+\begin{frame}{Calibration of movement coefficients in pivots}
+{Pivot irrigation machines movement}
 	\includegraphics[width=\textwidth]{Pivot.eps}
-\psset{unit=1mm}
+\psset{unit=0.9mm}
 \PSPICTURE{-10}{-6}{93}{20}
 {
 	\rput(25,17){$\alpha_i<\alpha_{start}\;\Rightarrow\;T_i$ start}
@@ -2003,8 +2536,7 @@ sprinklers}
 	\rput(60,8.5){$\alpha_3$}
 }\end{frame}
 
-\begin{frame}{Pivot irrigation machines movement}
-	\framesubtitle{Tower velocity}
+\begin{frame}{Calibration of movement coefficients in pivots}{Tower velocity}
 \psset{unit=1mm}
 \PSPICTURE{-16}{-6}{75}{39}
 {
@@ -2031,13 +2563,12 @@ sprinklers}
 }
 \end{frame}
 
-\begin{frame}{Pivot irrigation machines movement}
-	\framesubtitle{Chaotic regime of starts and stops}
+\begin{frame}{Calibration of movement coefficients in pivots}
+{Chaotic regime of starts and stops}
 	\includegraphics[width=0.9\textwidth]{pivot-velocity.eps}
 \end{frame}
 
-\begin{frame}{Pivot irrigation machines movement}
-	\framesubtitle{Calibration}
+\begin{frame}{Calibration of movement coefficients in pivots}{Calibration}
 	\begin{itemize}
 		\item 24 hours of simulation
 		\item 10000 simulations
@@ -2045,8 +2576,7 @@ sprinklers}
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{Pivot irrigation machines movement}
-	\framesubtitle{Calibration}
+\begin{frame}{Calibration of movement coefficients in pivots}{Calibration}
 \TABLE{\tiny}{cccc}
 {
 	Optimization & Optimization & Optimal empirical & Objective
@@ -2079,8 +2609,7 @@ sprinklers}
 }
 \end{frame}
 
-\begin{frame}{Pivot irrigation machines movement}
-	\framesubtitle{Calibration}
+\begin{frame}{Calibration of movement coefficients in pivots}{Calibration}
 \TABLE{\tiny}{cccc}
 {
 	\hline
@@ -2107,42 +2636,50 @@ sprinklers}
 }
 \end{frame}
 
-\begin{frame}{Start histograms: 100\%}
+\begin{frame}{Calibration of movement coefficients in pivots}
+{Start histograms: 100\%}
 	\includegraphics[width=0.60\textwidth]{pivot-measured-starts-100.eps}\\
 	\includegraphics[width=0.60\textwidth]{pivot-simulated-starts-100.eps}
 \end{frame}
 
-\begin{frame}{Stop histograms: 100\%}
+\begin{frame}{Calibration of movement coefficients in pivots}
+{Stop histograms: 100\%}
 	\includegraphics[width=0.60\textwidth]{pivot-measured-stops-100.eps}\\
 	\includegraphics[width=0.60\textwidth]{pivot-simulated-stops-100.eps}
 \end{frame}
 
-\begin{frame}{Start histograms: 50\%}
+\begin{frame}{Calibration of movement coefficients in pivots}
+{Start histograms: 50\%}
 	\includegraphics[width=0.60\textwidth]{pivot-measured-starts-50.eps}\\
 	\includegraphics[width=0.60\textwidth]{pivot-simulated-starts-50.eps}
 \end{frame}
 
-\begin{frame}{Stop histograms: 50\%}
+\begin{frame}{Calibration of movement coefficients in pivots}
+{Stop histograms: 50\%}
 	\includegraphics[width=0.60\textwidth]{pivot-measured-stops-50.eps}\\
 	\includegraphics[width=0.60\textwidth]{pivot-simulated-stops-50.eps}
 \end{frame}
 
-\begin{frame}{Start histograms: 40\%}
+\begin{frame}{Calibration of movement coefficients in pivots}
+{Start histograms: 40\%}
 	\includegraphics[width=0.60\textwidth]{pivot-measured-starts-40.eps}\\
 	\includegraphics[width=0.60\textwidth]{pivot-simulated-starts-40.eps}
 \end{frame}
 
-\begin{frame}{Stop histograms: 40\%}
+\begin{frame}{Calibration of movement coefficients in pivots}
+{Stop histograms: 40\%}
 	\includegraphics[width=0.60\textwidth]{pivot-measured-stops-40.eps}\\
 	\includegraphics[width=0.60\textwidth]{pivot-simulated-stops-40.eps}
 \end{frame}
 
-\begin{frame}{Start histograms: 25\%}
+\begin{frame}{Calibration of movement coefficients in pivots}
+{Start histograms: 25\%}
 	\includegraphics[width=0.60\textwidth]{pivot-measured-starts-25.eps}\\
 	\includegraphics[width=0.60\textwidth]{pivot-simulated-starts-25.eps}
 \end{frame}
 
-\begin{frame}{Stop histograms: 25\%}
+\begin{frame}{Calibration of movement coefficients in pivots}
+{Stop histograms: 25\%}
 	\includegraphics[width=0.60\textwidth]{pivot-measured-stops-25.eps}\\
 	\includegraphics[width=0.60\textwidth]{pivot-simulated-stops-25.eps}
 \end{frame}

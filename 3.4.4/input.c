@@ -171,6 +171,9 @@ input_open_xml (xmlDoc * doc)
       if (!input->result)
         input->result = (char *) xmlStrdup ((const xmlChar *) result_name);
     }
+#if DEBUG_INPUT
+  fprintf (stderr, "input_open_xml: result file=%s\n", input->result);
+#endif
   if (!input->variables)
     {
       input->variables =
@@ -179,6 +182,9 @@ input_open_xml (xmlDoc * doc)
         input->variables =
           (char *) xmlStrdup ((const xmlChar *) variables_name);
     }
+#if DEBUG_INPUT
+  fprintf (stderr, "input_open_xml: variables file=%s\n", input->variables);
+#endif
 
   // Opening simulator program name
   input->simulator =
@@ -390,6 +396,9 @@ input_open_xml (xmlDoc * doc)
               input_error (_("Invalid steps number"));
               goto exit_on_error;
             }
+#if DEBUG_INPUT
+          fprintf (stderr, "input_open_xml: nsteps=%u\n", input->nsteps);
+#endif
           buffer = xmlGetProp (node, (const xmlChar *) LABEL_DIRECTION);
           if (!xmlStrcmp (buffer, (const xmlChar *) LABEL_COORDINATES))
             input->direction = DIRECTION_METHOD_COORDINATES;

@@ -1066,7 +1066,7 @@ window_about ()
      "Javier Burguete Tolosa <jburguete@eead.csic.es> "
      "(english, french and spanish)\n"
      "Uğur Çayoğlu (german)",
-     "version", "3.4.3",
+     "version", "3.4.4",
      "copyright", "Copyright 2012-2017 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/mpcotool",
@@ -1884,6 +1884,7 @@ window_read (char *filename)
 
   // Reading new input file
   input_free ();
+	input->result = input->variables = NULL;
   if (!input_open (filename))
     {
 #if DEBUG_INTERFACE
@@ -2041,6 +2042,7 @@ window_open ()
 
           // Reading backup file on error
           buffer = g_build_filename (directory, name, NULL);
+					input->result = input->variables = NULL;
           if (!input_open (buffer))
             {
 
