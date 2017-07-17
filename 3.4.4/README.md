@@ -120,7 +120,7 @@ a terminal:
 4. Build doing on a terminal:
 > $ ./build
 
-Fedora Linux 25
+Fedora Linux 26
 _______________
 
 1. In order to use OpenMPI compilation do in a terminal (in 64 bits version):
