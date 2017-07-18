@@ -1,0 +1,9 @@
+The MPCOTool usage is illustrated by showing four practical applications
+
+Calibration of the empirical coefficients in a surface irrigation model
+
+Calibration of the empircal coefficients in a ballistic sprinkler irrigation model
+
+Calibration of empirical movement parameters of a sprinkler center-pivot model
+
+Optimization of gate opening delays in a canal management

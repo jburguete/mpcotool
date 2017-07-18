@@ -1,0 +1,9 @@
+MPCOTool, an open source tool to supply parameters of empirical models is presented
+
+Genetic, brute force, iterative and search optimization algorithms are included
+
+The software parallelizes the computations on an easy way
+
+Algorithms and simulation data can be selected from a graphical user interface
+
+The optimization methods are analyzed in six standard analytic test functions 
