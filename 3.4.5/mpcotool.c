@@ -118,11 +118,11 @@ mpcotool (int argn, char **argc)
 #endif
   input->result = input->variables = NULL;
 
-#if HAVE_GTK
-
   // Getting threads number and pseudo-random numbers generator seed
   nthreads_direction = nthreads = cores_number ();
   optimize->seed = DEFAULT_RANDOM_SEED;
+
+#if HAVE_GTK
 
   // Setting local language and international floating point numbers notation
   setlocale (LC_ALL, "");
@@ -165,8 +165,6 @@ mpcotool (int argn, char **argc)
   fprintf (stderr, "mpcotool: getting threads number and pseudo-random numbers "
            "generator seed\n");
 #endif
-  nthreads_direction = nthreads = cores_number ();
-  optimize->seed = DEFAULT_RANDOM_SEED;
   if (argn > 2 && !strcmp (argc[1], "-nthreads"))
     {
       nthreads_direction = nthreads = atoi (argc[2]);
