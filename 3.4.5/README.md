@@ -89,7 +89,7 @@ has not been tested.
 
 Debian 9 (Linux, kFreeBSD or Hurd)
 __________________________________
-DragonFly BSD 4.8
+DragonFly BSD 5.2
 _________________
 Dyson Illumos
 _____________
@@ -97,7 +97,7 @@ FreeBSD 11.0
 ____________
 Linux Mint DE 2
 _______________
-Ubuntu Linux 17.04
+Ubuntu Linux 18.04
 __________________
 
 1. Download the latest [genetic](https://github.com/jburguete/genetic) doing on
@@ -126,7 +126,7 @@ _______________
 1. In order to use OpenMPI compilation do in a terminal (in 64 bits version):
 > $ export PATH=$PATH:/usr/lib64/openmpi/bin
 
-2. Then, follow steps 1 to 4 of the previous Debian 8 section.
+2. Then, follow steps 1 to 4 of the previous Debian 9 section.
 
 Microsoft Windows 7
 ___________________
@@ -139,7 +139,7 @@ ____________________
 libraries and utilities. You can follow detailed instructions in
 [install-unix](https://github.com/jburguete/install-unix/blob/master/tutorial.pdf)
 
-2. Then, in a MSYS2 terminal, follow steps 1 to 4 of the previous Debian 8
+2. Then, in a MSYS2 terminal, follow steps 1 to 4 of the previous Debian 9
 section.
 
 3. Optional Windows binary package can be built doing in the terminal:
@@ -148,17 +148,17 @@ section.
 NetBSD 7.0
 __________
 
-1. MPI does not work. Follow steps 1 to 3 of the previous Debian 8 section and
+1. MPI does not work. Follow steps 1 to 3 of the previous Debian 9 section and
 do in the terminal:
 > $ CC=/usr/pkg/gcc5/bin/gcc ./build
 
-OpenBSD 6.1
+OpenBSD 6.3
 ___________
 
 1. Select adequate versions:
 > $ export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.15
 
-2. Then, in a terminal, follow steps 1 to 4 of the previous Debian 8 section.
+2. Then, in a terminal, follow steps 1 to 4 of the previous Debian 9 section.
 
 OpenIndiana Hipster
 ___________________
@@ -166,7 +166,7 @@ ___________________
 1. In order to use OpenMPI compilation do in a terminal:
 > $ export PATH=/usr/lib/openmpi/gcc/bin:$PATH
 
-2. Then, follow steps 1 to 4 of the previous Debian 8 section.
+2. Then, follow steps 1 to 4 of the previous Debian 9 section.
 
 OpenSUSE Linux Tumbleweed
 _________________________
@@ -174,14 +174,14 @@ _________________________
 1. In order to use OpenMPI compilation do in a terminal (in 64 bits version):
 > $ export PATH=/usr/lib64/mpi/gcc/openmpi/bin:$PATH
 
-2. Then, follow steps 1 to 4 of the previous Debian 8 section.
+2. Then, follow steps 1 to 4 of the previous Debian 9 section.
 
 Building no-GUI version on servers
 __________________________________
 
 On servers or clusters, where no-GUI with MPI parallelization is desirable,
-replace the 4th step of the previous Debian 8 section by:
-> $ ./build_with_mpi
+replace the 4th step of the previous Debian 9 section by:
+> $ ./build\_with\_mpi
  
 Linking as an external library
 ______________________________
