@@ -14,7 +14,7 @@ Absolute minimum is: x = pi, y = pi
 #include <stdio.h>
 #include <math.h>
 
-inline double
+static inline double
 objective (double x, double y)
 {
   x -= M_PI;

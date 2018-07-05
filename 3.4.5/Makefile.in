@@ -121,7 +121,7 @@ libmpcotool@SO@: $(OBJLIB)
 		-o mpcotool@EXE@ -DHAVE_GTK=1
 
 locales/mpcotool.pot: $(SRC) Makefile
-	xgettext -k_ -d mpcotool -o locales/mpcotool.pot --from-code=UTF-8 $(SRC)
+	@gnu@xgettext -k_ -d mpcotool -o locales/mpcotool.pot --from-code=UTF-8 $(SRC)
 
 locales/$(DE)mpcotool.po: locales/mpcotool.pot
 	test -d locales/$(DE) || mkdir -p locales/$(DE)
@@ -133,7 +133,7 @@ locales/$(DE)mpcotool.po: locales/mpcotool.pot
 	touch locales/$(DE)mpcotool.po
 
 locales/$(DE)mpcotool.mo: locales/$(DE)mpcotool.po locales/mpcotool.pot
-	msgfmt -c -v -o locales/$(DE)mpcotool.mo locales/$(DE)mpcotool.po
+	@gnu@msgfmt -c -v -o locales/$(DE)mpcotool.mo locales/$(DE)mpcotool.po
 
 locales/$(ES)mpcotool.po: locales/mpcotool.pot
 	test -d locales/$(ES) || mkdir -p locales/$(ES)
@@ -145,7 +145,7 @@ locales/$(ES)mpcotool.po: locales/mpcotool.pot
 	touch locales/$(ES)mpcotool.po
 
 locales/$(ES)mpcotool.mo: locales/$(ES)mpcotool.po locales/mpcotool.pot
-	msgfmt -c -v -o locales/$(ES)mpcotool.mo locales/$(ES)mpcotool.po
+	@gnu@msgfmt -c -v -o locales/$(ES)mpcotool.mo locales/$(ES)mpcotool.po
 
 locales/$(FR)mpcotool.po: locales/mpcotool.pot
 	test -d locales/$(FR) || mkdir -p locales/$(FR)
@@ -157,7 +157,7 @@ locales/$(FR)mpcotool.po: locales/mpcotool.pot
 	touch locales/$(FR)mpcotool.po
 
 locales/$(FR)mpcotool.mo: locales/$(FR)mpcotool.po locales/mpcotool.pot
-	msgfmt -c -v -o locales/$(FR)mpcotool.mo locales/$(FR)mpcotool.po
+	@gnu@msgfmt -c -v -o locales/$(FR)mpcotool.mo locales/$(FR)mpcotool.po
 
 $(T1)simulator: $(T1)simulator.c $(T1)Makefile
 	cd $(T1); make

@@ -40,6 +40,9 @@ elif test `uname -s` = "DragonFly"; then
 	AC_MSG_NOTICE([DragonFly BSD])
 	AC_SUBST(PREFIX, [/usr/local])
 	AC_SUBST(SED, [gsed])
+elif test `uname -s` = "SunOS"; then
+	AC_MSG_NOTICE([SunOS])
+	AC_SUBST(gnu,[/usr/gnu/bin/])
 else
 	AC_SUBST(PREFIX, [/usr])
 	AC_SUBST(SED, [sed])
