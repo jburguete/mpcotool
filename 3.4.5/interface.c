@@ -155,20 +155,17 @@ const char * logo[] = {
 */
 
 Options options[1];
-  ///< Options struct to define the options dialog.
+///< Options struct to define the options dialog.
 Running running[1];
-  ///< Running struct to define the running dialog.
+///< Running struct to define the running dialog.
 Window window[1];
-  ///< Window struct to define the main interface window.
+///< Window struct to define the main interface window.
 
 /**
- * \fn void input_save_direction_xml (xmlNode *node)
- * \brief Function to save the direction search method data in a XML node.
- * \param node
- * \brief XML node.
+ * Function to save the direction search method data in a XML node.
  */
 void
-input_save_direction_xml (xmlNode * node)
+input_save_direction_xml (xmlNode * node)       ///< XML node.
 {
 #if DEBUG_INTERFACE
   fprintf (stderr, "input_save_direction_xml: start\n");
@@ -198,13 +195,10 @@ input_save_direction_xml (xmlNode * node)
 }
 
 /**
- * \fn void input_save_direction_json (JsonNode *node)
- * \brief Function to save the direction search method data in a JSON node.
- * \param node
- * \brief JSON node.
+ * Function to save the direction search method data in a JSON node.
  */
 void
-input_save_direction_json (JsonNode * node)
+input_save_direction_json (JsonNode * node)     ///< JSON node.
 {
   JsonObject *object;
 #if DEBUG_INTERFACE
@@ -233,13 +227,10 @@ input_save_direction_json (JsonNode * node)
 }
 
 /**
- * \fn void input_save_xml (xmlDoc * doc)
- * \brief Function to save the input file in XML format.
- * \param doc
- * \brief xmlDoc struct.
+ * Function to save the input file in XML format.
  */
 void
-input_save_xml (xmlDoc * doc)
+input_save_xml (xmlDoc * doc)   ///< xmlDoc struct.
 {
   unsigned int i, j;
   char *buffer;
@@ -403,13 +394,10 @@ input_save_xml (xmlDoc * doc)
 }
 
 /**
- * \fn void input_save_json (JsonGenerator * generator)
- * \brief Function to save the input file in JSON format.
- * \param generator
- * \brief JsonGenerator struct.
+ * Function to save the input file in JSON format.
  */
 void
-input_save_json (JsonGenerator * generator)
+input_save_json (JsonGenerator * generator)     ///< JsonGenerator struct.
 {
   unsigned int i, j;
   char *buffer;
@@ -566,13 +554,10 @@ input_save_json (JsonGenerator * generator)
 }
 
 /**
- * \fn void input_save (char *filename)
- * \brief Function to save the input file.
- * \param filename
- * \brief Input file name.
+ * Function to save the input file.
  */
 void
-input_save (char *filename)
+input_save (char *filename)     ///< Input file name.
 {
   xmlDoc *doc;
   JsonGenerator *generator;
@@ -617,8 +602,7 @@ input_save (char *filename)
 }
 
 /**
- * \fn void options_new ()
- * \brief Function to open the options dialog.
+ * Function to open the options dialog.
  */
 void
 options_new ()
@@ -647,10 +631,10 @@ options_new ()
     gtk_label_new (_("Threads number for the direction search method"));
   options->spin_direction =
     (GtkSpinButton *) gtk_spin_button_new_with_range (1., 64., 1.);
-  gtk_widget_set_tooltip_text (GTK_WIDGET (options->spin_direction),
-                               _
-                               ("Number of threads to perform the calibration/optimization for "
-                                "the direction search method"));
+  gtk_widget_set_tooltip_text
+    (GTK_WIDGET (options->spin_direction),
+     _("Number of threads to perform the calibration/optimization for the "
+       "direction search method"));
   gtk_spin_button_set_value (options->spin_direction,
                              (gdouble) nthreads_direction);
   options->grid = (GtkGrid *) gtk_grid_new ();
@@ -689,8 +673,7 @@ options_new ()
 }
 
 /**
- * \fn void running_new ()
- * \brief Function to open the running dialog.
+ * Function to open the running dialog.
  */
 void
 running_new ()
@@ -717,8 +700,8 @@ running_new ()
 }
 
 /**
- * \fn unsigned int window_get_algorithm ()
- * \brief Function to get the stochastic algorithm number.
+ * Function to get the stochastic algorithm number.
+ *
  * \return Stochastic algorithm number.
  */
 unsigned int
@@ -737,8 +720,8 @@ window_get_algorithm ()
 }
 
 /**
- * \fn unsigned int window_get_direction ()
- * \brief Function to get the direction search method number.
+ * Function to get the direction search method number.
+ *
  * \return Direction search method number.
  */
 unsigned int
@@ -757,8 +740,8 @@ window_get_direction ()
 }
 
 /**
- * \fn unsigned int window_get_norm ()
- * \brief Function to get the norm method number.
+ * Function to get the norm method number.
+ *
  * \return Norm method number.
  */
 unsigned int
@@ -777,8 +760,7 @@ window_get_norm ()
 }
 
 /**
- * \fn void window_save_direction ()
- * \brief Function to save the direction search method data in the input file.
+ * Function to save the direction search method data in the input file.
  */
 void
 window_save_direction ()
@@ -810,8 +792,8 @@ window_save_direction ()
 }
 
 /**
- * \fn int window_save ()
- * \brief Function to save the input file.
+ * Function to save the input file.
+ *
  * \return 1 on OK, 0 on Cancel.
  */
 int
@@ -955,8 +937,7 @@ window_save ()
 }
 
 /**
- * \fn void window_run ()
- * \brief Function to run a optimization.
+ * Function to run a optimization.
  */
 void
 window_run ()
@@ -1011,8 +992,7 @@ window_run ()
 }
 
 /**
- * \fn void window_help ()
- * \brief Function to show a help dialog.
+ * Function to show a help dialog.
  */
 void
 window_help ()
@@ -1040,8 +1020,7 @@ window_help ()
 }
 
 /**
- * \fn void window_about ()
- * \brief Function to show an about dialog.
+ * Function to show an about dialog.
  */
 void
 window_about ()
@@ -1059,8 +1038,8 @@ window_about ()
      "program_name", "MPCOTool",
      "comments",
      _("The Multi-Purposes Calibration and Optimization Tool.\n"
-       "A software to perform calibrations or optimizations of empirical"
-       " parameters"),
+       "A software to perform calibrations or optimizations of empirical "
+       "parameters"),
      "authors", authors,
      "translator-credits",
      "Javier Burguete Tolosa <jburguete@eead.csic.es> "
@@ -1077,9 +1056,7 @@ window_about ()
 }
 
 /**
- * \fn void window_update_direction ()
- * \brief Function to update direction search method widgets view in the main
- *   window.
+ * Function to update direction search method widgets view in the main window.
  */
 void
 window_update_direction ()
@@ -1111,8 +1088,7 @@ window_update_direction ()
 }
 
 /**
- * \fn void window_update ()
- * \brief Function to update the main window view.
+ * Function to update the main window view.
  */
 void
 window_update ()
@@ -1268,8 +1244,7 @@ window_update ()
 }
 
 /**
- * \fn void window_set_algorithm ()
- * \brief Function to avoid memory errors changing the algorithm.
+ * Function to avoid memory errors changing the algorithm.
  */
 void
 window_set_algorithm ()
@@ -1302,8 +1277,7 @@ window_set_algorithm ()
 }
 
 /**
- * \fn void window_set_experiment ()
- * \brief Function to set the experiment data in the main window.
+ * Function to set the experiment data in the main window.
  */
 void
 window_set_experiment ()
@@ -1343,8 +1317,7 @@ window_set_experiment ()
 }
 
 /**
- * \fn void window_remove_experiment ()
- * \brief Function to remove an experiment in the main window.
+ * Function to remove an experiment in the main window.
  */
 void
 window_remove_experiment ()
@@ -1381,8 +1354,7 @@ window_remove_experiment ()
 }
 
 /**
- * \fn void window_add_experiment ()
- * \brief Function to add an experiment in the main window.
+ * Function to add an experiment in the main window.
  */
 void
 window_add_experiment ()
@@ -1435,8 +1407,7 @@ window_add_experiment ()
 }
 
 /**
- * \fn void window_name_experiment ()
- * \brief Function to set the experiment name in the main window.
+ * Function to set the experiment name in the main window.
  */
 void
 window_name_experiment ()
@@ -1466,8 +1437,7 @@ window_name_experiment ()
 }
 
 /**
- * \fn void window_weight_experiment ()
- * \brief Function to update the experiment weight in the main window.
+ * Function to update the experiment weight in the main window.
  */
 void
 window_weight_experiment ()
@@ -1484,9 +1454,7 @@ window_weight_experiment ()
 }
 
 /**
- * \fn void window_inputs_experiment ()
- * \brief Function to update the experiment input templates number in the main
- *   window.
+ * Function to update the experiment input templates number in the main window.
  */
 void
 window_inputs_experiment ()
@@ -1511,14 +1479,11 @@ window_inputs_experiment ()
 }
 
 /**
- * \fn void window_template_experiment (void *data)
- * \brief Function to update the experiment i-th input template in the main
- *   window.
- * \param data
- * \brief Callback data (i-th input template).
+ * Function to update the experiment i-th input template in the main window.
  */
 void
 window_template_experiment (void *data)
+                            ///< Callback data (i-th input template).
 {
   unsigned int i, j;
   char *buffer;
@@ -1545,8 +1510,7 @@ window_template_experiment (void *data)
 }
 
 /**
- * \fn void window_set_variable ()
- * \brief Function to set the variable data in the main window.
+ * Function to set the variable data in the main window.
  */
 void
 window_set_variable ()
@@ -1622,8 +1586,7 @@ window_set_variable ()
 }
 
 /**
- * \fn void window_remove_variable ()
- * \brief Function to remove a variable in the main window.
+ * Function to remove a variable in the main window.
  */
 void
 window_remove_variable ()
@@ -1653,8 +1616,7 @@ window_remove_variable ()
 }
 
 /**
- * \fn void window_add_variable ()
- * \brief Function to add a variable in the main window.
+ * Function to add a variable in the main window.
  */
 void
 window_add_variable ()
@@ -1689,8 +1651,7 @@ window_add_variable ()
 }
 
 /**
- * \fn void window_label_variable ()
- * \brief Function to set the variable label in the main window.
+ * Function to set the variable label in the main window.
  */
 void
 window_label_variable ()
@@ -1713,8 +1674,7 @@ window_label_variable ()
 }
 
 /**
- * \fn void window_precision_variable ()
- * \brief Function to update the variable precision in the main window.
+ * Function to update the variable precision in the main window.
  */
 void
 window_precision_variable ()
@@ -1738,8 +1698,7 @@ window_precision_variable ()
 }
 
 /**
- * \fn void window_rangemin_variable ()
- * \brief Function to update the variable rangemin in the main window.
+ * Function to update the variable rangemin in the main window.
  */
 void
 window_rangemin_variable ()
@@ -1756,8 +1715,7 @@ window_rangemin_variable ()
 }
 
 /**
- * \fn void window_rangemax_variable ()
- * \brief Function to update the variable rangemax in the main window.
+ * Function to update the variable rangemax in the main window.
  */
 void
 window_rangemax_variable ()
@@ -1774,8 +1732,7 @@ window_rangemax_variable ()
 }
 
 /**
- * \fn void window_rangeminabs_variable ()
- * \brief Function to update the variable rangeminabs in the main window.
+ * Function to update the variable rangeminabs in the main window.
  */
 void
 window_rangeminabs_variable ()
@@ -1793,8 +1750,7 @@ window_rangeminabs_variable ()
 }
 
 /**
- * \fn void window_rangemaxabs_variable ()
- * \brief Function to update the variable rangemaxabs in the main window.
+ * Function to update the variable rangemaxabs in the main window.
  */
 void
 window_rangemaxabs_variable ()
@@ -1812,8 +1768,7 @@ window_rangemaxabs_variable ()
 }
 
 /**
- * \fn void window_step_variable ()
- * \brief Function to update the variable step in the main window.
+ * Function to update the variable step in the main window.
  */
 void
 window_step_variable ()
@@ -1830,8 +1785,7 @@ window_step_variable ()
 }
 
 /**
- * \fn void window_update_variable ()
- * \brief Function to update the variable data in the main window.
+ * Function to update the variable data in the main window.
  */
 void
 window_update_variable ()
@@ -1867,14 +1821,12 @@ window_update_variable ()
 }
 
 /**
- * \fn int window_read (char *filename)
- * \brief Function to read the input data of a file.
- * \param filename
- * \brief File name.
+ * Function to read the input data of a file.
+ *
  * \return 1 on succes, 0 on error.
  */
 int
-window_read (char *filename)
+window_read (char *filename)    ///< File name.
 {
   unsigned int i;
   char *buffer;
@@ -1884,7 +1836,7 @@ window_read (char *filename)
 
   // Reading new input file
   input_free ();
-	input->result = input->variables = NULL;
+  input->result = input->variables = NULL;
   if (!input_open (filename))
     {
 #if DEBUG_INTERFACE
@@ -1916,6 +1868,7 @@ window_read (char *filename)
     case ALGORITHM_MONTE_CARLO:
       gtk_spin_button_set_value (window->spin_simulations,
                                  (gdouble) input->nsimulations);
+      // fallthrough
     case ALGORITHM_SWEEP:
       gtk_spin_button_set_value (window->spin_iterations,
                                  (gdouble) input->niterations);
@@ -1985,8 +1938,7 @@ window_read (char *filename)
 }
 
 /**
- * \fn void window_open ()
- * \brief Function to open the input data.
+ * Function to open the input data.
  */
 void
 window_open ()
@@ -2042,7 +1994,7 @@ window_open ()
 
           // Reading backup file on error
           buffer = g_build_filename (directory, name, NULL);
-					input->result = input->variables = NULL;
+          input->result = input->variables = NULL;
           if (!input_open (buffer))
             {
 
@@ -2072,13 +2024,10 @@ window_open ()
 }
 
 /**
- * \fn void window_new (GtkApplication * application)
- * \brief Function to open the main window.
- * \param application
- * \brief GtkApplication struct.
+ * Function to open the main window.
  */
 void
-window_new (GtkApplication * application)
+window_new (GtkApplication * application)       ///< GtkApplication struct.
 {
   unsigned int i;
   char *buffer, *buffer2, buffer3[64];
@@ -2390,67 +2339,58 @@ window_new (GtkApplication * application)
                         window_set_algorithm, NULL);
     }
   gtk_grid_attach (window->grid_algorithm,
-                   GTK_WIDGET (window->label_simulations), 0,
-                   NALGORITHMS, 1, 1);
+                   GTK_WIDGET (window->label_simulations),
+                   0, NALGORITHMS, 1, 1);
   gtk_grid_attach (window->grid_algorithm,
                    GTK_WIDGET (window->spin_simulations), 1, NALGORITHMS, 1, 1);
   gtk_grid_attach (window->grid_algorithm,
-                   GTK_WIDGET (window->label_iterations), 0, NALGORITHMS + 1,
-                   1, 1);
-  gtk_grid_attach (window->grid_algorithm,
-                   GTK_WIDGET (window->spin_iterations), 1, NALGORITHMS + 1,
-                   1, 1);
-  gtk_grid_attach (window->grid_algorithm,
-                   GTK_WIDGET (window->label_tolerance), 0, NALGORITHMS + 2,
-                   1, 1);
-  gtk_grid_attach (window->grid_algorithm,
-                   GTK_WIDGET (window->spin_tolerance), 1, NALGORITHMS + 2, 1,
-                   1);
-  gtk_grid_attach (window->grid_algorithm, GTK_WIDGET (window->label_bests),
-                   0, NALGORITHMS + 3, 1, 1);
+                   GTK_WIDGET (window->label_iterations),
+                   0, NALGORITHMS + 1, 1, 1);
+  gtk_grid_attach (window->grid_algorithm, GTK_WIDGET (window->spin_iterations),
+                   1, NALGORITHMS + 1, 1, 1);
+  gtk_grid_attach (window->grid_algorithm, GTK_WIDGET (window->label_tolerance),
+                   0, NALGORITHMS + 2, 1, 1);
+  gtk_grid_attach (window->grid_algorithm, GTK_WIDGET (window->spin_tolerance),
+                   1, NALGORITHMS + 2, 1, 1);
+  gtk_grid_attach (window->grid_algorithm, GTK_WIDGET (window->label_bests), 0,
+                   NALGORITHMS + 3, 1, 1);
   gtk_grid_attach (window->grid_algorithm, GTK_WIDGET (window->spin_bests), 1,
                    NALGORITHMS + 3, 1, 1);
   gtk_grid_attach (window->grid_algorithm,
-                   GTK_WIDGET (window->label_population), 0, NALGORITHMS + 4,
-                   1, 1);
+                   GTK_WIDGET (window->label_population),
+                   0, NALGORITHMS + 4, 1, 1);
+  gtk_grid_attach (window->grid_algorithm, GTK_WIDGET (window->spin_population),
+                   1, NALGORITHMS + 4, 1, 1);
   gtk_grid_attach (window->grid_algorithm,
-                   GTK_WIDGET (window->spin_population), 1, NALGORITHMS + 4,
-                   1, 1);
+                   GTK_WIDGET (window->label_generations),
+                   0, NALGORITHMS + 5, 1, 1);
   gtk_grid_attach (window->grid_algorithm,
-                   GTK_WIDGET (window->label_generations), 0, NALGORITHMS + 5,
-                   1, 1);
-  gtk_grid_attach (window->grid_algorithm,
-                   GTK_WIDGET (window->spin_generations), 1, NALGORITHMS + 5,
-                   1, 1);
-  gtk_grid_attach (window->grid_algorithm,
-                   GTK_WIDGET (window->label_mutation), 0, NALGORITHMS + 6, 1,
-                   1);
+                   GTK_WIDGET (window->spin_generations),
+                   1, NALGORITHMS + 5, 1, 1);
+  gtk_grid_attach (window->grid_algorithm, GTK_WIDGET (window->label_mutation),
+                   0, NALGORITHMS + 6, 1, 1);
   gtk_grid_attach (window->grid_algorithm, GTK_WIDGET (window->spin_mutation),
                    1, NALGORITHMS + 6, 1, 1);
   gtk_grid_attach (window->grid_algorithm,
-                   GTK_WIDGET (window->label_reproduction), 0,
-                   NALGORITHMS + 7, 1, 1);
+                   GTK_WIDGET (window->label_reproduction),
+                   0, NALGORITHMS + 7, 1, 1);
   gtk_grid_attach (window->grid_algorithm,
-                   GTK_WIDGET (window->spin_reproduction), 1, NALGORITHMS + 7,
-                   1, 1);
+                   GTK_WIDGET (window->spin_reproduction),
+                   1, NALGORITHMS + 7, 1, 1);
   gtk_grid_attach (window->grid_algorithm,
-                   GTK_WIDGET (window->label_adaptation), 0, NALGORITHMS + 8,
-                   1, 1);
+                   GTK_WIDGET (window->label_adaptation),
+                   0, NALGORITHMS + 8, 1, 1);
+  gtk_grid_attach (window->grid_algorithm, GTK_WIDGET (window->spin_adaptation),
+                   1, NALGORITHMS + 8, 1, 1);
+  gtk_grid_attach (window->grid_algorithm, GTK_WIDGET (window->check_direction),
+                   0, NALGORITHMS + 9, 2, 1);
+  gtk_grid_attach (window->grid_algorithm, GTK_WIDGET (window->grid_direction),
+                   0, NALGORITHMS + 10, 2, 1);
+  gtk_grid_attach (window->grid_algorithm, GTK_WIDGET (window->label_threshold),
+                   0, NALGORITHMS + 11, 1, 1);
   gtk_grid_attach (window->grid_algorithm,
-                   GTK_WIDGET (window->spin_adaptation), 1, NALGORITHMS + 8,
-                   1, 1);
-  gtk_grid_attach (window->grid_algorithm,
-                   GTK_WIDGET (window->check_direction), 0, NALGORITHMS + 9,
-                   2, 1);
-  gtk_grid_attach (window->grid_algorithm,
-                   GTK_WIDGET (window->grid_direction), 0, NALGORITHMS + 10,
-                   2, 1);
-  gtk_grid_attach (window->grid_algorithm,
-                   GTK_WIDGET (window->label_threshold), 0, NALGORITHMS + 11,
-                   1, 1);
-  gtk_grid_attach (window->grid_algorithm,
-                   GTK_WIDGET (window->scrolled_threshold), 1,
-                   NALGORITHMS + 11, 1, 1);
+                   GTK_WIDGET (window->scrolled_threshold),
+                   1, NALGORITHMS + 11, 1, 1);
   window->frame_algorithm = (GtkFrame *) gtk_frame_new (_("Algorithm"));
   gtk_container_add (GTK_CONTAINER (window->frame_algorithm),
                      GTK_WIDGET (window->grid_algorithm));

@@ -76,35 +76,30 @@ OF SUCH DAMAGE.
 #endif
 
 unsigned int nthreads_direction;
-  ///< Number of threads for the direction search method.
+///< Number of threads for the direction search method.
 void (*optimize_algorithm) ();
-  ///< Pointer to the function to perform a optimization algorithm step.
+///< Pointer to the function to perform a optimization algorithm step.
 double (*optimize_estimate_direction) (unsigned int variable,
                                        unsigned int estimate);
-  ///< Pointer to the function to estimate the direction.
+///< Pointer to the function to estimate the direction.
 double (*optimize_norm) (unsigned int simulation);
-  ///< Pointer to the error norm function.
+///< Pointer to the error norm function.
 Optimize optimize[1];           ///< Optimization data.
 
 /**
- * \fn void optimize_input (unsigned int simulation, char *input, \
- *   GMappedFile *stencil)
- * \brief Function to write the simulation input file.
- * \param simulation
- * \brief Simulation number.
- * \param input
- * \brief Input file name.
- * \param stencil
- * \brief Template of the input file name.
+ * Function to write the simulation input file.
  */
 void
-optimize_input (unsigned int simulation, char *input, GMappedFile * stencil)
+optimize_input (unsigned int simulation,        ///< Simulation number.
+                char *input,    ///< Input file name.
+                GMappedFile * stencil)  ///< Template of the input file name.
 {
-  unsigned int i;
-  char buffer[32], value[32], *buffer2, *buffer3, *content;
-  FILE *file;
-  gsize length;
+  char buffer[32], value[32];
   GRegex *regex;
+  FILE *file;
+ 	char *buffer2, *buffer3 = NULL, *content;
+  gsize length;
+  unsigned int i;
 
 #if DEBUG_OPTIMIZE
   fprintf (stderr, "optimize_input: start\n");
@@ -178,17 +173,14 @@ optimize_input_end:
 }
 
 /**
- * \fn double optimize_parse (unsigned int simulation, unsigned int experiment)
- * \brief Function to parse input files, simulating and calculating the \
- *   objective function.
- * \param simulation
- * \brief Simulation number.
- * \param experiment
- * \brief Experiment number.
+ * Function to parse input files, simulating and calculating the objective 
+ *   function.
+ *
  * \return Objective function value.
  */
 double
-optimize_parse (unsigned int simulation, unsigned int experiment)
+optimize_parse (unsigned int simulation,        ///< Simulation number.
+                unsigned int experiment)        ///< Experiment number.
 {
   unsigned int i;
   double e;
@@ -292,14 +284,12 @@ optimize_parse (unsigned int simulation, unsigned int experiment)
 }
 
 /**
- * \fn double optimize_norm_euclidian (unsigned int simulation)
- * \brief Function to calculate the Euclidian error norm.
- * \param simulation
- * \brief simulation number.
+ * Function to calculate the Euclidian error norm.
+ *
  * \return Euclidian error norm.
  */
 double
-optimize_norm_euclidian (unsigned int simulation)
+optimize_norm_euclidian (unsigned int simulation)       ///< simulation number.
 {
   double e, ei;
   unsigned int i;
@@ -321,14 +311,12 @@ optimize_norm_euclidian (unsigned int simulation)
 }
 
 /**
- * \fn double optimize_norm_maximum (unsigned int simulation)
- * \brief Function to calculate the maximum error norm.
- * \param simulation
- * \brief simulation number.
+ * Function to calculate the maximum error norm.
+ *
  * \return Maximum error norm.
  */
 double
-optimize_norm_maximum (unsigned int simulation)
+optimize_norm_maximum (unsigned int simulation) ///< simulation number.
 {
   double e, ei;
   unsigned int i;
@@ -349,14 +337,12 @@ optimize_norm_maximum (unsigned int simulation)
 }
 
 /**
- * \fn double optimize_norm_p (unsigned int simulation)
- * \brief Function to calculate the P error norm.
- * \param simulation
- * \brief simulation number.
+ * Function to calculate the P error norm.
+ *
  * \return P error norm.
  */
 double
-optimize_norm_p (unsigned int simulation)
+optimize_norm_p (unsigned int simulation)       ///< simulation number.
 {
   double e, ei;
   unsigned int i;
@@ -378,14 +364,12 @@ optimize_norm_p (unsigned int simulation)
 }
 
 /**
- * \fn double optimize_norm_taxicab (unsigned int simulation)
- * \brief Function to calculate the taxicab error norm.
- * \param simulation
- * \brief simulation number.
+ * Function to calculate the taxicab error norm.
+ *
  * \return Taxicab error norm.
  */
 double
-optimize_norm_taxicab (unsigned int simulation)
+optimize_norm_taxicab (unsigned int simulation) ///< simulation number.
 {
   double e;
   unsigned int i;
@@ -403,8 +387,7 @@ optimize_norm_taxicab (unsigned int simulation)
 }
 
 /**
- * \fn void optimize_print ()
- * \brief Function to print the results.
+ * Function to print the results.
  */
 void
 optimize_print ()
@@ -430,15 +413,11 @@ optimize_print ()
 }
 
 /**
- * \fn void optimize_save_variables (unsigned int simulation, double error)
- * \brief Function to save in a file the variables and the error.
- * \param simulation
- * \brief Simulation number.
- * \param error
- * \brief Error value.
+ * Function to save in a file the variables and the error.
  */
 void
-optimize_save_variables (unsigned int simulation, double error)
+optimize_save_variables (unsigned int simulation,       ///< Simulation number.
+                         double error)  ///< Error value.
 {
   unsigned int i;
   char buffer[64];
@@ -459,15 +438,11 @@ optimize_save_variables (unsigned int simulation, double error)
 }
 
 /**
- * \fn void optimize_best (unsigned int simulation, double value)
- * \brief Function to save the best simulations.
- * \param simulation
- * \brief Simulation number.
- * \param value
- * \brief Objective function value.
+ * Function to save the best simulations.
  */
 void
-optimize_best (unsigned int simulation, double value)
+optimize_best (unsigned int simulation, ///< Simulation number.
+               double value)    ///< Objective function value.
 {
   unsigned int i, j;
   double e;
@@ -504,8 +479,7 @@ optimize_best (unsigned int simulation, double value)
 }
 
 /**
- * \fn void optimize_sequential ()
- * \brief Function to optimize sequentially.
+ * Function to optimize sequentially.
  */
 void
 optimize_sequential ()
@@ -537,14 +511,12 @@ optimize_sequential ()
 }
 
 /**
- * \fn void* optimize_thread (ParallelData *data)
- * \brief Function to optimize on a thread.
- * \param data
- * \brief Function data.
- * \return NULL
+ * Function to optimize on a thread.
+ *
+ * \return NULL.
  */
 void *
-optimize_thread (ParallelData * data)
+optimize_thread (ParallelData * data)   ///< Function data.
 {
   unsigned int i, thread;
   double e;
@@ -579,19 +551,14 @@ optimize_thread (ParallelData * data)
 }
 
 /**
- * \fn void optimize_merge (unsigned int nsaveds, \
- *   unsigned int *simulation_best, double *error_best)
- * \brief Function to merge the 2 optimization results.
- * \param nsaveds
- * \brief Number of saved results.
- * \param simulation_best
- * \brief Array of best simulation numbers.
- * \param error_best
- * \brief Array of best objective function values.
+ * Function to merge the 2 optimization results.
  */
 void
-optimize_merge (unsigned int nsaveds, unsigned int *simulation_best,
+optimize_merge (unsigned int nsaveds,   ///< Number of saved results.
+                unsigned int *simulation_best,
+                ///< Array of best simulation numbers.
                 double *error_best)
+                ///< Array of best objective function values.
 {
   unsigned int i, j, k, s[optimize->nbest];
   double e[optimize->nbest];
@@ -644,8 +611,7 @@ optimize_merge (unsigned int nsaveds, unsigned int *simulation_best,
 }
 
 /**
- * \fn void optimize_synchronise ()
- * \brief Function to synchronise the optimization results of MPI tasks.
+ * Function to synchronise the optimization results of MPI tasks.
  */
 #if HAVE_MPI
 void
@@ -693,8 +659,7 @@ optimize_synchronise ()
 #endif
 
 /**
- * \fn void optimize_sweep ()
- * \brief Function to optimize with the sweep algorithm.
+ * Function to optimize with the sweep algorithm.
  */
 void
 optimize_sweep ()
@@ -744,8 +709,7 @@ optimize_sweep ()
 }
 
 /**
- * \fn void optimize_MonteCarlo ()
- * \brief Function to optimize with the Monte-Carlo algorithm.
+ * Function to optimize with the Monte-Carlo algorithm.
  */
 void
 optimize_MonteCarlo ()
@@ -785,16 +749,13 @@ optimize_MonteCarlo ()
 }
 
 /**
- * \fn void optimize_best_direction (unsigned int simulation, \
- *   double value)
- * \brief Function to save the best simulation in a direction search method.
- * \param simulation
- * \brief Simulation number.
- * \param value
- * \brief Objective function value.
+ * Function to save the best simulation in a direction search method.
  */
 void
-optimize_best_direction (unsigned int simulation, double value)
+optimize_best_direction (unsigned int simulation,
+///< Simulation number.
+                         double value)
+///< Objective function value.
 {
 #if DEBUG_OPTIMIZE
   fprintf (stderr, "optimize_best_direction: start\n");
@@ -818,13 +779,10 @@ optimize_best_direction (unsigned int simulation, double value)
 }
 
 /**
- * \fn void optimize_direction_sequential (unsigned int simulation)
- * \brief Function to estimate the direction search sequentially.
- * \param simulation
- * \brief Simulation number.
+ * Function to estimate the direction search sequentially.
  */
 void
-optimize_direction_sequential (unsigned int simulation)
+optimize_direction_sequential (unsigned int simulation) ///< Simulation number.
 {
   unsigned int i, j;
   double e;
@@ -855,14 +813,12 @@ optimize_direction_sequential (unsigned int simulation)
 }
 
 /**
- * \fn void* optimize_direction_thread (ParallelData *data)
- * \brief Function to estimate the direction search on a thread.
- * \param data
- * \brief Function data.
+ * Function to estimate the direction search on a thread.
+ *
  * \return NULL
  */
 void *
-optimize_direction_thread (ParallelData * data)
+optimize_direction_thread (ParallelData * data) ///< Function data.
 {
   unsigned int i, thread;
   double e;
@@ -900,17 +856,14 @@ optimize_direction_thread (ParallelData * data)
 }
 
 /**
- * \fn double optimize_estimate_direction_random (unsigned int variable, \
- *   unsigned int estimate)
- * \brief Function to estimate a component of the direction search vector.
- * \param variable
- * \brief Variable number.
- * \param estimate
- * \brief Estimate number.
+ * Function to estimate a component of the direction search vector.
  */
 double
 optimize_estimate_direction_random (unsigned int variable,
-                                    unsigned int estimate)
+                                    ///< Variable number.
+                                    unsigned int estimate
+                                    __attribute__ ((unused)))
+  ///< Estimate number.
 {
   double x;
 #if DEBUG_OPTIMIZE
@@ -927,17 +880,13 @@ optimize_estimate_direction_random (unsigned int variable,
 }
 
 /**
- * \fn double optimize_estimate_direction_coordinates (unsigned int variable, \
- *   unsigned int estimate)
- * \brief Function to estimate a component of the direction search vector.
- * \param variable
- * \brief Variable number.
- * \param estimate
- * \brief Estimate number.
+ * Function to estimate a component of the direction search vector.
  */
 double
 optimize_estimate_direction_coordinates (unsigned int variable,
+                                         ///< Variable number.
                                          unsigned int estimate)
+                                         ///< Estimate number.
 {
   double x;
 #if DEBUG_OPTIMIZE
@@ -961,13 +910,10 @@ optimize_estimate_direction_coordinates (unsigned int variable,
 }
 
 /**
- * \fn void optimize_step_direction (unsigned int simulation)
- * \brief Function to do a step of the direction search method.
- * \param simulation
- * \brief Simulation number.
+ * Function to do a step of the direction search method.
  */
 void
-optimize_step_direction (unsigned int simulation)
+optimize_step_direction (unsigned int simulation)       ///< Simulation number.
 {
   GThread *thread[nthreads_direction];
   ParallelData data[nthreads_direction];
@@ -1033,8 +979,7 @@ optimize_step_direction (unsigned int simulation)
 }
 
 /**
- * \fn void optimize_direction ()
- * \brief Function to optimize with a direction search method.
+ * Function to optimize with a direction search method.
  */
 void
 optimize_direction ()
@@ -1096,14 +1041,12 @@ optimize_direction ()
 }
 
 /**
- * \fn double optimize_genetic_objective (Entity *entity)
- * \brief Function to calculate the objective function of an entity.
- * \param entity
- * \brief entity data.
+ * Function to calculate the objective function of an entity.
+ *
  * \return objective function value.
  */
 double
-optimize_genetic_objective (Entity * entity)
+optimize_genetic_objective (Entity * entity)    ///< entity data.
 {
   unsigned int j;
   double objective;
@@ -1133,14 +1076,14 @@ optimize_genetic_objective (Entity * entity)
 }
 
 /**
- * \fn void optimize_genetic ()
- * \brief Function to optimize with the genetic algorithm.
+ * Function to optimize with the genetic algorithm.
  */
 void
 optimize_genetic ()
 {
-  char *best_genome;
-  double best_objective, *best_variable;
+  double *best_variable = NULL;
+  char *best_genome = NULL;
+  double best_objective = 0.;
 #if DEBUG_OPTIMIZE
   fprintf (stderr, "optimize_genetic: start\n");
   fprintf (stderr, "optimize_genetic: ntasks=%u nthreads=%u\n", ntasks,
@@ -1182,8 +1125,7 @@ optimize_genetic ()
 }
 
 /**
- * \fn void optimize_save_old ()
- * \brief Function to save the best results on iterative methods.
+ * Function to save the best results on iterative methods.
  */
 void
 optimize_save_old ()
@@ -1214,9 +1156,8 @@ optimize_save_old ()
 }
 
 /**
- * \fn void optimize_merge_old ()
- * \brief Function to merge the best results with the previous step best results
- *   on iterative methods.
+ * Function to merge the best results with the previous step best results on
+ *   iterative methods.
  */
 void
 optimize_merge_old ()
@@ -1263,8 +1204,7 @@ optimize_merge_old ()
 }
 
 /**
- * \fn void optimize_refine ()
- * \brief Function to refine the search ranges of the variables in iterative
+ * Function to refine the search ranges of the variables in iterative 
  *   algorithms.
  */
 void
@@ -1349,8 +1289,7 @@ optimize_refine ()
 }
 
 /**
- * \fn void optimize_step ()
- * \brief Function to do a step of the iterative algorithm.
+ * Function to do a step of the iterative algorithm.
  */
 void
 optimize_step ()
@@ -1367,8 +1306,7 @@ optimize_step ()
 }
 
 /**
- * \fn void optimize_iterate ()
- * \brief Function to iterate the algorithm.
+ * Function to iterate the algorithm.
  */
 void
 optimize_iterate ()
@@ -1398,8 +1336,7 @@ optimize_iterate ()
 }
 
 /**
- * \fn void optimize_free ()
- * \brief Function to free the memory used by the Optimize struct.
+ * Function to free the memory used by the Optimize struct.
  */
 void
 optimize_free ()
@@ -1424,8 +1361,7 @@ optimize_free ()
 }
 
 /**
- * \fn void optimize_open ()
- * \brief Function to open and perform a optimization.
+ * Function to open and perform a optimization.
  */
 void
 optimize_open ()

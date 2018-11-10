@@ -57,8 +57,7 @@ const char *result_name = "result";     ///< Name of the result file.
 const char *variables_name = "variables";       ///< Name of the variables file.
 
 /**
- * \fn void input_new ()
- * \brief Function to create a new Input struct.
+ * Function to create a new Input struct.
  */
 void
 input_new ()
@@ -76,8 +75,7 @@ input_new ()
 }
 
 /**
- * \fn void input_free ()
- * \brief Function to free the memory of the input file data.
+ * Function to free the memory of the input file data.
  */
 void
 input_free ()
@@ -115,13 +113,10 @@ input_free ()
 }
 
 /**
- * \fn void input_error (char *message)
- * \brief Function to print an error message opening an Input struct.
- * \param message
- * \brief Error message.
+ * Function to print an error message opening an Input struct.
  */
 void
-input_error (char *message)
+input_error (char *message)     ///< Error message.
 {
   char buffer[64];
   snprintf (buffer, 64, "%s: %s\n", _("Input"), message);
@@ -129,14 +124,12 @@ input_error (char *message)
 }
 
 /**
- * \fn int input_open_xml (xmlDoc * doc)
- * \brief Function to open the input file in XML format.
- * \param doc
- * \brief xmlDoc struct.
+ * Function to open the input file in XML format.
+ *
  * \return 1_on_success, 0_on_error.
  */
 int
-input_open_xml (xmlDoc * doc)
+input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
 {
   char buffer2[64];
   xmlNode *node, *child;
@@ -559,14 +552,12 @@ exit_on_error:
 }
 
 /**
- * \fn int input_open_json (JsonParser * parser)
- * \brief Function to open the input file in JSON format.
- * \param parser
- * \brief JsonParser struct.
+ * Function to open the input file in JSON format.
+ *
  * \return 1_on_success, 0_on_error.
  */
 int
-input_open_json (JsonParser * parser)
+input_open_json (JsonParser * parser)   ///< JsonParser struct.
 {
   JsonNode *node, *child;
   JsonObject *object;
@@ -948,14 +939,12 @@ exit_on_error:
 }
 
 /**
- * \fn int input_open (char *filename)
- * \brief Function to open the input file.
- * \param filename
- * \brief Input data file name.
+ * Function to open the input file.
+ *
  * \return 1_on_success, 0_on_error.
  */
 int
-input_open (char *filename)
+input_open (char *filename)     ///< Input data file name.
 {
   xmlDoc *doc;
   JsonParser *parser;

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.4.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-05 03:03+0200\n"
+"POT-Creation-Date: 2018-11-10 18:25+0100\n"
 "PO-Revision-Date: 2015-10-20 07:33+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -17,247 +17,247 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: utils.c:106
+#: utils.c:103
 msgid "ERROR!"
 msgstr "¡ERROR!"
 
-#: experiment.c:125 experiment.c:127 interface.c:2696
+#: experiment.c:114 experiment.c:116 interface.c:2636
 msgid "Experiment"
 msgstr "Experimento"
 
-#: experiment.c:163 experiment.c:277
+#: experiment.c:147 experiment.c:256
 msgid "no data file name"
 msgstr "falta el nombre del fichero de datos"
 
-#: experiment.c:175 experiment.c:289
+#: experiment.c:159 experiment.c:268
 msgid "bad weight"
 msgstr "peso no válido"
 
-#: experiment.c:193 experiment.c:220 experiment.c:306 experiment.c:333
+#: experiment.c:177 experiment.c:204 experiment.c:285 experiment.c:312
 msgid "no template"
 msgstr "falta plantilla"
 
-#: experiment.c:205 experiment.c:319
+#: experiment.c:189 experiment.c:298
 msgid "bad templates number"
 msgstr "número de plantillas incorrecto"
 
-#: variable.c:114 variable.c:116 input.c:494 interface.c:2614
+#: variable.c:107 variable.c:109 input.c:487 interface.c:2554
 msgid "Variable"
 msgstr "Variable"
 
-#: variable.c:147 variable.c:314
+#: variable.c:134 variable.c:295
 msgid "no name"
 msgstr "falta el nombre"
 
-#: variable.c:157 variable.c:324
+#: variable.c:144 variable.c:305
 msgid "bad minimum"
 msgstr "mínimo incorrecto"
 
-#: variable.c:165 variable.c:332
+#: variable.c:152 variable.c:313
 msgid "bad absolute minimum"
 msgstr "mínimo absoluto incorrecto"
 
-#: variable.c:170 variable.c:337
+#: variable.c:157 variable.c:318
 msgid "minimum range not allowed"
 msgstr "rango mínimo no permitido"
 
-#: variable.c:176 variable.c:343
+#: variable.c:163 variable.c:324
 msgid "no minimum range"
 msgstr "falta el rango mínimo"
 
-#: variable.c:186 variable.c:352
+#: variable.c:173 variable.c:333
 msgid "bad maximum"
 msgstr "máximo incorrecto"
 
-#: variable.c:194 variable.c:360
+#: variable.c:181 variable.c:341
 msgid "bad absolute maximum"
 msgstr "máximo absoluto incorrecto"
 
-#: variable.c:199 variable.c:365
+#: variable.c:186 variable.c:346
 msgid "maximum range not allowed"
 msgstr "rango máximo no permitido"
 
-#: variable.c:204 variable.c:370
+#: variable.c:191 variable.c:351
 msgid "bad range"
 msgstr "rango no válido"
 
-#: variable.c:210 variable.c:376
+#: variable.c:197 variable.c:357
 msgid "no maximum range"
 msgstr "falta el rango máximo"
 
-#: variable.c:218 variable.c:384
+#: variable.c:205 variable.c:365
 msgid "bad precision"
 msgstr "precisión incorrecta"
 
-#: variable.c:230 variable.c:395
+#: variable.c:217 variable.c:376
 msgid "bad sweeps"
 msgstr "número de barridos incorrecto"
 
-#: variable.c:236 variable.c:401
+#: variable.c:223 variable.c:382
 msgid "no sweeps number"
 msgstr "falta el número de barridos"
 
-#: variable.c:253 variable.c:417
+#: variable.c:240 variable.c:398
 msgid "invalid bits number"
 msgstr "número de bits no válido"
 
-#: variable.c:259 variable.c:423
+#: variable.c:246 variable.c:404
 msgid "no bits number"
 msgstr "falta el número de bits"
 
-#: variable.c:269 variable.c:432
+#: variable.c:256 variable.c:413
 msgid "bad step size"
 msgstr "tamaño de paso incorrecto"
 
-#: input.c:127
+#: input.c:122
 msgid "Input"
 msgstr "Entrada"
 
-#: input.c:162
+#: input.c:155
 msgid "Bad root XML node"
 msgstr "Nodo XML raíz incorrecto"
 
-#: input.c:194 input.c:616
+#: input.c:187 input.c:607
 msgid "Bad simulator program"
 msgstr "Programa simulador incorrecto"
 
-#: input.c:208 input.c:632
+#: input.c:201 input.c:623
 msgid "Bad pseudo-random numbers generator seed"
 msgstr "Semilla del generador de números pseudo-aleatorios incorrecta"
 
-#: input.c:224 input.c:647
+#: input.c:217 input.c:638
 msgid "Bad simulations number"
 msgstr "Número de simulaciones incorrecto"
 
-#: input.c:242 input.c:664
+#: input.c:235 input.c:655
 msgid "Invalid population number"
 msgstr "Número de población no válido"
 
-#: input.c:248 input.c:670
+#: input.c:241 input.c:661
 msgid "No population number"
 msgstr "Falta el número de población"
 
-#: input.c:260 input.c:681
+#: input.c:253 input.c:672
 msgid "Invalid generations number"
 msgstr "Numéro de generaciones no válido"
 
-#: input.c:266 input.c:687
+#: input.c:259 input.c:678
 msgid "No generations number"
 msgstr "Falta número de generaciones"
 
-#: input.c:279 input.c:699
+#: input.c:272 input.c:690
 msgid "Invalid mutation probability"
 msgstr "Probabilidad de mutación no válida"
 
-#: input.c:285 input.c:705
+#: input.c:278 input.c:696
 msgid "No mutation probability"
 msgstr "Falta probabilidad de mutación"
 
-#: input.c:298 input.c:717
+#: input.c:291 input.c:708
 msgid "Invalid reproduction probability"
 msgstr "Probabilidad de reproducción no válida"
 
-#: input.c:304 input.c:723
+#: input.c:297 input.c:714
 msgid "No reproduction probability"
 msgstr "Falta probabilidad de reproducción"
 
-#: input.c:317 input.c:735
+#: input.c:310 input.c:726
 msgid "Invalid adaptation probability"
 msgstr "Probabilidad de adaptación no válida"
 
-#: input.c:323 input.c:741
+#: input.c:316 input.c:732
 msgid "No adaptation probability"
 msgstr "Falta probabilidad de adaptación"
 
-#: input.c:334 input.c:752
+#: input.c:327 input.c:743
 msgid "No enough survival entities to reproduce the population"
 msgstr "Número de supervivientes insuficiente para reproducir la población"
 
-#: input.c:340 input.c:758
+#: input.c:333 input.c:749
 msgid "Unknown algorithm"
 msgstr "Algoritmo desconocido"
 
-#: input.c:358 input.c:773
+#: input.c:351 input.c:764
 msgid "Bad iterations number"
 msgstr "Número de iteraciones incorrecto"
 
-#: input.c:368 input.c:783
+#: input.c:361 input.c:774
 msgid "Invalid best number"
 msgstr "Número de mejores no válido"
 
-#: input.c:373
+#: input.c:366
 msgid "Best number higher than simulations number"
 msgstr "Número de mejores mayor que el número de simulaciones"
 
-#: input.c:384 input.c:793
+#: input.c:377 input.c:784
 msgid "Invalid tolerance"
 msgstr "Tolerancia no válida"
 
-#: input.c:396 input.c:804
+#: input.c:389 input.c:795
 msgid "Invalid steps number"
 msgstr "Número de pasos no válido"
 
-#: input.c:413 input.c:817
+#: input.c:406 input.c:808
 msgid "Invalid estimates number"
 msgstr "Número de estimaciones no válido"
 
-#: input.c:420 input.c:824
+#: input.c:413 input.c:815
 msgid "Unknown method to estimate the direction search"
 msgstr "Método de estimar la búsqueda de dirección desconocido"
 
-#: input.c:432 input.c:833
+#: input.c:425 input.c:824
 msgid "Invalid relaxation parameter"
 msgstr "Parámetro de relajación no válido"
 
-#: input.c:445 input.c:846
+#: input.c:438 input.c:837
 msgid "Invalid threshold"
 msgstr "Umbral no válido"
 
-#: input.c:480 input.c:880
+#: input.c:473 input.c:871
 msgid "No optimization experiments"
 msgstr "Faltan experimentos de optimización"
 
-#: input.c:494
+#: input.c:487
 msgid "bad XML node"
 msgstr "nodo XML incorrecto"
 
-#: input.c:508 input.c:901
+#: input.c:501 input.c:892
 msgid "No optimization variables"
 msgstr "Faltan las variables de optimización"
 
-#: input.c:528 input.c:919
+#: input.c:521 input.c:910
 msgid "Bad P parameter"
 msgstr "Parámetro P incorrecto"
 
-#: input.c:536 input.c:927
+#: input.c:529 input.c:918
 msgid "Unknown error norm"
 msgstr "Norma de error desconocida"
 
-#: input.c:984
+#: input.c:973
 msgid "Unable to parse the input file"
 msgstr "Imposible analizar el fichero de entrada"
 
-#: optimize.c:418 optimize.c:419 interface.c:1002
+#: optimize.c:401 optimize.c:402 interface.c:983
 msgid "Best result"
 msgstr "Mejor resultado"
 
-#: optimize.c:1718 optimize.c:1720 interface.c:998
+#: optimize.c:1654 optimize.c:1656 interface.c:979
 msgid "Calculation time"
 msgstr "Tiempo de cálculo"
 
-#: interface.c:630
+#: interface.c:614
 msgid "Pseudo-random numbers generator seed"
 msgstr "Semilla del generador de números pseudo-aleatorios"
 
-#: interface.c:635
+#: interface.c:619
 msgid "Seed to init the pseudo-random numbers generator"
 msgstr "Semilla para iniciar el generador de números pseudo-aleatorios"
 
-#: interface.c:638
+#: interface.c:622
 msgid "Threads number for the stochastic algorithm"
 msgstr "Número de hilos para el algoritmo estocástico"
 
-#: interface.c:643
+#: interface.c:627
 msgid ""
 "Number of threads to perform the calibration/optimization for the stochastic "
 "algorithm"
@@ -265,11 +265,11 @@ msgstr ""
 "Número de hilos para ejecutar la calibración/optimización para el algoritmo "
 "estocástico"
 
-#: interface.c:647
+#: interface.c:631
 msgid "Threads number for the direction search method"
 msgstr "Número de hilos para el método de búsqueda de dirección"
 
-#: interface.c:652
+#: interface.c:636
 msgid ""
 "Number of threads to perform the calibration/optimization for the direction "
 "search method"
@@ -277,35 +277,35 @@ msgstr ""
 "Número de hilos para ejecutar la calibración/optimización para el método de "
 "búsqueda de dirección"
 
-#: interface.c:669 interface.c:2146
+#: interface.c:653 interface.c:2095
 msgid "Options"
 msgstr "Opciones"
 
-#: interface.c:672 interface.c:834 interface.c:2012
+#: interface.c:656 interface.c:816 interface.c:1964
 msgid "_OK"
 msgstr "_Aceptar"
 
-#: interface.c:673 interface.c:833 interface.c:2011
+#: interface.c:657 interface.c:815 interface.c:1963
 msgid "_Cancel"
 msgstr "_Cancelar"
 
-#: interface.c:701
+#: interface.c:684
 msgid "Calculating ..."
 msgstr "Calculando ..."
 
-#: interface.c:707
+#: interface.c:690
 msgid "Calculating"
 msgstr "Calculando"
 
-#: interface.c:830
+#: interface.c:812
 msgid "Save file"
 msgstr "Guardar fichero"
 
-#: interface.c:1025
+#: interface.c:1005
 msgid "user-manual.pdf"
 msgstr "manual-de-usuario.pdf"
 
-#: interface.c:1061
+#: interface.c:1040
 msgid ""
 "The Multi-Purposes Calibration and Optimization Tool.\n"
 "A software to perform calibrations or optimizations of empirical parameters"
@@ -314,152 +314,152 @@ msgstr ""
 "Un software para realizar calibraciones/optimizaciones de parámetros "
 "empíricos"
 
-#: interface.c:2008
+#: interface.c:1960
 msgid "Open input file"
 msgstr "Abrir fichero de entrada"
 
-#: interface.c:2086
+#: interface.c:2035
 msgid "_Sweep"
 msgstr "_Barrido"
 
-#: interface.c:2086
+#: interface.c:2035
 msgid "_Genetic"
 msgstr "_Genético"
 
-#: interface.c:2089
+#: interface.c:2038
 msgid "Monte-Carlo brute force algorithm"
 msgstr "Algoritmo de fuerza bruta de Monte-Carlo"
 
-#: interface.c:2090
+#: interface.c:2039
 msgid "Sweep brute force algorithm"
 msgstr "Algoritmo de fuerza bruta de barrido"
 
-#: interface.c:2091
+#: interface.c:2040
 msgid "Genetic algorithm"
 msgstr "Algoritmo genético"
 
-#: interface.c:2094
+#: interface.c:2043
 msgid "_Coordinates descent"
 msgstr "_Descenso de coordenadas"
 
-#: interface.c:2094
+#: interface.c:2043
 msgid "_Random"
 msgstr "_Aleatorio"
 
-#: interface.c:2097
+#: interface.c:2046
 msgid "Coordinates direction estimate method"
 msgstr "Método de estimación de dirección por coordenadas"
 
-#: interface.c:2098
+#: interface.c:2047
 msgid "Random direction estimate method"
 msgstr "Método de estimación de dirección aleatoria"
 
-#: interface.c:2102
+#: interface.c:2051
 msgid "Euclidean error norm (L2)"
 msgstr "Norma de error euclidiana (L2)"
 
-#: interface.c:2103
+#: interface.c:2052
 msgid "Maximum error norm (L∞)"
 msgstr "Norma de error máxima (L∞)"
 
-#: interface.c:2104
+#: interface.c:2053
 msgid "P error norm (Lp)"
 msgstr "Norma de error P (Lp)"
 
-#: interface.c:2105
+#: interface.c:2054
 msgid "Taxicab error norm (L1)"
 msgstr "Norma de error taxicab (L1)"
 
-#: interface.c:2127
+#: interface.c:2076
 msgid "Open"
 msgstr "Abrir"
 
-#: interface.c:2133
+#: interface.c:2082
 msgid "Save"
 msgstr "Guardar"
 
-#: interface.c:2140
+#: interface.c:2089
 msgid "Run"
 msgstr "Ejecutar"
 
-#: interface.c:2152
+#: interface.c:2101
 msgid "Help"
 msgstr "Ayuda"
 
-#: interface.c:2158
+#: interface.c:2107
 msgid "About"
 msgstr "Acerca de"
 
-#: interface.c:2164
+#: interface.c:2113
 msgid "Exit"
 msgstr "Salir"
 
-#: interface.c:2188 interface.c:2190
+#: interface.c:2137 interface.c:2139
 msgid "Simulator program"
 msgstr "Programa simulador"
 
-#: interface.c:2193
+#: interface.c:2142
 msgid "Simulator program executable file"
 msgstr "Fichero ejecutable del programa simulador"
 
-#: interface.c:2198
+#: interface.c:2147
 msgid "_Evaluator program"
 msgstr "_Programa evaluador"
 
-#: interface.c:2201
+#: interface.c:2150
 msgid "Evaluator program"
 msgstr "Programa evaluador"
 
-#: interface.c:2205
+#: interface.c:2154
 msgid "Optional evaluator program executable file"
 msgstr "Opcional: fichero ejecutable del programa simulador"
 
-#: interface.c:2208
+#: interface.c:2157
 msgid "Result file"
 msgstr "Fichero de resultados"
 
-#: interface.c:2211
+#: interface.c:2160
 msgid "Best results file"
 msgstr "Fichero de mejores resultados"
 
-#: interface.c:2212
+#: interface.c:2161
 msgid "Variables file"
 msgstr "Fichero de variables"
 
-#: interface.c:2215
+#: interface.c:2164
 msgid "All simulated results file"
 msgstr "Fichero con todos los resultados simulados"
 
-#: interface.c:2238
+#: interface.c:2187
 msgid "Simulations number"
 msgstr "Número de simulaciones"
 
-#: interface.c:2243
+#: interface.c:2192
 msgid "Number of simulations to perform for each iteration"
 msgstr "Número de simulaciones para ejecutar en cada iteración"
 
-#: interface.c:2246
+#: interface.c:2195
 msgid "Iterations number"
 msgstr "Número de iteraciones"
 
-#: interface.c:2250
+#: interface.c:2199
 msgid "Number of iterations"
 msgstr "Número de iteraciones"
 
-#: interface.c:2254
+#: interface.c:2203
 msgid "Tolerance"
 msgstr "Tolerancia"
 
-#: interface.c:2259
+#: interface.c:2208
 msgid "Tolerance to set the variable interval on the next iteration"
 msgstr ""
 "Tolerancia para fijar el intervalo de la variable en la siguiente iteración"
 
-#: interface.c:2260
+#: interface.c:2209
 msgid "Bests number"
 msgstr "Número de los mejores"
 
-#: interface.c:2265
+#: interface.c:2214
 msgid ""
 "Number of best simulations used to set the variable interval on the next "
 "iteration"
@@ -467,131 +467,131 @@ msgstr ""
 "Número de las mejores simulaciones usadas para fijar el intervalo de la "
 "variable en la siguiente iteración"
 
-#: interface.c:2268
+#: interface.c:2217
 msgid "Population number"
 msgstr "Número de población"
 
-#: interface.c:2273
+#: interface.c:2222
 msgid "Number of population for the genetic algorithm"
 msgstr "Número de población para el algoritmo genético"
 
-#: interface.c:2276
+#: interface.c:2225
 msgid "Generations number"
 msgstr "Número de generaciones"
 
-#: interface.c:2281
+#: interface.c:2230
 msgid "Number of generations for the genetic algorithm"
 msgstr "Número de generaciones para el algoritmo genético"
 
-#: interface.c:2282
+#: interface.c:2231
 msgid "Mutation ratio"
 msgstr "Ratio de mutación"
 
-#: interface.c:2287
+#: interface.c:2236
 msgid "Ratio of mutation for the genetic algorithm"
 msgstr "Ratio de mutación para el algoritmo genético"
 
-#: interface.c:2289
+#: interface.c:2238
 msgid "Reproduction ratio"
 msgstr "Ratio de reproducción"
 
-#: interface.c:2294
+#: interface.c:2243
 msgid "Ratio of reproduction for the genetic algorithm"
 msgstr "Ratio de reproducción para el algoritmo genético"
 
-#: interface.c:2295
+#: interface.c:2244
 msgid "Adaptation ratio"
 msgstr "Ratio de adaptación"
 
-#: interface.c:2300
+#: interface.c:2249
 msgid "Ratio of adaptation for the genetic algorithm"
 msgstr "Ratio de adaptación para el algoritmo genético"
 
-#: interface.c:2301
+#: interface.c:2250
 msgid "Threshold"
 msgstr "Umbral"
 
-#: interface.c:2307
+#: interface.c:2256
 msgid "Threshold in the objective function to finish the simulations"
 msgstr "Umbral en la función objetivo para finalizar las simulaciones"
 
-#: interface.c:2318
+#: interface.c:2267
 msgid "_Direction search method"
 msgstr "_Método de búsqueda de dirección"
 
-#: interface.c:2340
+#: interface.c:2289
 msgid "Steps number"
 msgstr "Número de pasos"
 
-#: interface.c:2345
+#: interface.c:2294
 msgid "Direction estimates number"
 msgstr "Número de estimaciones de la dirección"
 
-#: interface.c:2349
+#: interface.c:2298
 msgid "Relaxation parameter"
 msgstr "Parámetro de relajación"
 
-#: interface.c:2454
+#: interface.c:2394
 msgid "Algorithm"
 msgstr "Algoritmo"
 
-#: interface.c:2461
+#: interface.c:2401
 msgid "Variables selector"
 msgstr "Seleccionador de variables"
 
-#: interface.c:2470
+#: interface.c:2410
 msgid "Add variable"
 msgstr "Añadir variable"
 
-#: interface.c:2477
+#: interface.c:2417
 msgid "Remove variable"
 msgstr "Eliminar variable"
 
-#: interface.c:2478
+#: interface.c:2418
 msgid "Name"
 msgstr "Nombre"
 
-#: interface.c:2481
+#: interface.c:2421
 msgid "Variable name"
 msgstr "Nombre de la variable"
 
-#: interface.c:2485
+#: interface.c:2425
 msgid "Minimum"
 msgstr "Mínimo"
 
-#: interface.c:2489
+#: interface.c:2429
 msgid "Minimum initial value of the variable"
 msgstr "Valor inicial mínimo de la variable"
 
-#: interface.c:2496
+#: interface.c:2436
 msgid "Maximum"
 msgstr "Máximo"
 
-#: interface.c:2500
+#: interface.c:2440
 msgid "Maximum initial value of the variable"
 msgstr "Valor inicial máximo de la variable"
 
-#: interface.c:2508
+#: interface.c:2448
 msgid "_Absolute minimum"
 msgstr "_Mínimo absoluto"
 
-#: interface.c:2514
+#: interface.c:2454
 msgid "Minimum allowed value of the variable"
 msgstr "Valor mínimo permitido de la variable"
 
-#: interface.c:2522
+#: interface.c:2462
 msgid "_Absolute maximum"
 msgstr "_Máximo absoluto"
 
-#: interface.c:2528
+#: interface.c:2468
 msgid "Maximum allowed value of the variable"
 msgstr "Valor máximo permitido de la variable"
 
-#: interface.c:2535
+#: interface.c:2475
 msgid "Precision digits"
 msgstr "Dígitos de precisión"
 
-#: interface.c:2540
+#: interface.c:2480
 msgid ""
 "Number of precision floating point digits\n"
 "0 is for integer numbers"
@@ -599,71 +599,71 @@ msgstr ""
 "Número de dígitos decimales de precisión\n"
 "0 es para números enteros"
 
-#: interface.c:2544
+#: interface.c:2484
 msgid "Sweeps number"
 msgstr "Número de barridos"
 
-#: interface.c:2548
+#: interface.c:2488
 msgid "Number of steps sweeping the variable"
 msgstr "Número de pasos barriendo la variable"
 
-#: interface.c:2551
+#: interface.c:2491
 msgid "Bits number"
 msgstr "Número de bits"
 
-#: interface.c:2556
+#: interface.c:2496
 msgid "Number of bits to encode the variable"
 msgstr "Número de bits para codificar la variable"
 
-#: interface.c:2559
+#: interface.c:2499
 msgid "Step size"
 msgstr "Tamaño de paso"
 
-#: interface.c:2564
+#: interface.c:2504
 msgid "Initial step size for the direction search method"
 msgstr "Tamaño de paso inicial para el método de búsqueda de dirección"
 
-#: interface.c:2621
+#: interface.c:2561
 msgid "Experiment selector"
 msgstr "Seleccionador de experimentos"
 
-#: interface.c:2630
+#: interface.c:2570
 msgid "Add experiment"
 msgstr "Añadir experimento"
 
-#: interface.c:2637
+#: interface.c:2577
 msgid "Remove experiment"
 msgstr "Eliminar experimento"
 
-#: interface.c:2639 interface.c:2641 interface.c:2644
+#: interface.c:2579 interface.c:2581 interface.c:2584
 msgid "Experimental data file"
 msgstr "Fichero de datos experimentales"
 
-#: interface.c:2649
+#: interface.c:2589
 msgid "Weight"
 msgstr "Peso"
 
-#: interface.c:2654
+#: interface.c:2594
 msgid "Weight factor to build the objective function"
 msgstr "Factor de peso para construir la función objetivo"
 
-#: interface.c:2674 interface.c:2684
+#: interface.c:2614 interface.c:2624
 msgid "Input template"
 msgstr "Plantilla de entrada"
 
-#: interface.c:2687
+#: interface.c:2627
 msgid "Experimental input template file"
 msgstr "Fichero plantilla de entrada experimental"
 
-#: interface.c:2701
+#: interface.c:2641
 msgid "Error norm"
 msgstr "Norma de error"
 
-#: interface.c:2723
+#: interface.c:2663
 msgid "P parameter"
 msgstr "Parámetro P"
 
-#: interface.c:2729
+#: interface.c:2669
 msgid "P parameter for the P error norm"
 msgstr "Parámetro P para la norma de error P"
 

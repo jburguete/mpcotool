@@ -58,13 +58,10 @@ const double precision[NPRECISIONS] = {
 };                              ///< Array of variable precisions.
 
 /**
- * \fn void variable_new (Variable * variable)
- * \brief Function to create a new Variable struct.
- * \param variable
- * \brief Variable struct.
+ * Function to create a new Variable struct.
  */
 void
-variable_new (Variable * variable)
+variable_new (Variable * variable)      ///< Variable struct.
 {
 #if DEBUG_VARIABLE
   fprintf (stderr, "variable_new: start\n");
@@ -76,15 +73,13 @@ variable_new (Variable * variable)
 }
 
 /**
- * \fn void variable_free (Variable * variable, unsigned int type)
- * \brief Function to free the memory of a Variable struct.
- * \param variable
- * \brief Variable struct.
- * \param type
- * \brief Type of input file.
+ * Function to free the memory of a Variable struct.
  */
 void
-variable_free (Variable * variable, unsigned int type)
+variable_free (Variable * variable,
+///< Variable struct.
+               unsigned int type)
+///< Type of input file.
 {
 #if DEBUG_VARIABLE
   fprintf (stderr, "variable_free: start\n");
@@ -99,15 +94,13 @@ variable_free (Variable * variable, unsigned int type)
 }
 
 /**
- * \fn void variable_error (Variable * variable, char *message)
- * \brief Function to print a message error opening an Variable struct.
- * \param variable
- * \brief Variable struct.
- * \param message
- * \brief Error message.
+ * Function to print a message error opening an Variable struct.
  */
 void
-variable_error (Variable * variable, char *message)
+variable_error (Variable * variable,
+///< Variable struct.
+                char *message)
+///< Error message.
 {
   char buffer[64];
   if (!variable->name)
@@ -118,22 +111,16 @@ variable_error (Variable * variable, char *message)
 }
 
 /**
- * \fn int variable_open_xml (Variable * variable, xmlNode * node, \
- *   unsigned int algorithm, unsigned int nsteps)
- * \brief Function to open the variable file.
- * \param variable
- * \brief Variable struct.
- * \param node
- * \brief XML node.
- * \param algorithm
- * \brief Algorithm type.
- * \param nsteps
- * \brief Number of steps to do the direction search method.
+ * Function to open the variable file.
+ *
  * \return 1 on success, 0 on error.
  */
 int
-variable_open_xml (Variable * variable, xmlNode * node,
-                   unsigned int algorithm, unsigned int nsteps)
+variable_open_xml (Variable * variable, ///< Variable struct.
+                   xmlNode * node,      ///< XML node.
+                   unsigned int algorithm,      ///< Algorithm type.
+                   unsigned int nsteps)
+                   ///< Number of steps to do the direction search method.
 {
   int error_code;
 
@@ -284,22 +271,16 @@ exit_on_error:
 }
 
 /**
- * \fn int variable_open_json (Variable * variable, JsonNode * node, \
- *   unsigned int algorithm, unsigned int nsteps)
- * \brief Function to open the variable file.
- * \param variable
- * \brief Variable struct.
- * \param node
- * \brief XML node.
- * \param algorithm
- * \brief Algorithm type.
- * \param nsteps
- * \brief Number of steps to do the direction search method.
+ * Function to open the variable file.
+ *
  * \return 1 on success, 0 on error.
  */
 int
-variable_open_json (Variable * variable, JsonNode * node,
-                    unsigned int algorithm, unsigned int nsteps)
+variable_open_json (Variable * variable,        ///< Variable struct.
+                    JsonNode * node,    ///< XML node.
+                    unsigned int algorithm,     ///< Algorithm type.
+                    unsigned int nsteps)
+                    ///< Number of steps to do the direction search method.
 {
   JsonObject *object;
   const char *label;

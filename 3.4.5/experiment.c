@@ -55,13 +55,10 @@ const char *stencil[MAX_NINPUTS] = {
 ///< Array of xmlChar strings with stencil labels.
 
 /**
- * \fn void experiment_new (Experiment * experiment)
- * \brief Function to create a new Experiment struct.
- * \param experiment
- * \brief Experiment struct.
+ * Function to create a new Experiment struct.
  */
 void
-experiment_new (Experiment * experiment)
+experiment_new (Experiment * experiment)        ///< Experiment struct.
 {
   unsigned int i;
 #if DEBUG_EXPERIMENT
@@ -77,15 +74,11 @@ experiment_new (Experiment * experiment)
 }
 
 /**
- * \fn void experiment_free (Experiment * experiment, unsigned int type)
- * \brief Function to free the memory of an Experiment struct.
- * \param experiment
- * \brief Experiment struct.
- * \param type
- * \brief Type of input file.
+ * Function to free the memory of an Experiment struct.
  */
 void
-experiment_free (Experiment * experiment, unsigned int type)
+experiment_free (Experiment * experiment,       ///< Experiment struct.
+                 unsigned int type)     ///< Type of input file.
 {
   unsigned int i;
 #if DEBUG_EXPERIMENT
@@ -110,15 +103,11 @@ experiment_free (Experiment * experiment, unsigned int type)
 }
 
 /**
- * \fn void experiment_error (Experiment * experiment, char *message)
- * \brief Function to print a message error opening an Experiment struct.
- * \param experiment
- * \brief Experiment struct.
- * \param message
- * \brief Error message.
+ * Function to print a message error opening an Experiment struct.
  */
 void
-experiment_error (Experiment * experiment, char *message)
+experiment_error (Experiment * experiment,      ///< Experiment struct.
+                  char *message)        ///< Error message.
 {
   char buffer[64];
   if (!experiment->name)
@@ -130,20 +119,15 @@ experiment_error (Experiment * experiment, char *message)
 }
 
 /**
- * \fn int experiment_open_xml (Experiment * experiment, xmlNode * node, \
- *   unsigned int ninputs)
- * \brief Function to open the Experiment struct on a XML node.
- * \param experiment
- * \brief Experiment struct.
- * \param node
- * \brief XML node.
- * \param ninputs
- * \brief Number of the simulator input files.
+ * Function to open the Experiment struct on a XML node.
+ *
  * \return 1 on success, 0 on error.
  */
 int
-experiment_open_xml (Experiment * experiment, xmlNode * node,
+experiment_open_xml (Experiment * experiment,   ///< Experiment struct.
+                     xmlNode * node,    ///< XML node.
                      unsigned int ninputs)
+                     ///< Number of the simulator input files.
 {
   char buffer[64];
   int error_code;
@@ -239,20 +223,15 @@ exit_on_error:
 }
 
 /**
- * \fn int experiment_open_json (Experiment * experiment, JsonNode * node, \
- *   unsigned int ninputs)
- * \brief Function to open the Experiment struct on a XML node.
- * \param experiment
- * \brief Experiment struct.
- * \param node
- * \brief JSON node.
- * \param ninputs
- * \brief Number of the simulator input files.
+ * Function to open the Experiment struct on a XML node.
+ *
  * \return 1 on success, 0 on error.
  */
 int
-experiment_open_json (Experiment * experiment, JsonNode * node,
+experiment_open_json (Experiment * experiment,  ///< Experiment struct.
+                      JsonNode * node,  ///< JSON node.
                       unsigned int ninputs)
+                      ///< Number of the simulator input files.
 {
   char buffer[64];
   JsonObject *object;

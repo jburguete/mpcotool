@@ -71,16 +71,23 @@ OF SUCH DAMAGE.
 #define DEBUG_MPCOTOOL 0        ///< Macro to debug main functions.
 
 /**
- * \fn int mpcotool (int argn, char **argc)
- * \brief Main function.
- * \param argn
- * \brief Arguments number.
- * \param argc
- * \brief Arguments pointer.
+ * Main function.
+ *
  * \return 0 on success, >0 on error.
  */
 int
-mpcotool (int argn, char **argc)
+mpcotool (int argn
+#if HAVE_GTK
+          __attribute__ ((unused))
+#endif
+          ,
+          ///< Arguments number.
+          char **argc
+#if HAVE_GTK
+          __attribute__ ((unused))
+#endif
+          ///< Arguments pointer.
+  )
 {
 #if HAVE_GTK
   GtkApplication *application;

@@ -60,17 +60,17 @@ void (*show_pending) () = NULL;
 ///< Pointer to the function to show pending events.
 
 /**
- * \fn void show_message (char *title, char *msg, int type)
- * \brief Function to show a dialog with a message.
- * \param title
- * \brief Title.
- * \param msg
- * \brief Message.
- * \param type
- * \brief Message type.
+ * Function to show a dialog with a message.
  */
 void
-show_message (char *title, char *msg, int type)
+show_message (char *title,      ///< Title.
+              char *msg,        ///< Message.
+              int type
+#if !HAVE_GTK
+              __attribute__ ((unused))
+#endif
+              ///< Message type.
+  )
 {
 #if HAVE_GTK
   GtkMessageDialog *dlg;
@@ -95,31 +95,23 @@ show_message (char *title, char *msg, int type)
 }
 
 /**
- * \fn void show_error (char *msg)
- * \brief Function to show a dialog with an error message.
- * \param msg
- * \brief Error message.
+ * Function to show a dialog with an error message.
  */
 void
-show_error (char *msg)
+show_error (char *msg)          ///< Error message.
 {
   show_message (_("ERROR!"), msg, ERROR_TYPE);
 }
 
 /**
- * \fn int xml_node_get_int (xmlNode *node, const xmlChar *prop, \
- *   int *error_code)
- * \brief Function to get an integer number of a XML node property.
- * \param node
- * \brief XML node.
- * \param prop
- * \brief XML property.
- * \param error_code
- * \brief Error code.
+ * Function to get an integer number of a XML node property.
+ *
  * \return Integer number value.
  */
 int
-xml_node_get_int (xmlNode * node, const xmlChar * prop, int *error_code)
+xml_node_get_int (xmlNode * node,       ///< XML node.
+                  const xmlChar * prop, ///< XML property.
+                  int *error_code)      ///< Error code.
 {
   int i = 0;
   xmlChar *buffer;
@@ -138,19 +130,14 @@ xml_node_get_int (xmlNode * node, const xmlChar * prop, int *error_code)
 }
 
 /**
- * \fn int xml_node_get_uint (xmlNode *node, const xmlChar *prop, \
- *   int *error_code)
- * \brief Function to get an unsigned integer number of a XML node property.
- * \param node
- * \brief XML node.
- * \param prop
- * \brief XML property.
- * \param error_code
- * \brief Error code.
+ * Function to get an unsigned integer number of a XML node property.
+ *
  * \return Unsigned integer number value.
  */
 unsigned int
-xml_node_get_uint (xmlNode * node, const xmlChar * prop, int *error_code)
+xml_node_get_uint (xmlNode * node,      ///< XML node.
+                   const xmlChar * prop,        ///< XML property.
+                   int *error_code)     ///< Error code.
 {
   unsigned int i = 0;
   xmlChar *buffer;
@@ -169,23 +156,17 @@ xml_node_get_uint (xmlNode * node, const xmlChar * prop, int *error_code)
 }
 
 /**
- * \fn int xml_node_get_uint_with_default (xmlNode *node, const xmlChar *prop, \
- *   unsigned int default_value, int *error_code)
- * \brief Function to get an unsigned integer number of a XML node property with
- *   a default value.
- * \param node
- * \brief XML node.
- * \param prop
- * \brief XML property.
- * \param default_value
- * \brief default value.
- * \param error_code
- * \brief Error code.
+ * Function to get an unsigned integer number of a XML node property with a
+ *   default value.
+ *
  * \return Unsigned integer number value.
  */
 unsigned int
-xml_node_get_uint_with_default (xmlNode * node, const xmlChar * prop,
-                                unsigned int default_value, int *error_code)
+xml_node_get_uint_with_default (xmlNode * node, ///< XML node.
+                                const xmlChar * prop,   ///< XML property.
+                                unsigned int default_value,
+                                ///< default value.
+                                int *error_code)        ///< Error code.
 {
   unsigned int i;
   if (xmlHasProp (node, prop))
@@ -199,19 +180,14 @@ xml_node_get_uint_with_default (xmlNode * node, const xmlChar * prop,
 }
 
 /**
- * \fn double xml_node_get_float (xmlNode *node, const xmlChar *prop, \
- *   int *error_code)
- * \brief Function to get a floating point number of a XML node property.
- * \param node
- * \brief XML node.
- * \param prop
- * \brief XML property.
- * \param error_code
- * \brief Error code.
+ * Function to get a floating point number of a XML node property.
+ *
  * \return Floating point number value.
  */
 double
-xml_node_get_float (xmlNode * node, const xmlChar * prop, int *error_code)
+xml_node_get_float (xmlNode * node,     ///< XML node.
+                    const xmlChar * prop,       ///< XML property.
+                    int *error_code)    ///< Error code.
 {
   double x = 0.;
   xmlChar *buffer;
@@ -230,23 +206,16 @@ xml_node_get_float (xmlNode * node, const xmlChar * prop, int *error_code)
 }
 
 /**
- * \fn double xml_node_get_float_with_default (xmlNode *node, \
- *   const xmlChar *prop, double default_value, int *error_code)
- * \brief Function to get a floating point number of a XML node property with a
- *   default value.
- * \param node
- * \brief XML node.
- * \param prop
- * \brief XML property.
- * \param default_value
- * \brief default value.
- * \param error_code
- * \brief Error code.
+ * Function to get a floating point number of a XML node property with a default
+ *   value.
+ *
  * \return Floating point number value.
  */
 double
-xml_node_get_float_with_default (xmlNode * node, const xmlChar * prop,
-                                 double default_value, int *error_code)
+xml_node_get_float_with_default (xmlNode * node,        ///< XML node.
+                                 const xmlChar * prop,  ///< XML property.
+                                 double default_value,  ///< default value.
+                                 int *error_code)       ///< Error code.
 {
   double x;
   if (xmlHasProp (node, prop))
@@ -260,17 +229,12 @@ xml_node_get_float_with_default (xmlNode * node, const xmlChar * prop,
 }
 
 /**
- * \fn void xml_node_set_int (xmlNode *node, const xmlChar *prop, int value)
- * \brief Function to set an integer number in a XML node property.
- * \param node
- * \brief XML node.
- * \param prop
- * \brief XML property.
- * \param value
- * \brief Integer number value.
+ * Function to set an integer number in a XML node property.
  */
 void
-xml_node_set_int (xmlNode * node, const xmlChar * prop, int value)
+xml_node_set_int (xmlNode * node,       ///< XML node.
+                  const xmlChar * prop, ///< XML property.
+                  int value)    ///< Integer number value.
 {
   xmlChar buffer[64];
   snprintf ((char *) buffer, 64, "%d", value);
@@ -278,18 +242,12 @@ xml_node_set_int (xmlNode * node, const xmlChar * prop, int value)
 }
 
 /**
- * \fn void xml_node_set_uint (xmlNode *node, const xmlChar *prop, \
- *   unsigned int value)
- * \brief Function to set an unsigned integer number in a XML node property.
- * \param node
- * \brief XML node.
- * \param prop
- * \brief XML property.
- * \param value
- * \brief Unsigned integer number value.
+ * Function to set an unsigned integer number in a XML node property.
  */
 void
-xml_node_set_uint (xmlNode * node, const xmlChar * prop, unsigned int value)
+xml_node_set_uint (xmlNode * node,      ///< XML node.
+                   const xmlChar * prop,        ///< XML property.
+                   unsigned int value)  ///< Unsigned integer number value.
 {
   xmlChar buffer[64];
   snprintf ((char *) buffer, 64, "%u", value);
@@ -297,18 +255,12 @@ xml_node_set_uint (xmlNode * node, const xmlChar * prop, unsigned int value)
 }
 
 /**
- * \fn void xml_node_set_float (xmlNode *node, const xmlChar *prop, \
- *   double value)
- * \brief Function to set a floating point number in a XML node property.
- * \param node
- * \brief XML node.
- * \param prop
- * \brief XML property.
- * \param value
- * \brief Floating point number value.
+ * Function to set a floating point number in a XML node property.
  */
 void
-xml_node_set_float (xmlNode * node, const xmlChar * prop, double value)
+xml_node_set_float (xmlNode * node,     ///< XML node.
+                    const xmlChar * prop,       ///< XML property.
+                    double value)       ///< Floating point number value.
 {
   xmlChar buffer[64];
   snprintf ((char *) buffer, 64, "%.14lg", value);
@@ -316,19 +268,14 @@ xml_node_set_float (xmlNode * node, const xmlChar * prop, double value)
 }
 
 /**
- * \fn int json_object_get_int (JsonObject *object, const char *prop, \
- *   int *error_code)
- * \brief Function to get an integer number of a JSON object property.
- * \param object
- * \brief JSON object.
- * \param prop
- * \brief JSON property.
- * \param error_code
- * \brief Error code.
+ * Function to get an integer number of a JSON object property.
+ *
  * \return Integer number value.
  */
 int
-json_object_get_int (JsonObject * object, const char *prop, int *error_code)
+json_object_get_int (JsonObject * object,       ///< JSON object.
+                     const char *prop,  ///< JSON property.
+                     int *error_code)   ///< Error code.
 {
   const char *buffer;
   int i = 0;
@@ -346,19 +293,14 @@ json_object_get_int (JsonObject * object, const char *prop, int *error_code)
 }
 
 /**
- * \fn int json_object_get_uint (JsonObject *object, const char *prop, \
- *   int *error_code)
- * \brief Function to get an unsigned integer number of a JSON object property.
- * \param object
- * \brief JSON object.
- * \param prop
- * \brief JSON property.
- * \param error_code
- * \brief Error code.
+ * Function to get an unsigned integer number of a JSON object property.
+ *
  * \return Unsigned integer number value.
  */
 unsigned int
-json_object_get_uint (JsonObject * object, const char *prop, int *error_code)
+json_object_get_uint (JsonObject * object,      ///< JSON object.
+                      const char *prop, ///< JSON property.
+                      int *error_code)  ///< Error code.
 {
   const char *buffer;
   unsigned int i = 0;
@@ -376,23 +318,17 @@ json_object_get_uint (JsonObject * object, const char *prop, int *error_code)
 }
 
 /**
- * \fn int json_object_get_uint_with_default (JsonObject *object, \
- *   const char *prop, unsigned int default_value, int *error_code)
- * \brief Function to get an unsigned integer number of a JSON object property
- *   with a default value.
- * \param object
- * \brief JSON object.
- * \param prop
- * \brief JSON property.
- * \param default_value
- * \brief default value.
- * \param error_code
- * \brief Error code.
+ * Function to get an unsigned integer number of a JSON object property with a
+ *   default value.
+ *
  * \return Unsigned integer number value.
  */
 unsigned int
-json_object_get_uint_with_default (JsonObject * object, const char *prop,
-                                   unsigned int default_value, int *error_code)
+json_object_get_uint_with_default (JsonObject * object, ///< JSON object.
+                                   const char *prop,    ///< JSON property.
+                                   unsigned int default_value,
+                                   ///< default value.
+                                   int *error_code)     ///< Error code.
 {
   unsigned int i;
   if (json_object_get_member (object, prop))
@@ -406,19 +342,14 @@ json_object_get_uint_with_default (JsonObject * object, const char *prop,
 }
 
 /**
- * \fn double json_object_get_float (JsonObject *object, const char *prop, \
- *   int *error_code)
- * \brief Function to get a floating point number of a JSON object property.
- * \param object
- * \brief JSON object.
- * \param prop
- * \brief JSON property.
- * \param error_code
- * \brief Error code.
+ * Function to get a floating point number of a JSON object property.
+ *
  * \return Floating point number value.
  */
 double
-json_object_get_float (JsonObject * object, const char *prop, int *error_code)
+json_object_get_float (JsonObject * object,     ///< JSON object.
+                       const char *prop,        ///< JSON property.
+                       int *error_code) ///< Error code.
 {
   const char *buffer;
   double x = 0.;
@@ -436,23 +367,18 @@ json_object_get_float (JsonObject * object, const char *prop, int *error_code)
 }
 
 /**
- * \fn double json_object_get_float_with_default (JsonObject *object, \
- *   const char *prop, double default_value, int *error_code)
- * \brief Function to get a floating point number of a JSON object property with
- *   a default value.
- * \param object
- * \brief JSON object.
- * \param prop
- * \brief JSON property.
- * \param default_value
- * \brief default value.
- * \param error_code
- * \brief Error code.
+ * Function to get a floating point number of a JSON object property with a 
+ *   default value.
+ *
  * \return Floating point number value.
  */
 double
-json_object_get_float_with_default (JsonObject * object, const char *prop,
-                                    double default_value, int *error_code)
+json_object_get_float_with_default (JsonObject * object,
+                                    ///< JSON object.
+                                    const char *prop,   ///< JSON property.
+                                    double default_value,
+                                    ///< default value.
+                                    int *error_code)    ///< Error code.
 {
   double x;
   if (json_object_get_member (object, prop))
@@ -466,18 +392,12 @@ json_object_get_float_with_default (JsonObject * object, const char *prop,
 }
 
 /**
- * \fn void json_object_set_int (JsonObject *object, const char *prop, \
- *   int value)
- * \brief Function to set an integer number in a JSON object property.
- * \param object
- * \brief JSON object.
- * \param prop
- * \brief JSON property.
- * \param value
- * \brief Integer number value.
+ * Function to set an integer number in a JSON object property.
  */
 void
-json_object_set_int (JsonObject * object, const char *prop, int value)
+json_object_set_int (JsonObject * object,       ///< JSON object.
+                     const char *prop,  ///< JSON property.
+                     int value) ///< Integer number value.
 {
   char buffer[64];
   snprintf (buffer, 64, "%d", value);
@@ -485,18 +405,13 @@ json_object_set_int (JsonObject * object, const char *prop, int value)
 }
 
 /**
- * \fn void json_object_set_uint (JsonObject *object, const char *prop, \
- *   unsigned int value)
- * \brief Function to set an unsigned integer number in a JSON object property.
- * \param object
- * \brief JSON object.
- * \param prop
- * \brief JSON property.
- * \param value
- * \brief Unsigned integer number value.
+ * Function to set an unsigned integer number in a JSON object property.
  */
 void
-json_object_set_uint (JsonObject * object, const char *prop, unsigned int value)
+json_object_set_uint (JsonObject * object,      ///< JSON object.
+                      const char *prop, ///< JSON property.
+                      unsigned int value)
+                      ///< Unsigned integer number value.
 {
   char buffer[64];
   snprintf (buffer, 64, "%u", value);
@@ -504,18 +419,12 @@ json_object_set_uint (JsonObject * object, const char *prop, unsigned int value)
 }
 
 /**
- * \fn void json_object_set_float (JsonObject *object, const char *prop, \
- *   double value)
- * \brief Function to set a floating point number in a JSON object property.
- * \param object
- * \brief JSON object.
- * \param prop
- * \brief JSON property.
- * \param value
- * \brief Floating point number value.
+ * Function to set a floating point number in a JSON object property.
  */
 void
-json_object_set_float (JsonObject * object, const char *prop, double value)
+json_object_set_float (JsonObject * object,     ///< JSON object.
+                       const char *prop,        ///< JSON property.
+                       double value)    ///< Floating point number value.
 {
   char buffer[64];
   snprintf (buffer, 64, "%.14lg", value);
@@ -523,8 +432,8 @@ json_object_set_float (JsonObject * object, const char *prop, double value)
 }
 
 /**
- * \fn int cores_number ()
- * \brief Function to obtain the cores number.
+ * Function to obtain the cores number.
+ *
  * \return Cores number.
  */
 int
@@ -542,8 +451,7 @@ cores_number ()
 #if HAVE_GTK
 
 /**
- * \fn void process_pending ()
- * \brief Function to process events on long computation.
+ * Function to process events on long computation.
  */
 void
 process_pending ()
@@ -553,17 +461,13 @@ process_pending ()
 }
 
 /**
- * \fn unsigned int gtk_array_get_active (GtkRadioButton * array[], \
- *   unsigned int n)
- * \brief Function to get the active GtkRadioButton.
- * \param array
- * \brief Array of GtkRadioButtons.
- * \param n
- * \brief Number of GtkRadioButtons.
+ * Function to get the active GtkRadioButton.
+ *
  * \return Active GtkRadioButton.
  */
 unsigned int
-gtk_array_get_active (GtkRadioButton * array[], unsigned int n)
+gtk_array_get_active (GtkRadioButton * array[], ///< Array of GtkRadioButtons.
+                      unsigned int n)   ///< Number of GtkRadioButtons.
 {
   unsigned int i;
   for (i = 0; i < n; ++i)
