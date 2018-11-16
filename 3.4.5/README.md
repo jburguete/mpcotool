@@ -93,12 +93,12 @@ DragonFly BSD 5.2
 _________________
 Dyson Illumos
 _____________
-FreeBSD 11.0
+FreeBSD 11.2
 ____________
 Linux Mint DE 2
 _______________
-Ubuntu Linux 18.04
-__________________
+Xubuntu Linux 18.10
+___________________
 
 1. Download the latest [genetic](https://github.com/jburguete/genetic) doing on
 a terminal:
@@ -120,7 +120,7 @@ a terminal:
 4. Build doing on a terminal:
 > $ ./build
 
-Fedora Linux 26
+Fedora Linux 29
 _______________
 
 1. In order to use OpenMPI compilation do in a terminal (in 64 bits version):
@@ -130,8 +130,6 @@ _______________
 
 Microsoft Windows 7
 ___________________
-Microsoft Windows 8.1
-_____________________
 Microsoft Windows 10
 ____________________
 
@@ -152,11 +150,11 @@ __________
 do in the terminal:
 > $ CC=/usr/pkg/gcc5/bin/gcc ./build
 
-OpenBSD 6.3
+OpenBSD 6.4
 ___________
 
 1. Select adequate versions:
-> $ export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.15
+> $ export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.16
 
 2. Then, in a terminal, follow steps 1 to 4 of the previous Debian 9 section.
 
@@ -168,8 +166,8 @@ ___________________
 
 2. Then, follow steps 1 to 4 of the previous Debian 9 section.
 
-OpenSUSE Linux Tumbleweed
-_________________________
+OpenSUSE Linux Leap
+___________________
 
 1. In order to use OpenMPI compilation do in a terminal (in 64 bits version):
 > $ export PATH=/usr/lib64/mpi/gcc/openmpi/bin:$PATH
@@ -254,21 +252,21 @@ Optional arguments are typed in square brackets.
 
 * Command line in sequential mode (where X is the number of threads to execute
   and S is a seed for the pseudo-random numbers generator):
-> $ ./mpcotoolbin [-nthreads X] [-seed S] input_file.xml [result_file]
-> [variables_file]
+> $ ./mpcotoolbin [-nthreads X] [-seed S] input\_file.xml [result\_file]
+> [variables\_file]
 
 * Command line in parallelized mode (where X is the number of threads to
   open for every node and S is a seed for the pseudo-random numbers generator):
-> $ mpirun [MPI options] ./mpcotoolbin [-nthreads X] [-seed S] input_file.xml
-> [result_file] [variables_file]
+> $ mpirun [MPI options] ./mpcotoolbin [-nthreads X] [-seed S] input\_file.xml
+> [result\_file] [variables\_file]
 
 * The syntax of the simulator has to be:
-> $ ./simulator_name input_file_1 [input_file_2] [input_file_3] [input_file_4]
-> output_file
+> $ ./simulator\_name input\_file\_1 [input\_file\_2] [input\_file\_3] [input\_file\_4]
+> output\_file
 
 * The syntax of the program to evaluate the objetive function has to be (where
   the first data in the results file has to be the objective function value):
-> $ ./evaluator_name simulated_file data_file results_file
+> $ ./evaluator\_name simulated\_file data\_file results\_file
 
 * On UNIX type systems the GUI application can be open doing on a terminal:
 > $ ./mpcotool
