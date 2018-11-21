@@ -97,6 +97,8 @@ FreeBSD 11.2
 ____________
 Linux Mint DE 2
 _______________
+Manjaro Linux
+_____________
 Xubuntu Linux 18.10
 ___________________
 
@@ -169,7 +171,9 @@ ___________________
 OpenSUSE Linux Leap
 ___________________
 
-1. In order to use OpenMPI compilation do in a terminal (in 64 bits version):
+1. In order to use OpenMPI compilation in 64 bits version do in a terminal
+(OpenMPI configure script does not work in last OpenSUSE versions then does not
+apply this step):
 > $ export PATH=/usr/lib64/mpi/gcc/openmpi/bin:$PATH
 
 2. Then, follow steps 1 to 4 of the previous Debian 9 section.
