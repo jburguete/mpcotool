@@ -97,7 +97,7 @@ optimize_input (unsigned int simulation,        ///< Simulation number.
   char buffer[32], value[32];
   GRegex *regex;
   FILE *file;
- 	char *buffer2, *buffer3 = NULL, *content;
+  char *buffer2, *buffer3 = NULL, *content;
   gsize length;
   unsigned int i;
 
@@ -771,7 +771,7 @@ optimize_orthogonal ()
           e = optimize->rangemin[j];
           if (optimize->nsweeps[j] > 1)
             e += (l + gsl_rng_uniform (optimize->rng))
-							* (optimize->rangemax[j] - optimize->rangemin[j])
+              * (optimize->rangemax[j] - optimize->rangemin[j])
               / optimize->nsweeps[j];
           optimize->value[i * optimize->nvariables + j] = e;
         }
@@ -1570,7 +1570,7 @@ optimize_open ()
       optimize->nbits[i] = input->variable[i].nbits;
     }
   if (input->algorithm == ALGORITHM_SWEEP
-			|| input->algorithm == ALGORITHM_ORTHOGONAL)
+      || input->algorithm == ALGORITHM_ORTHOGONAL)
     {
       optimize->nsimulations = 1;
       for (i = 0; i < input->nvariables; ++i)

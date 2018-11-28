@@ -92,7 +92,7 @@ OF SUCH DAMAGE.
 #define LABEL_NSIMULATIONS "nsimulations"       ///< nsimulations label.
 #define LABEL_NSTEPS "nsteps"   ///< nsteps label.
 #define LABEL_NSWEEPS "nsweeps" ///< nsweeps label.
-#define LABEL_ORTHOGONAL "orthogonal" ///< orthogonal label.
+#define LABEL_ORTHOGONAL "orthogonal"   ///< orthogonal label.
 #define LABEL_P "p"             ///< p label.
 #define LABEL_PRECISION "precision"     ///< precision label.
 #define LABEL_RANDOM "random"   ///< random label.
