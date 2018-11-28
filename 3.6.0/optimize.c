@@ -749,6 +749,57 @@ optimize_MonteCarlo ()
 }
 
 /**
+ * Function to optimize with the orthogonal sampling algorithm.
+ */
+void
+optimize_orthogonal ()
+{
+  unsigned int i, j, k, l;
+  double e;
+  GThread *thread[nthreads];
+  ParallelData data[nthreads];
+#if DEBUG_OPTIMIZE
+  fprintf (stderr, "optimize_orthogonal: start\n");
+#endif
+  for (i = 0; i < optimize->nsimulations; ++i)
+    {
+      k = i;
+      for (j = 0; j < optimize->nvariables; ++j)
+        {
+          l = k % optimize->nsweeps[j];
+          k /= optimize->nsweeps[j];
+          e = optimize->rangemin[j];
+          if (optimize->nsweeps[j] > 1)
+            e += (l + gsl_rng_uniform (optimize->rng))
+							* (optimize->rangemax[j] - optimize->rangemin[j])
+              / optimize->nsweeps[j];
+          optimize->value[i * optimize->nvariables + j] = e;
+        }
+    }
+  optimize->nsaveds = 0;
+  if (nthreads <= 1)
+    optimize_sequential ();
+  else
+    {
+      for (i = 0; i < nthreads; ++i)
+        {
+          data[i].thread = i;
+          thread[i]
+            = g_thread_new (NULL, (GThreadFunc) optimize_thread, &data[i]);
+        }
+      for (i = 0; i < nthreads; ++i)
+        g_thread_join (thread[i]);
+    }
+#if HAVE_MPI
+  // Communicating tasks results
+  optimize_synchronise ();
+#endif
+#if DEBUG_OPTIMIZE
+  fprintf (stderr, "optimize_orthogonal: end\n");
+#endif
+}
+
+/**
  * Function to save the best simulation in a direction search method.
  */
 void
@@ -1416,6 +1467,9 @@ optimize_open ()
     case ALGORITHM_SWEEP:
       optimize_algorithm = optimize_sweep;
       break;
+    case ALGORITHM_ORTHOGONAL:
+      optimize_algorithm = optimize_orthogonal;
+      break;
     default:
       optimize_algorithm = optimize_genetic;
       optimize->mutation_ratio = input->mutation_ratio;
@@ -1515,19 +1569,17 @@ optimize_open ()
       optimize->nsweeps[i] = input->variable[i].nsweeps;
       optimize->nbits[i] = input->variable[i].nbits;
     }
-  if (input->algorithm == ALGORITHM_SWEEP)
+  if (input->algorithm == ALGORITHM_SWEEP
+			|| input->algorithm == ALGORITHM_ORTHOGONAL)
     {
       optimize->nsimulations = 1;
       for (i = 0; i < input->nvariables; ++i)
         {
-          if (input->algorithm == ALGORITHM_SWEEP)
-            {
-              optimize->nsimulations *= optimize->nsweeps[i];
+          optimize->nsimulations *= optimize->nsweeps[i];
 #if DEBUG_OPTIMIZE
-              fprintf (stderr, "optimize_open: nsweeps=%u nsimulations=%u\n",
-                       optimize->nsweeps[i], optimize->nsimulations);
+          fprintf (stderr, "optimize_open: nsweeps=%u nsimulations=%u\n",
+                   optimize->nsweeps[i], optimize->nsimulations);
 #endif
-            }
         }
     }
   if (optimize->nsteps)

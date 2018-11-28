@@ -129,21 +129,23 @@ The source code in MPCOTool is written in C language. This software has
 been built and tested in the following operative systems:
 \begin{itemize}
 \item Debian Hurd, kFreeBSD and Linux 9;
-\item DragonFly BSD 4.8;
+\item Devuan Linux 2;
+\item DragonFly BSD 5.2;
 \item Dyson Illumos;
-\item Fedora Linux 26;
-\item FreeBSD 11.0;
-\item Microsoft Windows 7\footnotemark[1], 8.1\footnotemark[1] and
-	10\footnotemark[1];
+\item Fedora Linux 29;
+\item FreeBSD 11.2;
+\item Manjaro Linux;
+\item Microsoft Windows 7\footnotemark[1], and 10\footnotemark[1];
 \item NetBSD 7.0;
-\item OpenBSD 6.1;
+\item OpenBSD 6.4;
 \item OpenIndiana Hipster;
-\item OpenSUSE Tumbleweed;
-\item and Ubuntu Linux 17.04.
+\item OpenSUSE Linux Leap;
+\item Ubuntu Mate Linux 18.04;
+\item and Xubuntu Linux 18.10.
 \end{itemize}
 Probably, this software can be built and it works in other operative systems,
 software distributions or versions but it has not been tested.
-\footnotetext[1]{Windows 7 and Windows 8.1 are trademarks of Microsoft
+\footnotetext[1]{Windows 7 and Windows 10 are trademarks of Microsoft
 Corporation.}
 
 In order to build the executable file from the source code, a C compiler (\citet{gcc} or \citet{clang}), the configuration systems \citet{autoconf}, \citet{automake} and \citet{pkgconfig}, the executable creation control program \citet{gnumake} and the following open source external libraries are required:
@@ -158,9 +160,9 @@ of them is used to allow parallelization in multiple computers.
 \end{itemize}
 The indications provided in \citet{install-unix} can be followed in order to install all these utilities.
 
-On OpenBSD 6.0, prior to build the code, you have to select adequate version of Autoconf and Automake doing on a terminal:
+On OpenBSD 6.4, prior to build the code, you have to select adequate version of Autoconf and Automake doing on a terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-> export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.15
+> export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.16
 \end{lstlisting}
 
 On Window systems, you have to install MSYS2
@@ -168,7 +170,7 @@ On Window systems, you have to install MSYS2
 utilities. You can follow detailed instructions in
 https://github.com/jburguete/install-unix.
 
-On Fedora Linux 26, in order to use OpenMPI compilation, do in a terminal (in 64
+On Fedora Linux 29, in order to use OpenMPI compilation, do in a terminal (in 64
 bits version):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > export PATH=$PATH:/usr/lib64/openmpi/bin
@@ -189,7 +191,7 @@ Once all the tools installed, the Genetic source code must be downloaded and it 
 The following step is to download the source code MPCOTool, to link it with Genetic and compile together by means of:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > git clone https://github.com/jburguete/mpcotool.git
-> cd mpcotool/3.4.5
+> cd mpcotool/3.6.0
 > ln -s ../../genetic/2.2.2 genetic
 > ln -s genetic/libgenetic.so (or .dll on Windows systems)
 > ./build
@@ -214,7 +216,7 @@ also the \emph{Genetic} library):
 > cd ../test4
 > ln -s ../../../genetic/2.2.2 genetic
 > ln -s genetic/libgenetic.so (.dll on Windows systems)
-> cd ../../3.4.5
+> cd ../../3.6.0
 > make tests
 \end{lstlisting}
 
@@ -434,24 +436,30 @@ available properties are:
 			\item[nsweeps]: number of sweeps to generate each variable in every
 			experiment,
 		\end{description}
-	\item[Monte-Carlo]: Monte-Carlo brute force algorithm. It requires on the
-		main XML node:
+		\item[Monte-Carlo]: Monte-Carlo brute force algorithm. It requires on the
+			main XML node:
+			\begin{description}
+				\item[nsimulations]: number of simulations to run for each iteration
+					in every experiment,
+			\end{description}
+		\item[genetic]: genetic algorithm. It requires the following parameters in
+			the main XML node:
+			\begin{description}
+				\item[npopulation]: number of population entities,
+				\item[ngenerations]: number of generations,
+				\item[mutation]: mutation ratio,
+				\item[reproduction]: reproduction ratio,
+				\item[adaptation]: adaptation ratio.
+			\end{description}
+			And for each variable:
+			\begin{description}
+				\item[nbits]: number of bits to encode each variable,
+			\end{description}
+		\item[orthogonal]: orthogonal sampling brute force algorithm. It requires
+			for each variable:
 		\begin{description}
-			\item[nsimulations]: number of simulations to run for each iteration
-				in every experiment,
-		\end{description}
-	\item[genetic]: genetic algorithm. It requires the following parameters in
-		the main XML node:
-		\begin{description}
-			\item[npopulation]: number of population entities,
-			\item[ngenerations]: number of generations,
-			\item[mutation]: mutation ratio,
-			\item[reproduction]: reproduction ratio,
-			\item[adaptation]: adaptation ratio.
-		\end{description}
-	And for each variable:
-		\begin{description}
-			\item[nbits]: number of bits to encode each variable,
+			\item[nsweeps]: number of sweeps to generate each variable in every
+			experiment,
 		\end{description}
 	\end{description}
 	\item[niterations]: number of iterations (default 1) to perform the
@@ -1879,6 +1887,6 @@ method}{FigGeneticParallelization}
 \clearpage
 \renewcommand{\bibname}{References}
 \addcontentsline{toc}{chapter}{\bibname}
-\bibliography{../article/bib}
+\bibliography{bib}
 
 \end{document}

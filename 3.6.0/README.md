@@ -7,7 +7,7 @@ calibrations or optimizations of empirical parameters.
 VERSIONS
 --------
 
-* 3.4.5: Stable and recommended version.
+* 3.6.0: Stable and recommended version.
 
 AUTHORS
 -------
@@ -59,16 +59,15 @@ FILES
 -----
 
 The source code has to have the following files:
-* 3.4.5/configure.ac: configure generator.
-* 3.4.5/Makefile.in: Makefile generator.
-* 3.4.5/config.h.in: config header generator.
-* 3.4.5/mpcotool.c: main source code.
-* 3.4.5/mpcotool.h: main header code.
-* 3.4.5/mpcotool.ico: icon file.
-* 3.4.5/interface.h: interface header code.
-* 3.4.5/build: script to build all.
-* 3.4.5/logo.png: logo figure.
-* 3.4.5/Doxyfile: configuration file to generate doxygen documentation.
+* 3.6.0/configure.ac: configure generator.
+* 3.6.0/Makefile.in: Makefile generator.
+* 3.6.0/config.h.in: config header generator.
+* 3.6.0/\*.c: source code files.
+* 3.6.0/\*.h: header code files.
+* 3.6.0/mpcotool.ico: icon file.
+* 3.6.0/build.sh: shell script to build all.
+* 3.6.0/logo.png: logo figure.
+* 3.6.0/Doxyfile: configuration file to generate doxygen documentation.
 * TODO: tasks to do.
 * README.md: this file.
 * license.md: license file.
@@ -83,107 +82,85 @@ The source code has to have the following files:
 BUILDING INSTRUCTIONS
 ---------------------
 
-This software has been built and tested in the following operative systems.
+On Fedora 29, in order to use OpenMPI compilation, do in a terminal (in 64 bits
+version):
+> $ export PATH=$PATH:/usr/lib64/openmpi/bin
+
+On Microsoft Windows systems you have to install
+[MSYS2](http://sourceforge.net/projects/msys2) and the required
+libraries and utilities. You can follow detailed instructions in
+[install-unix](https://github.com/jburguete/install-unix/blob/master/tutorial.pdf).
+Optional Windows binary package can be built doing in the terminal:
+> $ make windist
+
+
+On NetBSD 8.0, to compile with last GCC version you have to do first on the
+building terminal:
+> $ export PATH=/usr/pkg/gcc8/bin:$PATH"
+
+On OpenBSD 6.4 you have to do first on the building terminal to select
+adequate versions and deactivate OpenMPI (does not link) building with CLang:
+> $ export AUTOCONF\_VERSION=2.69 AUTOMAKE\_VERSION=1.16 CC=clang
+
+On OpenIndiana Hipster, in order to enable OpenMPI compilation, do in a
+terminal:
+> $ export PATH=$PATH:/usr/lib/openmpi/gcc/bin
+
+On OpenSUSE Leap, in order to enable OpenMPI compilation, in 64 bits version do
+in a terminal (OpenMPI configure script does not work in last OpenSUSE versions
+then does not apply this step):
+> $ export PATH=$PATH:/usr/lib64/mpi/gcc/openmpi/bin
+
+This software has been built and tested in the following operative systems:
+* Debian 9 (Linux, kFreeBSD and Hurd)
+* DragonFly BSD 5.2
+* Dyson Illumos
+* Fedora Linux 29
+* FreeBSD 11.2
+* Linux Mint DE 3
+* Manjaro Linux
+* Microsoft Windows 7
+* Microsoft Windows 10
+* NetBSD 8.0 (from source with modular xorg)
+* OpenBSD 6.4
+* OpenInidiana Hipster
+* OpenSUSE Linux Leap 15
+* Ubuntu Mate Linux 18.04
+* Xubuntu Linux 18.10
+
 Probably, it can be built in other systems, distributions, or versions but it
 has not been tested.
-
-Debian 9 (Linux, kFreeBSD or Hurd)
-__________________________________
-DragonFly BSD 5.2
-_________________
-Dyson Illumos
-_____________
-FreeBSD 11.2
-____________
-Linux Mint DE 2
-_______________
-Manjaro Linux
-_____________
-Xubuntu Linux 18.10
-___________________
 
 1. Download the latest [genetic](https://github.com/jburguete/genetic) doing on
 a terminal:
 > $ git clone https://github.com/jburguete/genetic.git
 
-2. Download this repository:
+2. Build the genetic library:
+> $ cd genetic/2.2.2
+>
+> $ sh build.sh
+
+3. Download this repository:
+> $ cd ../..
+>
 > $ git clone https://github.com/jburguete/mpcotool.git
 
-3. Link the latest genetic version to genetic:
-> $ cd mpcotool/3.4.5
+4. Link the latest genetic version to genetic:
+> $ cd mpcotool/3.6.0
 >
 > $ ln -s ../../genetic/2.2.2 genetic
 > 
-> $ ln -s genetic/libgenetic.so
+> $ ln -s genetic/libgenetic.so (or .dll in Windows systems)
 
-  or in Windows systems:
-> $ ln -s genetic/libgenetic.dll
-
-4. Build doing on a terminal:
-> $ ./build
-
-Fedora Linux 29
-_______________
-
-1. In order to use OpenMPI compilation do in a terminal (in 64 bits version):
-> $ export PATH=$PATH:/usr/lib64/openmpi/bin
-
-2. Then, follow steps 1 to 4 of the previous Debian 9 section.
-
-Microsoft Windows 7
-___________________
-Microsoft Windows 10
-____________________
-
-1. Install [MSYS2](http://sourceforge.net/projects/msys2) and the required
-libraries and utilities. You can follow detailed instructions in
-[install-unix](https://github.com/jburguete/install-unix/blob/master/tutorial.pdf)
-
-2. Then, in a MSYS2 terminal, follow steps 1 to 4 of the previous Debian 9
-section.
-
-3. Optional Windows binary package can be built doing in the terminal:
-> $ make windist
-
-NetBSD 7.0
-__________
-
-1. MPI does not work. Follow steps 1 to 3 of the previous Debian 9 section and
-do in the terminal:
-> $ CC=/usr/pkg/gcc5/bin/gcc ./build
-
-OpenBSD 6.4
-___________
-
-1. Select adequate versions:
-> $ export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.16
-
-2. Then, in a terminal, follow steps 1 to 4 of the previous Debian 9 section.
-
-OpenIndiana Hipster
-___________________
-
-1. In order to use OpenMPI compilation do in a terminal:
-> $ export PATH=/usr/lib/openmpi/gcc/bin:$PATH
-
-2. Then, follow steps 1 to 4 of the previous Debian 9 section.
-
-OpenSUSE Linux Leap
-___________________
-
-1. In order to use OpenMPI compilation in 64 bits version do in a terminal
-(OpenMPI configure script does not work in last OpenSUSE versions then does not
-apply this step):
-> $ export PATH=/usr/lib64/mpi/gcc/openmpi/bin:$PATH
-
-2. Then, follow steps 1 to 4 of the previous Debian 9 section.
+5. Build doing on a terminal:
+> $ sh build.sh
 
 Building no-GUI version on servers
 __________________________________
 
 On servers or clusters, where no-GUI with MPI parallelization is desirable,
-replace the 4th step of the previous Debian 9 section by:
-> $ ./build\_with\_mpi
+replace the 5th step of the previous section by:
+> $ sh build\_with\_mpi.sh
  
 Linking as an external library
 ______________________________
@@ -225,7 +202,7 @@ MAKING TESTS INSTRUCTIONS
 In order to build the tests follow the next instructions:
 
 1. Link some tests that needs genetic library doing in a terminal (assuming that
-you are in the directory mpcotool/3.4.5):
+you are in the directory mpcotool/3.6.0):
 > $ cd ../tests/test2
 >
 > $ ln -s ../../../genetic/2.2.2 genetic
@@ -245,7 +222,7 @@ you are in the directory mpcotool/3.4.5):
 > $ ln -s genetic/libgenetic.so (or .dll on Windows systems)
 
 2. Build all tests doing in the same terminal:
-> $ cd ../../3.4.5
+> $ cd ../../3.6.0
 >
 > $ make tests
 
@@ -328,8 +305,17 @@ Implemented algorithms are:
     The total number of simulations to run is:
 > (number of experiments) x (number of simulations) x (number of iterations)
 
-* Both brute force algorithms can be iterated to improve convergence by using
-  the following parameters:
+* **orthogonal**: Orthogonal sampling brute force algorithm. It requires for
+  each variable:
+  * *sweeps*: number of sweeps to generate for each variable in every
+    experiment. 
+
+    The total number of simulations to run is:
+> (number of experiments) x (variable 1 number of sweeps) x ... x
+> (variable n number of sweeps) x (number of iterations)
+
+* Three former brute force algorithms can be iterated to improve convergence by
+  using the following parameters:
   * *nbest*: number of best simulations to calculate convergence interval on
     next iteration (default 1).
   * *tolerance*: tolerance parameter to increase convergence interval (default
@@ -339,7 +325,7 @@ Implemented algorithms are:
      It multiplies the total number of simulations:
 > x (number of iterations)
 
-* Moreover, both brute force algorithms can be coupled with a direction search
+* Moreover, brute force algorithms can be coupled with a direction search
   method by using:
   * *direction*: method to estimate the optimal direction. Two options are
     currently available:
@@ -355,7 +341,7 @@ Implemented algorithms are:
 > (number of experiments) x (number of iterations) x (number of steps)
 > x (number of estimates)
 
-  Both methods require also:
+  Former methods require also:
     * nsteps: number of steps to perform the direction search method,
     * relaxation: relaxation parameter,
 

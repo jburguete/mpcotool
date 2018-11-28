@@ -304,6 +304,18 @@ input_save_xml (xmlDoc * doc)   ///< xmlDoc struct.
       xmlSetProp (node, (const xmlChar *) LABEL_NBEST, (xmlChar *) buffer);
       input_save_direction_xml (node);
       break;
+    case ALGORITHM_ORTHOGONAL:
+      xmlSetProp (node, (const xmlChar *) LABEL_ALGORITHM,
+                  (const xmlChar *) LABEL_ORTHOGONAL);
+      snprintf (buffer, 64, "%u", input->niterations);
+      xmlSetProp (node, (const xmlChar *) LABEL_NITERATIONS,
+                  (xmlChar *) buffer);
+      snprintf (buffer, 64, "%.3lg", input->tolerance);
+      xmlSetProp (node, (const xmlChar *) LABEL_TOLERANCE, (xmlChar *) buffer);
+      snprintf (buffer, 64, "%u", input->nbest);
+      xmlSetProp (node, (const xmlChar *) LABEL_NBEST, (xmlChar *) buffer);
+      input_save_direction_xml (node);
+      break;
     default:
       xmlSetProp (node, (const xmlChar *) LABEL_ALGORITHM,
                   (const xmlChar *) LABEL_GENETIC);
@@ -360,7 +372,8 @@ input_save_xml (xmlDoc * doc)   ///< xmlDoc struct.
       if (input->variable[i].precision != DEFAULT_PRECISION)
         xml_node_set_uint (child, (const xmlChar *) LABEL_PRECISION,
                            input->variable[i].precision);
-      if (input->algorithm == ALGORITHM_SWEEP)
+      if (input->algorithm == ALGORITHM_SWEEP
+          || input->algorithm == ALGORITHM_ORTHOGONAL)
         xml_node_set_uint (child, (const xmlChar *) LABEL_NSWEEPS,
                            input->variable[i].nsweeps);
       else if (input->algorithm == ALGORITHM_GENETIC)
@@ -466,6 +479,16 @@ input_save_json (JsonGenerator * generator)     ///< JsonGenerator struct.
       json_object_set_string_member (object, LABEL_NBEST, buffer);
       input_save_direction_json (node);
       break;
+    case ALGORITHM_ORTHOGONAL:
+      json_object_set_string_member (object, LABEL_ALGORITHM, LABEL_ORTHOGONAL);
+      snprintf (buffer, 64, "%u", input->niterations);
+      json_object_set_string_member (object, LABEL_NITERATIONS, buffer);
+      snprintf (buffer, 64, "%.3lg", input->tolerance);
+      json_object_set_string_member (object, LABEL_TOLERANCE, buffer);
+      snprintf (buffer, 64, "%u", input->nbest);
+      json_object_set_string_member (object, LABEL_NBEST, buffer);
+      input_save_direction_json (node);
+      break;
     default:
       json_object_set_string_member (object, LABEL_ALGORITHM, LABEL_GENETIC);
       snprintf (buffer, 64, "%u", input->nsimulations);
@@ -523,7 +546,8 @@ input_save_json (JsonGenerator * generator)     ///< JsonGenerator struct.
       if (input->variable[i].precision != DEFAULT_PRECISION)
         json_object_set_uint (object, LABEL_PRECISION,
                               input->variable[i].precision);
-      if (input->algorithm == ALGORITHM_SWEEP)
+      if (input->algorithm == ALGORITHM_SWEEP
+          || input->algorithm == ALGORITHM_ORTHOGONAL)
         json_object_set_uint (object, LABEL_NSWEEPS,
                               input->variable[i].nsweeps);
       else if (input->algorithm == ALGORITHM_GENETIC)
@@ -897,6 +921,14 @@ window_save ()
           input->nbest = gtk_spin_button_get_value_as_int (window->spin_bests);
           window_save_direction ();
           break;
+        case ALGORITHM_ORTHOGONAL:
+          input->algorithm = ALGORITHM_ORTHOGONAL;
+          input->niterations
+            = gtk_spin_button_get_value_as_int (window->spin_iterations);
+          input->tolerance = gtk_spin_button_get_value (window->spin_tolerance);
+          input->nbest = gtk_spin_button_get_value_as_int (window->spin_bests);
+          window_save_direction ();
+          break;
         default:
           input->algorithm = ALGORITHM_GENETIC;
           input->nsimulations
@@ -1045,7 +1077,7 @@ window_about ()
      "Javier Burguete Tolosa <jburguete@eead.csic.es> "
      "(english, french and spanish)\n"
      "Uğur Çayoğlu (german)",
-     "version", "3.4.5",
+     "version", "3.6.0",
      "copyright", "Copyright 2012-2018 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/mpcotool",
@@ -1147,6 +1179,7 @@ window_update ()
       window_update_direction ();
       break;
     case ALGORITHM_SWEEP:
+    case ALGORITHM_ORTHOGONAL:
       gtk_widget_show (GTK_WIDGET (window->label_iterations));
       gtk_widget_show (GTK_WIDGET (window->spin_iterations));
       if (i > 1)
@@ -1257,6 +1290,7 @@ window_set_algorithm ()
   switch (i)
     {
     case ALGORITHM_SWEEP:
+    case ALGORITHM_ORTHOGONAL:
       i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_variable));
       if (i < 0)
         i = 0;
@@ -1563,6 +1597,7 @@ window_set_variable ()
   switch (window_get_algorithm ())
     {
     case ALGORITHM_SWEEP:
+    case ALGORITHM_ORTHOGONAL:
       gtk_spin_button_set_value (window->spin_sweeps,
                                  (gdouble) input->variable[i].nsweeps);
 #if DEBUG_INTERFACE
@@ -1800,6 +1835,7 @@ window_update_variable ()
   switch (window_get_algorithm ())
     {
     case ALGORITHM_SWEEP:
+    case ALGORITHM_ORTHOGONAL:
       input->variable[i].nsweeps
         = gtk_spin_button_get_value_as_int (window->spin_sweeps);
 #if DEBUG_INTERFACE
@@ -1870,6 +1906,7 @@ window_read (char *filename)    ///< File name.
                                  (gdouble) input->nsimulations);
       // fallthrough
     case ALGORITHM_SWEEP:
+    case ALGORITHM_ORTHOGONAL:
       gtk_spin_button_set_value (window->spin_iterations,
                                  (gdouble) input->niterations);
       gtk_spin_button_set_value (window->spin_bests, (gdouble) input->nbest);
@@ -2032,12 +2069,13 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
   unsigned int i;
   char *buffer, *buffer2, buffer3[64];
   char *label_algorithm[NALGORITHMS] = {
-    "_Monte-Carlo", _("_Sweep"), _("_Genetic")
+    "_Monte-Carlo", _("_Sweep"), _("_Genetic"), _("_Orthogonal")
   };
   char *tip_algorithm[NALGORITHMS] = {
     _("Monte-Carlo brute force algorithm"),
     _("Sweep brute force algorithm"),
-    _("Genetic algorithm")
+    _("Genetic algorithm"),
+    _("Orthogonal sampling brute force algorithm"),
   };
   char *label_direction[NDIRECTIONS] = {
     _("_Coordinates descent"), _("_Random")

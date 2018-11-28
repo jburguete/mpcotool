@@ -220,6 +220,8 @@ input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
     }
   else if (!xmlStrcmp (buffer, (const xmlChar *) LABEL_SWEEP))
     input->algorithm = ALGORITHM_SWEEP;
+  else if (!xmlStrcmp (buffer, (const xmlChar *) LABEL_ORTHOGONAL))
+    input->algorithm = ALGORITHM_ORTHOGONAL;
   else if (!xmlStrcmp (buffer, (const xmlChar *) LABEL_GENETIC))
     {
       input->algorithm = ALGORITHM_GENETIC;
@@ -337,7 +339,8 @@ input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
   buffer = NULL;
 
   if (input->algorithm == ALGORITHM_MONTE_CARLO
-      || input->algorithm == ALGORITHM_SWEEP)
+      || input->algorithm == ALGORITHM_SWEEP
+      || input->algorithm == ALGORITHM_ORTHOGONAL)
     {
 
       // Obtaining iterations number
@@ -641,6 +644,8 @@ input_open_json (JsonParser * parser)   ///< JsonParser struct.
     }
   else if (!strcmp (buffer, LABEL_SWEEP))
     input->algorithm = ALGORITHM_SWEEP;
+  else if (!strcmp (buffer, LABEL_ORTHOGONAL))
+    input->algorithm = ALGORITHM_ORTHOGONAL;
   else if (!strcmp (buffer, LABEL_GENETIC))
     {
       input->algorithm = ALGORITHM_GENETIC;
@@ -751,7 +756,8 @@ input_open_json (JsonParser * parser)   ///< JsonParser struct.
     }
 
   if (input->algorithm == ALGORITHM_MONTE_CARLO
-      || input->algorithm == ALGORITHM_SWEEP)
+      || input->algorithm == ALGORITHM_SWEEP
+      || input->algorithm == ALGORITHM_ORTHOGONAL)
     {
 
       // Obtaining iterations number

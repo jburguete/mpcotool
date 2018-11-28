@@ -155,6 +155,7 @@ void optimize_synchronise ();
 #endif
 void optimize_sweep ();
 void optimize_MonteCarlo ();
+void optimize_orthogonal ();
 void optimize_best_direction (unsigned int simulation, double value);
 void optimize_direction_sequential (unsigned int simulation);
 void *optimize_direction_thread (ParallelData * data);

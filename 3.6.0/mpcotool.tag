@@ -2,7 +2,7 @@
 <tagfile>
   <compound kind="file">
     <name>config.h</name>
-    <path>/home/burguete/programas/mpcotool/3.4.4/</path>
+    <path>/home/burguete/programas/mpcotool/3.4.5/</path>
     <filename>config_8h</filename>
     <member kind="define">
       <type>#define</type>
@@ -265,6 +265,13 @@
     </member>
     <member kind="define">
       <type>#define</type>
+      <name>LABEL_ORTHOGONAL</name>
+      <anchorfile>config_8h.html</anchorfile>
+      <anchor>ab016b8aeb0dc2028c665c26b51d7fe2c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
       <name>LABEL_P</name>
       <anchorfile>config_8h.html</anchorfile>
       <anchor>acf733c359597ac37012d915dfd800a1a</anchor>
@@ -460,7 +467,7 @@
   </compound>
   <compound kind="file">
     <name>experiment.c</name>
-    <path>/home/burguete/programas/mpcotool/3.4.4/</path>
+    <path>/home/burguete/programas/mpcotool/3.4.5/</path>
     <filename>experiment_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
     <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
@@ -517,7 +524,7 @@
   </compound>
   <compound kind="file">
     <name>experiment.h</name>
-    <path>/home/burguete/programas/mpcotool/3.4.4/</path>
+    <path>/home/burguete/programas/mpcotool/3.4.5/</path>
     <filename>experiment_8h</filename>
     <class kind="struct">Experiment</class>
     <member kind="function">
@@ -565,7 +572,7 @@
   </compound>
   <compound kind="file">
     <name>input.c</name>
-    <path>/home/burguete/programas/mpcotool/3.4.4/</path>
+    <path>/home/burguete/programas/mpcotool/3.4.5/</path>
     <filename>input_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
     <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
@@ -645,7 +652,7 @@
   </compound>
   <compound kind="file">
     <name>input.h</name>
-    <path>/home/burguete/programas/mpcotool/3.4.4/</path>
+    <path>/home/burguete/programas/mpcotool/3.4.5/</path>
     <filename>input_8h</filename>
     <class kind="struct">Input</class>
     <member kind="enumeration">
@@ -764,7 +771,7 @@
   </compound>
   <compound kind="file">
     <name>interface.c</name>
-    <path>/home/burguete/programas/mpcotool/3.4.4/</path>
+    <path>/home/burguete/programas/mpcotool/3.4.5/</path>
     <filename>interface_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
     <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
@@ -1091,7 +1098,7 @@
   </compound>
   <compound kind="file">
     <name>interface.h</name>
-    <path>/home/burguete/programas/mpcotool/3.4.4/</path>
+    <path>/home/burguete/programas/mpcotool/3.4.5/</path>
     <filename>interface_8h</filename>
     <class kind="struct">Options</class>
     <class kind="struct">Running</class>
@@ -1372,7 +1379,7 @@
   </compound>
   <compound kind="file">
     <name>main.c</name>
-    <path>/home/burguete/programas/mpcotool/3.4.4/</path>
+    <path>/home/burguete/programas/mpcotool/3.4.5/</path>
     <filename>main_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
     <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
@@ -1384,7 +1391,7 @@
   </compound>
   <compound kind="file">
     <name>optimize.c</name>
-    <path>/home/burguete/programas/mpcotool/3.4.4/</path>
+    <path>/home/burguete/programas/mpcotool/3.4.5/</path>
     <filename>optimize_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
     <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
@@ -1480,7 +1487,7 @@
       <type>void *</type>
       <name>optimize_thread</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a7332a562a8f4ae8a2ca4f45cb0afd96d</anchor>
+      <anchor>a26afd72eb6b1ce2eb7f4e4820e189ae3</anchor>
       <arglist>(ParallelData *data)</arglist>
     </member>
     <member kind="function">
@@ -1513,6 +1520,13 @@
     </member>
     <member kind="function">
       <type>void</type>
+      <name>optimize_orthogonal</name>
+      <anchorfile>optimize_8c.html</anchorfile>
+      <anchor>a306d6ca999211101b188ba46ab9546ed</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
       <name>optimize_best_direction</name>
       <anchorfile>optimize_8c.html</anchorfile>
       <anchor>a99ce3e0ac6f755d23da7277a5f4cc9ee</anchor>
@@ -1529,15 +1543,15 @@
       <type>void *</type>
       <name>optimize_direction_thread</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a67a6cf2eb2aad9e47b0ba07068a054d5</anchor>
+      <anchor>a2ca69af497f7c2a0563b9fbcbb13ec26</anchor>
       <arglist>(ParallelData *data)</arglist>
     </member>
     <member kind="function">
       <type>double</type>
       <name>optimize_estimate_direction_random</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a4355552487db6945027e1b05c617cc19</anchor>
-      <arglist>(unsigned int variable, unsigned int estimate)</arglist>
+      <anchor>a5c1c9e3f6527ae4edd759a854ed9909e</anchor>
+      <arglist>(unsigned int variable, unsigned int estimate __attribute__((unused)))</arglist>
     </member>
     <member kind="function">
       <type>double</type>
@@ -1661,7 +1675,7 @@
   </compound>
   <compound kind="file">
     <name>optimize.h</name>
-    <path>/home/burguete/programas/mpcotool/3.4.4/</path>
+    <path>/home/burguete/programas/mpcotool/3.4.5/</path>
     <filename>optimize_8h</filename>
     <class kind="struct">Optimize</class>
     <class kind="struct">ParallelData</class>
@@ -1772,6 +1786,13 @@
     </member>
     <member kind="function">
       <type>void</type>
+      <name>optimize_orthogonal</name>
+      <anchorfile>optimize_8h.html</anchorfile>
+      <anchor>a306d6ca999211101b188ba46ab9546ed</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
       <name>optimize_best_direction</name>
       <anchorfile>optimize_8h.html</anchorfile>
       <anchor>a99ce3e0ac6f755d23da7277a5f4cc9ee</anchor>
@@ -1790,13 +1811,6 @@
       <anchorfile>optimize_8h.html</anchorfile>
       <anchor>a2ca69af497f7c2a0563b9fbcbb13ec26</anchor>
       <arglist>(ParallelData *data)</arglist>
-    </member>
-    <member kind="function">
-      <type>double</type>
-      <name>optimize_estimate_direction_random</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>a4355552487db6945027e1b05c617cc19</anchor>
-      <arglist>(unsigned int variable, unsigned int estimate)</arglist>
     </member>
     <member kind="function">
       <type>double</type>
@@ -1920,7 +1934,7 @@
   </compound>
   <compound kind="file">
     <name>utils.c</name>
-    <path>/home/burguete/programas/mpcotool/3.4.4/</path>
+    <path>/home/burguete/programas/mpcotool/3.4.5/</path>
     <filename>utils_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
     <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
@@ -1949,14 +1963,14 @@
       <type>unsigned int</type>
       <name>xml_node_get_uint</name>
       <anchorfile>utils_8c.html</anchorfile>
-      <anchor>aaf7fad9a3246f502b9a1afbfcc981296</anchor>
+      <anchor>a6b3803fc6918d9cbde7f0d86e2d17e37</anchor>
       <arglist>(xmlNode *node, const xmlChar *prop, int *error_code)</arglist>
     </member>
     <member kind="function">
       <type>unsigned int</type>
       <name>xml_node_get_uint_with_default</name>
       <anchorfile>utils_8c.html</anchorfile>
-      <anchor>a323a626f4f4f634ff3fddbb5f9235e1d</anchor>
+      <anchor>a7d3bb20a81d564c507458f19e07e3185</anchor>
       <arglist>(xmlNode *node, const xmlChar *prop, unsigned int default_value, int *error_code)</arglist>
     </member>
     <member kind="function">
@@ -2005,14 +2019,14 @@
       <type>unsigned int</type>
       <name>json_object_get_uint</name>
       <anchorfile>utils_8c.html</anchorfile>
-      <anchor>af2812efec6408aa20970e0dde4f91603</anchor>
+      <anchor>a2552b0424485bc796c4ca6b25a8730aa</anchor>
       <arglist>(JsonObject *object, const char *prop, int *error_code)</arglist>
     </member>
     <member kind="function">
       <type>unsigned int</type>
       <name>json_object_get_uint_with_default</name>
       <anchorfile>utils_8c.html</anchorfile>
-      <anchor>a4adf1b1bb22daa42bd0e064a36735b9d</anchor>
+      <anchor>a1825b8475eae54e47db59de138df3ae0</anchor>
       <arglist>(JsonObject *object, const char *prop, unsigned int default_value, int *error_code)</arglist>
     </member>
     <member kind="function">
@@ -2095,7 +2109,7 @@
   </compound>
   <compound kind="file">
     <name>utils.h</name>
-    <path>/home/burguete/programas/mpcotool/3.4.4/</path>
+    <path>/home/burguete/programas/mpcotool/3.4.5/</path>
     <filename>utils_8h</filename>
     <member kind="define">
       <type>#define</type>
@@ -2282,7 +2296,7 @@
   </compound>
   <compound kind="file">
     <name>variable.c</name>
-    <path>/home/burguete/programas/mpcotool/3.4.4/</path>
+    <path>/home/burguete/programas/mpcotool/3.4.5/</path>
     <filename>variable_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
     <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
@@ -2346,7 +2360,7 @@
   </compound>
   <compound kind="file">
     <name>variable.h</name>
-    <path>/home/burguete/programas/mpcotool/3.4.4/</path>
+    <path>/home/burguete/programas/mpcotool/3.4.5/</path>
     <filename>variable_8h</filename>
     <class kind="struct">Variable</class>
     <member kind="enumeration">
@@ -2372,6 +2386,12 @@
       <name>ALGORITHM_GENETIC</name>
       <anchorfile>variable_8h.html</anchorfile>
       <anchor>a5e41188f16a381c8915a17a22228e691adfcb09d5d443bad5719cddf965c1861a</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>ALGORITHM_ORTHOGONAL</name>
+      <anchorfile>variable_8h.html</anchorfile>
+      <anchor>a5e41188f16a381c8915a17a22228e691a9326511f857072cf218f9214fd4f4053</anchor>
       <arglist></arglist>
     </member>
     <member kind="function">

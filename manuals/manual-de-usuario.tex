@@ -132,22 +132,24 @@ El código fuente en MPCOTool está escrito en lenguaje C. El programa ha sido
 compilado y probado en los siguientes sistemas operativos:
 \begin{itemize}
 \item Debian Hurd, kFreeBSD y Linux 9;
-\item DragonFly BSD 4.8;
+\item Devuan Linux 2;
+\item DragonFly BSD 5.2;
 \item Dyson Illumos;
-\item Fedora Linux 26;
-\item FreeBSD 11.0;
-\item Microsoft Windows 7\footnotemark[1], 8.1\footnotemark[1] y
-	10\footnotemark[1];
+\item Fedora Linux 29;
+\item FreeBSD 11.2;
+\item Manjaro Linux;
+\item Microsoft Windows 7\footnotemark[1], y 10\footnotemark[1];
 \item NetBSD 7.0;
-\item OpenBSD 6.1;
+\item OpenBSD 6.4;
 \item OpenIndiana Hipster;
-\item OpenSUSE Linux Tumbleweed;
-\item y Ubuntu Linux 17.04.
+\item OpenSUSE Linux Leap;
+\item Ubuntu Mate Linux 18.04;
+\item y Xubuntu Linux 18.10.
 \end{itemize}
 Es probable que también puede compilarse y funcione en otros sistemas
 operativos, otras distribuciones de software y otras versiones pero no ha sido
 probado.
-\footnotetext[1]{Windows 7, Windows 8.1 y Windows 10 son marcas registradas de
+\footnotetext[1]{Windows 7, y Windows 10 son marcas registradas de
 Microsoft Corporation.}
 
 Para generar el fichero ejecutable a partir de código fuente, un compilador de C
@@ -175,10 +177,10 @@ del cálculo en múltiples computadoras.
 Las indicaciones proporcionadas en \citet{install-unix} pueden seguirse para
 instalar todas estas utilidades.
 
-En OpenBSD 6.0, antes de generar el código, deben seleccionarse versiones
+En OpenBSD 6.4, antes de generar el código, deben seleccionarse versiones
 adecuadas de Autoconf y Automake haciendo en un terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
-> export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.15
+> export AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.16
 \end{lstlisting}
 
 En sistemas Windows hay que instalar MSYS2
@@ -186,7 +188,7 @@ En sistemas Windows hay que instalar MSYS2
 Para ello se pueden seguir las instrucciones detalladas en
 https://github.com/jburguete/install-unix.
 
-En Fedora Linux 26, para usar OpenMPI hay que hacer en un terminal (en la
+En Fedora Linux 29, para usar OpenMPI hay que hacer en un terminal (en la
 versión de 64 bits):
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > export PATH=$PATH:/usr/lib64/openmpi/bin
@@ -209,7 +211,7 @@ El siguiente paso es descargar el código fuente de MPCOTool, enlazarlo con el
 de Genetic y compilar todo junto haciendo:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > git clone https://github.com/jburguete/mpcotool.git
-> cd mpcotool/3.4.5
+> cd mpcotool/3.6.0
 > ln -s ../../genetic/2.2.2 genetic
 > ln -s genetic/libgenetic.so (o .dll en sistemas Windows)
 > ./build
@@ -235,7 +237,7 @@ usan también la librería \emph{Genetic}):
 > cd ../test4
 > ln -s ../../../genetic/2.2.2 genetic
 > ln -s genetic/libgenetic.so (.dll en sistemas Windows)
-> cd ../../3.4.5
+> cd ../../3.6.0
 > make tests
 \end{lstlisting}
 
@@ -457,29 +459,35 @@ Las propiedades que se pueden definir son:
 	\begin{description}
 		\item[sweep]: algoritmo de fuerza bruta de barrido. Requiere definir en
 			cada variable:
-		\begin{description}
-			\item[nsweeps]: número de barridos para la variable en cada
-				experimento.
-		\end{description}
-	\item[Monte-Carlo]: algoritmo de fuerza bruta de Monte-Carlo. Requiere
-		definir en el nodo XML principal:
-		\begin{description}
-			\item[nsimulations]: número de simulaciones a ejecutar en cada
-				iteración y en cada experimento.
-		\end{description}
-	\item[genetic]: algoritmo genético. Necesita definir los siguientes
-		parámetros en el nodo XML principal:
-		\begin{description}
-			\item[npopulation]: número de individuos de la población.
-			\item[ngenerations]: número de generaciones.
-			\item[mutation]: ratio de mutación.
-			\item[reproduction]: ratio de reproducción.
-			\item[adaptation]: ratio de adaptación.
-		\end{description}
-	Además para cada variable:
-		\begin{description}
-			\item[nbits]: número de bits para codificar la variable.
-		\end{description}
+			\begin{description}
+				\item[nsweeps]: número de barridos para la variable en cada
+					experimento.
+			\end{description}
+		\item[Monte-Carlo]: algoritmo de fuerza bruta de Monte-Carlo. Requiere
+			definir en el nodo XML principal:
+			\begin{description}
+				\item[nsimulations]: número de simulaciones a ejecutar en cada
+					iteración y en cada experimento.
+			\end{description}
+		\item[genetic]: algoritmo genético. Necesita definir los siguientes
+			parámetros en el nodo XML principal:
+			\begin{description}
+				\item[npopulation]: número de individuos de la población.
+				\item[ngenerations]: número de generaciones.
+				\item[mutation]: ratio de mutación.
+				\item[reproduction]: ratio de reproducción.
+				\item[adaptation]: ratio de adaptación.
+			\end{description}
+			Además para cada variable:
+			\begin{description}
+				\item[nbits]: número de bits para codificar la variable.
+			\end{description}
+		\item[orthogonal]: algoritmo de fuerza bruta de muestreo ortogonal. Requiere
+			definir en cada variable:
+			\begin{description}
+				\item[nsweeps]: número de barridos para la variable en cada
+					experimento.
+			\end{description}
 	\end{description}
 	\item[niterations]: número de iteraciones (valor por defecto: 1) para
 		realizar el algoritmo iterativo,
@@ -879,8 +887,8 @@ incrementa exponencialmente con el número de variables.
 	\put(0,37){$y_{\min}$}
 	\qbezier[10](20,160)(35,160)(50,160)
 	\put(0,157){$y_{\max}$}
-}{Diagrama de flujo ilustrando un ejempo de aplicación del método de fuerza
-bruta de barrido con dos variables para $N_x=N_y=5$}{FigSweep}
+}{Diagrama ilustrando un ejempo de aplicación del método de fuerza bruta de
+barrido con dos variables para $N_x=N_y=5$}{FigSweep}
 
 Los algoritmos de fuerza bruta presentan bajos ratios de convergencia pero son
 fuertemente paralelizables debido a que cada simulación es completamente
@@ -1973,6 +1981,6 @@ método genético}{FigGeneticParallelization}
 \clearpage
 \renewcommand{\bibname}{Referencias}
 \addcontentsline{toc}{chapter}{\bibname}
-\bibliography{../article/bib}
+\bibliography{bib}
 
 \end{document}

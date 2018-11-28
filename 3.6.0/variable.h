@@ -38,15 +38,13 @@ OF SUCH DAMAGE.
 #ifndef VARIABLE__H
 #define VARIABLE__H 1
 
-/**
- * \enum Algorithm
- * \brief Enum to define the algorithms.
- */
+///> Enum to define the algorithms.
 enum Algorithm
 {
   ALGORITHM_MONTE_CARLO = 0,    ///< Monte-Carlo algorithm.
   ALGORITHM_SWEEP = 1,          ///< Sweep algorithm.
-  ALGORITHM_GENETIC = 2         ///< Genetic algorithm.
+  ALGORITHM_GENETIC = 2,        ///< Genetic algorithm.
+  ALGORITHM_ORTHOGONAL = 3      ///< Orthogonal sampling algorithm.
 };
 
 /**

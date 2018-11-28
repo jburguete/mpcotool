@@ -45,7 +45,7 @@ OF SUCH DAMAGE.
 
 #define MAX_NINPUTS 8
   ///< Maximum number of input files in the simulator program.
-#define NALGORITHMS 3           ///< Number of stochastic algorithms.
+#define NALGORITHMS 4           ///< Number of stochastic algorithms.
 #define NDIRECTIONS 2           ///< Number of direction estimate methods.
 #define NNORMS 4                ///< Number of error norms.
 #define NPRECISIONS 15          ///< Number of precisions.
@@ -92,6 +92,7 @@ OF SUCH DAMAGE.
 #define LABEL_NSIMULATIONS "nsimulations"       ///< nsimulations label.
 #define LABEL_NSTEPS "nsteps"   ///< nsteps label.
 #define LABEL_NSWEEPS "nsweeps" ///< nsweeps label.
+#define LABEL_ORTHOGONAL "orthogonal" ///< orthogonal label.
 #define LABEL_P "p"             ///< p label.
 #define LABEL_PRECISION "precision"     ///< precision label.
 #define LABEL_RANDOM "random"   ///< random label.
@@ -120,10 +121,7 @@ OF SUCH DAMAGE.
 
 // Enumerations
 
-/**
- * \enum INPUT_TYPE
- * \brief Enum to define the input file types.
- */
+///> Enum to define the input file types.
 enum INPUT_TYPE
 {
   INPUT_TYPE_XML = 0,           ///< XML input file.

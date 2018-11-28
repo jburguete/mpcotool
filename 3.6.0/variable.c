@@ -205,7 +205,7 @@ variable_open_xml (Variable * variable, ///< Variable struct.
       variable_error (variable, _("bad precision"));
       goto exit_on_error;
     }
-  if (algorithm == ALGORITHM_SWEEP)
+  if (algorithm == ALGORITHM_SWEEP || algorithm == ALGORITHM_ORTHOGONAL)
     {
       if (xmlHasProp (node, (const xmlChar *) LABEL_NSWEEPS))
         {
@@ -365,7 +365,7 @@ variable_open_json (Variable * variable,        ///< Variable struct.
       variable_error (variable, _("bad precision"));
       goto exit_on_error;
     }
-  if (algorithm == ALGORITHM_SWEEP)
+  if (algorithm == ALGORITHM_SWEEP || algorithm == ALGORITHM_ORTHOGONAL)
     {
       if (json_object_get_member (object, LABEL_NSWEEPS))
         {
