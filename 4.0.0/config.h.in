@@ -5,7 +5,7 @@ calibrations or optimizations of empirical parameters.
 
 AUTHORS: Javier Burguete and Borja Latorre.
 
-Copyright 2012-2017, AUTHORS.
+Copyright 2012-2018, AUTHORS.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -33,7 +33,7 @@ OF SUCH DAMAGE.
  * \file config.h
  * \brief Configuration header file.
  * \authors Javier Burguete and Borja Latorre.
- * \copyright Copyright 2012-2017, all rights reserved.
+ * \copyright Copyright 2012-2018, all rights reserved.
  */
 #ifndef CONFIG__H
 #define CONFIG__H 1
@@ -46,7 +46,7 @@ OF SUCH DAMAGE.
 #define MAX_NINPUTS 8
   ///< Maximum number of input files in the simulator program.
 #define NALGORITHMS 4           ///< Number of stochastic algorithms.
-#define NDIRECTIONS 2           ///< Number of direction estimate methods.
+#define NCLIMBINGS 2            ///< Number of hill climbing estimate methods.
 #define NNORMS 4                ///< Number of error norms.
 #define NPRECISIONS 15          ///< Number of precisions.
 
@@ -69,9 +69,8 @@ OF SUCH DAMAGE.
   ///< absolute maximum label.
 #define LABEL_ADAPTATION "adaptation"   ///< adaption label.
 #define LABEL_ALGORITHM "algorithm"     ///< algoritm label.
-#define LABEL_OPTIMIZE "optimize"       ///< optimize label.
+#define LABEL_CLIMBING "climbing"       ///< climbing label.
 #define LABEL_COORDINATES "coordinates" ///< coordinates label.
-#define LABEL_DIRECTION "direction"     ///< direction label.
 #define LABEL_EUCLIDIAN "euclidian"     ///< euclidian label.
 #define LABEL_EVALUATOR "evaluator"     ///< evaluator label.
 #define LABEL_EXPERIMENT "experiment"   ///< experiment label.
@@ -92,6 +91,7 @@ OF SUCH DAMAGE.
 #define LABEL_NSIMULATIONS "nsimulations"       ///< nsimulations label.
 #define LABEL_NSTEPS "nsteps"   ///< nsteps label.
 #define LABEL_NSWEEPS "nsweeps" ///< nsweeps label.
+#define LABEL_OPTIMIZE "optimize"       ///< optimize label.
 #define LABEL_ORTHOGONAL "orthogonal"   ///< orthogonal label.
 #define LABEL_P "p"             ///< p label.
 #define LABEL_PRECISION "precision"     ///< precision label.

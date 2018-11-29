@@ -162,13 +162,13 @@ Window window[1];
 ///< Window struct to define the main interface window.
 
 /**
- * Function to save the direction search method data in a XML node.
+ * Function to save the hill climbing method data in a XML node.
  */
 void
-input_save_direction_xml (xmlNode * node)       ///< XML node.
+input_save_climbing_xml (xmlNode * node)        ///< XML node.
 {
 #if DEBUG_INTERFACE
-  fprintf (stderr, "input_save_direction_xml: start\n");
+  fprintf (stderr, "input_save_climbing_xml: start\n");
 #endif
   if (input->nsteps)
     {
@@ -176,33 +176,33 @@ input_save_direction_xml (xmlNode * node)       ///< XML node.
       if (input->relaxation != DEFAULT_RELAXATION)
         xml_node_set_float (node, (const xmlChar *) LABEL_RELAXATION,
                             input->relaxation);
-      switch (input->direction)
+      switch (input->climbing)
         {
-        case DIRECTION_METHOD_COORDINATES:
-          xmlSetProp (node, (const xmlChar *) LABEL_DIRECTION,
+        case CLIMBING_METHOD_COORDINATES:
+          xmlSetProp (node, (const xmlChar *) LABEL_CLIMBING,
                       (const xmlChar *) LABEL_COORDINATES);
           break;
         default:
-          xmlSetProp (node, (const xmlChar *) LABEL_DIRECTION,
+          xmlSetProp (node, (const xmlChar *) LABEL_CLIMBING,
                       (const xmlChar *) LABEL_RANDOM);
           xml_node_set_uint (node, (const xmlChar *) LABEL_NESTIMATES,
                              input->nestimates);
         }
     }
 #if DEBUG_INTERFACE
-  fprintf (stderr, "input_save_direction_xml: end\n");
+  fprintf (stderr, "input_save_climbing_xml: end\n");
 #endif
 }
 
 /**
- * Function to save the direction search method data in a JSON node.
+ * Function to save the hill climbing method data in a JSON node.
  */
 void
-input_save_direction_json (JsonNode * node)     ///< JSON node.
+input_save_climbing_json (JsonNode * node)      ///< JSON node.
 {
   JsonObject *object;
 #if DEBUG_INTERFACE
-  fprintf (stderr, "input_save_direction_json: start\n");
+  fprintf (stderr, "input_save_climbing_json: start\n");
 #endif
   object = json_node_get_object (node);
   if (input->nsteps)
@@ -210,19 +210,19 @@ input_save_direction_json (JsonNode * node)     ///< JSON node.
       json_object_set_uint (object, LABEL_NSTEPS, input->nsteps);
       if (input->relaxation != DEFAULT_RELAXATION)
         json_object_set_float (object, LABEL_RELAXATION, input->relaxation);
-      switch (input->direction)
+      switch (input->climbing)
         {
-        case DIRECTION_METHOD_COORDINATES:
-          json_object_set_string_member (object, LABEL_DIRECTION,
+        case CLIMBING_METHOD_COORDINATES:
+          json_object_set_string_member (object, LABEL_CLIMBING,
                                          LABEL_COORDINATES);
           break;
         default:
-          json_object_set_string_member (object, LABEL_DIRECTION, LABEL_RANDOM);
+          json_object_set_string_member (object, LABEL_CLIMBING, LABEL_RANDOM);
           json_object_set_uint (object, LABEL_NESTIMATES, input->nestimates);
         }
     }
 #if DEBUG_INTERFACE
-  fprintf (stderr, "input_save_direction_json: end\n");
+  fprintf (stderr, "input_save_climbing_json: end\n");
 #endif
 }
 
@@ -290,7 +290,7 @@ input_save_xml (xmlDoc * doc)   ///< xmlDoc struct.
       xmlSetProp (node, (const xmlChar *) LABEL_TOLERANCE, (xmlChar *) buffer);
       snprintf (buffer, 64, "%u", input->nbest);
       xmlSetProp (node, (const xmlChar *) LABEL_NBEST, (xmlChar *) buffer);
-      input_save_direction_xml (node);
+      input_save_climbing_xml (node);
       break;
     case ALGORITHM_SWEEP:
       xmlSetProp (node, (const xmlChar *) LABEL_ALGORITHM,
@@ -302,7 +302,7 @@ input_save_xml (xmlDoc * doc)   ///< xmlDoc struct.
       xmlSetProp (node, (const xmlChar *) LABEL_TOLERANCE, (xmlChar *) buffer);
       snprintf (buffer, 64, "%u", input->nbest);
       xmlSetProp (node, (const xmlChar *) LABEL_NBEST, (xmlChar *) buffer);
-      input_save_direction_xml (node);
+      input_save_climbing_xml (node);
       break;
     case ALGORITHM_ORTHOGONAL:
       xmlSetProp (node, (const xmlChar *) LABEL_ALGORITHM,
@@ -314,7 +314,7 @@ input_save_xml (xmlDoc * doc)   ///< xmlDoc struct.
       xmlSetProp (node, (const xmlChar *) LABEL_TOLERANCE, (xmlChar *) buffer);
       snprintf (buffer, 64, "%u", input->nbest);
       xmlSetProp (node, (const xmlChar *) LABEL_NBEST, (xmlChar *) buffer);
-      input_save_direction_xml (node);
+      input_save_climbing_xml (node);
       break;
     default:
       xmlSetProp (node, (const xmlChar *) LABEL_ALGORITHM,
@@ -467,7 +467,7 @@ input_save_json (JsonGenerator * generator)     ///< JsonGenerator struct.
       json_object_set_string_member (object, LABEL_TOLERANCE, buffer);
       snprintf (buffer, 64, "%u", input->nbest);
       json_object_set_string_member (object, LABEL_NBEST, buffer);
-      input_save_direction_json (node);
+      input_save_climbing_json (node);
       break;
     case ALGORITHM_SWEEP:
       json_object_set_string_member (object, LABEL_ALGORITHM, LABEL_SWEEP);
@@ -477,7 +477,7 @@ input_save_json (JsonGenerator * generator)     ///< JsonGenerator struct.
       json_object_set_string_member (object, LABEL_TOLERANCE, buffer);
       snprintf (buffer, 64, "%u", input->nbest);
       json_object_set_string_member (object, LABEL_NBEST, buffer);
-      input_save_direction_json (node);
+      input_save_climbing_json (node);
       break;
     case ALGORITHM_ORTHOGONAL:
       json_object_set_string_member (object, LABEL_ALGORITHM, LABEL_ORTHOGONAL);
@@ -487,7 +487,7 @@ input_save_json (JsonGenerator * generator)     ///< JsonGenerator struct.
       json_object_set_string_member (object, LABEL_TOLERANCE, buffer);
       snprintf (buffer, 64, "%u", input->nbest);
       json_object_set_string_member (object, LABEL_NBEST, buffer);
-      input_save_direction_json (node);
+      input_save_climbing_json (node);
       break;
     default:
       json_object_set_string_member (object, LABEL_ALGORITHM, LABEL_GENETIC);
@@ -651,27 +651,27 @@ options_new ()
      _("Number of threads to perform the calibration/optimization for "
        "the stochastic algorithm"));
   gtk_spin_button_set_value (options->spin_threads, (gdouble) nthreads);
-  options->label_direction = (GtkLabel *)
-    gtk_label_new (_("Threads number for the direction search method"));
-  options->spin_direction =
+  options->label_climbing = (GtkLabel *)
+    gtk_label_new (_("Threads number for the hill climbing method"));
+  options->spin_climbing =
     (GtkSpinButton *) gtk_spin_button_new_with_range (1., 64., 1.);
   gtk_widget_set_tooltip_text
-    (GTK_WIDGET (options->spin_direction),
+    (GTK_WIDGET (options->spin_climbing),
      _("Number of threads to perform the calibration/optimization for the "
-       "direction search method"));
-  gtk_spin_button_set_value (options->spin_direction,
-                             (gdouble) nthreads_direction);
+       "hill climbing method"));
+  gtk_spin_button_set_value (options->spin_climbing,
+                             (gdouble) nthreads_climbing);
   options->grid = (GtkGrid *) gtk_grid_new ();
   gtk_grid_attach (options->grid, GTK_WIDGET (options->label_seed), 0, 0, 1, 1);
   gtk_grid_attach (options->grid, GTK_WIDGET (options->spin_seed), 1, 0, 1, 1);
-  gtk_grid_attach (options->grid, GTK_WIDGET (options->label_threads), 0, 1,
-                   1, 1);
-  gtk_grid_attach (options->grid, GTK_WIDGET (options->spin_threads), 1, 1, 1,
+  gtk_grid_attach (options->grid, GTK_WIDGET (options->label_threads),
+                   0, 1, 1, 1);
+  gtk_grid_attach (options->grid, GTK_WIDGET (options->spin_threads),
+                   1, 1, 1, 1);
+  gtk_grid_attach (options->grid, GTK_WIDGET (options->label_climbing), 0, 2, 1,
                    1);
-  gtk_grid_attach (options->grid, GTK_WIDGET (options->label_direction), 0, 2,
-                   1, 1);
-  gtk_grid_attach (options->grid, GTK_WIDGET (options->spin_direction), 1, 2,
-                   1, 1);
+  gtk_grid_attach (options->grid, GTK_WIDGET (options->spin_climbing), 1, 2, 1,
+                   1);
   gtk_widget_show_all (GTK_WIDGET (options->grid));
   options->dialog = (GtkDialog *)
     gtk_dialog_new_with_buttons (_("Options"),
@@ -687,8 +687,8 @@ options_new ()
       input->seed
         = (unsigned long int) gtk_spin_button_get_value (options->spin_seed);
       nthreads = gtk_spin_button_get_value_as_int (options->spin_threads);
-      nthreads_direction
-        = gtk_spin_button_get_value_as_int (options->spin_direction);
+      nthreads_climbing
+        = gtk_spin_button_get_value_as_int (options->spin_climbing);
     }
   gtk_widget_destroy (GTK_WIDGET (options->dialog));
 #if DEBUG_INTERFACE
@@ -744,21 +744,21 @@ window_get_algorithm ()
 }
 
 /**
- * Function to get the direction search method number.
+ * Function to get the hill climbing method number.
  *
- * \return Direction search method number.
+ * \return Hill climbing method number.
  */
 unsigned int
-window_get_direction ()
+window_get_climbing ()
 {
   unsigned int i;
 #if DEBUG_INTERFACE
-  fprintf (stderr, "window_get_direction: start\n");
+  fprintf (stderr, "window_get_climbing: start\n");
 #endif
-  i = gtk_array_get_active (window->button_direction, NDIRECTIONS);
+  i = gtk_array_get_active (window->button_climbing, NCLIMBINGS);
 #if DEBUG_INTERFACE
-  fprintf (stderr, "window_get_direction: %u\n", i);
-  fprintf (stderr, "window_get_direction: end\n");
+  fprintf (stderr, "window_get_climbing: %u\n", i);
+  fprintf (stderr, "window_get_climbing: end\n");
 #endif
   return i;
 }
@@ -784,26 +784,25 @@ window_get_norm ()
 }
 
 /**
- * Function to save the direction search method data in the input file.
+ * Function to save the hill climbing method data in the input file.
  */
 void
-window_save_direction ()
+window_save_climbing ()
 {
 #if DEBUG_INTERFACE
-  fprintf (stderr, "window_save_direction: start\n");
+  fprintf (stderr, "window_save_climbing: start\n");
 #endif
-  if (gtk_toggle_button_get_active
-      (GTK_TOGGLE_BUTTON (window->check_direction)))
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (window->check_climbing)))
     {
       input->nsteps = gtk_spin_button_get_value_as_int (window->spin_steps);
       input->relaxation = gtk_spin_button_get_value (window->spin_relaxation);
-      switch (window_get_direction ())
+      switch (window_get_climbing ())
         {
-        case DIRECTION_METHOD_COORDINATES:
-          input->direction = DIRECTION_METHOD_COORDINATES;
+        case CLIMBING_METHOD_COORDINATES:
+          input->climbing = CLIMBING_METHOD_COORDINATES;
           break;
         default:
-          input->direction = DIRECTION_METHOD_RANDOM;
+          input->climbing = CLIMBING_METHOD_RANDOM;
           input->nestimates
             = gtk_spin_button_get_value_as_int (window->spin_estimates);
         }
@@ -811,7 +810,7 @@ window_save_direction ()
   else
     input->nsteps = 0;
 #if DEBUG_INTERFACE
-  fprintf (stderr, "window_save_direction: end\n");
+  fprintf (stderr, "window_save_climbing: end\n");
 #endif
 }
 
@@ -911,7 +910,7 @@ window_save ()
             = gtk_spin_button_get_value_as_int (window->spin_iterations);
           input->tolerance = gtk_spin_button_get_value (window->spin_tolerance);
           input->nbest = gtk_spin_button_get_value_as_int (window->spin_bests);
-          window_save_direction ();
+          window_save_climbing ();
           break;
         case ALGORITHM_SWEEP:
           input->algorithm = ALGORITHM_SWEEP;
@@ -919,7 +918,7 @@ window_save ()
             = gtk_spin_button_get_value_as_int (window->spin_iterations);
           input->tolerance = gtk_spin_button_get_value (window->spin_tolerance);
           input->nbest = gtk_spin_button_get_value_as_int (window->spin_bests);
-          window_save_direction ();
+          window_save_climbing ();
           break;
         case ALGORITHM_ORTHOGONAL:
           input->algorithm = ALGORITHM_ORTHOGONAL;
@@ -927,7 +926,7 @@ window_save ()
             = gtk_spin_button_get_value_as_int (window->spin_iterations);
           input->tolerance = gtk_spin_button_get_value (window->spin_tolerance);
           input->nbest = gtk_spin_button_get_value_as_int (window->spin_bests);
-          window_save_direction ();
+          window_save_climbing ();
           break;
         default:
           input->algorithm = ALGORITHM_GENETIC;
@@ -1077,7 +1076,7 @@ window_about ()
      "Javier Burguete Tolosa <jburguete@eead.csic.es> "
      "(english, french and spanish)\n"
      "Uğur Çayoğlu (german)",
-     "version", "3.6.0",
+     "version", "4.0.0",
      "copyright", "Copyright 2012-2018 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/mpcotool",
@@ -1088,25 +1087,24 @@ window_about ()
 }
 
 /**
- * Function to update direction search method widgets view in the main window.
+ * Function to update hill climbing method widgets view in the main window.
  */
 void
-window_update_direction ()
+window_update_climbing ()
 {
 #if DEBUG_INTERFACE
-  fprintf (stderr, "window_update_direction: start\n");
+  fprintf (stderr, "window_update_climbing: start\n");
 #endif
-  gtk_widget_show (GTK_WIDGET (window->check_direction));
-  if (gtk_toggle_button_get_active
-      (GTK_TOGGLE_BUTTON (window->check_direction)))
+  gtk_widget_show (GTK_WIDGET (window->check_climbing));
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (window->check_climbing)))
     {
-      gtk_widget_show (GTK_WIDGET (window->grid_direction));
+      gtk_widget_show (GTK_WIDGET (window->grid_climbing));
       gtk_widget_show (GTK_WIDGET (window->label_step));
       gtk_widget_show (GTK_WIDGET (window->spin_step));
     }
-  switch (window_get_direction ())
+  switch (window_get_climbing ())
     {
-    case DIRECTION_METHOD_COORDINATES:
+    case CLIMBING_METHOD_COORDINATES:
       gtk_widget_hide (GTK_WIDGET (window->label_estimates));
       gtk_widget_hide (GTK_WIDGET (window->spin_estimates));
       break;
@@ -1115,7 +1113,7 @@ window_update_direction ()
       gtk_widget_show (GTK_WIDGET (window->spin_estimates));
     }
 #if DEBUG_INTERFACE
-  fprintf (stderr, "window_update_direction: end\n");
+  fprintf (stderr, "window_update_climbing: end\n");
 #endif
 }
 
@@ -1155,8 +1153,8 @@ window_update ()
   gtk_widget_hide (GTK_WIDGET (window->spin_sweeps));
   gtk_widget_hide (GTK_WIDGET (window->label_bits));
   gtk_widget_hide (GTK_WIDGET (window->spin_bits));
-  gtk_widget_hide (GTK_WIDGET (window->check_direction));
-  gtk_widget_hide (GTK_WIDGET (window->grid_direction));
+  gtk_widget_hide (GTK_WIDGET (window->check_climbing));
+  gtk_widget_hide (GTK_WIDGET (window->grid_climbing));
   gtk_widget_hide (GTK_WIDGET (window->label_step));
   gtk_widget_hide (GTK_WIDGET (window->spin_step));
   gtk_widget_hide (GTK_WIDGET (window->label_p));
@@ -1176,7 +1174,7 @@ window_update ()
           gtk_widget_show (GTK_WIDGET (window->label_bests));
           gtk_widget_show (GTK_WIDGET (window->spin_bests));
         }
-      window_update_direction ();
+      window_update_climbing ();
       break;
     case ALGORITHM_SWEEP:
     case ALGORITHM_ORTHOGONAL:
@@ -1191,8 +1189,8 @@ window_update ()
         }
       gtk_widget_show (GTK_WIDGET (window->label_sweeps));
       gtk_widget_show (GTK_WIDGET (window->spin_sweeps));
-      gtk_widget_show (GTK_WIDGET (window->check_direction));
-      window_update_direction ();
+      gtk_widget_show (GTK_WIDGET (window->check_climbing));
+      window_update_climbing ();
       break;
     default:
       gtk_widget_show (GTK_WIDGET (window->label_population));
@@ -1912,19 +1910,19 @@ window_read (char *filename)    ///< File name.
       gtk_spin_button_set_value (window->spin_bests, (gdouble) input->nbest);
       gtk_spin_button_set_value (window->spin_tolerance, input->tolerance);
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON
-                                    (window->check_direction), input->nsteps);
+                                    (window->check_climbing), input->nsteps);
       if (input->nsteps)
         {
           gtk_toggle_button_set_active
-            (GTK_TOGGLE_BUTTON (window->button_direction
-                                [input->direction]), TRUE);
+            (GTK_TOGGLE_BUTTON (window->button_climbing[input->climbing]),
+             TRUE);
           gtk_spin_button_set_value (window->spin_steps,
                                      (gdouble) input->nsteps);
           gtk_spin_button_set_value (window->spin_relaxation,
                                      (gdouble) input->relaxation);
-          switch (input->direction)
+          switch (input->climbing)
             {
-            case DIRECTION_METHOD_RANDOM:
+            case CLIMBING_METHOD_RANDOM:
               gtk_spin_button_set_value (window->spin_estimates,
                                          (gdouble) input->nestimates);
             }
@@ -2077,12 +2075,12 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
     _("Genetic algorithm"),
     _("Orthogonal sampling brute force algorithm"),
   };
-  char *label_direction[NDIRECTIONS] = {
-    _("_Coordinates descent"), _("_Random")
+  char *label_climbing[NCLIMBINGS] = {
+    _("_Coordinates climbing"), _("_Random climbing")
   };
-  char *tip_direction[NDIRECTIONS] = {
-    _("Coordinates direction estimate method"),
-    _("Random direction estimate method")
+  char *tip_climbing[NCLIMBINGS] = {
+    _("Coordinates climbing estimate method"),
+    _("Random climbing estimate method")
   };
   char *label_norm[NNORMS] = { "L2", "L∞", "Lp", "L1" };
   char *tip_norm[NNORMS] = {
@@ -2300,58 +2298,53 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
 //  gtk_widget_set_halign (GTK_WIDGET (window->scrolled_threshold),
 //                               GTK_ALIGN_FILL);
 
-  // Creating the direction search method properties
-  window->check_direction = (GtkCheckButton *)
-    gtk_check_button_new_with_mnemonic (_("_Direction search method"));
-  g_signal_connect (window->check_direction, "clicked", window_update, NULL);
-  window->grid_direction = (GtkGrid *) gtk_grid_new ();
-  window->button_direction[0] = (GtkRadioButton *)
-    gtk_radio_button_new_with_mnemonic (NULL, label_direction[0]);
-  gtk_grid_attach (window->grid_direction,
-                   GTK_WIDGET (window->button_direction[0]), 0, 0, 1, 1);
-  g_signal_connect (window->button_direction[0], "clicked", window_update,
-                    NULL);
-  for (i = 0; ++i < NDIRECTIONS;)
+  // Creating the hill climbing method properties
+  window->check_climbing = (GtkCheckButton *)
+    gtk_check_button_new_with_mnemonic (_("_Hill climbing method"));
+  g_signal_connect (window->check_climbing, "clicked", window_update, NULL);
+  window->grid_climbing = (GtkGrid *) gtk_grid_new ();
+  window->button_climbing[0] = (GtkRadioButton *)
+    gtk_radio_button_new_with_mnemonic (NULL, label_climbing[0]);
+  gtk_grid_attach (window->grid_climbing,
+                   GTK_WIDGET (window->button_climbing[0]), 0, 0, 1, 1);
+  g_signal_connect (window->button_climbing[0], "clicked", window_update, NULL);
+  for (i = 0; ++i < NCLIMBINGS;)
     {
-      window->button_direction[i] = (GtkRadioButton *)
+      window->button_climbing[i] = (GtkRadioButton *)
         gtk_radio_button_new_with_mnemonic
-        (gtk_radio_button_get_group (window->button_direction[0]),
-         label_direction[i]);
-      gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_direction[i]),
-                                   tip_direction[i]);
-      gtk_grid_attach (window->grid_direction,
-                       GTK_WIDGET (window->button_direction[i]), 0, i, 1, 1);
-      g_signal_connect (window->button_direction[i], "clicked",
-                        window_update, NULL);
+        (gtk_radio_button_get_group (window->button_climbing[0]),
+         label_climbing[i]);
+      gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_climbing[i]),
+                                   tip_climbing[i]);
+      gtk_grid_attach (window->grid_climbing,
+                       GTK_WIDGET (window->button_climbing[i]), 0, i, 1, 1);
+      g_signal_connect (window->button_climbing[i], "clicked", window_update,
+                        NULL);
     }
   window->label_steps = (GtkLabel *) gtk_label_new (_("Steps number"));
   window->spin_steps = (GtkSpinButton *)
     gtk_spin_button_new_with_range (1., 1.e12, 1.);
   gtk_widget_set_hexpand (GTK_WIDGET (window->spin_steps), TRUE);
   window->label_estimates
-    = (GtkLabel *) gtk_label_new (_("Direction estimates number"));
+    = (GtkLabel *) gtk_label_new (_("Climbing estimates number"));
   window->spin_estimates = (GtkSpinButton *)
     gtk_spin_button_new_with_range (1., 1.e3, 1.);
   window->label_relaxation
     = (GtkLabel *) gtk_label_new (_("Relaxation parameter"));
   window->spin_relaxation = (GtkSpinButton *)
     gtk_spin_button_new_with_range (0., 2., 0.001);
-  gtk_grid_attach (window->grid_direction, GTK_WIDGET (window->label_steps),
-                   0, NDIRECTIONS, 1, 1);
-  gtk_grid_attach (window->grid_direction, GTK_WIDGET (window->spin_steps),
-                   1, NDIRECTIONS, 1, 1);
-  gtk_grid_attach (window->grid_direction,
-                   GTK_WIDGET (window->label_estimates), 0, NDIRECTIONS + 1,
-                   1, 1);
-  gtk_grid_attach (window->grid_direction,
-                   GTK_WIDGET (window->spin_estimates), 1, NDIRECTIONS + 1, 1,
-                   1);
-  gtk_grid_attach (window->grid_direction,
-                   GTK_WIDGET (window->label_relaxation), 0, NDIRECTIONS + 2,
-                   1, 1);
-  gtk_grid_attach (window->grid_direction,
-                   GTK_WIDGET (window->spin_relaxation), 1, NDIRECTIONS + 2,
-                   1, 1);
+  gtk_grid_attach (window->grid_climbing, GTK_WIDGET (window->label_steps),
+                   0, NCLIMBINGS, 1, 1);
+  gtk_grid_attach (window->grid_climbing, GTK_WIDGET (window->spin_steps),
+                   1, NCLIMBINGS, 1, 1);
+  gtk_grid_attach (window->grid_climbing, GTK_WIDGET (window->label_estimates),
+                   0, NCLIMBINGS + 1, 1, 1);
+  gtk_grid_attach (window->grid_climbing, GTK_WIDGET (window->spin_estimates),
+                   1, NCLIMBINGS + 1, 1, 1);
+  gtk_grid_attach (window->grid_climbing, GTK_WIDGET (window->label_relaxation),
+                   0, NCLIMBINGS + 2, 1, 1);
+  gtk_grid_attach (window->grid_climbing, GTK_WIDGET (window->spin_relaxation),
+                   1, NCLIMBINGS + 2, 1, 1);
 
   // Creating the array of algorithms
   window->grid_algorithm = (GtkGrid *) gtk_grid_new ();
@@ -2390,10 +2383,10 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
                    0, NALGORITHMS + 2, 1, 1);
   gtk_grid_attach (window->grid_algorithm, GTK_WIDGET (window->spin_tolerance),
                    1, NALGORITHMS + 2, 1, 1);
-  gtk_grid_attach (window->grid_algorithm, GTK_WIDGET (window->label_bests), 0,
-                   NALGORITHMS + 3, 1, 1);
-  gtk_grid_attach (window->grid_algorithm, GTK_WIDGET (window->spin_bests), 1,
-                   NALGORITHMS + 3, 1, 1);
+  gtk_grid_attach (window->grid_algorithm, GTK_WIDGET (window->label_bests),
+                   0, NALGORITHMS + 3, 1, 1);
+  gtk_grid_attach (window->grid_algorithm, GTK_WIDGET (window->spin_bests),
+                   1, NALGORITHMS + 3, 1, 1);
   gtk_grid_attach (window->grid_algorithm,
                    GTK_WIDGET (window->label_population),
                    0, NALGORITHMS + 4, 1, 1);
@@ -2420,9 +2413,9 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
                    0, NALGORITHMS + 8, 1, 1);
   gtk_grid_attach (window->grid_algorithm, GTK_WIDGET (window->spin_adaptation),
                    1, NALGORITHMS + 8, 1, 1);
-  gtk_grid_attach (window->grid_algorithm, GTK_WIDGET (window->check_direction),
+  gtk_grid_attach (window->grid_algorithm, GTK_WIDGET (window->check_climbing),
                    0, NALGORITHMS + 9, 2, 1);
-  gtk_grid_attach (window->grid_algorithm, GTK_WIDGET (window->grid_direction),
+  gtk_grid_attach (window->grid_algorithm, GTK_WIDGET (window->grid_climbing),
                    0, NALGORITHMS + 10, 2, 1);
   gtk_grid_attach (window->grid_algorithm, GTK_WIDGET (window->label_threshold),
                    0, NALGORITHMS + 11, 1, 1);
@@ -2439,20 +2432,18 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
     (GTK_WIDGET (window->combo_variable), _("Variables selector"));
   window->id_variable = g_signal_connect
     (window->combo_variable, "changed", window_set_variable, NULL);
-  window->button_add_variable
-    = (GtkButton *) gtk_button_new_from_icon_name ("list-add",
-                                                   GTK_ICON_SIZE_BUTTON);
-  g_signal_connect
-    (window->button_add_variable, "clicked", window_add_variable, NULL);
-  gtk_widget_set_tooltip_text
-    (GTK_WIDGET (window->button_add_variable), _("Add variable"));
-  window->button_remove_variable
-    = (GtkButton *) gtk_button_new_from_icon_name ("list-remove",
-                                                   GTK_ICON_SIZE_BUTTON);
-  g_signal_connect
-    (window->button_remove_variable, "clicked", window_remove_variable, NULL);
-  gtk_widget_set_tooltip_text
-    (GTK_WIDGET (window->button_remove_variable), _("Remove variable"));
+  window->button_add_variable = (GtkButton *)
+    gtk_button_new_from_icon_name ("list-add", GTK_ICON_SIZE_BUTTON);
+  g_signal_connect (window->button_add_variable, "clicked", window_add_variable,
+                    NULL);
+  gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_add_variable),
+                               _("Add variable"));
+  window->button_remove_variable = (GtkButton *)
+    gtk_button_new_from_icon_name ("list-remove", GTK_ICON_SIZE_BUTTON);
+  g_signal_connect (window->button_remove_variable, "clicked",
+                    window_remove_variable, NULL);
+  gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_remove_variable),
+                               _("Remove variable"));
   window->label_variable = (GtkLabel *) gtk_label_new (_("Name"));
   window->entry_variable = (GtkEntry *) gtk_entry_new ();
   gtk_widget_set_tooltip_text
@@ -2539,7 +2530,7 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
     (-G_MAXDOUBLE, G_MAXDOUBLE, precision[DEFAULT_PRECISION]);
   gtk_widget_set_tooltip_text
     (GTK_WIDGET (window->spin_step),
-     _("Initial step size for the direction search method"));
+     _("Initial step size for the hill climbing method"));
   window->scrolled_step
     = (GtkScrolledWindow *) gtk_scrolled_window_new (NULL, NULL);
   gtk_container_add (GTK_CONTAINER (window->scrolled_step),
@@ -2599,16 +2590,14 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
                                _("Experiment selector"));
   window->id_experiment = g_signal_connect
     (window->combo_experiment, "changed", window_set_experiment, NULL);
-  window->button_add_experiment
-    = (GtkButton *) gtk_button_new_from_icon_name ("list-add",
-                                                   GTK_ICON_SIZE_BUTTON);
+  window->button_add_experiment = (GtkButton *)
+    gtk_button_new_from_icon_name ("list-add", GTK_ICON_SIZE_BUTTON);
   g_signal_connect
     (window->button_add_experiment, "clicked", window_add_experiment, NULL);
   gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_add_experiment),
                                _("Add experiment"));
-  window->button_remove_experiment
-    = (GtkButton *) gtk_button_new_from_icon_name ("list-remove",
-                                                   GTK_ICON_SIZE_BUTTON);
+  window->button_remove_experiment = (GtkButton *)
+    gtk_button_new_from_icon_name ("list-remove", GTK_ICON_SIZE_BUTTON);
   g_signal_connect (window->button_remove_experiment, "clicked",
                     window_remove_experiment, NULL);
   gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_remove_experiment),
@@ -2657,8 +2646,7 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
                             window_inputs_experiment, NULL);
       gtk_grid_attach (window->grid_experiment,
                        GTK_WIDGET (window->check_template[i]), 0, 3 + i, 1, 1);
-      window->button_template[i] =
-        (GtkFileChooserButton *)
+      window->button_template[i] = (GtkFileChooserButton *)
         gtk_file_chooser_button_new (_("Input template"),
                                      GTK_FILE_CHOOSER_ACTION_OPEN);
       gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_template[i]),
@@ -2700,9 +2688,8 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
     }
   window->label_p = (GtkLabel *) gtk_label_new (_("P parameter"));
   gtk_grid_attach (window->grid_norm, GTK_WIDGET (window->label_p), 1, 1, 1, 1);
-  window->spin_p =
-    (GtkSpinButton *) gtk_spin_button_new_with_range (-G_MAXDOUBLE,
-                                                      G_MAXDOUBLE, 0.01);
+  window->spin_p = (GtkSpinButton *)
+    gtk_spin_button_new_with_range (-G_MAXDOUBLE, G_MAXDOUBLE, 0.01);
   gtk_widget_set_tooltip_text (GTK_WIDGET (window->spin_p),
                                _("P parameter for the P error norm"));
   window->scrolled_p =

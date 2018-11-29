@@ -137,6 +137,7 @@ compilado y probado en los siguientes sistemas operativos:
 \item Dyson Illumos;
 \item Fedora Linux 29;
 \item FreeBSD 11.2;
+\item Linux Mint DE 3;
 \item Manjaro Linux;
 \item Microsoft Windows 7\footnotemark[1], y 10\footnotemark[1];
 \item NetBSD 7.0;
@@ -194,7 +195,7 @@ versión de 64 bits):
 > export PATH=$PATH:/usr/lib64/openmpi/bin
 \end{lstlisting}
 
-En FreeBSD 11.0, debido a un extraño error en la versión por defecto de gcc, hay que hacer en un terminal:
+En FreeBSD 11.2, debido a un extraño error en la versión por defecto de gcc, hay que hacer en un terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > export CC=gcc5 (o CC=clang)
 \end{lstlisting}
@@ -211,7 +212,7 @@ El siguiente paso es descargar el código fuente de MPCOTool, enlazarlo con el
 de Genetic y compilar todo junto haciendo:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > git clone https://github.com/jburguete/mpcotool.git
-> cd mpcotool/3.6.0
+> cd mpcotool/4.0.0
 > ln -s ../../genetic/2.2.2 genetic
 > ln -s genetic/libgenetic.so (o .dll en sistemas Windows)
 > ./build
@@ -237,7 +238,7 @@ usan también la librería \emph{Genetic}):
 > cd ../test4
 > ln -s ../../../genetic/2.2.2 genetic
 > ln -s genetic/libgenetic.so (.dll en sistemas Windows)
-> cd ../../3.6.0
+> cd ../../4.0.0
 > make tests
 \end{lstlisting}
 
@@ -385,7 +386,7 @@ representada en la figura~\ref{FigMainFile}.
 	\rput(205,10){reproduction}
 	\rput(240,10){adaptation}
 	\rput(265,10){seed}
-	\rput(60,0){direction}
+	\rput(60,0){climbing}
 	\rput(95,0){nsteps}
 	\rput(130,0){nestimates}
 	\rput(170,0){relaxation}
@@ -457,8 +458,8 @@ Las propiedades que se pueden definir son:
 	\item[algorithm]: fija el algoritmo de optimización. Actualmente tres
 		métodos están disponibles:
 	\begin{description}
-		\item[sweep]: algoritmo de fuerza bruta de barrido. Requiere definir en
-			cada variable:
+		\item[sweep]: algoritmo de fuerza bruta de barrido regular. Requiere 
+			definir en cada variable:
 			\begin{description}
 				\item[nsweeps]: número de barridos para la variable en cada
 					experimento.
@@ -482,8 +483,8 @@ Las propiedades que se pueden definir son:
 			\begin{description}
 				\item[nbits]: número de bits para codificar la variable.
 			\end{description}
-		\item[orthogonal]: algoritmo de fuerza bruta de muestreo ortogonal. Requiere
-			definir en cada variable:
+		\item[orthogonal]: algoritmo de fuerza bruta de muestreo ortogonal. 
+			Requiere definir en cada variable:
 			\begin{description}
 				\item[nsweeps]: número de barridos para la variable en cada
 					experimento.
@@ -500,28 +501,27 @@ Las propiedades que se pueden definir son:
 		optimización,
 	\item[seed]: semilla del generador de números pseudo-aleatorios (valor por
 		defecto 7007),
-	\item[direction]: método de buscar la dirección óptima (opcional para los
-		algoritmos de barrido y de Monte-Carlo). Dos valores están disponibles
-		actualmente:
+	\item[climbing]: método de ascenso (opcional para los algoritmos de fuerza
+		bruta). Dos valores están disponibles actualmente:
 	\begin{description}
-		\item[coordinates]: búsqueda por descenso de coordenadas,
-		\item[random]: búsqueda aleatoria. Requiere:
+		\item[coordinates]: ascenso por coordenadas,
+		\item[random]: ascenso aleatorio. Requiere:
 		\begin{description}
-			\item[nestimates]: número de pruebas aleatorias para buscar la
-				dirección óptima.
+			\item[nestimates]: número de pruebas aleatorias para buscar el
+				ascenso óptimo.
 		\end{description}
 	\end{description}
 	Ambos métodos requieren además los siguientes parámetros:
 	\begin{description}
-		\item[nsteps]: número de pasos para ejecutar el método de búsqueda de
-			dirección,
-		\item[relaxation]: parámetro de relajación para el método de búsqueda de
-			dirección,
+		\item[nsteps]: número de pasos para ejecutar el método de ascenso de
+			colinas,
+		\item[relaxation]: parámetro de relajación para el método de ascenso de
+			colinas,
 	\end{description}
 	y para cada variable:
 	\begin{description}
-		\item[step]: tamaño de paso inicial para el método de búsqueda de
-			dirección,
+		\item[step]: tamaño de paso inicial para el método de ascenso de
+			colinas,
 	\end{description}
 	\item[norm]: selecciona la norma de error (valor por defecto:
 		``euclidian''). Actualmente se pueden escoger cuatro tipos:
@@ -586,7 +586,7 @@ En este formato el fichero sería de la forma:
 	nbest="best_number" npopulation="population_number"
 	ngenerations="generations_number" mutation="mutation_ratio"
 	reproduction="reproduction_ratio" adaptation="adaptation_ratio"
-	direction="direction_search_type" nsteps="steps_number"
+	climbing="hill_climbing_type" nsteps="steps_number"
 	relaxation="relaxation_parameter" nestimates="estimates_number"
 	threshold="threshold_parameter" norm="norm_type" p="p_parameter"
 	seed="random_seed" result_file="result_file"
@@ -621,7 +621,7 @@ Alternativamete, este fichero también puede escribirse en formato JSON:
 	"mutation": "mutation_ratio",
 	"reproduction": "reproduction_ratio",
 	"adaptation": "adaptation_ratio",
-	"direction": "direction_search_type",
+	"climbing": "hill_climbing_type",
 	"nsteps": "steps_number",
 	"relaxation": "relaxation_parameter",
 	"nestimates": "estimates_number",
@@ -851,11 +851,11 @@ En métodos iterativos $N_{total}=N_{simulaciones}\times N_{iteraciones}$.
 En métodos de fuerza bruta puros
 $N_{iteraciones}=1\;\Rightarrow\;N_{total}=N_{simulaciones}$.
 
-\section{Método de fuerza bruta de barrido}
+\section{Método de fuerza bruta de barrido regular}
 
-El método de barrido es un método de fuerza bruta que encuentra el conjunto
-óptimo de parámatros en una región dividiéndola en subdominios regulares. Para
-encontrar la solución óptima, el intervalo de dominio
+El método de barrido regular es un método de fuerza bruta que encuentra el 
+conjunto óptimo de parámatros en una región dividiéndola en subdominios 
+regulares. Para encontrar la solución óptima, el intervalo de dominio
 $x_i \in \PA{x_{i,min},\,x_{i,max}}$ se define para cada variable $x_i$.
 y se subdivide en una partición regular de $N_{x,i}$ subintervalos. El número de
 simulaciones que se requieren es:
@@ -888,7 +888,7 @@ incrementa exponencialmente con el número de variables.
 	\qbezier[10](20,160)(35,160)(50,160)
 	\put(0,157){$y_{\max}$}
 }{Diagrama ilustrando un ejempo de aplicación del método de fuerza bruta de
-barrido con dos variables para $N_x=N_y=5$}{FigSweep}
+barrido regular con dos variables para $N_x=N_y=5$}{FigSweep}
 
 Los algoritmos de fuerza bruta presentan bajos ratios de convergencia pero son
 fuertemente paralelizables debido a que cada simulación es completamente
@@ -923,7 +923,8 @@ capacidades computacionales de la máquina en la que se ejecuta MPCOTool.
 	\rput(0,-50){Obtención del conjunto óptimo de parámetros empíricos}
 	\psframe(-65,-45)(65,-55)
 }{Diagrama de flujo del esquema de la paralelización en MPCOTool para métodos de
-fuerza bruta (barrido y Monte-Carlo)}{FigBruteForceParallelization}
+fuerza bruta (barrido regular, muestreo ortogonal y Monte-Carlo)}
+{FigBruteForceParallelization}
 
 \section{Método de Monte-Carlo}
 
@@ -978,13 +979,65 @@ El método de Monte-Carlo es también fácilmente paralelizable siguiendo una
 estrategia como la del diagrama de flujo representado en la
 figura~\ref{FigBruteForceParallelization}.
 
+\section{Método de fuerza bruta de muestreo ortogonal}
+
+El método de muestreo ortogonal es un método de fuerza bruta que trata de
+conjugar lo mejor de los métodos de barrido regular y Monte-Carlo. Se subdivide
+el dominio de parámatros en subdominios regulares y se aplica el método de
+Monte-Carlo en cada uno de estos subdominios. Entonces, el intervalo de dominio
+$x_i \in \PA{x_{i,min},\,x_{i,max}}$ se define para cada variable $x_i$.
+y se subdivide en una partición regular de $N_{x,i}$ subintervalos. El número de
+simulaciones que se requieren es:
+\EQ{N_{simulaciones}=N_{x,1}\times N_{x,2}\times\cdots,}
+{EqNSweeps}
+donde $N_{x,i}$ es el número de barridos en la variable $x_i$.
+
+En la figura~\ref{FigSweep} el dominio $(x,y)$ se define en los intervalos
+$x\in\PA{x_{min},\,x_{max}}$ e $y \in \PA{y_{min},\,y_{max}}$. Ambos intervalos
+$x$ e $y$ se dividen en 5 regiones con $N_{x}=N_{y}=5$. El parámetro óptimo se
+encuentra evaluando el error de cada combinación de parámetros $\PA{x_i,\,y_i}$
+requiriendo por tanto 25 evaluaciones. Nótese que el costo computacional se
+incrementa exponencialmente con el número de variables como en el método de
+barrido regular.
+
+\PICTURE{210}{200}
+{
+	\put(20,10){\vector(0,1){180}}
+	\put(20,10){\vector(1,0){180}}
+	\put(10,190){$y$}
+	\put(200,0){$x$}
+	\multiput(50,40)(30,0){5}{\qbezier[40](0,0)(0,60)(0,120)}
+	\multiput(50,40)(0,30){5}{\qbezier[40](0,0)(60,0)(120,0)}
+	\multiput(50,40)(30,0){5}{\multiput(0,0)(0,30){5}{\circle*{2}}}
+	\qbezier[10](50,10)(50,25)(50,40)
+	\put(40,0){$x_{\min}$}
+	\qbezier[10](170,10)(170,25)(170,40)
+	\put(160,0){$x_{\max}$}
+	\qbezier[10](20,40)(35,40)(50,40)
+	\put(0,37){$y_{\min}$}
+	\qbezier[10](20,160)(35,160)(50,160)
+	\put(0,157){$y_{\max}$}
+}{Diagrama ilustrando un ejempo de aplicación del método de fuerza bruta de
+barrido regular con dos variables para $N_x=N_y=5$}{FigOrthogonal}
+
+Los algoritmos de fuerza bruta presentan bajos ratios de convergencia pero son
+fuertemente paralelizables debido a que cada simulación es completamente
+independiente. Si la computadora, o el clúster de computadoras, puede ejecutar
+$N_{tareas}$ tareas paralelizadas cada tarea efectúa $N_{total}/N_{tareas}$
+simulaciones, obviamente teniendo en cuenta efectos de redondeo puesto que cada
+tarea debe realizar un número natural de simulaciones. En la
+figura~\ref{FigBruteForceParallelization} se presenta un diagrama de flujo del
+esquema de esta paralelización. Puesto que cada tarea es independiente, una
+distribución en las diferentes tareas permite explotar al máximo las
+capacidades computacionales de la máquina en la que se ejecuta MPCOTool.
+
 \section{Algoritmo iterativo aplicado a los métodos de fuerza bruta}
 
-MPCOTool permite iterar ambos métodos de fuerza bruta, Monte-Carlo o barrido,
-para mejorar la convergencia. En este algoritmo se seleccionan un conjunto de
-$N_{best}^j$ mejores resultados en cada iteración $j$-ésima y se usan para
-forzar nuevos intervalos para la búsqueda de valores óptimos en la siguiente
-iteración. Definiendo:
+MPCOTool permite iterar los métodos de fuerza bruta, Monte-Carlo, muestreo
+ortogonal o barrido regular, para mejorar la convergencia. En este algoritmo se
+seleccionan un conjunto de $N_{best}^j$ mejores resultados en cada iteración
+$j$-ésima y se usan para forzar nuevos intervalos para la búsqueda de valores
+óptimos en la siguiente iteración. Definiendo:
 \begin{description}
 \item[$\displaystyle x_{\max}^b=\max_{i\in N_{best}}x_i^j$]: Valor máximo de la
 	variable $x$ en el subconjunto de $N_{best}^j$ mejores resultados de la
@@ -999,8 +1052,8 @@ Entonces se usará el nuevo intervalo para la variable $x$ para buscar valores
 {EqIterationInterval}
 con:
 \[
-	\mathrm{Sweep}\;\Rightarrow\;\left\{\begin{array}{c}
-	\displaystyle
+	\mathrm{Barrido\,o\,muestreo\,ortogonal}\;\Rightarrow\;
+	\left\{\begin{array}{c}\displaystyle
 	x_{\max}^{j+1}=x_{\max}^b+\frac{x_{\max}^j-x_{\min}^j}{N_x-1}\,tolerance,\\
 	\displaystyle
 	x_{\min}^{j+1}=x_{\min}^b-\frac{x_{\min}^j-x_{\min}^j}{N_x-1}\,tolerance,\\
@@ -1171,10 +1224,10 @@ la figura~\ref{FigIterativeParallelization}).
 }{Diagrama de flujo del esquema de paralelización seguido en MPCOTool para el
 método iterativo}{FigIterativeParallelization}
 
-\section{Método de búsqueda de dirección}
+\section{Método de ascenso de colinas}
 
 Los métodos de fuerza bruta, barrido y Monte-Carlo, pueden combinarse también
-con un algoritmo de búsqueda de dirección. Definiendo el vector $\vec{r}_i$ como
+con un algoritmo de ascenso de colinas. Definiendo el vector $\vec{r}_i$ como
 la combinación óptima de variables obtenida en el paso $i$-ésimo, $\vec{r}_1$
 como la combinación óptima de variables obtenida por el método de fuerza bruta y
 definiendo el vector $\vec{s}_i$ como:
@@ -1184,23 +1237,23 @@ definiendo el vector $\vec{s}_i$ como:
 	\vec{s}_i=(1-relaxation)\,\vec{s}_{i-1}+relaxation\,\Delta\vec{r}_{i-1},
 }{Eqs}
 con $\Delta\vec{r}_{i-1}=\vec{r}_i+\vec{r}_{i-1}$ y $relaxtion$ el parámetro de
-relajación, el método de búsqueda de dirección prueba $N_{estimaciones}$
-combinaciones de variables y elige el óptimo como:
+relajación, el método de ascenso prueba $N_{estimaciones}$ combinaciones de 
+variables y elige el óptimo como:
 \EQ
 {
 	\vec{r}_{i+1}=\mathrm{optimo}\PA{\vec{r}_i,\;\vec{r}_i+\vec{s}_i+\vec{t}_j},
 	\;j=1,\cdots,N_{estimaciones}.
-}{EqDirection}
+}{EqClimbing}
 Si en un paso no se mejora el óptimo ($\vec{r}_i=\vec{r}_{i+1}$) entonces las
-componentes del vector de dirección $\vec{t}_j$ se dividen por dos y
-las $\vec{s}_{i+1}$ se anulan. El método se itera $N_{pasos}$ veces.
+componentes del vector de ascenso $\vec{t}_j$ se dividen por dos y las 
+$\vec{s}_{i+1}$ se anulan. El método se itera $N_{pasos}$ veces.
 
-Aunque teóricamente el método de búsqueda de dirección es el de convergencia más
+Aunque teóricamente el método de ascenso de colinas es el de convergencia más
 rápida, también es el método de los implementados en MPCOTool que menores
-ventajas obtiene de la paralelización. El método el casi secuencial y la
+ventajas obtiene de la paralelización. El método es casi secuencial y la
 paralelización sólo puede hacerse en cada paso en las $N_{estimaciones}$
-simulaciones necesarias para estimar la dirección óptima. El la
-figura~\ref{FigDirectionParallelization} se muestra un diagrama de flujo del
+simulaciones necesarias para estimar el ascenso óptimo. En la
+figura~\ref{FigClimbingParallelization} se muestra un diagrama de flujo del
 esquma de paralelización seguido para este método.
 
 \psset{xunit=0.5mm,yunit=0.5mm}
@@ -1249,11 +1302,11 @@ esquma de paralelización seguido para este método.
 	\rput(0,-125){Obtención del conjunto óptimo de parámetros empíricos}
 	\psframe(-65,-120)(65,-130)
 }{Diagrama de flujo del esquema de paralelización seguido en MPCOTool para el
-método de búsqueda de dirección}{FigDirectionParallelization}
+método de ascenso de colinas}{FigClimbingParallelization}
 
 MPCOTool usa dos métodos para construir los vectores $\vec{t}_j$:
 
-\subsection{Descenso de coordenadas}
+\subsection{Ascenso por coordenadas}
 
 El método genera los vectores $\vec{t}_j$ incrementando o decreciendo una sóla
 variable:
@@ -1273,7 +1326,7 @@ por el usuario en el fichero principal de entrada. El número total de
 estimaciones depende del número de variables:
 \EQ{N_{estimaciones}=2\,N_{variables}}{EqNestimatesDescent}
 
-\subsection{Aleatorio}
+\subsection{Ascenso aleatorio}
 
 Los vectores $\vec{t}_j$ se construyen aleatoriamente:
 \EQ
@@ -1284,9 +1337,9 @@ Los vectores $\vec{t}_j$ se construyen aleatoriamente:
 }{EqtRandom}
 con $r_{j,k}\in[0,1)$ números aleatorios.
 
-En la figura~\ref{FigDirection} se presenta un esquema para un sistema con dos
-variables para ilustrar el modo de funcionamiento de los algoritmos de descenso
-de coordenadas y aleatorio.
+En la figura~\ref{FigClimbing} se presenta un esquema para un sistema con dos
+variables para ilustrar el modo de funcionamiento de los algoritmos de ascenso
+por coordenadas y aleatorio.
 \psset{xunit=0.45mm,yunit=0.45mm,runit=0.5mm}
 \PSPICTURE{0}{0}{260}{100}
 {
@@ -1336,8 +1389,8 @@ de coordenadas y aleatorio.
 	\pscircle*(212,49){1}
 	\rput(212,43){$\vec{t}_2$}
 }{Pruebas de combinaciones de variables con los algoritmos de (izquierda)
-descenso de coordenadas y (derecha) aleatorio con $N_{estimaciones}=3$ en un
-sistema de dos variables}{FigDirection}
+ascenso por coordenadas y (derecha) aleatorio con $N_{estimaciones}=3$ en un
+sistema de dos variables}{FigClimbing}
 
 \section{Método genético}
 

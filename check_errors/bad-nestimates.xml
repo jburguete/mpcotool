@@ -1,2 +1,2 @@
 <?xml version="1.0"?>
-<optimize simulator="a" algorithm="sweep" niterations="2" nbest="1" tolerance="0" nsteps="1" direction="random" nestimates="0"/>
+<optimize simulator="a" algorithm="sweep" niterations="2" nbest="1" tolerance="0" nsteps="1" climbing="random" nestimates="0"/>

@@ -75,13 +75,13 @@ OF SUCH DAMAGE.
 #define RM "rm"
 #endif
 
-unsigned int nthreads_direction;
-///< Number of threads for the direction search method.
+unsigned int nthreads_climbing;
+///< Number of threads for the hill climbing method.
 void (*optimize_algorithm) ();
 ///< Pointer to the function to perform a optimization algorithm step.
-double (*optimize_estimate_direction) (unsigned int variable,
-                                       unsigned int estimate);
-///< Pointer to the function to estimate the direction.
+double (*optimize_estimate_climbing) (unsigned int variable,
+                                      unsigned int estimate);
+///< Pointer to the function to estimate the climbing.
 double (*optimize_norm) (unsigned int simulation);
 ///< Pointer to the error norm function.
 Optimize optimize[1];           ///< Optimization data.
@@ -800,18 +800,16 @@ optimize_orthogonal ()
 }
 
 /**
- * Function to save the best simulation in a direction search method.
+ * Function to save the best simulation in a hill climbing method.
  */
 void
-optimize_best_direction (unsigned int simulation,
-///< Simulation number.
-                         double value)
-///< Objective function value.
+optimize_best_climbing (unsigned int simulation,        ///< Simulation number.
+                        double value)   ///< Objective function value.
 {
 #if DEBUG_OPTIMIZE
-  fprintf (stderr, "optimize_best_direction: start\n");
+  fprintf (stderr, "optimize_best_climbing: start\n");
   fprintf (stderr,
-           "optimize_best_direction: simulation=%u value=%.14le best=%.14le\n",
+           "optimize_best_climbing: simulation=%u value=%.14le best=%.14le\n",
            simulation, value, optimize->error_best[0]);
 #endif
   if (value < optimize->error_best[0])
@@ -820,34 +818,34 @@ optimize_best_direction (unsigned int simulation,
       optimize->simulation_best[0] = simulation;
 #if DEBUG_OPTIMIZE
       fprintf (stderr,
-               "optimize_best_direction: BEST simulation=%u value=%.14le\n",
+               "optimize_best_climbing: BEST simulation=%u value=%.14le\n",
                simulation, value);
 #endif
     }
 #if DEBUG_OPTIMIZE
-  fprintf (stderr, "optimize_best_direction: end\n");
+  fprintf (stderr, "optimize_best_climbing: end\n");
 #endif
 }
 
 /**
- * Function to estimate the direction search sequentially.
+ * Function to estimate the hill climbing sequentially.
  */
 void
-optimize_direction_sequential (unsigned int simulation) ///< Simulation number.
+optimize_climbing_sequential (unsigned int simulation)  ///< Simulation number.
 {
-  unsigned int i, j;
   double e;
+  unsigned int i, j;
 #if DEBUG_OPTIMIZE
-  fprintf (stderr, "optimize_direction_sequential: start\n");
-  fprintf (stderr, "optimize_direction_sequential: nstart_direction=%u "
-           "nend_direction=%u\n",
-           optimize->nstart_direction, optimize->nend_direction);
+  fprintf (stderr, "optimize_climbing_sequential: start\n");
+  fprintf (stderr, "optimize_climbing_sequential: nstart_climbing=%u "
+           "nend_climbing=%u\n",
+           optimize->nstart_climbing, optimize->nend_climbing);
 #endif
-  for (i = optimize->nstart_direction; i < optimize->nend_direction; ++i)
+  for (i = optimize->nstart_climbing; i < optimize->nend_climbing; ++i)
     {
       j = simulation + i;
       e = optimize_norm (j);
-      optimize_best_direction (j, e);
+      optimize_best_climbing (j, e);
       optimize_save_variables (j, e);
       if (e < optimize->threshold)
         {
@@ -855,40 +853,40 @@ optimize_direction_sequential (unsigned int simulation) ///< Simulation number.
           break;
         }
 #if DEBUG_OPTIMIZE
-      fprintf (stderr, "optimize_direction_sequential: i=%u e=%lg\n", i, e);
+      fprintf (stderr, "optimize_climbing_sequential: i=%u e=%lg\n", i, e);
 #endif
     }
 #if DEBUG_OPTIMIZE
-  fprintf (stderr, "optimize_direction_sequential: end\n");
+  fprintf (stderr, "optimize_climbing_sequential: end\n");
 #endif
 }
 
 /**
- * Function to estimate the direction search on a thread.
+ * Function to estimate the hill climbing on a thread.
  *
  * \return NULL
  */
 void *
-optimize_direction_thread (ParallelData * data) ///< Function data.
+optimize_climbing_thread (ParallelData * data)  ///< Function data.
 {
   unsigned int i, thread;
   double e;
 #if DEBUG_OPTIMIZE
-  fprintf (stderr, "optimize_direction_thread: start\n");
+  fprintf (stderr, "optimize_climbing_thread: start\n");
 #endif
   thread = data->thread;
 #if DEBUG_OPTIMIZE
-  fprintf (stderr, "optimize_direction_thread: thread=%u start=%u end=%u\n",
+  fprintf (stderr, "optimize_climbing_thread: thread=%u start=%u end=%u\n",
            thread,
-           optimize->thread_direction[thread],
-           optimize->thread_direction[thread + 1]);
+           optimize->thread_climbing[thread],
+           optimize->thread_climbing[thread + 1]);
 #endif
-  for (i = optimize->thread_direction[thread];
-       i < optimize->thread_direction[thread + 1]; ++i)
+  for (i = optimize->thread_climbing[thread];
+       i < optimize->thread_climbing[thread + 1]; ++i)
     {
       e = optimize_norm (i);
       g_mutex_lock (mutex);
-      optimize_best_direction (i, e);
+      optimize_best_climbing (i, e);
       optimize_save_variables (i, e);
       if (e < optimize->threshold)
         optimize->stop = 1;
@@ -896,54 +894,54 @@ optimize_direction_thread (ParallelData * data) ///< Function data.
       if (optimize->stop)
         break;
 #if DEBUG_OPTIMIZE
-      fprintf (stderr, "optimize_direction_thread: i=%u e=%lg\n", i, e);
+      fprintf (stderr, "optimize_climbing_thread: i=%u e=%lg\n", i, e);
 #endif
     }
 #if DEBUG_OPTIMIZE
-  fprintf (stderr, "optimize_direction_thread: end\n");
+  fprintf (stderr, "optimize_climbing_thread: end\n");
 #endif
   g_thread_exit (NULL);
   return NULL;
 }
 
 /**
- * Function to estimate a component of the direction search vector.
+ * Function to estimate a component of the hill climbing vector.
  */
 double
-optimize_estimate_direction_random (unsigned int variable,
-                                    ///< Variable number.
-                                    unsigned int estimate
-                                    __attribute__ ((unused)))
+optimize_estimate_climbing_random (unsigned int variable,
+                                   ///< Variable number.
+                                   unsigned int estimate
+                                   __attribute__ ((unused)))
   ///< Estimate number.
 {
   double x;
 #if DEBUG_OPTIMIZE
-  fprintf (stderr, "optimize_estimate_direction_random: start\n");
+  fprintf (stderr, "optimize_estimate_climbing_random: start\n");
 #endif
-  x = optimize->direction[variable]
+  x = optimize->climbing[variable]
     + (1. - 2. * gsl_rng_uniform (optimize->rng)) * optimize->step[variable];
 #if DEBUG_OPTIMIZE
-  fprintf (stderr, "optimize_estimate_direction_random: direction%u=%lg\n",
+  fprintf (stderr, "optimize_estimate_climbing_random: climbing%u=%lg\n",
            variable, x);
-  fprintf (stderr, "optimize_estimate_direction_random: end\n");
+  fprintf (stderr, "optimize_estimate_climbing_random: end\n");
 #endif
   return x;
 }
 
 /**
- * Function to estimate a component of the direction search vector.
+ * Function to estimate a component of the hill climbing vector.
  */
 double
-optimize_estimate_direction_coordinates (unsigned int variable,
-                                         ///< Variable number.
-                                         unsigned int estimate)
-                                         ///< Estimate number.
+optimize_estimate_climbing_coordinates (unsigned int variable,
+                                        ///< Variable number.
+                                        unsigned int estimate)
+                                        ///< Estimate number.
 {
   double x;
 #if DEBUG_OPTIMIZE
-  fprintf (stderr, "optimize_estimate_direction_coordinates: start\n");
+  fprintf (stderr, "optimize_estimate_climbing_coordinates: start\n");
 #endif
-  x = optimize->direction[variable];
+  x = optimize->climbing[variable];
   if (estimate >= (2 * variable) && estimate < (2 * variable + 2))
     {
       if (estimate & 1)
@@ -953,107 +951,107 @@ optimize_estimate_direction_coordinates (unsigned int variable,
     }
 #if DEBUG_OPTIMIZE
   fprintf (stderr,
-           "optimize_estimate_direction_coordinates: direction%u=%lg\n",
+           "optimize_estimate_climbing_coordinates: climbing%u=%lg\n",
            variable, x);
-  fprintf (stderr, "optimize_estimate_direction_coordinates: end\n");
+  fprintf (stderr, "optimize_estimate_climbing_coordinates: end\n");
 #endif
   return x;
 }
 
 /**
- * Function to do a step of the direction search method.
+ * Function to do a step of the hill climbing method.
  */
 void
-optimize_step_direction (unsigned int simulation)       ///< Simulation number.
+optimize_step_climbing (unsigned int simulation)        ///< Simulation number.
 {
-  GThread *thread[nthreads_direction];
-  ParallelData data[nthreads_direction];
+  GThread *thread[nthreads_climbing];
+  ParallelData data[nthreads_climbing];
   unsigned int i, j, k, b;
 #if DEBUG_OPTIMIZE
-  fprintf (stderr, "optimize_step_direction: start\n");
+  fprintf (stderr, "optimize_step_climbing: start\n");
 #endif
   for (i = 0; i < optimize->nestimates; ++i)
     {
       k = (simulation + i) * optimize->nvariables;
       b = optimize->simulation_best[0] * optimize->nvariables;
 #if DEBUG_OPTIMIZE
-      fprintf (stderr, "optimize_step_direction: simulation=%u best=%u\n",
+      fprintf (stderr, "optimize_step_climbing: simulation=%u best=%u\n",
                simulation + i, optimize->simulation_best[0]);
 #endif
       for (j = 0; j < optimize->nvariables; ++j, ++k, ++b)
         {
 #if DEBUG_OPTIMIZE
           fprintf (stderr,
-                   "optimize_step_direction: estimate=%u best%u=%.14le\n",
+                   "optimize_step_climbing: estimate=%u best%u=%.14le\n",
                    i, j, optimize->value[b]);
 #endif
           optimize->value[k]
-            = optimize->value[b] + optimize_estimate_direction (j, i);
+            = optimize->value[b] + optimize_estimate_climbing (j, i);
           optimize->value[k] = fmin (fmax (optimize->value[k],
                                            optimize->rangeminabs[j]),
                                      optimize->rangemaxabs[j]);
 #if DEBUG_OPTIMIZE
           fprintf (stderr,
-                   "optimize_step_direction: estimate=%u variable%u=%.14le\n",
+                   "optimize_step_climbing: estimate=%u variable%u=%.14le\n",
                    i, j, optimize->value[k]);
 #endif
         }
     }
-  if (nthreads_direction == 1)
-    optimize_direction_sequential (simulation);
+  if (nthreads_climbing == 1)
+    optimize_climbing_sequential (simulation);
   else
     {
-      for (i = 0; i <= nthreads_direction; ++i)
+      for (i = 0; i <= nthreads_climbing; ++i)
         {
-          optimize->thread_direction[i]
-            = simulation + optimize->nstart_direction
-            + i * (optimize->nend_direction - optimize->nstart_direction)
-            / nthreads_direction;
+          optimize->thread_climbing[i]
+            = simulation + optimize->nstart_climbing
+            + i * (optimize->nend_climbing - optimize->nstart_climbing)
+            / nthreads_climbing;
 #if DEBUG_OPTIMIZE
           fprintf (stderr,
-                   "optimize_step_direction: i=%u thread_direction=%u\n",
-                   i, optimize->thread_direction[i]);
+                   "optimize_step_climbing: i=%u thread_climbing=%u\n",
+                   i, optimize->thread_climbing[i]);
 #endif
         }
-      for (i = 0; i < nthreads_direction; ++i)
+      for (i = 0; i < nthreads_climbing; ++i)
         {
           data[i].thread = i;
           thread[i] = g_thread_new
-            (NULL, (GThreadFunc) optimize_direction_thread, &data[i]);
+            (NULL, (GThreadFunc) optimize_climbing_thread, &data[i]);
         }
-      for (i = 0; i < nthreads_direction; ++i)
+      for (i = 0; i < nthreads_climbing; ++i)
         g_thread_join (thread[i]);
     }
 #if DEBUG_OPTIMIZE
-  fprintf (stderr, "optimize_step_direction: end\n");
+  fprintf (stderr, "optimize_step_climbing: end\n");
 #endif
 }
 
 /**
- * Function to optimize with a direction search method.
+ * Function to optimize with a hill climbing method.
  */
 void
-optimize_direction ()
+optimize_climbing ()
 {
   unsigned int i, j, k, b, s, adjust;
 #if DEBUG_OPTIMIZE
-  fprintf (stderr, "optimize_direction: start\n");
+  fprintf (stderr, "optimize_climbing: start\n");
 #endif
   for (i = 0; i < optimize->nvariables; ++i)
-    optimize->direction[i] = 0.;
+    optimize->climbing[i] = 0.;
   b = optimize->simulation_best[0] * optimize->nvariables;
   s = optimize->nsimulations;
   adjust = 1;
   for (i = 0; i < optimize->nsteps; ++i, s += optimize->nestimates, b = k)
     {
 #if DEBUG_OPTIMIZE
-      fprintf (stderr, "optimize_direction: step=%u old_best=%u\n",
+      fprintf (stderr, "optimize_climbing: step=%u old_best=%u\n",
                i, optimize->simulation_best[0]);
 #endif
-      optimize_step_direction (s);
+      optimize_step_climbing (s);
       k = optimize->simulation_best[0] * optimize->nvariables;
 #if DEBUG_OPTIMIZE
-      fprintf (stderr, "optimize_direction: step=%u best=%u\n",
+      fprintf (stderr, "optimize_climbing: step=%u best=%u\n",
                i, optimize->simulation_best[0]);
 #endif
       if (k == b)
@@ -1062,7 +1060,7 @@ optimize_direction ()
             for (j = 0; j < optimize->nvariables; ++j)
               optimize->step[j] *= 0.5;
           for (j = 0; j < optimize->nvariables; ++j)
-            optimize->direction[j] = 0.;
+            optimize->climbing[j] = 0.;
           adjust = 1;
         }
       else
@@ -1071,23 +1069,23 @@ optimize_direction ()
             {
 #if DEBUG_OPTIMIZE
               fprintf (stderr,
-                       "optimize_direction: best%u=%.14le old%u=%.14le\n",
+                       "optimize_climbing: best%u=%.14le old%u=%.14le\n",
                        j, optimize->value[k + j], j, optimize->value[b + j]);
 #endif
-              optimize->direction[j]
-                = (1. - optimize->relaxation) * optimize->direction[j]
+              optimize->climbing[j]
+                = (1. - optimize->relaxation) * optimize->climbing[j]
                 + optimize->relaxation
                 * (optimize->value[k + j] - optimize->value[b + j]);
 #if DEBUG_OPTIMIZE
-              fprintf (stderr, "optimize_direction: direction%u=%.14le\n",
-                       j, optimize->direction[j]);
+              fprintf (stderr, "optimize_climbing: climbing%u=%.14le\n",
+                       j, optimize->climbing[j]);
 #endif
             }
           adjust = 0;
         }
     }
 #if DEBUG_OPTIMIZE
-  fprintf (stderr, "optimize_direction: end\n");
+  fprintf (stderr, "optimize_climbing: end\n");
 #endif
 }
 
@@ -1350,7 +1348,7 @@ optimize_step ()
 #endif
   optimize_algorithm ();
   if (optimize->nsteps)
-    optimize_direction ();
+    optimize_climbing ();
 #if DEBUG_OPTIMIZE
   fprintf (stderr, "optimize_step: end\n");
 #endif
@@ -1488,15 +1486,15 @@ optimize_open ()
   if (input->nsteps)
     {
       optimize->relaxation = input->relaxation;
-      switch (input->direction)
+      switch (input->climbing)
         {
-        case DIRECTION_METHOD_COORDINATES:
+        case CLIMBING_METHOD_COORDINATES:
           optimize->nestimates = 2 * optimize->nvariables;
-          optimize_estimate_direction = optimize_estimate_direction_coordinates;
+          optimize_estimate_climbing = optimize_estimate_climbing_coordinates;
           break;
         default:
           optimize->nestimates = input->nestimates;
-          optimize_estimate_direction = optimize_estimate_direction_random;
+          optimize_estimate_climbing = optimize_estimate_climbing_random;
         }
     }
 
@@ -1583,7 +1581,7 @@ optimize_open ()
         }
     }
   if (optimize->nsteps)
-    optimize->direction
+    optimize->climbing
       = (double *) alloca (optimize->nvariables * sizeof (double));
 
   // Setting error norm
@@ -1645,9 +1643,9 @@ optimize_open ()
   optimize->nend = (1 + optimize->mpi_rank) * optimize->nsimulations / ntasks;
   if (optimize->nsteps)
     {
-      optimize->nstart_direction
+      optimize->nstart_climbing
         = optimize->mpi_rank * optimize->nestimates / ntasks;
-      optimize->nend_direction
+      optimize->nend_climbing
         = (1 + optimize->mpi_rank) * optimize->nestimates / ntasks;
     }
 #else
@@ -1655,8 +1653,8 @@ optimize_open ()
   optimize->nend = optimize->nsimulations;
   if (optimize->nsteps)
     {
-      optimize->nstart_direction = 0;
-      optimize->nend_direction = optimize->nestimates;
+      optimize->nstart_climbing = 0;
+      optimize->nend_climbing = optimize->nestimates;
     }
 #endif
 #if DEBUG_OPTIMIZE
@@ -1677,8 +1675,8 @@ optimize_open ()
 #endif
     }
   if (optimize->nsteps)
-    optimize->thread_direction = (unsigned int *)
-      alloca ((1 + nthreads_direction) * sizeof (unsigned int));
+    optimize->thread_climbing = (unsigned int *)
+      alloca ((1 + nthreads_climbing) * sizeof (unsigned int));
 
   // Opening result files
   optimize->file_result = g_fopen (optimize->result, "w");

@@ -120,7 +120,7 @@ variable_open_xml (Variable * variable, ///< Variable struct.
                    xmlNode * node,      ///< XML node.
                    unsigned int algorithm,      ///< Algorithm type.
                    unsigned int nsteps)
-                   ///< Number of steps to do the direction search method.
+                   ///< Number of steps to do the hill climbing method.
 {
   int error_code;
 
@@ -280,7 +280,7 @@ variable_open_json (Variable * variable,        ///< Variable struct.
                     JsonNode * node,    ///< XML node.
                     unsigned int algorithm,     ///< Algorithm type.
                     unsigned int nsteps)
-                    ///< Number of steps to do the direction search method.
+                    ///< Number of steps to do the hill climbing method.
 {
   JsonObject *object;
   const char *label;

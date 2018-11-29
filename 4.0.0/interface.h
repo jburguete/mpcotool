@@ -55,9 +55,8 @@ typedef struct
   ///< Pseudo-random numbers generator seed GtkSpinButton.
   GtkLabel *label_threads;      ///< Threads number GtkLabel.
   GtkSpinButton *spin_threads;  ///< Threads number GtkSpinButton.
-  GtkLabel *label_direction;    ///< Direction threads number GtkLabel.
-  GtkSpinButton *spin_direction;
-  ///< Direction threads number GtkSpinButton.
+  GtkLabel *label_climbing;     ///< Climbing threads number GtkLabel.
+  GtkSpinButton *spin_climbing; ///< Climbing threads number GtkSpinButton.
 } Options;
 
 /**
@@ -135,12 +134,12 @@ typedef struct
   GtkLabel *label_adaptation;   ///< GtkLabel to set the adaptation ratio.
   GtkSpinButton *spin_adaptation;
   ///< GtkSpinButton to set the adaptation ratio.
-  GtkCheckButton *check_direction;
-  ///< GtkCheckButton to check running the direction search method.
-  GtkGrid *grid_direction;
-  ///< GtkGrid to pack the direction search method widgets.
-  GtkRadioButton *button_direction[NDIRECTIONS];
-  ///< GtkRadioButtons array to set the direction estimate method.
+  GtkCheckButton *check_climbing;
+  ///< GtkCheckButton to check running the hill climbing method.
+  GtkGrid *grid_climbing;
+  ///< GtkGrid to pack the hill climbing method widgets.
+  GtkRadioButton *button_climbing[NCLIMBINGS];
+  ///< GtkRadioButtons array to set the hill climbing method.
   GtkLabel *label_steps;        ///< GtkLabel to set the steps number.
   GtkSpinButton *spin_steps;    ///< GtkSpinButton to set the steps number.
   GtkLabel *label_estimates;    ///< GtkLabel to set the estimates number.
@@ -239,13 +238,13 @@ void input_save (char *filename);
 void options_new ();
 void running_new ();
 unsigned int window_get_algorithm ();
-unsigned int window_get_direction ();
+unsigned int window_get_climbing ();
 unsigned int window_get_norm ();
-void window_save_direction ();
+void window_save_climbing ();
 int window_save ();
 void window_run ();
 void window_help ();
-void window_update_direction ();
+void window_update_climbing ();
 void window_update ();
 void window_set_algorithm ();
 void window_set_experiment ();

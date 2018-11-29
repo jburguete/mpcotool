@@ -126,7 +126,7 @@ mpcotool (int argn
   input->result = input->variables = NULL;
 
   // Getting threads number and pseudo-random numbers generator seed
-  nthreads_direction = nthreads = cores_number ();
+  nthreads_climbing = nthreads = cores_number ();
   optimize->seed = DEFAULT_RANDOM_SEED;
 
 #if HAVE_GTK
@@ -174,7 +174,7 @@ mpcotool (int argn
 #endif
   if (argn > 2 && !strcmp (argc[1], "-nthreads"))
     {
-      nthreads_direction = nthreads = atoi (argc[2]);
+      nthreads_climbing = nthreads = atoi (argc[2]);
       if (!nthreads)
         {
           printf ("Bad threads number\n");
@@ -196,7 +196,7 @@ mpcotool (int argn
       argn -= 2;
       if (argn > 2 && !strcmp (argc[1], "-nthreads"))
         {
-          nthreads_direction = nthreads = atoi (argc[2]);
+          nthreads_climbing = nthreads = atoi (argc[2]);
           if (!nthreads)
             {
               printf ("Bad threads number\n");

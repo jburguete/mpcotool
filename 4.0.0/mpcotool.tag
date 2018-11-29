@@ -2,7 +2,7 @@
 <tagfile>
   <compound kind="file">
     <name>config.h</name>
-    <path>/home/burguete/programas/mpcotool/3.4.5/</path>
+    <path>/home/javi/programas/mpcotool/3.6.0/</path>
     <filename>config_8h</filename>
     <member kind="define">
       <type>#define</type>
@@ -20,9 +20,9 @@
     </member>
     <member kind="define">
       <type>#define</type>
-      <name>NDIRECTIONS</name>
+      <name>NCLIMBINGS</name>
       <anchorfile>config_8h.html</anchorfile>
-      <anchor>a759074b3b66aedc21dea10a3621c0aa5</anchor>
+      <anchor>af99e08ceae873abd461e950e40886137</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
@@ -104,9 +104,9 @@
     </member>
     <member kind="define">
       <type>#define</type>
-      <name>LABEL_OPTIMIZE</name>
+      <name>LABEL_CLIMBING</name>
       <anchorfile>config_8h.html</anchorfile>
-      <anchor>a04b98ee8d93ffc842c6ce39a7dba60ec</anchor>
+      <anchor>a904b3c5de15179bcc9f6f46ebbdda2aa</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
@@ -114,13 +114,6 @@
       <name>LABEL_COORDINATES</name>
       <anchorfile>config_8h.html</anchorfile>
       <anchor>a675c58f2563b212721ddd15b36af330a</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="define">
-      <type>#define</type>
-      <name>LABEL_DIRECTION</name>
-      <anchorfile>config_8h.html</anchorfile>
-      <anchor>ac33878ecdeee35216bed59ccd645adef</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
@@ -261,6 +254,13 @@
       <name>LABEL_NSWEEPS</name>
       <anchorfile>config_8h.html</anchorfile>
       <anchor>ad3908a6d474eb7577d70a5df3526c61f</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>LABEL_OPTIMIZE</name>
+      <anchorfile>config_8h.html</anchorfile>
+      <anchor>a04b98ee8d93ffc842c6ce39a7dba60ec</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
@@ -467,7 +467,7 @@
   </compound>
   <compound kind="file">
     <name>experiment.c</name>
-    <path>/home/burguete/programas/mpcotool/3.4.5/</path>
+    <path>/home/javi/programas/mpcotool/3.6.0/</path>
     <filename>experiment_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
     <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
@@ -524,7 +524,7 @@
   </compound>
   <compound kind="file">
     <name>experiment.h</name>
-    <path>/home/burguete/programas/mpcotool/3.4.5/</path>
+    <path>/home/javi/programas/mpcotool/3.6.0/</path>
     <filename>experiment_8h</filename>
     <class kind="struct">Experiment</class>
     <member kind="function">
@@ -572,7 +572,7 @@
   </compound>
   <compound kind="file">
     <name>input.c</name>
-    <path>/home/burguete/programas/mpcotool/3.4.5/</path>
+    <path>/home/javi/programas/mpcotool/3.6.0/</path>
     <filename>input_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
     <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
@@ -652,26 +652,26 @@
   </compound>
   <compound kind="file">
     <name>input.h</name>
-    <path>/home/burguete/programas/mpcotool/3.4.5/</path>
+    <path>/home/javi/programas/mpcotool/3.6.0/</path>
     <filename>input_8h</filename>
     <class kind="struct">Input</class>
     <member kind="enumeration">
       <type></type>
-      <name>DirectionMethod</name>
+      <name>ClimbingMethod</name>
       <anchorfile>input_8h.html</anchorfile>
-      <anchor>a756d98ab968054e752a555e69d7f5035</anchor>
+      <anchor>ae70a958ecc987e09d0da77f1b9db7b1c</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
-      <name>DIRECTION_METHOD_COORDINATES</name>
+      <name>CLIMBING_METHOD_COORDINATES</name>
       <anchorfile>input_8h.html</anchorfile>
-      <anchor>a756d98ab968054e752a555e69d7f5035a3fb2bef3d5efafcedd91112555f10d8a</anchor>
+      <anchor>ae70a958ecc987e09d0da77f1b9db7b1cac573c318935efe17dd0b6842903d632c</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
-      <name>DIRECTION_METHOD_RANDOM</name>
+      <name>CLIMBING_METHOD_RANDOM</name>
       <anchorfile>input_8h.html</anchorfile>
-      <anchor>a756d98ab968054e752a555e69d7f5035aa5e42fb2debbabee41ace04f27540a73</anchor>
+      <anchor>ae70a958ecc987e09d0da77f1b9db7b1ca865718ff537f789b8b73b3d316a3ba78</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumeration">
@@ -771,7 +771,7 @@
   </compound>
   <compound kind="file">
     <name>interface.c</name>
-    <path>/home/burguete/programas/mpcotool/3.4.5/</path>
+    <path>/home/javi/programas/mpcotool/3.6.0/</path>
     <filename>interface_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
     <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
@@ -796,16 +796,16 @@
     </member>
     <member kind="function">
       <type>void</type>
-      <name>input_save_direction_xml</name>
+      <name>input_save_climbing_xml</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>af3a9feb1d8b05fb9619a2fb7f8d02280</anchor>
+      <anchor>ac8d01885ff7a26c493e5617dde53d4ef</anchor>
       <arglist>(xmlNode *node)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
-      <name>input_save_direction_json</name>
+      <name>input_save_climbing_json</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>a519a1ecf6660d2022c603bcee2af71a7</anchor>
+      <anchor>adb1634e6e922f0a88983ffdab6580887</anchor>
       <arglist>(JsonNode *node)</arglist>
     </member>
     <member kind="function">
@@ -852,9 +852,9 @@
     </member>
     <member kind="function">
       <type>unsigned int</type>
-      <name>window_get_direction</name>
+      <name>window_get_climbing</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>a93c9abd5889a22d40186e6cf30d66d6f</anchor>
+      <anchor>a23e05813b45609b9ce245496871c2073</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
@@ -866,9 +866,9 @@
     </member>
     <member kind="function">
       <type>void</type>
-      <name>window_save_direction</name>
+      <name>window_save_climbing</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>af9a469396b09b4068c34bd74f9c8af92</anchor>
+      <anchor>af034fe9508cfa6736930fb3812a7ae50</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
@@ -901,9 +901,9 @@
     </member>
     <member kind="function">
       <type>void</type>
-      <name>window_update_direction</name>
+      <name>window_update_climbing</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>a9ee1811e333c865fc398dc9ce39beea1</anchor>
+      <anchor>aed03b90a00842ddc101ae04720dcb621</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
@@ -1098,7 +1098,7 @@
   </compound>
   <compound kind="file">
     <name>interface.h</name>
-    <path>/home/burguete/programas/mpcotool/3.4.5/</path>
+    <path>/home/javi/programas/mpcotool/3.6.0/</path>
     <filename>interface_8h</filename>
     <class kind="struct">Options</class>
     <class kind="struct">Running</class>
@@ -1147,9 +1147,9 @@
     </member>
     <member kind="function">
       <type>unsigned int</type>
-      <name>window_get_direction</name>
+      <name>window_get_climbing</name>
       <anchorfile>interface_8h.html</anchorfile>
-      <anchor>a93c9abd5889a22d40186e6cf30d66d6f</anchor>
+      <anchor>a23e05813b45609b9ce245496871c2073</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
@@ -1161,9 +1161,9 @@
     </member>
     <member kind="function">
       <type>void</type>
-      <name>window_save_direction</name>
+      <name>window_save_climbing</name>
       <anchorfile>interface_8h.html</anchorfile>
-      <anchor>af9a469396b09b4068c34bd74f9c8af92</anchor>
+      <anchor>af034fe9508cfa6736930fb3812a7ae50</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
@@ -1189,9 +1189,9 @@
     </member>
     <member kind="function">
       <type>void</type>
-      <name>window_update_direction</name>
+      <name>window_update_climbing</name>
       <anchorfile>interface_8h.html</anchorfile>
-      <anchor>a9ee1811e333c865fc398dc9ce39beea1</anchor>
+      <anchor>aed03b90a00842ddc101ae04720dcb621</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
@@ -1379,7 +1379,7 @@
   </compound>
   <compound kind="file">
     <name>main.c</name>
-    <path>/home/burguete/programas/mpcotool/3.4.5/</path>
+    <path>/home/javi/programas/mpcotool/3.6.0/</path>
     <filename>main_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
     <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
@@ -1391,7 +1391,7 @@
   </compound>
   <compound kind="file">
     <name>optimize.c</name>
-    <path>/home/burguete/programas/mpcotool/3.4.5/</path>
+    <path>/home/javi/programas/mpcotool/3.6.0/</path>
     <filename>optimize_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
     <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
@@ -1527,51 +1527,51 @@
     </member>
     <member kind="function">
       <type>void</type>
-      <name>optimize_best_direction</name>
+      <name>optimize_best_climbing</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a99ce3e0ac6f755d23da7277a5f4cc9ee</anchor>
+      <anchor>a1a136da897a0f961d18787975f9bf7e1</anchor>
       <arglist>(unsigned int simulation, double value)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
-      <name>optimize_direction_sequential</name>
+      <name>optimize_climbing_sequential</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a6925a127b9181f5266530c6da596f8a4</anchor>
+      <anchor>a79f513f131b6f348e818036fdfa87d1c</anchor>
       <arglist>(unsigned int simulation)</arglist>
     </member>
     <member kind="function">
       <type>void *</type>
-      <name>optimize_direction_thread</name>
+      <name>optimize_climbing_thread</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a2ca69af497f7c2a0563b9fbcbb13ec26</anchor>
+      <anchor>adc798ed52e4f9f8d050dd337914593a6</anchor>
       <arglist>(ParallelData *data)</arglist>
     </member>
     <member kind="function">
       <type>double</type>
-      <name>optimize_estimate_direction_random</name>
+      <name>optimize_estimate_climbing_random</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a5c1c9e3f6527ae4edd759a854ed9909e</anchor>
+      <anchor>adac8f0dda362955ef0d6bb7977dcfe65</anchor>
       <arglist>(unsigned int variable, unsigned int estimate __attribute__((unused)))</arglist>
     </member>
     <member kind="function">
       <type>double</type>
-      <name>optimize_estimate_direction_coordinates</name>
+      <name>optimize_estimate_climbing_coordinates</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a3bc85c936a3dc91dc92505873877cc30</anchor>
+      <anchor>adf061262424f6ed5fe19506d1e3df5ba</anchor>
       <arglist>(unsigned int variable, unsigned int estimate)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
-      <name>optimize_step_direction</name>
+      <name>optimize_step_climbing</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a12253c49780f55289c7b1000be6837be</anchor>
+      <anchor>a33a8cab07022b26b79a91ecad150932c</anchor>
       <arglist>(unsigned int simulation)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
-      <name>optimize_direction</name>
+      <name>optimize_climbing</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a361e3c0473364eaacb21bd5275c9c30d</anchor>
+      <anchor>a64b92cdafbc2ef76a1b1ca50ca833f48</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
@@ -1639,9 +1639,9 @@
     </member>
     <member kind="variable">
       <type>unsigned int</type>
-      <name>nthreads_direction</name>
+      <name>nthreads_climbing</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>afa851d18da1805382b3ad5def56c34ad</anchor>
+      <anchor>a120bbbb471f176cda892738b6ba04825</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
@@ -1653,9 +1653,9 @@
     </member>
     <member kind="variable">
       <type>double(*</type>
-      <name>optimize_estimate_direction</name>
+      <name>optimize_estimate_climbing</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>aa765c966ee89de2f674a9b22ad56410c</anchor>
+      <anchor>a952e17bb9b0f2d14cea87d21180d11fc</anchor>
       <arglist>)(unsigned int variable, unsigned int estimate)</arglist>
     </member>
     <member kind="variable">
@@ -1675,7 +1675,7 @@
   </compound>
   <compound kind="file">
     <name>optimize.h</name>
-    <path>/home/burguete/programas/mpcotool/3.4.5/</path>
+    <path>/home/javi/programas/mpcotool/3.6.0/</path>
     <filename>optimize_8h</filename>
     <class kind="struct">Optimize</class>
     <class kind="struct">ParallelData</class>
@@ -1793,44 +1793,44 @@
     </member>
     <member kind="function">
       <type>void</type>
-      <name>optimize_best_direction</name>
+      <name>optimize_best_climbing</name>
       <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>a99ce3e0ac6f755d23da7277a5f4cc9ee</anchor>
+      <anchor>a1a136da897a0f961d18787975f9bf7e1</anchor>
       <arglist>(unsigned int simulation, double value)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
-      <name>optimize_direction_sequential</name>
+      <name>optimize_climbing_sequential</name>
       <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>a6925a127b9181f5266530c6da596f8a4</anchor>
+      <anchor>a79f513f131b6f348e818036fdfa87d1c</anchor>
       <arglist>(unsigned int simulation)</arglist>
     </member>
     <member kind="function">
       <type>void *</type>
-      <name>optimize_direction_thread</name>
+      <name>optimize_climbing_thread</name>
       <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>a2ca69af497f7c2a0563b9fbcbb13ec26</anchor>
+      <anchor>adc798ed52e4f9f8d050dd337914593a6</anchor>
       <arglist>(ParallelData *data)</arglist>
     </member>
     <member kind="function">
       <type>double</type>
-      <name>optimize_estimate_direction_coordinates</name>
+      <name>optimize_estimate_climbing_coordinates</name>
       <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>a3bc85c936a3dc91dc92505873877cc30</anchor>
+      <anchor>adf061262424f6ed5fe19506d1e3df5ba</anchor>
       <arglist>(unsigned int variable, unsigned int estimate)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
-      <name>optimize_step_direction</name>
+      <name>optimize_step_climbing</name>
       <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>a12253c49780f55289c7b1000be6837be</anchor>
+      <anchor>a33a8cab07022b26b79a91ecad150932c</anchor>
       <arglist>(unsigned int simulation)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
-      <name>optimize_direction</name>
+      <name>optimize_climbing</name>
       <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>a361e3c0473364eaacb21bd5275c9c30d</anchor>
+      <anchor>a64b92cdafbc2ef76a1b1ca50ca833f48</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
@@ -1898,9 +1898,9 @@
     </member>
     <member kind="variable">
       <type>unsigned int</type>
-      <name>nthreads_direction</name>
+      <name>nthreads_climbing</name>
       <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>afa851d18da1805382b3ad5def56c34ad</anchor>
+      <anchor>a120bbbb471f176cda892738b6ba04825</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
@@ -1912,9 +1912,9 @@
     </member>
     <member kind="variable">
       <type>double(*</type>
-      <name>optimize_estimate_direction</name>
+      <name>optimize_estimate_climbing</name>
       <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>aa765c966ee89de2f674a9b22ad56410c</anchor>
+      <anchor>a952e17bb9b0f2d14cea87d21180d11fc</anchor>
       <arglist>)(unsigned int variable, unsigned int estimate)</arglist>
     </member>
     <member kind="variable">
@@ -1934,7 +1934,7 @@
   </compound>
   <compound kind="file">
     <name>utils.c</name>
-    <path>/home/burguete/programas/mpcotool/3.4.5/</path>
+    <path>/home/javi/programas/mpcotool/3.6.0/</path>
     <filename>utils_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
     <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
@@ -2109,7 +2109,7 @@
   </compound>
   <compound kind="file">
     <name>utils.h</name>
-    <path>/home/burguete/programas/mpcotool/3.4.5/</path>
+    <path>/home/javi/programas/mpcotool/3.6.0/</path>
     <filename>utils_8h</filename>
     <member kind="define">
       <type>#define</type>
@@ -2296,7 +2296,7 @@
   </compound>
   <compound kind="file">
     <name>variable.c</name>
-    <path>/home/burguete/programas/mpcotool/3.4.5/</path>
+    <path>/home/javi/programas/mpcotool/3.6.0/</path>
     <filename>variable_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
     <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
@@ -2360,7 +2360,7 @@
   </compound>
   <compound kind="file">
     <name>variable.h</name>
-    <path>/home/burguete/programas/mpcotool/3.4.5/</path>
+    <path>/home/javi/programas/mpcotool/3.6.0/</path>
     <filename>variable_8h</filename>
     <class kind="struct">Variable</class>
     <member kind="enumeration">
@@ -2628,9 +2628,9 @@
     </member>
     <member kind="variable">
       <type>unsigned int</type>
-      <name>direction</name>
+      <name>climbing</name>
       <anchorfile>structInput.html</anchorfile>
-      <anchor>aecc7fa9950d757b154ce01a3e751ab00</anchor>
+      <anchor>a01a803975b4ca84e7e5b832189e703fa</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
@@ -2807,9 +2807,9 @@
     </member>
     <member kind="variable">
       <type>double *</type>
-      <name>direction</name>
+      <name>climbing</name>
       <anchorfile>structOptimize.html</anchorfile>
-      <anchor>ac03d0a753616ab828a085dbaaf24276f</anchor>
+      <anchor>a00bddc91cb5b2a55b07b2249f0bb63ca</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
@@ -2856,9 +2856,9 @@
     </member>
     <member kind="variable">
       <type>unsigned int *</type>
-      <name>thread_direction</name>
+      <name>thread_climbing</name>
       <anchorfile>structOptimize.html</anchorfile>
-      <anchor>ac1b8fdcab50b78de89aabea63dbf1e61</anchor>
+      <anchor>a0cbe07441aa4371e50e939aa9ee24519</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
@@ -2996,16 +2996,16 @@
     </member>
     <member kind="variable">
       <type>unsigned int</type>
-      <name>nstart_direction</name>
+      <name>nstart_climbing</name>
       <anchorfile>structOptimize.html</anchorfile>
-      <anchor>a24d006922927bee740191d3bc093495c</anchor>
+      <anchor>a0d9415dc03e0f5f672869276ad2b98f4</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>unsigned int</type>
-      <name>nend_direction</name>
+      <name>nend_climbing</name>
       <anchorfile>structOptimize.html</anchorfile>
-      <anchor>abb834423560b565e186faf5a2a1c54d7</anchor>
+      <anchor>a520e25976b0a67e76716633e22452d3b</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
@@ -3091,16 +3091,16 @@
     </member>
     <member kind="variable">
       <type>GtkLabel *</type>
-      <name>label_direction</name>
+      <name>label_climbing</name>
       <anchorfile>structOptions.html</anchorfile>
-      <anchor>a8685b66394062b81ebdb5090b883f455</anchor>
+      <anchor>a4b46390cab9c1bb406cee666c4a2f2e4</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>GtkSpinButton *</type>
-      <name>spin_direction</name>
+      <name>spin_climbing</name>
       <anchorfile>structOptions.html</anchorfile>
-      <anchor>ac2128bdb442d38723d5d36e7389f8b06</anchor>
+      <anchor>a3c1bad1f3a56f7ac9f536f03c2914a80</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -3541,24 +3541,24 @@
     </member>
     <member kind="variable">
       <type>GtkCheckButton *</type>
-      <name>check_direction</name>
+      <name>check_climbing</name>
       <anchorfile>structWindow.html</anchorfile>
-      <anchor>a2220a51688c5844cfcb962008d009774</anchor>
+      <anchor>af28c737c9b4a5c0ef5dfd355f3c1db51</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>GtkGrid *</type>
-      <name>grid_direction</name>
+      <name>grid_climbing</name>
       <anchorfile>structWindow.html</anchorfile>
-      <anchor>a6a33e984c39e977f298f58dccb6accee</anchor>
+      <anchor>a6d72516f5187c4153ba3f1f5442d1973</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>GtkRadioButton *</type>
-      <name>button_direction</name>
+      <name>button_climbing</name>
       <anchorfile>structWindow.html</anchorfile>
-      <anchor>ab6d8708c4b56d3415c8dfdfd6fad9ece</anchor>
-      <arglist>[NDIRECTIONS]</arglist>
+      <anchor>a75fa527589867ec1fca5cca67b4933ab</anchor>
+      <arglist>[NCLIMBINGS]</arglist>
     </member>
     <member kind="variable">
       <type>GtkLabel *</type>

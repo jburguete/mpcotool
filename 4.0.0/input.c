@@ -381,7 +381,7 @@ input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
           goto exit_on_error;
         }
 
-      // Getting direction search method parameters
+      // Getting hill climbing method parameters
       if (xmlHasProp (node, (const xmlChar *) LABEL_NSTEPS))
         {
           input->nsteps =
@@ -395,12 +395,12 @@ input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
 #if DEBUG_INPUT
           fprintf (stderr, "input_open_xml: nsteps=%u\n", input->nsteps);
 #endif
-          buffer = xmlGetProp (node, (const xmlChar *) LABEL_DIRECTION);
+          buffer = xmlGetProp (node, (const xmlChar *) LABEL_CLIMBING);
           if (!xmlStrcmp (buffer, (const xmlChar *) LABEL_COORDINATES))
-            input->direction = DIRECTION_METHOD_COORDINATES;
+            input->climbing = CLIMBING_METHOD_COORDINATES;
           else if (!xmlStrcmp (buffer, (const xmlChar *) LABEL_RANDOM))
             {
-              input->direction = DIRECTION_METHOD_RANDOM;
+              input->climbing = CLIMBING_METHOD_RANDOM;
               input->nestimates
                 = xml_node_get_uint (node, (const xmlChar *) LABEL_NESTIMATES,
                                      &error_code);
@@ -412,8 +412,7 @@ input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
             }
           else
             {
-              input_error
-                (_("Unknown method to estimate the direction search"));
+              input_error (_("Unknown method to estimate the hill climbing"));
               goto exit_on_error;
             }
           xmlFree (buffer);
@@ -791,7 +790,7 @@ input_open_json (JsonParser * parser)   ///< JsonParser struct.
           goto exit_on_error;
         }
 
-      // Getting direction search method parameters
+      // Getting hill climbing method parameters
       if (json_object_get_member (object, LABEL_NSTEPS))
         {
           input->nsteps
@@ -801,12 +800,12 @@ input_open_json (JsonParser * parser)   ///< JsonParser struct.
               input_error (_("Invalid steps number"));
               goto exit_on_error;
             }
-          buffer = json_object_get_string_member (object, LABEL_DIRECTION);
+          buffer = json_object_get_string_member (object, LABEL_CLIMBING);
           if (!strcmp (buffer, LABEL_COORDINATES))
-            input->direction = DIRECTION_METHOD_COORDINATES;
+            input->climbing = CLIMBING_METHOD_COORDINATES;
           else if (!strcmp (buffer, LABEL_RANDOM))
             {
-              input->direction = DIRECTION_METHOD_RANDOM;
+              input->climbing = CLIMBING_METHOD_RANDOM;
               input->nestimates
                 = json_object_get_uint (object, LABEL_NESTIMATES, &error_code);
               if (error_code || !input->nestimates)
@@ -817,8 +816,7 @@ input_open_json (JsonParser * parser)   ///< JsonParser struct.
             }
           else
             {
-              input_error
-                (_("Unknown method to estimate the direction search"));
+              input_error (_("Unknown method to estimate the hill climbing"));
               goto exit_on_error;
             }
           input->relaxation

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<optimize simulator="Easom" algorithm="Monte-Carlo" nsimulations="1600" nsteps="90" direction="random" nestimates="10" relaxation="1" result_file="result-mc-r-1600-1-90-10-0.001-1-14" variables_file="variables-mc-r-1600-1-90-10-0.001-1-14">
+<optimize simulator="Easom" algorithm="Monte-Carlo" nsimulations="1600" nsteps="90" climbing="random" nestimates="10" relaxation="1" result_file="result-mc-r-1600-1-90-10-0.001-1-14" variables_file="variables-mc-r-1600-1-90-10-0.001-1-14">
   <experiment name="test.exp" template1="test.tmp"/>
   <variable name="x" minimum="-40" maximum="1000" precision="14" step="1e-3"/>
   <variable name="y" minimum="-40" maximum="1000" precision="14" step="1e-3"/>

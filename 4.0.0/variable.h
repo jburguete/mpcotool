@@ -58,7 +58,7 @@ typedef struct
   double rangemax;              ///< Maximum variable value.
   double rangeminabs;           ///< Absolute minimum variable value.
   double rangemaxabs;           ///< Absolute maximum variable value.
-  double step;                  ///< Direction search method step size.
+  double step;                  ///< Hill climbing method step size.
   unsigned int precision;       ///< Variable precision.
   unsigned int nsweeps;         ///< Sweeps of the sweep algorithm.
   unsigned int nbits;           ///< Bits number of the genetic algorithm.

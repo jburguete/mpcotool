@@ -38,20 +38,14 @@ OF SUCH DAMAGE.
 #ifndef INPUT__H
 #define INPUT__H 1
 
-/**
- * \enum DirectionMethod
- * \brief Enum to define the methods to estimate the direction search.
- */
-enum DirectionMethod
+///> Enum to define the methods to estimate the hill climbing.
+enum ClimbingMethod
 {
-  DIRECTION_METHOD_COORDINATES = 0,     ///< Coordinates descent method.
-  DIRECTION_METHOD_RANDOM = 1,  ///< Random method.
+  CLIMBING_METHOD_COORDINATES = 0,      ///< Coordinates hill climbing method.
+  CLIMBING_METHOD_RANDOM = 1,   ///< Random hill climbing method.
 };
 
-/**
- * \enum ErrorNorm
- * \brief Enum to define the error norm.
- */
+///> Enum to define the error norm.
 enum ErrorNorm
 {
   ERROR_NORM_EUCLIDIAN = 0,
@@ -93,10 +87,10 @@ typedef struct
   unsigned int nsimulations;    ///< Simulations number per experiment.
   unsigned int algorithm;       ///< Algorithm type.
   unsigned int nsteps;
-  ///< Number of steps to do the direction search method.
-  unsigned int direction;       ///< Method to estimate the direction search.
+  ///< Number of steps to do the hill climbing method.
+  unsigned int climbing;        ///< Method to estimate the hill climbing.
   unsigned int nestimates;
-  ///< Number of simulations to estimate the direction search.
+  ///< Number of simulations to estimate the hill climbing.
   unsigned int niterations;     ///< Number of algorithm iterations
   unsigned int nbest;           ///< Number of best simulations.
   unsigned int norm;            ///< Error norm type.

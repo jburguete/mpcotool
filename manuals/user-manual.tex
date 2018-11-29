@@ -134,6 +134,7 @@ been built and tested in the following operative systems:
 \item Dyson Illumos;
 \item Fedora Linux 29;
 \item FreeBSD 11.2;
+\item Linux Mint DE 3;
 \item Manjaro Linux;
 \item Microsoft Windows 7\footnotemark[1], and 10\footnotemark[1];
 \item NetBSD 7.0;
@@ -176,7 +177,7 @@ bits version):
 > export PATH=$PATH:/usr/lib64/openmpi/bin
 \end{lstlisting}
 
-On FreeBSD 11.0, due to a wrong error in default gcc version, do in a terminal:
+On FreeBSD 11.2, due to a wrong error in default gcc version, do in a terminal:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > export CC=gcc5 (or CC=clang)
 \end{lstlisting}
@@ -191,7 +192,7 @@ Once all the tools installed, the Genetic source code must be downloaded and it 
 The following step is to download the source code MPCOTool, to link it with Genetic and compile together by means of:
 \begin{lstlisting}[language=bash,basicstyle=\scriptsize]
 > git clone https://github.com/jburguete/mpcotool.git
-> cd mpcotool/3.6.0
+> cd mpcotool/4.0.0
 > ln -s ../../genetic/2.2.2 genetic
 > ln -s genetic/libgenetic.so (or .dll on Windows systems)
 > ./build
@@ -216,7 +217,7 @@ also the \emph{Genetic} library):
 > cd ../test4
 > ln -s ../../../genetic/2.2.2 genetic
 > ln -s genetic/libgenetic.so (.dll on Windows systems)
-> cd ../../3.6.0
+> cd ../../4.0.0
 > make tests
 \end{lstlisting}
 
@@ -360,7 +361,7 @@ represented in figure~\ref{FigMainFile}.
 	\rput(205,10){reproduction}
 	\rput(240,10){adaptation}
 	\rput(265,10){seed}
-	\rput(60,0){direction}
+	\rput(60,0){climbing}
 	\rput(95,0){nsteps}
 	\rput(130,0){nestimates}
 	\rput(170,0){relaxation}
@@ -436,14 +437,14 @@ available properties are:
 			\item[nsweeps]: number of sweeps to generate each variable in every
 			experiment,
 		\end{description}
-		\item[Monte-Carlo]: Monte-Carlo brute force algorithm. It requires on the
-			main XML node:
-			\begin{description}
-				\item[nsimulations]: number of simulations to run for each iteration
-					in every experiment,
-			\end{description}
-		\item[genetic]: genetic algorithm. It requires the following parameters in
+		\item[Monte-Carlo]: Monte-Carlo brute force algorithm. It requires on 
 			the main XML node:
+			\begin{description}
+				\item[nsimulations]: number of simulations to run for each 
+					iteration in every experiment,
+			\end{description}
+		\item[genetic]: genetic algorithm. It requires the following parameters 
+			in the main XML node:
 			\begin{description}
 				\item[npopulation]: number of population entities,
 				\item[ngenerations]: number of generations,
@@ -455,8 +456,8 @@ available properties are:
 			\begin{description}
 				\item[nbits]: number of bits to encode each variable,
 			\end{description}
-		\item[orthogonal]: orthogonal sampling brute force algorithm. It requires
-			for each variable:
+		\item[orthogonal]: orthogonal sampling brute force algorithm. It 
+			requires for each variable:
 		\begin{description}
 			\item[nsweeps]: number of sweeps to generate each variable in every
 			experiment,
@@ -471,24 +472,24 @@ available properties are:
 	\item[threshold]: threshold in the objective function to stop the
 		optimization,
 	\item[seed]: seed of the pseudo-random numbers generator (default 7007),
-	\item[direction]: method to search the optimal direction (optional for sweep
-		and Monte-Carlo algorithms). Two values are currently available:
+	\item[climbing]: method to search the optimal climbing (optional for brute
+		force algorithms). Two values are currently available:
 	\begin{description}
-		\item[coordinates]: coordinates descent search,
-		\item[random]: random search. It requieres:
+		\item[coordinates]: coordinates climbing,
+		\item[random]: random climbing. It requieres:
 		\begin{description}
 			\item[nestimates]: number of random checks to search the optimal
-				direction.
+				climbing.
 		\end{description}
 	\end{description}
 	Both methods requires the following parameters:
 	\begin{description}
-		\item[nsteps]: number of steps to perform the direction search method,
-		\item[relaxation]: relaxation parameter for the direction search method,
+		\item[nsteps]: number of steps to perform the hill climbing method,
+		\item[relaxation]: relaxation parameter for the hill climbing method,
 	\end{description}
 	and for each variable:
 	\begin{description}
-		\item[step]: initial step size for the direction search method,
+		\item[step]: initial step size for the hill climbing method,
 	\end{description}
 	\item[norm]: to set the error norm (default "euclidian"). Four values are
 		currently available:
@@ -546,7 +547,7 @@ In this format the file is written as:
 	nbest="best_number" npopulation="population_number"
 	ngenerations="generations_number" mutation="mutation_ratio"
 	reproduction="reproduction_ratio" adaptation="adaptation_ratio"
-	direction="direction_search_type" nsteps="steps_number"
+	climbing="hill_climbing_type" nsteps="steps_number"
 	relaxation="relaxation_parameter" nestimates="estimates_number"
 	threshold="threshold_parameter" norm="norm_type" p="p_parameter"
 	seed="random_seed" result_file="result_file"
@@ -581,7 +582,7 @@ Alternatively, the main input file can be also written in JSON format:
 	"mutation": "mutation_ratio",
 	"reproduction": "reproduction_ratio",
 	"adaptation": "adaptation_ratio",
-	"direction": "direction_search_type",
+	"climbing": "hill_climbing_type",
 	"nsteps": "steps_number",
 	"relaxation": "relaxation_parameter",
 	"nestimates": "estimates_number",

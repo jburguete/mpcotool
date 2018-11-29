@@ -64,9 +64,8 @@ typedef struct
   double *rangemaxabs;          ///< Array of absolute maximum variable values.
   double *error_best;           ///< Array of the best minimum errors.
   double *weight;               ///< Array of the experiment weights.
-  double *step;
-  ///< Array of direction search method step sizes.
-  double *direction;            ///< Vector of direction search estimation.
+  double *step;                 ///< Array of hill climbing method step sizes.
+  double *climbing;             ///< Vector of hill climbing estimation.
   double *value_old;
   ///< Array of the best variable values on the previous step.
   double *error_old;
@@ -77,9 +76,9 @@ typedef struct
   ///< Array of bits number of the genetic algorithm.
   unsigned int *thread;
   ///< Array of simulation numbers to calculate on the thread.
-  unsigned int *thread_direction;
-  ///< Array of simulation numbers to calculate on the thread for the direction
-  ///< search method.
+  unsigned int *thread_climbing;
+  ///< Array of simulation numbers to calculate on the thread for the hill
+  ///< climbing method.
   unsigned int *simulation_best;        ///< Array of best simulation numbers.
   double tolerance;             ///< Algorithm tolerance.
   double mutation_ratio;        ///< Mutation probability.
@@ -96,16 +95,16 @@ typedef struct
   unsigned int ninputs;         ///< Number of input files to the simulator.
   unsigned int nsimulations;    ///< Simulations number per experiment.
   unsigned int nsteps;
-  ///< Number of steps for the direction search method.
+  ///< Number of steps for the hill climbing method.
   unsigned int nestimates;
-  ///< Number of simulations to estimate the direction.
+  ///< Number of simulations to estimate the climbing.
   unsigned int algorithm;       ///< Algorithm type.
   unsigned int nstart;          ///< Beginning simulation number of the task.
   unsigned int nend;            ///< Ending simulation number of the task.
-  unsigned int nstart_direction;
-  ///< Beginning simulation number of the task for the direction search method.
-  unsigned int nend_direction;
-  ///< Ending simulation number of the task for the direction search method.
+  unsigned int nstart_climbing;
+  ///< Beginning simulation number of the task for the hill climbing method.
+  unsigned int nend_climbing;
+  ///< Ending simulation number of the task for the hill climbing method.
   unsigned int niterations;     ///< Number of algorithm iterations
   unsigned int nbest;           ///< Number of best simulations.
   unsigned int nsaveds;         ///< Number of saved simulations.
@@ -127,11 +126,11 @@ typedef struct
 // Global variables
 extern int ntasks;
 extern unsigned int nthreads;
-extern unsigned int nthreads_direction;
+extern unsigned int nthreads_climbing;
 extern GMutex mutex[1];
 extern void (*optimize_algorithm) ();
-extern double (*optimize_estimate_direction) (unsigned int variable,
-                                              unsigned int estimate);
+extern double (*optimize_estimate_climbing) (unsigned int variable,
+                                             unsigned int estimate);
 extern double (*optimize_norm) (unsigned int simulation);
 extern Optimize optimize[1];
 
@@ -156,15 +155,15 @@ void optimize_synchronise ();
 void optimize_sweep ();
 void optimize_MonteCarlo ();
 void optimize_orthogonal ();
-void optimize_best_direction (unsigned int simulation, double value);
-void optimize_direction_sequential (unsigned int simulation);
-void *optimize_direction_thread (ParallelData * data);
-double optimize_estimate_direction_random (unsigned int variable,
-                                           unsigned int estimate);
-double optimize_estimate_direction_coordinates (unsigned int variable,
-                                                unsigned int estimate);
-void optimize_step_direction (unsigned int simulation);
-void optimize_direction ();
+void optimize_best_climbing (unsigned int simulation, double value);
+void optimize_climbing_sequential (unsigned int simulation);
+void *optimize_climbing_thread (ParallelData * data);
+double optimize_estimate_climbing_random (unsigned int variable,
+                                          unsigned int estimate);
+double optimize_estimate_climbing_coordinates (unsigned int variable,
+                                               unsigned int estimate);
+void optimize_step_climbing (unsigned int simulation);
+void optimize_climbing ();
 double optimize_genetic_objective (Entity * entity);
 void optimize_genetic ();
 void optimize_save_old ();
