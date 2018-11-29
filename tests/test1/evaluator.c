@@ -2,21 +2,19 @@
 #include <math.h>
 
 int
-main (int argn, char **argc)
+main (int argn __attribute__ ((unused)), char **argc)
 {
-  double ref1, sol1;
-  double ref2, sol2;
-  double error;
   FILE *fp;
+  double ref1, sol1, ref2, sol2, error;
 
   fp = fopen (argc[1], "r");
-  fscanf (fp, "%lf", &ref1);
-  fscanf (fp, "%lf", &ref2);
+  if (fscanf (fp, "%lf%lf", &ref1, &ref2) != 2)
+    return 1;
   fclose (fp);
 
   fp = fopen (argc[2], "r");
-  fscanf (fp, "%*s %*s %lf", &sol1);
-  fscanf (fp, "%*s %*s %lf", &sol2);
+  if (fscanf (fp, "%*s%*s%lf%*s%*s%lf", &sol1, &sol2) != 2)
+    return 2;
   fclose (fp);
 
   error = (ref1 - sol1) * (ref1 - sol1);

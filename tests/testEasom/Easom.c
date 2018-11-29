@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 
-double
+static inline double
 Easom (double x, double y)
 {
   double k1, k2;
@@ -11,12 +11,13 @@ Easom (double x, double y)
 }
 
 int
-main (int argn, char **argc)
+main (int argn __attribute__ ((unused)), char **argc)
 {
-  double x, y;
   FILE *file;
+  double x, y;
   file = fopen (argc[1], "r");
-  fscanf (file, "%*s%lf%*s%lf", &x, &y);
+  if (fscanf (file, "%*s%lf%*s%lf", &x, &y) != 2)
+    return 1;
   fclose (file);
   file = fopen (argc[2], "w");
   fprintf (file, "%.14le", Easom (x, y));

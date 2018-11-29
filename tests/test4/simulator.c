@@ -33,13 +33,13 @@ evaluate (Entity * entity)
 int
 main (int argn, char **argc)
 {
+  FILE *file;
+  double *best_variables;
+  char *best_genome;
+  double xgenerations, mutation_ratio, reproduction_ratio, adaptation_ratio,
+    evolution_ratio, best_objective;
   int rank;
   unsigned int ngenerations;
-  char *best_genome;
-  double *best_variables, best_objective;
-  double xgenerations, mutation_ratio, reproduction_ratio, adaptation_ratio,
-    evolution_ratio;
-  FILE *file;
 #if HAVE_MPI
   MPI_Init (&argn, &argc);
   MPI_Comm_size (MPI_COMM_WORLD, &ntasks);
@@ -61,20 +61,18 @@ main (int argn, char **argc)
   v[3].minimum = -10.;
   v[3].nbits = 32;
   file = fopen (argc[1], "r");
-  fscanf (file, "%*s%lf%*s%lf%*s%lf%*s%lf",
-          &xgenerations,
-          &mutation_ratio, &reproduction_ratio, &adaptation_ratio);
+  if (fscanf (file, "%*s%lf%*s%lf%*s%lf%*s%lf", &xgenerations,
+              &mutation_ratio, &reproduction_ratio, &adaptation_ratio) != 4)
+    return 1;
   fclose (file);
   ngenerations = xgenerations;
   evolution_ratio = mutation_ratio + reproduction_ratio + adaptation_ratio;
-  genetic_algorithm_default (4,
-                             v,
-                             N_SIMULATIONS / (1 +
-                                              (ngenerations -
-                                               1) * evolution_ratio),
+  genetic_algorithm_default (4, v,
+                             N_SIMULATIONS
+                             / (1 + (ngenerations - 1) * evolution_ratio),
                              ngenerations, mutation_ratio, reproduction_ratio,
                              adaptation_ratio, SEED, 0., &evaluate,
-							 &best_genome, &best_variables, &best_objective);
+                             &best_genome, &best_variables, &best_objective);
   if (rank == 0)
     {
       file = fopen (argc[2], "w");

@@ -23,14 +23,14 @@ objective (double x, double y)
 }
 
 int
-main (int argn, char **argc)
+main (int argn __attribute__ ((unused)), char **argc)
 {
-  double value1, value2;
   FILE *fp;
+  double value1, value2;
 
   fp = fopen (argc[1], "r");
-  fscanf (fp, "%*s %*s %lf", &value1);
-  fscanf (fp, "%*s %*s %lf", &value2);
+  if (fscanf (fp, "%*s%*s%lf%*s%*s%lf", &value1, &value2) != 2)
+    return 1;
   fclose (fp);
 
   fp = fopen (argc[2], "w");

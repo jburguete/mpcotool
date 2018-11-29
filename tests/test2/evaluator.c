@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 int
-main (int argn, char **argc)
+main (int argn __attribute__ ((unused)), char **argc)
 {
   char buffer[512];
   snprintf (buffer, 512, "cp %s %s", argc[1], argc[3]);

@@ -1,4 +1,5 @@
-CC = @CC@ @ARCH@ @LTO@ @STD@ @WINCFLAGS@ -O3 -lm #-pg 
+CC = @CC@ @ARCH@ @LTO@ @STD@ @WINCFLAGS@ -O3 -D_FORTIFY_SOURCE=2 -Wall -Wextra \
+	 -lm #-pg 
 
 Rosenbrock@EXE@: Rosenbrock.c Makefile
 	$(CC) Rosenbrock.c -lm -o Rosenbrock@EXE@
