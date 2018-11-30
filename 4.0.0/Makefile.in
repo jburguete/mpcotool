@@ -1,7 +1,7 @@
 CC = @CC@ @ARCH@ @LTO@ @STD@
 CFLAGS = @CPPFLAGS@ @GSL_CFLAGS@ @XML_CFLAGS@ @GLIB_CFLAGS@ @JSON_CFLAGS@ \
 				 @GTHREAD_CFLAGS@ @MPI@ -g -pedantic -Wall -Wextra -O3 \
-				 -D_FORTIFY_SOURCE=2 -fPIC
+				 -D_FORTIFY_SOURCE=2
 LDFLAGS = @LDFLAGS@ @LIBS@ @GSL_LIBS@ @XML_LIBS@ @GLIB_LIBS@ @JSON_LIBS@ \
 	@GTHREAD_LIBS@
 
@@ -50,23 +50,23 @@ manuals: $(MANUALS)
 tests: $(TESTS)
 
 utilsbin.o: utils.c utils.h config.h $(DEP)
-	$(CC) -c $(CFLAGS) utils.c -o utilsbin.o
+	$(CC) -c -fPIC $(CFLAGS) utils.c -o utilsbin.o
 
 utils.o: utils.c utils.h config.h $(DEP)
 	$(CC) -c $(CFLAGS) @GTK_CFLAGS@ utils.c -o utils.o -DHAVE_GTK=1
 
 experiment.o: experiment.c experiment.h utils.h config.h $(DEP)
-	$(CC) -c $(CFLAGS) experiment.c -o experiment.o
+	$(CC) -c -fPIC $(CFLAGS) experiment.c -o experiment.o
 
 variable.o: variable.c variable.h utils.h config.h $(DEP)
-	$(CC) -c $(CFLAGS) variable.c -o variable.o
+	$(CC) -c -fPIC $(CFLAGS) variable.c -o variable.o
 
 input.o: input.c input.h variable.h experiment.h utils.h config.h $(DEP)
-	$(CC) -c $(CFLAGS) input.c -o input.o
+	$(CC) -c -fPIC $(CFLAGS) input.c -o input.o
 
 optimize.o: optimize.c optimize.h input.h variable.h experiment.h utils.h \
 	config.h $(DEP)
-	$(CC) -c $(CFLAGS) optimize.c -o optimize.o
+	$(CC) -c -fPIC $(CFLAGS) optimize.c -o optimize.o
 
 interface.o: interface.c interface.h optimize.h input.h variable.h \
 	experiment.h utils.h config.h $(DEP)
@@ -74,7 +74,7 @@ interface.o: interface.c interface.h optimize.h input.h variable.h \
 
 mpcotoolbin.o: mpcotool.c mpcotool.h optimize.h input.h variable.h \
 	experiment.h utils.h config.h $(DEP)
-	$(CC) -c $(CFLAGS) mpcotool.c -o mpcotoolbin.o
+	$(CC) -c -fPIC $(CFLAGS) mpcotool.c -o mpcotoolbin.o
 
 mpcotool.o: mpcotool.c mpcotool.h interface.h optimize.h input.h variable.h \
 	experiment.h utils.h config.h $(DEP)
@@ -85,11 +85,12 @@ libmpcotool@SO@: $(OBJLIB)
 		$(LDFLAGS) -L. -Wl,-rpath=. -lgenetic -o libmpcotool@SO@
 
 mpcotoolbin@EXE@: main.c libmpcotool@SO@
-	$(CC) $(CFLAGS) main.c $(LDFLAGS) -o mpcotoolbin@EXE@ -L. -lmpcotool -lgenetic
+	$(CC) $(CFLAGS) main.c $(LDFLAGS) -o mpcotoolbin@EXE@ -L. -Wl,-rpath=. \
+		-lmpcotool -lgenetic
 
 @MPCOTOOL@@EXE@: main.c libmpcotool@SO@ @ICON@
-	$(CC) $(CFLAGS) @GTK_CFLAGS@ main.c $(OBJGUI) $(LDFLAGS) @GTK_LIBS@ \
-		-o mpcotool@EXE@ -DHAVE_GTK=1 -L. -lmpcotool -lgenetic
+	$(CC) $(CFLAGS) @GTK_CFLAGS@ -DHAVE_GTK=1 main.c $(OBJGUI) -L. -Wl,-rpath=. \
+		-lmpcotool -lgenetic $(LDFLAGS) @GTK_LIBS@ -o @MPCOTOOL@@EXE@
 
 locales/mpcotool.pot: $(SRC) Makefile
 	@gnu@xgettext -k_ -d mpcotool -o locales/mpcotool.pot --from-code=UTF-8 $(SRC)
