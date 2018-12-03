@@ -55,7 +55,7 @@ AC_MSG_NOTICE([Compiler: $CC])
 AC_PROG_MAKE_SET
 AC_LANG([C])
 PKG_PROG_PKG_CONFIG
-if test $win = 1; then
+if test "x$win" = "x1"; then
 	AC_CHECK_TOOL(WINDRES, windres)
 	AC_SUBST(SO, [.dll])
 	AC_SUBST(EXE, [.exe])
@@ -91,7 +91,7 @@ if test -f "genetic/genetic.h"; then
 else
 	AC_MSG_ERROR([genetic header not installed])
 fi
-if test $win = 0; then
+if test "x$win" = "x0"; then
 	if test -x "libgenetic.so"; then
 		AC_MSG_NOTICE([genetic library installed])
 	else
@@ -122,13 +122,13 @@ fi
 AC_CHECK_HEADERS([stdlib.h string.h unistd.h pthread.h])
 
 # Checking -march=native compiler flag
-if test $win = 0; then
+if test "x$win" = "x0"; then
 	compiler=$CC
 	CC="$CC -march=native"
 	AC_TRY_LINK([],
 		[int main(int argc, char **argv){return 0;}], [arch=1], [arch=0])
 	CC=$compiler
-	if test $arch = 0; then
+	if test "x$arch" = "x0"; then
 		AC_MSG_NOTICE([checking for -march=native... no])
 		AC_SUBST(ARCH, "")
 	else
@@ -142,7 +142,7 @@ compiler=$CC
 CC="$CC -flto"
 AC_TRY_LINK([], [int main(int argc, char **argv){return 0;}], [lto=1], [lto=0])
 CC=$compiler
-if test $lto = 0; then
+if test "x$lto" = "x0"; then
 	AC_MSG_NOTICE([checking for -flto... no])
 	AC_SUBST(LTO, "")
 else
@@ -155,13 +155,13 @@ compiler=$CC
 CC="$CC -std=gnu11"
 AC_TRY_LINK([], [int main(int argc, char **argv){return 0;}], [std=1], [std=0])
 CC=$compiler
-if test $std = 0; then
+if test "x$std" = "x0"; then
 	AC_MSG_NOTICE("checking for -std=gnu11... no")
 	CC="$CC -std=gnu99"
 	AC_TRY_LINK([], [int main(int argc, char **argv){return 0;}], [std=1],
 		[std=0])
 	CC=$compiler
-	if test $std = 0; then
+	if test "x$std" = "x0"; then
 		AC_MSG_NOTICE("checking for -std=gnu99... no")
 		AC_SUBST(STD, "")
 	else
