@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 #define NTESTS 6
-#define NMETHODSA1 27
+#define NMETHODSA1 37
 #define NMETHODSB1 6
 #define NMETHODSA2 4
 #define NMETHODSB2 1
@@ -40,7 +40,17 @@ char *methodA1[NMETHODSA1] = {
   "sw-ra-10-10-1-240-10-0.1-1-14",
   "sw-ra-40-40-1-450-2-0.01-1-14",
   "sw-ra-40-40-1-225-4-0.01-1-14",
-  "sw-ra-40-40-1-90-10-0.01-1-14"
+  "sw-ra-40-40-1-90-10-0.01-1-14",
+  "os-10-10-25-10-0.5-14",
+  "os-50-50-1-14",
+  "os-cd-10-10-1-600-0.1-1-14",
+  "os-cd-40-40-1-225-0.01-1-14",
+  "os-ra-10-10-1-1200-2-0.1-1-14",
+  "os-ra-10-10-1-600-4-0.1-1-14",
+  "os-ra-10-10-1-240-10-0.1-1-14",
+  "os-ra-40-40-1-450-2-0.01-1-14",
+  "os-ra-40-40-1-225-4-0.01-1-14",
+  "os-ra-40-40-1-90-10-0.01-1-14"
 };
 
 char *methodB1[NMETHODSB1] = {
@@ -60,7 +70,7 @@ char *methodA2[NMETHODSA2] = {
 };
 
 char *methodB2[NMETHODSB2] = {
-  "sw-10-10-25-4-0-14",
+  "sw-10-10-25-4-0-14"
 };
 
 unsigned int seed[NSEEDS] = { 777, 7077, 7707, 7770, 70077, 70707, 70770, 77007,

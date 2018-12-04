@@ -132,17 +132,17 @@ mpcotoolbin@EXE@: main.c libmpcotool@SO@
 		-Wl,-rpath=. -lmpcotool -lgenetic
 
 utils.o: utils.c utils.h config.h $(DEP)
-	$(CC) -c $(CFLAGS) @GTK_CFLAGS@ utils.c -o utils.o -DHAVE_GTK=1
+	$(CC) -c $(CFLAGS) @GTK_CFLAGS@ -DHAVE_GTK=1 utils.c -o utils.o
 
 interface.o: interface.c interface.h optimize.h input.h variable.h \
 	experiment.h utils.h config.h $(DEP)
-	$(CC) -c $(CFLAGS) @GTK_CFLAGS@ interface.c -o interface.o -DHAVE_GTK=1
+	$(CC) -c $(CFLAGS) @GTK_CFLAGS@ -DHAVE_GTK=1 interface.c -o interface.o
 
 mpcotool.o: mpcotool.c mpcotool.h interface.h optimize.h input.h variable.h \
 	experiment.h utils.h config.h $(DEP)
-	$(CC) -c $(CFLAGS) @GTK_CFLAGS@ mpcotool.c -o mpcotool.o -DHAVE_GTK=1
+	$(CC) -c $(CFLAGS) @GTK_CFLAGS@ -DHAVE_GTK=1 mpcotool.c -o mpcotool.o
 
-@MPCOTOOL@@EXE@: main.c libmpcotool@SO@ @ICON@
+@MPCOTOOL@@EXE@: main.c libmpcotool@SO@ $(OBJGUI) @ICON@
 	$(CC) $(CFLAGS) @GTK_CFLAGS@ -DHAVE_GTK=1 main.c $(OBJGUI) -L. -Wl,-rpath=. \
 		-lmpcotool -lgenetic $(LDFLAGS) @GTK_LIBS@ -o @MPCOTOOL@@EXE@
 
