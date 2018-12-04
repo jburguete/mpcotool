@@ -1,5 +1,5 @@
 AC_PREREQ([2.67])
-AC_INIT([mpcotool], [4.0.0], [https://github.com/jburguete/mpcotool])
+AC_INIT([mpcotool], [4.0.1], [https://github.com/jburguete/mpcotool])
 
 # Checks for operative systems
 AC_CANONICAL_SYSTEM
@@ -50,8 +50,9 @@ fi
 AC_MSG_NOTICE([prefix=$PREFIX])
 
 # Checks for programs
-AC_PROG_CC([egcc mpicc gcc clang])
+AC_PROG_CC([mpicc egcc gcc clang])
 AC_MSG_NOTICE([Compiler: $CC])
+AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_LANG([C])
 PKG_PROG_PKG_CONFIG
@@ -69,16 +70,6 @@ if test "x$with_mpi" = "xyes"; then
 	if test $CC = "mpicc"; then
 		AC_MSG_NOTICE([checking for MPI... yes])
 		AC_SUBST(MPI, "-DHAVE_MPI=1")
-	elif test $CC = "egcc"; then
-		if test -x "/usr/local/bin/mpicc"; then
-			AC_MSG_NOTICE([checking for MPI... yes])
-			AC_SUBST(MPI, "-DHAVE_MPI=1")
-			CPPFLAGS="$CPPFLAGS `mpicc -showme:compile`"
-			LDFLAGS="$LDFLAGS `mpicc -showme:link`"
-		else
-			AC_MSG_NOTICE([checking for MPI... no])
-			AC_SUBST(MPI, "")
-		fi
 	else
 		AC_MSG_NOTICE([checking for MPI... no])
 		AC_SUBST(MPI, "")
@@ -119,7 +110,11 @@ if test "x$with_gtk" = "xyes"; then
 fi
 
 # Checks for header files
-AC_CHECK_HEADERS([stdlib.h string.h unistd.h pthread.h])
+AC_FUNC_MALLOC
+AC_FUNC_REALLOC
+AC_FUNC_ALLOCA
+AC_CHECK_HEADERS(
+	[stdlib.h string.h unistd.h pthread.h locale.h sys/param.h libintl.h])
 
 # Checking -march=native compiler flag
 if test "x$win" = "x0"; then
@@ -173,11 +168,29 @@ else
 	AC_SUBST(STD, "-std=gnu11")
 fi
 
+# Checking PGO optimiztion
+AC_ARG_WITH([pgo],
+	AS_HELP_STRING([--with-pgo], [Build using PGO]))
+if test "x$with_pgo" = "xyes"; then
+	CC="$CC -fprofile-generate"
+	AC_TRY_LINK([], [int main(int argc, char **argv){return 0;}], [pgo=1],
+		[pgo=0])
+	CC=$compiler
+	if test "x$pgo" = "x0"; then
+		AC_MSG_NOTICE("checking for PGO... no")
+		AC_SUBST(PGO, "0")
+	else
+		AC_MSG_NOTICE("checking for PGO... yes")
+		AC_SUBST(PGO, "1")
+	fi
+fi
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_C_INLINE
+AC_TYPE_SIZE_T
+
 # Checks for library functions
-AC_FUNC_MALLOC
-AC_FUNC_REALLOC
-AC_FUNC_ALLOCA
-AC_CHECK_FUNCS([strtoul])
+AC_CHECK_FUNCS([pow setlocale sqrt])
 
 # Final output
 AC_CONFIG_HEADERS([config.h])

@@ -7,7 +7,7 @@ calibrations or optimizations of empirical parameters.
 VERSIONS
 --------
 
-* 4.0.0: Stable and recommended version.
+* 4.0.1: Stable and recommended version.
 
 AUTHORS
 -------
@@ -59,15 +59,15 @@ FILES
 -----
 
 The source code has to have the following files:
-* 4.0.0/configure.ac: configure generator.
-* 4.0.0/Makefile.in: Makefile generator.
-* 4.0.0/config.h.in: config header generator.
-* 4.0.0/\*.c: source code files.
-* 4.0.0/\*.h: header code files.
-* 4.0.0/mpcotool.ico: icon file.
-* 4.0.0/build.sh: shell script to build all.
-* 4.0.0/logo.png: logo figure.
-* 4.0.0/Doxyfile: configuration file to generate doxygen documentation.
+* 4.0.1/configure.ac: configure generator.
+* 4.0.1/Makefile.in: Makefile generator.
+* 4.0.1/config.h.in: config header generator.
+* 4.0.1/\*.c: source code files.
+* 4.0.1/\*.h: header code files.
+* 4.0.1/mpcotool.ico: icon file.
+* 4.0.1/build.sh: shell script to build all.
+* 4.0.1/logo.png: logo figure.
+* 4.0.1/Doxyfile: configuration file to generate doxygen documentation.
 * TODO: tasks to do.
 * README.md: this file.
 * license.md: license file.
@@ -146,7 +146,7 @@ a terminal:
 > $ git clone https://github.com/jburguete/mpcotool.git
 
 4. Link the latest genetic version to genetic:
-> $ cd mpcotool/4.0.0
+> $ cd mpcotool/4.0.1
 >
 > $ ln -s ../../genetic/2.2.2 genetic
 > 
@@ -160,7 +160,7 @@ __________________________________
 
 On servers or clusters, where no-GUI with MPI parallelization is desirable,
 replace the 5th step of the previous section by:
-> $ sh build\_with\_mpi.sh
+> $ sh build\_without\_gui.sh
  
 Linking as an external library
 ______________________________
@@ -188,6 +188,13 @@ MPCOTool can also be used as an external library:
 
   * argc[argn-1]: last argument.
 
+FINAL VERSIONS
+______________
+
+Optionally, final compact versions without debug information can be built doing
+on the terminal:
+> $ make strip
+
 MAKING MANUALS INSTRUCTIONS
 ---------------------------
 
@@ -202,7 +209,7 @@ MAKING TESTS INSTRUCTIONS
 In order to build the tests follow the next instructions:
 
 1. Link some tests that needs genetic library doing in a terminal (assuming that
-you are in the directory mpcotool/4.0.0):
+you are in the directory mpcotool/4.0.1):
 > $ cd ../tests/test2
 >
 > $ ln -s ../../../genetic/2.2.2 genetic
@@ -222,7 +229,7 @@ you are in the directory mpcotool/4.0.0):
 > $ ln -s genetic/libgenetic.so (or .dll on Windows systems)
 
 2. Build all tests doing in the same terminal:
-> $ cd ../../4.0.0
+> $ cd ../../4.0.1
 >
 > $ make tests
 

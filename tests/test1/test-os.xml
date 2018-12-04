@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <optimize simulator="simulator" evaluator="evaluator" seed="7" algorithm="orthogonal" niterations="1" tolerance="0" nbest="1">
   <experiment name="test.exp" template1="test.tmp"/>
-  <variable name="var1" minimum="1" maximum="2" nsweeps="100"/>
-  <variable name="var2" minimum="1" maximum="2" nsweeps="100"/>
+  <variable name="var1" minimum="1" maximum="2" nsweeps="10"/>
+  <variable name="var2" minimum="1" maximum="2" nsweeps="10"/>
 </optimize>

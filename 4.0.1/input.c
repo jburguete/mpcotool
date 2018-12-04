@@ -364,11 +364,6 @@ input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
           input_error (_("Invalid best number"));
           goto exit_on_error;
         }
-      if (input->nbest > input->nsimulations)
-        {
-          input_error (_("Best number higher than simulations number"));
-          goto exit_on_error;
-        }
 
       // Obtaining tolerance
       input->tolerance
@@ -478,6 +473,9 @@ input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
   buffer = NULL;
 
   // Reading the variables data
+  if (input->algorithm == ALGORITHM_SWEEP
+      || input->algorithm == ALGORITHM_ORTHOGONAL)
+	input->nsimulations = 1;
   for (; child; child = child->next)
     {
 #if DEBUG_INPUT
@@ -496,11 +494,19 @@ input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
       if (!variable_open_xml (input->variable + input->nvariables, child,
                               input->algorithm, input->nsteps))
         goto exit_on_error;
+      if (input->algorithm == ALGORITHM_SWEEP
+          || input->algorithm == ALGORITHM_ORTHOGONAL)
+		input->nsimulations *= input->variable[input->nvariables].nsweeps;
       ++input->nvariables;
     }
   if (!input->nvariables)
     {
       input_error (_("No optimization variables"));
+      goto exit_on_error;
+    }
+  if (input->nbest > input->nsimulations)
+    {
+      input_error (_("Best number higher than simulations number"));
       goto exit_on_error;
     }
   buffer = NULL;

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<optimize simulator="./simulator" evaluator="./evaluator" algorithm="Monte-Carlo" nsimulations="1000" seed="7">
+<optimize simulator="./simulator" evaluator="./evaluator" algorithm="Monte-Carlo" nsimulations="100" seed="7" niterations="2" nbest="4">
 	<experiment name="test.exp" template1="test.tmp"/>
 	<variable name="var1" minimum="1.000" maximum="2.000" format="%e"/>
 	<variable name="var2" minimum="1.000" maximum="2.000" format="%e"/>
