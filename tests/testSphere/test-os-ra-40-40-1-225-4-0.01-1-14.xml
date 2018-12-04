@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<optimize simulator="Sphere" algorithm="orthogonal" nsteps="225" climbing="random" nestimates="4" relaxation="1" result_file="result-os-ra-40-40-1-450-2-0.01-1-14" variables_file="variables-os-ra-40-40-1-450-2-0.01-1-14">
+  <experiment name="test.exp" template1="test.tmp"/>
+  <variable name="x" minimum="-5" maximum="5" precision="14" northogonals="40" step="0.01"/>
+  <variable name="y" minimum="-5" maximum="5" precision="14" northogonals="40" step="0.01"/>
+</optimize>
