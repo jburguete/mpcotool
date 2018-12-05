@@ -52,6 +52,26 @@ test=Sphere method=sw-ra-40-40-1-225-4-0.01-1-14-*
 min=13.6609 mean=14.3061 max=14.6
 test=Sphere method=sw-ra-40-40-1-90-10-0.01-1-14-*
 min=10.4334 mean=11.3703 max=12.9009
+test=Sphere method=os-10-10-25-10-0.5-14-*
+min=12.8512 mean=13.2333 max=13.6963
+test=Sphere method=os-50-50-1-14-*
+min=0.832715 mean=1.02939 max=1.20275
+test=Sphere method=os-cd-10-10-1-600-0.1-1-14-*
+min=14.6 mean=14.6 max=14.6
+test=Sphere method=os-cd-40-40-1-225-0.01-1-14-*
+min=14.6 mean=14.6 max=14.6
+test=Sphere method=os-ra-10-10-1-1200-2-0.1-1-14-*
+min=13.4067 mean=13.7246 max=13.929
+test=Sphere method=os-ra-10-10-1-600-4-0.1-1-14-*
+min=13.5134 mean=14.2766 max=14.6
+test=Sphere method=os-ra-10-10-1-240-10-0.1-1-14-*
+min=14.6 mean=14.6 max=14.6
+test=Sphere method=os-ra-40-40-1-450-2-0.01-1-14-*
+min=13.052 mean=13.8558 max=14.6
+test=Sphere method=os-ra-40-40-1-225-4-0.01-1-14-*
+min=14.0699 mean=14.4939 max=14.6
+test=Sphere method=os-ra-40-40-1-90-10-0.01-1-14-*
+min=10.7521 mean=11.214 max=11.6909
 test=Sphere method=sw-10-10-25-10-0.5-14
 min=12.7704 mean=12.7704 max=12.7704
 test=Sphere method=sw-50-50-1-14
@@ -114,6 +134,26 @@ test=Ackley method=sw-ra-40-40-1-225-4-0.01-1-14-*
 min=14.6 mean=14.6 max=14.6
 test=Ackley method=sw-ra-40-40-1-90-10-0.01-1-14-*
 min=10.9403 mean=11.2085 max=11.3789
+test=Ackley method=os-10-10-25-10-0.5-14-*
+min=11.8193 mean=12.093 max=12.33
+test=Ackley method=os-50-50-1-14-*
+min=0.0587884 mean=0.330012 max=0.750699
+test=Ackley method=os-cd-10-10-1-600-0.1-1-14-*
+min=-0.687703 mean=2.62048 max=14.6
+test=Ackley method=os-cd-40-40-1-225-0.01-1-14-*
+min=0.0355761 mean=8.77646 max=14.6
+test=Ackley method=os-ra-10-10-1-1200-2-0.1-1-14-*
+min=-0.688335 mean=2.51745 max=14.0699
+test=Ackley method=os-ra-10-10-1-600-4-0.1-1-14-*
+min=-0.693294 mean=5.4925 max=14.6
+test=Ackley method=os-ra-10-10-1-240-10-0.1-1-14-*
+min=-0.696401 mean=2.51187 max=14.0699
+test=Ackley method=os-ra-40-40-1-450-2-0.01-1-14-*
+min=0.0357868 mean=8.51383 max=14.6
+test=Ackley method=os-ra-40-40-1-225-4-0.01-1-14-*
+min=0.063374 mean=8.78632 max=14.6
+test=Ackley method=os-ra-40-40-1-90-10-0.01-1-14-*
+min=0.0451265 mean=5.97558 max=10.0273
 test=Ackley method=sw-10-10-25-10-0.5-14
 min=12.3742 mean=12.3742 max=12.3742
 test=Ackley method=sw-50-50-1-14
@@ -149,17 +189,17 @@ min=9.18222 mean=10.827 max=12.0986
 test=Booth method=mc-2500-1-14-*
 min=0.557299 mean=0.827703 max=1.09821
 test=Booth method=mc-cd-100-1-600-0.1-1-14-*
-min=14.0644 mean=14.4928 max=14.6
+min=14.0644 mean=14.2786 max=14.6
 test=Booth method=mc-cd-1600-1-225-0.01-1-14-*
-min=14.6 mean=14.6 max=14.6
+min=14.0644 mean=14.4928 max=14.6
 test=Booth method=mc-ra-100-1-1200-2-0.1-1-14-*
 min=13.5118 mean=13.9336 max=14.6
 test=Booth method=mc-ra-100-1-600-4-0.1-1-14-*
 min=13.7377 mean=14.4275 max=14.6
 test=Booth method=mc-ra-100-1-240-10-0.1-1-14-*
-min=14.0644 mean=14.4928 max=14.6
+min=14.6 mean=14.6 max=14.6
 test=Booth method=mc-ra-1600-1-450-2-0.01-1-14-*
-min=12.6574 mean=13.5989 max=14.6
+min=12.6574 mean=13.8211 max=14.6
 test=Booth method=mc-ra-1600-1-225-4-0.01-1-14-*
 min=13.8486 mean=14.3448 max=14.6
 test=Booth method=mc-ra-1600-1-90-10-0.01-1-14-*
@@ -176,6 +216,26 @@ test=Booth method=sw-ra-40-40-1-225-4-0.01-1-14-*
 min=13.7829 mean=14.4365 max=14.6
 test=Booth method=sw-ra-40-40-1-90-10-0.01-1-14-*
 min=11.0315 mean=11.7764 max=12.1785
+test=Booth method=os-10-10-25-10-0.5-14-*
+min=10.4995 mean=10.8636 max=11.5651
+test=Booth method=os-50-50-1-14-*
+min=0.640359 mean=0.822178 max=1.25289
+test=Booth method=os-cd-10-10-1-600-0.1-1-14-*
+min=14.0644 mean=14.3857 max=14.6
+test=Booth method=os-cd-40-40-1-225-0.01-1-14-*
+min=14.0644 mean=14.1715 max=14.6
+test=Booth method=os-ra-10-10-1-1200-2-0.1-1-14-*
+min=12.8309 mean=13.5759 max=14.6
+test=Booth method=os-ra-10-10-1-600-4-0.1-1-14-*
+min=13.9325 mean=14.3616 max=14.6
+test=Booth method=os-ra-10-10-1-240-10-0.1-1-14-*
+min=14.6 mean=14.6 max=14.6
+test=Booth method=os-ra-40-40-1-450-2-0.01-1-14-*
+min=12.9898 mean=13.8569 max=14.6
+test=Booth method=os-ra-40-40-1-225-4-0.01-1-14-*
+min=14.0754 mean=14.4951 max=14.6
+test=Booth method=os-ra-40-40-1-90-10-0.01-1-14-*
+min=9.52174 mean=10.6755 max=11.9644
 test=Booth method=sw-10-10-25-10-0.5-14
 min=10.2045 mean=10.2045 max=10.2045
 test=Booth method=sw-50-50-1-14
@@ -217,7 +277,7 @@ min=8.56633 mean=9.67674 max=11.6565
 test=Rosenbrock method=mc-ra-100-1-1200-2-0.1-1-14-*
 min=0.0183213 mean=1.46052 max=5.10816
 test=Rosenbrock method=mc-ra-100-1-600-4-0.1-1-14-*
-min=8.78001 mean=11.5256 max=13.6066
+min=8.78001 mean=11.4509 max=13.2289
 test=Rosenbrock method=mc-ra-100-1-240-10-0.1-1-14-*
 min=9.07402 mean=11.7642 max=13.8431
 test=Rosenbrock method=mc-ra-1600-1-450-2-0.01-1-14-*
@@ -229,7 +289,7 @@ min=4.91652 mean=6.17871 max=8.11751
 test=Rosenbrock method=sw-ra-10-10-1-1200-2-0.1-1-14-*
 min=0.799184 mean=2.8575 max=5.6484
 test=Rosenbrock method=sw-ra-10-10-1-600-4-0.1-1-14-*
-min=10.1811 mean=11.2413 max=12.4277
+min=10.1811 mean=11.5709 max=14.0754
 test=Rosenbrock method=sw-ra-10-10-1-240-10-0.1-1-14-*
 min=11.0622 mean=12.6278 max=14.0754
 test=Rosenbrock method=sw-ra-40-40-1-450-2-0.01-1-14-*
@@ -238,6 +298,26 @@ test=Rosenbrock method=sw-ra-40-40-1-225-4-0.01-1-14-*
 min=5.8036 mean=7.25313 max=8.95522
 test=Rosenbrock method=sw-ra-40-40-1-90-10-0.01-1-14-*
 min=6.2932 mean=6.69846 max=7.46221
+test=Rosenbrock method=os-10-10-25-10-0.5-14-*
+min=0.716932 mean=2.21739 max=2.93574
+test=Rosenbrock method=os-50-50-1-14-*
+min=0.769396 mean=0.843044 max=0.888058
+test=Rosenbrock method=os-cd-10-10-1-600-0.1-1-14-*
+min=11.7636 mean=12.0763 max=12.629
+test=Rosenbrock method=os-cd-40-40-1-225-0.01-1-14-*
+min=7.1482 mean=8.88925 max=10.5782
+test=Rosenbrock method=os-ra-10-10-1-1200-2-0.1-1-14-*
+min=0.0193799 mean=1.74401 max=3.55445
+test=Rosenbrock method=os-ra-10-10-1-600-4-0.1-1-14-*
+min=2.38979 mean=10.5112 max=12.7983
+test=Rosenbrock method=os-ra-10-10-1-240-10-0.1-1-14-*
+min=9.98949 mean=11.9627 max=13.9244
+test=Rosenbrock method=os-ra-40-40-1-450-2-0.01-1-14-*
+min=0.630609 mean=1.27335 max=2.19395
+test=Rosenbrock method=os-ra-40-40-1-225-4-0.01-1-14-*
+min=0.707577 mean=5.00714 max=7.7968
+test=Rosenbrock method=os-ra-40-40-1-90-10-0.01-1-14-*
+min=4.0846 mean=5.12772 max=6.2289
 test=Rosenbrock method=sw-10-10-25-10-0.5-14
 min=1.53855 mean=1.53855 max=1.53855
 test=Rosenbrock method=sw-50-50-1-14
@@ -269,7 +349,7 @@ min=-0.544875 mean=-0.215786 max=0.420976
 test=Easom method=ge-625-6-0.2-0.2-0.2-32-14-*
 min=-0.802928 mean=-0.19043 max=0.511079
 test=Easom method=mc-100-25-10-0.1-14-*
-min=-0.483274 mean=0.990222 max=6.19839
+min=-0.508677 mean=0.918467 max=5.18554
 test=Easom method=mc-2500-1-14-*
 min=-0.342089 mean=-0.164139 max=0.0884187
 test=Easom method=mc-cd-100-1-600-0.1-1-14-*
@@ -283,7 +363,7 @@ min=-1.26617 mean=-0.841025 max=-0.360434
 test=Easom method=mc-ra-100-1-240-10-0.1-1-14-*
 min=-1.26617 mean=-0.837755 max=-0.358114
 test=Easom method=mc-ra-1600-1-450-2-0.01-1-14-*
-min=-0.622088 mean=2.97756 max=8.21105
+min=-0.622088 mean=3.01664 max=8.40643
 test=Easom method=mc-ra-1600-1-225-4-0.01-1-14-*
 min=-0.622088 mean=3.20187 max=8.88009
 test=Easom method=mc-ra-1600-1-90-10-0.01-1-14-*
@@ -297,9 +377,29 @@ min=-1.05195 mean=-1.05195 max=-1.05195
 test=Easom method=sw-ra-40-40-1-450-2-0.01-1-14-*
 min=7.81817 mean=8.26418 max=8.70745
 test=Easom method=sw-ra-40-40-1-225-4-0.01-1-14-*
-min=8.35782 mean=8.62017 max=8.8082
+min=8.35782 mean=8.64868 max=8.82528
 test=Easom method=sw-ra-40-40-1-90-10-0.01-1-14-*
 min=8.63013 mean=9.06453 max=9.59082
+test=Easom method=os-10-10-25-10-0.5-14-*
+min=-0.419085 mean=0.28101 max=2.40756
+test=Easom method=os-50-50-1-14-*
+min=-0.352731 mean=-0.260786 max=-0.162309
+test=Easom method=os-cd-10-10-1-600-0.1-1-14-*
+min=-1.14616 mean=-0.778704 max=-0.449585
+test=Easom method=os-cd-40-40-1-225-0.01-1-14-*
+min=-0.403198 mean=3.32325 max=8.94855
+test=Easom method=os-ra-10-10-1-1200-2-0.1-1-14-*
+min=-1.14616 mean=-0.778704 max=-0.449585
+test=Easom method=os-ra-10-10-1-600-4-0.1-1-14-*
+min=-1.14616 mean=-0.778704 max=-0.449585
+test=Easom method=os-ra-10-10-1-240-10-0.1-1-14-*
+min=-1.14616 mean=-0.778704 max=-0.449585
+test=Easom method=os-ra-40-40-1-450-2-0.01-1-14-*
+min=-0.407603 mean=3.23072 max=8.75708
+test=Easom method=os-ra-40-40-1-225-4-0.01-1-14-*
+min=-0.402471 mean=3.18049 max=8.61074
+test=Easom method=os-ra-40-40-1-90-10-0.01-1-14-*
+min=-0.396844 mean=3.5008 max=9.36543
 test=Easom method=sw-10-10-25-10-0.5-14
 min=-0.764009 mean=-0.764009 max=-0.764009
 test=Easom method=sw-50-50-1-14
@@ -339,7 +439,7 @@ min=13.6066 mean=13.8061 max=13.929
 test=Beale method=mc-cd-1600-1-225-0.01-1-14-*
 min=13.2864 mean=13.8004 max=14.6
 test=Beale method=mc-ra-100-1-1200-2-0.1-1-14-*
-min=11.4977 mean=12.1364 max=13.0133
+min=11.504 mean=12.1377 max=13.0133
 test=Beale method=mc-ra-100-1-600-4-0.1-1-14-*
 min=12.9101 mean=13.6075 max=14.6
 test=Beale method=mc-ra-100-1-240-10-0.1-1-14-*
@@ -351,7 +451,7 @@ min=13.0876 mean=13.463 max=14.6
 test=Beale method=mc-ra-1600-1-90-10-0.01-1-14-*
 min=8.77422 mean=9.66957 max=10.2842
 test=Beale method=sw-ra-10-10-1-1200-2-0.1-1-14-*
-min=10.7861 mean=11.7089 max=12.4439
+min=10.7861 mean=11.6898 max=12.4439
 test=Beale method=sw-ra-10-10-1-600-4-0.1-1-14-*
 min=13.1309 mean=13.7772 max=14.6
 test=Beale method=sw-ra-10-10-1-240-10-0.1-1-14-*
@@ -362,6 +462,26 @@ test=Beale method=sw-ra-40-40-1-225-4-0.01-1-14-*
 min=10.5155 mean=13.0612 max=14.0644
 test=Beale method=sw-ra-40-40-1-90-10-0.01-1-14-*
 min=6.96136 mean=8.73096 max=10.0743
+test=Beale method=os-10-10-25-10-0.5-14-*
+min=7.99305 mean=8.52393 max=9.02261
+test=Beale method=os-50-50-1-14-*
+min=0.949333 mean=1.00474 max=1.12053
+test=Beale method=os-cd-10-10-1-600-0.1-1-14-*
+min=0.187778 mean=8.42437 max=13.929
+test=Beale method=os-cd-40-40-1-225-0.01-1-14-*
+min=13.2864 mean=13.7707 max=14.0754
+test=Beale method=os-ra-10-10-1-1200-2-0.1-1-14-*
+min=0.187778 mean=7.64388 max=13.4176
+test=Beale method=os-ra-10-10-1-600-4-0.1-1-14-*
+min=0.187778 mean=8.67961 max=14.6
+test=Beale method=os-ra-10-10-1-240-10-0.1-1-14-*
+min=0.187778 mean=8.73591 max=14.6
+test=Beale method=os-ra-40-40-1-450-2-0.01-1-14-*
+min=0.734412 mean=5.37384 max=9.43757
+test=Beale method=os-ra-40-40-1-225-4-0.01-1-14-*
+min=12.5551 mean=13.3069 max=14.0644
+test=Beale method=os-ra-40-40-1-90-10-0.01-1-14-*
+min=8.33983 mean=10.4055 max=11.9204
 test=Beale method=sw-10-10-25-10-0.5-14
 min=7.44668 mean=7.44668 max=7.44668
 test=Beale method=sw-50-50-1-14

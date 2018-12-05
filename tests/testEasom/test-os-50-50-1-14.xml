@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <optimize simulator="Easom" algorithm="orthogonal" result_file="result-os-50-50-1-14" variables_file="variables-os-50-50-1-14">
   <experiment name="test.exp" template1="test.tmp"/>
-  <variable name="x" minimum="-100" maximum="100" precision="14" northogonals="50"/>
-  <variable name="y" minimum="-100" maximum="100" precision="14" northogonals="50"/>
+  <variable name="x" minimum="-100" maximum="100" precision="14" nsweeps="50"/>
+  <variable name="y" minimum="-100" maximum="100" precision="14" nsweeps="50"/>
 </optimize>

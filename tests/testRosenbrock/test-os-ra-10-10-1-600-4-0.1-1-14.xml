@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <optimize simulator="Rosenbrock" algorithm="orthogonal" nsteps="600" climbing="random" nestimates="4" relaxation="1" result_file="result-os-ra-10-10-1-1200-2-0.1-1-14" variables_file="variables-os-ra-10-10-1-1200-2-0.1-1-14">
   <experiment name="test.exp" template1="test.tmp"/>
-  <variable name="x" minimum="-10" maximum="10" precision="14" northogonals="10" step="0.1"/>
-  <variable name="y" minimum="-10" maximum="10" precision="14" northogonals="10" step="0.1"/>
+  <variable name="x" minimum="-10" maximum="10" precision="14" nsweeps="10" step="0.1"/>
+  <variable name="y" minimum="-10" maximum="10" precision="14" nsweeps="10" step="0.1"/>
 </optimize>
