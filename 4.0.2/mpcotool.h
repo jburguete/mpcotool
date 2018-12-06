@@ -30,7 +30,7 @@ OF SUCH DAMAGE.
 */
 
 /**
- * \file mpocotool.h
+ * \file mpcotool.h
  * \brief Main function header file.
  * \authors Javier Burguete and Borja Latorre.
  * \copyright Copyright 2012-2018, all rights reserved.

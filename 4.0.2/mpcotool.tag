@@ -2,7 +2,7 @@
 <tagfile>
   <compound kind="file">
     <name>config.h</name>
-    <path>/home/javi/programas/mpcotool/3.6.0/</path>
+    <path>/home/burguete/programas/mpcotool/4.0.2/</path>
     <filename>config_8h</filename>
     <member kind="define">
       <type>#define</type>
@@ -467,7 +467,7 @@
   </compound>
   <compound kind="file">
     <name>experiment.c</name>
-    <path>/home/javi/programas/mpcotool/3.6.0/</path>
+    <path>/home/burguete/programas/mpcotool/4.0.2/</path>
     <filename>experiment_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
     <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
@@ -524,7 +524,7 @@
   </compound>
   <compound kind="file">
     <name>experiment.h</name>
-    <path>/home/javi/programas/mpcotool/3.6.0/</path>
+    <path>/home/burguete/programas/mpcotool/4.0.2/</path>
     <filename>experiment_8h</filename>
     <class kind="struct">Experiment</class>
     <member kind="function">
@@ -572,7 +572,7 @@
   </compound>
   <compound kind="file">
     <name>input.c</name>
-    <path>/home/javi/programas/mpcotool/3.6.0/</path>
+    <path>/home/burguete/programas/mpcotool/4.0.2/</path>
     <filename>input_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
     <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
@@ -652,7 +652,7 @@
   </compound>
   <compound kind="file">
     <name>input.h</name>
-    <path>/home/javi/programas/mpcotool/3.6.0/</path>
+    <path>/home/burguete/programas/mpcotool/4.0.2/</path>
     <filename>input_8h</filename>
     <class kind="struct">Input</class>
     <member kind="enumeration">
@@ -771,7 +771,7 @@
   </compound>
   <compound kind="file">
     <name>interface.c</name>
-    <path>/home/javi/programas/mpcotool/3.6.0/</path>
+    <path>/home/burguete/programas/mpcotool/4.0.2/</path>
     <filename>interface_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
     <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
@@ -1098,7 +1098,7 @@
   </compound>
   <compound kind="file">
     <name>interface.h</name>
-    <path>/home/javi/programas/mpcotool/3.6.0/</path>
+    <path>/home/burguete/programas/mpcotool/4.0.2/</path>
     <filename>interface_8h</filename>
     <class kind="struct">Options</class>
     <class kind="struct">Running</class>
@@ -1379,7 +1379,7 @@
   </compound>
   <compound kind="file">
     <name>main.c</name>
-    <path>/home/javi/programas/mpcotool/3.6.0/</path>
+    <path>/home/burguete/programas/mpcotool/4.0.2/</path>
     <filename>main_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
     <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
@@ -1388,10 +1388,71 @@
     <includes id="input_8h" name="input.h" local="yes" imported="no">input.h</includes>
     <includes id="optimize_8h" name="optimize.h" local="yes" imported="no">optimize.h</includes>
     <includes id="interface_8h" name="interface.h" local="yes" imported="no">interface.h</includes>
+    <includes id="mpcotool_8h" name="mpcotool.h" local="yes" imported="no">mpcotool.h</includes>
+  </compound>
+  <compound kind="file">
+    <name>mpcotool.c</name>
+    <path>/home/burguete/programas/mpcotool/4.0.2/</path>
+    <filename>mpcotool_8c</filename>
+    <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
+    <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
+    <includes id="experiment_8h" name="experiment.h" local="yes" imported="no">experiment.h</includes>
+    <includes id="variable_8h" name="variable.h" local="yes" imported="no">variable.h</includes>
+    <includes id="input_8h" name="input.h" local="yes" imported="no">input.h</includes>
+    <includes id="optimize_8h" name="optimize.h" local="yes" imported="no">optimize.h</includes>
+    <includes id="interface_8h" name="interface.h" local="yes" imported="no">interface.h</includes>
+    <includes id="mpcotool_8h" name="mpcotool.h" local="yes" imported="no">mpcotool.h</includes>
+    <member kind="define">
+      <type>#define</type>
+      <name>DEBUG_MPCOTOOL</name>
+      <anchorfile>mpcotool_8c.html</anchorfile>
+      <anchor>a9bb1eda484210a80ca90d8ffa5eae87a</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>int</type>
+      <name>mpcotool</name>
+      <anchorfile>mpcotool_8c.html</anchorfile>
+      <anchor>a6142492fe82a10cdffb6eb51c2403a11</anchor>
+      <arglist>(int argn, char **argc)</arglist>
+    </member>
+    <member kind="variable">
+      <type>GMutex</type>
+      <name>mutex</name>
+      <anchorfile>mpcotool_8c.html</anchorfile>
+      <anchor>ac1bbdd709ee463b4624a6e17f0c76148</anchor>
+      <arglist>[1]</arglist>
+    </member>
+    <member kind="variable">
+      <type>int</type>
+      <name>ntasks</name>
+      <anchorfile>mpcotool_8c.html</anchorfile>
+      <anchor>ad8caa56c58b5da3d9c20c7213d146363</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>unsigned int</type>
+      <name>nthreads</name>
+      <anchorfile>mpcotool_8c.html</anchorfile>
+      <anchor>a47a6a7abf51f20275a0453efd67c8de0</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="file">
+    <name>mpcotool.h</name>
+    <path>/home/burguete/programas/mpcotool/4.0.2/</path>
+    <filename>mpcotool_8h</filename>
+    <member kind="function">
+      <type>int</type>
+      <name>mpcotool</name>
+      <anchorfile>mpcotool_8h.html</anchorfile>
+      <anchor>a6142492fe82a10cdffb6eb51c2403a11</anchor>
+      <arglist>(int argn, char **argc)</arglist>
+    </member>
   </compound>
   <compound kind="file">
     <name>optimize.c</name>
-    <path>/home/javi/programas/mpcotool/3.6.0/</path>
+    <path>/home/burguete/programas/mpcotool/4.0.2/</path>
     <filename>optimize_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
     <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
@@ -1550,8 +1611,8 @@
       <type>double</type>
       <name>optimize_estimate_climbing_random</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>adac8f0dda362955ef0d6bb7977dcfe65</anchor>
-      <arglist>(unsigned int variable, unsigned int estimate __attribute__((unused)))</arglist>
+      <anchor>a0f2753fd35f824b19799b492b0acb6e0</anchor>
+      <arglist>(unsigned int variable, unsigned int estimate)</arglist>
     </member>
     <member kind="function">
       <type>double</type>
@@ -1675,7 +1736,7 @@
   </compound>
   <compound kind="file">
     <name>optimize.h</name>
-    <path>/home/javi/programas/mpcotool/3.6.0/</path>
+    <path>/home/burguete/programas/mpcotool/4.0.2/</path>
     <filename>optimize_8h</filename>
     <class kind="struct">Optimize</class>
     <class kind="struct">ParallelData</class>
@@ -1814,6 +1875,13 @@
     </member>
     <member kind="function">
       <type>double</type>
+      <name>optimize_estimate_climbing_random</name>
+      <anchorfile>optimize_8h.html</anchorfile>
+      <anchor>a0f2753fd35f824b19799b492b0acb6e0</anchor>
+      <arglist>(unsigned int variable, unsigned int estimate)</arglist>
+    </member>
+    <member kind="function">
+      <type>double</type>
       <name>optimize_estimate_climbing_coordinates</name>
       <anchorfile>optimize_8h.html</anchorfile>
       <anchor>adf061262424f6ed5fe19506d1e3df5ba</anchor>
@@ -1897,11 +1965,32 @@
       <arglist>()</arglist>
     </member>
     <member kind="variable">
+      <type>int</type>
+      <name>ntasks</name>
+      <anchorfile>optimize_8h.html</anchorfile>
+      <anchor>ad8caa56c58b5da3d9c20c7213d146363</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>unsigned int</type>
+      <name>nthreads</name>
+      <anchorfile>optimize_8h.html</anchorfile>
+      <anchor>a47a6a7abf51f20275a0453efd67c8de0</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
       <type>unsigned int</type>
       <name>nthreads_climbing</name>
       <anchorfile>optimize_8h.html</anchorfile>
       <anchor>a120bbbb471f176cda892738b6ba04825</anchor>
       <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>GMutex</type>
+      <name>mutex</name>
+      <anchorfile>optimize_8h.html</anchorfile>
+      <anchor>ac1bbdd709ee463b4624a6e17f0c76148</anchor>
+      <arglist>[1]</arglist>
     </member>
     <member kind="variable">
       <type>void(*</type>
@@ -1934,7 +2023,7 @@
   </compound>
   <compound kind="file">
     <name>utils.c</name>
-    <path>/home/javi/programas/mpcotool/3.6.0/</path>
+    <path>/home/burguete/programas/mpcotool/4.0.2/</path>
     <filename>utils_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
     <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
@@ -2109,7 +2198,7 @@
   </compound>
   <compound kind="file">
     <name>utils.h</name>
-    <path>/home/javi/programas/mpcotool/3.6.0/</path>
+    <path>/home/burguete/programas/mpcotool/4.0.2/</path>
     <filename>utils_8h</filename>
     <member kind="define">
       <type>#define</type>
@@ -2296,7 +2385,7 @@
   </compound>
   <compound kind="file">
     <name>variable.c</name>
-    <path>/home/javi/programas/mpcotool/3.6.0/</path>
+    <path>/home/burguete/programas/mpcotool/4.0.2/</path>
     <filename>variable_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
     <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
@@ -2360,7 +2449,7 @@
   </compound>
   <compound kind="file">
     <name>variable.h</name>
-    <path>/home/javi/programas/mpcotool/3.6.0/</path>
+    <path>/home/burguete/programas/mpcotool/4.0.2/</path>
     <filename>variable_8h</filename>
     <class kind="struct">Variable</class>
     <member kind="enumeration">

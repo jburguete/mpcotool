@@ -30,7 +30,7 @@ OF SUCH DAMAGE.
 */
 
 /**
- * \file mpocotool.c
+ * \file mpcotool.c
  * \brief Main function source file.
  * \authors Javier Burguete and Borja Latorre.
  * \copyright Copyright 2012-2018, all rights reserved.
@@ -69,6 +69,10 @@ OF SUCH DAMAGE.
 #include "mpcotool.h"
 
 #define DEBUG_MPCOTOOL 0        ///< Macro to debug main functions.
+
+GMutex mutex[1];                ///< GMutex struct.
+int ntasks;                     ///< Tasks number.
+unsigned int nthreads;          ///< Threads number.
 
 /**
  * Main function.

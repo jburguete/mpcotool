@@ -20,9 +20,9 @@ main (int argn __attribute__ ((unused)), char **argc)
 
   ref = pow (ref, 1. / e);
   if (!n)
-	error = sol1;
+    error = sol1;
   else
-	error = sol2;
+    error = sol2;
   error = ref - error;
   error *= error;
 

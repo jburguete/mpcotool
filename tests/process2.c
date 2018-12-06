@@ -13,8 +13,7 @@ main (int argn, char **argc)
   unsigned int i, nt;
   if (argn != 4)
     return 1;
-  snprintf (buffer, 512, "tail -n1 test%s/v-%s > out",
-            argc[1], argc[2]);
+  snprintf (buffer, 512, "tail -n1 test%s/v-%s > out", argc[1], argc[2]);
   system (buffer);
   file = fopen ("out", "r");
   xmin = INFINITY;

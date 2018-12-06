@@ -28,10 +28,12 @@ BOOTH = ../tests/testBooth/
 ROSENBROCK = ../tests/testRosenbrock/
 EASOM = ../tests/testEasom/
 BEALE = ../tests/testBeale/
-TESTS = $(T1)simulator $(T1)evaluator $(T2)simulator $(T2)evaluator \
-	$(T3)simulator $(T3)evaluator $(T4)simulator $(T5)simulator \
-	$(ACKLEY)Ackley $(SPHERE)Sphere $(BOOTH)Booth $(ROSENBROCK)Rosenbrock \
-	$(EASOM)Easom $(BEALE)Beale
+TESTS = $(T1)simulator@EXE@ $(T1)evaluator@EXE@ \
+	$(T2)simulator@EXE@ $(T2)evaluator@EXE@ \
+	$(T3)simulator@EXE@ $(T3)evaluator@EXE@ \
+	$(T4)simulator@EXE@ $(T5)simulator@EXE@ \
+	$(ACKLEY)Ackley@EXE@ $(SPHERE)Sphere@EXE@ $(BOOTH)Booth@EXE@ \
+	$(ROSENBROCK)Rosenbrock@EXE@ $(EASOM)Easom@EXE@ $(BEALE)Beale@EXE@
 MDIR = ../manuals/
 ADIR = ../article/
 M1 = $(MDIR)user-manual.pdf
@@ -49,11 +51,9 @@ ifeq ($(PGO), 1)
 	VARIABLEDEP = mpcotoolbinpgo variable.gcda
 	EXPERIMENTDEP = mpcotoolbinpgo experiment.gcda
 	MPCOTOOLBINDEP = mpcotoolbinpgo mpcotoolbin.gcda
-	PGOTESTS = ../tests/test1/test-mc@WIN@.xml \
-		../tests/test1/test-mc@WIN@.json \
-		../tests/test1/test-sw@WIN@.xml \
-		../tests/test1/test-os@WIN@.xml \
-		../tests/test1/test-ga@WIN@.xml
+	PGOTESTS = $(T1)simulator@EXE@ $(T1)evaluator@EXE@ \
+		$(T1)test-mc@WIN@.xml $(T1)test-mc@WIN@.json $(T1)test-sw@WIN@.xml \
+		$(T1)test-os@WIN@.xml $(T1)test-ga@WIN@.xml
 else
 	UTILSBINDEP = utils.c utils.h config.h $(DEP)
 	OPTIMIZEDEP = experiment.c experiment.h utils.h config.h $(DEP)
@@ -197,46 +197,46 @@ locales/$(FR)mpcotool.po: locales/mpcotool.pot
 locales/$(FR)mpcotool.mo: locales/$(FR)mpcotool.po locales/mpcotool.pot
 	@gnu@msgfmt -c -v -o locales/$(FR)mpcotool.mo locales/$(FR)mpcotool.po
 
-$(T1)simulator: $(T1)simulator.c $(T1)Makefile
+$(T1)simulator@EXE@: $(T1)simulator.c $(T1)Makefile
 	cd $(T1); make
 
-$(T1)evaluator: $(T1)evaluator.c $(T1)Makefile
+$(T1)evaluator@EXE@: $(T1)evaluator.c $(T1)Makefile
 	cd $(T1); make
 
-$(T2)simulator: $(T2)simulator.c $(T2)Makefile
+$(T2)simulator@EXE@: $(T2)simulator.c $(T2)Makefile
 	cd $(T2); make
 
-$(T2)evaluator: $(T2)evaluator.c $(T2)Makefile
+$(T2)evaluator@EXE@: $(T2)evaluator.c $(T2)Makefile
 	cd $(T2); make
 
-$(T3)simulator: $(T3)simulator.c $(T3)Makefile
+$(T3)simulator@EXE@: $(T3)simulator.c $(T3)Makefile
 	cd $(T3); make
 
-$(T3)evaluator: $(T3)evaluator.c $(T3)Makefile
+$(T3)evaluator@EXE@: $(T3)evaluator.c $(T3)Makefile
 	cd $(T3); make
 
-$(T4)simulator: $(T4)simulator.c $(T4)Makefile
+$(T4)simulator@EXE@: $(T4)simulator.c $(T4)Makefile
 	cd $(T4); make
 
-$(T5)simulator: $(T5)simulator.c $(T5)Makefile
+$(T5)simulator@EXE@: $(T5)simulator.c $(T5)Makefile
 	cd $(T5); make
 
-$(ACKLEY)Ackley: $(ACKLEY)Ackley.c $(ACKLEY)Makefile
+$(ACKLEY)Ackley@EXE@: $(ACKLEY)Ackley.c $(ACKLEY)Makefile
 	cd $(ACKLEY); make
 
-$(SPHERE)Sphere: $(SPHERE)Sphere.c $(SPHERE)Makefile
+$(SPHERE)Sphere@EXE@: $(SPHERE)Sphere.c $(SPHERE)Makefile
 	cd $(SPHERE); make
 
-$(BOOTH)Booth: $(BOOTH)Booth.c $(BOOTH)Makefile
+$(BOOTH)Booth@EXE@: $(BOOTH)Booth.c $(BOOTH)Makefile
 	cd $(BOOTH); make
 
-$(ROSENBROCK)Rosenbrock: $(ROSENBROCK)Rosenbrock.c $(ROSENBROCK)Makefile
+$(ROSENBROCK)Rosenbrock@EXE@: $(ROSENBROCK)Rosenbrock.c $(ROSENBROCK)Makefile
 	cd $(ROSENBROCK); make
 
-$(EASOM)Easom: $(EASOM)Easom.c $(EASOM)Makefile
+$(EASOM)Easom@EXE@: $(EASOM)Easom.c $(EASOM)Makefile
 	cd $(EASOM); make
 
-$(BEALE)Beale: $(BEALE)Beale.c $(BEALE)Makefile
+$(BEALE)Beale@EXE@: $(BEALE)Beale.c $(BEALE)Makefile
 	cd $(BEALE); make
 
 @ICON@: mpcotool.rc mpcotool.ico

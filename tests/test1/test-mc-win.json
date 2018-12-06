@@ -5,7 +5,7 @@
 	"evaluator":"evaluator.exe",
 	"seed":"7",
 	"algorithm":"Monte-Carlo",
-	"nsimulations":"1000",
+	"nsimulations":"100",
 	"niterations":"1",
 	"tolerance":"0",
 	"nbest":"1",
