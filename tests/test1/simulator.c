@@ -13,7 +13,7 @@ main (int argn __attribute__ ((unused)), char **argc)
   fclose (fp);
 
   fp = fopen (argc[2], "w");
-  fprintf (fp, "%e\n%e\n", value1, value2);
+  fprintf (fp, "%e %e\n", value1, value2);
   fclose (fp);
 
   return 0;

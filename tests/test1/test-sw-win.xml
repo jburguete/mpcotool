@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<optimize simulator="simulator" evaluator="evaluator" seed="7" algorithm="sweep" niterations="2" tolerance="0.1" nbest="4" norm="taxicab">
+<optimize simulator="simulator.exe" evaluator="evaluator.exe" seed="7" algorithm="sweep" niterations="2" tolerance="0.1" nbest="4" norm="taxicab">
 	<experiment name="test.exp" template1="test.tmp"/>
 	<experiment name="test2.exp" template1="test.tmp"/>
 	<variable name="var1" minimum="1" maximum="2" nsweeps="10"/>

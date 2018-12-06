@@ -1,8 +1,8 @@
 {
 	"result_file":"results",
 	"variables_file":"variables",
-	"simulator":"simulator",
-	"evaluator":"evaluator",
+	"simulator":"simulator.exe",
+	"evaluator":"evaluator.exe",
 	"seed":"7",
 	"algorithm":"Monte-Carlo",
 	"nsimulations":"1000",
@@ -19,6 +19,7 @@
 			"name":"test2.exp",
 			"template1":"test.tmp"
 		}
+
 	],
 	"variables":
 	[

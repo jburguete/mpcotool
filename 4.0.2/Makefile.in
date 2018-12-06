@@ -49,6 +49,11 @@ ifeq ($(PGO), 1)
 	VARIABLEDEP = mpcotoolbinpgo variable.gcda
 	EXPERIMENTDEP = mpcotoolbinpgo experiment.gcda
 	MPCOTOOLBINDEP = mpcotoolbinpgo mpcotoolbin.gcda
+	PGOTESTS = ../tests/test1/test-mc@WIN@.xml \
+		../tests/test1/test-mc@WIN@.json \
+		../tests/test1/test-sw@WIN@.xml \
+		../tests/test1/test-os@WIN@.xml \
+		../tests/test1/test-ga@WIN@.xml
 else
 	UTILSBINDEP = utils.c utils.h config.h $(DEP)
 	OPTIMIZEDEP = experiment.c experiment.h utils.h config.h $(DEP)
@@ -97,13 +102,14 @@ libmpcotoolpgo@SO@: $(PGOOBJLIB)
 	$(CC) $(CFLAGS) $(PGOGEN) -shared -DEXTERNAL_LIBRARY=1 $(PGOOBJLIB) \
 		$(LDFLAGS) -L. -Wl,-rpath=. -lgenetic -o libmpcotoolpgo@SO@
 
-mpcotoolbinpgo@EXE@: main.c libmpcotoolpgo@SO@
+mpcotoolbinpgo@EXE@: main.c libmpcotoolpgo@SO@ $(PGOTESTS)
 	$(CC) $(CFLAGS) $(PGOGEN) main.c $(LDFLAGS) -o mpcotoolbinpgo@EXE@ -L. \
 		-Wl,-rpath=. -lmpcotoolpgo -lgenetic
-	./mpcotoolbinpgo ../tests/test1/test-mc.xml
-	./mpcotoolbinpgo ../tests/test1/test-sw.xml
-	./mpcotoolbinpgo ../tests/test1/test-os.xml
-	./mpcotoolbinpgo ../tests/test1/test-ga.xml
+	./mpcotoolbinpgo -nthreads 1 ../tests/test1/test-mc@WIN@.xml
+	./mpcotoolbinpgo ../tests/test1/test-mc@WIN@.json
+	./mpcotoolbinpgo ../tests/test1/test-sw@WIN@.xml
+	./mpcotoolbinpgo ../tests/test1/test-os@WIN@.xml
+	./mpcotoolbinpgo ../tests/test1/test-ga@WIN@.xml
 
 utilsbin.o: $(UTILSBINDEP)
 	$(CC) -c -fPIC $(CFLAGS) $(PGOUSE) utils.c -o utilsbin.o

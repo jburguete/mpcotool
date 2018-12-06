@@ -524,7 +524,7 @@ input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
           input->norm = ERROR_NORM_P;
           input->p
             = xml_node_get_float (node, (const xmlChar *) LABEL_P, &error_code);
-          if (!error_code)
+          if (error_code)
             {
               input_error (_("Bad P parameter"));
               goto exit_on_error;
