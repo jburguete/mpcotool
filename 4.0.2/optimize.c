@@ -625,7 +625,7 @@ optimize_synchronise ()
 #endif
   if (optimize->mpi_rank == 0)
     {
-      for (i = 1; i < ntasks; ++i)
+      for (i = 1; (int) i < ntasks; ++i)
         {
           MPI_Recv (&nsaveds, 1, MPI_INT, i, 1, MPI_COMM_WORLD, &mpi_stat);
           MPI_Recv (simulation_best, nsaveds, MPI_INT, i, 1,
@@ -637,7 +637,7 @@ optimize_synchronise ()
           if (stop)
             optimize->stop = 1;
         }
-      for (i = 1; i < ntasks; ++i)
+      for (i = 1; (int) i < ntasks; ++i)
         MPI_Send (&optimize->stop, 1, MPI_UNSIGNED, i, 1, MPI_COMM_WORLD);
     }
   else
@@ -1316,7 +1316,7 @@ optimize_refine ()
                    optimize->rangemax[j]);
         }
 #if HAVE_MPI
-      for (i = 1; i < ntasks; ++i)
+      for (i = 1; (int) i < ntasks; ++i)
         {
           MPI_Send (optimize->rangemin, optimize->nvariables, MPI_DOUBLE, i,
                     1, MPI_COMM_WORLD);
