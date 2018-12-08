@@ -223,7 +223,8 @@ optimize_parse (unsigned int simulation,        ///< Simulation number.
 #if DEBUG_OPTIMIZE
   fprintf (stderr, "optimize_parse: %s\n", buffer);
 #endif
-  system (buffer);
+	if (system (buffer) == -1)
+	  error_message = buffer;
 
   // Checking the objective value function
   if (optimize->evaluator)
@@ -241,7 +242,8 @@ optimize_parse (unsigned int simulation,        ///< Simulation number.
       fprintf (stderr, "optimize_parse: %s\n", buffer);
       fprintf (stderr, "optimize_parse: result=%s\n", result);
 #endif
-      system (buffer);
+	    if (system (buffer) == -1)
+	      error_message = buffer;
       file_result = g_fopen (result, "r");
       e = atof (fgets (buffer, 512, file_result));
       fclose (file_result);
@@ -264,11 +266,13 @@ optimize_parse (unsigned int simulation,        ///< Simulation number.
       if (optimize->file[i][0])
         {
           snprintf (buffer, 512, RM " %s", &input[i][0]);
-          system (buffer);
+	        if (system (buffer) == -1)
+	          error_message = buffer;
         }
     }
   snprintf (buffer, 512, RM " %s %s", output, result);
-  system (buffer);
+	if (system (buffer) == -1)
+	  error_message = buffer;
 #endif
 
   // Processing pending events
