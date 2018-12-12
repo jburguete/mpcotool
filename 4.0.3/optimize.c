@@ -75,21 +75,22 @@ OF SUCH DAMAGE.
 #define RM "rm"
 #endif
 
+Optimize optimize[1];           ///< Optimization data.
 unsigned int nthreads_climbing;
 ///< Number of threads for the hill climbing method.
-void (*optimize_algorithm) ();
+
+static void (*optimize_algorithm) ();
 ///< Pointer to the function to perform a optimization algorithm step.
-double (*optimize_estimate_climbing) (unsigned int variable,
-                                      unsigned int estimate);
+static double (*optimize_estimate_climbing) (unsigned int variable,
+                                             unsigned int estimate);
 ///< Pointer to the function to estimate the climbing.
-double (*optimize_norm) (unsigned int simulation);
+static double (*optimize_norm) (unsigned int simulation);
 ///< Pointer to the error norm function.
-Optimize optimize[1];           ///< Optimization data.
 
 /**
  * Function to write the simulation input file.
  */
-void
+static inline void
 optimize_input (unsigned int simulation,        ///< Simulation number.
                 char *input,    ///< Input file name.
                 GMappedFile * stencil)  ///< Template of the input file name.
@@ -178,7 +179,7 @@ optimize_input_end:
  *
  * \return Objective function value.
  */
-double
+static double
 optimize_parse (unsigned int simulation,        ///< Simulation number.
                 unsigned int experiment)        ///< Experiment number.
 {
@@ -292,7 +293,7 @@ optimize_parse (unsigned int simulation,        ///< Simulation number.
  *
  * \return Euclidian error norm.
  */
-double
+static double
 optimize_norm_euclidian (unsigned int simulation)       ///< simulation number.
 {
   double e, ei;
@@ -319,7 +320,7 @@ optimize_norm_euclidian (unsigned int simulation)       ///< simulation number.
  *
  * \return Maximum error norm.
  */
-double
+static double
 optimize_norm_maximum (unsigned int simulation) ///< simulation number.
 {
   double e, ei;
@@ -345,7 +346,7 @@ optimize_norm_maximum (unsigned int simulation) ///< simulation number.
  *
  * \return P error norm.
  */
-double
+static double
 optimize_norm_p (unsigned int simulation)       ///< simulation number.
 {
   double e, ei;
@@ -372,7 +373,7 @@ optimize_norm_p (unsigned int simulation)       ///< simulation number.
  *
  * \return Taxicab error norm.
  */
-double
+static double
 optimize_norm_taxicab (unsigned int simulation) ///< simulation number.
 {
   double e;
@@ -393,7 +394,7 @@ optimize_norm_taxicab (unsigned int simulation) ///< simulation number.
 /**
  * Function to print the results.
  */
-void
+static void
 optimize_print ()
 {
   unsigned int i;
@@ -419,7 +420,7 @@ optimize_print ()
 /**
  * Function to save in a file the variables and the error.
  */
-void
+static void
 optimize_save_variables (unsigned int simulation,       ///< Simulation number.
                          double error)  ///< Error value.
 {
@@ -444,7 +445,7 @@ optimize_save_variables (unsigned int simulation,       ///< Simulation number.
 /**
  * Function to save the best simulations.
  */
-void
+static void
 optimize_best (unsigned int simulation, ///< Simulation number.
                double value)    ///< Objective function value.
 {
@@ -485,7 +486,7 @@ optimize_best (unsigned int simulation, ///< Simulation number.
 /**
  * Function to optimize sequentially.
  */
-void
+static void
 optimize_sequential ()
 {
   unsigned int i;
@@ -519,7 +520,7 @@ optimize_sequential ()
  *
  * \return NULL.
  */
-void *
+static void *
 optimize_thread (ParallelData * data)   ///< Function data.
 {
   unsigned int i, thread;
@@ -557,7 +558,7 @@ optimize_thread (ParallelData * data)   ///< Function data.
 /**
  * Function to merge the 2 optimization results.
  */
-void
+static inline void
 optimize_merge (unsigned int nsaveds,   ///< Number of saved results.
                 unsigned int *simulation_best,
                 ///< Array of best simulation numbers.
@@ -618,7 +619,7 @@ optimize_merge (unsigned int nsaveds,   ///< Number of saved results.
  * Function to synchronise the optimization results of MPI tasks.
  */
 #if HAVE_MPI
-void
+static void
 optimize_synchronise ()
 {
   unsigned int i, nsaveds, simulation_best[optimize->nbest], stop;
@@ -665,7 +666,7 @@ optimize_synchronise ()
 /**
  * Function to optimize with the sweep algorithm.
  */
-void
+static void
 optimize_sweep ()
 {
   unsigned int i, j, k, l;
@@ -715,7 +716,7 @@ optimize_sweep ()
 /**
  * Function to optimize with the Monte-Carlo algorithm.
  */
-void
+static void
 optimize_MonteCarlo ()
 {
   unsigned int i, j;
@@ -755,7 +756,7 @@ optimize_MonteCarlo ()
 /**
  * Function to optimize with the orthogonal sampling algorithm.
  */
-void
+static void
 optimize_orthogonal ()
 {
   unsigned int i, j, k, l;
@@ -806,7 +807,7 @@ optimize_orthogonal ()
 /**
  * Function to save the best simulation in a hill climbing method.
  */
-void
+static void
 optimize_best_climbing (unsigned int simulation,        ///< Simulation number.
                         double value)   ///< Objective function value.
 {
@@ -834,7 +835,7 @@ optimize_best_climbing (unsigned int simulation,        ///< Simulation number.
 /**
  * Function to estimate the hill climbing sequentially.
  */
-void
+static inline void
 optimize_climbing_sequential (unsigned int simulation)  ///< Simulation number.
 {
   double e;
@@ -870,7 +871,7 @@ optimize_climbing_sequential (unsigned int simulation)  ///< Simulation number.
  *
  * \return NULL
  */
-void *
+static void *
 optimize_climbing_thread (ParallelData * data)  ///< Function data.
 {
   unsigned int i, thread;
@@ -911,7 +912,7 @@ optimize_climbing_thread (ParallelData * data)  ///< Function data.
 /**
  * Function to estimate a component of the hill climbing vector.
  */
-double
+static double
 optimize_estimate_climbing_random (unsigned int variable,
                                    ///< Variable number.
                                    unsigned int estimate
@@ -935,7 +936,7 @@ optimize_estimate_climbing_random (unsigned int variable,
 /**
  * Function to estimate a component of the hill climbing vector.
  */
-double
+static double
 optimize_estimate_climbing_coordinates (unsigned int variable,
                                         ///< Variable number.
                                         unsigned int estimate)
@@ -965,7 +966,7 @@ optimize_estimate_climbing_coordinates (unsigned int variable,
 /**
  * Function to do a step of the hill climbing method.
  */
-void
+static inline void
 optimize_step_climbing (unsigned int simulation)        ///< Simulation number.
 {
   GThread *thread[nthreads_climbing];
@@ -1034,7 +1035,7 @@ optimize_step_climbing (unsigned int simulation)        ///< Simulation number.
 /**
  * Function to optimize with a hill climbing method.
  */
-void
+static inline void
 optimize_climbing ()
 {
   unsigned int i, j, k, b, s, adjust;
@@ -1098,7 +1099,7 @@ optimize_climbing ()
  *
  * \return objective function value.
  */
-double
+static double
 optimize_genetic_objective (Entity * entity)    ///< entity data.
 {
   unsigned int j;
@@ -1131,7 +1132,7 @@ optimize_genetic_objective (Entity * entity)    ///< entity data.
 /**
  * Function to optimize with the genetic algorithm.
  */
-void
+static void
 optimize_genetic ()
 {
   double *best_variable = NULL;
@@ -1180,7 +1181,7 @@ optimize_genetic ()
 /**
  * Function to save the best results on iterative methods.
  */
-void
+static inline void
 optimize_save_old ()
 {
   unsigned int i, j;
@@ -1212,7 +1213,7 @@ optimize_save_old ()
  * Function to merge the best results with the previous step best results on
  *   iterative methods.
  */
-void
+static inline void
 optimize_merge_old ()
 {
   unsigned int i, j, k;
@@ -1260,7 +1261,7 @@ optimize_merge_old ()
  * Function to refine the search ranges of the variables in iterative 
  *   algorithms.
  */
-void
+static inline void
 optimize_refine ()
 {
   unsigned int i, j;
@@ -1344,7 +1345,7 @@ optimize_refine ()
 /**
  * Function to do a step of the iterative algorithm.
  */
-void
+static void
 optimize_step ()
 {
 #if DEBUG_OPTIMIZE
@@ -1361,7 +1362,7 @@ optimize_step ()
 /**
  * Function to iterate the algorithm.
  */
-void
+static inline void
 optimize_iterate ()
 {
   unsigned int i;

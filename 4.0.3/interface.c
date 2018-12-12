@@ -75,7 +75,10 @@ OF SUCH DAMAGE.
 #define INPUT_FILE "test-ga.xml"
 #endif
 
-const char *logo[] = {
+Window window[1];
+///< Window struct to define the main interface window.
+
+static const char *logo[] = {
   "32 32 3 1",
   "     c None",
   ".    c #0000FF",
@@ -154,17 +157,15 @@ const char * logo[] = {
 "                                "};
 */
 
-Options options[1];
+static Options options[1];
 ///< Options struct to define the options dialog.
-Running running[1];
+static Running running[1];
 ///< Running struct to define the running dialog.
-Window window[1];
-///< Window struct to define the main interface window.
 
 /**
  * Function to save the hill climbing method data in a XML node.
  */
-void
+static void
 input_save_climbing_xml (xmlNode * node)        ///< XML node.
 {
 #if DEBUG_INTERFACE
@@ -197,7 +198,7 @@ input_save_climbing_xml (xmlNode * node)        ///< XML node.
 /**
  * Function to save the hill climbing method data in a JSON node.
  */
-void
+static void
 input_save_climbing_json (JsonNode * node)      ///< JSON node.
 {
   JsonObject *object;
@@ -229,7 +230,7 @@ input_save_climbing_json (JsonNode * node)      ///< JSON node.
 /**
  * Function to save the input file in XML format.
  */
-void
+static inline void
 input_save_xml (xmlDoc * doc)   ///< xmlDoc struct.
 {
   unsigned int i, j;
@@ -409,7 +410,7 @@ input_save_xml (xmlDoc * doc)   ///< xmlDoc struct.
 /**
  * Function to save the input file in JSON format.
  */
-void
+static inline void
 input_save_json (JsonGenerator * generator)     ///< JsonGenerator struct.
 {
   unsigned int i, j;
@@ -580,7 +581,7 @@ input_save_json (JsonGenerator * generator)     ///< JsonGenerator struct.
 /**
  * Function to save the input file.
  */
-void
+static inline void
 input_save (char *filename)     ///< Input file name.
 {
   xmlDoc *doc;
@@ -628,7 +629,7 @@ input_save (char *filename)     ///< Input file name.
 /**
  * Function to open the options dialog.
  */
-void
+static void
 options_new ()
 {
 #if DEBUG_INTERFACE
@@ -699,7 +700,7 @@ options_new ()
 /**
  * Function to open the running dialog.
  */
-void
+static inline void
 running_new ()
 {
 #if DEBUG_INTERFACE
@@ -728,7 +729,7 @@ running_new ()
  *
  * \return Stochastic algorithm number.
  */
-unsigned int
+static unsigned int
 window_get_algorithm ()
 {
   unsigned int i;
@@ -748,7 +749,7 @@ window_get_algorithm ()
  *
  * \return Hill climbing method number.
  */
-unsigned int
+static unsigned int
 window_get_climbing ()
 {
   unsigned int i;
@@ -768,7 +769,7 @@ window_get_climbing ()
  *
  * \return Norm method number.
  */
-unsigned int
+static unsigned int
 window_get_norm ()
 {
   unsigned int i;
@@ -786,7 +787,7 @@ window_get_norm ()
 /**
  * Function to save the hill climbing method data in the input file.
  */
-void
+static void
 window_save_climbing ()
 {
 #if DEBUG_INTERFACE
@@ -819,7 +820,7 @@ window_save_climbing ()
  *
  * \return 1 on OK, 0 on Cancel.
  */
-int
+static int
 window_save ()
 {
   GtkFileChooserDialog *dlg;
@@ -970,7 +971,7 @@ window_save ()
 /**
  * Function to run a optimization.
  */
-void
+static void
 window_run ()
 {
   unsigned int i;
@@ -1025,7 +1026,7 @@ window_run ()
 /**
  * Function to show a help dialog.
  */
-void
+static void
 window_help ()
 {
   char *buffer, *buffer2;
@@ -1053,7 +1054,7 @@ window_help ()
 /**
  * Function to show an about dialog.
  */
-void
+static void
 window_about ()
 {
   static const gchar *authors[] = {
@@ -1089,7 +1090,7 @@ window_about ()
 /**
  * Function to update hill climbing method widgets view in the main window.
  */
-void
+static void
 window_update_climbing ()
 {
 #if DEBUG_INTERFACE
@@ -1120,7 +1121,7 @@ window_update_climbing ()
 /**
  * Function to update the main window view.
  */
-void
+static void
 window_update ()
 {
   unsigned int i;
@@ -1277,7 +1278,7 @@ window_update ()
 /**
  * Function to avoid memory errors changing the algorithm.
  */
-void
+static void
 window_set_algorithm ()
 {
   int i;
@@ -1311,7 +1312,7 @@ window_set_algorithm ()
 /**
  * Function to set the experiment data in the main window.
  */
-void
+static void
 window_set_experiment ()
 {
   unsigned int i, j;
@@ -1351,7 +1352,7 @@ window_set_experiment ()
 /**
  * Function to remove an experiment in the main window.
  */
-void
+static void
 window_remove_experiment ()
 {
   unsigned int i, j;
@@ -1388,7 +1389,7 @@ window_remove_experiment ()
 /**
  * Function to add an experiment in the main window.
  */
-void
+static void
 window_add_experiment ()
 {
   unsigned int i, j;
@@ -1441,7 +1442,7 @@ window_add_experiment ()
 /**
  * Function to set the experiment name in the main window.
  */
-void
+static void
 window_name_experiment ()
 {
   unsigned int i;
@@ -1471,7 +1472,7 @@ window_name_experiment ()
 /**
  * Function to update the experiment weight in the main window.
  */
-void
+static void
 window_weight_experiment ()
 {
   unsigned int i;
@@ -1488,7 +1489,7 @@ window_weight_experiment ()
 /**
  * Function to update the experiment input templates number in the main window.
  */
-void
+static void
 window_inputs_experiment ()
 {
   unsigned int j;
@@ -1513,7 +1514,7 @@ window_inputs_experiment ()
 /**
  * Function to update the experiment i-th input template in the main window.
  */
-void
+static void
 window_template_experiment (void *data)
                             ///< Callback data (i-th input template).
 {
@@ -1544,7 +1545,7 @@ window_template_experiment (void *data)
 /**
  * Function to set the variable data in the main window.
  */
-void
+static void
 window_set_variable ()
 {
   unsigned int i;
@@ -1621,7 +1622,7 @@ window_set_variable ()
 /**
  * Function to remove a variable in the main window.
  */
-void
+static void
 window_remove_variable ()
 {
   unsigned int i, j;
@@ -1651,7 +1652,7 @@ window_remove_variable ()
 /**
  * Function to add a variable in the main window.
  */
-void
+static void
 window_add_variable ()
 {
   unsigned int i, j;
@@ -1686,7 +1687,7 @@ window_add_variable ()
 /**
  * Function to set the variable label in the main window.
  */
-void
+static void
 window_label_variable ()
 {
   unsigned int i;
@@ -1709,7 +1710,7 @@ window_label_variable ()
 /**
  * Function to update the variable precision in the main window.
  */
-void
+static void
 window_precision_variable ()
 {
   unsigned int i;
@@ -1733,7 +1734,7 @@ window_precision_variable ()
 /**
  * Function to update the variable rangemin in the main window.
  */
-void
+static void
 window_rangemin_variable ()
 {
   unsigned int i;
@@ -1750,7 +1751,7 @@ window_rangemin_variable ()
 /**
  * Function to update the variable rangemax in the main window.
  */
-void
+static void
 window_rangemax_variable ()
 {
   unsigned int i;
@@ -1767,7 +1768,7 @@ window_rangemax_variable ()
 /**
  * Function to update the variable rangeminabs in the main window.
  */
-void
+static void
 window_rangeminabs_variable ()
 {
   unsigned int i;
@@ -1785,7 +1786,7 @@ window_rangeminabs_variable ()
 /**
  * Function to update the variable rangemaxabs in the main window.
  */
-void
+static void
 window_rangemaxabs_variable ()
 {
   unsigned int i;
@@ -1803,7 +1804,7 @@ window_rangemaxabs_variable ()
 /**
  * Function to update the variable step in the main window.
  */
-void
+static void
 window_step_variable ()
 {
   unsigned int i;
@@ -1820,7 +1821,7 @@ window_step_variable ()
 /**
  * Function to update the variable data in the main window.
  */
-void
+static void
 window_update_variable ()
 {
   int i;
@@ -1859,7 +1860,7 @@ window_update_variable ()
  *
  * \return 1 on succes, 0 on error.
  */
-int
+static int
 window_read (char *filename)    ///< File name.
 {
   unsigned int i;
@@ -1975,7 +1976,7 @@ window_read (char *filename)    ///< File name.
 /**
  * Function to open the input data.
  */
-void
+static void
 window_open ()
 {
   GtkFileChooserDialog *dlg;

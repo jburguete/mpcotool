@@ -53,7 +53,6 @@ typedef struct
 extern const char *stencil[MAX_NINPUTS];
 
 // Public functions
-void experiment_new (Experiment * experiment);
 void experiment_free (Experiment * experiment, unsigned int type);
 void experiment_error (Experiment * experiment, char *message);
 int experiment_open_xml (Experiment * experiment, xmlNode * node,

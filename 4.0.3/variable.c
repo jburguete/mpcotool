@@ -58,21 +58,6 @@ const double precision[NPRECISIONS] = {
 };                              ///< Array of variable precisions.
 
 /**
- * Function to create a new Variable struct.
- */
-void
-variable_new (Variable * variable)      ///< Variable struct.
-{
-#if DEBUG_VARIABLE
-  fprintf (stderr, "variable_new: start\n");
-#endif
-  variable->name = NULL;
-#if DEBUG_VARIABLE
-  fprintf (stderr, "variable_new: end\n");
-#endif
-}
-
-/**
  * Function to free the memory of a Variable struct.
  */
 void

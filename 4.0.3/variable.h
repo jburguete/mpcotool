@@ -68,7 +68,6 @@ extern const char *format[NPRECISIONS];
 extern const double precision[NPRECISIONS];
 
 // Public functions
-void variable_new (Variable * variable);
 void variable_free (Variable * variable, unsigned int type);
 void variable_error (Variable * variable, char *message);
 int variable_open_xml (Variable * variable, xmlNode * node,

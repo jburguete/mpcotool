@@ -479,11 +479,11 @@
       <anchor>ab809e52c7397ff3e61e4c134d74a6575</anchor>
       <arglist></arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>experiment_new</name>
       <anchorfile>experiment_8c.html</anchorfile>
-      <anchor>af02a37fbefc12ffdcdda5fc5dd45cc5e</anchor>
+      <anchor>a9b82cf921153846c2b115ed6a0e77493</anchor>
       <arglist>(Experiment *experiment)</arglist>
     </member>
     <member kind="function">
@@ -527,13 +527,6 @@
     <path>/home/burguete/programas/mpcotool/4.0.3/</path>
     <filename>experiment_8h</filename>
     <class kind="struct">Experiment</class>
-    <member kind="function">
-      <type>void</type>
-      <name>experiment_new</name>
-      <anchorfile>experiment_8h.html</anchorfile>
-      <anchor>af02a37fbefc12ffdcdda5fc5dd45cc5e</anchor>
-      <arglist>(Experiment *experiment)</arglist>
-    </member>
     <member kind="function">
       <type>void</type>
       <name>experiment_free</name>
@@ -2399,13 +2392,6 @@
     </member>
     <member kind="function">
       <type>void</type>
-      <name>variable_new</name>
-      <anchorfile>variable_8c.html</anchorfile>
-      <anchor>a5c376420b745b9ea2593676fdc3a24a2</anchor>
-      <arglist>(Variable *variable)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
       <name>variable_free</name>
       <anchorfile>variable_8c.html</anchorfile>
       <anchor>a2704f33e2c56f9ebc69efe8e883424a1</anchor>
@@ -2482,13 +2468,6 @@
       <anchorfile>variable_8h.html</anchorfile>
       <anchor>a5e41188f16a381c8915a17a22228e691a9326511f857072cf218f9214fd4f4053</anchor>
       <arglist></arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>variable_new</name>
-      <anchorfile>variable_8h.html</anchorfile>
-      <anchor>a5c376420b745b9ea2593676fdc3a24a2</anchor>
-      <arglist>(Variable *variable)</arglist>
     </member>
     <member kind="function">
       <type>void</type>

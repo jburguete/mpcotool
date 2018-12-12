@@ -115,7 +115,7 @@ input_free ()
 /**
  * Function to print an error message opening an Input struct.
  */
-void
+static void
 input_error (char *message)     ///< Error message.
 {
   char buffer[64];
@@ -128,7 +128,7 @@ input_error (char *message)     ///< Error message.
  *
  * \return 1_on_success, 0_on_error.
  */
-int
+static inline int
 input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
 {
   char buffer2[64];
@@ -564,7 +564,7 @@ exit_on_error:
  *
  * \return 1_on_success, 0_on_error.
  */
-int
+static inline int
 input_open_json (JsonParser * parser)   ///< JsonParser struct.
 {
   JsonNode *node, *child;

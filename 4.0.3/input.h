@@ -104,9 +104,6 @@ extern const char *variables_name;
 // Public functions
 void input_new ();
 void input_free ();
-void input_error (char *message);
-int input_open_xml (xmlDoc * doc);
-int input_open_json (JsonParser * parser);
 int input_open (char *filename);
 
 #endif

@@ -213,59 +213,9 @@ typedef struct
 } Window;
 
 // Global variables
-extern const char *logo[];
-extern Options options[1];
-extern Running running[1];
 extern Window window[1];
 
-// Inline functions
-#if GTK_MINOR_VERSION < 10
-static inline GtkButton *
-gtk_button_new_from_icon_name (const char *name, GtkIconSize size)
-{
-  GtkButton *button;
-  GtkImage *image;
-  button = (GtkButton *) gtk_button_new ();
-  image = (GtkImage *) gtk_image_new_from_icon_name (name, size);
-  gtk_button_set_image (button, GTK_WIDGET (image));
-  return button;
-}
-#endif
-
 // Public functions
-unsigned int gtk_array_get_active (GtkRadioButton * array[], unsigned int n);
-void input_save (char *filename);
-void options_new ();
-void running_new ();
-unsigned int window_get_algorithm ();
-unsigned int window_get_climbing ();
-unsigned int window_get_norm ();
-void window_save_climbing ();
-int window_save ();
-void window_run ();
-void window_help ();
-void window_update_climbing ();
-void window_update ();
-void window_set_algorithm ();
-void window_set_experiment ();
-void window_remove_experiment ();
-void window_add_experiment ();
-void window_name_experiment ();
-void window_weight_experiment ();
-void window_inputs_experiment ();
-void window_template_experiment (void *data);
-void window_set_variable ();
-void window_remove_variable ();
-void window_add_variable ();
-void window_label_variable ();
-void window_precision_variable ();
-void window_rangemin_variable ();
-void window_rangemax_variable ();
-void window_rangeminabs_variable ();
-void window_rangemaxabs_variable ();
-void window_update_variable ();
-int window_read (char *filename);
-void window_open ();
 void window_new (GtkApplication * application);
 
 #endif

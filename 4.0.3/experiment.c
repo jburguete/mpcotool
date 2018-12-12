@@ -57,7 +57,7 @@ const char *stencil[MAX_NINPUTS] = {
 /**
  * Function to create a new Experiment struct.
  */
-void
+static void
 experiment_new (Experiment * experiment)        ///< Experiment struct.
 {
   unsigned int i;

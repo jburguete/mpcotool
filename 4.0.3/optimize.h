@@ -128,49 +128,9 @@ extern int ntasks;
 extern unsigned int nthreads;
 extern unsigned int nthreads_climbing;
 extern GMutex mutex[1];
-extern void (*optimize_algorithm) ();
-extern double (*optimize_estimate_climbing) (unsigned int variable,
-                                             unsigned int estimate);
-extern double (*optimize_norm) (unsigned int simulation);
 extern Optimize optimize[1];
 
 // Public functions
-void optimize_input (unsigned int simulation, char *input,
-                     GMappedFile * stencil);
-double optimize_parse (unsigned int simulation, unsigned int experiment);
-double optimize_norm_euclidian (unsigned int simulation);
-double optimize_norm_maximum (unsigned int simulation);
-double optimize_norm_p (unsigned int simulation);
-double optimize_norm_taxicab (unsigned int simulation);
-void optimize_print ();
-void optimize_save_variables (unsigned int simulation, double error);
-void optimize_best (unsigned int simulation, double value);
-void optimize_sequential ();
-void *optimize_thread (ParallelData * data);
-void optimize_merge (unsigned int nsaveds, unsigned int *simulation_best,
-                     double *error_best);
-#if HAVE_MPI
-void optimize_synchronise ();
-#endif
-void optimize_sweep ();
-void optimize_MonteCarlo ();
-void optimize_orthogonal ();
-void optimize_best_climbing (unsigned int simulation, double value);
-void optimize_climbing_sequential (unsigned int simulation);
-void *optimize_climbing_thread (ParallelData * data);
-double optimize_estimate_climbing_random (unsigned int variable,
-                                          unsigned int estimate);
-double optimize_estimate_climbing_coordinates (unsigned int variable,
-                                               unsigned int estimate);
-void optimize_step_climbing (unsigned int simulation);
-void optimize_climbing ();
-double optimize_genetic_objective (Entity * entity);
-void optimize_genetic ();
-void optimize_save_old ();
-void optimize_merge_old ();
-void optimize_refine ();
-void optimize_step ();
-void optimize_iterate ();
 void optimize_free ();
 void optimize_open ();
 
