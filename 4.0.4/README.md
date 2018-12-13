@@ -7,7 +7,7 @@ calibrations or optimizations of empirical parameters.
 VERSIONS
 --------
 
-* 4.0.1: Stable and recommended version.
+* 4.0.4: Stable and recommended version.
 
 AUTHORS
 -------
@@ -59,15 +59,15 @@ FILES
 -----
 
 The source code has to have the following files:
-* 4.0.1/configure.ac: configure generator.
-* 4.0.1/Makefile.in: Makefile generator.
-* 4.0.1/config.h.in: config header generator.
-* 4.0.1/\*.c: source code files.
-* 4.0.1/\*.h: header code files.
-* 4.0.1/mpcotool.ico: icon file.
-* 4.0.1/build.sh: shell script to build all.
-* 4.0.1/logo.png: logo figure.
-* 4.0.1/Doxyfile: configuration file to generate doxygen documentation.
+* 4.0.4/configure.ac: configure generator.
+* 4.0.4/Makefile.in: Makefile generator.
+* 4.0.4/config.h.in: config header generator.
+* 4.0.4/\*.c: source code files.
+* 4.0.4/\*.h: header code files.
+* 4.0.4/mpcotool.ico: icon file.
+* 4.0.4/build.sh: shell script to build all.
+* 4.0.4/logo.png: logo figure.
+* 4.0.4/Doxyfile: configuration file to generate doxygen documentation.
 * TODO: tasks to do.
 * README.md: this file.
 * license.md: license file.
@@ -136,7 +136,7 @@ a terminal:
 > $ git clone https://github.com/jburguete/genetic.git
 
 2. Build the genetic library:
-> $ cd genetic/2.2.2
+> $ cd genetic/3.0.0
 >
 > $ sh build.sh
 
@@ -146,9 +146,9 @@ a terminal:
 > $ git clone https://github.com/jburguete/mpcotool.git
 
 4. Link the latest genetic version to genetic:
-> $ cd mpcotool/4.0.1
+> $ cd mpcotool/4.0.4
 >
-> $ ln -s ../../genetic/2.2.2 genetic
+> $ ln -s ../../genetic/3.0.0 genetic
 > 
 > $ ln -s genetic/libgenetic.so (or .dll in Windows systems)
 
@@ -209,27 +209,27 @@ MAKING TESTS INSTRUCTIONS
 In order to build the tests follow the next instructions:
 
 1. Link some tests that needs genetic library doing in a terminal (assuming that
-you are in the directory mpcotool/4.0.1):
+you are in the directory mpcotool/4.0.4):
 > $ cd ../tests/test2
 >
-> $ ln -s ../../../genetic/2.2.2 genetic
+> $ ln -s ../../../genetic/3.0.0 genetic
 >
 > $ ln -s genetic/libgenetic.so (or .dll on Windows systems)
 >
 > $ cd ../test3
 >
-> $ ln -s ../../../genetic/2.2.2 genetic
+> $ ln -s ../../../genetic/3.0.0 genetic
 >
 > $ ln -s genetic/libgenetic.so (or .dll on Windows systems)
 >
 > $ cd ../test4
 >
-> $ ln -s ../../../genetic/2.2.2 genetic
+> $ ln -s ../../../genetic/3.0.0 genetic
 >
 > $ ln -s genetic/libgenetic.so (or .dll on Windows systems)
 
 2. Build all tests doing in the same terminal:
-> $ cd ../../4.0.1
+> $ cd ../../4.0.4
 >
 > $ make tests
 
