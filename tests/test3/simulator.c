@@ -12,6 +12,7 @@
 #define SEED 707l
 int ntasks = 1;
 unsigned int nthreads = 1;
+GMutex mutex[1];
 GeneticVariable v[3];
 
 double

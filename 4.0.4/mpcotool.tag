@@ -2,7 +2,7 @@
 <tagfile>
   <compound kind="file">
     <name>config.h</name>
-    <path>/home/burguete/programas/mpcotool/4.0.3/</path>
+    <path>/home/burguete/programas/mpcotool/4.0.4/</path>
     <filename>config_8h</filename>
     <member kind="define">
       <type>#define</type>
@@ -467,7 +467,7 @@
   </compound>
   <compound kind="file">
     <name>experiment.c</name>
-    <path>/home/burguete/programas/mpcotool/4.0.3/</path>
+    <path>/home/burguete/programas/mpcotool/4.0.4/</path>
     <filename>experiment_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
     <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
@@ -524,7 +524,7 @@
   </compound>
   <compound kind="file">
     <name>experiment.h</name>
-    <path>/home/burguete/programas/mpcotool/4.0.3/</path>
+    <path>/home/burguete/programas/mpcotool/4.0.4/</path>
     <filename>experiment_8h</filename>
     <class kind="struct">Experiment</class>
     <member kind="function">
@@ -565,7 +565,7 @@
   </compound>
   <compound kind="file">
     <name>input.c</name>
-    <path>/home/burguete/programas/mpcotool/4.0.3/</path>
+    <path>/home/burguete/programas/mpcotool/4.0.4/</path>
     <filename>input_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
     <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
@@ -593,25 +593,25 @@
       <anchor>a2a1b757eb145bc6681b95f606f034e2e</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>input_error</name>
       <anchorfile>input_8c.html</anchorfile>
-      <anchor>a40671e2ffa03e637bda5d56559b99dc4</anchor>
+      <anchor>a1ef8c75591a653942032c354f9bf97e9</anchor>
       <arglist>(char *message)</arglist>
     </member>
-    <member kind="function">
-      <type>int</type>
+    <member kind="function" static="yes">
+      <type>static int</type>
       <name>input_open_xml</name>
       <anchorfile>input_8c.html</anchorfile>
-      <anchor>a017879d1e5cb2ca57ee57e8c111c0f94</anchor>
+      <anchor>a88956daca5392bb88d9a34f513575e07</anchor>
       <arglist>(xmlDoc *doc)</arglist>
     </member>
-    <member kind="function">
-      <type>int</type>
+    <member kind="function" static="yes">
+      <type>static int</type>
       <name>input_open_json</name>
       <anchorfile>input_8c.html</anchorfile>
-      <anchor>a80c85085447530b866a0abb290991e41</anchor>
+      <anchor>a66ab00fd89e1ed6872489ebe893ec266</anchor>
       <arglist>(JsonParser *parser)</arglist>
     </member>
     <member kind="function">
@@ -645,7 +645,7 @@
   </compound>
   <compound kind="file">
     <name>input.h</name>
-    <path>/home/burguete/programas/mpcotool/4.0.3/</path>
+    <path>/home/burguete/programas/mpcotool/4.0.4/</path>
     <filename>input_8h</filename>
     <class kind="struct">Input</class>
     <member kind="enumeration">
@@ -713,27 +713,6 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>void</type>
-      <name>input_error</name>
-      <anchorfile>input_8h.html</anchorfile>
-      <anchor>a40671e2ffa03e637bda5d56559b99dc4</anchor>
-      <arglist>(char *message)</arglist>
-    </member>
-    <member kind="function">
-      <type>int</type>
-      <name>input_open_xml</name>
-      <anchorfile>input_8h.html</anchorfile>
-      <anchor>a017879d1e5cb2ca57ee57e8c111c0f94</anchor>
-      <arglist>(xmlDoc *doc)</arglist>
-    </member>
-    <member kind="function">
-      <type>int</type>
-      <name>input_open_json</name>
-      <anchorfile>input_8h.html</anchorfile>
-      <anchor>a80c85085447530b866a0abb290991e41</anchor>
-      <arglist>(JsonParser *parser)</arglist>
-    </member>
-    <member kind="function">
       <type>int</type>
       <name>input_open</name>
       <anchorfile>input_8h.html</anchorfile>
@@ -764,7 +743,7 @@
   </compound>
   <compound kind="file">
     <name>interface.c</name>
-    <path>/home/burguete/programas/mpcotool/4.0.3/</path>
+    <path>/home/burguete/programas/mpcotool/4.0.4/</path>
     <filename>interface_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
     <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
@@ -787,270 +766,270 @@
       <anchor>a2a3ad4ebb43e29f804a1e524aca840b2</anchor>
       <arglist></arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>input_save_climbing_xml</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>ac8d01885ff7a26c493e5617dde53d4ef</anchor>
+      <anchor>a4710acd57580fee8696ea7da64a25333</anchor>
       <arglist>(xmlNode *node)</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>input_save_climbing_json</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>adb1634e6e922f0a88983ffdab6580887</anchor>
+      <anchor>a3857dded968756153682a1398d13fbc5</anchor>
       <arglist>(JsonNode *node)</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>input_save_xml</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>ad0ea7a909d7c19c05ef1832052c73359</anchor>
+      <anchor>aa77812583cd5f2237d9841ad6c8b3f9d</anchor>
       <arglist>(xmlDoc *doc)</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>input_save_json</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>a56e93542fc1dfb48ca1ce2ea27d83854</anchor>
+      <anchor>a583850006cba79f0027db68a82ecdafe</anchor>
       <arglist>(JsonGenerator *generator)</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>input_save</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>a35e53c21b4d8b01a92339f5ce2d0d0c5</anchor>
+      <anchor>a5af63329a54f8d5d022542237959c0f1</anchor>
       <arglist>(char *filename)</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>options_new</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>ad1348732eaa001277c33ae0aa3cf5013</anchor>
+      <anchor>a09483cdd5bd6ad55ebeaa5c21999cdf3</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>running_new</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>ae4887573807f66e095b671c2576fde96</anchor>
+      <anchor>a47d4ebdaca84c9de4c3ec5a2b6b27f6a</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>unsigned int</type>
+    <member kind="function" static="yes">
+      <type>static unsigned int</type>
       <name>window_get_algorithm</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>af52d1808a839c7b5ad08c484734b76c3</anchor>
+      <anchor>aaba23ec468e51febaead59ab61dfcc65</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>unsigned int</type>
+    <member kind="function" static="yes">
+      <type>static unsigned int</type>
       <name>window_get_climbing</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>a23e05813b45609b9ce245496871c2073</anchor>
+      <anchor>a137542640068c49a35f4bd9d7272da5e</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>unsigned int</type>
+    <member kind="function" static="yes">
+      <type>static unsigned int</type>
       <name>window_get_norm</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>a9b4faff47798d4e9e96ac330fd26958e</anchor>
+      <anchor>af782a6c8c18cfae19e29e5222622002d</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>window_save_climbing</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>af034fe9508cfa6736930fb3812a7ae50</anchor>
+      <anchor>ad79110d8145eaf1b34b63c68773860cc</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>int</type>
+    <member kind="function" static="yes">
+      <type>static int</type>
       <name>window_save</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>a93933b83e130ba1c72566ec3602921a0</anchor>
+      <anchor>a8d57557acbbdce20d2845dc20bec054d</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>window_run</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>aa88189450bd758e637f003dac5759456</anchor>
+      <anchor>a895935da87859734a41081e8401b35e0</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>window_help</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>a8266e9b968c88d96b0a996161c3a7b27</anchor>
+      <anchor>a0793d71a138f5bcc80a7d2d897070b1d</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>window_about</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>a07a1c5992a797a86028ab1227c2ad311</anchor>
+      <anchor>a57b83af2346ce1465de95662931e306f</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>window_update_climbing</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>aed03b90a00842ddc101ae04720dcb621</anchor>
+      <anchor>ad5b113c46ceed151aaa6dcf4ebcba6f8</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>window_update</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>ac8cbeea07c624b3aa64a7e3accd848ea</anchor>
+      <anchor>ae9312f7868418f5bd37c005425589ba4</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>window_set_algorithm</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>afc2c9847693c2507d858c1505772d1d8</anchor>
+      <anchor>afc08965306f91eecfc648a6463550df4</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>window_set_experiment</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>a0e5fd55b52fc3f579058fedede307997</anchor>
+      <anchor>ada64f07cafdfce92486995436ab1fe89</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>window_remove_experiment</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>aeec7067a115097826ea6e241812a9e91</anchor>
+      <anchor>ac3afc96b65afb154453283ab31e47d9a</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>window_add_experiment</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>a0adf8e63061f6e63f7cde767848e22db</anchor>
+      <anchor>a4f20f492ab9c4e0caac4c78454de5763</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>window_name_experiment</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>a1ba27cdd41f45bfbaa9ca39a4f45be6a</anchor>
+      <anchor>a86863ce768f3a5e0feeba6eb2c72d43b</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>window_weight_experiment</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>a6102bbb5d6da398d448a0560f825858e</anchor>
+      <anchor>a31d52a809382e7038208642c48c3dcb0</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>window_inputs_experiment</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>ab2c1ab11fc0e7b8915061832ddf706d3</anchor>
+      <anchor>ab00f15d1a0d7719755d1e7e73dd41b5e</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>window_template_experiment</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>aa56731e62474e6d59e91649e1f6f6188</anchor>
+      <anchor>a1b2a1ada5f2896419a634c4365d4e78d</anchor>
       <arglist>(void *data)</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>window_set_variable</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>a5fac22d5a8bda1e71f6872eba25a4ac3</anchor>
+      <anchor>aabb139c938bbafaf3cd91ed8b492d7ca</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>window_remove_variable</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>a5f0eb037b491bf848f8d55981a927f99</anchor>
+      <anchor>a381b5357e2f32a328962bdb865ac8d8a</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>window_add_variable</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>a9fb21f1b3148bc38240a4b9dfae1609c</anchor>
+      <anchor>a47cb5361f34826f3ae9f9fbf9d39ea72</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>window_label_variable</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>ae6d4651670c3029b0409f4c051b97601</anchor>
+      <anchor>aa85d7f8d1c03ec4baac7ce18b50f6058</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>window_precision_variable</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>abc979173d6e1638d7c9777fe2da296a0</anchor>
+      <anchor>a110b4566dc149a2bd323a791d36acd67</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>window_rangemin_variable</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>af7cf39681ad654453fefeb28af3b4fd6</anchor>
+      <anchor>a43412f010b57f936a2c8eaa3e0a1272a</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>window_rangemax_variable</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>a9d2c1fa32ed81fe7e9374647d48522f7</anchor>
+      <anchor>a29917d27cdad128cbf2186e7d29c056e</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>window_rangeminabs_variable</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>a884b1133ee48a8b7807934f4c1254262</anchor>
+      <anchor>afd0ccd4829e3f19a2c02aec3a5cacc9a</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>window_rangemaxabs_variable</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>a10b4d7c23b7e429067597e808da3337e</anchor>
+      <anchor>a37c3e2fc7c1a33898dcbab4e1edf4104</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>window_step_variable</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>a70a394b6c96bc7218e8ca21ef3904e05</anchor>
+      <anchor>a36f70cadbd2e4db772b41c396136b687</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>window_update_variable</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>a254eff0f9c5d3a97fd81fd3bd04002e7</anchor>
+      <anchor>ae7865179103f2b177d5b7b6a873bb962</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>int</type>
+    <member kind="function" static="yes">
+      <type>static int</type>
       <name>window_read</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>a8591bc45d301a0feea24ec0a27ef7c81</anchor>
+      <anchor>a0f89e398bc8153b49a12212f235784db</anchor>
       <arglist>(char *filename)</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>window_open</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>ac30fe9bd5871150beca9144d1c990763</anchor>
+      <anchor>a91f1e33ff772a2f27fee695066b45895</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
@@ -1061,37 +1040,37 @@
       <arglist>(GtkApplication *application)</arglist>
     </member>
     <member kind="variable">
-      <type>const char *</type>
-      <name>logo</name>
-      <anchorfile>interface_8c.html</anchorfile>
-      <anchor>a4be24e399cdab91ef2b016c0db258986</anchor>
-      <arglist>[]</arglist>
-    </member>
-    <member kind="variable">
-      <type>Options</type>
-      <name>options</name>
-      <anchorfile>interface_8c.html</anchorfile>
-      <anchor>abbcdaf16d976778f03cb516d9b652a07</anchor>
-      <arglist>[1]</arglist>
-    </member>
-    <member kind="variable">
-      <type>Running</type>
-      <name>running</name>
-      <anchorfile>interface_8c.html</anchorfile>
-      <anchor>af279dabd58b1d67acebeb40fcd1b76c2</anchor>
-      <arglist>[1]</arglist>
-    </member>
-    <member kind="variable">
       <type>Window</type>
       <name>window</name>
       <anchorfile>interface_8c.html</anchorfile>
       <anchor>aadfe55f324bd1360398bb119efc0cedb</anchor>
       <arglist>[1]</arglist>
     </member>
+    <member kind="variable" static="yes">
+      <type>static const char *</type>
+      <name>logo</name>
+      <anchorfile>interface_8c.html</anchorfile>
+      <anchor>a4be24e399cdab91ef2b016c0db258986</anchor>
+      <arglist>[]</arglist>
+    </member>
+    <member kind="variable" static="yes">
+      <type>static Options</type>
+      <name>options</name>
+      <anchorfile>interface_8c.html</anchorfile>
+      <anchor>abbcdaf16d976778f03cb516d9b652a07</anchor>
+      <arglist>[1]</arglist>
+    </member>
+    <member kind="variable" static="yes">
+      <type>static Running</type>
+      <name>running</name>
+      <anchorfile>interface_8c.html</anchorfile>
+      <anchor>af279dabd58b1d67acebeb40fcd1b76c2</anchor>
+      <arglist>[1]</arglist>
+    </member>
   </compound>
   <compound kind="file">
     <name>interface.h</name>
-    <path>/home/burguete/programas/mpcotool/4.0.3/</path>
+    <path>/home/burguete/programas/mpcotool/4.0.4/</path>
     <filename>interface_8h</filename>
     <class kind="struct">Options</class>
     <class kind="struct">Running</class>
@@ -1104,263 +1083,11 @@
       <arglist></arglist>
     </member>
     <member kind="function">
-      <type>unsigned int</type>
-      <name>gtk_array_get_active</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>acbcc3c82fb88f948630d56ff9bdfbba1</anchor>
-      <arglist>(GtkRadioButton *array[], unsigned int n)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>input_save</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>a35e53c21b4d8b01a92339f5ce2d0d0c5</anchor>
-      <arglist>(char *filename)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>options_new</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>ad1348732eaa001277c33ae0aa3cf5013</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>running_new</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>ae4887573807f66e095b671c2576fde96</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>unsigned int</type>
-      <name>window_get_algorithm</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>af52d1808a839c7b5ad08c484734b76c3</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>unsigned int</type>
-      <name>window_get_climbing</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>a23e05813b45609b9ce245496871c2073</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>unsigned int</type>
-      <name>window_get_norm</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>a9b4faff47798d4e9e96ac330fd26958e</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>window_save_climbing</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>af034fe9508cfa6736930fb3812a7ae50</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>int</type>
-      <name>window_save</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>a93933b83e130ba1c72566ec3602921a0</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>window_run</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>aa88189450bd758e637f003dac5759456</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>window_help</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>a8266e9b968c88d96b0a996161c3a7b27</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>window_update_climbing</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>aed03b90a00842ddc101ae04720dcb621</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>window_update</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>ac8cbeea07c624b3aa64a7e3accd848ea</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>window_set_algorithm</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>afc2c9847693c2507d858c1505772d1d8</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>window_set_experiment</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>a0e5fd55b52fc3f579058fedede307997</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>window_remove_experiment</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>aeec7067a115097826ea6e241812a9e91</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>window_add_experiment</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>a0adf8e63061f6e63f7cde767848e22db</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>window_name_experiment</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>a1ba27cdd41f45bfbaa9ca39a4f45be6a</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>window_weight_experiment</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>a6102bbb5d6da398d448a0560f825858e</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>window_inputs_experiment</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>ab2c1ab11fc0e7b8915061832ddf706d3</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>window_template_experiment</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>aa56731e62474e6d59e91649e1f6f6188</anchor>
-      <arglist>(void *data)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>window_set_variable</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>a5fac22d5a8bda1e71f6872eba25a4ac3</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>window_remove_variable</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>a5f0eb037b491bf848f8d55981a927f99</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>window_add_variable</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>a9fb21f1b3148bc38240a4b9dfae1609c</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>window_label_variable</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>ae6d4651670c3029b0409f4c051b97601</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>window_precision_variable</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>abc979173d6e1638d7c9777fe2da296a0</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>window_rangemin_variable</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>af7cf39681ad654453fefeb28af3b4fd6</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>window_rangemax_variable</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>a9d2c1fa32ed81fe7e9374647d48522f7</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>window_rangeminabs_variable</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>a884b1133ee48a8b7807934f4c1254262</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>window_rangemaxabs_variable</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>a10b4d7c23b7e429067597e808da3337e</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>window_update_variable</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>a254eff0f9c5d3a97fd81fd3bd04002e7</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>int</type>
-      <name>window_read</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>a8591bc45d301a0feea24ec0a27ef7c81</anchor>
-      <arglist>(char *filename)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>window_open</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>ac30fe9bd5871150beca9144d1c990763</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
       <type>void</type>
       <name>window_new</name>
       <anchorfile>interface_8h.html</anchorfile>
       <anchor>a6217e583c4bdea03070607d21a40d006</anchor>
       <arglist>(GtkApplication *application)</arglist>
-    </member>
-    <member kind="variable">
-      <type>const char *</type>
-      <name>logo</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>a4be24e399cdab91ef2b016c0db258986</anchor>
-      <arglist>[]</arglist>
-    </member>
-    <member kind="variable">
-      <type>Options</type>
-      <name>options</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>abbcdaf16d976778f03cb516d9b652a07</anchor>
-      <arglist>[1]</arglist>
-    </member>
-    <member kind="variable">
-      <type>Running</type>
-      <name>running</name>
-      <anchorfile>interface_8h.html</anchorfile>
-      <anchor>af279dabd58b1d67acebeb40fcd1b76c2</anchor>
-      <arglist>[1]</arglist>
     </member>
     <member kind="variable">
       <type>Window</type>
@@ -1372,7 +1099,7 @@
   </compound>
   <compound kind="file">
     <name>main.c</name>
-    <path>/home/burguete/programas/mpcotool/4.0.3/</path>
+    <path>/home/burguete/programas/mpcotool/4.0.4/</path>
     <filename>main_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
     <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
@@ -1385,7 +1112,7 @@
   </compound>
   <compound kind="file">
     <name>mpcotool.c</name>
-    <path>/home/burguete/programas/mpcotool/4.0.3/</path>
+    <path>/home/burguete/programas/mpcotool/4.0.4/</path>
     <filename>mpcotool_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
     <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
@@ -1433,7 +1160,7 @@
   </compound>
   <compound kind="file">
     <name>mpcotool.h</name>
-    <path>/home/burguete/programas/mpcotool/4.0.3/</path>
+    <path>/home/burguete/programas/mpcotool/4.0.4/</path>
     <filename>mpcotool_8h</filename>
     <member kind="function">
       <type>int</type>
@@ -1445,7 +1172,7 @@
   </compound>
   <compound kind="file">
     <name>optimize.c</name>
-    <path>/home/burguete/programas/mpcotool/4.0.3/</path>
+    <path>/home/burguete/programas/mpcotool/4.0.4/</path>
     <filename>optimize_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
     <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
@@ -1467,214 +1194,214 @@
       <anchor>a4608958cdf4c8b8ff0a6e301c4c23ae1</anchor>
       <arglist></arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>optimize_input</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a152c667defdbd5a05204c1e713940df1</anchor>
+      <anchor>ade3ccb8bb1e8cee97a9612347666231b</anchor>
       <arglist>(unsigned int simulation, char *input, GMappedFile *stencil)</arglist>
     </member>
-    <member kind="function">
-      <type>double</type>
+    <member kind="function" static="yes">
+      <type>static double</type>
       <name>optimize_parse</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a081be4a72104964a56c123e6cc69855c</anchor>
+      <anchor>ada09870440d90725ce4430884a328e63</anchor>
       <arglist>(unsigned int simulation, unsigned int experiment)</arglist>
     </member>
-    <member kind="function">
-      <type>double</type>
+    <member kind="function" static="yes">
+      <type>static double</type>
       <name>optimize_norm_euclidian</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a984e0e7986b53c5099f294b4f2a7cb7f</anchor>
+      <anchor>a478c0065502554d63bfd75ab90046c6e</anchor>
       <arglist>(unsigned int simulation)</arglist>
     </member>
-    <member kind="function">
-      <type>double</type>
+    <member kind="function" static="yes">
+      <type>static double</type>
       <name>optimize_norm_maximum</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>acd2d40cdca1d1583cf984db0053d1407</anchor>
+      <anchor>a6eeb3e64645453ca543e466c0aeb9da0</anchor>
       <arglist>(unsigned int simulation)</arglist>
     </member>
-    <member kind="function">
-      <type>double</type>
+    <member kind="function" static="yes">
+      <type>static double</type>
       <name>optimize_norm_p</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a36d9fa801a4c114189586ea7e3c98026</anchor>
+      <anchor>a0c101494d3a3f5329e81138aa7bd63c1</anchor>
       <arglist>(unsigned int simulation)</arglist>
     </member>
-    <member kind="function">
-      <type>double</type>
+    <member kind="function" static="yes">
+      <type>static double</type>
       <name>optimize_norm_taxicab</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>abd74ac1254a92659a0fa3e4c26b55268</anchor>
+      <anchor>a5b6c349941875510bd2096accd77d2bf</anchor>
       <arglist>(unsigned int simulation)</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>optimize_print</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a1862369cc4cd884a2787900c3218086c</anchor>
+      <anchor>af1ce4e2e7515069b2fe443d096f30ee4</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>optimize_save_variables</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>ab2e29345e6d5af47b3c3a0d4fb186b84</anchor>
+      <anchor>a29330805286f9e5c298366beb471065d</anchor>
       <arglist>(unsigned int simulation, double error)</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>optimize_best</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a4e65bd47b93fb4c3360c3c8cc340e3e4</anchor>
+      <anchor>aec95c9dc3d5b1499b2806126250b152e</anchor>
       <arglist>(unsigned int simulation, double value)</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>optimize_sequential</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a7861c1614146b83f3a4776b221eadad8</anchor>
+      <anchor>a9b24940a8896ab37edd1cc7b4ec4f8ba</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void *</type>
+    <member kind="function" static="yes">
+      <type>static void *</type>
       <name>optimize_thread</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a26afd72eb6b1ce2eb7f4e4820e189ae3</anchor>
+      <anchor>af37109643fa0756b029e866a46dd1e7a</anchor>
       <arglist>(ParallelData *data)</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>optimize_merge</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a8156e25d5ce2dedc5ea27c2d891b555b</anchor>
+      <anchor>af3b154c269c2bbfcbde35b1915ea94b8</anchor>
       <arglist>(unsigned int nsaveds, unsigned int *simulation_best, double *error_best)</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>optimize_synchronise</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>aa2b4a77975c8c44730bab99923e1cd66</anchor>
+      <anchor>a02eed61d22fc7cda76bdbc0f03f5c6fd</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>optimize_sweep</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a99e7a41091f1dfa14e400ff741dd7d2a</anchor>
+      <anchor>a78e00750aaa3a7b1c622f5ba9ad9f17a</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>optimize_MonteCarlo</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a852be9aa8d3a2556e6afb6d048d9c5b7</anchor>
+      <anchor>a20d659bc425c985b561805601dbda0b7</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>optimize_orthogonal</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a306d6ca999211101b188ba46ab9546ed</anchor>
+      <anchor>ac49b2bdfd2ca79c19ef1e66d15bd01e3</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>optimize_best_climbing</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a1a136da897a0f961d18787975f9bf7e1</anchor>
+      <anchor>aa83f3edfd78d4e29cfb141a14063cec3</anchor>
       <arglist>(unsigned int simulation, double value)</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>optimize_climbing_sequential</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a79f513f131b6f348e818036fdfa87d1c</anchor>
+      <anchor>ab3ed25067402d77044764f3550dcdf74</anchor>
       <arglist>(unsigned int simulation)</arglist>
     </member>
-    <member kind="function">
-      <type>void *</type>
+    <member kind="function" static="yes">
+      <type>static void *</type>
       <name>optimize_climbing_thread</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>adc798ed52e4f9f8d050dd337914593a6</anchor>
+      <anchor>a27cf14f16b3c2bd3e4d7137a088a16a9</anchor>
       <arglist>(ParallelData *data)</arglist>
     </member>
-    <member kind="function">
-      <type>double</type>
+    <member kind="function" static="yes">
+      <type>static double</type>
       <name>optimize_estimate_climbing_random</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a0f2753fd35f824b19799b492b0acb6e0</anchor>
+      <anchor>a9819f5c08802c78ca7335bea260c9b0c</anchor>
       <arglist>(unsigned int variable, unsigned int estimate)</arglist>
     </member>
-    <member kind="function">
-      <type>double</type>
+    <member kind="function" static="yes">
+      <type>static double</type>
       <name>optimize_estimate_climbing_coordinates</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>adf061262424f6ed5fe19506d1e3df5ba</anchor>
+      <anchor>a39dbfc39b44a1e25e3e7e46778fcdac2</anchor>
       <arglist>(unsigned int variable, unsigned int estimate)</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>optimize_step_climbing</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a33a8cab07022b26b79a91ecad150932c</anchor>
+      <anchor>a190f65a861f3bc99d12a46e5a96060ae</anchor>
       <arglist>(unsigned int simulation)</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>optimize_climbing</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a64b92cdafbc2ef76a1b1ca50ca833f48</anchor>
+      <anchor>a6b1145cd332571158595a2b9a413fc0d</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>double</type>
+    <member kind="function" static="yes">
+      <type>static double</type>
       <name>optimize_genetic_objective</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a023f43d88a403039a956326477cdc704</anchor>
+      <anchor>a174cc97b7d5846ab5748e7f69202dad9</anchor>
       <arglist>(Entity *entity)</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>optimize_genetic</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a575d6b43d74ff5e54d451842329fa0f3</anchor>
+      <anchor>a34b651d03f8fe23c0fbca5cac5b79634</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>optimize_save_old</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a2dc0170624aba789fed0ef90d3158c39</anchor>
+      <anchor>a8444dee89b88f2b168cc767b650b2a66</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>optimize_merge_old</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a3a8116ce4d9767201a7ce198c8da8633</anchor>
+      <anchor>ab6c06d569586a613191a76407f0829d3</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>optimize_refine</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>ab198c6c9e1a89bb18c1444444bda659f</anchor>
+      <anchor>ac496d5dc724e6cc6d08a8fce16af083e</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>optimize_step</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>af472d46ecc80cb91973afe5694171ecf</anchor>
+      <anchor>a5c51d11903df6cac6620d8d350a9593d</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>optimize_iterate</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a49cd377b89122dc1bf7d1198487f2f3a</anchor>
+      <anchor>a0ed870d7011b57e469fe08a0daef9c89</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
@@ -1692,257 +1419,47 @@
       <arglist>()</arglist>
     </member>
     <member kind="variable">
-      <type>unsigned int</type>
-      <name>nthreads_climbing</name>
-      <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a120bbbb471f176cda892738b6ba04825</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>void(*</type>
-      <name>optimize_algorithm</name>
-      <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>ae8e1e13b61d1f59287097efcc722e72c</anchor>
-      <arglist>)()</arglist>
-    </member>
-    <member kind="variable">
-      <type>double(*</type>
-      <name>optimize_estimate_climbing</name>
-      <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a952e17bb9b0f2d14cea87d21180d11fc</anchor>
-      <arglist>)(unsigned int variable, unsigned int estimate)</arglist>
-    </member>
-    <member kind="variable">
-      <type>double(*</type>
-      <name>optimize_norm</name>
-      <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a8739da78c54dbf16d462d57c00fb0183</anchor>
-      <arglist>)(unsigned int simulation)</arglist>
-    </member>
-    <member kind="variable">
       <type>Optimize</type>
       <name>optimize</name>
       <anchorfile>optimize_8c.html</anchorfile>
       <anchor>ae27bc538babb4c464007962ea5e7698f</anchor>
       <arglist>[1]</arglist>
     </member>
+    <member kind="variable">
+      <type>unsigned int</type>
+      <name>nthreads_climbing</name>
+      <anchorfile>optimize_8c.html</anchorfile>
+      <anchor>a120bbbb471f176cda892738b6ba04825</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" static="yes">
+      <type>static void(*</type>
+      <name>optimize_algorithm</name>
+      <anchorfile>optimize_8c.html</anchorfile>
+      <anchor>ae8e1e13b61d1f59287097efcc722e72c</anchor>
+      <arglist>)()</arglist>
+    </member>
+    <member kind="variable" static="yes">
+      <type>static double(*</type>
+      <name>optimize_estimate_climbing</name>
+      <anchorfile>optimize_8c.html</anchorfile>
+      <anchor>a952e17bb9b0f2d14cea87d21180d11fc</anchor>
+      <arglist>)(unsigned int variable, unsigned int estimate)</arglist>
+    </member>
+    <member kind="variable" static="yes">
+      <type>static double(*</type>
+      <name>optimize_norm</name>
+      <anchorfile>optimize_8c.html</anchorfile>
+      <anchor>a8739da78c54dbf16d462d57c00fb0183</anchor>
+      <arglist>)(unsigned int simulation)</arglist>
+    </member>
   </compound>
   <compound kind="file">
     <name>optimize.h</name>
-    <path>/home/burguete/programas/mpcotool/4.0.3/</path>
+    <path>/home/burguete/programas/mpcotool/4.0.4/</path>
     <filename>optimize_8h</filename>
     <class kind="struct">Optimize</class>
     <class kind="struct">ParallelData</class>
-    <member kind="function">
-      <type>void</type>
-      <name>optimize_input</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>a152c667defdbd5a05204c1e713940df1</anchor>
-      <arglist>(unsigned int simulation, char *input, GMappedFile *stencil)</arglist>
-    </member>
-    <member kind="function">
-      <type>double</type>
-      <name>optimize_parse</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>a081be4a72104964a56c123e6cc69855c</anchor>
-      <arglist>(unsigned int simulation, unsigned int experiment)</arglist>
-    </member>
-    <member kind="function">
-      <type>double</type>
-      <name>optimize_norm_euclidian</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>a984e0e7986b53c5099f294b4f2a7cb7f</anchor>
-      <arglist>(unsigned int simulation)</arglist>
-    </member>
-    <member kind="function">
-      <type>double</type>
-      <name>optimize_norm_maximum</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>acd2d40cdca1d1583cf984db0053d1407</anchor>
-      <arglist>(unsigned int simulation)</arglist>
-    </member>
-    <member kind="function">
-      <type>double</type>
-      <name>optimize_norm_p</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>a36d9fa801a4c114189586ea7e3c98026</anchor>
-      <arglist>(unsigned int simulation)</arglist>
-    </member>
-    <member kind="function">
-      <type>double</type>
-      <name>optimize_norm_taxicab</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>abd74ac1254a92659a0fa3e4c26b55268</anchor>
-      <arglist>(unsigned int simulation)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>optimize_print</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>a1862369cc4cd884a2787900c3218086c</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>optimize_save_variables</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>ab2e29345e6d5af47b3c3a0d4fb186b84</anchor>
-      <arglist>(unsigned int simulation, double error)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>optimize_best</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>a4e65bd47b93fb4c3360c3c8cc340e3e4</anchor>
-      <arglist>(unsigned int simulation, double value)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>optimize_sequential</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>a7861c1614146b83f3a4776b221eadad8</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void *</type>
-      <name>optimize_thread</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>a26afd72eb6b1ce2eb7f4e4820e189ae3</anchor>
-      <arglist>(ParallelData *data)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>optimize_merge</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>a8156e25d5ce2dedc5ea27c2d891b555b</anchor>
-      <arglist>(unsigned int nsaveds, unsigned int *simulation_best, double *error_best)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>optimize_synchronise</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>aa2b4a77975c8c44730bab99923e1cd66</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>optimize_sweep</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>a99e7a41091f1dfa14e400ff741dd7d2a</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>optimize_MonteCarlo</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>a852be9aa8d3a2556e6afb6d048d9c5b7</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>optimize_orthogonal</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>a306d6ca999211101b188ba46ab9546ed</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>optimize_best_climbing</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>a1a136da897a0f961d18787975f9bf7e1</anchor>
-      <arglist>(unsigned int simulation, double value)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>optimize_climbing_sequential</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>a79f513f131b6f348e818036fdfa87d1c</anchor>
-      <arglist>(unsigned int simulation)</arglist>
-    </member>
-    <member kind="function">
-      <type>void *</type>
-      <name>optimize_climbing_thread</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>adc798ed52e4f9f8d050dd337914593a6</anchor>
-      <arglist>(ParallelData *data)</arglist>
-    </member>
-    <member kind="function">
-      <type>double</type>
-      <name>optimize_estimate_climbing_random</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>a0f2753fd35f824b19799b492b0acb6e0</anchor>
-      <arglist>(unsigned int variable, unsigned int estimate)</arglist>
-    </member>
-    <member kind="function">
-      <type>double</type>
-      <name>optimize_estimate_climbing_coordinates</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>adf061262424f6ed5fe19506d1e3df5ba</anchor>
-      <arglist>(unsigned int variable, unsigned int estimate)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>optimize_step_climbing</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>a33a8cab07022b26b79a91ecad150932c</anchor>
-      <arglist>(unsigned int simulation)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>optimize_climbing</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>a64b92cdafbc2ef76a1b1ca50ca833f48</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>double</type>
-      <name>optimize_genetic_objective</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>a023f43d88a403039a956326477cdc704</anchor>
-      <arglist>(Entity *entity)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>optimize_genetic</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>a575d6b43d74ff5e54d451842329fa0f3</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>optimize_save_old</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>a2dc0170624aba789fed0ef90d3158c39</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>optimize_merge_old</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>a3a8116ce4d9767201a7ce198c8da8633</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>optimize_refine</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>ab198c6c9e1a89bb18c1444444bda659f</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>optimize_step</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>af472d46ecc80cb91973afe5694171ecf</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>optimize_iterate</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>a49cd377b89122dc1bf7d1198487f2f3a</anchor>
-      <arglist>()</arglist>
-    </member>
     <member kind="function">
       <type>void</type>
       <name>optimize_free</name>
@@ -1986,27 +1503,6 @@
       <arglist>[1]</arglist>
     </member>
     <member kind="variable">
-      <type>void(*</type>
-      <name>optimize_algorithm</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>ae8e1e13b61d1f59287097efcc722e72c</anchor>
-      <arglist>)()</arglist>
-    </member>
-    <member kind="variable">
-      <type>double(*</type>
-      <name>optimize_estimate_climbing</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>a952e17bb9b0f2d14cea87d21180d11fc</anchor>
-      <arglist>)(unsigned int variable, unsigned int estimate)</arglist>
-    </member>
-    <member kind="variable">
-      <type>double(*</type>
-      <name>optimize_norm</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>a8739da78c54dbf16d462d57c00fb0183</anchor>
-      <arglist>)(unsigned int simulation)</arglist>
-    </member>
-    <member kind="variable">
       <type>Optimize</type>
       <name>optimize</name>
       <anchorfile>optimize_8h.html</anchorfile>
@@ -2016,7 +1512,7 @@
   </compound>
   <compound kind="file">
     <name>utils.c</name>
-    <path>/home/burguete/programas/mpcotool/4.0.3/</path>
+    <path>/home/burguete/programas/mpcotool/4.0.4/</path>
     <filename>utils_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
     <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
@@ -2191,7 +1687,7 @@
   </compound>
   <compound kind="file">
     <name>utils.h</name>
-    <path>/home/burguete/programas/mpcotool/4.0.3/</path>
+    <path>/home/burguete/programas/mpcotool/4.0.4/</path>
     <filename>utils_8h</filename>
     <member kind="define">
       <type>#define</type>
@@ -2378,7 +1874,7 @@
   </compound>
   <compound kind="file">
     <name>variable.c</name>
-    <path>/home/burguete/programas/mpcotool/4.0.3/</path>
+    <path>/home/burguete/programas/mpcotool/4.0.4/</path>
     <filename>variable_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
     <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
@@ -2435,7 +1931,7 @@
   </compound>
   <compound kind="file">
     <name>variable.h</name>
-    <path>/home/burguete/programas/mpcotool/4.0.3/</path>
+    <path>/home/burguete/programas/mpcotool/4.0.4/</path>
     <filename>variable_8h</filename>
     <class kind="struct">Variable</class>
     <member kind="enumeration">

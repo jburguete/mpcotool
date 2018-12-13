@@ -99,10 +99,10 @@ mpcotoolbin.pgo: mpcotool.c mpcotool.h optimize.h input.h variable.h \
 	$(CC) -c -fPIC $(CFLAGS) $(PGOGEN) mpcotool.c -o mpcotoolbin.pgo
 
 libmpcotoolpgo@SO@: $(PGOOBJLIB)
-	$(CC) $(CFLAGS) $(PGOGEN) -shared -DEXTERNAL_LIBRARY=1 $(PGOOBJLIB) \
-		$(LDFLAGS) -L. -Wl,-rpath=. -lgenetic -o libmpcotoolpgo@SO@
+	$(CC) $(CFLAGS) $(PGOGEN) -shared $(PGOOBJLIB) $(LDFLAGS) -L. -Wl,-rpath=. \
+		-lgenetic -o libmpcotoolpgo@SO@
 
-mpcotoolbinpgo@EXE@: main.c libmpcotoolpgo@SO@ $(PGOTESTS)
+mpcotoolbinpgo@EXE@: main.c libmpcotoolpgo@SO@ libgenetic@SO@ $(PGOTESTS)
 	$(CC) $(CFLAGS) $(PGOGEN) main.c $(LDFLAGS) -o mpcotoolbinpgo@EXE@ -L. \
 		-Wl,-rpath=. -lmpcotoolpgo -lgenetic
 	./mpcotoolbinpgo -nthreads 1 ../tests/test1/test-mc@WIN@.xml
