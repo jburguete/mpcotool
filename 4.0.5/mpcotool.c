@@ -5,7 +5,7 @@ calibrations or optimizations of empirical parameters.
 
 AUTHORS: Javier Burguete and Borja Latorre.
 
-Copyright 2012-2018, AUTHORS.
+Copyright 2012-2019, AUTHORS.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -33,13 +33,14 @@ OF SUCH DAMAGE.
  * \file mpcotool.c
  * \brief Main function source file.
  * \authors Javier Burguete and Borja Latorre.
- * \copyright Copyright 2012-2018, all rights reserved.
+ * \copyright Copyright 2012-2019, all rights reserved.
  */
 #define _GNU_SOURCE
 #include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <getopt.h>
 #include <math.h>
 #include <locale.h>
 #include <gsl/gsl_rng.h>
@@ -80,23 +81,19 @@ unsigned int nthreads;          ///< Threads number.
  * \return 0 on success, >0 on error.
  */
 int
-mpcotool (int argn
-#if HAVE_GTK
-          __attribute__ ((unused))
-#endif
-          ,
-          ///< Arguments number.
-          char **argc
-#if HAVE_GTK
-          __attribute__ ((unused))
-#endif
-          ///< Arguments pointer.
-  )
+mpcotool (int argn,             ///< Arguments number.
+          char **argc)          ///< Arguments pointer.
 {
+  const struct option options[] = {
+    {"seed", required_argument, NULL, 's'},
+    {"nthreads", required_argument, NULL, 't'},
+    {NULL, 0, NULL, 0}
+  };
 #if HAVE_GTK
   GtkApplication *application;
   char *buffer;
 #endif
+  int o, option_index;
 
   // Starting pseudo-random numbers generator
 #if DEBUG_MPCOTOOL
@@ -123,15 +120,36 @@ mpcotool (int argn
   ntasks = 1;
 #endif
 
+  // Getting threads number and pseudo-random numbers generator seed
+  nthreads_climbing = nthreads = cores_number ();
+  optimize->seed = DEFAULT_RANDOM_SEED;
+
+  // Parsing command line arguments
+  while (1)
+    {
+      o = getopt_long (argn, argc, "s:t:", options, &option_index);
+      if (o == -1)
+        break;
+      switch (o)
+        {
+        case 's':
+          optimize->seed = atol (optarg);
+          break;
+        case 't':
+          nthreads_climbing = nthreads = atoi (optarg);
+          break;
+        default:
+          printf ("%s\n%s\n", _("ERROR!"), _("Unknown option"));
+          return 1;
+        }
+    }
+  argn -= optind;
+
   // Resetting result and variables file names
 #if DEBUG_MPCOTOOL
   fprintf (stderr, "mpcotool: resetting result and variables file names\n");
 #endif
   input->result = input->variables = NULL;
-
-  // Getting threads number and pseudo-random numbers generator seed
-  nthreads_climbing = nthreads = cores_number ();
-  optimize->seed = DEFAULT_RANDOM_SEED;
 
 #if HAVE_GTK
 
@@ -163,77 +181,23 @@ mpcotool (int argn
 #else
 
   // Checking syntax
-  if (argn < 2)
+  if (argn < 1 || argn > 3)
     {
       printf ("The syntax is:\n"
               "./mpcotoolbin [-nthreads x] [-seed s] data_file [result_file] "
               "[variables_file]\n");
-      return 1;
+      return 2;
     }
-
-  // Getting threads number and pseudo-random numbers generator seed
-#if DEBUG_MPCOTOOL
-  fprintf (stderr, "mpcotool: getting threads number and pseudo-random numbers "
-           "generator seed\n");
-#endif
-  if (argn > 2 && !strcmp (argc[1], "-nthreads"))
-    {
-      nthreads_climbing = nthreads = atoi (argc[2]);
-      if (!nthreads)
-        {
-          printf ("Bad threads number\n");
-          return 2;
-        }
-      argc += 2;
-      argn -= 2;
-      if (argn > 2 && !strcmp (argc[1], "-seed"))
-        {
-          optimize->seed = atoi (argc[2]);
-          argc += 2;
-          argn -= 2;
-        }
-    }
-  else if (argn > 2 && !strcmp (argc[1], "-seed"))
-    {
-      optimize->seed = atoi (argc[2]);
-      argc += 2;
-      argn -= 2;
-      if (argn > 2 && !strcmp (argc[1], "-nthreads"))
-        {
-          nthreads_climbing = nthreads = atoi (argc[2]);
-          if (!nthreads)
-            {
-              printf ("Bad threads number\n");
-              return 2;
-            }
-          argc += 2;
-          argn -= 2;
-        }
-    }
-  printf ("nthreads=%u\n", nthreads);
-  printf ("seed=%lu\n", optimize->seed);
-
-  // Checking arguments
-#if DEBUG_MPCOTOOL
-  fprintf (stderr, "mpcotool: checking arguments\n");
-#endif
-  if (argn > 4 || argn < 2)
-    {
-      printf ("The syntax is:\n"
-              "./mpcotoolbin [-nthreads x] [-seed s] data_file [result_file] "
-              "[variables_file]\n");
-      return 1;
-    }
-  if (argn > 2)
-    input->result = (char *) xmlStrdup ((xmlChar *) argc[2]);
-  if (argn == 4)
-    input->variables = (char *) xmlStrdup ((xmlChar *) argc[3]);
+  if (argn > 1)
+    input->result = (char *) xmlStrdup ((xmlChar *) argc[optind + 1]);
+  if (argn == 2)
+    input->variables = (char *) xmlStrdup ((xmlChar *) argc[optind + 2]);
 
   // Making optimization
 #if DEBUG_MPCOTOOL
   fprintf (stderr, "mpcotool: making optimization\n");
 #endif
-  if (input_open (argc[1]))
+  if (input_open (argc[optind]))
     optimize_open ();
 
   // Freeing memory

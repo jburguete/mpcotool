@@ -105,7 +105,7 @@ libmpcotoolpgo@SO@: $(PGOOBJLIB)
 mpcotoolbinpgo@EXE@: main.c libmpcotoolpgo@SO@ libgenetic@SO@ $(PGOTESTS)
 	$(CC) $(CFLAGS) $(PGOGEN) main.c $(LDFLAGS) -o mpcotoolbinpgo@EXE@ -L. \
 		-Wl,-rpath=. -lmpcotoolpgo -lgenetic
-	./mpcotoolbinpgo -nthreads 1 ../tests/test1/test-mc@WIN@.xml
+	./mpcotoolbinpgo -t 1 ../tests/test1/test-mc@WIN@.xml
 	./mpcotoolbinpgo ../tests/test1/test-mc@WIN@.json
 	./mpcotoolbinpgo ../tests/test1/test-sw@WIN@.xml
 	./mpcotoolbinpgo ../tests/test1/test-os@WIN@.xml

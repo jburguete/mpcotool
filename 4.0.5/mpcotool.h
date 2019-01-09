@@ -5,7 +5,7 @@ calibrations or optimizations of empirical parameters.
 
 AUTHORS: Javier Burguete and Borja Latorre.
 
-Copyright 2012-2018, AUTHORS.
+Copyright 2012-2019, AUTHORS.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -30,49 +30,14 @@ OF SUCH DAMAGE.
 */
 
 /**
- * \file main.c
- * \brief Main source file.
+ * \file mpcotool.h
+ * \brief Main function header file.
  * \authors Javier Burguete and Borja Latorre.
- * \copyright Copyright 2012-2018, all rights reserved.
+ * \copyright Copyright 2012-2019, all rights reserved.
  */
-#define _GNU_SOURCE
-#include "config.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include <locale.h>
-#include <gsl/gsl_rng.h>
-#include <libxml/parser.h>
-#include <libintl.h>
-#include <glib.h>
-#include <json-glib/json-glib.h>
-#ifdef G_OS_WIN32
-#include <windows.h>
-#endif
-#if HAVE_MPI
-#include <mpi.h>
-#endif
-#if HAVE_GTK
-#include <gio/gio.h>
-#include <gtk/gtk.h>
-#endif
-#include "genetic/genetic.h"
-#include "utils.h"
-#include "experiment.h"
-#include "variable.h"
-#include "input.h"
-#include "optimize.h"
-#if HAVE_GTK
-#include "interface.h"
-#endif
-#include "mpcotool.h"
+#ifndef MPCOTOOL__H
+#define MPCOTOOL__H 1
 
-int
-main (int argn, char **argc)
-{
-#if HAVE_GTK
-  show_pending = process_pending;
+extern int mpcotool (int argn, char **argc);
+
 #endif
-  return mpcotool (argn, argc);
-}
