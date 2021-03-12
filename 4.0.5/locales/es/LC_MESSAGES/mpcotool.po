@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 4.0.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-09 12:37+0100\n"
+"POT-Creation-Date: 2020-12-06 19:28+0100\n"
 "PO-Revision-Date: 2015-10-20 07:33+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: utils.c:103
+#: utils.c:103 mpcotool.c:142
 msgid "ERROR!"
 msgstr "¡ERROR!"
 
@@ -676,12 +676,5 @@ msgid "P parameter for the P error norm"
 msgstr "Parámetro P para la norma de error P"
 
 #: mpcotool.c:142
-#, fuzzy
 msgid "Unknown option"
-msgstr "Algoritmo desconocido"
-
-#~ msgid "_Direction search method"
-#~ msgstr "_Método de búsqueda de dirección"
-
-#~ msgid "bad absolute range"
-#~ msgstr "rango absoluto incorrecto"
+msgstr "Opción desconocida"

@@ -68,7 +68,7 @@ fi
 # Checking MPI
 AC_ARG_WITH([mpi], AS_HELP_STRING([--with-mpi], [Build with MPI]))
 if test "x$with_mpi" = "xyes"; then
-	if test $CC = "mpicc"; then
+	if test "x$CC" = "xmpicc"; then
 		AC_MSG_NOTICE([checking for MPI... yes])
 		AC_SUBST(MPI, "-DHAVE_MPI=1")
 	else
@@ -115,11 +115,13 @@ AC_CHECK_HEADERS(
 	[stdlib.h string.h unistd.h pthread.h locale.h sys/param.h libintl.h])
 
 # Checking -march=native compiler flag
-if test "x$win" = "x0"; then
+AC_ARG_WITH([native], AS_HELP_STRING([--with-native],
+	[Build with native optimization]))
+if test [["x$with_native" = "xyes"] -a ["x$win" = "x0"]]; then
 	compiler=$CC
 	CC="$CC -march=native"
-	AC_TRY_LINK([],
-		[int main(int argc, char **argv){return 0;}], [arch=1], [arch=0])
+	AC_TRY_LINK([], [int main(int argc, char **argv){return 0;}], [arch=1],
+       		[arch=0])
 	CC=$compiler
 	if test "x$arch" = "x0"; then
 		AC_MSG_NOTICE([checking for -march=native... no])

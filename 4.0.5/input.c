@@ -475,7 +475,7 @@ input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
   // Reading the variables data
   if (input->algorithm == ALGORITHM_SWEEP
       || input->algorithm == ALGORITHM_ORTHOGONAL)
-	input->nsimulations = 1;
+    input->nsimulations = 1;
   for (; child; child = child->next)
     {
 #if DEBUG_INPUT
@@ -496,7 +496,7 @@ input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
         goto exit_on_error;
       if (input->algorithm == ALGORITHM_SWEEP
           || input->algorithm == ALGORITHM_ORTHOGONAL)
-		input->nsimulations *= input->variable[input->nvariables].nsweeps;
+        input->nsimulations *= input->variable[input->nvariables].nsweeps;
       ++input->nvariables;
     }
   if (!input->nvariables)

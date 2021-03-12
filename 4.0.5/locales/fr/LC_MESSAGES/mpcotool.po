@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 4.0.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-09 12:37+0100\n"
+"POT-Creation-Date: 2020-12-06 19:28+0100\n"
 "PO-Revision-Date: 2015-10-20 18:47+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: utils.c:103
+#: utils.c:103 mpcotool.c:142
 msgid "ERROR!"
 msgstr "ERREUR!"
 
@@ -198,9 +198,8 @@ msgid "Invalid estimates number"
 msgstr "Nombre d'estimations incorrect"
 
 #: input.c:410 input.c:825
-#, fuzzy
 msgid "Unknown method to estimate the hill climbing"
-msgstr "Méthode d'éstimer la direction inconnue"
+msgstr "Méthode d'éstimer l'escalade inconnue"
 
 #: input.c:422 input.c:834
 msgid "Invalid relaxation parameter"
@@ -267,18 +266,16 @@ msgstr ""
 "l'algorithme stochastique"
 
 #: interface.c:656
-#, fuzzy
 msgid "Threads number for the hill climbing method"
-msgstr "Nombre de fils pour la méthode de recherche de direction"
+msgstr "Nombre de fils pour la méthode de recherche d'escalade"
 
 #: interface.c:661
-#, fuzzy
 msgid ""
 "Number of threads to perform the calibration/optimization for the hill "
 "climbing method"
 msgstr ""
 "Nombre de fils pour exécuter le calibrage ou la optimisation pour la méthode "
-"de recherche de direction"
+"d'escalade"
 
 #: interface.c:678 interface.c:2132
 msgid "Options"
@@ -349,24 +346,20 @@ msgid "Orthogonal sampling brute force algorithm"
 msgstr "Algorithme de force brute d'échantillonnage orthogonal"
 
 #: interface.c:2080
-#, fuzzy
 msgid "_Coordinates climbing"
-msgstr "_Directions de descente"
+msgstr "_Directions d'escalade"
 
 #: interface.c:2080
-#, fuzzy
 msgid "_Random climbing"
-msgstr "_Aléatoire"
+msgstr "Escalade _aléatoire"
 
 #: interface.c:2083
-#, fuzzy
 msgid "Coordinates climbing estimate method"
-msgstr "Méthode à directions de descente par coordonnées"
+msgstr "Méthode d'escalade par coordonnées"
 
 #: interface.c:2084
-#, fuzzy
 msgid "Random climbing estimate method"
-msgstr "Méthode d'estimation de la direction aléatoire"
+msgstr "Méthode d'estimation de l'escalade aléatoire"
 
 #: interface.c:2088
 msgid "Euclidean error norm (L2)"
@@ -538,9 +531,8 @@ msgid "Steps number"
 msgstr "Nombre de pas"
 
 #: interface.c:2330
-#, fuzzy
 msgid "Climbing estimates number"
-msgstr "Nombre d'estimations de la direction de descente"
+msgstr "Nombre d'estimations d'escalade"
 
 #: interface.c:2334
 msgid "Relaxation parameter"
@@ -635,9 +627,8 @@ msgid "Step size"
 msgstr "Grandeur de pas"
 
 #: interface.c:2534
-#, fuzzy
 msgid "Initial step size for the hill climbing method"
-msgstr "Grandeur de pas initiale pour la méthode à directions de descente"
+msgstr "Grandeur de pas initiale pour la méthode d'escalade"
 
 #: interface.c:2591
 msgid "Experiment selector"
@@ -684,12 +675,5 @@ msgid "P parameter for the P error norm"
 msgstr "Paramètre P pour la norme d'erreur P"
 
 #: mpcotool.c:142
-#, fuzzy
 msgid "Unknown option"
-msgstr "Algorithme inconnu"
-
-#~ msgid "_Direction search method"
-#~ msgstr "_Méthode à directions de descente"
-
-#~ msgid "bad absolute range"
-#~ msgstr "gamme absolue incorrecte"
+msgstr "Option inconnue"

@@ -67,7 +67,7 @@ show_message (char *title,      ///< Title.
               char *msg,        ///< Message.
               int type
 #if !HAVE_GTK
-              __attribute__ ((unused))
+              __attribute__((unused))
 #endif
               ///< Message type.
   )
