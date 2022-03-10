@@ -45,12 +45,12 @@ ifeq ($(PGO), 1)
 		optimize.pgo utilsbin.pgo
 	PGOGEN = -fprofile-generate
 	PGOUSE = -fprofile-use -fprofile-correction
-	UTILSBINDEP = mpcotoolbinpgo utilsbin.gcda
-	OPTIMIZEDEP = mpcotoolbinpgo optimize.gcda
-	INPUTDEP = mpcotoolbinpgo input.gcda
-	VARIABLEDEP = mpcotoolbinpgo variable.gcda
-	EXPERIMENTDEP = mpcotoolbinpgo experiment.gcda
-	MPCOTOOLBINDEP = mpcotoolbinpgo mpcotoolbin.gcda
+	UTILSBINDEP = mpcotoolbinpgo@EXE@ utilsbin.gcda
+	OPTIMIZEDEP = mpcotoolbinpgo@EXE@ optimize.gcda
+	INPUTDEP = mpcotoolbinpgo@EXE@ input.gcda
+	VARIABLEDEP = mpcotoolbinpgo@EXE@ variable.gcda
+	EXPERIMENTDEP = mpcotoolbinpgo@EXE@ experiment.gcda
+	MPCOTOOLBINDEP = mpcotoolbinpgo@EXE@ mpcotoolbin.gcda
 	PGOTESTS = $(T1)simulator@EXE@ $(T1)evaluator@EXE@ \
 		$(T1)test-mc@WIN@.xml $(T1)test-mc@WIN@.json $(T1)test-sw@WIN@.xml \
 		$(T1)test-os@WIN@.xml $(T1)test-ga@WIN@.xml
