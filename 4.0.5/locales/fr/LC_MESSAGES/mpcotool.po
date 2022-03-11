@@ -524,7 +524,7 @@ msgstr "Seuil de la fonction objectif pour finir les simulations"
 
 #: interface.c:2304
 msgid "_Hill climbing method"
-msgstr ""
+msgstr "Méthode d'_escalade"
 
 #: interface.c:2325
 msgid "Steps number"

@@ -172,7 +172,7 @@ MPCOTool can also be used as an external library:
   program directory.
 
 2. Include the function header in your source code:
-> extern int mpcotool (int argn, char **argc);
+> extern int mpcotool (int argn, char \*\*argc);
 
 3. Build the executable file with the linker and compiler flags:
 > $ gcc -L. -Wl,-rpath=. -lmpcotool -lgenetic ...

@@ -69,7 +69,7 @@ OF SUCH DAMAGE.
 #endif
 #include "mpcotool.h"
 
-#define DEBUG_MPCOTOOL 0        ///< Macro to debug main functions.
+#define DEBUG_MPCOTOOL 1        ///< Macro to debug main functions.
 
 GMutex mutex[1];                ///< GMutex struct.
 int ntasks;                     ///< Tasks number.

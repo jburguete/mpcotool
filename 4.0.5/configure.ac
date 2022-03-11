@@ -70,10 +70,9 @@ AC_ARG_WITH([mpi], AS_HELP_STRING([--with-mpi], [Build with MPI]))
 if test "x$with_mpi" = "xyes"; then
 	if test "x$CC" = "xmpicc"; then
 		AC_MSG_NOTICE([checking for MPI... yes])
-		AC_SUBST(MPI, "-DHAVE_MPI=1")
+		AC_DEFINE([HAVE_MPI], [1])
 	else
 		AC_MSG_NOTICE([checking for MPI... no])
-		AC_SUBST(MPI, "")
 	fi
 fi
 

@@ -38,6 +38,8 @@ OF SUCH DAMAGE.
 #ifndef CONFIG__H
 #define CONFIG__H 1
 
+#undef HAVE_MPI
+
 // Gettext simplification
 #define _(string) (gettext(string))
 

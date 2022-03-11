@@ -82,7 +82,7 @@ The source code has to have the following files:
 BUILDING INSTRUCTIONS
 ---------------------
 
-On Fedora Linux 33, in order to use OpenMPI compilation, do in a terminal (in 64 bits
+On Fedora Linux 34, in order to use OpenMPI compilation, do in a terminal (in 64 bits
 version):
 > $ export PATH=$PATH:/usr/lib64/openmpi/bin
 
@@ -98,7 +98,7 @@ On NetBSD 9.1, to compile with last GCC version you have to do first on the
 building terminal:
 > $ export PATH=/usr/pkg/gcc8/bin:$PATH"
 
-On OpenBSD 6.8 you have to do first on the building terminal to select
+On OpenBSD 6.9 you have to do first on the building terminal to select
 adequate versions and deactivate OpenMPI (does not link) building with CLang:
 > $ export AUTOCONF\_VERSION=2.69 AUTOMAKE\_VERSION=1.16 CC=clang
 
@@ -106,25 +106,25 @@ On OpenIndiana Hipster, in order to enable OpenMPI compilation, do in a
 terminal:
 > $ export PATH=$PATH:/usr/lib/openmpi/gcc/bin
 
-On OpenSUSE Linux 15.2, in order to enable OpenMPI compilation, in 64 bits version do
-in a terminal (OpenMPI configure script does not work in last OpenSUSE versions
-then does not apply this step):
+On OpenSUSE Linux 15.2, in order to enable OpenMPI compilation, in 64 bits
+version do in a terminal (OpenMPI configure script does not work in last
+OpenSUSE versions then does not apply this step):
 > $ export PATH=$PATH:/usr/lib64/mpi/gcc/openmpi/bin
 
 This software has been built and tested in the following operative systems:
 * Debian 10 (Linux and Hurd)
 * Dragonfly BSD 5.8.3
-* Dyson Illumos
-* Fedora Linux 33
-* FreeBSD 12.2
+* Fedora Linux 34
+* FreeBSD 13.0
+* Gentoo Linux
 * Linux Mint DE 4
 * Manjaro Linux
 * Microsoft Windows 10
 * NetBSD 9.1
-* OpenBSD 6.8
+* OpenBSD 6.9
 * OpenInidiana Hipster
 * OpenSUSE Linux 15.2
-* Xubuntu Linux 20.10
+* Ubuntu Linux 21.04
 
 Probably, it can be built in other systems, distributions, or versions but it
 has not been tested.
@@ -170,7 +170,7 @@ MPCOTool can also be used as an external library:
   program directory.
 
 2. Include the function header in your source code:
-> extern int mpcotool (int argn, char **argc);
+> extern int mpcotool (int argn, char \*\*argc);
 
 3. Build the executable file with the linker and compiler flags:
 > $ gcc -L. -Wl,-rpath=. -lmpcotool -lgenetic ...
