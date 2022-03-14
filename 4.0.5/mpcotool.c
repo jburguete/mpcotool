@@ -71,10 +71,6 @@ OF SUCH DAMAGE.
 
 #define DEBUG_MPCOTOOL 1        ///< Macro to debug main functions.
 
-GMutex mutex[1];                ///< GMutex struct.
-int ntasks;                     ///< Tasks number.
-unsigned int nthreads;          ///< Threads number.
-
 /**
  * Main function.
  *

@@ -1,5 +1,5 @@
 AC_PREREQ([2.67])
-AC_INIT([mpcotool], [4.0.1], [https://github.com/jburguete/mpcotool])
+AC_INIT([mpcotool], [4.0.5], [https://github.com/jburguete/mpcotool])
 
 # Checks for operative systems
 AC_CANONICAL_SYSTEM
@@ -184,6 +184,15 @@ if test "x$with_pgo" = "xyes"; then
 	fi
 fi
 
+# Checking static library
+AC_ARG_WITH([static],
+	AS_HELP_STRING([--with-static], [Build static library]))
+if test "x$with_static" = "xyes"; then
+	mk=Makefile-static.in
+else
+	mk=Makefile.in
+fi
+
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_INLINE
 AC_TYPE_SIZE_T
@@ -193,7 +202,7 @@ AC_CHECK_FUNCS([pow setlocale sqrt])
 
 # Final output
 AC_CONFIG_HEADERS([config.h])
-AC_CONFIG_FILES([Makefile ../tests/test1/Makefile ../tests/test2/Makefile
+AC_CONFIG_FILES([Makefile:$mk ../tests/test1/Makefile ../tests/test2/Makefile
 	../tests/test3/Makefile ../tests/test4/Makefile ../tests/test5/Makefile
 	../tests/testAckley/Makefile ../tests/testSphere/Makefile
 	../tests/testBooth/Makefile ../tests/testRosenbrock/Makefile
