@@ -6,12 +6,32 @@ CFLAGS = @CPPFLAGS@ @GSL_CFLAGS@ @XML_CFLAGS@ @GLIB_CFLAGS@ @JSON_CFLAGS@ \
 LDFLAGS = @LDFLAGS@ @LIBS@ @GSL_LIBS@ @XML_LIBS@ @GLIB_LIBS@ @JSON_LIBS@ \
 	@GTHREAD_LIBS@
 
+bin = ./
+utilsbin_o = $(bin)utilsbin.o
+optimize_o = $(bin)optimize.o
+input_o = $(bin)input.o
+variable_o = $(bin)variable.o
+experiment_o = $(bin)experiment.o
+mpcotoolbin_o = $(bin)mpcotoolbin.o
+utils_o = $(bin)utils.o
+interface_o = $(bin)interface.o
+mpcotool_o = $(bin)mpcotool.o
+utilsbin_pgo = $(bin)utilsbin.pgo
+optimize_pgo = $(bin)optimize.pgo
+input_pgo = $(bin)input.pgo
+variable_pgo = $(bin)variable.pgo
+experiment_pgo = $(bin)experiment.pgo
+mpcotoolbin_pgo = $(bin)mpcotoolbin.pgo
+libgenetic = $(bin)libgenetic@SO@
+libmpcotoolpgo = $(bin)libmpcotoolpgo@SO@
+libmpcotool = $(bin)libmpcotool@SO@
 SRC = utils.c experiment.c variable.c input.c optimize.c interface.c \
 	mpcotool.c main.c
-OBJLIB = mpcotoolbin.o experiment.o variable.o input.o optimize.o utilsbin.o
-OBJ = experiment.o variable.o input.o optimize.o
-OBJBIN = mpcotoolbin.o utilsbin.o $(OBJ)
-OBJGUI = mpcotool.o interface.o utils.o $(OBJ) @ICON@
+OBJLIB = $(mpcotoolbin_o) $(experiment_o) $(variable_o) $(input_o) \
+	$(optimize_o) $(utilsbin_o)
+OBJ = $(experiment_o) $(variable_o) $(input_o) $(optimize_o)
+OBJBIN = $(mpcotoolbin_o) $(utilsbin_o) $(OBJ)
+OBJGUI = $(mpcotool_o) $(interface_o) $(utils_o) $(OBJ) @ICON@
 DEP = Makefile
 DE = de/LC_MESSAGES/
 ES = es/LC_MESSAGES/
@@ -41,16 +61,16 @@ M2 = $(MDIR)manual-de-usuario.pdf
 MANUALS = $(M1) $(M2) $(MDIR)reference-manual.pdf
 PGO = @PGO@
 ifeq ($(PGO), 1)
-	PGOOBJLIB = mpcotoolbin.pgo experiment.pgo variable.pgo input.pgo \
-		optimize.pgo utilsbin.pgo
+	PGOOBJLIB = $(mpcotoolbin_pgo) $(experiment_pgo) $(variable_pgo) \
+		$(input_pgo) $(optimize_pgo) $(utilsbin_pgo)
 	PGOGEN = -fprofile-generate
 	PGOUSE = -fprofile-use -fprofile-correction
-	UTILSBINDEP = mpcotoolbinpgo@EXE@ utilsbin.gcda
-	OPTIMIZEDEP = mpcotoolbinpgo@EXE@ optimize.gcda
-	INPUTDEP = mpcotoolbinpgo@EXE@ input.gcda
-	VARIABLEDEP = mpcotoolbinpgo@EXE@ variable.gcda
-	EXPERIMENTDEP = mpcotoolbinpgo@EXE@ experiment.gcda
-	MPCOTOOLBINDEP = mpcotoolbinpgo@EXE@ mpcotoolbin.gcda
+	UTILSBINDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)utilsbin.gcda
+	OPTIMIZEDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)optimize.gcda
+	INPUTDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)input.gcda
+	VARIABLEDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)variable.gcda
+	EXPERIMENTDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)experiment.gcda
+	MPCOTOOLBINDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)mpcotoolbin.gcda
 	PGOTESTS = $(T1)simulator@EXE@ $(T1)evaluator@EXE@ \
 		$(T1)test-mc@WIN@.xml $(T1)test-mc@WIN@.json $(T1)test-sw@WIN@.xml \
 		$(T1)test-os@WIN@.xml $(T1)test-ga@WIN@.xml
@@ -65,109 +85,117 @@ else
 	MPCOTOOLBINDEP = mpcotool.c mpcotool.h optimize.h input.h variable.h \
 		experiment.h utils.h config.h $(DEP)
 endif
+CGEN = -c -fPIC $(CFLAGS) $(PGOGEN)
+CUSE = -c -fPIC $(CFLAGS) $(PGOUSE)
 
-
-all: mpcotoolbin@EXE@ \
-	libmpcotool@SO@ \
-	@MPCOTOOL@@EXE@ \
+all: $(bin) $(bin)mpcotoolbin@EXE@ \
+	$(bin)@MPCOTOOL@@EXE@ \
 	locales/$(DE)mpcotool.mo \
 	locales/$(ES)mpcotool.mo \
 	locales/$(FR)mpcotool.mo
+
+$(bin):
+	test -d $(bin) || mkdir -p $(bin)
+	test -e $(bin)libgenetic.a || ln -sf ../genetic/libgenetic.a $(bin)
 
 manuals: $(MANUALS)
 
 tests: $(TESTS)
 
-utilsbin.pgo: utils.c utils.h config.h $(DEP)
-	$(CC) -c -fPIC $(CFLAGS) $(PGOGEN) utils.c -o utilsbin.pgo
+$(utilsbin_pgo): utils.c utils.h config.h $(DEP)
+	$(CC) $(CGEN) utils.c -o $(utilsbin_pgo)
 
-experiment.pgo: experiment.c experiment.h utils.h config.h $(DEP)
-	$(CC) -c -fPIC $(CFLAGS) $(PGOGEN) experiment.c -o experiment.pgo
+$(experiment_pgo): experiment.c experiment.h utils.h config.h $(DEP)
+	$(CC) $(CGEN) experiment.c -o $(experiment_pgo)
 
-variable.pgo: variable.c variable.h utils.h config.h $(DEP)
-	$(CC) -c -fPIC $(CFLAGS) $(PGOGEN) variable.c -o variable.pgo
+$(variable_pgo): variable.c variable.h utils.h config.h $(DEP)
+	$(CC) $(CGEN) variable.c -o $(variable_pgo)
 
-input.pgo: input.c input.h variable.h experiment.h utils.h config.h $(DEP)
-	$(CC) -c -fPIC $(CFLAGS) $(PGOGEN) input.c -o input.pgo
+$(input_pgo): input.c input.h variable.h experiment.h utils.h config.h $(DEP)
+	$(CC) $(CGEN) input.c -o $(input_pgo)
 
-optimize.pgo: optimize.c optimize.h input.h variable.h experiment.h utils.h \
+$(optimize_pgo): optimize.c optimize.h input.h variable.h experiment.h utils.h \
 	config.h $(DEP)
-	$(CC) -c -fPIC $(CFLAGS) $(PGOGEN) optimize.c -o optimize.pgo
+	$(CC) $(CGEN) optimize.c -o $(optimize_pgo)
 
-mpcotoolbin.pgo: mpcotool.c mpcotool.h optimize.h input.h variable.h \
+$(mpcotoolbin_pgo): mpcotool.c mpcotool.h optimize.h input.h variable.h \
 	experiment.h utils.h config.h $(DEP)
-	$(CC) -c -fPIC $(CFLAGS) $(PGOGEN) mpcotool.c -o mpcotoolbin.pgo
+	$(CC) $(CGEN) mpcotool.c -o $(mpcotoolbin_pgo)
 
-libmpcotoolpgo@SO@: $(PGOOBJLIB)
+$(libmpcotoolpgo): $(PGOOBJLIB)
 	$(CC) $(PGOGEN) -shared $(PGOOBJLIB) $(LDFLAGS) -L. -Wl,-rpath=. -lgenetic \
-		-o libmpcotoolpgo@SO@
+		-o $(libmpcotoolpgo)
 
-mainbin.pgo: main.c mpcotool.h optimize.h input.h variable.h experiment.h \
-	utils.h config.h $(DEP)
-	$(CC) -c $(CFLAGS) $(PGOGEN) main.c -o mainbin.pgo
+$(bin)mainbin.pgo: main.c mpcotool.h optimize.h input.h variable.h \
+	experiment.h utils.h config.h $(DEP)
+	$(CC) -c $(CFLAGS) $(PGOGEN) main.c -o $(bin)mainbin.pgo
 
-mpcotoolbinpgo@EXE@: mainbin.pgo libmpcotoolpgo@SO@ libgenetic@SO@ $(PGOTESTS)
-	$(CC) $(PGOGEN) mainbin.pgo $(LDFLAGS) -o mpcotoolbinpgo@EXE@ -L. \
-		-Wl,-rpath=. -lmpcotoolpgo -lgenetic
-	./mpcotoolbinpgo -t 1 ../tests/test1/test-mc@WIN@.xml
-	./mpcotoolbinpgo ../tests/test1/test-mc@WIN@.json
-	./mpcotoolbinpgo ../tests/test1/test-sw@WIN@.xml
-	./mpcotoolbinpgo ../tests/test1/test-os@WIN@.xml
-	./mpcotoolbinpgo ../tests/test1/test-ga@WIN@.xml
+$(bin)mpcotoolbinpgo@EXE@: $(bin)mainbin.pgo $(libmpcotoolpgo) $(libgenetic) \
+	$(PGOTESTS)
+	$(CC) $(PGOGEN) $(bin)mainbin.pgo $(LDFLAGS) \
+		-o $(bin)mpcotoolbinpgo@EXE@ -L$(bin) -Wl,-rpath=. -lmpcotoolpgo \
+		-lgenetic
+	$(bin)mpcotoolbinpgo -t 1 ../tests/test1/test-mc@WIN@.xml
+	$(bin)mpcotoolbinpgo ../tests/test1/test-mc@WIN@.json
+	$(bin)mpcotoolbinpgo ../tests/test1/test-sw@WIN@.xml
+	$(bin)mpcotoolbinpgo ../tests/test1/test-os@WIN@.xml
+	$(bin)mpcotoolbinpgo ../tests/test1/test-ga@WIN@.xml
 
-utilsbin.o: $(UTILSBINDEP)
-	$(CC) -c -fPIC $(CFLAGS) $(PGOUSE) utils.c -o utilsbin.o
+$(utilsbin_o): $(UTILSBINDEP)
+	$(CC) $(CUSE) utils.c -o $(utilsbin_o)
 
-experiment.o: $(EXPERIMENTDEP)
-	$(CC) -c -fPIC $(CFLAGS) $(PGOUSE) experiment.c -o experiment.o
+$(experiment_o): $(EXPERIMENTDEP)
+	$(CC) $(CUSE) experiment.c -o $(experiment_o)
 
-variable.o: $(VARIABLEDEP)
-	$(CC) -c -fPIC $(CFLAGS) $(PGOUSE) variable.c -o variable.o
+$(variable_o): $(VARIABLEDEP)
+	$(CC) $(CUSE) variable.c -o $(variable_o)
 
-input.o: $(INPUTDEP)
-	$(CC) -c -fPIC $(CFLAGS) $(PGOUSE) input.c -o input.o
+$(input_o): $(INPUTDEP)
+	$(CC) $(CUSE) input.c -o $(input_o)
 
-optimize.o: $(OPTIMIZEDEP)
-	$(CC) -c -fPIC $(CFLAGS) $(PGOUSE) optimize.c -o optimize.o
+$(optimize_o): $(OPTIMIZEDEP)
+	$(CC) $(CUSE) optimize.c -o $(optimize_o)
 
-mpcotoolbin.o: $(MPCOTOOLBINDEP)
-	$(CC) -c -fPIC $(CFLAGS) $(PGOUSE) mpcotool.c -o mpcotoolbin.o
+$(mpcotoolbin_o): $(MPCOTOOLBINDEP)
+	$(CC) $(CUSE) mpcotool.c -o $(mpcotoolbin_o)
 
-libmpcotool@SO@: $(OBJLIB)
+$(libmpcotool): $(OBJLIB)
 	$(CC) $(PGOUSE) -shared -DEXTERNAL_LIBRARY=1 $(OBJLIB) $(LDFLAGS) -L. \
-		-Wl,-rpath=. -lgenetic -o libmpcotool@SO@
+		-Wl,-rpath=. -lgenetic -o $(libmpcotool)
 
-mainbin.o: main.c $(MPCOTOOLBINDEP)
-	$(CC) -c $(CFLAGS) $(PGOUSE) main.c -o mainbin.o
-
-mpcotoolbin@EXE@: mainbin.o libmpcotool@SO@
-	$(CC) $(PGOUSE) mainbin.o $(LDFLAGS) -o mpcotoolbin@EXE@ -L. \
-		-Wl,-rpath=. -lmpcotool -lgenetic
-
-utils.o: utils.c utils.h config.h $(DEP)
-	$(CC) -c $(CFLAGS) @GTK_CFLAGS@ -DHAVE_GTK=1 utils.c -o utils.o
-
-interface.o: interface.c interface.h optimize.h input.h variable.h \
+$(bin)mainbin.o: main.c mpcotool.h optimize.h input.h variable.h \
 	experiment.h utils.h config.h $(DEP)
-	$(CC) -c $(CFLAGS) @GTK_CFLAGS@ -DHAVE_GTK=1 interface.c -o interface.o
+	$(CC) -c $(CFLAGS) $(PGOUSE) main.c -o $(bin)mainbin.o
 
-mpcotool.o: mpcotool.c mpcotool.h interface.h optimize.h input.h variable.h \
+$(bin)mpcotoolbin@EXE@: $(bin)mainbin.o $(libmpcotool)
+	$(CC) $(PGOUSE) $(bin)mainbin.o -o $(bin)mpcotoolbin@EXE@ \
+		$(LDFLAGS) -L$(bin) -Wl,-rpath=. -lmpcotool -lgenetic
+
+$(utils_o): utils.c utils.h config.h $(DEP)
+	$(CC) -c $(CFLAGS) @GTK_CFLAGS@ -DHAVE_GTK=1 utils.c -o $(utils_o)
+
+$(interface_o): interface.c interface.h optimize.h input.h variable.h \
 	experiment.h utils.h config.h $(DEP)
-	$(CC) -c $(CFLAGS) @GTK_CFLAGS@ -DHAVE_GTK=1 mpcotool.c -o mpcotool.o
+	$(CC) -c $(CFLAGS) @GTK_CFLAGS@ -DHAVE_GTK=1 interface.c -o $(interface_o)
 
-main.o: main.c mpcotool.h optimize.h input.h variable.h experiment.h utils.h \
-	config.h $(DEP)
-	$(CC) -c $(CFLAGS) @GTK_CFLAGS@ -DHAVE_GTK=1 main.c -o main.o
+$(mpcotool_o): mpcotool.c mpcotool.h interface.h optimize.h input.h variable.h \
+	experiment.h utils.h config.h $(DEP)
+	$(CC) -c $(CFLAGS) @GTK_CFLAGS@ -DHAVE_GTK=1 mpcotool.c -o $(mpcotool_o)
 
-@MPCOTOOL@@EXE@: main.o libmpcotool@SO@ $(OBJGUI) @ICON@
-	$(CC) main.o $(OBJGUI) -L. -Wl,-rpath=. -lmpcotool -lgenetic $(LDFLAGS) \
-		@GTK_LIBS@ -o @MPCOTOOL@@EXE@
+$(bin)main.o: main.c mpcotool.h optimize.h input.h variable.h experiment.h \
+	utils.h config.h $(DEP)
+	$(CC) -c $(CFLAGS) @GTK_CFLAGS@ -DHAVE_GTK=1 main.c -o $(bin)main.o
+
+$(bin)@MPCOTOOL@@EXE@: $(bin)main.o $(libmpcotool) $(OBJGUI) @ICON@
+	$(CC) $(bin)main.o $(OBJGUI) -L$(bin) -Wl,-rpath=. -lmpcotool \
+		-lgenetic $(LDFLAGS) @GTK_LIBS@ -o $(bin)@MPCOTOOL@@EXE@
 
 clean:
-	rm *.o *pgo *.gcda *@SO@ mpcotoolbin @MPCOTOOL@@EXE@
+	cd $(bin); rm *.o *pgo *.gcda *@SO@ mpcotoolbin @MPCOTOOL@@EXE@
 
-strip: mpcotoolbin@EXE@ libmpcotool@SO@ @MPCOTOOL@@EXE@
-	strip mpcotoolbin@EXE@ libmpcotool@SO@ @MPCOTOOL@@EXE@
+strip:
+	make
+	strip $(bin)mpcotoolbin@EXE@ $(libmpcotool) $(bin)@MPCOTOOL@@EXE@
 
 locales/mpcotool.pot: $(SRC) Makefile
 	@gnu@xgettext -k_ -d mpcotool -o locales/mpcotool.pot --from-code=UTF-8 $(SRC)
