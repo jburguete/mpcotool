@@ -71,6 +71,7 @@ ifeq ($(PGO), 1)
 	VARIABLEDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)variable.gcda
 	EXPERIMENTDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)experiment.gcda
 	MPCOTOOLBINDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)mpcotoolbin.gcda
+	MAINBINDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)mainbin.gcda
 	PGOTESTS = $(T1)simulator@EXE@ $(T1)evaluator@EXE@ \
 		$(T1)test-mc@WIN@.xml $(T1)test-mc@WIN@.json $(T1)test-sw@WIN@.xml \
 		$(T1)test-os@WIN@.xml $(T1)test-ga@WIN@.xml
@@ -84,6 +85,8 @@ else
 		utils.h config.h $(DEP)
 	MPCOTOOLBINDEP = mpcotool.c mpcotool.h optimize.h input.h variable.h \
 		experiment.h utils.h config.h $(DEP)
+	MAINBINDEP = main.c mpcotool.h optimize.h input.h variable.h experiment.h \
+		utils.h config.h $(DEP)
 endif
 CGEN = -c -fPIC $(CFLAGS) $(PGOGEN)
 CUSE = -c -fPIC $(CFLAGS) $(PGOUSE)
@@ -163,8 +166,7 @@ $(libmpcotool): $(OBJLIB)
 	$(CC) $(PGOUSE) -shared -DEXTERNAL_LIBRARY=1 $(OBJLIB) $(LDFLAGS) -L. \
 		-Wl,-rpath=. -lgenetic -o $(libmpcotool)
 
-$(bin)mainbin.o: main.c mpcotool.h optimize.h input.h variable.h \
-	experiment.h utils.h config.h $(DEP)
+$(bin)mainbin.o: $(MAINBINDEP)
 	$(CC) -c $(CFLAGS) $(PGOUSE) main.c -o $(bin)mainbin.o
 
 $(bin)mpcotoolbin@EXE@: $(bin)mainbin.o $(libmpcotool)
