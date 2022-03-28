@@ -120,7 +120,7 @@ if test [["x$with_native" = "xyes"] -a ["x$win" = "x0"]]; then
 	compiler=$CC
 	CC="$CC -march=native"
 	AC_LINK_IFELSE([AC_LANG_PROGRAM([[]],
-    [int main(int argc, char **argv){return 0;}])], [arch=1], [arch=0])
+		[int main(int argc, char **argv){return 0;}])], [arch=1], [arch=0])
 	CC=$compiler
 	if test "x$arch" = "x0"; then
 		AC_MSG_NOTICE([checking for -march=native... no])
@@ -135,7 +135,7 @@ fi
 compiler=$CC
 CC="$CC -flto"
 AC_LINK_IFELSE([AC_LANG_PROGRAM([[]],
-  [[int main(int argc, char **argv){return 0;}]])], [lto=1], [lto=0])
+	[[int main(int argc, char **argv){return 0;}]])], [lto=1], [lto=0])
 CC=$compiler
 if test "x$lto" = "x0"; then
 	AC_MSG_NOTICE([checking for -flto... no])
@@ -149,13 +149,13 @@ fi
 compiler=$CC
 CC="$CC -std=gnu11"
 AC_LINK_IFELSE([AC_LANG_PROGRAM([[]],
-  [[int main(int argc, char **argv){return 0;}]])], [std=1], [std=0])
+	[[int main(int argc, char **argv){return 0;}]])], [std=1], [std=0])
 CC=$compiler
 if test "x$std" = "x0"; then
 	AC_MSG_NOTICE("checking for -std=gnu11... no")
 	CC="$CC -std=gnu99"
 	AC_LINK_IFELSE([AC_LANG_PROGRAM([[]],
-    [[int main(int argc, char **argv){return 0;}]])], [std=1], [std=0])
+		[[int main(int argc, char **argv){return 0;}]])], [std=1], [std=0])
 	CC=$compiler
 	if test "x$std" = "x0"; then
 		AC_MSG_NOTICE("checking for -std=gnu99... no")
@@ -175,7 +175,7 @@ AC_ARG_WITH([pgo],
 if test "x$with_pgo" = "xyes"; then
 	CC="$CC -fprofile-generate"
 	AC_LINK_IFELSE([AC_LANG_PROGRAM([[]],
-    [[int main(int argc, char **argv){return 0;}]])], [pgo=1], [pgo=0])
+		[[int main(int argc, char **argv){return 0;}]])], [pgo=1], [pgo=0])
 	CC=$compiler
 	if test "x$pgo" = "x0"; then
 		AC_MSG_NOTICE("checking for PGO... no")
