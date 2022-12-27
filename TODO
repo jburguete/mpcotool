@@ -1,3 +1,8 @@
 TASKS
 
-1) Add ant algorithm (Borja Latorre? Asier Lacasta?)
+* Replace utils files by tools
+* Compile with CLang/LLVM
+* Use the JB library
+* Enable GTK4
+* Enable optimization functions inputs by variables (not by files)
+- Add ant algorithm

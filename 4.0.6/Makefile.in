@@ -6,22 +6,24 @@ CFLAGS = @CPPFLAGS@ @GSL_CFLAGS@ @XML_CFLAGS@ @GLIB_CFLAGS@ @JSON_CFLAGS@ \
 LDFLAGS = @LDFLAGS@ @LIBS@ @GSL_LIBS@ @XML_LIBS@ @GLIB_LIBS@ @JSON_LIBS@ \
 	@GTHREAD_LIBS@
 
+src = ./
 bin = ./
-utilsbin_o = $(bin)utilsbin.o
-optimize_o = $(bin)optimize.o
-input_o = $(bin)input.o
-variable_o = $(bin)variable.o
-experiment_o = $(bin)experiment.o
-mpcotoolbin_o = $(bin)mpcotoolbin.o
-utils_o = $(bin)utils.o
-interface_o = $(bin)interface.o
-mpcotool_o = $(bin)mpcotool.o
-utilsbin_pgo = $(bin)utilsbin.pgo
-optimize_pgo = $(bin)optimize.pgo
-input_pgo = $(bin)input.pgo
-variable_pgo = $(bin)variable.pgo
-experiment_pgo = $(bin)experiment.pgo
-mpcotoolbin_pgo = $(bin)mpcotoolbin.pgo
+obj = ./
+utilsbin_o = $(obj)utilsbin.o
+optimize_o = $(obj)optimize.o
+input_o = $(obj)input.o
+variable_o = $(obj)variable.o
+experiment_o = $(obj)experiment.o
+mpcotoolbin_o = $(obj)mpcotoolbin.o
+utils_o = $(obj)utils.o
+interface_o = $(obj)interface.o
+mpcotool_o = $(obj)mpcotool.o
+utilsbin_pgo = $(obj)utilsbin.pgo
+optimize_pgo = $(obj)optimize.pgo
+input_pgo = $(obj)input.pgo
+variable_pgo = $(obj)variable.pgo
+experiment_pgo = $(obj)experiment.pgo
+mpcotoolbin_pgo = $(obj)mpcotoolbin.pgo
 libgenetic = $(bin)libgenetic@SO@
 libmpcotoolpgo = $(bin)libmpcotoolpgo@SO@
 libmpcotool = $(bin)libmpcotool@SO@
@@ -59,8 +61,7 @@ ADIR = ../article/
 M1 = $(MDIR)user-manual.pdf
 M2 = $(MDIR)manual-de-usuario.pdf
 MANUALS = $(M1) $(M2) $(MDIR)reference-manual.pdf
-PGO = @PGO@
-ifeq ($(PGO), 1)
+ifeq (@PGO@, 1)
 	PGOOBJLIB = $(mpcotoolbin_pgo) $(experiment_pgo) $(variable_pgo) \
 		$(input_pgo) $(optimize_pgo) $(utilsbin_pgo)
 	PGOGEN = -fprofile-generate

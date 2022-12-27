@@ -425,8 +425,9 @@ input_save_json (JsonGenerator * generator)     ///< JsonGenerator struct.
 #endif
 
   // Setting root JSON node
+  object = json_object_new ();
   node = json_node_new (JSON_NODE_OBJECT);
-  object = json_node_get_object (node);
+  json_node_set_object (node, object);
   json_generator_set_root (generator, node);
 
   // Adding properties to the root JSON node
