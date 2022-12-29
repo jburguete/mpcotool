@@ -7,7 +7,7 @@ calibrations or optimizations of empirical parameters.
 VERSIONS
 --------
 
-* 4.0.7: Stable and recommended version.
+* 4.0.8: Stable and recommended version.
 
 AUTHORS
 -------
@@ -59,15 +59,15 @@ FILES
 -----
 
 The source code has to have the following files:
-* 4.0.7/configure.ac: configure generator.
-* 4.0.7/Makefile.in: Makefile generator.
-* 4.0.7/config.h.in: config header generator.
-* 4.0.7/\*.c: source code files.
-* 4.0.7/\*.h: header code files.
-* 4.0.7/mpcotool.ico: icon file.
-* 4.0.7/build.sh: shell script to build all.
-* 4.0.7/logo.png: logo figure.
-* 4.0.7/Doxyfile: configuration file to generate doxygen documentation.
+* 4.0.8/configure.ac: configure generator.
+* 4.0.8/Makefile.in: Makefile generator.
+* 4.0.8/config.h.in: config header generator.
+* 4.0.8/\*.c: source code files.
+* 4.0.8/\*.h: header code files.
+* 4.0.8/mpcotool.ico: icon file.
+* 4.0.8/build.sh: shell script to build all.
+* 4.0.8/logo.png: logo figure.
+* 4.0.8/Doxyfile: configuration file to generate doxygen documentation.
 * TODO: tasks to do.
 * README.md: this file.
 * license.md: license file.
@@ -146,7 +146,7 @@ a terminal:
 > $ git clone https://github.com/jburguete/mpcotool.git
 
 4. Link the latest genetic version to genetic:
-> $ cd mpcotool/4.0.7
+> $ cd mpcotool/4.0.8
 >
 > $ ln -s ../../genetic/3.0.0 genetic
 > 
@@ -209,7 +209,7 @@ MAKING TESTS INSTRUCTIONS
 In order to build the tests follow the next instructions:
 
 1. Link some tests that needs genetic library doing in a terminal (assuming that
-you are in the directory mpcotool/4.0.7):
+you are in the directory mpcotool/4.0.8):
 > $ cd ../tests/test2
 >
 > $ ln -s ../../../genetic/3.0.0 genetic
@@ -229,7 +229,7 @@ you are in the directory mpcotool/4.0.7):
 > $ ln -s genetic/libgenetic.so (or .dll on Windows systems)
 
 2. Build all tests doing in the same terminal:
-> $ cd ../../4.0.7
+> $ cd ../../4.0.8
 >
 > $ make tests
 

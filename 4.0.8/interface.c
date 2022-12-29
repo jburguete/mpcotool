@@ -56,7 +56,7 @@ OF SUCH DAMAGE.
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 #include "genetic/genetic.h"
-#include "utils.h"
+#include "tools.h"
 #include "experiment.h"
 #include "variable.h"
 #include "input.h"

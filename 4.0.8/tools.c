@@ -30,7 +30,7 @@ OF SUCH DAMAGE.
 */
 
 /**
- * \file utils.c
+ * \file tools.c
  * \brief Source file to define some useful functions.
  * \authors Javier Burguete and Borja Latorre.
  * \copyright Copyright 2012-2019, all rights reserved.
@@ -49,7 +49,7 @@ OF SUCH DAMAGE.
 #if HAVE_GTK
 #include <gtk/gtk.h>
 #endif
-#include "utils.h"
+#include "tools.h"
 
 #if HAVE_GTK
 GtkWindow *main_window;         ///< Main GtkWindow.

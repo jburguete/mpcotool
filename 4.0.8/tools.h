@@ -30,13 +30,13 @@ OF SUCH DAMAGE.
 */
 
 /**
- * \file utils.h
+ * \file tools.h
  * \brief Header file to define some useful functions.
  * \authors Javier Burguete.
  * \copyright Copyright 2012-2019, all rights reserved.
  */
-#ifndef UTILS__H
-#define UTILS__H 1
+#ifndef TOOLS__H
+#define TOOLS__H 1
 
 /**
  * \def ERROR_TYPE

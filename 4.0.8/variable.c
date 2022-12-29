@@ -42,7 +42,7 @@ OF SUCH DAMAGE.
 #include <libintl.h>
 #include <glib.h>
 #include <json-glib/json-glib.h>
-#include "utils.h"
+#include "tools.h"
 #include "variable.h"
 
 #define DEBUG_VARIABLE 0        ///< Macro to debug variable functions.

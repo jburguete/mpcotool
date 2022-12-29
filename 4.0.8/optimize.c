@@ -57,7 +57,7 @@ OF SUCH DAMAGE.
 #include <mpi.h>
 #endif
 #include "genetic/genetic.h"
-#include "utils.h"
+#include "tools.h"
 #include "experiment.h"
 #include "variable.h"
 #include "input.h"

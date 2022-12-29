@@ -58,7 +58,7 @@ OF SUCH DAMAGE.
 #include <gtk/gtk.h>
 #endif
 #include "genetic/genetic.h"
-#include "utils.h"
+#include "tools.h"
 #include "experiment.h"
 #include "variable.h"
 #include "input.h"
