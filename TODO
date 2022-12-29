@@ -1,6 +1,5 @@
 TASKS
 
-* Replace utils files by tools
 * Use the JB library
 * Enable GTK4
 * Enable optimization functions inputs by variables (not by files)

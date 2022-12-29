@@ -181,10 +181,28 @@ PKG_CHECK_MODULES([GLIB], [glib-2.0])
 PKG_CHECK_MODULES([JSON], [json-glib-1.0])
 PKG_CHECK_MODULES([GTHREAD], [gthread-2.0])
 
-# Checks fot GTK+ interface
-AC_ARG_WITH([gtk], AS_HELP_STRING([--with-gtk], [Build with GTK+ interface]))
-if test "x$with_gtk" = "xyes"; then
-	PKG_CHECK_MODULES([GTK], [gtk+-3.0])
+# Checks for GTK+ interface
+AC_ARG_WITH([gtk],
+	AS_HELP_STRING([--with-gtk],
+		[Build using a version of GTK (3 (--with-gtk=3) or 4 (--with-gtk=4))]))
+gtk4=0
+gtk3=0
+gtk=0
+if test "x$with_gtk" = "x4"; then
+	PKG_CHECK_MODULES([GTK], [gtk4], [gtk4=1], [gtk4=0])
+	gtk3=1
+elif test "x$with_gtk" = "x3"; then
+	gtk3=1
+fi
+if test $gtk4 = 1; then
+	gtk=1
+elif test $gtk3 = 1; then
+	PKG_CHECK_MODULES([GTK], [gtk+-3.0],
+		[AC_MSG_NOTICE([With GTK])],
+		[AC_MSG_NOTICE([Without GTK])])
+	gtk=1
+fi
+if test $gtk = 1; then
 	AC_SUBST(MPCOTOOL, "mpcotool")
 fi
 
