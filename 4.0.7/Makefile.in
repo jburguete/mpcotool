@@ -64,6 +64,24 @@ MANUALS = $(M1) $(M2) $(MDIR)reference-manual.pdf
 ifeq (@PGO@, 1)
 	PGOOBJLIB = $(mpcotoolbin_pgo) $(experiment_pgo) $(variable_pgo) \
 		$(input_pgo) $(optimize_pgo) $(utilsbin_pgo)
+ifeq (@CC@, clang)
+	PGOGEN = -fprofile-instr-generate
+	PGOUSE = -fprofile-instr-use=$(bin)mpcotool.profraw
+	TESTSDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)mpcotool.profraw
+	UTILSBINDEP = $(TESTSDEP)
+	OPTIMIZEDEP = $(TESTSDEP)
+	INPUTDEP = $(TESTSDEP)
+	VARIABLEDEP = $(TESTSDEP)
+	EXPERIMENTDEP = $(TESTSDEP)
+	MPCOTOOLBINDEP = $(TESTSDEP)
+	MAINBINDEP = $(TESTSDEP)
+	MCXML1_PREFIX = LLVM_PROFILE_FILE="mcxml-1.profdata"
+	MCJSON_PREFIX = LLVM_PROFILE_FILE="mcjson.profdata"
+	SW_PREFIX = LLVM_PROFILE_FILE="sw.profdata"
+	OS_PREFIX = LLVM_PROFILE_FILE="os.profdata"
+	GA_PREFIX = LLVM_PROFILE_FILE="ga.profdata"
+	LLVM_MERGE = @LLVM_PROFDATA@ merge *.profdata -output mpcotool.profraw
+else
 	PGOGEN = -fprofile-generate
 	PGOUSE = -fprofile-use -fprofile-correction
 	UTILSBINDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)utilsbin.gcda
@@ -73,6 +91,7 @@ ifeq (@PGO@, 1)
 	EXPERIMENTDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)experiment.gcda
 	MPCOTOOLBINDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)mpcotoolbin.gcda
 	MAINBINDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)mainbin.gcda
+endif
 	PGOTESTS = $(T1)simulator@EXE@ $(T1)evaluator@EXE@ \
 		$(T1)test-mc@WIN@.xml $(T1)test-mc@WIN@.json $(T1)test-sw@WIN@.xml \
 		$(T1)test-os@WIN@.xml $(T1)test-ga@WIN@.xml
@@ -139,11 +158,12 @@ $(bin)mpcotoolbinpgo@EXE@: $(bin)mainbin.pgo $(libmpcotoolpgo) $(libgenetic) \
 	$(CC) $(PGOGEN) $(bin)mainbin.pgo $(LDFLAGS) \
 		-o $(bin)mpcotoolbinpgo@EXE@ -L$(bin) -Wl,-rpath=. -lmpcotoolpgo \
 		-lgenetic
-	$(bin)mpcotoolbinpgo -t 1 ../tests/test1/test-mc@WIN@.xml
-	$(bin)mpcotoolbinpgo ../tests/test1/test-mc@WIN@.json
-	$(bin)mpcotoolbinpgo ../tests/test1/test-sw@WIN@.xml
-	$(bin)mpcotoolbinpgo ../tests/test1/test-os@WIN@.xml
-	$(bin)mpcotoolbinpgo ../tests/test1/test-ga@WIN@.xml
+	$(MCXML1_PREFIX) $(bin)mpcotoolbinpgo -t 1 ../tests/test1/test-mc@WIN@.xml
+	$(MCJSON_PREFIX) $(bin)mpcotoolbinpgo ../tests/test1/test-mc@WIN@.json
+	$(SW_PREFIX) $(bin)mpcotoolbinpgo ../tests/test1/test-sw@WIN@.xml
+	$(OS_PREFIX) $(bin)mpcotoolbinpgo ../tests/test1/test-os@WIN@.xml
+	$(GA_PREFIX) $(bin)mpcotoolbinpgo ../tests/test1/test-ga@WIN@.xml
+	$(LLVM_MERGE)
 
 $(utilsbin_o): $(UTILSBINDEP)
 	$(CC) $(CUSE) utils.c -o $(utilsbin_o)
