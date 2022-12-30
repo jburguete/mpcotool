@@ -1,5 +1,5 @@
 AC_PREREQ([2.69])
-AC_INIT([mpcotool], [4.0.8], [https://github.com/jburguete/mpcotool])
+AC_INIT([mpcotool], [4.2.0], [https://github.com/jburguete/mpcotool])
 
 # Checks for operative systems
 AC_CANONICAL_TARGET
@@ -196,11 +196,13 @@ elif test "x$with_gtk" = "x3"; then
 fi
 if test $gtk4 = 1; then
 	gtk=1
+	AC_SUBST(GTK4, "-DGTK4=1")
 elif test $gtk3 = 1; then
 	PKG_CHECK_MODULES([GTK], [gtk+-3.0],
 		[AC_MSG_NOTICE([With GTK])],
 		[AC_MSG_NOTICE([Without GTK])])
 	gtk=1
+	AC_SUBST(GTK4, "-DGTK4=0")
 fi
 if test $gtk = 1; then
 	AC_SUBST(MPCOTOOL, "mpcotool")

@@ -5,7 +5,7 @@ calibrations or optimizations of empirical parameters.
 
 AUTHORS: Javier Burguete and Borja Latorre.
 
-Copyright 2012-2019, AUTHORS.
+Copyright 2012-2022, AUTHORS.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -33,7 +33,7 @@ OF SUCH DAMAGE.
  * \file variable.h
  * \brief Header file to define the variable data.
  * \authors Javier Burguete.
- * \copyright Copyright 2012-2019, all rights reserved.
+ * \copyright Copyright 2012-2022, all rights reserved.
  */
 #ifndef VARIABLE__H
 #define VARIABLE__H 1

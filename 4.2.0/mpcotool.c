@@ -5,7 +5,7 @@ calibrations or optimizations of empirical parameters.
 
 AUTHORS: Javier Burguete and Borja Latorre.
 
-Copyright 2012-2019, AUTHORS.
+Copyright 2012-2022, AUTHORS.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -33,7 +33,7 @@ OF SUCH DAMAGE.
  * \file mpcotool.c
  * \brief Main function source file.
  * \authors Javier Burguete and Borja Latorre.
- * \copyright Copyright 2012-2019, all rights reserved.
+ * \copyright Copyright 2012-2022, all rights reserved.
  */
 #define _GNU_SOURCE
 #include "config.h"
@@ -161,7 +161,7 @@ mpcotool (int argn,             ///< Arguments number.
   // Initing GTK+
   gtk_disable_setlocale ();
   application = gtk_application_new ("es.csic.eead.auladei.sprinkler",
-                                     G_APPLICATION_FLAGS_NONE);
+                                     G_APPLICATION_DEFAULT_FLAGS);
   g_signal_connect (application, "activate", G_CALLBACK (window_new), NULL);
 
   // Opening the main window
@@ -170,7 +170,7 @@ mpcotool (int argn,             ///< Arguments number.
   // Freeing memory
   input_free ();
   g_free (buffer);
-  gtk_widget_destroy (GTK_WIDGET (window->window));
+  gtk_window_destroy (window->window);
   g_object_unref (application);
   g_free (window->application_directory);
 

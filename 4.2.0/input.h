@@ -5,7 +5,7 @@ calibrations or optimizations of empirical parameters.
 
 AUTHORS: Javier Burguete and Borja Latorre.
 
-Copyright 2012-2019, AUTHORS.
+Copyright 2012-2022, AUTHORS.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -33,7 +33,7 @@ OF SUCH DAMAGE.
  * \file input.h
  * \brief Header file to define the input functions.
  * \authors Javier Burguete.
- * \copyright Copyright 2012-2019, all rights reserved.
+ * \copyright Copyright 2012-2022, all rights reserved.
  */
 #ifndef INPUT__H
 #define INPUT__H 1

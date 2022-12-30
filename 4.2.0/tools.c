@@ -5,7 +5,7 @@ calibrations or optimizations of empirical parameters.
 
 AUTHORS: Javier Burguete and Borja Latorre.
 
-Copyright 2012-2019, AUTHORS.
+Copyright 2012-2022, AUTHORS.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -33,7 +33,7 @@ OF SUCH DAMAGE.
  * \file tools.c
  * \brief Source file to define some useful functions.
  * \authors Javier Burguete and Borja Latorre.
- * \copyright Copyright 2012-2019, all rights reserved.
+ * \copyright Copyright 2012-2022, all rights reserved.
  */
 #define _GNU_SOURCE
 #include "config.h"
@@ -74,6 +74,7 @@ show_message (char *title,      ///< Title.
 {
 #if HAVE_GTK
   GtkMessageDialog *dlg;
+  GMainLoop *loop;
 
   // Creating the dialog
   dlg = (GtkMessageDialog *)
@@ -84,10 +85,21 @@ show_message (char *title,      ///< Title.
   gtk_window_set_title (GTK_WINDOW (dlg), title);
 
   // Showing the dialog and waiting response
-  gtk_dialog_run (GTK_DIALOG (dlg));
+#if !GTK4
+  gtk_widget_show_all (GTK_WIDGET (dlg));
+  g_signal_connect (dlg, "response", G_CALLBACK (gtk_widget_destroy), NULL);
+#else
+  gtk_widget_show (GTK_WIDGET (dlg));
+  g_signal_connect (dlg, "response", G_CALLBACK (gtk_window_destroy), NULL);
+#endif
+  loop = g_main_loop_new (NULL, 0);
+  g_signal_connect_swapped (dlg, "destroy", G_CALLBACK (g_main_loop_quit),
+                            loop);
+  g_main_loop_run (loop);
+  g_main_loop_unref (loop);
 
   // Closing and freeing memory
-  gtk_widget_destroy (GTK_WIDGET (dlg));
+  gtk_window_destroy (GTK_WINDOW (dlg));
 
 #else
   printf ("%s: %s\n", title, msg);
@@ -456,8 +468,9 @@ cores_number ()
 void
 process_pending ()
 {
-  while (gtk_events_pending ())
-    gtk_main_iteration ();
+  GMainContext *context = g_main_context_default ();
+  while (g_main_context_pending (context))
+    g_main_context_iteration (context, 0);
 }
 
 /**
@@ -466,14 +479,48 @@ process_pending ()
  * \return Active GtkRadioButton.
  */
 unsigned int
-gtk_array_get_active (GtkRadioButton * array[], ///< Array of GtkRadioButtons.
-                      unsigned int n)   ///< Number of GtkRadioButtons.
+gtk_array_get_active (
+#if !GTK4
+		      GtkRadioButton * array[], ///< Array of GtkRadioButtons.
+#else
+		      GtkCheckButton * array[], ///< Array of GtkCheckButtons.
+#endif
+		      unsigned int n)   ///< Number of GtkRadioButtons.
 {
   unsigned int i;
   for (i = 0; i < n; ++i)
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (array[i])))
+    if (gtk_check_button_get_active (array[i]))
       break;
   return i;
 }
+
+#if GTK4
+
+/**
+ * function to set a text on a GtkEntry struct as in GTK3.
+ */
+void
+gtk_entry_set_text (GtkEntry * entry,   ///< GtkEntry struct.
+                    const char *text)   ///< text.
+{
+  GtkEntryBuffer *buffer;
+  buffer = gtk_entry_get_buffer (entry);
+  gtk_entry_buffer_set_text (buffer, text, -1);
+}
+
+/**
+ * function to get the text of a GtkEntry widget as in GTK3.
+ *
+ * \return text.
+ */
+const char *
+gtk_entry_get_text (GtkEntry * entry)   ///< GtkEntry struct.
+{
+  GtkEntryBuffer *buffer;
+  buffer = gtk_entry_get_buffer (entry);
+  return gtk_entry_buffer_get_text (buffer);
+}
+
+#endif
 
 #endif

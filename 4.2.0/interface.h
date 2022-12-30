@@ -5,7 +5,7 @@ calibrations or optimizations of empirical parameters.
 
 AUTHORS: Javier Burguete and Borja Latorre.
 
-Copyright 2012-2019, AUTHORS.
+Copyright 2012-2022, AUTHORS.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -33,7 +33,7 @@ OF SUCH DAMAGE.
  * \file interface.h
  * \brief Header file to define the graphical interface functions.
  * \authors Javier Burguete.
- * \copyright Copyright 2012-2019, all rights reserved.
+ * \copyright Copyright 2012-2022, all rights reserved.
  */
 #ifndef INTERFACE__H
 #define INTERFACE__H 1
@@ -79,37 +79,45 @@ typedef struct
 {
   GtkWindow *window;            ///< Main GtkWindow.
   GtkGrid *grid;                ///< Main GtkGrid.
-  GtkToolbar *bar_buttons;      ///< GtkToolbar to store the main buttons.
-  GtkToolButton *button_open;   ///< Open GtkToolButton.
-  GtkToolButton *button_save;   ///< Save GtkToolButton.
-  GtkToolButton *button_run;    ///< Run GtkToolButton.
-  GtkToolButton *button_options;        ///< Options GtkToolButton.
-  GtkToolButton *button_help;   ///< Help GtkToolButton.
-  GtkToolButton *button_about;  ///< Help GtkToolButton.
-  GtkToolButton *button_exit;   ///< Exit GtkToolButton.
+  GtkBox *box_buttons;          ///< GtkBox to store the main buttons.
+  GtkButton *button_open;       ///< Open GtkButton.
+  GtkButton *button_save;       ///< Save GtkButton.
+  GtkButton *button_run;        ///< Run GtkButton.
+  GtkButton *button_options;    ///< Options GtkButton.
+  GtkButton *button_help;       ///< Help GtkButton.
+  GtkButton *button_about;      ///< Help GtkButton.
+  GtkButton *button_exit;       ///< Exit GtkButton.
   GtkGrid *grid_files;          ///< Files GtkGrid.
   GtkLabel *label_simulator;    ///< Simulator program GtkLabel.
-  GtkFileChooserButton *button_simulator;
-  ///< Simulator program GtkFileChooserButton.
+  GtkButton *button_simulator;  ///< Simulator program GtkButton.
   GtkCheckButton *check_evaluator;      ///< Evaluator program GtkCheckButton.
-  GtkFileChooserButton *button_evaluator;
-  ///< Evaluator program GtkFileChooserButton.
+  GtkButton *button_evaluator;   ///< Evaluator program GtkButton.
   GtkLabel *label_result;       ///< Result file GtkLabel.
   GtkEntry *entry_result;       ///< Result file GtkEntry.
   GtkLabel *label_variables;    ///< Variables file GtkLabel.
   GtkEntry *entry_variables;    ///< Variables file GtkEntry.
   GtkFrame *frame_norm;         ///< GtkFrame to set the error norm.
   GtkGrid *grid_norm;           ///< GtkGrid to set the error norm.
+#if !GTK4
   GtkRadioButton *button_norm[NNORMS];
-  ///< Array of GtkButtons to set the error norm.
+  ///< Array of GtkRadioButtons to set the error norm.
+#else
+  GtkCheckButton *button_norm[NNORMS];
+  ///< Array of GtkCheckButtons to set the error norm.
+#endif
   GtkLabel *label_p;            ///< GtkLabel to set the p parameter.
   GtkSpinButton *spin_p;        ///< GtkSpinButton to set the p parameter.
   GtkScrolledWindow *scrolled_p;
   ///< GtkScrolledWindow to set the p parameter.
   GtkFrame *frame_algorithm;    ///< GtkFrame to set the algorithm.
   GtkGrid *grid_algorithm;      ///< GtkGrid to set the algorithm.
+#if !GTK4
   GtkRadioButton *button_algorithm[NALGORITHMS];
-  ///< Array of GtkButtons to set the algorithm.
+  ///< Array of GtkRadioButtons to set the algorithm.
+#else
+  GtkCheckButton *button_algorithm[NALGORITHMS];
+  ///< Array of GtkCheckButtons to set the algorithm.
+#endif
   GtkLabel *label_simulations;  ///< GtkLabel to set the simulations number.
   GtkSpinButton *spin_simulations;
   ///< GtkSpinButton to set the simulations number.
@@ -138,8 +146,13 @@ typedef struct
   ///< GtkCheckButton to check running the hill climbing method.
   GtkGrid *grid_climbing;
   ///< GtkGrid to pack the hill climbing method widgets.
+#if !GTK4
   GtkRadioButton *button_climbing[NCLIMBINGS];
-  ///< GtkRadioButtons array to set the hill climbing method.
+  ///< Array of GtkRadioButtons array to set the hill climbing method.
+#else
+  GtkCheckButton *button_climbing[NCLIMBINGS];
+  ///< Array of GtkCheckButtons array to set the hill climbing method.
+#endif
   GtkLabel *label_steps;        ///< GtkLabel to set the steps number.
   GtkSpinButton *spin_steps;    ///< GtkSpinButton to set the steps number.
   GtkLabel *label_estimates;    ///< GtkLabel to set the estimates number.
@@ -188,14 +201,14 @@ typedef struct
   GtkButton *button_add_experiment;     ///< GtkButton to add a experiment.
   GtkButton *button_remove_experiment;  ///< GtkButton to remove a experiment.
   GtkLabel *label_experiment;   ///< Experiment GtkLabel.
-  GtkFileChooserButton *button_experiment;
-  ///< GtkFileChooserButton to set the experimental data file.
+  GtkButton *button_experiment;
+  ///< GtkButton to set the experimental data file.
   GtkLabel *label_weight;       ///< Weight GtkLabel.
   GtkSpinButton *spin_weight;   ///< Weight GtkSpinButton.
   GtkCheckButton *check_template[MAX_NINPUTS];
   ///< Array of GtkCheckButtons to set the input templates.
-  GtkFileChooserButton *button_template[MAX_NINPUTS];
-  ///< Array of GtkFileChooserButtons to set the input templates.
+  GtkButton *button_template[MAX_NINPUTS];
+  ///< Array of GtkButtons to set the input templates.
   GdkPixbuf *logo;              ///< Logo GdkPixbuf.
   Experiment *experiment;       ///< Array of experiments data.
   Variable *variable;           ///< Array of variables data.

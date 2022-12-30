@@ -5,7 +5,7 @@ calibrations or optimizations of empirical parameters.
 
 AUTHORS: Javier Burguete and Borja Latorre.
 
-Copyright 2012-2019, AUTHORS.
+Copyright 2012-2022, AUTHORS.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -33,7 +33,7 @@ OF SUCH DAMAGE.
  * \file interface.c
  * \brief Source file to define the graphical interface functions.
  * \authors Javier Burguete and Borja Latorre.
- * \copyright Copyright 2012-2019, all rights reserved.
+ * \copyright Copyright 2012-2022, all rights reserved.
  */
 #define _GNU_SOURCE
 #include "config.h"
@@ -63,7 +63,7 @@ OF SUCH DAMAGE.
 #include "optimize.h"
 #include "interface.h"
 
-#define DEBUG_INTERFACE 0       ///< Macro to debug interface functions.
+#define DEBUG_INTERFACE 1       ///< Macro to debug interface functions.
 
 /**
  * \def INPUT_FILE
@@ -628,6 +628,30 @@ input_save (char *filename)     ///< Input file name.
 }
 
 /**
+ * Function to close the options dialog.
+ */
+static void
+dialog_options_close (GtkDialog * dlg,  ///< GtkDialog options dialog.
+                      int response_id)  ///< Response identifier.
+{
+#if DEBUG_INTERFACE
+  fprintf (stderr, "dialog_options_close: start\n");
+#endif
+  if (response_id == GTK_RESPONSE_OK)
+    {
+      input->seed
+        = (unsigned long int) gtk_spin_button_get_value (options->spin_seed);
+      nthreads = gtk_spin_button_get_value_as_int (options->spin_threads);
+      nthreads_climbing
+        = gtk_spin_button_get_value_as_int (options->spin_climbing);
+    }
+  gtk_window_destroy (GTK_WINDOW (dlg));
+#if DEBUG_INTERFACE
+  fprintf (stderr, "dialog_options_close: end\n");
+#endif
+}
+
+/**
  * Function to open the options dialog.
  */
 static void
@@ -674,25 +698,22 @@ options_new ()
                    1);
   gtk_grid_attach (options->grid, GTK_WIDGET (options->spin_climbing), 1, 2, 1,
                    1);
+#if !GTK4
   gtk_widget_show_all (GTK_WIDGET (options->grid));
+#else
+  gtk_widget_show (GTK_WIDGET (options->grid));
+#endif
   options->dialog = (GtkDialog *)
     gtk_dialog_new_with_buttons (_("Options"),
                                  window->window,
                                  GTK_DIALOG_MODAL,
                                  _("_OK"), GTK_RESPONSE_OK,
                                  _("_Cancel"), GTK_RESPONSE_CANCEL, NULL);
-  gtk_container_add
-    (GTK_CONTAINER (gtk_dialog_get_content_area (options->dialog)),
-     GTK_WIDGET (options->grid));
-  if (gtk_dialog_run (options->dialog) == GTK_RESPONSE_OK)
-    {
-      input->seed
-        = (unsigned long int) gtk_spin_button_get_value (options->spin_seed);
-      nthreads = gtk_spin_button_get_value_as_int (options->spin_threads);
-      nthreads_climbing
-        = gtk_spin_button_get_value_as_int (options->spin_climbing);
-    }
-  gtk_widget_destroy (GTK_WIDGET (options->dialog));
+  gtk_box_append (GTK_BOX (gtk_dialog_get_content_area (options->dialog)),
+                  GTK_WIDGET (options->grid));
+  g_signal_connect (options->dialog, "response",
+                    G_CALLBACK (dialog_options_close), NULL);
+  gtk_window_present (GTK_WINDOW (options->dialog));
 #if DEBUG_INTERFACE
   fprintf (stderr, "options_new: end\n");
 #endif
@@ -715,11 +736,15 @@ running_new ()
   running->dialog = (GtkDialog *)
     gtk_dialog_new_with_buttons (_("Calculating"),
                                  window->window, GTK_DIALOG_MODAL, NULL, NULL);
-  gtk_container_add (GTK_CONTAINER
-                     (gtk_dialog_get_content_area (running->dialog)),
-                     GTK_WIDGET (running->grid));
+  gtk_window_set_child (GTK_WINDOW
+                        (gtk_dialog_get_content_area (running->dialog)),
+                        GTK_WIDGET (running->grid));
   gtk_spinner_start (running->spinner);
+#if !GTK4
   gtk_widget_show_all (GTK_WIDGET (running->dialog));
+#else
+  gtk_widget_show (GTK_WIDGET (running->dialog));
+#endif
 #if DEBUG_INTERFACE
   fprintf (stderr, "running_new: end\n");
 #endif
@@ -794,7 +819,7 @@ window_save_climbing ()
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_save_climbing: start\n");
 #endif
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (window->check_climbing)))
+  if (gtk_check_button_get_active (window->check_climbing))
     {
       input->nsteps = gtk_spin_button_get_value_as_int (window->spin_steps);
       input->relaxation = gtk_spin_button_get_value (window->spin_relaxation);
@@ -817,56 +842,20 @@ window_save_climbing ()
 }
 
 /**
- * Function to save the input file.
- *
- * \return 1 on OK, 0 on Cancel.
+ * Function to close the save dialog.
  */
-static int
-window_save ()
+static void
+dialog_save_close (GtkFileChooserDialog * dlg,
+                   ///< GtkFileChooserDialog dialog.
+                   int response_id)     ///< Response identifier.
 {
-  GtkFileChooserDialog *dlg;
-  GtkFileFilter *filter1, *filter2;
+  GtkFileFilter *filter1;
   char *buffer;
-
 #if DEBUG_INTERFACE
-  fprintf (stderr, "window_save: start\n");
+  fprintf (stderr, "dialog_save_close: start\n");
 #endif
-
-  // Opening the saving dialog
-  dlg = (GtkFileChooserDialog *)
-    gtk_file_chooser_dialog_new (_("Save file"),
-                                 window->window,
-                                 GTK_FILE_CHOOSER_ACTION_SAVE,
-                                 _("_Cancel"), GTK_RESPONSE_CANCEL,
-                                 _("_OK"), GTK_RESPONSE_OK, NULL);
-  gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dlg), TRUE);
-  buffer = g_build_filename (input->directory, input->name, NULL);
-  gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (dlg), buffer);
-  g_free (buffer);
-
-  // Adding XML filter
-  filter1 = (GtkFileFilter *) gtk_file_filter_new ();
-  gtk_file_filter_set_name (filter1, "XML");
-  gtk_file_filter_add_pattern (filter1, "*.xml");
-  gtk_file_filter_add_pattern (filter1, "*.XML");
-  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dlg), filter1);
-
-  // Adding JSON filter
-  filter2 = (GtkFileFilter *) gtk_file_filter_new ();
-  gtk_file_filter_set_name (filter2, "JSON");
-  gtk_file_filter_add_pattern (filter2, "*.json");
-  gtk_file_filter_add_pattern (filter2, "*.JSON");
-  gtk_file_filter_add_pattern (filter2, "*.js");
-  gtk_file_filter_add_pattern (filter2, "*.JS");
-  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dlg), filter2);
-
-  if (input->type == INPUT_TYPE_XML)
-    gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dlg), filter1);
-  else
-    gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dlg), filter2);
-
   // If OK response then saving
-  if (gtk_dialog_run (GTK_DIALOG (dlg)) == GTK_RESPONSE_OK)
+  if (response_id == GTK_RESPONSE_OK)
     {
       // Setting input file type
       filter1 = gtk_file_chooser_get_filter (GTK_FILE_CHOOSER (dlg));
@@ -877,12 +866,11 @@ window_save ()
         input->type = INPUT_TYPE_JSON;
 
       // Adding properties to the root XML node
-      input->simulator = gtk_file_chooser_get_filename
-        (GTK_FILE_CHOOSER (window->button_simulator));
-      if (gtk_toggle_button_get_active
-          (GTK_TOGGLE_BUTTON (window->check_evaluator)))
-        input->evaluator = gtk_file_chooser_get_filename
-          (GTK_FILE_CHOOSER (window->button_evaluator));
+      input->simulator
+        = g_strdup (gtk_button_get_label (window->button_simulator));
+      if (gtk_check_button_get_active (window->check_evaluator))
+        input->evaluator
+          = g_strdup (gtk_button_get_label (window->button_evaluator));
       else
         input->evaluator = NULL;
       if (input->type == INPUT_TYPE_XML)
@@ -942,31 +930,84 @@ window_save ()
             = gtk_spin_button_get_value (window->spin_reproduction);
           input->adaptation_ratio
             = gtk_spin_button_get_value (window->spin_adaptation);
-          break;
         }
       input->norm = window_get_norm ();
       input->p = gtk_spin_button_get_value (window->spin_p);
       input->threshold = gtk_spin_button_get_value (window->spin_threshold);
 
       // Saving the XML file
-      buffer = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dlg));
+      buffer = gtk_file_chooser_get_current_name (GTK_FILE_CHOOSER (dlg));
       input_save (buffer);
 
       // Closing and freeing memory
       g_free (buffer);
-      gtk_widget_destroy (GTK_WIDGET (dlg));
-#if DEBUG_INTERFACE
-      fprintf (stderr, "window_save: end\n");
-#endif
-      return 1;
     }
+  gtk_window_destroy (GTK_WINDOW (dlg));
+#if DEBUG_INTERFACE
+  fprintf (stderr, "dialog_save_close: end\n");
+#endif
+}
 
-  // Closing and freeing memory
-  gtk_widget_destroy (GTK_WIDGET (dlg));
+/**
+ * Function to save the input file.
+ *
+ * \return 1 on OK, 0 on Cancel.
+ */
+static void
+window_save ()
+{
+  GtkFileChooserDialog *dlg;
+  GtkFileFilter *filter1, *filter2;
+  char *buffer;
+
+#if DEBUG_INTERFACE
+  fprintf (stderr, "window_save: start\n");
+#endif
+
+  // Opening the saving dialog
+  dlg = (GtkFileChooserDialog *)
+    gtk_file_chooser_dialog_new (_("Save file"),
+                                 window->window,
+                                 GTK_FILE_CHOOSER_ACTION_SAVE,
+                                 _("_Cancel"), GTK_RESPONSE_CANCEL,
+                                 _("_OK"), GTK_RESPONSE_OK, NULL);
+#if !GTK4
+  gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dlg), TRUE);
+#endif
+  buffer = g_build_filename (input->directory, input->name, NULL);
+  gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dlg), buffer);
+  g_free (buffer);
+
+  // Adding XML filter
+  filter1 = (GtkFileFilter *) gtk_file_filter_new ();
+  gtk_file_filter_set_name (filter1, "XML");
+  gtk_file_filter_add_pattern (filter1, "*.xml");
+  gtk_file_filter_add_pattern (filter1, "*.XML");
+  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dlg), filter1);
+
+  // Adding JSON filter
+  filter2 = (GtkFileFilter *) gtk_file_filter_new ();
+  gtk_file_filter_set_name (filter2, "JSON");
+  gtk_file_filter_add_pattern (filter2, "*.json");
+  gtk_file_filter_add_pattern (filter2, "*.JSON");
+  gtk_file_filter_add_pattern (filter2, "*.js");
+  gtk_file_filter_add_pattern (filter2, "*.JS");
+  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dlg), filter2);
+
+  if (input->type == INPUT_TYPE_XML)
+    gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dlg), filter1);
+  else
+    gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dlg), filter2);
+
+  // Connecting the close function
+  g_signal_connect (dlg, "response", G_CALLBACK (dialog_save_close), NULL);
+
+  // Showing modal dialog
+  gtk_window_present (GTK_WINDOW (dlg));
+
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_save: end\n");
 #endif
-  return 0;
 }
 
 /**
@@ -975,27 +1016,23 @@ window_save ()
 static void
 window_run ()
 {
-  unsigned int i;
+  GMainContext *context;
   char *msg, *msg2, buffer[64], buffer2[64];
+  unsigned int i;
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_run: start\n");
 #endif
-  if (!window_save ())
-    {
-#if DEBUG_INTERFACE
-      fprintf (stderr, "window_run: end\n");
-#endif
-      return;
-    }
+  window_save ();
   running_new ();
-  while (gtk_events_pending ())
-    gtk_main_iteration ();
+  context = g_main_context_default ();
+  while (g_main_context_pending (context))
+    g_main_context_iteration (context, 0);
   optimize_open ();
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_run: closing running dialog\n");
 #endif
   gtk_spinner_stop (running->spinner);
-  gtk_widget_destroy (GTK_WIDGET (running->dialog));
+  gtk_window_destroy (GTK_WINDOW (running->dialog));
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_run: displaying results\n");
 #endif
@@ -1038,10 +1075,14 @@ window_help ()
                               _("user-manual.pdf"), NULL);
   buffer = g_filename_to_uri (buffer2, NULL, NULL);
   g_free (buffer2);
+#if !GTK4
 #if GTK_MINOR_VERSION >= 22
   gtk_show_uri_on_window (window->window, buffer, GDK_CURRENT_TIME, NULL);
 #else
   gtk_show_uri (NULL, buffer, GDK_CURRENT_TIME, NULL);
+#endif
+#else
+  gtk_show_uri (window->window, buffer, GDK_CURRENT_TIME);
 #endif
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_help: uri=%s\n", buffer);
@@ -1079,7 +1120,7 @@ window_about ()
      "(english, french and spanish)\n"
      "Uğur Çayoğlu (german)",
      "version", "4.0.1",
-     "copyright", "Copyright 2012-2019 Javier Burguete Tolosa",
+     "copyright", "Copyright 2012-2022 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/mpcotool",
      "license-type", GTK_LICENSE_BSD, NULL);
@@ -1098,7 +1139,7 @@ window_update_climbing ()
   fprintf (stderr, "window_update_climbing: start\n");
 #endif
   gtk_widget_show (GTK_WIDGET (window->check_climbing));
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (window->check_climbing)))
+  if (gtk_check_button_get_active (window->check_climbing))
     {
       gtk_widget_show (GTK_WIDGET (window->grid_climbing));
       gtk_widget_show (GTK_WIDGET (window->label_step));
@@ -1131,8 +1172,7 @@ window_update ()
 #endif
   gtk_widget_set_sensitive
     (GTK_WIDGET (window->button_evaluator),
-     gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON
-                                   (window->check_evaluator)));
+     gtk_check_button_get_active (window->check_evaluator));
   gtk_widget_hide (GTK_WIDGET (window->label_simulations));
   gtk_widget_hide (GTK_WIDGET (window->spin_simulations));
   gtk_widget_hide (GTK_WIDGET (window->label_iterations));
@@ -1221,8 +1261,7 @@ window_update ()
       g_signal_handler_block
         (window->check_template[i], window->id_template[i]);
       g_signal_handler_block (window->button_template[i], window->id_input[i]);
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON
-                                    (window->check_template[i]), 1);
+      gtk_check_button_set_active (window->check_template[i], 1);
       g_signal_handler_unblock (window->button_template[i],
                                 window->id_input[i]);
       g_signal_handler_unblock (window->check_template[i],
@@ -1232,9 +1271,8 @@ window_update ()
     {
       gtk_widget_set_sensitive (GTK_WIDGET (window->check_template[i - 1]), 1);
       gtk_widget_set_sensitive (GTK_WIDGET (window->button_template[i - 1]),
-                                gtk_toggle_button_get_active
-                                GTK_TOGGLE_BUTTON (window->check_template
-                                                   [i - 1]));
+                                gtk_check_button_get_active
+                                (window->check_template[i - 1]));
     }
   if (i < MAX_NINPUTS)
     {
@@ -1243,13 +1281,11 @@ window_update ()
       gtk_widget_set_sensitive (GTK_WIDGET (window->check_template[i]), 1);
       gtk_widget_set_sensitive
         (GTK_WIDGET (window->button_template[i]),
-         gtk_toggle_button_get_active
-         GTK_TOGGLE_BUTTON (window->check_template[i]));
+         gtk_check_button_get_active (window->check_template[i]));
       g_signal_handler_block
         (window->check_template[i], window->id_template[i]);
       g_signal_handler_block (window->button_template[i], window->id_input[i]);
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON
-                                    (window->check_template[i]), 0);
+      gtk_check_button_set_active (window->check_template[i], 0);
       g_signal_handler_unblock (window->button_template[i],
                                 window->id_input[i]);
       g_signal_handler_unblock (window->check_template[i],
@@ -1262,10 +1298,10 @@ window_update ()
     }
   gtk_widget_set_sensitive
     (GTK_WIDGET (window->spin_minabs),
-     gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (window->check_minabs)));
+     gtk_check_button_get_active (window->check_minabs));
   gtk_widget_set_sensitive
     (GTK_WIDGET (window->spin_maxabs),
-     gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (window->check_maxabs)));
+     gtk_check_button_get_active (window->check_maxabs));
   if (window_get_norm () == ERROR_NORM_P)
     {
       gtk_widget_show (GTK_WIDGET (window->label_p));
@@ -1317,31 +1353,20 @@ static void
 window_set_experiment ()
 {
   unsigned int i, j;
-  char *buffer1, *buffer2;
+  char *buffer1;
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_set_experiment: start\n");
 #endif
   i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_experiment));
   gtk_spin_button_set_value (window->spin_weight, input->experiment[i].weight);
   buffer1 = gtk_combo_box_text_get_active_text (window->combo_experiment);
-  buffer2 = g_build_filename (input->directory, buffer1, NULL);
+  gtk_button_set_label (window->button_experiment, buffer1);
   g_free (buffer1);
-  g_signal_handler_block
-    (window->button_experiment, window->id_experiment_name);
-  gtk_file_chooser_set_filename
-    (GTK_FILE_CHOOSER (window->button_experiment), buffer2);
-  g_signal_handler_unblock
-    (window->button_experiment, window->id_experiment_name);
-  g_free (buffer2);
   for (j = 0; j < input->experiment->ninputs; ++j)
     {
       g_signal_handler_block (window->button_template[j], window->id_input[j]);
-      buffer2 =
-        g_build_filename (input->directory, input->experiment[i].stencil[j],
-                          NULL);
-      gtk_file_chooser_set_filename (GTK_FILE_CHOOSER
-                                     (window->button_template[j]), buffer2);
-      g_free (buffer2);
+      gtk_button_set_label (window->button_template[j],
+                            input->experiment[i].stencil[j]);
       g_signal_handler_unblock
         (window->button_template[j], window->id_input[j]);
     }
@@ -1374,11 +1399,7 @@ window_remove_experiment ()
     i = j;
   for (j = 0; j < input->experiment->ninputs; ++j)
     g_signal_handler_block (window->button_template[j], window->id_input[j]);
-  g_signal_handler_block
-    (window->button_experiment, window->id_experiment_name);
   gtk_combo_box_set_active (GTK_COMBO_BOX (window->combo_experiment), i);
-  g_signal_handler_unblock
-    (window->button_experiment, window->id_experiment_name);
   for (j = 0; j < input->experiment->ninputs; ++j)
     g_signal_handler_unblock (window->button_template[j], window->id_input[j]);
   window_update ();
@@ -1427,11 +1448,7 @@ window_add_experiment ()
   ++input->nexperiments;
   for (j = 0; j < input->experiment->ninputs; ++j)
     g_signal_handler_block (window->button_template[j], window->id_input[j]);
-  g_signal_handler_block
-    (window->button_experiment, window->id_experiment_name);
   gtk_combo_box_set_active (GTK_COMBO_BOX (window->combo_experiment), i + 1);
-  g_signal_handler_unblock
-    (window->button_experiment, window->id_experiment_name);
   for (j = 0; j < input->experiment->ninputs; ++j)
     g_signal_handler_unblock (window->button_template[j], window->id_input[j]);
   window_update ();
@@ -1441,30 +1458,67 @@ window_add_experiment ()
 }
 
 /**
+ * Function to close the experiment name dialog.
+ */
+static void
+dialog_name_experiment_close (GtkFileChooserDialog * dlg,
+                              ///< GtkFileChooserDialog struct.
+                              int response_id,  ///< Response identifier.
+                              void *data)       ///< Function data.
+{
+  char *buffer;
+  unsigned int i;
+#if DEBUG_INTERFACE
+  fprintf (stderr, "window_name_experiment_close: start\n");
+#endif
+  i = (size_t) data;
+  if (response_id == GTK_RESPONSE_OK)
+    {
+      buffer = gtk_file_chooser_get_current_name (GTK_FILE_CHOOSER (dlg));
+      g_signal_handler_block (window->combo_experiment, window->id_experiment);
+      gtk_combo_box_text_remove (window->combo_experiment, i);
+      gtk_combo_box_text_insert_text (window->combo_experiment, i, buffer);
+      gtk_combo_box_set_active (GTK_COMBO_BOX (window->combo_experiment), i);
+      g_signal_handler_unblock (window->combo_experiment,
+                                window->id_experiment);
+      g_free (buffer);
+    }
+#if DEBUG_INTERFACE
+  fprintf (stderr, "window_name_experiment_close: end\n");
+#endif
+}
+
+/**
  * Function to set the experiment name in the main window.
  */
 static void
 window_name_experiment ()
 {
+  GtkFileChooserDialog *dlg;
+  GMainLoop *loop;
+  const char *buffer;
   unsigned int i;
-  char *buffer;
-  GFile *file1, *file2;
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_name_experiment: start\n");
 #endif
   i = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_experiment));
-  file1
-    = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (window->button_experiment));
-  file2 = g_file_new_for_path (input->directory);
-  buffer = g_file_get_relative_path (file2, file1);
-  g_signal_handler_block (window->combo_experiment, window->id_experiment);
-  gtk_combo_box_text_remove (window->combo_experiment, i);
-  gtk_combo_box_text_insert_text (window->combo_experiment, i, buffer);
-  gtk_combo_box_set_active (GTK_COMBO_BOX (window->combo_experiment), i);
-  g_signal_handler_unblock (window->combo_experiment, window->id_experiment);
-  g_free (buffer);
-  g_object_unref (file2);
-  g_object_unref (file1);
+  buffer = gtk_button_get_label (window->button_experiment);
+  dlg = (GtkFileChooserDialog *)
+    gtk_file_chooser_dialog_new (_("Open experiment file"),
+                                 window->window,
+				 GTK_FILE_CHOOSER_ACTION_OPEN,
+				 _("_Cancel"),
+                                 GTK_RESPONSE_CANCEL,
+				 _("_Open"), GTK_RESPONSE_OK, NULL);
+  gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dlg), buffer);
+  g_signal_connect (dlg, "response", G_CALLBACK (dialog_name_experiment_close),
+		    (void *) (size_t) i);
+  gtk_window_present (GTK_WINDOW (dlg));
+  loop = g_main_loop_new (NULL, 0);
+  g_signal_connect_swapped (dlg, "destroy", G_CALLBACK (g_main_loop_quit),
+                            loop);
+  g_main_loop_run (loop);
+  g_main_loop_unref (loop);
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_name_experiment: end\n");
 #endif
@@ -1499,16 +1553,54 @@ window_inputs_experiment ()
 #endif
   j = input->experiment->ninputs - 1;
   if (j
-      && !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON
-                                        (window->check_template[j])))
+      && !gtk_check_button_get_active (window->check_template[j]))
     --input->experiment->ninputs;
   if (input->experiment->ninputs < MAX_NINPUTS
-      && gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON
-                                       (window->check_template[j])))
+      && gtk_check_button_get_active (window->check_template[j]))
     ++input->experiment->ninputs;
   window_update ();
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_inputs_experiment: end\n");
+#endif
+}
+
+/**
+ * Function to close the experiment template dialog.
+ */
+static void
+window_template_experiment_close (GtkFileChooserDialog * dlg,
+                                  ///< GtkFileChooserDialg struct.
+                                  int response_id,
+                                  ///< Response identifier.
+                                  void *data)     ///< Function data.
+{
+  GFile *file1, *file2;
+  char *buffer1, *buffer2;
+  unsigned int i, j;
+#if DEBUG_INTERFACE
+  fprintf (stderr, "window_template_experiment_close: start\n");
+#endif
+  if (response_id == GTK_RESPONSE_OK)
+    {
+      i = (size_t) data;
+      j = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_experiment));
+      buffer1 = gtk_file_chooser_get_current_name (GTK_FILE_CHOOSER (dlg));
+      file1 = g_file_new_for_path (buffer1);
+      file2 = g_file_new_for_path (input->directory);
+      buffer2 = g_file_get_relative_path (file2, file1);
+      if (input->type == INPUT_TYPE_XML)
+        input->experiment[j].stencil[i]
+          = (char *) xmlStrdup ((xmlChar *) buffer2);
+      else
+        input->experiment[j].stencil[i] = g_strdup (buffer2);
+      g_free (buffer2);
+      g_object_unref (file2);
+      g_object_unref (file1);
+      g_free (buffer1);
+    }
+  gtk_window_destroy (GTK_WINDOW (dlg));
+#if DEBUG_INTERFACE
+  fprintf (stderr, "window_template_experiment_close: end\n");
 #endif
 }
 
@@ -1519,25 +1611,31 @@ static void
 window_template_experiment (void *data)
                             ///< Callback data (i-th input template).
 {
-  unsigned int i, j;
-  char *buffer;
-  GFile *file1, *file2;
+  GtkFileChooserDialog *dlg;
+  GMainLoop *loop;
+  const char *buffer;
+  unsigned int i;
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_template_experiment: start\n");
 #endif
   i = (size_t) data;
-  j = gtk_combo_box_get_active (GTK_COMBO_BOX (window->combo_experiment));
-  file1
-    = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (window->button_template[i]));
-  file2 = g_file_new_for_path (input->directory);
-  buffer = g_file_get_relative_path (file2, file1);
-  if (input->type == INPUT_TYPE_XML)
-    input->experiment[j].stencil[i] = (char *) xmlStrdup ((xmlChar *) buffer);
-  else
-    input->experiment[j].stencil[i] = g_strdup (buffer);
-  g_free (buffer);
-  g_object_unref (file2);
-  g_object_unref (file1);
+  buffer = gtk_button_get_label (window->button_template[i]);
+  dlg = (GtkFileChooserDialog *)
+    gtk_file_chooser_dialog_new (_("Open template file"),
+                                 window->window,
+				 GTK_FILE_CHOOSER_ACTION_OPEN,
+				 _("_Cancel"),
+				 GTK_RESPONSE_CANCEL,
+				 _("_Open"), GTK_RESPONSE_ACCEPT, NULL);
+  gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dlg), buffer);
+  g_signal_connect (dlg, "response",
+                    G_CALLBACK (window_template_experiment_close), data);
+  gtk_window_present (GTK_WINDOW (dlg));
+  loop = g_main_loop_new (NULL, 0);
+  g_signal_connect_swapped (dlg, "destroy", G_CALLBACK (g_main_loop_quit),
+                            loop);
+  g_main_loop_run (loop);
+  g_main_loop_unref (loop);
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_template_experiment: end\n");
 #endif
@@ -1563,27 +1661,23 @@ window_set_variable ()
     {
       gtk_spin_button_set_value (window->spin_minabs,
                                  input->variable[i].rangeminabs);
-      gtk_toggle_button_set_active
-        (GTK_TOGGLE_BUTTON (window->check_minabs), 1);
+      gtk_check_button_set_active (window->check_minabs, 1);
     }
   else
     {
       gtk_spin_button_set_value (window->spin_minabs, -G_MAXDOUBLE);
-      gtk_toggle_button_set_active
-        (GTK_TOGGLE_BUTTON (window->check_minabs), 0);
+      gtk_check_button_set_active (window->check_minabs, 0);
     }
   if (input->variable[i].rangemaxabs != G_MAXDOUBLE)
     {
       gtk_spin_button_set_value (window->spin_maxabs,
                                  input->variable[i].rangemaxabs);
-      gtk_toggle_button_set_active
-        (GTK_TOGGLE_BUTTON (window->check_maxabs), 1);
+      gtk_check_button_set_active (window->check_maxabs, 1);
     }
   else
     {
       gtk_spin_button_set_value (window->spin_maxabs, G_MAXDOUBLE);
-      gtk_toggle_button_set_active
-        (GTK_TOGGLE_BUTTON (window->check_maxabs), 0);
+      gtk_check_button_set_active (window->check_maxabs, 0);
     }
   gtk_spin_button_set_value (window->spin_precision,
                              input->variable[i].precision);
@@ -1865,7 +1959,6 @@ static int
 window_read (char *filename)    ///< File name.
 {
   unsigned int i;
-  char *buffer;
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_read: start\n");
 #endif
@@ -1884,21 +1977,13 @@ window_read (char *filename)    ///< File name.
   // Setting GTK+ widgets data
   gtk_entry_set_text (window->entry_result, input->result);
   gtk_entry_set_text (window->entry_variables, input->variables);
-  buffer = g_build_filename (input->directory, input->simulator, NULL);
-  gtk_file_chooser_set_filename (GTK_FILE_CHOOSER
-                                 (window->button_simulator), buffer);
-  g_free (buffer);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (window->check_evaluator),
+  gtk_button_set_label (window->button_simulator, input->simulator);
+  gtk_check_button_set_active (window->check_evaluator,
                                 (size_t) input->evaluator);
   if (input->evaluator)
-    {
-      buffer = g_build_filename (input->directory, input->evaluator, NULL);
-      gtk_file_chooser_set_filename (GTK_FILE_CHOOSER
-                                     (window->button_evaluator), buffer);
-      g_free (buffer);
-    }
-  gtk_toggle_button_set_active
-    (GTK_TOGGLE_BUTTON (window->button_algorithm[input->algorithm]), TRUE);
+    gtk_button_set_label (window->button_evaluator, input->evaluator);
+  gtk_check_button_set_active (window->button_algorithm[input->algorithm],
+                                TRUE);
   switch (input->algorithm)
     {
     case ALGORITHM_MONTE_CARLO:
@@ -1911,13 +1996,11 @@ window_read (char *filename)    ///< File name.
                                  (gdouble) input->niterations);
       gtk_spin_button_set_value (window->spin_bests, (gdouble) input->nbest);
       gtk_spin_button_set_value (window->spin_tolerance, input->tolerance);
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON
-                                    (window->check_climbing), input->nsteps);
+      gtk_check_button_set_active (window->check_climbing, input->nsteps);
       if (input->nsteps)
         {
-          gtk_toggle_button_set_active
-            (GTK_TOGGLE_BUTTON (window->button_climbing[input->climbing]),
-             TRUE);
+          gtk_check_button_set_active
+            (window->button_climbing[input->climbing], TRUE);
           gtk_spin_button_set_value (window->spin_steps,
                                      (gdouble) input->nsteps);
           gtk_spin_button_set_value (window->spin_relaxation,
@@ -1941,19 +2024,14 @@ window_read (char *filename)    ///< File name.
       gtk_spin_button_set_value (window->spin_adaptation,
                                  input->adaptation_ratio);
     }
-  gtk_toggle_button_set_active
-    (GTK_TOGGLE_BUTTON (window->button_norm[input->norm]), TRUE);
+  gtk_check_button_set_active (window->button_norm[input->norm], TRUE);
   gtk_spin_button_set_value (window->spin_p, input->p);
   gtk_spin_button_set_value (window->spin_threshold, input->threshold);
   g_signal_handler_block (window->combo_experiment, window->id_experiment);
-  g_signal_handler_block (window->button_experiment,
-                          window->id_experiment_name);
   gtk_combo_box_text_remove_all (window->combo_experiment);
   for (i = 0; i < input->nexperiments; ++i)
     gtk_combo_box_text_append_text (window->combo_experiment,
                                     input->experiment[i].name);
-  g_signal_handler_unblock
-    (window->button_experiment, window->id_experiment_name);
   g_signal_handler_unblock (window->combo_experiment, window->id_experiment);
   gtk_combo_box_set_active (GTK_COMBO_BOX (window->combo_experiment), 0);
   g_signal_handler_block (window->combo_variable, window->id_variable);
@@ -1975,6 +2053,64 @@ window_read (char *filename)    ///< File name.
 }
 
 /**
+ * Function to close the input data dialog.
+ */
+static void
+dialog_open_close (GtkFileChooserDialog * dlg,
+                   ///< GtkFileChooserDialog dialog.
+                   int response_id)     ///< Response identifier.
+{
+  char *buffer, *directory, *name;
+
+#if DEBUG_INTERFACE
+  fprintf (stderr, "dialog_open_close: start\n");
+#endif
+
+  // Saving a backup of the current input file
+  directory = g_strdup (input->directory);
+  name = g_strdup (input->name);
+
+  // If OK saving
+  if (response_id == GTK_RESPONSE_OK)
+    {
+
+      // Traying to open the input file
+      buffer = gtk_file_chooser_get_current_name (GTK_FILE_CHOOSER (dlg));
+      if (!window_read (buffer))
+        {
+#if DEBUG_INTERFACE
+          fprintf (stderr, "dialog_open_close: error reading input file\n");
+#endif
+          g_free (buffer);
+
+          // Reading backup file on error
+          buffer = g_build_filename (directory, name, NULL);
+          input->result = input->variables = NULL;
+          if (!input_open (buffer))
+            {
+
+              // Closing on backup file reading error
+#if DEBUG_INTERFACE
+              fprintf (stderr,
+                       "dialog_open_close: error reading backup file\n");
+#endif
+            }
+        }
+        g_free (buffer);
+    }
+
+  // Freeing and closing
+  g_free (name);
+  g_free (directory);
+  gtk_window_destroy (GTK_WINDOW (dlg));
+
+#if DEBUG_INTERFACE
+  fprintf (stderr, "dialog_open_close: end\n");
+#endif
+
+}
+
+/**
  * Function to open the input data.
  */
 static void
@@ -1982,15 +2118,10 @@ window_open ()
 {
   GtkFileChooserDialog *dlg;
   GtkFileFilter *filter;
-  char *buffer, *directory, *name;
 
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_open: start\n");
 #endif
-
-  // Saving a backup of the current input file
-  directory = g_strdup (input->directory);
-  name = g_strdup (input->name);
 
   // Opening dialog
   dlg = (GtkFileChooserDialog *)
@@ -2016,47 +2147,122 @@ window_open ()
   gtk_file_filter_add_pattern (filter, "*.JS");
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dlg), filter);
 
-  // If OK saving
-  while (gtk_dialog_run (GTK_DIALOG (dlg)) == GTK_RESPONSE_OK)
-    {
+  // Connecting the close function
+  g_signal_connect (dlg, "response", G_CALLBACK (dialog_open_close), NULL);
 
-      // Traying to open the input file
-      buffer = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dlg));
-      if (!window_read (buffer))
-        {
-#if DEBUG_INTERFACE
-          fprintf (stderr, "window_open: error reading input file\n");
-#endif
-          g_free (buffer);
+  // Showing modal dialog
+  gtk_window_present (GTK_WINDOW (dlg));
 
-          // Reading backup file on error
-          buffer = g_build_filename (directory, name, NULL);
-          input->result = input->variables = NULL;
-          if (!input_open (buffer))
-            {
-
-              // Closing on backup file reading error
-#if DEBUG_INTERFACE
-              fprintf (stderr, "window_read: error reading backup file\n");
-#endif
-              g_free (buffer);
-              break;
-            }
-          g_free (buffer);
-        }
-      else
-        {
-          g_free (buffer);
-          break;
-        }
-    }
-
-  // Freeing and closing
-  g_free (name);
-  g_free (directory);
-  gtk_widget_destroy (GTK_WIDGET (dlg));
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_open: end\n");
+#endif
+}
+
+/**
+ * Function to save the close the simulator file dialog.
+ */
+static void
+dialog_simulator_close (GtkFileChooserDialog * dlg,
+                        ///< GtkFileChooserDialog dialog.
+                        int response_id)        ///< Response identifier.
+{
+  GFile *file1, *file2;
+  char *buffer1, *buffer2;
+#if DEBUG_INTERFACE
+  fprintf (stderr, "dialog_simulator_close: start\n");
+#endif
+  if (response_id == GTK_RESPONSE_OK)
+    {
+      buffer1 = gtk_file_chooser_get_current_name (GTK_FILE_CHOOSER (dlg));
+      file1 = g_file_new_for_path (buffer1);
+      file2 = g_file_new_for_path (input->directory);
+      buffer2 = g_file_get_relative_path (file2, file1);
+      input->simulator = g_strdup (buffer2);
+      g_free (buffer2);
+      g_object_unref (file2);
+      g_object_unref (file1);
+      g_free (buffer1);
+    }
+  gtk_window_destroy (GTK_WINDOW (dlg));
+#if DEBUG_INTERFACE
+  fprintf (stderr, "dialog_simulator_close: end\n");
+#endif
+}
+
+/**
+ * Function to open a dialog to save the simulator file.
+ */
+static void
+dialog_simulator ()
+{
+  GtkFileChooserDialog *dlg;
+#if DEBUG_INTERFACE
+  fprintf (stderr, "dialog_simulator: start\n");
+#endif
+  dlg = (GtkFileChooserDialog *)
+    gtk_file_chooser_dialog_new (_("Open simulator file"),
+                                 window->window,
+				 GTK_FILE_CHOOSER_ACTION_OPEN,
+				 _("_Cancel"), GTK_RESPONSE_CANCEL,
+				 _("_Open"), GTK_RESPONSE_ACCEPT, NULL);
+  g_signal_connect (dlg, "response", G_CALLBACK (dialog_simulator_close), NULL);
+  gtk_window_present (GTK_WINDOW (dlg));
+#if DEBUG_INTERFACE
+  fprintf (stderr, "dialog_simulator: end\n");
+#endif
+}
+
+/**
+ * Function to save the close the evaluator file dialog.
+ */
+static void
+dialog_evaluator_close (GtkFileChooserDialog * dlg,
+                        ///< GtkFileChooserDialog dialog.
+                        int response_id)        ///< Response identifier.
+{
+  GFile *file1, *file2;
+  char *buffer1, *buffer2;
+#if DEBUG_INTERFACE
+  fprintf (stderr, "dialog_evaluator_close: start\n");
+#endif
+  if (response_id == GTK_RESPONSE_OK)
+    {
+      buffer1 = gtk_file_chooser_get_current_name (GTK_FILE_CHOOSER (dlg));
+      file1 = g_file_new_for_path (buffer1);
+      file2 = g_file_new_for_path (input->directory);
+      buffer2 = g_file_get_relative_path (file2, file1);
+      input->evaluator = g_strdup (buffer2);
+      g_free (buffer2);
+      g_object_unref (file2);
+      g_object_unref (file1);
+      g_free (buffer1);
+    }
+  gtk_window_destroy (GTK_WINDOW (dlg));
+#if DEBUG_INTERFACE
+  fprintf (stderr, "dialog_evaluator_close: end\n");
+#endif
+}
+
+/**
+ * Function to open a dialog to save the evaluator file.
+ */
+static void
+dialog_evaluator ()
+{
+  GtkFileChooserDialog *dlg;
+#if DEBUG_INTERFACE
+  fprintf (stderr, "dialog_evaluator: start\n");
+#endif
+  dlg = (GtkFileChooserDialog *)
+    gtk_file_chooser_dialog_new (_("Open evaluator file"),
+                                 window->window,
+				 GTK_FILE_CHOOSER_ACTION_OPEN,
+				 _("_Cancel"), GTK_RESPONSE_CANCEL,
+				 _("_Open"), GTK_RESPONSE_ACCEPT, NULL);
+  g_signal_connect (dlg, "response", G_CALLBACK (dialog_evaluator_close), NULL);
+  gtk_window_present (GTK_WINDOW (dlg));
+#if DEBUG_INTERFACE
+  fprintf (stderr, "dialog_evaluator: end\n");
 #endif
 }
 
@@ -2068,29 +2274,34 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
 {
   unsigned int i;
   char *buffer, *buffer2, buffer3[64];
-  char *label_algorithm[NALGORITHMS] = {
+  const char *label_algorithm[NALGORITHMS] = {
     "_Monte-Carlo", _("_Sweep"), _("_Genetic"), _("_Orthogonal")
   };
-  char *tip_algorithm[NALGORITHMS] = {
+  const char *tip_algorithm[NALGORITHMS] = {
     _("Monte-Carlo brute force algorithm"),
     _("Sweep brute force algorithm"),
     _("Genetic algorithm"),
     _("Orthogonal sampling brute force algorithm"),
   };
-  char *label_climbing[NCLIMBINGS] = {
+  const char *label_climbing[NCLIMBINGS] = {
     _("_Coordinates climbing"), _("_Random climbing")
   };
-  char *tip_climbing[NCLIMBINGS] = {
+  const char *tip_climbing[NCLIMBINGS] = {
     _("Coordinates climbing estimate method"),
     _("Random climbing estimate method")
   };
-  char *label_norm[NNORMS] = { "L2", "L∞", "Lp", "L1" };
-  char *tip_norm[NNORMS] = {
+  const char *label_norm[NNORMS] = { "L2", "L∞", "Lp", "L1" };
+  const char *tip_norm[NNORMS] = {
     _("Euclidean error norm (L2)"),
     _("Maximum error norm (L∞)"),
     _("P error norm (Lp)"),
     _("Taxicab error norm (L1)")
   };
+#if !GTK4
+  const char *close = "delete-event";
+#else
+  const char *close = "close-request";
+#endif
 
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_new: start\n");
@@ -2101,7 +2312,7 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
     = (GtkWindow *) gtk_application_window_new (application);
 
   // Finish when closing the window
-  g_signal_connect_swapped (window->window, "delete-event",
+  g_signal_connect_swapped (window->window, close,
                             G_CALLBACK (g_application_quit),
                             G_APPLICATION (application));
 
@@ -2109,87 +2320,102 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
   gtk_window_set_title (window->window, "MPCOTool");
 
   // Creating the open button
-  window->button_open = (GtkToolButton *) gtk_tool_button_new
-    (gtk_image_new_from_icon_name ("document-open",
-                                   GTK_ICON_SIZE_LARGE_TOOLBAR), _("Open"));
+  window->button_open = (GtkButton *)
+#if !GTK4
+    gtk_button_new_from_icon_name ("document-open", GTK_ICON_SIZE_BUTTON);
+#else
+    gtk_button_new_from_icon_name ("document-open");
+#endif
   g_signal_connect (window->button_open, "clicked", window_open, NULL);
 
   // Creating the save button
-  window->button_save = (GtkToolButton *) gtk_tool_button_new
-    (gtk_image_new_from_icon_name ("document-save",
-                                   GTK_ICON_SIZE_LARGE_TOOLBAR), _("Save"));
+  window->button_save = (GtkButton *)
+#if !GTK4
+    gtk_button_new_from_icon_name ("document-save", GTK_ICON_SIZE_BUTTON);
+#else
+    gtk_button_new_from_icon_name ("document-save");
+#endif
   g_signal_connect (window->button_save, "clicked", (GCallback) window_save,
                     NULL);
 
   // Creating the run button
-  window->button_run = (GtkToolButton *) gtk_tool_button_new
-    (gtk_image_new_from_icon_name ("system-run",
-                                   GTK_ICON_SIZE_LARGE_TOOLBAR), _("Run"));
+  window->button_run = (GtkButton *)
+#if !GTK4
+    gtk_button_new_from_icon_name ("system-run", GTK_ICON_SIZE_BUTTON);
+#else
+    gtk_button_new_from_icon_name ("system-run");
+#endif
   g_signal_connect (window->button_run, "clicked", window_run, NULL);
 
   // Creating the options button
-  window->button_options = (GtkToolButton *) gtk_tool_button_new
-    (gtk_image_new_from_icon_name ("preferences-system",
-                                   GTK_ICON_SIZE_LARGE_TOOLBAR), _("Options"));
+  window->button_options = (GtkButton *)
+#if !GTK4
+    gtk_button_new_from_icon_name ("preferences-system", GTK_ICON_SIZE_BUTTON);
+#else
+    gtk_button_new_from_icon_name ("preferences-system");
+#endif
   g_signal_connect (window->button_options, "clicked", options_new, NULL);
 
   // Creating the help button
-  window->button_help = (GtkToolButton *) gtk_tool_button_new
-    (gtk_image_new_from_icon_name ("help-browser",
-                                   GTK_ICON_SIZE_LARGE_TOOLBAR), _("Help"));
+  window->button_help = (GtkButton *)
+#if !GTK4
+    gtk_button_new_from_icon_name ("help-browser", GTK_ICON_SIZE_BUTTON);
+#else
+    gtk_button_new_from_icon_name ("help-browser");
+#endif
   g_signal_connect (window->button_help, "clicked", window_help, NULL);
 
   // Creating the about button
-  window->button_about = (GtkToolButton *) gtk_tool_button_new
-    (gtk_image_new_from_icon_name ("help-about",
-                                   GTK_ICON_SIZE_LARGE_TOOLBAR), _("About"));
+  window->button_about = (GtkButton *)
+#if !GTK4
+    gtk_button_new_from_icon_name ("help-about", GTK_ICON_SIZE_BUTTON);
+#else
+    gtk_button_new_from_icon_name ("help-about");
+#endif
   g_signal_connect (window->button_about, "clicked", window_about, NULL);
 
   // Creating the exit button
-  window->button_exit = (GtkToolButton *) gtk_tool_button_new
-    (gtk_image_new_from_icon_name ("application-exit",
-                                   GTK_ICON_SIZE_LARGE_TOOLBAR), _("Exit"));
+  window->button_exit = (GtkButton *)
+#if !GTK4
+    gtk_button_new_from_icon_name ("application-exit", GTK_ICON_SIZE_BUTTON);
+#else
+    gtk_button_new_from_icon_name ("application-exit");
+#endif
   g_signal_connect_swapped (window->button_exit, "clicked",
                             G_CALLBACK (g_application_quit),
                             G_APPLICATION (application));
 
   // Creating the buttons bar
-  window->bar_buttons = (GtkToolbar *) gtk_toolbar_new ();
-  gtk_toolbar_insert
-    (window->bar_buttons, GTK_TOOL_ITEM (window->button_open), 0);
-  gtk_toolbar_insert
-    (window->bar_buttons, GTK_TOOL_ITEM (window->button_save), 1);
-  gtk_toolbar_insert
-    (window->bar_buttons, GTK_TOOL_ITEM (window->button_run), 2);
-  gtk_toolbar_insert
-    (window->bar_buttons, GTK_TOOL_ITEM (window->button_options), 3);
-  gtk_toolbar_insert
-    (window->bar_buttons, GTK_TOOL_ITEM (window->button_help), 4);
-  gtk_toolbar_insert
-    (window->bar_buttons, GTK_TOOL_ITEM (window->button_about), 5);
-  gtk_toolbar_insert
-    (window->bar_buttons, GTK_TOOL_ITEM (window->button_exit), 6);
-  gtk_toolbar_set_style (window->bar_buttons, GTK_TOOLBAR_BOTH);
+  window->box_buttons = (GtkBox *) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_box_append (window->box_buttons, GTK_WIDGET (window->button_open));
+  gtk_box_append (window->box_buttons, GTK_WIDGET (window->button_save));
+  gtk_box_append (window->box_buttons, GTK_WIDGET (window->button_run));
+  gtk_box_append (window->box_buttons, GTK_WIDGET (window->button_options));
+  gtk_box_append (window->box_buttons, GTK_WIDGET (window->button_help));
+  gtk_box_append (window->box_buttons, GTK_WIDGET (window->button_about));
+  gtk_box_append (window->box_buttons, GTK_WIDGET (window->button_exit));
 
   // Creating the simulator program label and entry
   window->label_simulator = (GtkLabel *) gtk_label_new (_("Simulator program"));
-  window->button_simulator = (GtkFileChooserButton *)
-    gtk_file_chooser_button_new (_("Simulator program"),
-                                 GTK_FILE_CHOOSER_ACTION_OPEN);
+  window->button_simulator = (GtkButton *)
+    gtk_button_new_with_mnemonic (_("Simulator program"));
   gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_simulator),
                                _("Simulator program executable file"));
   gtk_widget_set_hexpand (GTK_WIDGET (window->button_simulator), TRUE);
+  g_signal_connect (window->button_simulator, "clicked",
+                    G_CALLBACK (dialog_simulator), NULL);
 
   // Creating the evaluator program label and entry
   window->check_evaluator = (GtkCheckButton *)
     gtk_check_button_new_with_mnemonic (_("_Evaluator program"));
   g_signal_connect (window->check_evaluator, "toggled", window_update, NULL);
-  window->button_evaluator = (GtkFileChooserButton *)
-    gtk_file_chooser_button_new (_("Evaluator program"),
-                                 GTK_FILE_CHOOSER_ACTION_OPEN);
+  window->button_evaluator = (GtkButton *)
+    gtk_button_new_with_mnemonic (_("Evaluator program"));
   gtk_widget_set_tooltip_text
     (GTK_WIDGET (window->button_evaluator),
      _("Optional evaluator program executable file"));
+  g_signal_connect (window->button_evaluator, "clicked",
+                    G_CALLBACK (dialog_evaluator), NULL);
 
   // Creating the results files labels and entries
   window->label_result = (GtkLabel *) gtk_label_new (_("Result file"));
@@ -2292,10 +2518,14 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
   gtk_widget_set_tooltip_text
     (GTK_WIDGET (window->spin_threshold),
      _("Threshold in the objective function to finish the simulations"));
-  window->scrolled_threshold =
-    (GtkScrolledWindow *) gtk_scrolled_window_new (NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (window->scrolled_threshold),
-                     GTK_WIDGET (window->spin_threshold));
+  window->scrolled_threshold = (GtkScrolledWindow *)
+#if !GTK4
+    gtk_scrolled_window_new (NULL, NULL);
+#else
+    gtk_scrolled_window_new ();
+#endif
+    gtk_scrolled_window_set_child (window->scrolled_threshold,
+                                 GTK_WIDGET (window->spin_threshold));
 //  gtk_widget_set_hexpand (GTK_WIDGET (window->scrolled_threshold), TRUE);
 //  gtk_widget_set_halign (GTK_WIDGET (window->scrolled_threshold),
 //                               GTK_ALIGN_FILL);
@@ -2303,24 +2533,36 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
   // Creating the hill climbing method properties
   window->check_climbing = (GtkCheckButton *)
     gtk_check_button_new_with_mnemonic (_("_Hill climbing method"));
-  g_signal_connect (window->check_climbing, "clicked", window_update, NULL);
+  g_signal_connect (window->check_climbing, "toggled", window_update, NULL);
   window->grid_climbing = (GtkGrid *) gtk_grid_new ();
+#if !GTK4
   window->button_climbing[0] = (GtkRadioButton *)
     gtk_radio_button_new_with_mnemonic (NULL, label_climbing[0]);
+#else
+  window->button_climbing[0] = (GtkCheckButton *)
+    gtk_check_button_new_with_mnemonic (label_climbing[0]);
+#endif
   gtk_grid_attach (window->grid_climbing,
                    GTK_WIDGET (window->button_climbing[0]), 0, 0, 1, 1);
-  g_signal_connect (window->button_climbing[0], "clicked", window_update, NULL);
+  g_signal_connect (window->button_climbing[0], "toggled", window_update, NULL);
   for (i = 0; ++i < NCLIMBINGS;)
     {
+#if !GTK4
       window->button_climbing[i] = (GtkRadioButton *)
         gtk_radio_button_new_with_mnemonic
         (gtk_radio_button_get_group (window->button_climbing[0]),
          label_climbing[i]);
+#else
+      window->button_climbing[i] = (GtkCheckButton *)
+        gtk_check_button_new_with_mnemonic (label_climbing[i]);
+      gtk_check_button_set_group (window->button_climbing[i],
+                                  window->button_climbing[0]);
+#endif
       gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_climbing[i]),
                                    tip_climbing[i]);
       gtk_grid_attach (window->grid_climbing,
                        GTK_WIDGET (window->button_climbing[i]), 0, i, 1, 1);
-      g_signal_connect (window->button_climbing[i], "clicked", window_update,
+      g_signal_connect (window->button_climbing[i], "toggled", window_update,
                         NULL);
     }
   window->label_steps = (GtkLabel *) gtk_label_new (_("Steps number"));
@@ -2350,25 +2592,37 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
 
   // Creating the array of algorithms
   window->grid_algorithm = (GtkGrid *) gtk_grid_new ();
+#if !GTK4
   window->button_algorithm[0] = (GtkRadioButton *)
     gtk_radio_button_new_with_mnemonic (NULL, label_algorithm[0]);
+#else
+  window->button_algorithm[0] = (GtkCheckButton *)
+    gtk_check_button_new_with_mnemonic (label_algorithm[0]);
+#endif
   gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_algorithm[0]),
                                tip_algorithm[0]);
   gtk_grid_attach (window->grid_algorithm,
                    GTK_WIDGET (window->button_algorithm[0]), 0, 0, 1, 1);
-  g_signal_connect (window->button_algorithm[0], "clicked",
+  g_signal_connect (window->button_algorithm[0], "toggled",
                     window_set_algorithm, NULL);
   for (i = 0; ++i < NALGORITHMS;)
     {
+#if !GTK4
       window->button_algorithm[i] = (GtkRadioButton *)
         gtk_radio_button_new_with_mnemonic
         (gtk_radio_button_get_group (window->button_algorithm[0]),
          label_algorithm[i]);
+#else
+      window->button_algorithm[i] = (GtkCheckButton *)
+        gtk_check_button_new_with_mnemonic (label_algorithm[i]);
+       gtk_check_button_set_group (window->button_algorithm[i],
+                                   window->button_algorithm[0]),
+#endif
       gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_algorithm[i]),
                                    tip_algorithm[i]);
       gtk_grid_attach (window->grid_algorithm,
                        GTK_WIDGET (window->button_algorithm[i]), 0, i, 1, 1);
-      g_signal_connect (window->button_algorithm[i], "clicked",
+      g_signal_connect (window->button_algorithm[i], "toggled",
                         window_set_algorithm, NULL);
     }
   gtk_grid_attach (window->grid_algorithm,
@@ -2425,8 +2679,8 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
                    GTK_WIDGET (window->scrolled_threshold),
                    1, NALGORITHMS + 11, 1, 1);
   window->frame_algorithm = (GtkFrame *) gtk_frame_new (_("Algorithm"));
-  gtk_container_add (GTK_CONTAINER (window->frame_algorithm),
-                     GTK_WIDGET (window->grid_algorithm));
+  gtk_frame_set_child (window->frame_algorithm,
+                       GTK_WIDGET (window->grid_algorithm));
 
   // Creating the variable widgets
   window->combo_variable = (GtkComboBoxText *) gtk_combo_box_text_new ();
@@ -2434,14 +2688,24 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
     (GTK_WIDGET (window->combo_variable), _("Variables selector"));
   window->id_variable = g_signal_connect
     (window->combo_variable, "changed", window_set_variable, NULL);
+#if !GTK4
   window->button_add_variable = (GtkButton *)
     gtk_button_new_from_icon_name ("list-add", GTK_ICON_SIZE_BUTTON);
+#else
+  window->button_add_variable = (GtkButton *)
+    gtk_button_new_from_icon_name ("list-add");
+#endif
   g_signal_connect (window->button_add_variable, "clicked", window_add_variable,
                     NULL);
   gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_add_variable),
                                _("Add variable"));
+#if !GTK4
   window->button_remove_variable = (GtkButton *)
     gtk_button_new_from_icon_name ("list-remove", GTK_ICON_SIZE_BUTTON);
+#else
+  window->button_remove_variable = (GtkButton *)
+    gtk_button_new_from_icon_name ("list-remove");
+#endif
   g_signal_connect (window->button_remove_variable, "clicked",
                     window_remove_variable, NULL);
   gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_remove_variable),
@@ -2458,10 +2722,14 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
     (-G_MAXDOUBLE, G_MAXDOUBLE, precision[DEFAULT_PRECISION]);
   gtk_widget_set_tooltip_text
     (GTK_WIDGET (window->spin_min), _("Minimum initial value of the variable"));
-  window->scrolled_min
-    = (GtkScrolledWindow *) gtk_scrolled_window_new (NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (window->scrolled_min),
-                     GTK_WIDGET (window->spin_min));
+  window->scrolled_min = (GtkScrolledWindow *)
+#if !GTK4
+    gtk_scrolled_window_new (NULL, NULL);
+#else
+    gtk_scrolled_window_new ();
+#endif
+  gtk_scrolled_window_set_child (window->scrolled_min,
+                                 GTK_WIDGET (window->spin_min));
   g_signal_connect (window->spin_min, "value-changed",
                     window_rangemin_variable, NULL);
   window->label_max = (GtkLabel *) gtk_label_new (_("Maximum"));
@@ -2469,10 +2737,14 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
     (-G_MAXDOUBLE, G_MAXDOUBLE, precision[DEFAULT_PRECISION]);
   gtk_widget_set_tooltip_text
     (GTK_WIDGET (window->spin_max), _("Maximum initial value of the variable"));
-  window->scrolled_max
-    = (GtkScrolledWindow *) gtk_scrolled_window_new (NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (window->scrolled_max),
-                     GTK_WIDGET (window->spin_max));
+  window->scrolled_max = (GtkScrolledWindow *)
+#if !GTK4
+    gtk_scrolled_window_new (NULL, NULL);
+#else
+    gtk_scrolled_window_new ();
+#endif
+  gtk_scrolled_window_set_child (window->scrolled_max,
+                                 GTK_WIDGET (window->spin_max));
   g_signal_connect (window->spin_max, "value-changed",
                     window_rangemax_variable, NULL);
   window->check_minabs = (GtkCheckButton *)
@@ -2483,10 +2755,14 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
   gtk_widget_set_tooltip_text
     (GTK_WIDGET (window->spin_minabs),
      _("Minimum allowed value of the variable"));
-  window->scrolled_minabs
-    = (GtkScrolledWindow *) gtk_scrolled_window_new (NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (window->scrolled_minabs),
-                     GTK_WIDGET (window->spin_minabs));
+  window->scrolled_minabs = (GtkScrolledWindow *)
+#if !GTK4
+    gtk_scrolled_window_new (NULL, NULL);
+#else
+    gtk_scrolled_window_new ();
+#endif
+  gtk_scrolled_window_set_child (window->scrolled_minabs,
+                                 GTK_WIDGET (window->spin_minabs));
   g_signal_connect (window->spin_minabs, "value-changed",
                     window_rangeminabs_variable, NULL);
   window->check_maxabs = (GtkCheckButton *)
@@ -2497,10 +2773,14 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
   gtk_widget_set_tooltip_text
     (GTK_WIDGET (window->spin_maxabs),
      _("Maximum allowed value of the variable"));
-  window->scrolled_maxabs
-    = (GtkScrolledWindow *) gtk_scrolled_window_new (NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (window->scrolled_maxabs),
-                     GTK_WIDGET (window->spin_maxabs));
+  window->scrolled_maxabs = (GtkScrolledWindow *)
+#if !GTK4
+    gtk_scrolled_window_new (NULL, NULL);
+#else
+    gtk_scrolled_window_new ();
+#endif
+  gtk_scrolled_window_set_child (window->scrolled_maxabs,
+                                 GTK_WIDGET (window->spin_maxabs));
   g_signal_connect (window->spin_maxabs, "value-changed",
                     window_rangemaxabs_variable, NULL);
   window->label_precision = (GtkLabel *) gtk_label_new (_("Precision digits"));
@@ -2533,10 +2813,14 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
   gtk_widget_set_tooltip_text
     (GTK_WIDGET (window->spin_step),
      _("Initial step size for the hill climbing method"));
-  window->scrolled_step
-    = (GtkScrolledWindow *) gtk_scrolled_window_new (NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (window->scrolled_step),
-                     GTK_WIDGET (window->spin_step));
+  window->scrolled_step = (GtkScrolledWindow *)
+#if !GTK4
+    gtk_scrolled_window_new (NULL, NULL);
+#else
+    gtk_scrolled_window_new ();
+#endif
+  gtk_scrolled_window_set_child (window->scrolled_step,
+                                 GTK_WIDGET (window->spin_step));
   g_signal_connect
     (window->spin_step, "value-changed", window_step_variable, NULL);
   window->grid_variable = (GtkGrid *) gtk_grid_new ();
@@ -2583,8 +2867,8 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
   gtk_grid_attach (window->grid_variable,
                    GTK_WIDGET (window->scrolled_step), 1, 9, 3, 1);
   window->frame_variable = (GtkFrame *) gtk_frame_new (_("Variable"));
-  gtk_container_add (GTK_CONTAINER (window->frame_variable),
-                     GTK_WIDGET (window->grid_variable));
+  gtk_frame_set_child (window->frame_variable,
+                       GTK_WIDGET (window->grid_variable));
 
   // Creating the experiment widgets
   window->combo_experiment = (GtkComboBoxText *) gtk_combo_box_text_new ();
@@ -2592,28 +2876,36 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
                                _("Experiment selector"));
   window->id_experiment = g_signal_connect
     (window->combo_experiment, "changed", window_set_experiment, NULL);
+#if !GTK4
   window->button_add_experiment = (GtkButton *)
     gtk_button_new_from_icon_name ("list-add", GTK_ICON_SIZE_BUTTON);
+#else
+  window->button_add_experiment = (GtkButton *)
+    gtk_button_new_from_icon_name ("list-add");
+#endif
   g_signal_connect
     (window->button_add_experiment, "clicked", window_add_experiment, NULL);
   gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_add_experiment),
                                _("Add experiment"));
+#if !GTK4
   window->button_remove_experiment = (GtkButton *)
     gtk_button_new_from_icon_name ("list-remove", GTK_ICON_SIZE_BUTTON);
+#else
+  window->button_remove_experiment = (GtkButton *)
+    gtk_button_new_from_icon_name ("list-remove");
+#endif
   g_signal_connect (window->button_remove_experiment, "clicked",
                     window_remove_experiment, NULL);
   gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_remove_experiment),
                                _("Remove experiment"));
   window->label_experiment
     = (GtkLabel *) gtk_label_new (_("Experimental data file"));
-  window->button_experiment = (GtkFileChooserButton *)
-    gtk_file_chooser_button_new (_("Experimental data file"),
-                                 GTK_FILE_CHOOSER_ACTION_OPEN);
+  window->button_experiment = (GtkButton *)
+    gtk_button_new_with_mnemonic (_("Experimental data file"));
   gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_experiment),
                                _("Experimental data file"));
-  window->id_experiment_name
-    = g_signal_connect (window->button_experiment, "selection-changed",
-                        window_name_experiment, NULL);
+  g_signal_connect (window->button_experiment, "clicked",
+                    window_name_experiment, NULL);
   gtk_widget_set_hexpand (GTK_WIDGET (window->button_experiment), TRUE);
   window->label_weight = (GtkLabel *) gtk_label_new (_("Weight"));
   window->spin_weight
@@ -2648,45 +2940,55 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
                             window_inputs_experiment, NULL);
       gtk_grid_attach (window->grid_experiment,
                        GTK_WIDGET (window->check_template[i]), 0, 3 + i, 1, 1);
-      window->button_template[i] = (GtkFileChooserButton *)
-        gtk_file_chooser_button_new (_("Input template"),
-                                     GTK_FILE_CHOOSER_ACTION_OPEN);
+      window->button_template[i] = (GtkButton *)
+        gtk_button_new_with_mnemonic (_("Input template"));
+                                    
       gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_template[i]),
                                    _("Experimental input template file"));
       window->id_input[i] =
-        g_signal_connect_swapped (window->button_template[i],
-                                  "selection-changed",
+        g_signal_connect_swapped (window->button_template[i], "clicked",
                                   (GCallback) window_template_experiment,
                                   (void *) (size_t) i);
       gtk_grid_attach (window->grid_experiment,
                        GTK_WIDGET (window->button_template[i]), 1, 3 + i, 3, 1);
     }
   window->frame_experiment = (GtkFrame *) gtk_frame_new (_("Experiment"));
-  gtk_container_add (GTK_CONTAINER (window->frame_experiment),
-                     GTK_WIDGET (window->grid_experiment));
+  gtk_frame_set_child (window->frame_experiment,
+                       GTK_WIDGET (window->grid_experiment));
 
   // Creating the error norm widgets
   window->frame_norm = (GtkFrame *) gtk_frame_new (_("Error norm"));
   window->grid_norm = (GtkGrid *) gtk_grid_new ();
-  gtk_container_add (GTK_CONTAINER (window->frame_norm),
-                     GTK_WIDGET (window->grid_norm));
+  gtk_frame_set_child (window->frame_norm, GTK_WIDGET (window->grid_norm));
+#if !GTK4
   window->button_norm[0] = (GtkRadioButton *)
     gtk_radio_button_new_with_mnemonic (NULL, label_norm[0]);
+#else
+  window->button_norm[0] = (GtkCheckButton *)
+    gtk_check_button_new_with_mnemonic (label_norm[0]);
+#endif
   gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_norm[0]),
                                tip_norm[0]);
   gtk_grid_attach (window->grid_norm,
                    GTK_WIDGET (window->button_norm[0]), 0, 0, 1, 1);
-  g_signal_connect (window->button_norm[0], "clicked", window_update, NULL);
+  g_signal_connect (window->button_norm[0], "toggled", window_update, NULL);
   for (i = 0; ++i < NNORMS;)
     {
+#if !GTK4
       window->button_norm[i] = (GtkRadioButton *)
         gtk_radio_button_new_with_mnemonic
         (gtk_radio_button_get_group (window->button_norm[0]), label_norm[i]);
+#else
+      window->button_norm[i] = (GtkCheckButton *)
+        gtk_check_button_new_with_mnemonic (label_norm[i]);
+      gtk_check_button_set_group (window->button_norm[i],
+                                  window->button_norm[0]);
+#endif
       gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_norm[i]),
                                    tip_norm[i]);
       gtk_grid_attach (window->grid_norm,
                        GTK_WIDGET (window->button_norm[i]), 0, i, 1, 1);
-      g_signal_connect (window->button_norm[i], "clicked", window_update, NULL);
+      g_signal_connect (window->button_norm[i], "toggled", window_update, NULL);
     }
   window->label_p = (GtkLabel *) gtk_label_new (_("P parameter"));
   gtk_grid_attach (window->grid_norm, GTK_WIDGET (window->label_p), 1, 1, 1, 1);
@@ -2694,10 +2996,14 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
     gtk_spin_button_new_with_range (-G_MAXDOUBLE, G_MAXDOUBLE, 0.01);
   gtk_widget_set_tooltip_text (GTK_WIDGET (window->spin_p),
                                _("P parameter for the P error norm"));
-  window->scrolled_p =
-    (GtkScrolledWindow *) gtk_scrolled_window_new (NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (window->scrolled_p),
-                     GTK_WIDGET (window->spin_p));
+  window->scrolled_p = (GtkScrolledWindow *)
+#if !GTK4
+    gtk_scrolled_window_new (NULL, NULL);
+#else
+    gtk_scrolled_window_new ();
+#endif
+  gtk_scrolled_window_set_child (window->scrolled_p,
+                                 GTK_WIDGET (window->spin_p));
   gtk_widget_set_hexpand (GTK_WIDGET (window->scrolled_p), TRUE);
   gtk_widget_set_halign (GTK_WIDGET (window->scrolled_p), GTK_ALIGN_FILL);
   gtk_grid_attach (window->grid_norm, GTK_WIDGET (window->scrolled_p),
@@ -2705,7 +3011,7 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
 
   // Creating the grid and attaching the widgets to the grid
   window->grid = (GtkGrid *) gtk_grid_new ();
-  gtk_grid_attach (window->grid, GTK_WIDGET (window->bar_buttons), 0, 0, 3, 1);
+  gtk_grid_attach (window->grid, GTK_WIDGET (window->box_buttons), 0, 0, 3, 1);
   gtk_grid_attach (window->grid, GTK_WIDGET (window->grid_files), 0, 1, 1, 1);
   gtk_grid_attach (window->grid,
                    GTK_WIDGET (window->frame_algorithm), 0, 2, 1, 1);
@@ -2714,14 +3020,20 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
   gtk_grid_attach (window->grid,
                    GTK_WIDGET (window->frame_experiment), 2, 2, 1, 1);
   gtk_grid_attach (window->grid, GTK_WIDGET (window->frame_norm), 1, 1, 2, 1);
-  gtk_container_add (GTK_CONTAINER (window->window), GTK_WIDGET (window->grid));
+  gtk_window_set_child (window->window, GTK_WIDGET (window->grid));
 
   // Setting the window logo
   window->logo = gdk_pixbuf_new_from_xpm_data (logo);
+#if !GTK4
   gtk_window_set_icon (window->window, window->logo);
+#endif
 
   // Showing the window
+#if !GTK4
   gtk_widget_show_all (GTK_WIDGET (window->window));
+#else
+  gtk_widget_show (GTK_WIDGET (window->window));
+#endif
 
   // In GTK+ 3.16 and 3.18 the default scrolled size is wrong
 #if GTK_MINOR_VERSION >= 16

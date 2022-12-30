@@ -5,7 +5,7 @@ calibrations or optimizations of empirical parameters.
 
 AUTHORS: Javier Burguete and Borja Latorre.
 
-Copyright 2012-2019, AUTHORS.
+Copyright 2012-2022, AUTHORS.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -33,7 +33,7 @@ OF SUCH DAMAGE.
  * \file tools.h
  * \brief Header file to define some useful functions.
  * \authors Javier Burguete.
- * \copyright Copyright 2012-2019, all rights reserved.
+ * \copyright Copyright 2012-2022, all rights reserved.
  */
 #ifndef TOOLS__H
 #define TOOLS__H 1
@@ -94,9 +94,37 @@ void json_object_set_uint (JsonObject * object, const char *prop,
 void json_object_set_float (JsonObject * object, const char *prop,
                             double value);
 int cores_number ();
+
 #if HAVE_GTK
+
 void process_pending ();
+
+#if !GTK4
+
+#define gtk_box_append(box, child) (gtk_box_pack_start(box, child, 0, 0, 0))
+#define gtk_check_button_get_active(button) \
+  (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button)))
+#define gtk_check_button_set_active(button, active) \
+  (gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), active))
+#define gtk_file_chooser_get_current_filename gtk_file_chooser_get_name
+#define gtk_file_chooser_set_current_filename gtk_file_chooser_set_name
+#define gtk_frame_set_child(frame, child) \
+  (gtk_container_add(GTK_CONTAINER(frame), child))
+#define gtk_scrolled_window_set_child(window, child) \
+  (gtk_container_add(GTK_CONTAINER(window), child))
+#define gtk_window_destroy(window) (gtk_widget_destroy(GTK_WIDGET(window)))
+#define gtk_window_set_child(window, child) \
+  (gtk_container_add(GTK_CONTAINER(window), child))
+
 unsigned int gtk_array_get_active (GtkRadioButton * array[], unsigned int n);
+
+#else
+
+unsigned int gtk_array_get_active (GtkCheckButton * array[], unsigned int n);
+void gtk_entry_set_text (GtkEntry * entry, const char *text);
+const char *gtk_entry_get_text (GtkEntry * entry);
+
+#endif
 #endif
 
 #endif
