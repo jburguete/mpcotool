@@ -315,33 +315,28 @@ msgstr ""
 "Un programme pour faire calibrages ou optimisations de paramètres empiriques"
 
 #: interface.c:1507
-#, fuzzy
 msgid "Open experiment file"
-msgstr "Ouvrir fichier d'entrée"
+msgstr "Ouvrir fichier d'expérience"
 
 #: interface.c:1512 interface.c:1629 interface.c:2207 interface.c:2261
-#, fuzzy
 msgid "_Open"
-msgstr "Ouvrir"
+msgstr "_Ouvrir"
 
 #: interface.c:1624
-#, fuzzy
 msgid "Open template file"
-msgstr "Ouvrir fichier d'entrée"
+msgstr "Ouvrir fichier de modèle"
 
 #: interface.c:2128
 msgid "Open input file"
 msgstr "Ouvrir fichier d'entrée"
 
 #: interface.c:2203
-#, fuzzy
 msgid "Open simulator file"
-msgstr "Ouvrir fichier d'entrée"
+msgstr "Ouvrir fichier de simulateur"
 
 #: interface.c:2257
-#, fuzzy
 msgid "Open evaluator file"
-msgstr "Ouvrir fichier d'entrée"
+msgstr "Ouvrir fichier d'évaluateur"
 
 #: interface.c:2278
 msgid "_Sweep"

@@ -316,33 +316,28 @@ msgstr ""
 "empíricos"
 
 #: interface.c:1507
-#, fuzzy
 msgid "Open experiment file"
-msgstr "Abrir fichero de entrada"
+msgstr "Abrir fichero de experimento"
 
 #: interface.c:1512 interface.c:1629 interface.c:2207 interface.c:2261
-#, fuzzy
 msgid "_Open"
-msgstr "Abrir"
+msgstr "_Abrir"
 
 #: interface.c:1624
-#, fuzzy
 msgid "Open template file"
-msgstr "Abrir fichero de entrada"
+msgstr "Abrir fichero de plantilla"
 
 #: interface.c:2128
 msgid "Open input file"
 msgstr "Abrir fichero de entrada"
 
 #: interface.c:2203
-#, fuzzy
 msgid "Open simulator file"
-msgstr "Abrir fichero de entrada"
+msgstr "Abrir fichero de simulador"
 
 #: interface.c:2257
-#, fuzzy
 msgid "Open evaluator file"
-msgstr "Abrir fichero de entrada"
+msgstr "Abrir fichero de evaluador"
 
 #: interface.c:2278
 msgid "_Sweep"
