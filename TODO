@@ -1,6 +1,5 @@
 TASKS
 
-* Use the JB library
 * Enable optimization functions inputs by variables (not by files)
 * Correct several german translations
 - Add ant algorithm
