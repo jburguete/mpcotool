@@ -134,8 +134,8 @@ variable_open_xml (Variable * variable, ///< Variable struct.
         }
       variable->rangeminabs = jb_xml_node_get_float_with_default
         (node, (const xmlChar *) LABEL_ABSOLUTE_MINIMUM, &error_code,
-	 -G_MAXDOUBLE);
-         
+         -G_MAXDOUBLE);
+
       if (!error_code)
         {
           variable_error (variable, _("bad absolute minimum"));
@@ -164,7 +164,7 @@ variable_open_xml (Variable * variable, ///< Variable struct.
         }
       variable->rangemaxabs = jb_xml_node_get_float_with_default
         (node, (const xmlChar *) LABEL_ABSOLUTE_MAXIMUM, &error_code,
-	 G_MAXDOUBLE);
+         G_MAXDOUBLE);
       if (!error_code)
         {
           variable_error (variable, _("bad absolute maximum"));
@@ -188,8 +188,8 @@ variable_open_xml (Variable * variable, ///< Variable struct.
     }
   variable->precision
     = jb_xml_node_get_uint_with_default (node,
-		                         (const xmlChar *) LABEL_PRECISION,
-					 &error_code, DEFAULT_PRECISION);
+                                         (const xmlChar *) LABEL_PRECISION,
+                                         &error_code, DEFAULT_PRECISION);
   if (!error_code || variable->precision >= NPRECISIONS)
     {
       variable_error (variable, _("bad precision"));

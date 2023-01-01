@@ -358,7 +358,7 @@ input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
       // Obtaining best number
       input->nbest
         = jb_xml_node_get_uint_with_default (node,
-		       	                     (const xmlChar *) LABEL_NBEST,
+                                             (const xmlChar *) LABEL_NBEST,
                                              &error_code, 1);
       if (!error_code || !input->nbest)
         {
@@ -847,7 +847,7 @@ input_open_json (JsonParser * parser)   ///< JsonParser struct.
   input->threshold
     = jb_json_object_get_float_with_default (object, LABEL_THRESHOLD,
                                              &error_code, 0.);
-                                             
+
   if (!error_code)
     {
       input_error (_("Invalid threshold"));
