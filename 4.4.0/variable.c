@@ -5,7 +5,7 @@ calibrations or optimizations of empirical parameters.
 
 AUTHORS: Javier Burguete and Borja Latorre.
 
-Copyright 2012-2022, AUTHORS.
+Copyright 2012-2023, AUTHORS.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -33,7 +33,7 @@ OF SUCH DAMAGE.
  * \file variable.c
  * \brief Source file to define the variable data.
  * \authors Javier Burguete and Borja Latorre.
- * \copyright Copyright 2012-2022, all rights reserved.
+ * \copyright Copyright 2012-2023, all rights reserved.
  */
 #define _GNU_SOURCE
 #include "config.h"
@@ -42,6 +42,9 @@ OF SUCH DAMAGE.
 #include <libintl.h>
 #include <glib.h>
 #include <json-glib/json-glib.h>
+#include "jb/src/jb_xml.h"
+#include "jb/src/jb_json.h"
+#include "jb/src/jb_win.h"
 #include "tools.h"
 #include "variable.h"
 
@@ -122,17 +125,18 @@ variable_open_xml (Variable * variable, ///< Variable struct.
   if (xmlHasProp (node, (const xmlChar *) LABEL_MINIMUM))
     {
       variable->rangemin
-        = xml_node_get_float (node, (const xmlChar *) LABEL_MINIMUM,
-                              &error_code);
-      if (error_code)
+        = jb_xml_node_get_float (node, (const xmlChar *) LABEL_MINIMUM,
+                                 &error_code);
+      if (!error_code)
         {
           variable_error (variable, _("bad minimum"));
           goto exit_on_error;
         }
-      variable->rangeminabs = xml_node_get_float_with_default
-        (node, (const xmlChar *) LABEL_ABSOLUTE_MINIMUM, -G_MAXDOUBLE,
-         &error_code);
-      if (error_code)
+      variable->rangeminabs = jb_xml_node_get_float_with_default
+        (node, (const xmlChar *) LABEL_ABSOLUTE_MINIMUM, &error_code,
+	 -G_MAXDOUBLE);
+         
+      if (!error_code)
         {
           variable_error (variable, _("bad absolute minimum"));
           goto exit_on_error;
@@ -151,17 +155,17 @@ variable_open_xml (Variable * variable, ///< Variable struct.
   if (xmlHasProp (node, (const xmlChar *) LABEL_MAXIMUM))
     {
       variable->rangemax
-        = xml_node_get_float (node, (const xmlChar *) LABEL_MAXIMUM,
-                              &error_code);
-      if (error_code)
+        = jb_xml_node_get_float (node, (const xmlChar *) LABEL_MAXIMUM,
+                                 &error_code);
+      if (!error_code)
         {
           variable_error (variable, _("bad maximum"));
           goto exit_on_error;
         }
-      variable->rangemaxabs = xml_node_get_float_with_default
-        (node, (const xmlChar *) LABEL_ABSOLUTE_MAXIMUM, G_MAXDOUBLE,
-         &error_code);
-      if (error_code)
+      variable->rangemaxabs = jb_xml_node_get_float_with_default
+        (node, (const xmlChar *) LABEL_ABSOLUTE_MAXIMUM, &error_code,
+	 G_MAXDOUBLE);
+      if (!error_code)
         {
           variable_error (variable, _("bad absolute maximum"));
           goto exit_on_error;
@@ -183,9 +187,10 @@ variable_open_xml (Variable * variable, ///< Variable struct.
       goto exit_on_error;
     }
   variable->precision
-    = xml_node_get_uint_with_default (node, (const xmlChar *) LABEL_PRECISION,
-                                      DEFAULT_PRECISION, &error_code);
-  if (error_code || variable->precision >= NPRECISIONS)
+    = jb_xml_node_get_uint_with_default (node,
+		                         (const xmlChar *) LABEL_PRECISION,
+					 &error_code, DEFAULT_PRECISION);
+  if (!error_code || variable->precision >= NPRECISIONS)
     {
       variable_error (variable, _("bad precision"));
       goto exit_on_error;
@@ -195,9 +200,9 @@ variable_open_xml (Variable * variable, ///< Variable struct.
       if (xmlHasProp (node, (const xmlChar *) LABEL_NSWEEPS))
         {
           variable->nsweeps
-            = xml_node_get_uint (node, (const xmlChar *) LABEL_NSWEEPS,
-                                 &error_code);
-          if (error_code || !variable->nsweeps)
+            = jb_xml_node_get_uint (node, (const xmlChar *) LABEL_NSWEEPS,
+                                    &error_code);
+          if (!error_code || !variable->nsweeps)
             {
               variable_error (variable, _("bad sweeps"));
               goto exit_on_error;
@@ -218,9 +223,9 @@ variable_open_xml (Variable * variable, ///< Variable struct.
       if (xmlHasProp (node, (const xmlChar *) LABEL_NBITS))
         {
           variable->nbits
-            = xml_node_get_uint (node, (const xmlChar *) LABEL_NBITS,
-                                 &error_code);
-          if (error_code || !variable->nbits)
+            = jb_xml_node_get_uint (node, (const xmlChar *) LABEL_NBITS,
+                                    &error_code);
+          if (!error_code || !variable->nbits)
             {
               variable_error (variable, _("invalid bits number"));
               goto exit_on_error;
@@ -235,8 +240,9 @@ variable_open_xml (Variable * variable, ///< Variable struct.
   else if (nsteps)
     {
       variable->step
-        = xml_node_get_float (node, (const xmlChar *) LABEL_STEP, &error_code);
-      if (error_code || variable->step < 0.)
+        = jb_xml_node_get_float (node, (const xmlChar *) LABEL_STEP,
+                                 &error_code);
+      if (!error_code || variable->step < 0.)
         {
           variable_error (variable, _("bad step size"));
           goto exit_on_error;
@@ -284,16 +290,16 @@ variable_open_json (Variable * variable,        ///< Variable struct.
   if (json_object_get_member (object, LABEL_MINIMUM))
     {
       variable->rangemin
-        = json_object_get_float (object, LABEL_MINIMUM, &error_code);
-      if (error_code)
+        = jb_json_object_get_float (object, LABEL_MINIMUM, &error_code);
+      if (!error_code)
         {
           variable_error (variable, _("bad minimum"));
           goto exit_on_error;
         }
       variable->rangeminabs
-        = json_object_get_float_with_default (object, LABEL_ABSOLUTE_MINIMUM,
-                                              -G_MAXDOUBLE, &error_code);
-      if (error_code)
+        = jb_json_object_get_float_with_default (object, LABEL_ABSOLUTE_MINIMUM,
+                                                 &error_code, -G_MAXDOUBLE);
+      if (!error_code)
         {
           variable_error (variable, _("bad absolute minimum"));
           goto exit_on_error;
@@ -312,16 +318,16 @@ variable_open_json (Variable * variable,        ///< Variable struct.
   if (json_object_get_member (object, LABEL_MAXIMUM))
     {
       variable->rangemax
-        = json_object_get_float (object, LABEL_MAXIMUM, &error_code);
-      if (error_code)
+        = jb_json_object_get_float (object, LABEL_MAXIMUM, &error_code);
+      if (!error_code)
         {
           variable_error (variable, _("bad maximum"));
           goto exit_on_error;
         }
       variable->rangemaxabs
-        = json_object_get_float_with_default (object, LABEL_ABSOLUTE_MAXIMUM,
-                                              G_MAXDOUBLE, &error_code);
-      if (error_code)
+        = jb_json_object_get_float_with_default (object, LABEL_ABSOLUTE_MAXIMUM,
+                                                 &error_code, G_MAXDOUBLE);
+      if (!error_code)
         {
           variable_error (variable, _("bad absolute maximum"));
           goto exit_on_error;
@@ -343,9 +349,9 @@ variable_open_json (Variable * variable,        ///< Variable struct.
       goto exit_on_error;
     }
   variable->precision
-    = json_object_get_uint_with_default (object, LABEL_PRECISION,
-                                         DEFAULT_PRECISION, &error_code);
-  if (error_code || variable->precision >= NPRECISIONS)
+    = jb_json_object_get_uint_with_default (object, LABEL_PRECISION,
+                                            &error_code, DEFAULT_PRECISION);
+  if (!error_code || variable->precision >= NPRECISIONS)
     {
       variable_error (variable, _("bad precision"));
       goto exit_on_error;
@@ -355,8 +361,8 @@ variable_open_json (Variable * variable,        ///< Variable struct.
       if (json_object_get_member (object, LABEL_NSWEEPS))
         {
           variable->nsweeps
-            = json_object_get_uint (object, LABEL_NSWEEPS, &error_code);
-          if (error_code || !variable->nsweeps)
+            = jb_json_object_get_uint (object, LABEL_NSWEEPS, &error_code);
+          if (!error_code || !variable->nsweeps)
             {
               variable_error (variable, _("bad sweeps"));
               goto exit_on_error;
@@ -377,8 +383,8 @@ variable_open_json (Variable * variable,        ///< Variable struct.
       if (json_object_get_member (object, LABEL_NBITS))
         {
           variable->nbits
-            = json_object_get_uint (object, LABEL_NBITS, &error_code);
-          if (error_code || !variable->nbits)
+            = jb_json_object_get_uint (object, LABEL_NBITS, &error_code);
+          if (!error_code || !variable->nbits)
             {
               variable_error (variable, _("invalid bits number"));
               goto exit_on_error;
@@ -392,8 +398,9 @@ variable_open_json (Variable * variable,        ///< Variable struct.
     }
   else if (nsteps)
     {
-      variable->step = json_object_get_float (object, LABEL_STEP, &error_code);
-      if (error_code || variable->step < 0.)
+      variable->step
+        = jb_json_object_get_float (object, LABEL_STEP, &error_code);
+      if (!error_code || variable->step < 0.)
         {
           variable_error (variable, _("bad step size"));
           goto exit_on_error;

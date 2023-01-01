@@ -40,9 +40,6 @@ OF SUCH DAMAGE.
 
 #undef HAVE_MPI
 
-// Gettext simplification
-#define _(string) (gettext(string))
-
 // Array sizes
 
 #define MAX_NINPUTS 8

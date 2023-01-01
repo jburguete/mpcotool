@@ -5,7 +5,7 @@ calibrations or optimizations of empirical parameters.
 
 AUTHORS: Javier Burguete and Borja Latorre.
 
-Copyright 2012-2022, AUTHORS.
+Copyright 2012-2023, AUTHORS.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -33,7 +33,7 @@ OF SUCH DAMAGE.
  * \file optimize.c
  * \brief Source file to define the optimization functions.
  * \authors Javier Burguete and Borja Latorre.
- * \copyright Copyright 2012-2022, all rights reserved.
+ * \copyright Copyright 2012-2023, all rights reserved.
  */
 #define _GNU_SOURCE
 #include "config.h"
@@ -56,6 +56,7 @@ OF SUCH DAMAGE.
 #if HAVE_MPI
 #include <mpi.h>
 #endif
+#include "jb/src/jb_win.h"
 #include "genetic/genetic.h"
 #include "tools.h"
 #include "experiment.h"

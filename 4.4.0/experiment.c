@@ -5,7 +5,7 @@ calibrations or optimizations of empirical parameters.
 
 AUTHORS: Javier Burguete and Borja Latorre.
 
-Copyright 2012-2022, AUTHORS.
+Copyright 2012-2023, AUTHORS.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -33,7 +33,7 @@ OF SUCH DAMAGE.
  * \file experiment.c
  * \brief Source file to define the experiment data.
  * \authors Javier Burguete and Borja Latorre.
- * \copyright Copyright 2012-2022, all rights reserved.
+ * \copyright Copyright 2012-2023, all rights reserved.
  */
 #define _GNU_SOURCE
 #include "config.h"
@@ -42,6 +42,9 @@ OF SUCH DAMAGE.
 #include <libintl.h>
 #include <glib.h>
 #include <json-glib/json-glib.h>
+#include "jb/src/jb_xml.h"
+#include "jb/src/jb_json.h"
+#include "jb/src/jb_win.h"
 #include "tools.h"
 #include "experiment.h"
 
@@ -151,10 +154,9 @@ experiment_open_xml (Experiment * experiment,   ///< Experiment struct.
   fprintf (stderr, "experiment_open_xml: name=%s\n", experiment->name);
 #endif
   experiment->weight
-    =
-    xml_node_get_float_with_default (node, (const xmlChar *) LABEL_WEIGHT, 1.,
-                                     &error_code);
-  if (error_code)
+    = jb_xml_node_get_float_with_default (node, (const xmlChar *) LABEL_WEIGHT,
+                                          &error_code, 1.);
+  if (!error_code)
     {
       experiment_error (experiment, _("bad weight"));
       goto exit_on_error;
@@ -261,9 +263,9 @@ experiment_open_json (Experiment * experiment,  ///< Experiment struct.
   fprintf (stderr, "experiment_open_json: name=%s\n", experiment->name);
 #endif
   experiment->weight
-    = json_object_get_float_with_default (object, LABEL_WEIGHT, 1.,
-                                          &error_code);
-  if (error_code)
+    = jb_json_object_get_float_with_default (object, LABEL_WEIGHT, &error_code,
+                                             1.);
+  if (!error_code)
     {
       experiment_error (experiment, _("bad weight"));
       goto exit_on_error;

@@ -5,7 +5,7 @@ calibrations or optimizations of empirical parameters.
 
 AUTHORS: Javier Burguete and Borja Latorre.
 
-Copyright 2012-2022, AUTHORS.
+Copyright 2012-2023, AUTHORS.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -30,34 +30,44 @@ OF SUCH DAMAGE.
 */
 
 /**
- * \file experiment.h
- * \brief Header file to define the experiment data.
+ * \file tools.h
+ * \brief Header file to define some useful functions.
  * \authors Javier Burguete.
- * \copyright Copyright 2012-2022, all rights reserved.
+ * \copyright Copyright 2012-2023, all rights reserved.
  */
-#ifndef EXPERIMENT__H
-#define EXPERIMENT__H 1
+#ifndef TOOLS__H
+#define TOOLS__H 1
 
 /**
- * \struct Experiment
- * \brief Struct to define the experiment data.
+ * \def ERROR_TYPE
+ * \brief Macro to define the error message type.
+ * \def INFO_TYPE
+ * \brief Macro to define the information message type.
  */
-typedef struct
-{
-  char *name;                   ///< File name.
-  char *stencil[MAX_NINPUTS];   ///< Array of template names of input files.
-  double weight;                ///< Objective function weight.
-  unsigned int ninputs;         ///< Number of input files to the simulator.
-} Experiment;
+#if HAVE_GTK
+#define ERROR_TYPE GTK_MESSAGE_ERROR
+#define INFO_TYPE GTK_MESSAGE_INFO
+extern GtkWindow *main_window;
+#else
+#define ERROR_TYPE 0
+#define INFO_TYPE 0
+#endif
 
-extern const char *stencil[MAX_NINPUTS];
+extern char *error_message;
+extern void (*show_pending) ();
 
 // Public functions
-void experiment_free (Experiment * experiment, unsigned int type);
-void experiment_error (Experiment * experiment, char *message);
-int experiment_open_xml (Experiment * experiment, xmlNode * node,
-                         unsigned int ninputs);
-int experiment_open_json (Experiment * experiment, JsonNode * node,
-                          unsigned int ninputs);
+
+#if HAVE_GTK
+
+void process_pending ();
+
+#if !GTK4
+unsigned int gtk_array_get_active (GtkRadioButton * array[], unsigned int n);
+#else
+unsigned int gtk_array_get_active (GtkCheckButton * array[], unsigned int n);
+#endif
+
+#endif
 
 #endif

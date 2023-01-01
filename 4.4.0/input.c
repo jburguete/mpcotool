@@ -5,7 +5,7 @@ calibrations or optimizations of empirical parameters.
 
 AUTHORS: Javier Burguete and Borja Latorre.
 
-Copyright 2012-2022, AUTHORS.
+Copyright 2012-2023, AUTHORS.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -33,7 +33,7 @@ OF SUCH DAMAGE.
  * \file input.c
  * \brief Source file to define the input functions.
  * \authors Javier Burguete and Borja Latorre.
- * \copyright Copyright 2012-2022, all rights reserved.
+ * \copyright Copyright 2012-2023, all rights reserved.
  */
 #define _GNU_SOURCE
 #include "config.h"
@@ -44,6 +44,9 @@ OF SUCH DAMAGE.
 #include <glib.h>
 #include <glib/gstdio.h>
 #include <json-glib/json-glib.h>
+#include "jb/src/jb_xml.h"
+#include "jb/src/jb_json.h"
+#include "jb/src/jb_win.h"
 #include "tools.h"
 #include "experiment.h"
 #include "variable.h"
@@ -194,9 +197,9 @@ input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
 
   // Obtaining pseudo-random numbers generator seed
   input->seed
-    = xml_node_get_uint_with_default (node, (const xmlChar *) LABEL_SEED,
-                                      DEFAULT_RANDOM_SEED, &error_code);
-  if (error_code)
+    = jb_xml_node_get_uint_with_default (node, (const xmlChar *) LABEL_SEED,
+                                         &error_code, DEFAULT_RANDOM_SEED);
+  if (!error_code)
     {
       input_error (_("Bad pseudo-random numbers generator seed"));
       goto exit_on_error;
@@ -210,9 +213,9 @@ input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
 
       // Obtaining simulations number
       input->nsimulations
-        = xml_node_get_int (node, (const xmlChar *) LABEL_NSIMULATIONS,
-                            &error_code);
-      if (error_code)
+        = jb_xml_node_get_uint (node, (const xmlChar *) LABEL_NSIMULATIONS,
+                                &error_code);
+      if (!error_code)
         {
           input_error (_("Bad simulations number"));
           goto exit_on_error;
@@ -230,9 +233,9 @@ input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
       if (xmlHasProp (node, (const xmlChar *) LABEL_NPOPULATION))
         {
           input->nsimulations
-            = xml_node_get_uint (node, (const xmlChar *) LABEL_NPOPULATION,
-                                 &error_code);
-          if (error_code || input->nsimulations < 3)
+            = jb_xml_node_get_uint (node, (const xmlChar *) LABEL_NPOPULATION,
+                                    &error_code);
+          if (!error_code || input->nsimulations < 3)
             {
               input_error (_("Invalid population number"));
               goto exit_on_error;
@@ -248,9 +251,9 @@ input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
       if (xmlHasProp (node, (const xmlChar *) LABEL_NGENERATIONS))
         {
           input->niterations
-            = xml_node_get_uint (node, (const xmlChar *) LABEL_NGENERATIONS,
-                                 &error_code);
-          if (error_code || !input->niterations)
+            = jb_xml_node_get_uint (node, (const xmlChar *) LABEL_NGENERATIONS,
+                                    &error_code);
+          if (!error_code || !input->niterations)
             {
               input_error (_("Invalid generations number"));
               goto exit_on_error;
@@ -266,9 +269,9 @@ input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
       if (xmlHasProp (node, (const xmlChar *) LABEL_MUTATION))
         {
           input->mutation_ratio
-            = xml_node_get_float (node, (const xmlChar *) LABEL_MUTATION,
-                                  &error_code);
-          if (error_code || input->mutation_ratio < 0.
+            = jb_xml_node_get_float (node, (const xmlChar *) LABEL_MUTATION,
+                                     &error_code);
+          if (!error_code || input->mutation_ratio < 0.
               || input->mutation_ratio >= 1.)
             {
               input_error (_("Invalid mutation probability"));
@@ -285,9 +288,9 @@ input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
       if (xmlHasProp (node, (const xmlChar *) LABEL_REPRODUCTION))
         {
           input->reproduction_ratio
-            = xml_node_get_float (node, (const xmlChar *) LABEL_REPRODUCTION,
-                                  &error_code);
-          if (error_code || input->reproduction_ratio < 0.
+            = jb_xml_node_get_float (node, (const xmlChar *) LABEL_REPRODUCTION,
+                                     &error_code);
+          if (!error_code || input->reproduction_ratio < 0.
               || input->reproduction_ratio >= 1.0)
             {
               input_error (_("Invalid reproduction probability"));
@@ -304,9 +307,9 @@ input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
       if (xmlHasProp (node, (const xmlChar *) LABEL_ADAPTATION))
         {
           input->adaptation_ratio
-            = xml_node_get_float (node, (const xmlChar *) LABEL_ADAPTATION,
-                                  &error_code);
-          if (error_code || input->adaptation_ratio < 0.
+            = jb_xml_node_get_float (node, (const xmlChar *) LABEL_ADAPTATION,
+                                     &error_code);
+          if (!error_code || input->adaptation_ratio < 0.
               || input->adaptation_ratio >= 1.)
             {
               input_error (_("Invalid adaptation probability"));
@@ -344,12 +347,9 @@ input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
     {
 
       // Obtaining iterations number
-      input->niterations
-        = xml_node_get_uint (node, (const xmlChar *) LABEL_NITERATIONS,
-                             &error_code);
-      if (error_code == 1)
-        input->niterations = 1;
-      else if (error_code)
+      input->niterations = jb_xml_node_get_uint_with_default
+        (node, (const xmlChar *) LABEL_NITERATIONS, &error_code, 1);
+      if (!error_code || !input->niterations)
         {
           input_error (_("Bad iterations number"));
           goto exit_on_error;
@@ -357,9 +357,10 @@ input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
 
       // Obtaining best number
       input->nbest
-        = xml_node_get_uint_with_default (node, (const xmlChar *) LABEL_NBEST,
-                                          1, &error_code);
-      if (error_code || !input->nbest)
+        = jb_xml_node_get_uint_with_default (node,
+		       	                     (const xmlChar *) LABEL_NBEST,
+                                             &error_code, 1);
+      if (!error_code || !input->nbest)
         {
           input_error (_("Invalid best number"));
           goto exit_on_error;
@@ -367,10 +368,10 @@ input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
 
       // Obtaining tolerance
       input->tolerance
-        = xml_node_get_float_with_default (node,
-                                           (const xmlChar *) LABEL_TOLERANCE,
-                                           0., &error_code);
-      if (error_code || input->tolerance < 0.)
+        = jb_xml_node_get_float_with_default (node,
+                                              (const xmlChar *) LABEL_TOLERANCE,
+                                              &error_code, 0.);
+      if (!error_code || input->tolerance < 0.)
         {
           input_error (_("Invalid tolerance"));
           goto exit_on_error;
@@ -380,9 +381,9 @@ input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
       if (xmlHasProp (node, (const xmlChar *) LABEL_NSTEPS))
         {
           input->nsteps =
-            xml_node_get_uint (node, (const xmlChar *) LABEL_NSTEPS,
-                               &error_code);
-          if (error_code)
+            jb_xml_node_get_uint (node, (const xmlChar *) LABEL_NSTEPS,
+                                  &error_code);
+          if (!error_code)
             {
               input_error (_("Invalid steps number"));
               goto exit_on_error;
@@ -397,9 +398,10 @@ input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
             {
               input->climbing = CLIMBING_METHOD_RANDOM;
               input->nestimates
-                = xml_node_get_uint (node, (const xmlChar *) LABEL_NESTIMATES,
-                                     &error_code);
-              if (error_code || !input->nestimates)
+                = jb_xml_node_get_uint (node,
+                                        (const xmlChar *) LABEL_NESTIMATES,
+                                        &error_code);
+              if (!error_code || !input->nestimates)
                 {
                   input_error (_("Invalid estimates number"));
                   goto exit_on_error;
@@ -413,11 +415,12 @@ input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
           xmlFree (buffer);
           buffer = NULL;
           input->relaxation
-            = xml_node_get_float_with_default (node,
-                                               (const xmlChar *)
-                                               LABEL_RELAXATION,
-                                               DEFAULT_RELAXATION, &error_code);
-          if (error_code || input->relaxation < 0. || input->relaxation > 2.)
+            = jb_xml_node_get_float_with_default (node,
+                                                  (const xmlChar *)
+                                                  LABEL_RELAXATION,
+                                                  &error_code,
+                                                  DEFAULT_RELAXATION);
+          if (!error_code || input->relaxation < 0. || input->relaxation > 2.)
             {
               input_error (_("Invalid relaxation parameter"));
               goto exit_on_error;
@@ -428,9 +431,9 @@ input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
     }
   // Obtaining the threshold
   input->threshold =
-    xml_node_get_float_with_default (node, (const xmlChar *) LABEL_THRESHOLD,
-                                     0., &error_code);
-  if (error_code)
+    jb_xml_node_get_float_with_default (node, (const xmlChar *) LABEL_THRESHOLD,
+                                        &error_code, 0.);
+  if (!error_code)
     {
       input_error (_("Invalid threshold"));
       goto exit_on_error;
@@ -523,8 +526,9 @@ input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
         {
           input->norm = ERROR_NORM_P;
           input->p
-            = xml_node_get_float (node, (const xmlChar *) LABEL_P, &error_code);
-          if (error_code)
+            = jb_xml_node_get_float (node, (const xmlChar *) LABEL_P,
+                                     &error_code);
+          if (!error_code)
             {
               input_error (_("Bad P parameter"));
               goto exit_on_error;
@@ -624,9 +628,9 @@ input_open_json (JsonParser * parser)   ///< JsonParser struct.
 
   // Obtaining pseudo-random numbers generator seed
   input->seed
-    = json_object_get_uint_with_default (object, LABEL_SEED,
-                                         DEFAULT_RANDOM_SEED, &error_code);
-  if (error_code)
+    = jb_json_object_get_uint_with_default (object, LABEL_SEED,
+                                            &error_code, DEFAULT_RANDOM_SEED);
+  if (!error_code)
     {
       input_error (_("Bad pseudo-random numbers generator seed"));
       goto exit_on_error;
@@ -640,8 +644,8 @@ input_open_json (JsonParser * parser)   ///< JsonParser struct.
 
       // Obtaining simulations number
       input->nsimulations
-        = json_object_get_int (object, LABEL_NSIMULATIONS, &error_code);
-      if (error_code)
+        = jb_json_object_get_uint (object, LABEL_NSIMULATIONS, &error_code);
+      if (!error_code)
         {
           input_error (_("Bad simulations number"));
           goto exit_on_error;
@@ -659,8 +663,8 @@ input_open_json (JsonParser * parser)   ///< JsonParser struct.
       if (json_object_get_member (object, LABEL_NPOPULATION))
         {
           input->nsimulations
-            = json_object_get_uint (object, LABEL_NPOPULATION, &error_code);
-          if (error_code || input->nsimulations < 3)
+            = jb_json_object_get_uint (object, LABEL_NPOPULATION, &error_code);
+          if (!error_code || input->nsimulations < 3)
             {
               input_error (_("Invalid population number"));
               goto exit_on_error;
@@ -676,8 +680,9 @@ input_open_json (JsonParser * parser)   ///< JsonParser struct.
       if (json_object_get_member (object, LABEL_NGENERATIONS))
         {
           input->niterations
-            = json_object_get_uint (object, LABEL_NGENERATIONS, &error_code);
-          if (error_code || !input->niterations)
+            = jb_json_object_get_uint_with_default (object, LABEL_NGENERATIONS,
+                                                    &error_code, 1);
+          if (!error_code || !input->niterations)
             {
               input_error (_("Invalid generations number"));
               goto exit_on_error;
@@ -693,8 +698,8 @@ input_open_json (JsonParser * parser)   ///< JsonParser struct.
       if (json_object_get_member (object, LABEL_MUTATION))
         {
           input->mutation_ratio
-            = json_object_get_float (object, LABEL_MUTATION, &error_code);
-          if (error_code || input->mutation_ratio < 0.
+            = jb_json_object_get_float (object, LABEL_MUTATION, &error_code);
+          if (!error_code || input->mutation_ratio < 0.
               || input->mutation_ratio >= 1.)
             {
               input_error (_("Invalid mutation probability"));
@@ -711,8 +716,9 @@ input_open_json (JsonParser * parser)   ///< JsonParser struct.
       if (json_object_get_member (object, LABEL_REPRODUCTION))
         {
           input->reproduction_ratio
-            = json_object_get_float (object, LABEL_REPRODUCTION, &error_code);
-          if (error_code || input->reproduction_ratio < 0.
+            = jb_json_object_get_float (object, LABEL_REPRODUCTION,
+                                        &error_code);
+          if (!error_code || input->reproduction_ratio < 0.
               || input->reproduction_ratio >= 1.0)
             {
               input_error (_("Invalid reproduction probability"));
@@ -729,8 +735,8 @@ input_open_json (JsonParser * parser)   ///< JsonParser struct.
       if (json_object_get_member (object, LABEL_ADAPTATION))
         {
           input->adaptation_ratio
-            = json_object_get_float (object, LABEL_ADAPTATION, &error_code);
-          if (error_code || input->adaptation_ratio < 0.
+            = jb_json_object_get_float (object, LABEL_ADAPTATION, &error_code);
+          if (!error_code || input->adaptation_ratio < 0.
               || input->adaptation_ratio >= 1.)
             {
               input_error (_("Invalid adaptation probability"));
@@ -767,10 +773,8 @@ input_open_json (JsonParser * parser)   ///< JsonParser struct.
 
       // Obtaining iterations number
       input->niterations
-        = json_object_get_uint (object, LABEL_NITERATIONS, &error_code);
-      if (error_code == 1)
-        input->niterations = 1;
-      else if (error_code)
+        = jb_json_object_get_uint (object, LABEL_NITERATIONS, &error_code);
+      if (!error_code || !input->niterations)
         {
           input_error (_("Bad iterations number"));
           goto exit_on_error;
@@ -778,9 +782,9 @@ input_open_json (JsonParser * parser)   ///< JsonParser struct.
 
       // Obtaining best number
       input->nbest
-        = json_object_get_uint_with_default (object, LABEL_NBEST, 1,
-                                             &error_code);
-      if (error_code || !input->nbest)
+        = jb_json_object_get_uint_with_default (object, LABEL_NBEST,
+                                                &error_code, 1);
+      if (!error_code || !input->nbest)
         {
           input_error (_("Invalid best number"));
           goto exit_on_error;
@@ -788,9 +792,9 @@ input_open_json (JsonParser * parser)   ///< JsonParser struct.
 
       // Obtaining tolerance
       input->tolerance
-        = json_object_get_float_with_default (object, LABEL_TOLERANCE, 0.,
-                                              &error_code);
-      if (error_code || input->tolerance < 0.)
+        = jb_json_object_get_float_with_default (object, LABEL_TOLERANCE,
+                                                 &error_code, 0.);
+      if (!error_code || input->tolerance < 0.)
         {
           input_error (_("Invalid tolerance"));
           goto exit_on_error;
@@ -800,8 +804,8 @@ input_open_json (JsonParser * parser)   ///< JsonParser struct.
       if (json_object_get_member (object, LABEL_NSTEPS))
         {
           input->nsteps
-            = json_object_get_uint (object, LABEL_NSTEPS, &error_code);
-          if (error_code)
+            = jb_json_object_get_uint (object, LABEL_NSTEPS, &error_code);
+          if (!error_code)
             {
               input_error (_("Invalid steps number"));
               goto exit_on_error;
@@ -813,8 +817,9 @@ input_open_json (JsonParser * parser)   ///< JsonParser struct.
             {
               input->climbing = CLIMBING_METHOD_RANDOM;
               input->nestimates
-                = json_object_get_uint (object, LABEL_NESTIMATES, &error_code);
-              if (error_code || !input->nestimates)
+                = jb_json_object_get_uint (object, LABEL_NESTIMATES,
+                                           &error_code);
+              if (!error_code || !input->nestimates)
                 {
                   input_error (_("Invalid estimates number"));
                   goto exit_on_error;
@@ -826,10 +831,10 @@ input_open_json (JsonParser * parser)   ///< JsonParser struct.
               goto exit_on_error;
             }
           input->relaxation
-            = json_object_get_float_with_default (object, LABEL_RELAXATION,
-                                                  DEFAULT_RELAXATION,
-                                                  &error_code);
-          if (error_code || input->relaxation < 0. || input->relaxation > 2.)
+            = jb_json_object_get_float_with_default (object, LABEL_RELAXATION,
+                                                     &error_code,
+                                                     DEFAULT_RELAXATION);
+          if (!error_code || input->relaxation < 0. || input->relaxation > 2.)
             {
               input_error (_("Invalid relaxation parameter"));
               goto exit_on_error;
@@ -840,9 +845,10 @@ input_open_json (JsonParser * parser)   ///< JsonParser struct.
     }
   // Obtaining the threshold
   input->threshold
-    = json_object_get_float_with_default (object, LABEL_THRESHOLD, 0.,
-                                          &error_code);
-  if (error_code)
+    = jb_json_object_get_float_with_default (object, LABEL_THRESHOLD,
+                                             &error_code, 0.);
+                                             
+  if (!error_code)
     {
       input_error (_("Invalid threshold"));
       goto exit_on_error;
@@ -914,7 +920,7 @@ input_open_json (JsonParser * parser)   ///< JsonParser struct.
       else if (!strcmp (buffer, LABEL_P))
         {
           input->norm = ERROR_NORM_P;
-          input->p = json_object_get_float (object, LABEL_P, &error_code);
+          input->p = jb_json_object_get_float (object, LABEL_P, &error_code);
           if (!error_code)
             {
               input_error (_("Bad P parameter"));
@@ -999,7 +1005,7 @@ input_open (char *filename)     ///< Input data file name.
   return 1;
 
 exit_on_error:
-  show_error (error_message);
+  jbw_show_error (error_message);
   g_free (error_message);
   input_free ();
 #if DEBUG_INPUT

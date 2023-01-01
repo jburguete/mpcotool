@@ -1,5 +1,5 @@
 AC_PREREQ([2.69])
-AC_INIT([mpcotool], [4.2.0], [https://github.com/jburguete/mpcotool])
+AC_INIT([mpcotool], [4.4.0], [https://github.com/jburguete/mpcotool])
 
 # Checks for operative systems
 AC_CANONICAL_TARGET
@@ -50,7 +50,7 @@ fi
 AC_MSG_NOTICE([prefix=$PREFIX])
 
 # Checks for programs
-AC_PROG_CC([mpicc egcc gcc clang])
+AC_PROG_CC([mpicc gcc-12 gcc12 gcc-11 gcc11 gcc-10 gcc10 egcc gcc clang])
 AC_MSG_NOTICE([Compiler: $CC])
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
@@ -205,6 +205,7 @@ elif test $gtk3 = 1; then
 	AC_SUBST(GTK4, "-DGTK4=0")
 fi
 if test $gtk = 1; then
+	PKG_CHECK_MODULES([FREETYPE], [freetype2])
 	AC_SUBST(MPCOTOOL, "mpcotool")
 fi
 

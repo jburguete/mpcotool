@@ -5,7 +5,7 @@ calibrations or optimizations of empirical parameters.
 
 AUTHORS: Javier Burguete and Borja Latorre.
 
-Copyright 2012-2022, AUTHORS.
+Copyright 2012-2023, AUTHORS.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -33,7 +33,7 @@ OF SUCH DAMAGE.
  * \file interface.h
  * \brief Header file to define the graphical interface functions.
  * \authors Javier Burguete.
- * \copyright Copyright 2012-2022, all rights reserved.
+ * \copyright Copyright 2012-2023, all rights reserved.
  */
 #ifndef INTERFACE__H
 #define INTERFACE__H 1
@@ -91,7 +91,7 @@ typedef struct
   GtkLabel *label_simulator;    ///< Simulator program GtkLabel.
   GtkButton *button_simulator;  ///< Simulator program GtkButton.
   GtkCheckButton *check_evaluator;      ///< Evaluator program GtkCheckButton.
-  GtkButton *button_evaluator;   ///< Evaluator program GtkButton.
+  GtkButton *button_evaluator;  ///< Evaluator program GtkButton.
   GtkLabel *label_result;       ///< Result file GtkLabel.
   GtkEntry *entry_result;       ///< Result file GtkEntry.
   GtkLabel *label_variables;    ///< Variables file GtkLabel.

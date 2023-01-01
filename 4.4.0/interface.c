@@ -5,7 +5,7 @@ calibrations or optimizations of empirical parameters.
 
 AUTHORS: Javier Burguete and Borja Latorre.
 
-Copyright 2012-2022, AUTHORS.
+Copyright 2012-2023, AUTHORS.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -33,7 +33,7 @@ OF SUCH DAMAGE.
  * \file interface.c
  * \brief Source file to define the graphical interface functions.
  * \authors Javier Burguete and Borja Latorre.
- * \copyright Copyright 2012-2022, all rights reserved.
+ * \copyright Copyright 2012-2023, all rights reserved.
  */
 #define _GNU_SOURCE
 #include "config.h"
@@ -55,6 +55,9 @@ OF SUCH DAMAGE.
 #endif
 #include <gio/gio.h>
 #include <gtk/gtk.h>
+#include "jb/src/jb_xml.h"
+#include "jb/src/jb_json.h"
+#include "jb/src/jb_win.h"
 #include "genetic/genetic.h"
 #include "tools.h"
 #include "experiment.h"
@@ -173,10 +176,11 @@ input_save_climbing_xml (xmlNode * node)        ///< XML node.
 #endif
   if (input->nsteps)
     {
-      xml_node_set_uint (node, (const xmlChar *) LABEL_NSTEPS, input->nsteps);
+      jb_xml_node_set_uint (node, (const xmlChar *) LABEL_NSTEPS,
+                            input->nsteps);
       if (input->relaxation != DEFAULT_RELAXATION)
-        xml_node_set_float (node, (const xmlChar *) LABEL_RELAXATION,
-                            input->relaxation);
+        jb_xml_node_set_float (node, (const xmlChar *) LABEL_RELAXATION,
+                               input->relaxation);
       switch (input->climbing)
         {
         case CLIMBING_METHOD_COORDINATES:
@@ -186,8 +190,8 @@ input_save_climbing_xml (xmlNode * node)        ///< XML node.
         default:
           xmlSetProp (node, (const xmlChar *) LABEL_CLIMBING,
                       (const xmlChar *) LABEL_RANDOM);
-          xml_node_set_uint (node, (const xmlChar *) LABEL_NESTIMATES,
-                             input->nestimates);
+          jb_xml_node_set_uint (node, (const xmlChar *) LABEL_NESTIMATES,
+                                input->nestimates);
         }
     }
 #if DEBUG_INTERFACE
@@ -208,9 +212,9 @@ input_save_climbing_json (JsonNode * node)      ///< JSON node.
   object = json_node_get_object (node);
   if (input->nsteps)
     {
-      json_object_set_uint (object, LABEL_NSTEPS, input->nsteps);
+      jb_json_object_set_uint (object, LABEL_NSTEPS, input->nsteps);
       if (input->relaxation != DEFAULT_RELAXATION)
-        json_object_set_float (object, LABEL_RELAXATION, input->relaxation);
+        jb_json_object_set_float (object, LABEL_RELAXATION, input->relaxation);
       switch (input->climbing)
         {
         case CLIMBING_METHOD_COORDINATES:
@@ -219,7 +223,7 @@ input_save_climbing_json (JsonNode * node)      ///< JSON node.
           break;
         default:
           json_object_set_string_member (object, LABEL_CLIMBING, LABEL_RANDOM);
-          json_object_set_uint (object, LABEL_NESTIMATES, input->nestimates);
+          jb_json_object_set_uint (object, LABEL_NESTIMATES, input->nestimates);
         }
     }
 #if DEBUG_INTERFACE
@@ -272,7 +276,7 @@ input_save_xml (xmlDoc * doc)   ///< xmlDoc struct.
       g_free (buffer);
     }
   if (input->seed != DEFAULT_RANDOM_SEED)
-    xml_node_set_uint (node, (const xmlChar *) LABEL_SEED, input->seed);
+    jb_xml_node_set_uint (node, (const xmlChar *) LABEL_SEED, input->seed);
 
   // Setting the algorithm
   buffer = (char *) g_slice_alloc (64);
@@ -337,8 +341,8 @@ input_save_xml (xmlDoc * doc)   ///< xmlDoc struct.
     }
   g_slice_free1 (64, buffer);
   if (input->threshold != 0.)
-    xml_node_set_float (node, (const xmlChar *) LABEL_THRESHOLD,
-                        input->threshold);
+    jb_xml_node_set_float (node, (const xmlChar *) LABEL_THRESHOLD,
+                           input->threshold);
 
   // Setting the experimental data
   for (i = 0; i < input->nexperiments; ++i)
@@ -347,8 +351,8 @@ input_save_xml (xmlDoc * doc)   ///< xmlDoc struct.
       xmlSetProp (child, (const xmlChar *) LABEL_NAME,
                   (xmlChar *) input->experiment[i].name);
       if (input->experiment[i].weight != 1.)
-        xml_node_set_float (child, (const xmlChar *) LABEL_WEIGHT,
-                            input->experiment[i].weight);
+        jb_xml_node_set_float (child, (const xmlChar *) LABEL_WEIGHT,
+                               input->experiment[i].weight);
       for (j = 0; j < input->experiment->ninputs; ++j)
         xmlSetProp (child, (const xmlChar *) stencil[j],
                     (xmlChar *) input->experiment[i].stencil[j]);
@@ -360,29 +364,29 @@ input_save_xml (xmlDoc * doc)   ///< xmlDoc struct.
       child = xmlNewChild (node, 0, (const xmlChar *) LABEL_VARIABLE, 0);
       xmlSetProp (child, (const xmlChar *) LABEL_NAME,
                   (xmlChar *) input->variable[i].name);
-      xml_node_set_float (child, (const xmlChar *) LABEL_MINIMUM,
-                          input->variable[i].rangemin);
+      jb_xml_node_set_float (child, (const xmlChar *) LABEL_MINIMUM,
+                             input->variable[i].rangemin);
       if (input->variable[i].rangeminabs != -G_MAXDOUBLE)
-        xml_node_set_float (child, (const xmlChar *) LABEL_ABSOLUTE_MINIMUM,
-                            input->variable[i].rangeminabs);
-      xml_node_set_float (child, (const xmlChar *) LABEL_MAXIMUM,
-                          input->variable[i].rangemax);
+        jb_xml_node_set_float (child, (const xmlChar *) LABEL_ABSOLUTE_MINIMUM,
+                               input->variable[i].rangeminabs);
+      jb_xml_node_set_float (child, (const xmlChar *) LABEL_MAXIMUM,
+                             input->variable[i].rangemax);
       if (input->variable[i].rangemaxabs != G_MAXDOUBLE)
-        xml_node_set_float (child, (const xmlChar *) LABEL_ABSOLUTE_MAXIMUM,
-                            input->variable[i].rangemaxabs);
+        jb_xml_node_set_float (child, (const xmlChar *) LABEL_ABSOLUTE_MAXIMUM,
+                               input->variable[i].rangemaxabs);
       if (input->variable[i].precision != DEFAULT_PRECISION)
-        xml_node_set_uint (child, (const xmlChar *) LABEL_PRECISION,
-                           input->variable[i].precision);
+        jb_xml_node_set_uint (child, (const xmlChar *) LABEL_PRECISION,
+                              input->variable[i].precision);
       if (input->algorithm == ALGORITHM_SWEEP
           || input->algorithm == ALGORITHM_ORTHOGONAL)
-        xml_node_set_uint (child, (const xmlChar *) LABEL_NSWEEPS,
-                           input->variable[i].nsweeps);
+        jb_xml_node_set_uint (child, (const xmlChar *) LABEL_NSWEEPS,
+                              input->variable[i].nsweeps);
       else if (input->algorithm == ALGORITHM_GENETIC)
-        xml_node_set_uint (child, (const xmlChar *) LABEL_NBITS,
-                           input->variable[i].nbits);
+        jb_xml_node_set_uint (child, (const xmlChar *) LABEL_NBITS,
+                              input->variable[i].nbits);
       if (input->nsteps)
-        xml_node_set_float (child, (const xmlChar *) LABEL_STEP,
-                            input->variable[i].step);
+        jb_xml_node_set_float (child, (const xmlChar *) LABEL_STEP,
+                               input->variable[i].step);
     }
 
   // Saving the error norm
@@ -395,7 +399,7 @@ input_save_xml (xmlDoc * doc)   ///< xmlDoc struct.
     case ERROR_NORM_P:
       xmlSetProp (node, (const xmlChar *) LABEL_NORM,
                   (const xmlChar *) LABEL_P);
-      xml_node_set_float (node, (const xmlChar *) LABEL_P, input->p);
+      jb_xml_node_set_float (node, (const xmlChar *) LABEL_P, input->p);
       break;
     case ERROR_NORM_TAXICAB:
       xmlSetProp (node, (const xmlChar *) LABEL_NORM,
@@ -452,7 +456,7 @@ input_save_json (JsonGenerator * generator)     ///< JsonGenerator struct.
       g_free (buffer);
     }
   if (input->seed != DEFAULT_RANDOM_SEED)
-    json_object_set_uint (object, LABEL_SEED, input->seed);
+    jb_json_object_set_uint (object, LABEL_SEED, input->seed);
 
   // Setting the algorithm
   buffer = (char *) g_slice_alloc (64);
@@ -507,7 +511,7 @@ input_save_json (JsonGenerator * generator)     ///< JsonGenerator struct.
     }
   g_slice_free1 (64, buffer);
   if (input->threshold != 0.)
-    json_object_set_float (object, LABEL_THRESHOLD, input->threshold);
+    jb_json_object_set_float (object, LABEL_THRESHOLD, input->threshold);
 
   // Setting the experimental data
   array = json_array_new ();
@@ -518,8 +522,8 @@ input_save_json (JsonGenerator * generator)     ///< JsonGenerator struct.
       json_object_set_string_member (object, LABEL_NAME,
                                      input->experiment[i].name);
       if (input->experiment[i].weight != 1.)
-        json_object_set_float (object, LABEL_WEIGHT,
-                               input->experiment[i].weight);
+        jb_json_object_set_float (object, LABEL_WEIGHT,
+                                  input->experiment[i].weight);
       for (j = 0; j < input->experiment->ninputs; ++j)
         json_object_set_string_member (object, stencil[j],
                                        input->experiment[i].stencil[j]);
@@ -535,27 +539,27 @@ input_save_json (JsonGenerator * generator)     ///< JsonGenerator struct.
       object = json_node_get_object (child);
       json_object_set_string_member (object, LABEL_NAME,
                                      input->variable[i].name);
-      json_object_set_float (object, LABEL_MINIMUM,
-                             input->variable[i].rangemin);
+      jb_json_object_set_float (object, LABEL_MINIMUM,
+                                input->variable[i].rangemin);
       if (input->variable[i].rangeminabs != -G_MAXDOUBLE)
-        json_object_set_float (object, LABEL_ABSOLUTE_MINIMUM,
-                               input->variable[i].rangeminabs);
-      json_object_set_float (object, LABEL_MAXIMUM,
-                             input->variable[i].rangemax);
+        jb_json_object_set_float (object, LABEL_ABSOLUTE_MINIMUM,
+                                  input->variable[i].rangeminabs);
+      jb_json_object_set_float (object, LABEL_MAXIMUM,
+                                input->variable[i].rangemax);
       if (input->variable[i].rangemaxabs != G_MAXDOUBLE)
-        json_object_set_float (object, LABEL_ABSOLUTE_MAXIMUM,
-                               input->variable[i].rangemaxabs);
+        jb_json_object_set_float (object, LABEL_ABSOLUTE_MAXIMUM,
+                                  input->variable[i].rangemaxabs);
       if (input->variable[i].precision != DEFAULT_PRECISION)
-        json_object_set_uint (object, LABEL_PRECISION,
-                              input->variable[i].precision);
+        jb_json_object_set_uint (object, LABEL_PRECISION,
+                                 input->variable[i].precision);
       if (input->algorithm == ALGORITHM_SWEEP
           || input->algorithm == ALGORITHM_ORTHOGONAL)
-        json_object_set_uint (object, LABEL_NSWEEPS,
-                              input->variable[i].nsweeps);
+        jb_json_object_set_uint (object, LABEL_NSWEEPS,
+                                 input->variable[i].nsweeps);
       else if (input->algorithm == ALGORITHM_GENETIC)
-        json_object_set_uint (object, LABEL_NBITS, input->variable[i].nbits);
+        jb_json_object_set_uint (object, LABEL_NBITS, input->variable[i].nbits);
       if (input->nsteps)
-        json_object_set_float (object, LABEL_STEP, input->variable[i].step);
+        jb_json_object_set_float (object, LABEL_STEP, input->variable[i].step);
       json_array_add_element (array, child);
     }
   json_object_set_array_member (object, LABEL_VARIABLES, array);
@@ -568,7 +572,7 @@ input_save_json (JsonGenerator * generator)     ///< JsonGenerator struct.
       break;
     case ERROR_NORM_P:
       json_object_set_string_member (object, LABEL_NORM, LABEL_P);
-      json_object_set_float (object, LABEL_P, input->p);
+      jb_json_object_set_float (object, LABEL_P, input->p);
       break;
     case ERROR_NORM_TAXICAB:
       json_object_set_string_member (object, LABEL_NORM, LABEL_TAXICAB);
@@ -1050,7 +1054,7 @@ window_run ()
             optimize->calculation_time);
   msg = g_strconcat (msg2, buffer, NULL);
   g_free (msg2);
-  show_message (_("Best result"), msg, INFO_TYPE);
+  jbw_show_message (_("Best result"), msg, INFO_TYPE);
   g_free (msg);
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_run: freeing memory\n");
@@ -1119,8 +1123,8 @@ window_about ()
      "Javier Burguete Tolosa <jburguete@eead.csic.es> "
      "(english, french and spanish)\n"
      "Uğur Çayoğlu (german)",
-     "version", "4.2.0",
-     "copyright", "Copyright 2012-2022 Javier Burguete Tolosa",
+     "version", "4.4.0",
+     "copyright", "Copyright 2012-2023 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/mpcotool",
      "license-type", GTK_LICENSE_BSD, NULL);
@@ -1506,13 +1510,13 @@ window_name_experiment ()
   dlg = (GtkFileChooserDialog *)
     gtk_file_chooser_dialog_new (_("Open experiment file"),
                                  window->window,
-				 GTK_FILE_CHOOSER_ACTION_OPEN,
-				 _("_Cancel"),
+                                 GTK_FILE_CHOOSER_ACTION_OPEN,
+                                 _("_Cancel"),
                                  GTK_RESPONSE_CANCEL,
-				 _("_Open"), GTK_RESPONSE_OK, NULL);
+                                 _("_Open"), GTK_RESPONSE_OK, NULL);
   gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dlg), buffer);
   g_signal_connect (dlg, "response", G_CALLBACK (dialog_name_experiment_close),
-		    (void *) (size_t) i);
+                    (void *) (size_t) i);
   gtk_window_present (GTK_WINDOW (dlg));
   loop = g_main_loop_new (NULL, 0);
   g_signal_connect_swapped (dlg, "destroy", G_CALLBACK (g_main_loop_quit),
@@ -1552,8 +1556,7 @@ window_inputs_experiment ()
   fprintf (stderr, "window_inputs_experiment: start\n");
 #endif
   j = input->experiment->ninputs - 1;
-  if (j
-      && !gtk_check_button_get_active (window->check_template[j]))
+  if (j && !gtk_check_button_get_active (window->check_template[j]))
     --input->experiment->ninputs;
   if (input->experiment->ninputs < MAX_NINPUTS
       && gtk_check_button_get_active (window->check_template[j]))
@@ -1572,7 +1575,7 @@ window_template_experiment_close (GtkFileChooserDialog * dlg,
                                   ///< GtkFileChooserDialg struct.
                                   int response_id,
                                   ///< Response identifier.
-                                  void *data)     ///< Function data.
+                                  void *data)   ///< Function data.
 {
   GFile *file1, *file2;
   char *buffer1, *buffer2;
@@ -1623,10 +1626,10 @@ window_template_experiment (void *data)
   dlg = (GtkFileChooserDialog *)
     gtk_file_chooser_dialog_new (_("Open template file"),
                                  window->window,
-				 GTK_FILE_CHOOSER_ACTION_OPEN,
-				 _("_Cancel"),
-				 GTK_RESPONSE_CANCEL,
-				 _("_Open"), GTK_RESPONSE_ACCEPT, NULL);
+                                 GTK_FILE_CHOOSER_ACTION_OPEN,
+                                 _("_Cancel"),
+                                 GTK_RESPONSE_CANCEL,
+                                 _("_Open"), GTK_RESPONSE_ACCEPT, NULL);
   gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dlg), buffer);
   g_signal_connect (dlg, "response",
                     G_CALLBACK (window_template_experiment_close), data);
@@ -1979,11 +1982,11 @@ window_read (char *filename)    ///< File name.
   gtk_entry_set_text (window->entry_variables, input->variables);
   gtk_button_set_label (window->button_simulator, input->simulator);
   gtk_check_button_set_active (window->check_evaluator,
-                                (size_t) input->evaluator);
+                               (size_t) input->evaluator);
   if (input->evaluator)
     gtk_button_set_label (window->button_evaluator, input->evaluator);
   gtk_check_button_set_active (window->button_algorithm[input->algorithm],
-                                TRUE);
+                               TRUE);
   switch (input->algorithm)
     {
     case ALGORITHM_MONTE_CARLO:
@@ -2096,7 +2099,7 @@ dialog_open_close (GtkFileChooserDialog * dlg,
 #endif
             }
         }
-        g_free (buffer);
+      g_free (buffer);
     }
 
   // Freeing and closing
@@ -2202,9 +2205,9 @@ dialog_simulator ()
   dlg = (GtkFileChooserDialog *)
     gtk_file_chooser_dialog_new (_("Open simulator file"),
                                  window->window,
-				 GTK_FILE_CHOOSER_ACTION_OPEN,
-				 _("_Cancel"), GTK_RESPONSE_CANCEL,
-				 _("_Open"), GTK_RESPONSE_ACCEPT, NULL);
+                                 GTK_FILE_CHOOSER_ACTION_OPEN,
+                                 _("_Cancel"), GTK_RESPONSE_CANCEL,
+                                 _("_Open"), GTK_RESPONSE_ACCEPT, NULL);
   g_signal_connect (dlg, "response", G_CALLBACK (dialog_simulator_close), NULL);
   gtk_window_present (GTK_WINDOW (dlg));
 #if DEBUG_INTERFACE
@@ -2256,9 +2259,9 @@ dialog_evaluator ()
   dlg = (GtkFileChooserDialog *)
     gtk_file_chooser_dialog_new (_("Open evaluator file"),
                                  window->window,
-				 GTK_FILE_CHOOSER_ACTION_OPEN,
-				 _("_Cancel"), GTK_RESPONSE_CANCEL,
-				 _("_Open"), GTK_RESPONSE_ACCEPT, NULL);
+                                 GTK_FILE_CHOOSER_ACTION_OPEN,
+                                 _("_Cancel"), GTK_RESPONSE_CANCEL,
+                                 _("_Open"), GTK_RESPONSE_ACCEPT, NULL);
   g_signal_connect (dlg, "response", G_CALLBACK (dialog_evaluator_close), NULL);
   gtk_window_present (GTK_WINDOW (dlg));
 #if DEBUG_INTERFACE
@@ -2524,7 +2527,7 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
 #else
     gtk_scrolled_window_new ();
 #endif
-    gtk_scrolled_window_set_child (window->scrolled_threshold,
+  gtk_scrolled_window_set_child (window->scrolled_threshold,
                                  GTK_WIDGET (window->spin_threshold));
 //  gtk_widget_set_hexpand (GTK_WIDGET (window->scrolled_threshold), TRUE);
 //  gtk_widget_set_halign (GTK_WIDGET (window->scrolled_threshold),
@@ -2615,11 +2618,11 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
 #else
       window->button_algorithm[i] = (GtkCheckButton *)
         gtk_check_button_new_with_mnemonic (label_algorithm[i]);
-       gtk_check_button_set_group (window->button_algorithm[i],
-                                   window->button_algorithm[0]),
+      gtk_check_button_set_group (window->button_algorithm[i],
+                                  window->button_algorithm[0]),
 #endif
-      gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_algorithm[i]),
-                                   tip_algorithm[i]);
+        gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_algorithm[i]),
+                                     tip_algorithm[i]);
       gtk_grid_attach (window->grid_algorithm,
                        GTK_WIDGET (window->button_algorithm[i]), 0, i, 1, 1);
       g_signal_connect (window->button_algorithm[i], "toggled",
@@ -2942,7 +2945,7 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
                        GTK_WIDGET (window->check_template[i]), 0, 3 + i, 1, 1);
       window->button_template[i] = (GtkButton *)
         gtk_button_new_with_mnemonic (_("Input template"));
-                                    
+
       gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_template[i]),
                                    _("Experimental input template file"));
       window->id_input[i] =

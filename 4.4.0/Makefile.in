@@ -2,9 +2,10 @@
 
 CC = @CC@ @ARCH@ @LTO@ @STD@ -g
 CFLAGS = @CPPFLAGS@ @GSL_CFLAGS@ @XML_CFLAGS@ @GLIB_CFLAGS@ @JSON_CFLAGS@ \
-	@GTHREAD_CFLAGS@ @GTK4@ -pedantic -Wall -Wextra -O3 -D_FORTIFY_SOURCE=2
+	@GTHREAD_CFLAGS@ @GTK4@ -DJBM_PRECISION=2 -pedantic -Wall -Wextra \
+	-O3 -D_FORTIFY_SOURCE=2
 LDFLAGS = @LDFLAGS@ @LIBS@ @GSL_LIBS@ @XML_LIBS@ @GLIB_LIBS@ @JSON_LIBS@ \
-	@GTHREAD_LIBS@
+	@GTHREAD_LIBS@ -ljb-2 -ljbm-2 -ljbw-2 -ljbxml-2 -ljbjson-2
 
 src = ./
 bin = ./
@@ -108,8 +109,8 @@ else
 	MAINBINDEP = main.c mpcotool.h optimize.h input.h variable.h experiment.h \
 		tools.h config.h $(DEP)
 endif
-CGEN = -c -fPIC $(CFLAGS) $(PGOGEN)
-CUSE = -c -fPIC $(CFLAGS) $(PGOUSE)
+CGEN = -c -fPIC -DJBW=1 $(CFLAGS) $(PGOGEN)
+CUSE = -c -fPIC -DJBW=1 $(CFLAGS) $(PGOUSE)
 
 all: $(bin) $(bin)mpcotoolbin@EXE@ \
 	$(bin)@MPCOTOOL@@EXE@ \
@@ -195,23 +196,23 @@ $(bin)mpcotoolbin@EXE@: $(bin)mainbin.o $(libmpcotool)
 		$(LDFLAGS) -L$(bin) -Wl,-rpath=. -lmpcotool -lgenetic
 
 $(tools_o): tools.c tools.h config.h $(DEP)
-	$(CC) -c $(CFLAGS) @GTK_CFLAGS@ -DHAVE_GTK=1 tools.c -o $(tools_o)
+	$(CC) -c $(CFLAGS) @FREETYPE_CFLAGS@ @GTK_CFLAGS@ -DHAVE_GTK=1 -DJBW=2 tools.c -o $(tools_o)
 
 $(interface_o): interface.c interface.h optimize.h input.h variable.h \
 	experiment.h tools.h config.h $(DEP)
-	$(CC) -c $(CFLAGS) @GTK_CFLAGS@ -DHAVE_GTK=1 interface.c -o $(interface_o)
+	$(CC) -c $(CFLAGS) @FREETYPE_CFLAGS@ @GTK_CFLAGS@ -DHAVE_GTK=1 -DJBW=2 interface.c -o $(interface_o)
 
 $(mpcotool_o): mpcotool.c mpcotool.h interface.h optimize.h input.h variable.h \
 	experiment.h tools.h config.h $(DEP)
-	$(CC) -c $(CFLAGS) @GTK_CFLAGS@ -DHAVE_GTK=1 mpcotool.c -o $(mpcotool_o)
+	$(CC) -c $(CFLAGS) @FREETYPE_CFLAGS@ @GTK_CFLAGS@ -DHAVE_GTK=1 -DJBW=2 mpcotool.c -o $(mpcotool_o)
 
 $(bin)main.o: main.c mpcotool.h optimize.h input.h variable.h experiment.h \
 	tools.h config.h $(DEP)
-	$(CC) -c $(CFLAGS) @GTK_CFLAGS@ -DHAVE_GTK=1 main.c -o $(bin)main.o
+	$(CC) -c $(CFLAGS) @FREETYPE_CFLAGS@ @GTK_CFLAGS@ -DHAVE_GTK=1 -DJBW=2 main.c -o $(bin)main.o
 
 $(bin)@MPCOTOOL@@EXE@: $(bin)main.o $(libmpcotool) $(OBJGUI) @ICON@
 	$(CC) $(bin)main.o $(OBJGUI) -L$(bin) -Wl,-rpath=. -lmpcotool \
-		-lgenetic $(LDFLAGS) @GTK_LIBS@ -o $(bin)@MPCOTOOL@@EXE@
+		-lgenetic $(LDFLAGS) @GTK_LIBS@ @FREETYPE_LIBS@ -o $(bin)@MPCOTOOL@@EXE@
 
 clean:
 	cd $(bin); rm *.o *pgo *.gcda *@SO@ mpcotoolbin @MPCOTOOL@@EXE@

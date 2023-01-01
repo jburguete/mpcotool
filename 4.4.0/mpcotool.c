@@ -5,7 +5,7 @@ calibrations or optimizations of empirical parameters.
 
 AUTHORS: Javier Burguete and Borja Latorre.
 
-Copyright 2012-2022, AUTHORS.
+Copyright 2012-2023, AUTHORS.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -33,7 +33,7 @@ OF SUCH DAMAGE.
  * \file mpcotool.c
  * \brief Main function source file.
  * \authors Javier Burguete and Borja Latorre.
- * \copyright Copyright 2012-2022, all rights reserved.
+ * \copyright Copyright 2012-2023, all rights reserved.
  */
 #define _GNU_SOURCE
 #include "config.h"
@@ -58,6 +58,7 @@ OF SUCH DAMAGE.
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 #endif
+#include "jb/src/jb_win.h"
 #include "genetic/genetic.h"
 #include "tools.h"
 #include "experiment.h"
@@ -117,7 +118,7 @@ mpcotool (int argn,             ///< Arguments number.
 #endif
 
   // Getting threads number and pseudo-random numbers generator seed
-  nthreads_climbing = nthreads = cores_number ();
+  nthreads_climbing = nthreads = jb_get_ncores ();
   optimize->seed = DEFAULT_RANDOM_SEED;
 
   // Parsing command line arguments
