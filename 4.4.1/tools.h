@@ -60,6 +60,10 @@ extern void (*show_pending) ();
 
 #if HAVE_GTK
 
+#ifndef G_APPLICATION_DEFAULT_FLAGS
+#define G_APPLICATION_DEFAULT_FLAGS G_APPLICATION_FLAGS_NONE
+#endif
+
 void process_pending ();
 
 #if !GTK4

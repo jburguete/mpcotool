@@ -85,7 +85,7 @@ ifeq (@CC@, clang)
 else
 	PGOGEN = -fprofile-generate
 	PGOUSE = -fprofile-use -fprofile-correction
-	TOOLSBINDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)toolsbin.gcda
+	TOOLSBINDEP = $(bin)mpcotoolbinpgo@EXE@
 	OPTIMIZEDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)optimize.gcda
 	INPUTDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)input.gcda
 	VARIABLEDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)variable.gcda

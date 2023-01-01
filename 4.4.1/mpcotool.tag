@@ -2,7 +2,7 @@
 <tagfile>
   <compound kind="file">
     <name>config.h</name>
-    <path>/home/burguete/programas/mpcotool/4.0.4/</path>
+    <path>/home/burguete/programas/mpcotool/4.4.1/</path>
     <filename>config_8h</filename>
     <member kind="define">
       <type>#define</type>
@@ -467,10 +467,10 @@
   </compound>
   <compound kind="file">
     <name>experiment.c</name>
-    <path>/home/burguete/programas/mpcotool/4.0.4/</path>
+    <path>/home/burguete/programas/mpcotool/4.4.1/</path>
     <filename>experiment_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
-    <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
+    <includes id="tools_8h" name="tools.h" local="yes" imported="no">tools.h</includes>
     <includes id="experiment_8h" name="experiment.h" local="yes" imported="no">experiment.h</includes>
     <member kind="define">
       <type>#define</type>
@@ -524,7 +524,7 @@
   </compound>
   <compound kind="file">
     <name>experiment.h</name>
-    <path>/home/burguete/programas/mpcotool/4.0.4/</path>
+    <path>/home/burguete/programas/mpcotool/4.4.1/</path>
     <filename>experiment_8h</filename>
     <class kind="struct">Experiment</class>
     <member kind="function">
@@ -565,10 +565,10 @@
   </compound>
   <compound kind="file">
     <name>input.c</name>
-    <path>/home/burguete/programas/mpcotool/4.0.4/</path>
+    <path>/home/burguete/programas/mpcotool/4.4.1/</path>
     <filename>input_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
-    <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
+    <includes id="tools_8h" name="tools.h" local="yes" imported="no">tools.h</includes>
     <includes id="experiment_8h" name="experiment.h" local="yes" imported="no">experiment.h</includes>
     <includes id="variable_8h" name="variable.h" local="yes" imported="no">variable.h</includes>
     <includes id="input_8h" name="input.h" local="yes" imported="no">input.h</includes>
@@ -645,7 +645,7 @@
   </compound>
   <compound kind="file">
     <name>input.h</name>
-    <path>/home/burguete/programas/mpcotool/4.0.4/</path>
+    <path>/home/burguete/programas/mpcotool/4.4.1/</path>
     <filename>input_8h</filename>
     <class kind="struct">Input</class>
     <member kind="enumeration">
@@ -743,10 +743,10 @@
   </compound>
   <compound kind="file">
     <name>interface.c</name>
-    <path>/home/burguete/programas/mpcotool/4.0.4/</path>
+    <path>/home/burguete/programas/mpcotool/4.4.1/</path>
     <filename>interface_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
-    <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
+    <includes id="tools_8h" name="tools.h" local="yes" imported="no">tools.h</includes>
     <includes id="experiment_8h" name="experiment.h" local="yes" imported="no">experiment.h</includes>
     <includes id="variable_8h" name="variable.h" local="yes" imported="no">variable.h</includes>
     <includes id="input_8h" name="input.h" local="yes" imported="no">input.h</includes>
@@ -803,6 +803,13 @@
     </member>
     <member kind="function" static="yes">
       <type>static void</type>
+      <name>dialog_options_close</name>
+      <anchorfile>interface_8c.html</anchorfile>
+      <anchor>a594e61394315ea973b09a6eea15daf8c</anchor>
+      <arglist>(GtkDialog *dlg, int response_id)</arglist>
+    </member>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>options_new</name>
       <anchorfile>interface_8c.html</anchorfile>
       <anchor>a09483cdd5bd6ad55ebeaa5c21999cdf3</anchor>
@@ -844,10 +851,17 @@
       <arglist>()</arglist>
     </member>
     <member kind="function" static="yes">
-      <type>static int</type>
+      <type>static void</type>
+      <name>dialog_save_close</name>
+      <anchorfile>interface_8c.html</anchorfile>
+      <anchor>a15f245ebde76039d053ed27d8fe35505</anchor>
+      <arglist>(GtkFileChooserDialog *dlg, int response_id)</arglist>
+    </member>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>window_save</name>
       <anchorfile>interface_8c.html</anchorfile>
-      <anchor>a8d57557acbbdce20d2845dc20bec054d</anchor>
+      <anchor>a2781c75c365ed1cca924d677ba9cfb49</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function" static="yes">
@@ -915,6 +929,13 @@
     </member>
     <member kind="function" static="yes">
       <type>static void</type>
+      <name>dialog_name_experiment_close</name>
+      <anchorfile>interface_8c.html</anchorfile>
+      <anchor>a32b7c343a84187336e00b889a4bfe02f</anchor>
+      <arglist>(GtkFileChooserDialog *dlg, int response_id, void *data)</arglist>
+    </member>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>window_name_experiment</name>
       <anchorfile>interface_8c.html</anchorfile>
       <anchor>a86863ce768f3a5e0feeba6eb2c72d43b</anchor>
@@ -933,6 +954,13 @@
       <anchorfile>interface_8c.html</anchorfile>
       <anchor>ab00f15d1a0d7719755d1e7e73dd41b5e</anchor>
       <arglist>()</arglist>
+    </member>
+    <member kind="function" static="yes">
+      <type>static void</type>
+      <name>window_template_experiment_close</name>
+      <anchorfile>interface_8c.html</anchorfile>
+      <anchor>a1c8335507ef2d2f0f09d8389a77d2b9a</anchor>
+      <arglist>(GtkFileChooserDialog *dlg, int response_id, void *data)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>static void</type>
@@ -1027,9 +1055,44 @@
     </member>
     <member kind="function" static="yes">
       <type>static void</type>
+      <name>dialog_open_close</name>
+      <anchorfile>interface_8c.html</anchorfile>
+      <anchor>a9dc7f93005ee722e40aa788b08f57519</anchor>
+      <arglist>(GtkFileChooserDialog *dlg, int response_id)</arglist>
+    </member>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>window_open</name>
       <anchorfile>interface_8c.html</anchorfile>
       <anchor>a91f1e33ff772a2f27fee695066b45895</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function" static="yes">
+      <type>static void</type>
+      <name>dialog_simulator_close</name>
+      <anchorfile>interface_8c.html</anchorfile>
+      <anchor>a620f5b4d492cf2b668c95211dd09de02</anchor>
+      <arglist>(GtkFileChooserDialog *dlg, int response_id)</arglist>
+    </member>
+    <member kind="function" static="yes">
+      <type>static void</type>
+      <name>dialog_simulator</name>
+      <anchorfile>interface_8c.html</anchorfile>
+      <anchor>a8051a2ec58b3b646ef07092b79e79854</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function" static="yes">
+      <type>static void</type>
+      <name>dialog_evaluator_close</name>
+      <anchorfile>interface_8c.html</anchorfile>
+      <anchor>a1b1f0a94995d122008ddcd14967a5067</anchor>
+      <arglist>(GtkFileChooserDialog *dlg, int response_id)</arglist>
+    </member>
+    <member kind="function" static="yes">
+      <type>static void</type>
+      <name>dialog_evaluator</name>
+      <anchorfile>interface_8c.html</anchorfile>
+      <anchor>a69cee5e66cb30e05f371a7ed3cbb0225</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
@@ -1070,7 +1133,7 @@
   </compound>
   <compound kind="file">
     <name>interface.h</name>
-    <path>/home/burguete/programas/mpcotool/4.0.4/</path>
+    <path>/home/burguete/programas/mpcotool/4.4.1/</path>
     <filename>interface_8h</filename>
     <class kind="struct">Options</class>
     <class kind="struct">Running</class>
@@ -1099,10 +1162,10 @@
   </compound>
   <compound kind="file">
     <name>main.c</name>
-    <path>/home/burguete/programas/mpcotool/4.0.4/</path>
+    <path>/home/burguete/programas/mpcotool/4.4.1/</path>
     <filename>main_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
-    <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
+    <includes id="tools_8h" name="tools.h" local="yes" imported="no">tools.h</includes>
     <includes id="experiment_8h" name="experiment.h" local="yes" imported="no">experiment.h</includes>
     <includes id="variable_8h" name="variable.h" local="yes" imported="no">variable.h</includes>
     <includes id="input_8h" name="input.h" local="yes" imported="no">input.h</includes>
@@ -1112,10 +1175,10 @@
   </compound>
   <compound kind="file">
     <name>mpcotool.c</name>
-    <path>/home/burguete/programas/mpcotool/4.0.4/</path>
+    <path>/home/burguete/programas/mpcotool/4.4.1/</path>
     <filename>mpcotool_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
-    <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
+    <includes id="tools_8h" name="tools.h" local="yes" imported="no">tools.h</includes>
     <includes id="experiment_8h" name="experiment.h" local="yes" imported="no">experiment.h</includes>
     <includes id="variable_8h" name="variable.h" local="yes" imported="no">variable.h</includes>
     <includes id="input_8h" name="input.h" local="yes" imported="no">input.h</includes>
@@ -1136,31 +1199,10 @@
       <anchor>a6142492fe82a10cdffb6eb51c2403a11</anchor>
       <arglist>(int argn, char **argc)</arglist>
     </member>
-    <member kind="variable">
-      <type>GMutex</type>
-      <name>mutex</name>
-      <anchorfile>mpcotool_8c.html</anchorfile>
-      <anchor>ac1bbdd709ee463b4624a6e17f0c76148</anchor>
-      <arglist>[1]</arglist>
-    </member>
-    <member kind="variable">
-      <type>int</type>
-      <name>ntasks</name>
-      <anchorfile>mpcotool_8c.html</anchorfile>
-      <anchor>ad8caa56c58b5da3d9c20c7213d146363</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>unsigned int</type>
-      <name>nthreads</name>
-      <anchorfile>mpcotool_8c.html</anchorfile>
-      <anchor>a47a6a7abf51f20275a0453efd67c8de0</anchor>
-      <arglist></arglist>
-    </member>
   </compound>
   <compound kind="file">
     <name>mpcotool.h</name>
-    <path>/home/burguete/programas/mpcotool/4.0.4/</path>
+    <path>/home/burguete/programas/mpcotool/4.4.1/</path>
     <filename>mpcotool_8h</filename>
     <member kind="function">
       <type>int</type>
@@ -1172,10 +1214,10 @@
   </compound>
   <compound kind="file">
     <name>optimize.c</name>
-    <path>/home/burguete/programas/mpcotool/4.0.4/</path>
+    <path>/home/burguete/programas/mpcotool/4.4.1/</path>
     <filename>optimize_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
-    <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
+    <includes id="tools_8h" name="tools.h" local="yes" imported="no">tools.h</includes>
     <includes id="experiment_8h" name="experiment.h" local="yes" imported="no">experiment.h</includes>
     <includes id="variable_8h" name="variable.h" local="yes" imported="no">variable.h</includes>
     <includes id="input_8h" name="input.h" local="yes" imported="no">input.h</includes>
@@ -1456,7 +1498,7 @@
   </compound>
   <compound kind="file">
     <name>optimize.h</name>
-    <path>/home/burguete/programas/mpcotool/4.0.4/</path>
+    <path>/home/burguete/programas/mpcotool/4.4.1/</path>
     <filename>optimize_8h</filename>
     <class kind="struct">Optimize</class>
     <class kind="struct">ParallelData</class>
@@ -1475,32 +1517,11 @@
       <arglist>()</arglist>
     </member>
     <member kind="variable">
-      <type>int</type>
-      <name>ntasks</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>ad8caa56c58b5da3d9c20c7213d146363</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>unsigned int</type>
-      <name>nthreads</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>a47a6a7abf51f20275a0453efd67c8de0</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
       <type>unsigned int</type>
       <name>nthreads_climbing</name>
       <anchorfile>optimize_8h.html</anchorfile>
       <anchor>a120bbbb471f176cda892738b6ba04825</anchor>
       <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>GMutex</type>
-      <name>mutex</name>
-      <anchorfile>optimize_8h.html</anchorfile>
-      <anchor>ac1bbdd709ee463b4624a6e17f0c76148</anchor>
-      <arglist>[1]</arglist>
     </member>
     <member kind="variable">
       <type>Optimize</type>
@@ -1511,373 +1532,107 @@
     </member>
   </compound>
   <compound kind="file">
-    <name>utils.c</name>
-    <path>/home/burguete/programas/mpcotool/4.0.4/</path>
-    <filename>utils_8c</filename>
+    <name>tools.c</name>
+    <path>/home/burguete/programas/mpcotool/4.4.1/</path>
+    <filename>tools_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
-    <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
-    <member kind="function">
-      <type>void</type>
-      <name>show_message</name>
-      <anchorfile>utils_8c.html</anchorfile>
-      <anchor>a3b97c91e1b5953180ca97ef0703b8247</anchor>
-      <arglist>(char *title, char *msg, int type)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>show_error</name>
-      <anchorfile>utils_8c.html</anchorfile>
-      <anchor>a0c9f84353482a780fb128686d6371b71</anchor>
-      <arglist>(char *msg)</arglist>
-    </member>
-    <member kind="function">
-      <type>int</type>
-      <name>xml_node_get_int</name>
-      <anchorfile>utils_8c.html</anchorfile>
-      <anchor>a14dd5b95b1c19e3f81b9ba60d7b6790b</anchor>
-      <arglist>(xmlNode *node, const xmlChar *prop, int *error_code)</arglist>
-    </member>
-    <member kind="function">
-      <type>unsigned int</type>
-      <name>xml_node_get_uint</name>
-      <anchorfile>utils_8c.html</anchorfile>
-      <anchor>a6b3803fc6918d9cbde7f0d86e2d17e37</anchor>
-      <arglist>(xmlNode *node, const xmlChar *prop, int *error_code)</arglist>
-    </member>
-    <member kind="function">
-      <type>unsigned int</type>
-      <name>xml_node_get_uint_with_default</name>
-      <anchorfile>utils_8c.html</anchorfile>
-      <anchor>a7d3bb20a81d564c507458f19e07e3185</anchor>
-      <arglist>(xmlNode *node, const xmlChar *prop, unsigned int default_value, int *error_code)</arglist>
-    </member>
-    <member kind="function">
-      <type>double</type>
-      <name>xml_node_get_float</name>
-      <anchorfile>utils_8c.html</anchorfile>
-      <anchor>ab617fd18a66c4baa2e6fbc1f73c0a20c</anchor>
-      <arglist>(xmlNode *node, const xmlChar *prop, int *error_code)</arglist>
-    </member>
-    <member kind="function">
-      <type>double</type>
-      <name>xml_node_get_float_with_default</name>
-      <anchorfile>utils_8c.html</anchorfile>
-      <anchor>a91ba8bc810f37e110e612426c945d5e9</anchor>
-      <arglist>(xmlNode *node, const xmlChar *prop, double default_value, int *error_code)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>xml_node_set_int</name>
-      <anchorfile>utils_8c.html</anchorfile>
-      <anchor>ae95f3a922578a853c13d2b11e6c5c533</anchor>
-      <arglist>(xmlNode *node, const xmlChar *prop, int value)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>xml_node_set_uint</name>
-      <anchorfile>utils_8c.html</anchorfile>
-      <anchor>a8fd0c86c715e228b482a1b383ea7e2f1</anchor>
-      <arglist>(xmlNode *node, const xmlChar *prop, unsigned int value)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>xml_node_set_float</name>
-      <anchorfile>utils_8c.html</anchorfile>
-      <anchor>af4f6db91f2a9c093ba6bf3ac93ebd9ef</anchor>
-      <arglist>(xmlNode *node, const xmlChar *prop, double value)</arglist>
-    </member>
-    <member kind="function">
-      <type>int</type>
-      <name>json_object_get_int</name>
-      <anchorfile>utils_8c.html</anchorfile>
-      <anchor>ab733723cdd517017ccbcbfcc4be54ae6</anchor>
-      <arglist>(JsonObject *object, const char *prop, int *error_code)</arglist>
-    </member>
-    <member kind="function">
-      <type>unsigned int</type>
-      <name>json_object_get_uint</name>
-      <anchorfile>utils_8c.html</anchorfile>
-      <anchor>a2552b0424485bc796c4ca6b25a8730aa</anchor>
-      <arglist>(JsonObject *object, const char *prop, int *error_code)</arglist>
-    </member>
-    <member kind="function">
-      <type>unsigned int</type>
-      <name>json_object_get_uint_with_default</name>
-      <anchorfile>utils_8c.html</anchorfile>
-      <anchor>a1825b8475eae54e47db59de138df3ae0</anchor>
-      <arglist>(JsonObject *object, const char *prop, unsigned int default_value, int *error_code)</arglist>
-    </member>
-    <member kind="function">
-      <type>double</type>
-      <name>json_object_get_float</name>
-      <anchorfile>utils_8c.html</anchorfile>
-      <anchor>aa7f602770497b98ac7e5452e2c18ed84</anchor>
-      <arglist>(JsonObject *object, const char *prop, int *error_code)</arglist>
-    </member>
-    <member kind="function">
-      <type>double</type>
-      <name>json_object_get_float_with_default</name>
-      <anchorfile>utils_8c.html</anchorfile>
-      <anchor>a5614492f9ea0040e4d0f2737832beb30</anchor>
-      <arglist>(JsonObject *object, const char *prop, double default_value, int *error_code)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>json_object_set_int</name>
-      <anchorfile>utils_8c.html</anchorfile>
-      <anchor>a87b74d2ab20d646c4021a155a2ee2160</anchor>
-      <arglist>(JsonObject *object, const char *prop, int value)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>json_object_set_uint</name>
-      <anchorfile>utils_8c.html</anchorfile>
-      <anchor>a93cd7d14b1e565b0edc85ff47ca0bf71</anchor>
-      <arglist>(JsonObject *object, const char *prop, unsigned int value)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>json_object_set_float</name>
-      <anchorfile>utils_8c.html</anchorfile>
-      <anchor>a66ce05837a2bde6e6f1ca53fa553dbd8</anchor>
-      <arglist>(JsonObject *object, const char *prop, double value)</arglist>
-    </member>
-    <member kind="function">
-      <type>int</type>
-      <name>cores_number</name>
-      <anchorfile>utils_8c.html</anchorfile>
-      <anchor>a80f0afb24ab354228575b2a519436ddc</anchor>
-      <arglist>()</arglist>
-    </member>
+    <includes id="tools_8h" name="tools.h" local="yes" imported="no">tools.h</includes>
     <member kind="function">
       <type>void</type>
       <name>process_pending</name>
-      <anchorfile>utils_8c.html</anchorfile>
+      <anchorfile>tools_8c.html</anchorfile>
       <anchor>af9e53a279af83dcf782717082739f359</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
       <type>unsigned int</type>
       <name>gtk_array_get_active</name>
-      <anchorfile>utils_8c.html</anchorfile>
+      <anchorfile>tools_8c.html</anchorfile>
       <anchor>acbcc3c82fb88f948630d56ff9bdfbba1</anchor>
       <arglist>(GtkRadioButton *array[], unsigned int n)</arglist>
     </member>
     <member kind="variable">
       <type>GtkWindow *</type>
       <name>main_window</name>
-      <anchorfile>utils_8c.html</anchorfile>
+      <anchorfile>tools_8c.html</anchorfile>
       <anchor>a8ddc7c19263eba194a0015ea713b2fc7</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>char *</type>
       <name>error_message</name>
-      <anchorfile>utils_8c.html</anchorfile>
+      <anchorfile>tools_8c.html</anchorfile>
       <anchor>a1a1c633ac5dcca48c2e8aba77d007207</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>void(*</type>
       <name>show_pending</name>
-      <anchorfile>utils_8c.html</anchorfile>
+      <anchorfile>tools_8c.html</anchorfile>
       <anchor>a0635e19b9c144cdc89935edf38d08bb5</anchor>
       <arglist>)()</arglist>
     </member>
   </compound>
   <compound kind="file">
-    <name>utils.h</name>
-    <path>/home/burguete/programas/mpcotool/4.0.4/</path>
-    <filename>utils_8h</filename>
+    <name>tools.h</name>
+    <path>/home/burguete/programas/mpcotool/4.4.1/</path>
+    <filename>tools_8h</filename>
     <member kind="define">
       <type>#define</type>
       <name>ERROR_TYPE</name>
-      <anchorfile>utils_8h.html</anchorfile>
+      <anchorfile>tools_8h.html</anchorfile>
       <anchor>a5b8c8883788eccf90bd9805807370537</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>INFO_TYPE</name>
-      <anchorfile>utils_8h.html</anchorfile>
+      <anchorfile>tools_8h.html</anchorfile>
       <anchor>a6093548b0b330b348aaf437264b0ee98</anchor>
       <arglist></arglist>
     </member>
     <member kind="function">
       <type>void</type>
-      <name>show_message</name>
-      <anchorfile>utils_8h.html</anchorfile>
-      <anchor>a3b97c91e1b5953180ca97ef0703b8247</anchor>
-      <arglist>(char *title, char *msg, int type)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>show_error</name>
-      <anchorfile>utils_8h.html</anchorfile>
-      <anchor>a0c9f84353482a780fb128686d6371b71</anchor>
-      <arglist>(char *msg)</arglist>
-    </member>
-    <member kind="function">
-      <type>int</type>
-      <name>xml_node_get_int</name>
-      <anchorfile>utils_8h.html</anchorfile>
-      <anchor>a14dd5b95b1c19e3f81b9ba60d7b6790b</anchor>
-      <arglist>(xmlNode *node, const xmlChar *prop, int *error_code)</arglist>
-    </member>
-    <member kind="function">
-      <type>unsigned int</type>
-      <name>xml_node_get_uint</name>
-      <anchorfile>utils_8h.html</anchorfile>
-      <anchor>a6b3803fc6918d9cbde7f0d86e2d17e37</anchor>
-      <arglist>(xmlNode *node, const xmlChar *prop, int *error_code)</arglist>
-    </member>
-    <member kind="function">
-      <type>unsigned int</type>
-      <name>xml_node_get_uint_with_default</name>
-      <anchorfile>utils_8h.html</anchorfile>
-      <anchor>a7d3bb20a81d564c507458f19e07e3185</anchor>
-      <arglist>(xmlNode *node, const xmlChar *prop, unsigned int default_value, int *error_code)</arglist>
-    </member>
-    <member kind="function">
-      <type>double</type>
-      <name>xml_node_get_float</name>
-      <anchorfile>utils_8h.html</anchorfile>
-      <anchor>ab617fd18a66c4baa2e6fbc1f73c0a20c</anchor>
-      <arglist>(xmlNode *node, const xmlChar *prop, int *error_code)</arglist>
-    </member>
-    <member kind="function">
-      <type>double</type>
-      <name>xml_node_get_float_with_default</name>
-      <anchorfile>utils_8h.html</anchorfile>
-      <anchor>a91ba8bc810f37e110e612426c945d5e9</anchor>
-      <arglist>(xmlNode *node, const xmlChar *prop, double default_value, int *error_code)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>xml_node_set_int</name>
-      <anchorfile>utils_8h.html</anchorfile>
-      <anchor>ae95f3a922578a853c13d2b11e6c5c533</anchor>
-      <arglist>(xmlNode *node, const xmlChar *prop, int value)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>xml_node_set_uint</name>
-      <anchorfile>utils_8h.html</anchorfile>
-      <anchor>a8fd0c86c715e228b482a1b383ea7e2f1</anchor>
-      <arglist>(xmlNode *node, const xmlChar *prop, unsigned int value)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>xml_node_set_float</name>
-      <anchorfile>utils_8h.html</anchorfile>
-      <anchor>af4f6db91f2a9c093ba6bf3ac93ebd9ef</anchor>
-      <arglist>(xmlNode *node, const xmlChar *prop, double value)</arglist>
-    </member>
-    <member kind="function">
-      <type>int</type>
-      <name>json_object_get_int</name>
-      <anchorfile>utils_8h.html</anchorfile>
-      <anchor>ab733723cdd517017ccbcbfcc4be54ae6</anchor>
-      <arglist>(JsonObject *object, const char *prop, int *error_code)</arglist>
-    </member>
-    <member kind="function">
-      <type>unsigned int</type>
-      <name>json_object_get_uint</name>
-      <anchorfile>utils_8h.html</anchorfile>
-      <anchor>a2552b0424485bc796c4ca6b25a8730aa</anchor>
-      <arglist>(JsonObject *object, const char *prop, int *error_code)</arglist>
-    </member>
-    <member kind="function">
-      <type>unsigned int</type>
-      <name>json_object_get_uint_with_default</name>
-      <anchorfile>utils_8h.html</anchorfile>
-      <anchor>a1825b8475eae54e47db59de138df3ae0</anchor>
-      <arglist>(JsonObject *object, const char *prop, unsigned int default_value, int *error_code)</arglist>
-    </member>
-    <member kind="function">
-      <type>double</type>
-      <name>json_object_get_float</name>
-      <anchorfile>utils_8h.html</anchorfile>
-      <anchor>aa7f602770497b98ac7e5452e2c18ed84</anchor>
-      <arglist>(JsonObject *object, const char *prop, int *error_code)</arglist>
-    </member>
-    <member kind="function">
-      <type>double</type>
-      <name>json_object_get_float_with_default</name>
-      <anchorfile>utils_8h.html</anchorfile>
-      <anchor>a5614492f9ea0040e4d0f2737832beb30</anchor>
-      <arglist>(JsonObject *object, const char *prop, double default_value, int *error_code)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>json_object_set_int</name>
-      <anchorfile>utils_8h.html</anchorfile>
-      <anchor>a87b74d2ab20d646c4021a155a2ee2160</anchor>
-      <arglist>(JsonObject *object, const char *prop, int value)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>json_object_set_uint</name>
-      <anchorfile>utils_8h.html</anchorfile>
-      <anchor>a93cd7d14b1e565b0edc85ff47ca0bf71</anchor>
-      <arglist>(JsonObject *object, const char *prop, unsigned int value)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>json_object_set_float</name>
-      <anchorfile>utils_8h.html</anchorfile>
-      <anchor>a66ce05837a2bde6e6f1ca53fa553dbd8</anchor>
-      <arglist>(JsonObject *object, const char *prop, double value)</arglist>
-    </member>
-    <member kind="function">
-      <type>int</type>
-      <name>cores_number</name>
-      <anchorfile>utils_8h.html</anchorfile>
-      <anchor>a80f0afb24ab354228575b2a519436ddc</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
       <name>process_pending</name>
-      <anchorfile>utils_8h.html</anchorfile>
+      <anchorfile>tools_8h.html</anchorfile>
       <anchor>af9e53a279af83dcf782717082739f359</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
       <type>unsigned int</type>
       <name>gtk_array_get_active</name>
-      <anchorfile>utils_8h.html</anchorfile>
+      <anchorfile>tools_8h.html</anchorfile>
       <anchor>acbcc3c82fb88f948630d56ff9bdfbba1</anchor>
       <arglist>(GtkRadioButton *array[], unsigned int n)</arglist>
     </member>
     <member kind="variable">
       <type>GtkWindow *</type>
       <name>main_window</name>
-      <anchorfile>utils_8h.html</anchorfile>
+      <anchorfile>tools_8h.html</anchorfile>
       <anchor>a8ddc7c19263eba194a0015ea713b2fc7</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>char *</type>
       <name>error_message</name>
-      <anchorfile>utils_8h.html</anchorfile>
+      <anchorfile>tools_8h.html</anchorfile>
       <anchor>a1a1c633ac5dcca48c2e8aba77d007207</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>void(*</type>
       <name>show_pending</name>
-      <anchorfile>utils_8h.html</anchorfile>
+      <anchorfile>tools_8h.html</anchorfile>
       <anchor>a0635e19b9c144cdc89935edf38d08bb5</anchor>
       <arglist>)()</arglist>
     </member>
   </compound>
   <compound kind="file">
     <name>variable.c</name>
-    <path>/home/burguete/programas/mpcotool/4.0.4/</path>
+    <path>/home/burguete/programas/mpcotool/4.4.1/</path>
     <filename>variable_8c</filename>
     <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
-    <includes id="utils_8h" name="utils.h" local="yes" imported="no">utils.h</includes>
+    <includes id="tools_8h" name="tools.h" local="yes" imported="no">tools.h</includes>
     <includes id="variable_8h" name="variable.h" local="yes" imported="no">variable.h</includes>
     <member kind="define">
       <type>#define</type>
@@ -1931,7 +1686,7 @@
   </compound>
   <compound kind="file">
     <name>variable.h</name>
-    <path>/home/burguete/programas/mpcotool/4.0.4/</path>
+    <path>/home/burguete/programas/mpcotool/4.4.1/</path>
     <filename>variable_8h</filename>
     <class kind="struct">Variable</class>
     <member kind="enumeration">
@@ -2796,59 +2551,59 @@
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>GtkToolbar *</type>
-      <name>bar_buttons</name>
+      <type>GtkBox *</type>
+      <name>box_buttons</name>
       <anchorfile>structWindow.html</anchorfile>
-      <anchor>ae1a80acebc08eebdfd248520ff8145f9</anchor>
+      <anchor>ac981fe64c079f4fff6947ed48aa9170c</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>GtkToolButton *</type>
+      <type>GtkButton *</type>
       <name>button_open</name>
       <anchorfile>structWindow.html</anchorfile>
-      <anchor>acda4638027e7643303a688af277ff976</anchor>
+      <anchor>af40bf28e5e9fe8d29a802ab7908541ac</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>GtkToolButton *</type>
+      <type>GtkButton *</type>
       <name>button_save</name>
       <anchorfile>structWindow.html</anchorfile>
-      <anchor>a3fdc6d2d58abcf377c2c2a80597e9406</anchor>
+      <anchor>ab252f904fed849d635e26096573c0cb0</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>GtkToolButton *</type>
+      <type>GtkButton *</type>
       <name>button_run</name>
       <anchorfile>structWindow.html</anchorfile>
-      <anchor>a402bee28ad20257b25ee351f3fded185</anchor>
+      <anchor>a7ffd85f33640e2b0a7c95493ae5024bf</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>GtkToolButton *</type>
+      <type>GtkButton *</type>
       <name>button_options</name>
       <anchorfile>structWindow.html</anchorfile>
-      <anchor>a756300afd61731585592f12959f374a3</anchor>
+      <anchor>a16648f0b4514f367608f61e48469829f</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>GtkToolButton *</type>
+      <type>GtkButton *</type>
       <name>button_help</name>
       <anchorfile>structWindow.html</anchorfile>
-      <anchor>a280b195cea655e859ce34a5bc5acbc9e</anchor>
+      <anchor>ace61a5c84f9fdc63426fb5dd2bee543c</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>GtkToolButton *</type>
+      <type>GtkButton *</type>
       <name>button_about</name>
       <anchorfile>structWindow.html</anchorfile>
-      <anchor>af2f82b9859b1c7fcfc132a99c63d0447</anchor>
+      <anchor>a246266f67397342c3290b2d018b60a0b</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>GtkToolButton *</type>
+      <type>GtkButton *</type>
       <name>button_exit</name>
       <anchorfile>structWindow.html</anchorfile>
-      <anchor>a21d27e6474590e701e53cdf9dc80c7a6</anchor>
+      <anchor>a8fe4b3840203e3fc2a10a74cc7d9f737</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
@@ -2866,10 +2621,10 @@
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>GtkFileChooserButton *</type>
+      <type>GtkButton *</type>
       <name>button_simulator</name>
       <anchorfile>structWindow.html</anchorfile>
-      <anchor>ada52bd64171b16ad96f85d590f9eb11f</anchor>
+      <anchor>a5c5dce5943c2d3fed205ec8bae2f5dfd</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
@@ -2880,10 +2635,10 @@
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>GtkFileChooserButton *</type>
+      <type>GtkButton *</type>
       <name>button_evaluator</name>
       <anchorfile>structWindow.html</anchorfile>
-      <anchor>ab18aecebeb549ce26dacc14014fc034a</anchor>
+      <anchor>ac546e43e2cc83f0bb9297f71f2a8113b</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
@@ -3426,10 +3181,10 @@
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>GtkFileChooserButton *</type>
+      <type>GtkButton *</type>
       <name>button_experiment</name>
       <anchorfile>structWindow.html</anchorfile>
-      <anchor>a200757ff891f122879965bfb3ee7f550</anchor>
+      <anchor>ac7bc931e82bbed5ad2d4d243d09cd6ed</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
@@ -3454,10 +3209,10 @@
       <arglist>[MAX_NINPUTS]</arglist>
     </member>
     <member kind="variable">
-      <type>GtkFileChooserButton *</type>
+      <type>GtkButton *</type>
       <name>button_template</name>
       <anchorfile>structWindow.html</anchorfile>
-      <anchor>a281a409fb6ff6538bff00cd9af784a08</anchor>
+      <anchor>a0823c21b61d3fd7ddee47bbc48ea1b66</anchor>
       <arglist>[MAX_NINPUTS]</arglist>
     </member>
     <member kind="variable">
