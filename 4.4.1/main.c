@@ -68,6 +68,11 @@ OF SUCH DAMAGE.
 #endif
 #include "mpcotool.h"
 
+/**
+ * Main function
+ *
+ * \return 0 on succes, error code (>0) on error.
+ */
 int
 main (int argn, char **argc)
 {

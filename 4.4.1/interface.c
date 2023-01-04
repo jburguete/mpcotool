@@ -954,8 +954,6 @@ dialog_save_close (GtkFileChooserDialog * dlg,
 
 /**
  * Function to save the input file.
- *
- * \return 1 on OK, 0 on Cancel.
  */
 static void
 window_save ()
