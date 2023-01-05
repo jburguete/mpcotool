@@ -1,4 +1,4 @@
-CC = @CC@ @ARCH@ @LTO@ @STD@ @WINCFLAGS@ -O3 -D_FORTIFY_SOURCE=2 -Wall -Wextra \
+CC = @CC@ @ARCH@ @LTO@ @WINCFLAGS@ -O3 -D_FORTIFY_SOURCE=2 -Wall -Wextra \
 	 -lm #-pg 
 
 simulator@EXE@: simulator.c Makefile

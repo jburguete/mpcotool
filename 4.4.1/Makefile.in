@@ -1,6 +1,6 @@
 .PHONY: clean strip
 
-CC = @CC@ @ARCH@ @LTO@ @STD@ -g
+CC = @CC@ @ARCH@ @LTO@ -g
 CFLAGS = @CPPFLAGS@ @GSL_CFLAGS@ @XML_CFLAGS@ @GLIB_CFLAGS@ @JSON_CFLAGS@ \
 	@GTHREAD_CFLAGS@ @GTK4@ -DJBM_PRECISION=2 -pedantic -Wall -Wextra \
 	-O3 -D_FORTIFY_SOURCE=2
