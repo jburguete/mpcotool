@@ -1,5 +1,6 @@
 TASKS
 
+* Check JB library in configure script
 * Enable optimization functions inputs by variables (not by files)
 * Correct several german translations
 - Add ant algorithm
