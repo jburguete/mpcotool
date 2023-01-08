@@ -2,10 +2,11 @@
 
 CC = @CC@ @ARCH@ @LTO@ -g
 CFLAGS = @CPPFLAGS@ @GSL_CFLAGS@ @XML_CFLAGS@ @GLIB_CFLAGS@ @JSON_CFLAGS@ \
-	@GTHREAD_CFLAGS@ @GTK4@ -DJBM_PRECISION=2 -pedantic -Wall -Wextra \
+	@GTHREAD_CFLAGS@ @GTK4@ @PRECISION@ -pedantic -Wall -Wextra \
 	-O3 -D_FORTIFY_SOURCE=2
 LDFLAGS = @LDFLAGS@ @LIBS@ @GSL_LIBS@ @XML_LIBS@ @GLIB_LIBS@ @JSON_LIBS@ \
-	@GTHREAD_LIBS@ -ljb-2 -ljbm-2 -ljbw-2 -ljbxml-2 -ljbjson-2
+	@GTHREAD_LIBS@ -ljbw@SUFFIX@ -ljbxml@SUFFIX@ -ljbjson@SUFFIX@ \
+	-ljbm@SUFFIX@ -ljb@SUFFIX@
 
 src = ./
 bin = ./

@@ -142,17 +142,82 @@ else
 fi
 AC_SUBST(PGO, [$pgo])
 
-# Checks for libraries
+# Set precision
+AC_ARG_WITH([precision], AS_HELP_STRING([--with-precision],
+	[Build with precision degree (1-5), default=2]))
+if test "x$with_precision" = "x1"; then
+	precision=1
+elif test "x$with_precision" = "x3"; then
+	precision=3
+elif test "x$with_precision" = "x4"; then
+	precision=4
+elif test "x$with_precision" = "x5"; then
+	precision=5
+else
+	precision=2
+fi
+AC_SUBST(PRECISION, "-DJBM_PRECISION=$precision")
+AC_SUBST(SUFFIX, [-$precision])
+
+# Checks for header files
+AC_FUNC_MALLOC
+AC_FUNC_REALLOC
+AC_FUNC_ALLOCA
+AC_CHECK_HEADERS(
+	[stdlib.h string.h unistd.h pthread.h locale.h sys/param.h libintl.h])
 if test -f "genetic/genetic.h"; then
 	AC_MSG_NOTICE([Genetic header installed])
 else
 	AC_MSG_ERROR([Genetic header not installed])
 fi
+if test -f "jb/src/jb_def.h"; then
+	AC_MSG_NOTICE([JB header installed])
+else
+	AC_MSG_ERROR([JB header not installed])
+fi
+
+# Checks for libraries
 genetic=libgenetic$so
 if test -x "$genetic"; then
 	AC_MSG_NOTICE([Genetic library installed])
 else
 	AC_MSG_ERROR([Genetic library not installed])
+fi
+libjb=libjb-$precision$so
+if test -x "$libjb"; then
+	AC_MSG_NOTICE([$libjb: OK])
+else
+	AC_MSG_ERROR([$libjb: not installed])
+fi
+libjbm=libjbm-$precision$so
+if test -x "$libjbm"; then
+	AC_MSG_NOTICE([$libjbm: OK])
+else
+	AC_MSG_ERROR([$libjbm: not installed])
+fi
+libjbjson=libjbjson-$precision$so
+if test -x "$libjbjson"; then
+	AC_MSG_NOTICE([$libjbjson: OK])
+else
+	AC_MSG_ERROR([$libjbjson: not installed])
+fi
+libjbxml=libjbxml-$precision$so
+if test -x "$libjbxml"; then
+	AC_MSG_NOTICE([$libjbxml: OK])
+else
+	AC_MSG_ERROR([$libjbxml: not installed])
+fi
+libjbbin=libjbbin-$precision$so
+if test -x "$libjbbin"; then
+	AC_MSG_NOTICE([$libjbbin: OK])
+else
+	AC_MSG_ERROR([$libjbbin: not installed])
+fi
+libjbw=libjbw-$precision$so
+if test -x "$libjbw"; then
+	AC_MSG_NOTICE([$libjbw: OK])
+else
+	AC_MSG_ERROR([$libjbw: not installed])
 fi
 AC_SEARCH_LIBS([sqrt], [m])
 PKG_CHECK_MODULES([GSL], [gsl])
@@ -187,13 +252,6 @@ if test $gtk = 1; then
 	PKG_CHECK_MODULES([FREETYPE], [freetype2])
 	AC_SUBST(MPCOTOOL, "mpcotool")
 fi
-
-# Checks for header files
-AC_FUNC_MALLOC
-AC_FUNC_REALLOC
-AC_FUNC_ALLOCA
-AC_CHECK_HEADERS(
-	[stdlib.h string.h unistd.h pthread.h locale.h sys/param.h libintl.h])
 
 # Checking static library
 AC_ARG_WITH([static],
