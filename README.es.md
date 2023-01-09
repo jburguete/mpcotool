@@ -3,62 +3,64 @@ MPCOTool
 
 :gb:[english](README.md) :es:[español](README.es.md)
 
-The Multi-Purposes Calibration and Optimization Tool. A software to perform
-calibrations or optimizations of empirical parameters.
+The Multi-Purposes Calibration and Optimization Tool. Un programa para realizar
+calibraciones u optimizaciones de parámetros empíricos.
 
-VERSIONS
---------
+VERSIONES
+---------
 
-* 4.4.1: Stable and recommended version.
+* 4.4.1: versión estable y recomendada.
 
-AUTHORS
+AUTORES
 -------
 
 * Javier Burguete Tolosa (jburguete@eead.csic.es)
 * Borja Latorre Garcés (borja.latorre@csic.es)
 
-WINDOWS EXECUTABLE FILES
-------------------------
+FICHEROS EJECUTABLES PARA WINDOWS
+---------------------------------
 
-This repository contains source and example files with the latest version of 
-MPCOTool. Stable versions with executable files and manuals for Microsoft
-Windows systems can be downloaded in 
+Este repositorio contiene los ficheros de código fuente y de ejemplos con la
+última versión de MPCOTool. Versiones estables con ficheros ejecutables y
+manuales para sistemas Microsoft Windows pueden descargarse de: 
 [digital.csic](http://digital.csic.es/handle/10261/148471)
 
-TOOLS AND LIBRARIES REQUIRED TO BUILD THE EXECUTABLE
-----------------------------------------------------
+UTILIDADES Y BIBLIOTECAS REQUERIDAS PARA CONSTRUIR EL EJECUTABLE
+----------------------------------------------------------------
 
-* [gcc](https://gcc.gnu.org) or [clang](http://clang.llvm.org) (to compile the
-  source code)
-* [make](http://www.gnu.org/software/make) (to build the executable file)
-* [autoconf](http://www.gnu.org/software/autoconf) (to generate the Makefile in
-  different operative systems)
-* [automake](http://www.gnu.org/software/automake) (to check the operative
-  system)
-* [pkg-config](http://www.freedesktop.org/wiki/Software/pkg-config) (to find the
-  libraries to compile)
-* [gsl](http://www.gnu.org/software/gsl) (to generate random numbers)
-* [libxml](http://xmlsoft.org) (to deal with XML files)
-* [glib](https://developer.gnome.org/glib) (extended utilities of C to work with
-  data, lists, mapped files, regular expressions, using multicores in shared
-  memory machines, ...)
-* [json-glib](https://github.com/ebassi/json-glib) (to deal with JSON files)
-* [genetic](https://github.com/jburguete/genetic) (genetic algorithm)
+* [gcc](https://gcc.gnu.org) o [clang](http://clang.llvm.org) (para compilar el
+  código fuente)
+* [make](http://www.gnu.org/software/make) (para construir el fichero
+  ejecutable)
+* [autoconf](http://www.gnu.org/software/autoconf) (para generar el Makefile en
+  diferentes sistemas operativos)
+* [automake](http://www.gnu.org/software/automake) (para detectar el sistema
+  operativo)
+* [pkg-config](http://www.freedesktop.org/wiki/Software/pkg-config) (para
+  encontrar las librerías para compilar)
+* [gsl](http://www.gnu.org/software/gsl) (para generar números aleatorios)
+* [libxml](http://xmlsoft.org) (para trabajar con ficheros XML)
+* [glib](https://developer.gnome.org/glib) (utilidades extendidas de C para
+  trabajar con datos, listas, ficheros mapeados, expresiones regulares, usar
+  múltiples núcles en máquinas de memoria compartida, ...)
+* [json-glib](https://github.com/ebassi/json-glib) (para trabajar con ficheros
+  JSON)
+* [genetic](https://github.com/jburguete/genetic) (algoritmos genéticos)
 
-OPTIONAL TOOLS AND LIBRARIES
-----------------------------
+UTILIDADES Y BIBLIOTECAS OPCIONALES
+-----------------------------------
 
-* [gettext](http://www.gnu.org/software/gettext) (to work with different
+* [gettext](http://www.gnu.org/software/gettext) (para trabajar con diferentes
   locales)
-* [gtk+3](http://www.gtk.org) (to create the interactive GUI tool)
-* [openmpi](http://www.open-mpi.org) or [mpich](http://www.mpich.org) (to run in
-  parallelized tasks on multiple computers)
-* [doxygen](http://www.stack.nl/~dimitri/doxygen) (standard comments format to
-  generate documentation)
-* [latex](https://www.latex-project.org/) (to build the PDF manuals)
+* [gtk+3](http://www.gtk.org) (para crear la utilidad GUI interactiva)
+* [openmpi](http://www.open-mpi.org) or [mpich](http://www.mpich.org) (para
+  correr en tareas paralelizadas en múltiples computadoras)
+* [doxygen](http://www.stack.nl/~dimitri/doxygen) (formato de comentarios
+  estándar para generar documentación)
+* [latex](https://www.latex-project.org/) (para construir los ficheros PDF)
 
-FILES
------
+FICHEROS
+--------
 
 The source code has to have the following files:
 * 4.4.1/configure.ac: configure generator.
