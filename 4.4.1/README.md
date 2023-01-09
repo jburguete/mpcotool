@@ -82,17 +82,12 @@ The source code has to have the following files:
 BUILDING INSTRUCTIONS
 ---------------------
 
-On Fedora 29, in order to use OpenMPI compilation, do in a terminal (in 64 bits
-version):
-> $ export PATH=$PATH:/usr/lib64/openmpi/bin
-
 On Microsoft Windows systems you have to install
 [MSYS2](http://sourceforge.net/projects/msys2) and the required
 libraries and utilities. You can follow detailed instructions in
 [install-unix](https://github.com/jburguete/install-unix/blob/master/tutorial.pdf).
 Optional Windows binary package can be built doing in the terminal:
 > $ make windist
-
 
 On NetBSD 8.0, to compile with last GCC version you have to do first on the
 building terminal:
@@ -112,21 +107,19 @@ then does not apply this step):
 > $ export PATH=$PATH:/usr/lib64/mpi/gcc/openmpi/bin
 
 This software has been built and tested in the following operative systems:
-* Debian 9 (Linux, kFreeBSD and Hurd)
-* DragonFly BSD 5.2
-* Dyson Illumos
-* Fedora Linux 29
+* Debian 11 (Linux, kFreeBSD and Hurd)
+* DragonFly BSD 6.4
+* Fedora Linux 37
 * FreeBSD 11.2
+* Gentoo Linux
 * Linux Mint DE 3
 * Manjaro Linux
-* Microsoft Windows 7
 * Microsoft Windows 10
 * NetBSD 8.0 (from source with modular xorg)
 * OpenBSD 6.4
 * OpenInidiana Hipster
 * OpenSUSE Linux Leap 15
-* Ubuntu Mate Linux 18.04
-* Xubuntu Linux 18.10
+* Xubuntu Linux 22.10
 
 Probably, it can be built in other systems, distributions, or versions but it
 has not been tested.
@@ -136,7 +129,7 @@ a terminal:
 > $ git clone https://github.com/jburguete/genetic.git
 
 2. Build the genetic library:
-> $ cd genetic/3.0.0
+> $ cd genetic/3.0.1
 >
 > $ sh build.sh
 
@@ -148,7 +141,7 @@ a terminal:
 4. Link the latest genetic version to genetic:
 > $ cd mpcotool/4.4.1
 >
-> $ ln -s ../../genetic/3.0.0 genetic
+> $ ln -s ../../genetic/3.0.1 genetic
 > 
 > $ ln -s genetic/libgenetic.so (or .dll in Windows systems)
 
@@ -212,19 +205,19 @@ In order to build the tests follow the next instructions:
 you are in the directory mpcotool/4.4.1):
 > $ cd ../tests/test2
 >
-> $ ln -s ../../../genetic/3.0.0 genetic
+> $ ln -s ../../../genetic/3.0.1 genetic
 >
 > $ ln -s genetic/libgenetic.so (or .dll on Windows systems)
 >
 > $ cd ../test3
 >
-> $ ln -s ../../../genetic/3.0.0 genetic
+> $ ln -s ../../../genetic/3.0.1 genetic
 >
 > $ ln -s genetic/libgenetic.so (or .dll on Windows systems)
 >
 > $ cd ../test4
 >
-> $ ln -s ../../../genetic/3.0.0 genetic
+> $ ln -s ../../../genetic/3.0.1 genetic
 >
 > $ ln -s genetic/libgenetic.so (or .dll on Windows systems)
 
