@@ -5,8 +5,10 @@ CFLAGS = @CPPFLAGS@ @GSL_CFLAGS@ @XML_CFLAGS@ @GLIB_CFLAGS@ @JSON_CFLAGS@ \
 	@GTHREAD_CFLAGS@ @GTK4@ @PRECISION@ -pedantic -Wall -Wextra \
 	-O3 -D_FORTIFY_SOURCE=2
 LDFLAGS = @LDFLAGS@ @LIBS@ @GSL_LIBS@ @XML_LIBS@ @GLIB_LIBS@ @JSON_LIBS@ \
-	@GTHREAD_LIBS@ -ljbw@SUFFIX@ -ljbxml@SUFFIX@ -ljbjson@SUFFIX@ \
-	-ljbm@SUFFIX@ -ljb@SUFFIX@
+	@GTHREAD_LIBS@
+JBLIBS = -ljbxml@SUFFIX@ -ljbjson@SUFFIX@ -ljbm@SUFFIX@ -ljb@SUFFIX@ $(LDFLAGS)
+JBBINLIBS = -ljbbin@SUFFIX@ $(JBLIBS)
+JBWINLIBS = -ljbwin@SUFFIX@ $(JBLIBS)
 
 src = ./
 bin = ./
@@ -112,9 +114,11 @@ else
 endif
 CGEN = -c -fPIC -DJBW=1 $(CFLAGS) $(PGOGEN)
 CUSE = -c -fPIC -DJBW=1 $(CFLAGS) $(PGOUSE)
+ifeq (@MPCOTOOL@, 1)
+	mpcotool=$(bin)mpcotool@EXE@
+endif
 
-all: $(bin) $(bin)mpcotoolbin@EXE@ \
-	$(bin)@MPCOTOOL@@EXE@ \
+all: $(bin) $(bin)mpcotoolbin@EXE@ $(mpcotool) \
 	locales/$(DE)mpcotool.mo \
 	locales/$(ES)mpcotool.mo \
 	locales/$(FR)mpcotool.mo
@@ -148,8 +152,8 @@ $(mpcotoolbin_pgo): mpcotool.c mpcotool.h optimize.h input.h variable.h \
 	$(CC) $(CGEN) mpcotool.c -o $(mpcotoolbin_pgo)
 
 $(libmpcotoolpgo): $(PGOOBJLIB)
-	$(CC) $(PGOGEN) -shared $(PGOOBJLIB) $(LDFLAGS) -L. -Wl,-rpath=. -lgenetic \
-		-o $(libmpcotoolpgo)
+	$(CC) $(PGOGEN) -shared $(PGOOBJLIB) -o $(libmpcotoolpgo) -L. \
+		-Wl,-rpath=. -lgenetic $(LDFLAGS)
 
 $(bin)mainbin.pgo: main.c mpcotool.h optimize.h input.h variable.h \
 	experiment.h tools.h config.h $(DEP)
@@ -157,10 +161,10 @@ $(bin)mainbin.pgo: main.c mpcotool.h optimize.h input.h variable.h \
 
 $(bin)mpcotoolbinpgo@EXE@: $(bin)mainbin.pgo $(libmpcotoolpgo) $(libgenetic) \
 	$(PGOTESTS)
-	$(CC) $(PGOGEN) $(bin)mainbin.pgo $(LDFLAGS) \
-		-o $(bin)mpcotoolbinpgo@EXE@ -L$(bin) -Wl,-rpath=. -lmpcotoolpgo \
-		-lgenetic
-	$(MCXML1_PREFIX) $(bin)mpcotoolbinpgo -t 1 ../tests/test1/test-mc@WIN@.xml
+	$(CC) $(PGOGEN) $(bin)mainbin.pgo -o $(bin)mpcotoolbinpgo@EXE@ \
+		-L$(bin) -Wl,-rpath=. -lmpcotoolpgo -lgenetic $(JBBINLIBS)
+	$(MCXML1_PREFIX) $(bin)mpcotoolbinpgo -t 1 \
+		../tests/test1/test-mc@WIN@.xml
 	$(MCJSON_PREFIX) $(bin)mpcotoolbinpgo ../tests/test1/test-mc@WIN@.json
 	$(SW_PREFIX) $(bin)mpcotoolbinpgo ../tests/test1/test-sw@WIN@.xml
 	$(OS_PREFIX) $(bin)mpcotoolbinpgo ../tests/test1/test-os@WIN@.xml
@@ -186,50 +190,57 @@ $(mpcotoolbin_o): $(MPCOTOOLBINDEP)
 	$(CC) $(CUSE) mpcotool.c -o $(mpcotoolbin_o)
 
 $(libmpcotool): $(OBJLIB)
-	$(CC) $(PGOUSE) -shared -DEXTERNAL_LIBRARY=1 $(OBJLIB) $(LDFLAGS) -L. \
-		-Wl,-rpath=. -lgenetic -o $(libmpcotool)
+	$(CC) $(PGOUSE) -shared -DEXTERNAL_LIBRARY=1 $(OBJLIB) \
+		-o $(libmpcotool) -L. -Wl,-rpath=. -lgenetic $(LDFLAGS) 
 
 $(bin)mainbin.o: $(MAINBINDEP)
 	$(CC) -c $(CFLAGS) $(PGOUSE) main.c -o $(bin)mainbin.o
 
 $(bin)mpcotoolbin@EXE@: $(bin)mainbin.o $(libmpcotool)
 	$(CC) $(PGOUSE) $(bin)mainbin.o -o $(bin)mpcotoolbin@EXE@ \
-		$(LDFLAGS) -L$(bin) -Wl,-rpath=. -lmpcotool -lgenetic
+		-L$(bin) -Wl,-rpath=. -lmpcotool -lgenetic $(JBBINLIBS)
+
 
 $(tools_o): tools.c tools.h config.h $(DEP)
-	$(CC) -c $(CFLAGS) @FREETYPE_CFLAGS@ @GTK_CFLAGS@ -DHAVE_GTK=1 -DJBW=2 tools.c -o $(tools_o)
+	$(CC) -c $(CFLAGS) @FREETYPE_CFLAGS@ @GTK_CFLAGS@ -DHAVE_GTK=1 -DJBW=2 \
+		tools.c -o $(tools_o)
 
 $(interface_o): interface.c interface.h optimize.h input.h variable.h \
 	experiment.h tools.h config.h $(DEP)
-	$(CC) -c $(CFLAGS) @FREETYPE_CFLAGS@ @GTK_CFLAGS@ -DHAVE_GTK=1 -DJBW=2 interface.c -o $(interface_o)
+	$(CC) -c $(CFLAGS) @FREETYPE_CFLAGS@ @GTK_CFLAGS@ -DHAVE_GTK=1 -DJBW=2 \
+		interface.c -o $(interface_o)
 
 $(mpcotool_o): mpcotool.c mpcotool.h interface.h optimize.h input.h variable.h \
 	experiment.h tools.h config.h $(DEP)
-	$(CC) -c $(CFLAGS) @FREETYPE_CFLAGS@ @GTK_CFLAGS@ -DHAVE_GTK=1 -DJBW=2 mpcotool.c -o $(mpcotool_o)
+	$(CC) -c $(CFLAGS) @FREETYPE_CFLAGS@ @GTK_CFLAGS@ -DHAVE_GTK=1 -DJBW=2 \
+		mpcotool.c -o $(mpcotool_o)
 
 $(bin)main.o: main.c mpcotool.h optimize.h input.h variable.h experiment.h \
 	tools.h config.h $(DEP)
-	$(CC) -c $(CFLAGS) @FREETYPE_CFLAGS@ @GTK_CFLAGS@ -DHAVE_GTK=1 -DJBW=2 main.c -o $(bin)main.o
+	$(CC) -c $(CFLAGS) @FREETYPE_CFLAGS@ @GTK_CFLAGS@ -DHAVE_GTK=1 -DJBW=2 \
+		main.c -o $(bin)main.o
 
-$(bin)@MPCOTOOL@@EXE@: $(bin)main.o $(libmpcotool) $(OBJGUI) @ICON@
-	$(CC) $(bin)main.o $(OBJGUI) -L$(bin) -Wl,-rpath=. -lmpcotool \
-		-lgenetic $(LDFLAGS) @GTK_LIBS@ @FREETYPE_LIBS@ -o $(bin)@MPCOTOOL@@EXE@
+$(bin)mpcotool@EXE@: $(bin)main.o $(libmpcotool) $(OBJGUI) @ICON@
+	$(CC) $(bin)main.o $(OBJGUI) -o $(mpcotool) -L$(bin) \
+		-Wl,-rpath=. -lmpcotool -lgenetic $(JBWINLIBS) @GTK_LIBS@ \
+		@FREETYPE_LIBS@
 
 clean:
-	cd $(bin); rm *.o *pgo *.gcda *@SO@ mpcotoolbin @MPCOTOOL@@EXE@
+	cd $(bin); rm *.o *pgo *.gcda *@SO@ mpcotoolbin $(mpcotool)
 
 strip:
-	make
-	strip $(bin)mpcotoolbin@EXE@ $(libmpcotool) $(bin)@MPCOTOOL@@EXE@
+	@MAKE@
+	strip $(bin)mpcotoolbin@EXE@ $(libmpcotool) $(mpcotool)
 
 locales/mpcotool.pot: $(SRC) Makefile
-	@gnu@xgettext -k_ -d mpcotool -o locales/mpcotool.pot --from-code=UTF-8 $(SRC)
+	@gnu@xgettext -k_ -d mpcotool -o locales/mpcotool.pot \
+		--from-code=UTF-8 $(SRC)
 
 locales/$(DE)mpcotool.po: locales/mpcotool.pot
 	test -d locales/$(DE) || mkdir -p locales/$(DE)
 	test -f locales/$(DE)mpcotool.po || \
-		msginit -l de -o locales/$(DE)mpcotool.po -i locales/mpcotool.pot \
-		--no-translator
+		msginit -l de -o locales/$(DE)mpcotool.po \
+		-i locales/mpcotool.pot --no-translator
 	msgmerge -U locales/$(DE)mpcotool.po locales/mpcotool.pot
 	vim -p locales/$(DE)mpcotool.po
 	touch locales/$(DE)mpcotool.po
@@ -240,8 +251,8 @@ locales/$(DE)mpcotool.mo: locales/$(DE)mpcotool.po locales/mpcotool.pot
 locales/$(ES)mpcotool.po: locales/mpcotool.pot
 	test -d locales/$(ES) || mkdir -p locales/$(ES)
 	test -f locales/$(ES)mpcotool.po || \
-		msginit -l es -o locales/$(ES)mpcotool.po -i locales/mpcotool.pot \
-		--no-translator
+		msginit -l es -o locales/$(ES)mpcotool.po \
+		-i locales/mpcotool.pot --no-translator
 	msgmerge -U locales/$(ES)mpcotool.po locales/mpcotool.pot
 	vim -p locales/$(ES)mpcotool.po
 	touch locales/$(ES)mpcotool.po
@@ -252,8 +263,8 @@ locales/$(ES)mpcotool.mo: locales/$(ES)mpcotool.po locales/mpcotool.pot
 locales/$(FR)mpcotool.po: locales/mpcotool.pot
 	test -d locales/$(FR) || mkdir -p locales/$(FR)
 	test -f locales/$(FR)mpcotool.po || \
-		msginit -l fr -o locales/$(FR)mpcotool.po -i locales/mpcotool.pot \
-		--no-translator
+		msginit -l fr -o locales/$(FR)mpcotool.po \
+		-i locales/mpcotool.pot --no-translator
 	msgmerge -U locales/$(FR)mpcotool.po locales/mpcotool.pot
 	vim -p locales/$(FR)mpcotool.po
 	touch locales/$(FR)mpcotool.po
@@ -262,46 +273,46 @@ locales/$(FR)mpcotool.mo: locales/$(FR)mpcotool.po locales/mpcotool.pot
 	@gnu@msgfmt -c -v -o locales/$(FR)mpcotool.mo locales/$(FR)mpcotool.po
 
 $(T1)simulator@EXE@: $(T1)simulator.c $(T1)Makefile
-	cd $(T1); make
+	cd $(T1); @MAKE@
 
 $(T1)evaluator@EXE@: $(T1)evaluator.c $(T1)Makefile
-	cd $(T1); make
+	cd $(T1); @MAKE@
 
 $(T2)simulator@EXE@: $(T2)simulator.c $(T2)Makefile
-	cd $(T2); make
+	cd $(T2); @MAKE@
 
 $(T2)evaluator@EXE@: $(T2)evaluator.c $(T2)Makefile
-	cd $(T2); make
+	cd $(T2); @MAKE@
 
 $(T3)simulator@EXE@: $(T3)simulator.c $(T3)Makefile
-	cd $(T3); make
+	cd $(T3); @MAKE@
 
 $(T3)evaluator@EXE@: $(T3)evaluator.c $(T3)Makefile
-	cd $(T3); make
+	cd $(T3); @MAKE@
 
 $(T4)simulator@EXE@: $(T4)simulator.c $(T4)Makefile
-	cd $(T4); make
+	cd $(T4); @MAKE@
 
 $(T5)simulator@EXE@: $(T5)simulator.c $(T5)Makefile
-	cd $(T5); make
+	cd $(T5); @MAKE@
 
 $(ACKLEY)Ackley@EXE@: $(ACKLEY)Ackley.c $(ACKLEY)Makefile
-	cd $(ACKLEY); make
+	cd $(ACKLEY); @MAKE@
 
 $(SPHERE)Sphere@EXE@: $(SPHERE)Sphere.c $(SPHERE)Makefile
-	cd $(SPHERE); make
+	cd $(SPHERE); @MAKE@
 
 $(BOOTH)Booth@EXE@: $(BOOTH)Booth.c $(BOOTH)Makefile
-	cd $(BOOTH); make
+	cd $(BOOTH); @MAKE@
 
 $(ROSENBROCK)Rosenbrock@EXE@: $(ROSENBROCK)Rosenbrock.c $(ROSENBROCK)Makefile
-	cd $(ROSENBROCK); make
+	cd $(ROSENBROCK); @MAKE@
 
 $(EASOM)Easom@EXE@: $(EASOM)Easom.c $(EASOM)Makefile
-	cd $(EASOM); make
+	cd $(EASOM); @MAKE@
 
 $(BEALE)Beale@EXE@: $(BEALE)Beale.c $(BEALE)Makefile
-	cd $(BEALE); make
+	cd $(BEALE); @MAKE@
 
 @ICON@: mpcotool.rc mpcotool.ico
 	@WINDRES@ mpcotool.rc -o @ICON@
@@ -319,7 +330,7 @@ $(M2): $(MDIR)manual-de-usuario.tex $(MDIR)bib.bib \
 
 $(MDIR)reference-manual.pdf: $(SRC) README.md Doxyfile
 	doxygen
-	cd latex; @SED@ -i 's/∞//g' *.tex; make; \
+	cd latex; @SED@ -i 's/∞//g' *.tex; @MAKE@; \
 		mv refman.pdf ../$(MDIR)reference-manual.pdf
 
 BIN = @PREFIX@/bin/
@@ -392,7 +403,8 @@ windist: mpcotool.exe $(DLL) $(MO)
 		@WIN@/share/locale/{de,en_GB,es,fr}/LC_MESSAGES \
 		@WIN@/share/glib-2.0/schemas @WIN@/$(GDKPIXBUF)loaders @WIN@/src
 	cp *.exe *.dll $(DLL) @WIN@/bin
-	cd ..; cp --parents tests/*/*{.exe,.exp,.tmp,win.xml} @PACKAGE_VERSION@/@WIN@
+	cd ..; cp --parents tests/*/*{.exe,.exp,.tmp,win.xml} \
+		@PACKAGE_VERSION@/@WIN@
 	cd ..; cp --parents manuals/*.pdf @PACKAGE_VERSION@/@WIN@
 	cp @PREFIX@/$(GDKPIXBUF)loaders.cache @WIN@/$(GDKPIXBUF)
 	cp @PREFIX@/$(GDKPIXBUF)loaders/*.dll @WIN@/$(GDKPIXBUF)loaders
@@ -409,12 +421,12 @@ windist: mpcotool.exe $(DLL) $(MO)
 	mv ../mpcotool-check-errors.zip @WIN@/src
 	cd ..; zip mpcotool-tests-@WIN@ $(TT1)*.exe $(TT1)*.c $(TT1)*.in \
 		$(TT1)*.exp $(TT1)*.tmp $(TT1)test*.xml $(TT1)test*.json \
-		$(TT2)*.exe $(TT2)*.dll $(TT2)*.c $(TT2)*.in $(TT2)*.exp $(TT2)*.tmp \
-			$(TT2)test*.xml \
-		$(TT3)*.exe $(TT3)*.dll $(TT3)*.c $(TT3)*.in $(TT3)*.exp $(TT3)*.tmp \
-			$(TT3)test*.xml \
-		$(TT4)*.exe $(TT4)*.dll $(TT4)*.c $(TT4)*.in $(TT4)*.exp $(TT4)*.tmp \
-			$(TT4)test*.xml \
+		$(TT2)*.exe $(TT2)*.dll $(TT2)*.c $(TT2)*.in $(TT2)*.exp \
+		$(TT2)*.tmp $(TT2)test*.xml \
+		$(TT3)*.exe $(TT3)*.dll $(TT3)*.c $(TT3)*.in $(TT3)*.exp \
+		$(TT3)*.tmp $(TT3)test*.xml \
+		$(TT4)*.exe $(TT4)*.dll $(TT4)*.c $(TT4)*.in $(TT4)*.exp \
+		$(TT4)*.tmp $(TT4)test*.xml \
 		$(TT5)*.exe $(TT5)*.c $(TT5)*.in $(TT5)*.exp $(TT5)*.tmp \
 			$(TT5)test*.xml \
 		$(TACKLEY)*.exe $(TACKLEY)*.c $(TACKLEY)*.in $(TACKLEY)*.tmp \
@@ -425,12 +437,12 @@ windist: mpcotool.exe $(DLL) $(MO)
 			$(TROSENBROCK)*.tmp \
 		$(TSPHERE)*.exe $(TSPHERE)*.c $(TSPHERE)*.in $(TSPHERE)*.tmp
 	mv ../mpcotool-tests-@WIN@.zip @WIN@/src
-	zip mpcotool-sources-@PACKAGE_VERSION@.zip *.c *.h *.in *.ac *.ico *.rc \
-		Doxyfile
+	zip mpcotool-sources-@PACKAGE_VERSION@.zip *.c *.h *.in *.ac *.ico \
+		*.rc Doxyfile
 	mv mpcotool-sources-@PACKAGE_VERSION@.zip @WIN@/src
 	zip genetic-sources-2.2.2.zip genetic/*.c genetic/*.h
 	mv genetic-sources-2.2.2.zip @WIN@/src
 	zip @WIN@/src/mpcotool-manuals ../manuals/*.pdf
-	zip -r @WIN@/src/mpcotool-binaries-@WIN@-@PACKAGE_VERSION@.zip @WIN@/bin \
-		@WIN@/lib @WIN@/share
+	zip -r @WIN@/src/mpcotool-binaries-@WIN@-@PACKAGE_VERSION@.zip \
+		@WIN@/bin @WIN@/lib @WIN@/share
 	cd @WIN@/src; perl ../../fetch.pl $(WINLIBS)

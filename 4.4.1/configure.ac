@@ -8,7 +8,7 @@ AM_INIT_AUTOMAKE
 AC_MSG_NOTICE([Build: $build])
 AC_MSG_NOTICE([Host: $host])
 win=0
-openbsd=0
+native=1
 if test $host = "x86_64-w64-mingw32"; then
 	AC_MSG_NOTICE([Microsoft Windows 64 bits])
 	AC_SUBST(PREFIX, "/mingw64")
@@ -37,7 +37,7 @@ elif test `uname -s` = "OpenBSD"; then
 	AC_MSG_NOTICE([OpenBSD])
 	AC_SUBST(PREFIX, [/usr/local])
 	AC_SUBST(SED, [gsed])
-	openbsd=1
+	native=0
 elif test `uname -s` = "DragonFly"; then
 	AC_MSG_NOTICE([DragonFly BSD])
 	AC_SUBST(PREFIX, [/usr/local])
@@ -48,6 +48,9 @@ elif test `uname -s` = "SunOS"; then
 else
 	AC_SUBST(PREFIX, [/usr])
 	AC_SUBST(SED, [sed])
+fi
+if test $win = 1; then
+	native=0
 fi
 AC_MSG_NOTICE([prefix=$PREFIX])
 
@@ -95,20 +98,21 @@ fi
 compiler=$CC
 
 # Checking -march=native compiler flag
-if test [[$win = 0] -a [$openbsd = 0]]; then
+arch=0
+if test $native = 1; then
 	AC_ARG_WITH([native], AS_HELP_STRING([--with-native],
 		[Build using -march=native compiler flag]))
 	if test "x$with_native" = "xyes"; then
 		CC="$CC -march=native"
-		AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[]])], [arch=1], [arch=0])
+		AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[]])], [arch=1], [])
 		CC=$compiler
-		if test $arch = 0; then
-			AC_MSG_NOTICE([checking for -march=native... no])
-		else
-			AC_MSG_NOTICE([checking for -march=native... yes])
-			AC_SUBST(ARCH, "-march=native")
-		fi
 	fi
+fi
+if test $arch = 0; then
+	AC_MSG_NOTICE([checking for -march=native... no])
+else
+	AC_MSG_NOTICE([checking for -march=native... yes])
+	AC_SUBST(ARCH, "-march=native")
 fi
 
 # Checking -flto compiler flag
@@ -213,12 +217,6 @@ if test -x "$libjbbin"; then
 else
 	AC_MSG_ERROR([$libjbbin: not installed])
 fi
-libjbw=libjbw-$precision$so
-if test -x "$libjbw"; then
-	AC_MSG_NOTICE([$libjbw: OK])
-else
-	AC_MSG_ERROR([$libjbw: not installed])
-fi
 AC_SEARCH_LIBS([sqrt], [m])
 PKG_CHECK_MODULES([GSL], [gsl])
 PKG_CHECK_MODULES([XML], [libxml-2.0])
@@ -249,8 +247,16 @@ elif test $gtk3 = 1; then
 	AC_SUBST(GTK4, "-DGTK4=0")
 fi
 if test $gtk = 1; then
+	libjbwin=libjbwin-$precision$so
+	if test -x "$libjbwin"; then
+		AC_MSG_NOTICE([$libjbwin: OK])
+	else
+		AC_MSG_ERROR([$libjbwin: not installed])
+	fi
 	PKG_CHECK_MODULES([FREETYPE], [freetype2])
-	AC_SUBST(MPCOTOOL, "mpcotool")
+	AC_SUBST(MPCOTOOL, 1)
+else
+	AC_SUBST(MPCOTOOL, 0)
 fi
 
 # Checking static library
