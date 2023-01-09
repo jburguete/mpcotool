@@ -29,6 +29,10 @@ variable_pgo = $(obj)variable.pgo
 experiment_pgo = $(obj)experiment.pgo
 mpcotoolbin_pgo = $(obj)mpcotoolbin.pgo
 libgenetic = $(bin)libgenetic@SO@
+libjb = $(bin)libjb@SUFFIX@@SO@ $(bin)libjbm@SUFFIX@@SO@ \
+	$(bin)libjbjson@SUFFIX@@SO@ $(bin)libjbxml@SUFFIX@@SO@
+libjbbin = $(libjb) $(bin)libjbbin@SUFFIX@@SO@
+libjbwin = $(libjb) $(bin)libjbwin@SUFFIX@@SO@
 libmpcotoolpgo = $(bin)libmpcotoolpgo@SO@
 libmpcotool = $(bin)libmpcotool@SO@
 SRC = tools.c experiment.c variable.c input.c optimize.c interface.c \
@@ -38,7 +42,9 @@ OBJLIB = $(mpcotoolbin_o) $(experiment_o) $(variable_o) $(input_o) \
 OBJ = $(experiment_o) $(variable_o) $(input_o) $(optimize_o)
 OBJBIN = $(mpcotoolbin_o) $(toolsbin_o) $(OBJ)
 OBJGUI = $(mpcotool_o) $(interface_o) $(tools_o) $(OBJ) @ICON@
-DEP = Makefile
+DEP = Makefile $(libgenetic)
+DEPBIN = $(DEP) $(libjbbin)
+DEPWIN = $(DEP) $(libjbwin)
 DE = de/LC_MESSAGES/
 ES = es/LC_MESSAGES/
 FR = fr/LC_MESSAGES/
@@ -100,17 +106,17 @@ endif
 		$(T1)test-mc@WIN@.xml $(T1)test-mc@WIN@.json $(T1)test-sw@WIN@.xml \
 		$(T1)test-os@WIN@.xml $(T1)test-ga@WIN@.xml
 else
-	TOOLSBINDEP = tools.c tools.h config.h $(DEP)
-	OPTIMIZEDEP = experiment.c experiment.h tools.h config.h $(DEP)
-	INPUTDEP = variable.c variable.h tools.h config.h $(DEP)
+	TOOLSBINDEP = tools.c tools.h config.h $(DEPBIN)
+	OPTIMIZEDEP = experiment.c experiment.h tools.h config.h $(DEPBIN)
+	INPUTDEP = variable.c variable.h tools.h config.h $(DEPBIN)
 	VARIABLEDEP = input.c input.h variable.h experiment.h tools.h config.h \
-		$(DEP)
+		$(DEPBIN)
 	EXPERIMENTDEP = optimize.c optimize.h input.h variable.h experiment.h \
-		tools.h config.h $(DEP)
+		tools.h config.h $(DEPBIN)
 	MPCOTOOLBINDEP = mpcotool.c mpcotool.h optimize.h input.h variable.h \
-		experiment.h tools.h config.h $(DEP)
-	MAINBINDEP = main.c mpcotool.h optimize.h input.h variable.h experiment.h \
-		tools.h config.h $(DEP)
+		experiment.h tools.h config.h $(DEPBIN)
+	MAINBINDEP = main.c mpcotool.h optimize.h input.h variable.h \
+		experiment.h tools.h config.h $(DEPBIN)
 endif
 CGEN = -c -fPIC -DJBW=1 $(CFLAGS) $(PGOGEN)
 CUSE = -c -fPIC -DJBW=1 $(CFLAGS) $(PGOUSE)
@@ -131,24 +137,24 @@ manuals: $(MANUALS)
 
 tests: $(TESTS)
 
-$(toolsbin_pgo): tools.c tools.h config.h $(DEP)
+$(toolsbin_pgo): tools.c tools.h config.h $(DEPBIN)
 	$(CC) $(CGEN) tools.c -o $(toolsbin_pgo)
 
-$(experiment_pgo): experiment.c experiment.h tools.h config.h $(DEP)
+$(experiment_pgo): experiment.c experiment.h tools.h config.h $(DEPBIN)
 	$(CC) $(CGEN) experiment.c -o $(experiment_pgo)
 
-$(variable_pgo): variable.c variable.h tools.h config.h $(DEP)
+$(variable_pgo): variable.c variable.h tools.h config.h $(DEPBIN)
 	$(CC) $(CGEN) variable.c -o $(variable_pgo)
 
-$(input_pgo): input.c input.h variable.h experiment.h tools.h config.h $(DEP)
+$(input_pgo): input.c input.h variable.h experiment.h tools.h config.h $(DEPBIN)
 	$(CC) $(CGEN) input.c -o $(input_pgo)
 
 $(optimize_pgo): optimize.c optimize.h input.h variable.h experiment.h tools.h \
-	config.h $(DEP)
+	config.h $(DEPBIN)
 	$(CC) $(CGEN) optimize.c -o $(optimize_pgo)
 
 $(mpcotoolbin_pgo): mpcotool.c mpcotool.h optimize.h input.h variable.h \
-	experiment.h tools.h config.h $(DEP)
+	experiment.h tools.h config.h $(DEPBIN)
 	$(CC) $(CGEN) mpcotool.c -o $(mpcotoolbin_pgo)
 
 $(libmpcotoolpgo): $(PGOOBJLIB)
@@ -156,7 +162,7 @@ $(libmpcotoolpgo): $(PGOOBJLIB)
 		-Wl,-rpath=. -lgenetic $(LDFLAGS)
 
 $(bin)mainbin.pgo: main.c mpcotool.h optimize.h input.h variable.h \
-	experiment.h tools.h config.h $(DEP)
+	experiment.h tools.h config.h $(DEPBIN)
 	$(CC) -c $(CFLAGS) $(PGOGEN) main.c -o $(bin)mainbin.pgo
 
 $(bin)mpcotoolbinpgo@EXE@: $(bin)mainbin.pgo $(libmpcotoolpgo) $(libgenetic) \
@@ -201,22 +207,22 @@ $(bin)mpcotoolbin@EXE@: $(bin)mainbin.o $(libmpcotool)
 		-L$(bin) -Wl,-rpath=. -lmpcotool -lgenetic $(JBBINLIBS)
 
 
-$(tools_o): tools.c tools.h config.h $(DEP)
+$(tools_o): tools.c tools.h config.h $(DEPWIN)
 	$(CC) -c $(CFLAGS) @FREETYPE_CFLAGS@ @GTK_CFLAGS@ -DHAVE_GTK=1 -DJBW=2 \
 		tools.c -o $(tools_o)
 
 $(interface_o): interface.c interface.h optimize.h input.h variable.h \
-	experiment.h tools.h config.h $(DEP)
+	experiment.h tools.h config.h $(DEPWIN)
 	$(CC) -c $(CFLAGS) @FREETYPE_CFLAGS@ @GTK_CFLAGS@ -DHAVE_GTK=1 -DJBW=2 \
 		interface.c -o $(interface_o)
 
 $(mpcotool_o): mpcotool.c mpcotool.h interface.h optimize.h input.h variable.h \
-	experiment.h tools.h config.h $(DEP)
+	experiment.h tools.h config.h $(DEPWIN)
 	$(CC) -c $(CFLAGS) @FREETYPE_CFLAGS@ @GTK_CFLAGS@ -DHAVE_GTK=1 -DJBW=2 \
 		mpcotool.c -o $(mpcotool_o)
 
 $(bin)main.o: main.c mpcotool.h optimize.h input.h variable.h experiment.h \
-	tools.h config.h $(DEP)
+	tools.h config.h $(DEPWIN)
 	$(CC) -c $(CFLAGS) @FREETYPE_CFLAGS@ @GTK_CFLAGS@ -DHAVE_GTK=1 -DJBW=2 \
 		main.c -o $(bin)main.o
 
