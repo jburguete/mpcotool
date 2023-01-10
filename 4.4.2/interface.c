@@ -1121,7 +1121,7 @@ window_about ()
      "Javier Burguete Tolosa <jburguete@eead.csic.es> "
      "(english, french and spanish)\n"
      "Uğur Çayoğlu (german)",
-     "version", "4.4.1",
+     "version", "4.4.2",
      "copyright", "Copyright 2012-2023 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/mpcotool",
@@ -1962,6 +1962,7 @@ window_read (char *filename)    ///< File name.
   unsigned int i;
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_read: start\n");
+  fprintf (stderr, "window_read: file name=%s\n", filename);
 #endif
 
   // Reading new input file
@@ -2062,6 +2063,7 @@ dialog_open_close (GtkFileChooserDialog * dlg,
                    int response_id)     ///< Response identifier.
 {
   char *buffer, *directory, *name;
+  GFile *file;
 
 #if DEBUG_INTERFACE
   fprintf (stderr, "dialog_open_close: start\n");
@@ -2076,7 +2078,11 @@ dialog_open_close (GtkFileChooserDialog * dlg,
     {
 
       // Traying to open the input file
-      buffer = gtk_file_chooser_get_current_name (GTK_FILE_CHOOSER (dlg));
+      file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dlg));
+      buffer = g_file_get_path (file);
+#if DEBUG_INTERFACE
+      fprintf (stderr, "dialog_open_close: file name=%s\n", buffer);
+#endif
       if (!window_read (buffer))
         {
 #if DEBUG_INTERFACE
@@ -2098,6 +2104,7 @@ dialog_open_close (GtkFileChooserDialog * dlg,
             }
         }
       g_free (buffer);
+      g_object_unref (file);
     }
 
   // Freeing and closing
@@ -2309,7 +2316,7 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
 #endif
 
   // Creating the window
-  window->window = main_window
+  window->window = window_parent = main_window
     = (GtkWindow *) gtk_application_window_new (application);
 
   // Finish when closing the window

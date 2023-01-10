@@ -48,25 +48,24 @@ OF SUCH DAMAGE.
 #define ERROR_TYPE GTK_MESSAGE_ERROR
 #define INFO_TYPE GTK_MESSAGE_INFO
 extern GtkWindow *main_window;
+extern GtkWindow *window_parent;
 #else
 #define ERROR_TYPE 0
 #define INFO_TYPE 0
 #endif
 
+// Public functions
+
 extern char *error_message;
 extern void (*show_pending) ();
 
-// Public functions
-
 #if HAVE_GTK
 
-#ifndef G_APPLICATION_DEFAULT_FLAGS
-#define G_APPLICATION_DEFAULT_FLAGS G_APPLICATION_FLAGS_NONE
-#endif
 
 void process_pending ();
 
 #if !GTK4
+#define G_APPLICATION_DEFAULT_FLAGS G_APPLICATION_FLAGS_NONE
 unsigned int gtk_array_get_active (GtkRadioButton * array[], unsigned int n);
 #else
 unsigned int gtk_array_get_active (GtkCheckButton * array[], unsigned int n);
