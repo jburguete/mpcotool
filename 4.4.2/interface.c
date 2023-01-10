@@ -1077,14 +1077,10 @@ window_help ()
                               _("user-manual.pdf"), NULL);
   buffer = g_filename_to_uri (buffer2, NULL, NULL);
   g_free (buffer2);
-#if !GTK4
-#if GTK_MINOR_VERSION >= 22
-  gtk_show_uri_on_window (window->window, buffer, GDK_CURRENT_TIME, NULL);
-#else
-  gtk_show_uri (NULL, buffer, GDK_CURRENT_TIME, NULL);
-#endif
-#else
+#if GTK4
   gtk_show_uri (window->window, buffer, GDK_CURRENT_TIME);
+#else
+  gtk_show_uri_on_window (window->window, buffer, GDK_CURRENT_TIME, NULL);
 #endif
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_help: uri=%s\n", buffer);
