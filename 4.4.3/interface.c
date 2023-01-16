@@ -766,7 +766,7 @@ window_get_algorithm ()
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_get_algorithm: start\n");
 #endif
-  i = gtk_array_get_active (window->button_algorithm, NALGORITHMS);
+  i = jbw_array_buttons_get_active (window->button_algorithm, NALGORITHMS);
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_get_algorithm: %u\n", i);
   fprintf (stderr, "window_get_algorithm: end\n");
@@ -786,7 +786,7 @@ window_get_climbing ()
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_get_climbing: start\n");
 #endif
-  i = gtk_array_get_active (window->button_climbing, NCLIMBINGS);
+  i = jbw_array_buttons_get_active (window->button_climbing, NCLIMBINGS);
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_get_climbing: %u\n", i);
   fprintf (stderr, "window_get_climbing: end\n");
@@ -806,7 +806,7 @@ window_get_norm ()
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_get_norm: start\n");
 #endif
-  i = gtk_array_get_active (window->button_norm, NNORMS);
+  i = jbw_array_buttons_get_active (window->button_norm, NNORMS);
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_get_norm: %u\n", i);
   fprintf (stderr, "window_get_norm: end\n");
@@ -1018,7 +1018,6 @@ window_save ()
 static void
 window_run ()
 {
-  GMainContext *context;
   char *msg, *msg2, buffer[64], buffer2[64];
   unsigned int i;
 #if DEBUG_INTERFACE
@@ -1026,9 +1025,7 @@ window_run ()
 #endif
   window_save ();
   running_new ();
-  context = g_main_context_default ();
-  while (g_main_context_pending (context))
-    g_main_context_iteration (context, 0);
+  jbw_process_pending ();
   optimize_open ();
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_run: closing running dialog\n");
@@ -1117,7 +1114,7 @@ window_about ()
      "Javier Burguete Tolosa <jburguete@eead.csic.es> "
      "(english, french and spanish)\n"
      "Uğur Çayoğlu (german)",
-     "version", "4.4.2",
+     "version", "4.4.3",
      "copyright", "Copyright 2012-2023 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/mpcotool",

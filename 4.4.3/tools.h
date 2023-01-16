@@ -59,18 +59,4 @@ extern GtkWindow *window_parent;
 extern char *error_message;
 extern void (*show_pending) ();
 
-#if HAVE_GTK
-
-
-void process_pending ();
-
-#if !GTK4
-#define G_APPLICATION_DEFAULT_FLAGS G_APPLICATION_FLAGS_NONE
-unsigned int gtk_array_get_active (GtkRadioButton * array[], unsigned int n);
-#else
-unsigned int gtk_array_get_active (GtkCheckButton * array[], unsigned int n);
-#endif
-
-#endif
-
 #endif
