@@ -59,39 +59,3 @@ GtkWindow *main_window;         ///< Main GtkWindow.
 char *error_message;            ///< Error message.
 void (*show_pending) () = NULL;
 ///< Pointer to the function to show pending events.
-
-#if HAVE_GTK
-
-/**
- * Function to process events on long computation.
- */
-void
-process_pending ()
-{
-  GMainContext *context = g_main_context_default ();
-  while (g_main_context_pending (context))
-    g_main_context_iteration (context, 0);
-}
-
-/**
- * Function to get the active GtkRadioButton.
- *
- * \return Active GtkRadioButton.
- */
-unsigned int
-gtk_array_get_active (
-#if !GTK4
-                       GtkRadioButton * array[],        ///< Array of GtkRadioButtons.
-#else
-                       GtkCheckButton * array[],        ///< Array of GtkCheckButtons.
-#endif
-                       unsigned int n)  ///< Number of GtkRadioButtons.
-{
-  unsigned int i;
-  for (i = 0; i < n; ++i)
-    if (gtk_check_button_get_active (array[i]))
-      break;
-  return i;
-}
-
-#endif

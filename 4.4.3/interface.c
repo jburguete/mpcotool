@@ -766,7 +766,7 @@ window_get_algorithm ()
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_get_algorithm: start\n");
 #endif
-  i = gtk_array_get_active (window->button_algorithm, NALGORITHMS);
+  i = jbw_array_buttons_get_active (window->button_algorithm, NALGORITHMS);
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_get_algorithm: %u\n", i);
   fprintf (stderr, "window_get_algorithm: end\n");
@@ -786,7 +786,7 @@ window_get_climbing ()
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_get_climbing: start\n");
 #endif
-  i = gtk_array_get_active (window->button_climbing, NCLIMBINGS);
+  i = jbw_array_buttons_get_active (window->button_climbing, NCLIMBINGS);
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_get_climbing: %u\n", i);
   fprintf (stderr, "window_get_climbing: end\n");
@@ -806,7 +806,7 @@ window_get_norm ()
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_get_norm: start\n");
 #endif
-  i = gtk_array_get_active (window->button_norm, NNORMS);
+  i = jbw_array_buttons_get_active (window->button_norm, NNORMS);
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_get_norm: %u\n", i);
   fprintf (stderr, "window_get_norm: end\n");
@@ -1018,7 +1018,6 @@ window_save ()
 static void
 window_run ()
 {
-  GMainContext *context;
   char *msg, *msg2, buffer[64], buffer2[64];
   unsigned int i;
 #if DEBUG_INTERFACE
@@ -1026,9 +1025,7 @@ window_run ()
 #endif
   window_save ();
   running_new ();
-  context = g_main_context_default ();
-  while (g_main_context_pending (context))
-    g_main_context_iteration (context, 0);
+  jbw_process_pending ();
   optimize_open ();
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_run: closing running dialog\n");
@@ -1077,14 +1074,10 @@ window_help ()
                               _("user-manual.pdf"), NULL);
   buffer = g_filename_to_uri (buffer2, NULL, NULL);
   g_free (buffer2);
-#if !GTK4
-#if GTK_MINOR_VERSION >= 22
-  gtk_show_uri_on_window (window->window, buffer, GDK_CURRENT_TIME, NULL);
-#else
-  gtk_show_uri (NULL, buffer, GDK_CURRENT_TIME, NULL);
-#endif
-#else
+#if GTK4
   gtk_show_uri (window->window, buffer, GDK_CURRENT_TIME);
+#else
+  gtk_show_uri_on_window (window->window, buffer, GDK_CURRENT_TIME, NULL);
 #endif
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_help: uri=%s\n", buffer);
@@ -1121,7 +1114,7 @@ window_about ()
      "Javier Burguete Tolosa <jburguete@eead.csic.es> "
      "(english, french and spanish)\n"
      "Uğur Çayoğlu (german)",
-     "version", "4.4.1",
+     "version", "4.4.3",
      "copyright", "Copyright 2012-2023 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/mpcotool",
@@ -1962,6 +1955,7 @@ window_read (char *filename)    ///< File name.
   unsigned int i;
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_read: start\n");
+  fprintf (stderr, "window_read: file name=%s\n", filename);
 #endif
 
   // Reading new input file
@@ -2062,6 +2056,7 @@ dialog_open_close (GtkFileChooserDialog * dlg,
                    int response_id)     ///< Response identifier.
 {
   char *buffer, *directory, *name;
+  GFile *file;
 
 #if DEBUG_INTERFACE
   fprintf (stderr, "dialog_open_close: start\n");
@@ -2076,7 +2071,11 @@ dialog_open_close (GtkFileChooserDialog * dlg,
     {
 
       // Traying to open the input file
-      buffer = gtk_file_chooser_get_current_name (GTK_FILE_CHOOSER (dlg));
+      file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dlg));
+      buffer = g_file_get_path (file);
+#if DEBUG_INTERFACE
+      fprintf (stderr, "dialog_open_close: file name=%s\n", buffer);
+#endif
       if (!window_read (buffer))
         {
 #if DEBUG_INTERFACE
@@ -2098,6 +2097,7 @@ dialog_open_close (GtkFileChooserDialog * dlg,
             }
         }
       g_free (buffer);
+      g_object_unref (file);
     }
 
   // Freeing and closing
@@ -2309,7 +2309,7 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
 #endif
 
   // Creating the window
-  window->window = main_window
+  window->window = window_parent = main_window
     = (GtkWindow *) gtk_application_window_new (application);
 
   // Finish when closing the window

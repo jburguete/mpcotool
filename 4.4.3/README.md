@@ -1,13 +1,15 @@
 MPCOTool
 ========
 
+:gb:[english](README.md) :es:[español](README.es.md)
+
 The Multi-Purposes Calibration and Optimization Tool. A software to perform
 calibrations or optimizations of empirical parameters.
 
 VERSIONS
 --------
 
-* 4.4.1: Stable and recommended version.
+* 4.4.3: Stable and recommended version.
 
 AUTHORS
 -------
@@ -59,15 +61,15 @@ FILES
 -----
 
 The source code has to have the following files:
-* 4.4.1/configure.ac: configure generator.
-* 4.4.1/Makefile.in: Makefile generator.
-* 4.4.1/config.h.in: config header generator.
-* 4.4.1/\*.c: source code files.
-* 4.4.1/\*.h: header code files.
-* 4.4.1/mpcotool.ico: icon file.
-* 4.4.1/build.sh: shell script to build all.
-* 4.4.1/logo.png: logo figure.
-* 4.4.1/Doxyfile: configuration file to generate doxygen documentation.
+* 4.4.3/configure.ac: configure generator.
+* 4.4.3/Makefile.in: Makefile generator.
+* 4.4.3/config.h.in: config header generator.
+* 4.4.3/\*.c: source code files.
+* 4.4.3/\*.h: header code files.
+* 4.4.3/mpcotool.ico: icon file.
+* 4.4.3/build.sh: shell script to build all.
+* 4.4.3/logo.png: logo figure.
+* 4.4.3/Doxyfile: configuration file to generate doxygen documentation.
 * TODO: tasks to do.
 * README.md: this file.
 * license.md: license file.
@@ -82,10 +84,6 @@ The source code has to have the following files:
 BUILDING INSTRUCTIONS
 ---------------------
 
-On Fedora 29, in order to use OpenMPI compilation, do in a terminal (in 64 bits
-version):
-> $ export PATH=$PATH:/usr/lib64/openmpi/bin
-
 On Microsoft Windows systems you have to install
 [MSYS2](http://sourceforge.net/projects/msys2) and the required
 libraries and utilities. You can follow detailed instructions in
@@ -93,12 +91,11 @@ libraries and utilities. You can follow detailed instructions in
 Optional Windows binary package can be built doing in the terminal:
 > $ make windist
 
-
-On NetBSD 8.0, to compile with last GCC version you have to do first on the
+On NetBSD 9.3, to compile with last GCC version you have to do first on the
 building terminal:
 > $ export PATH=/usr/pkg/gcc8/bin:$PATH"
 
-On OpenBSD 6.4 you have to do first on the building terminal to select
+On OpenBSD 7.2 you have to do first on the building terminal to select
 adequate versions and deactivate OpenMPI (does not link) building with CLang:
 > $ export AUTOCONF\_VERSION=2.69 AUTOMAKE\_VERSION=1.16 CC=clang
 
@@ -112,21 +109,22 @@ then does not apply this step):
 > $ export PATH=$PATH:/usr/lib64/mpi/gcc/openmpi/bin
 
 This software has been built and tested in the following operative systems:
-* Debian 9 (Linux, kFreeBSD and Hurd)
-* DragonFly BSD 5.2
-* Dyson Illumos
-* Fedora Linux 29
-* FreeBSD 11.2
-* Linux Mint DE 3
+* Arch Linux
+* Debian Linux 11
+* Devuan Linux 4
+* DragonFly BSD 6.4
+* Fedora Linux 37
+* FreeBSD 13.1
+* Gentoo Linux
+* Linux Mint DE 5
+* MacOS Catalina + Homebrew
 * Manjaro Linux
-* Microsoft Windows 7
 * Microsoft Windows 10
-* NetBSD 8.0 (from source with modular xorg)
-* OpenBSD 6.4
+* NetBSD 9.3
+* OpenBSD 7.2
 * OpenInidiana Hipster
-* OpenSUSE Linux Leap 15
-* Ubuntu Mate Linux 18.04
-* Xubuntu Linux 18.10
+* OpenSUSE Linux Leap 15.4
+* Ubuntu Linux 22.10
 
 Probably, it can be built in other systems, distributions, or versions but it
 has not been tested.
@@ -136,7 +134,7 @@ a terminal:
 > $ git clone https://github.com/jburguete/genetic.git
 
 2. Build the genetic library:
-> $ cd genetic/3.0.0
+> $ cd genetic/3.0.1
 >
 > $ sh build.sh
 
@@ -146,9 +144,9 @@ a terminal:
 > $ git clone https://github.com/jburguete/mpcotool.git
 
 4. Link the latest genetic version to genetic:
-> $ cd mpcotool/4.4.1
+> $ cd mpcotool/4.4.3
 >
-> $ ln -s ../../genetic/3.0.0 genetic
+> $ ln -s ../../genetic/3.0.1 genetic
 > 
 > $ ln -s genetic/libgenetic.so (or .dll in Windows systems)
 
@@ -209,27 +207,27 @@ MAKING TESTS INSTRUCTIONS
 In order to build the tests follow the next instructions:
 
 1. Link some tests that needs genetic library doing in a terminal (assuming that
-you are in the directory mpcotool/4.4.1):
+you are in the directory mpcotool/4.4.3):
 > $ cd ../tests/test2
 >
-> $ ln -s ../../../genetic/3.0.0 genetic
+> $ ln -s ../../../genetic/3.0.1 genetic
 >
 > $ ln -s genetic/libgenetic.so (or .dll on Windows systems)
 >
 > $ cd ../test3
 >
-> $ ln -s ../../../genetic/3.0.0 genetic
+> $ ln -s ../../../genetic/3.0.1 genetic
 >
 > $ ln -s genetic/libgenetic.so (or .dll on Windows systems)
 >
 > $ cd ../test4
 >
-> $ ln -s ../../../genetic/3.0.0 genetic
+> $ ln -s ../../../genetic/3.0.1 genetic
 >
 > $ ln -s genetic/libgenetic.so (or .dll on Windows systems)
 
 2. Build all tests doing in the same terminal:
-> $ cd ../../4.4.1
+> $ cd ../../4.4.3
 >
 > $ make tests
 

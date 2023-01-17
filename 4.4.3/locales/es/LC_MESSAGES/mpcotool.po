@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 4.4.1\n"
+"Project-Id-Version: 4.4.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-05 01:47+0100\n"
+"POT-Creation-Date: 2023-01-16 14:59+0100\n"
 "PO-Revision-Date: 2015-10-20 07:33+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -233,11 +233,11 @@ msgstr "Norma de error desconocida"
 msgid "Unable to parse the input file"
 msgstr "Imposible analizar el fichero de entrada"
 
-#: optimize.c:407 optimize.c:408 interface.c:1055
+#: optimize.c:407 optimize.c:408 interface.c:1052
 msgid "Best result"
 msgstr "Mejor resultado"
 
-#: optimize.c:1710 optimize.c:1712 interface.c:1051
+#: optimize.c:1710 optimize.c:1712 interface.c:1048
 msgid "Calculation time"
 msgstr "Tiempo de cálculo"
 
@@ -281,7 +281,7 @@ msgstr "Opciones"
 msgid "_OK"
 msgstr "_Aceptar"
 
-#: interface.c:715 interface.c:974 interface.c:1512 interface.c:1628
+#: interface.c:715 interface.c:974 interface.c:1505 interface.c:1621
 #: interface.c:2132 interface.c:2207 interface.c:2261
 msgid "_Cancel"
 msgstr "_Cancelar"
@@ -298,11 +298,11 @@ msgstr "Calculando"
 msgid "Save file"
 msgstr "Guardar fichero"
 
-#: interface.c:1077
+#: interface.c:1074
 msgid "user-manual.pdf"
 msgstr "manual-de-usuario.pdf"
 
-#: interface.c:1116
+#: interface.c:1109
 msgid ""
 "The Multi-Purposes Calibration and Optimization Tool.\n"
 "A software to perform calibrations or optimizations of empirical parameters"
@@ -311,15 +311,15 @@ msgstr ""
 "Un software para realizar calibraciones/optimizaciones de parámetros "
 "empíricos"
 
-#: interface.c:1509
+#: interface.c:1502
 msgid "Open experiment file"
 msgstr "Abrir fichero de experimento"
 
-#: interface.c:1514 interface.c:1630 interface.c:2208 interface.c:2262
+#: interface.c:1507 interface.c:1623 interface.c:2208 interface.c:2262
 msgid "_Open"
 msgstr "_Abrir"
 
-#: interface.c:1625
+#: interface.c:1618
 msgid "Open template file"
 msgstr "Abrir fichero de plantilla"
 

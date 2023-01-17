@@ -56,7 +56,11 @@ OF SUCH DAMAGE.
 #if HAVE_GTK
 #include <gio/gio.h>
 #include <gtk/gtk.h>
+#define JBW 2
+#else
+#define JBW 1
 #endif
+#include "jb/src/jb_win.h"
 #include "genetic/genetic.h"
 #include "tools.h"
 #include "experiment.h"
@@ -77,7 +81,7 @@ int
 main (int argn, char **argc)
 {
 #if HAVE_GTK
-  show_pending = process_pending;
+  show_pending = jbw_process_pending;
 #endif
   return mpcotool (argn, argc);
 }

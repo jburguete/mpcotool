@@ -1,5 +1,5 @@
 aclocal
 autoconf
 automake --add-missing
-./configure --with-pgo --with-mpi --with-gtk
+./configure --with-gtk=3
 make
