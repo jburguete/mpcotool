@@ -51,7 +51,14 @@ else
 fi
 if test $win = 1; then
 	native=0
+	so=.dll
+	AC_CHECK_TOOL(WINDRES, windres)
+	AC_SUBST(EXE, [.exe])
+	AC_SUBST(WIN, [-win])
+else
+	so=.so
 fi
+AC_SUBST(SO, [$so])
 AC_MSG_NOTICE([prefix=$PREFIX])
 
 # Checks for programs
@@ -69,19 +76,10 @@ fi
 if test $CC = "clang"; then
 	AC_CHECK_PROGS([LLVM_PROFDATA], [llvm-profdata llvm-profdata-15], 0)
 	if test $LLVM_PROFDATA = 0; then
-	      	AC_MSG_ERROR([No llvm-profdata])
+		AC_MSG_ERROR([No llvm-profdata])
 	fi
 	AC_MSG_NOTICE([llvm-profdata: $LLVM_PROFDATA])
 fi
-if test "x$win" = "x1"; then
-  so=.dll
-	AC_CHECK_TOOL(WINDRES, windres)
-	AC_SUBST(EXE, [.exe])
-	AC_SUBST(WIN, [-win])
-else
-  so=.so
-fi
-AC_SUBST(SO, [$so])
 
 # Checking MPI
 AC_ARG_WITH([mpi], AS_HELP_STRING([--with-mpi], [Build with MPI]))
