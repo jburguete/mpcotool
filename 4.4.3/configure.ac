@@ -257,15 +257,6 @@ else
 	AC_SUBST(MPCOTOOL, 0)
 fi
 
-# Checking static library
-AC_ARG_WITH([static],
-	AS_HELP_STRING([--with-static], [Build static library]))
-if test "x$with_static" = "xyes"; then
-	mk=Makefile-static.in
-else
-	mk=Makefile.in
-fi
-
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_INLINE
 AC_TYPE_SIZE_T
@@ -274,6 +265,7 @@ AC_TYPE_SIZE_T
 AC_CHECK_FUNCS([pow setlocale sqrt])
 
 # Final output
+mk=Makefile.in
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([Makefile:$mk ../tests/test1/Makefile ../tests/test2/Makefile
 	../tests/test3/Makefile ../tests/test4/Makefile ../tests/test5/Makefile
