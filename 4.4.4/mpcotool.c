@@ -88,7 +88,6 @@ mpcotool (int argn,             ///< Arguments number.
   };
 #if HAVE_GTK
   GtkApplication *application;
-  char *buffer;
 #endif
   int o, option_index;
 
@@ -151,15 +150,10 @@ mpcotool (int argn,             ///< Arguments number.
 #if HAVE_GTK
 
   // Setting local language and international floating point numbers notation
-  setlocale (LC_ALL, "");
-  setlocale (LC_NUMERIC, "C");
-  window->application_directory = g_get_current_dir ();
-  buffer = g_build_filename (window->application_directory, LOCALE_DIR, NULL);
-  bindtextdomain (PROGRAM_INTERFACE, buffer);
-  bind_textdomain_codeset (PROGRAM_INTERFACE, "UTF-8");
-  textdomain (PROGRAM_INTERFACE);
+  jb_set_locales (PROGRAM_INTERFACE, LOCALE_DIR, "", "C");
 
   // Initing GTK+
+  window->application_directory = g_get_current_dir ();
   gtk_disable_setlocale ();
   application = gtk_application_new ("es.csic.eead.auladei.sprinkler",
                                      G_APPLICATION_DEFAULT_FLAGS);
@@ -170,7 +164,6 @@ mpcotool (int argn,             ///< Arguments number.
 
   // Freeing memory
   input_free ();
-  g_free (buffer);
   gtk_window_destroy (window->window);
   g_object_unref (application);
   g_free (window->application_directory);

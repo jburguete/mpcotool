@@ -112,13 +112,11 @@ void
 experiment_error (Experiment * experiment,      ///< Experiment struct.
                   char *message)        ///< Error message.
 {
-  char buffer[64];
   if (!experiment->name)
-    snprintf (buffer, 64, "%s: %s", _("Experiment"), message);
+    error_message = g_strconcat (_("Experiment"), ": ", message, NULL);
   else
-    snprintf (buffer, 64, "%s %s: %s", _("Experiment"),
-              experiment->name, message);
-  error_message = g_strdup (buffer);
+    error_message = g_strconcat (_("Experiment"), " ", experiment->name, ": ",
+                                 message, NULL);
 }
 
 /**

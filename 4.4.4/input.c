@@ -121,9 +121,7 @@ input_free ()
 static void
 input_error (char *message)     ///< Error message.
 {
-  char buffer[64];
-  snprintf (buffer, 64, "%s: %s\n", _("Input"), message);
-  error_message = g_strdup (buffer);
+  error_message = g_strconcat (_("Input"), ": ", message, "\n", NULL);
 }
 
 /**

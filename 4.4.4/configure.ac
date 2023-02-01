@@ -1,6 +1,6 @@
 # Header
 AC_PREREQ([2.69])
-AC_INIT([mpcotool], [4.4.3], [https://github.com/jburguete/mpcotool])
+AC_INIT([mpcotool], [4.4.4], [https://github.com/jburguete/mpcotool])
 
 # Checks for operative systems
 AC_CANONICAL_TARGET
@@ -220,6 +220,8 @@ PKG_CHECK_MODULES([GSL], [gsl])
 PKG_CHECK_MODULES([XML], [libxml-2.0])
 PKG_CHECK_MODULES([GLIB], [glib-2.0])
 PKG_CHECK_MODULES([JSON], [json-glib-1.0])
+PKG_CHECK_MODULES([GTOP], [libgtop-2.0], AC_DEFINE([HAVE_GTOP], [1]),
+	AC_MSG_NOTICE([No libgtop]))
 PKG_CHECK_MODULES([GTHREAD], [gthread-2.0])
 
 # Checks for GTK+ interface

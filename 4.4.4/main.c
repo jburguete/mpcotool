@@ -83,5 +83,6 @@ main (int argn, char **argc)
 #if HAVE_GTK
   show_pending = jbw_process_pending;
 #endif
+  jbw_show_init ();
   return mpcotool (argn, argc);
 }

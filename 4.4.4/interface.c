@@ -1049,7 +1049,7 @@ window_run ()
             optimize->calculation_time);
   msg = g_strconcat (msg2, buffer, NULL);
   g_free (msg2);
-  jbw_show_message (_("Best result"), msg, INFO_TYPE);
+  jbw_show_message_gtk (_("Best result"), msg, INFO_TYPE);
   g_free (msg);
 #if DEBUG_INTERFACE
   fprintf (stderr, "window_run: freeing memory\n");
@@ -1114,7 +1114,7 @@ window_about ()
      "Javier Burguete Tolosa <jburguete@eead.csic.es> "
      "(english, french and spanish)\n"
      "Uğur Çayoğlu (german)",
-     "version", "4.4.3",
+     "version", "4.4.4",
      "copyright", "Copyright 2012-2023 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/mpcotool",
