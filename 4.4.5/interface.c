@@ -1114,7 +1114,7 @@ window_about ()
      "Javier Burguete Tolosa <jburguete@eead.csic.es> "
      "(english, french and spanish)\n"
      "Uğur Çayoğlu (german)",
-     "version", "4.4.4",
+     "version", "4.4.5",
      "copyright", "Copyright 2012-2023 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/mpcotool",
@@ -2327,6 +2327,8 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
 #else
     gtk_button_new_from_icon_name ("document-open");
 #endif
+  gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_open),
+                               _("Open a case"));
   g_signal_connect (window->button_open, "clicked", window_open, NULL);
 
   // Creating the save button
@@ -2336,6 +2338,8 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
 #else
     gtk_button_new_from_icon_name ("document-save");
 #endif
+  gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_save),
+                               _("Save the case"));
   g_signal_connect (window->button_save, "clicked", (GCallback) window_save,
                     NULL);
 
@@ -2346,6 +2350,8 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
 #else
     gtk_button_new_from_icon_name ("system-run");
 #endif
+  gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_run),
+                               _("Run the optimization"));
   g_signal_connect (window->button_run, "clicked", window_run, NULL);
 
   // Creating the options button
@@ -2355,6 +2361,8 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
 #else
     gtk_button_new_from_icon_name ("preferences-system");
 #endif
+  gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_options),
+                               _("Edit the case"));
   g_signal_connect (window->button_options, "clicked", options_new, NULL);
 
   // Creating the help button
@@ -2364,6 +2372,7 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
 #else
     gtk_button_new_from_icon_name ("help-browser");
 #endif
+  gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_help), _("Help"));
   g_signal_connect (window->button_help, "clicked", window_help, NULL);
 
   // Creating the about button
@@ -2373,6 +2382,7 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
 #else
     gtk_button_new_from_icon_name ("help-about");
 #endif
+  gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_about), _("About"));
   g_signal_connect (window->button_about, "clicked", window_about, NULL);
 
   // Creating the exit button
@@ -2382,6 +2392,7 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
 #else
     gtk_button_new_from_icon_name ("application-exit");
 #endif
+  gtk_widget_set_tooltip_text (GTK_WIDGET (window->button_exit), _("Exit"));
   g_signal_connect_swapped (window->button_exit, "clicked",
                             G_CALLBACK (g_application_quit),
                             G_APPLICATION (application));
