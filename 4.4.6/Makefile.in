@@ -160,7 +160,7 @@ $(mpcotoolbin_pgo): mpcotool.c mpcotool.h optimize.h input.h variable.h \
 
 $(libmpcotoolpgo): $(PGOOBJLIB)
 	$(CC) $(PGOGEN) -shared $(PGOOBJLIB) -o $(libmpcotoolpgo) -L. \
-		-Wl,-rpath=. -lgenetic $(LDFLAGS)
+		-Wl,-rpath=. -lgenetic $(JBLIBS)
 
 $(bin)mainbin.pgo: main.c mpcotool.h optimize.h input.h variable.h \
 	experiment.h tools.h config.h $(DEPBIN)
@@ -198,7 +198,7 @@ $(mpcotoolbin_o): $(MPCOTOOLBINDEP)
 
 $(libmpcotool): $(OBJLIB)
 	$(CC) $(PGOUSE) -shared -DEXTERNAL_LIBRARY=1 $(OBJLIB) \
-		-o $(libmpcotool) -L. -Wl,-rpath=. -lgenetic $(LDFLAGS) 
+		-o $(libmpcotool) -L. -Wl,-rpath=. -lgenetic $(JBLIBS) 
 
 $(bin)mainbin.o: $(MAINBINDEP)
 	$(CC) -c $(CFLAGS) $(PGOUSE) main.c -o $(bin)mainbin.o
