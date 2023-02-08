@@ -61,17 +61,17 @@ FILES
 -----
 
 The source code has to have the following files:
-* 4.4.6/configure.ac: configure generator.
+* 4.4.6/configure.ac: configure script generator.
 * 4.4.6/Makefile.in: Makefile generator.
 * 4.4.6/config.h.in: config header generator.
-* 4.4.6/\*.c: source code files.
-* 4.4.6/\*.h: header code files.
+* 4.4.6/\*.c: C-source code files.
+* 4.4.6/\*.h: C-header code files.
 * 4.4.6/mpcotool.ico: icon file.
 * 4.4.6/build.sh: shell script to build all.
 * 4.4.6/logo.png: logo figure.
 * 4.4.6/Doxyfile: configuration file to generate doxygen documentation.
 * TODO: tasks to do.
-* README.md: this file.
+* README\*.md: README files.
 * license.md: license file.
 * tests/testX/\*: several tests to check the program working.
 * locales/\*/LC\_MESSAGES/mpcotool.po: translation files.
@@ -117,9 +117,9 @@ This software has been built and tested in the following operative systems:
 * FreeBSD 13.1
 * Gentoo Linux
 * Linux Mint DE 5
-* MacOS Catalina + Homebrew
+* MacOS Big Sur + Homebrew
 * Manjaro Linux
-* Microsoft Windows 10
+* Microsoft Windows 10 + MSYS2
 * NetBSD 9.3
 * OpenBSD 7.2
 * OpenInidiana Hipster

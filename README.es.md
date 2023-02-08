@@ -62,26 +62,27 @@ UTILIDADES Y BIBLIOTECAS OPCIONALES
 FICHEROS
 --------
 
-The source code has to have the following files:
-* 4.4.1/configure.ac: configure generator.
-* 4.4.1/Makefile.in: Makefile generator.
-* 4.4.1/config.h.in: config header generator.
-* 4.4.1/\*.c: source code files.
-* 4.4.1/\*.h: header code files.
-* 4.4.1/mpcotool.ico: icon file.
-* 4.4.1/build.sh: shell script to build all.
-* 4.4.1/logo.png: logo figure.
-* 4.4.1/Doxyfile: configuration file to generate doxygen documentation.
-* TODO: tasks to do.
-* README.md: this file.
-* license.md: license file.
-* tests/testX/\*: several tests to check the program working.
-* locales/\*/LC\_MESSAGES/mpcotool.po: translation files.
-* manuals/\*.eps: manual figures in EPS format.
-* manuals/\*.png: manual figures in PNG format.
-* manuals/\*.tex: documentation source files.
-* applications/\*/\*: several practical application cases.
-* check\_errors/\*.xml: several mistaken files to check error handling.
+El código fuente consta de los siguientes ficheros:
+* 4.4.1/configure.ac: generador del script configure.
+* 4.4.1/Makefile.in: generador del fichero Makefile.
+* 4.4.1/config.h.in: generador del fichero cabecera de configuración.
+* 4.4.1/\*.c: ficheros fuente de C.
+* 4.4.1/\*.h: ficheros cabecera de C.
+* 4.4.1/mpcotool.ico: fichero de icono.
+* 4.4.1/build.sh: script de shell para construir todo.
+* 4.4.1/logo.png: figura de logo.
+* 4.4.1/Doxyfile: fichero de configuración para generar documentación doxygen.
+* TODO: tareas a realizar.
+* README\*.md: ficheros LÉAME.
+* license.md: fichero de licencia.
+* tests/testX/\*: algunos ficheros para probar cómo funciona el programa.
+* locales/\*/LC\_MESSAGES/mpcotool.po: ficheros de traducción.
+* manuals/\*.eps: figuras del manual en formato EPS.
+* manuals/\*.png: figuras del manual en formato PNG.
+* manuals/\*.tex: ficheros fuente de la documentación.
+* applications/\*/\*: algunos casos prácticos de aplicación.
+* check\_errors/\*.xml: algunos ficheros erróneos para probar el manejo de
+  errores.
 
 BUILDING INSTRUCTIONS
 ---------------------
@@ -119,9 +120,9 @@ This software has been built and tested in the following operative systems:
 * FreeBSD 13.1
 * Gentoo Linux
 * Linux Mint DE 5
-* MacOS Catalina + Homebrew
+* MacOS Big Sur + Homebrew
 * Manjaro Linux
-* Microsoft Windows 10
+* Microsoft Windows 10 + MSYS2
 * NetBSD 9.3
 * OpenBSD 7.2
 * OpenInidiana Hipster
