@@ -96,7 +96,7 @@ optimize_input (unsigned int simulation,        ///< Simulation number.
                 char *input,    ///< Input file name.
                 GMappedFile * stencil)  ///< Template of the input file name.
 {
-  char buffer[32], value[32];
+  char buffer[256], value[32];
   GRegex *regex;
   FILE *file;
   char *buffer2, *buffer3 = NULL, *content;
@@ -184,11 +184,12 @@ static double
 optimize_parse (unsigned int simulation,        ///< Simulation number.
                 unsigned int experiment)        ///< Experiment number.
 {
-  unsigned int i;
-  double e;
-  char buffer[512], input[MAX_NINPUTS][32], output[32], result[32], *buffer2,
+  char buffer[512], cinput[MAX_NINPUTS][32], output[32], result[32], *buffer2,
     *buffer3, *buffer4;
   FILE *file_result;
+  double e;
+  unsigned int i;
+  unsigned int flags = 1;
 
 #if DEBUG_OPTIMIZE
   fprintf (stderr, "optimize_parse: start\n");
@@ -199,14 +200,28 @@ optimize_parse (unsigned int simulation,        ///< Simulation number.
   // Opening input files
   for (i = 0; i < optimize->ninputs; ++i)
     {
-      snprintf (&input[i][0], 32, "input-%u-%u-%u", i, simulation, experiment);
+      snprintf (&cinput[i][0], 32, "input-%u-%u-%u", i, simulation, experiment);
 #if DEBUG_OPTIMIZE
-      fprintf (stderr, "optimize_parse: i=%u input=%s\n", i, &input[i][0]);
+      fprintf (stderr, "optimize_parse: i=%u input=%s\n", i, &cinput[i][0]);
 #endif
-      optimize_input (simulation, &input[i][0], optimize->file[i][experiment]);
+      // Checking simple copy
+      if (optimize->template_flags & flags)
+        optimize_input (simulation, &cinput[i][0],
+                        optimize->file[i][experiment]);
+      else
+        {
+          buffer2 = input->experiment[experiment].stencil[i];
+#ifdef G_OS_WIN32
+          snprintf (buffer, 256, "copy %s %s", buffer2, &cinput[i][0]);
+#else
+          snprintf (buffer, 256, "cp %s %s", buffer2, &cinput[i][0]);
+#endif
+          system (buffer);
+        }
+      flags <<= 1;
     }
   for (; i < MAX_NINPUTS; ++i)
-    strcpy (&input[i][0], "");
+    strcpy (&cinput[i][0], "");
 #if DEBUG_OPTIMIZE
   fprintf (stderr, "optimize_parse: parsing end\n");
 #endif
@@ -217,8 +232,8 @@ optimize_parse (unsigned int simulation,        ///< Simulation number.
   buffer3 = g_path_get_basename (optimize->simulator);
   buffer4 = g_build_filename (buffer2, buffer3, NULL);
   snprintf (buffer, 512, "\"%s\" %s %s %s %s %s %s %s %s %s",
-            buffer4, input[0], input[1], input[2], input[3], input[4],
-            input[5], input[6], input[7], output);
+            buffer4, cinput[0], cinput[1], cinput[2], cinput[3], cinput[4],
+            cinput[5], cinput[6], cinput[7], output);
   g_free (buffer4);
   g_free (buffer3);
   g_free (buffer2);
@@ -267,7 +282,7 @@ optimize_parse (unsigned int simulation,        ///< Simulation number.
     {
       if (optimize->file[i][0])
         {
-          snprintf (buffer, 512, RM " %s", &input[i][0]);
+          snprintf (buffer, 512, RM " %s", &cinput[i][0]);
           if (system (buffer) == -1)
             error_message = buffer;
         }
@@ -1444,6 +1459,12 @@ optimize_open ()
   if (optimize->seed == DEFAULT_RANDOM_SEED)
     optimize->seed = input->seed;
   gsl_rng_set (optimize->rng, optimize->seed);
+
+  // Obtaining template flags
+#if DEBUG_OPTIMIZE
+  fprintf (stderr, "optimize_open: getting template flags\n");
+#endif
+  optimize->template_flags = input->template_flags;
 
   // Replacing the working directory
 #if DEBUG_OPTIMIZE

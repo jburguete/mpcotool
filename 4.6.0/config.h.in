@@ -75,6 +75,14 @@ OF SUCH DAMAGE.
 #define LABEL_EXPERIMENT "experiment"   ///< experiment label.
 #define LABEL_EXPERIMENTS "experiments" ///< experiment label.
 #define LABEL_GENETIC "genetic" ///< genetic label.
+#define LABEL_INPUT1 "input1"   ///< input1 label.
+#define LABEL_INPUT2 "input2"   ///< input2 label.
+#define LABEL_INPUT3 "input3"   ///< input3 label.
+#define LABEL_INPUT4 "input4"   ///< input4 label.
+#define LABEL_INPUT5 "input5"   ///< input5 label.
+#define LABEL_INPUT6 "input6"   ///< input6 label.
+#define LABEL_INPUT7 "input7"   ///< input7 label.
+#define LABEL_INPUT8 "input8"   ///< input8 label.
 #define LABEL_MINIMUM "minimum" ///< minimum label.
 #define LABEL_MAXIMUM "maximum" ///< maximum label.
 #define LABEL_MONTE_CARLO "Monte-Carlo" ///< Monte-Carlo label.

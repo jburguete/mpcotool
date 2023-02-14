@@ -50,12 +50,17 @@ OF SUCH DAMAGE.
 
 #define DEBUG_EXPERIMENT 0      ///< Macro to debug experiment functions.
 
+///> Array of strings with stencil labels.
 const char *stencil[MAX_NINPUTS] = {
   LABEL_TEMPLATE1, LABEL_TEMPLATE2, LABEL_TEMPLATE3, LABEL_TEMPLATE4,
   LABEL_TEMPLATE5, LABEL_TEMPLATE6, LABEL_TEMPLATE7, LABEL_TEMPLATE8
 };
 
-///< Array of xmlChar strings with stencil labels.
+///> Array of strings with binary stencil labels.
+const char *stencilbin[MAX_NINPUTS] = {
+  LABEL_INPUT1, LABEL_INPUT2, LABEL_INPUT3, LABEL_INPUT4,
+  LABEL_INPUT5, LABEL_INPUT6, LABEL_INPUT7, LABEL_INPUT8
+};
 
 /**
  * Function to create a new Experiment struct.
@@ -68,7 +73,7 @@ experiment_new (Experiment * experiment)        ///< Experiment struct.
   fprintf (stderr, "experiment_new: start\n");
 #endif
   experiment->name = NULL;
-  experiment->ninputs = 0;
+  experiment->ninputs = experiment->template_flags = 0;
   for (i = 0; i < MAX_NINPUTS; ++i)
     experiment->stencil[i] = NULL;
 #if DEBUG_EXPERIMENT
@@ -99,7 +104,7 @@ experiment_free (Experiment * experiment,       ///< Experiment struct.
         g_free (experiment->stencil[i]);
       g_free (experiment->name);
     }
-  experiment->ninputs = 0;
+  experiment->ninputs = experiment->template_flags = 0;
 #if DEBUG_EXPERIMENT
   fprintf (stderr, "experiment_free: end\n");
 #endif
@@ -133,6 +138,7 @@ experiment_open_xml (Experiment * experiment,   ///< Experiment struct.
   char buffer[64];
   int error_code;
   unsigned int i;
+  unsigned int flags = 1;
 
 #if DEBUG_EXPERIMENT
   fprintf (stderr, "experiment_open_xml: start\n");
@@ -171,17 +177,32 @@ experiment_open_xml (Experiment * experiment,   ///< Experiment struct.
                experiment->name, stencil[0]);
 #endif
       ++experiment->ninputs;
+      experiment->template_flags |= flags;
     }
   else
     {
-      experiment_error (experiment, _("no template"));
-      goto exit_on_error;
+      experiment->stencil[0]
+        = (char *) xmlGetProp (node, (const xmlChar *) stencilbin[0]);
+      if (experiment->stencil[0])
+        {
+#if DEBUG_EXPERIMENT
+          fprintf (stderr, "experiment_open_xml: experiment=%s stencil1=%s\n",
+                   experiment->name, stencilbin[0]);
+#endif
+          ++experiment->ninputs;
+        }
+      else
+        {
+          experiment_error (experiment, _("no template"));
+          goto exit_on_error;
+        }
     }
   for (i = 1; i < MAX_NINPUTS; ++i)
     {
 #if DEBUG_EXPERIMENT
       fprintf (stderr, "experiment_open_xml: stencil%u\n", i + 1);
 #endif
+      flags <<= 1;
       if (xmlHasProp (node, (const xmlChar *) stencil[i]))
         {
           if (ninputs && ninputs <= i)
@@ -191,6 +212,24 @@ experiment_open_xml (Experiment * experiment,   ///< Experiment struct.
             }
           experiment->stencil[i]
             = (char *) xmlGetProp (node, (const xmlChar *) stencil[i]);
+#if DEBUG_EXPERIMENT
+          fprintf (stderr,
+                   "experiment_open_xml: experiment=%s stencil%u=%s\n",
+                   experiment->nexperiments, experiment->name,
+                   experiment->stencil[i]);
+#endif
+          ++experiment->ninputs;
+          experiment->template_flags |= flags;
+        }
+      else if (xmlHasProp (node, (const xmlChar *) stencilbin[i]))
+        {
+          if (ninputs && ninputs <= i)
+            {
+              experiment_error (experiment, _("bad templates number"));
+              goto exit_on_error;
+            }
+          experiment->stencil[i]
+            = (char *) xmlGetProp (node, (const xmlChar *) stencilbin[i]);
 #if DEBUG_EXPERIMENT
           fprintf (stderr,
                    "experiment_open_xml: experiment=%s stencil%u=%s\n",
@@ -238,6 +277,7 @@ experiment_open_json (Experiment * experiment,  ///< Experiment struct.
   const char *name;
   int error_code;
   unsigned int i;
+  unsigned int flags = 1;
 
 #if DEBUG_EXPERIMENT
   fprintf (stderr, "experiment_open_json: start\n");
@@ -279,11 +319,24 @@ experiment_open_json (Experiment * experiment,  ///< Experiment struct.
                name, stencil[0]);
 #endif
       ++experiment->ninputs;
+      experiment->template_flags |= flags;
     }
   else
     {
-      experiment_error (experiment, _("no template"));
-      goto exit_on_error;
+      name = json_object_get_string_member (object, stencilbin[0]);
+      if (name)
+        {
+#if DEBUG_EXPERIMENT
+          fprintf (stderr, "experiment_open_json: experiment=%s template1=%s\n",
+                   name, stencilbin[0]);
+#endif
+          ++experiment->ninputs;
+        }
+      else
+        {
+          experiment_error (experiment, _("no template"));
+          goto exit_on_error;
+        }
     }
   experiment->stencil[0] = g_strdup (name);
   for (i = 1; i < MAX_NINPUTS; ++i)
@@ -291,6 +344,7 @@ experiment_open_json (Experiment * experiment,  ///< Experiment struct.
 #if DEBUG_EXPERIMENT
       fprintf (stderr, "experiment_open_json: stencil%u\n", i + 1);
 #endif
+      flags <<= 1;
       if (json_object_get_member (object, stencil[i]))
         {
           if (ninputs && ninputs <= i)
@@ -303,6 +357,23 @@ experiment_open_json (Experiment * experiment,  ///< Experiment struct.
           fprintf (stderr,
                    "experiment_open_json: experiment=%s stencil%u=%s\n",
                    experiment->nexperiments, name, stencil[i]);
+#endif
+          experiment->stencil[i] = g_strdup (name);
+          ++experiment->ninputs;
+          experiment->template_flags |= flags;
+        }
+      else if (json_object_get_member (object, stencilbin[i]))
+        {
+          if (ninputs && ninputs <= i)
+            {
+              experiment_error (experiment, _("bad templates number"));
+              goto exit_on_error;
+            }
+          name = json_object_get_string_member (object, stencilbin[i]);
+#if DEBUG_EXPERIMENT
+          fprintf (stderr,
+                   "experiment_open_json: experiment=%s stencil%u=%s\n",
+                   experiment->nexperiments, name, stencilbin[i]);
 #endif
           experiment->stencil[i] = g_strdup (name);
           ++experiment->ninputs;

@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 4.4.6\n"
+"Project-Id-Version: 4.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-01 13:15+0100\n"
+"POT-Creation-Date: 2023-02-14 12:14+0100\n"
 "PO-Revision-Date: 2015-10-20 07:33+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -17,27 +17,27 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: experiment.c:116 experiment.c:118 interface.c:2967
+#: experiment.c:121 experiment.c:123 interface.c:2967
 msgid "Experiment"
 msgstr "Experiment"
 
-#: experiment.c:148 experiment.c:256
+#: experiment.c:154 experiment.c:296
 msgid "no data file name"
 msgstr "Kein Dateiname angegeben"
 
-#: experiment.c:159 experiment.c:268
+#: experiment.c:165 experiment.c:308
 msgid "bad weight"
 msgstr "Falsche Gewichtung"
 
-#: experiment.c:177 experiment.c:204 experiment.c:285 experiment.c:312
+#: experiment.c:196 experiment.c:243 experiment.c:337 experiment.c:383
 msgid "no template"
 msgstr "Keine Vorlage"
 
-#: experiment.c:189 experiment.c:298
+#: experiment.c:210 experiment.c:228 experiment.c:352 experiment.c:369
 msgid "bad templates number"
 msgstr "Falsche Vorlagennummer"
 
-#: variable.c:95 variable.c:97 input.c:488 interface.c:2881
+#: variable.c:95 variable.c:97 input.c:496 interface.c:2881
 msgid "Variable"
 msgstr "Variable"
 
@@ -109,137 +109,137 @@ msgstr "Falscher Schrittwert"
 msgid "Input"
 msgstr "Eingabe"
 
-#: input.c:156
+#: input.c:157
 msgid "Bad root XML node"
 msgstr "Falscher XML-Wurzelknoten"
 
-#: input.c:188 input.c:617
+#: input.c:189 input.c:626
 msgid "Bad simulator program"
 msgstr "Falsches Simulationsprogramm"
 
-#: input.c:202 input.c:633
+#: input.c:203 input.c:642
 msgid "Bad pseudo-random numbers generator seed"
 msgstr "Seed für Pseudozufallszahlengenerator falsch gesetzt"
 
-#: input.c:218 input.c:648
+#: input.c:219 input.c:657
 msgid "Bad simulations number"
 msgstr "Ungültige Simulationsnummer"
 
-#: input.c:238 input.c:667
+#: input.c:239 input.c:676
 msgid "Invalid population number"
 msgstr "Ungültige Populationsanzahl"
 
-#: input.c:244 input.c:673
+#: input.c:245 input.c:682
 msgid "No population number"
 msgstr "Keine Populationsanzahl"
 
-#: input.c:256 input.c:685
+#: input.c:257 input.c:694
 msgid "Invalid generations number"
 msgstr "Ungültige Generationennummer"
 
-#: input.c:262 input.c:691
+#: input.c:263 input.c:700
 msgid "No generations number"
 msgstr "Keine Generationennummer"
 
-#: input.c:275 input.c:703
+#: input.c:276 input.c:712
 msgid "Invalid mutation probability"
 msgstr "Ungültige Mutationswahrscheinlichkeit"
 
-#: input.c:281 input.c:709
+#: input.c:282 input.c:718
 msgid "No mutation probability"
 msgstr "Keine Mutationswahrscheinlichkeit"
 
-#: input.c:294 input.c:722
+#: input.c:295 input.c:731
 msgid "Invalid reproduction probability"
 msgstr "Ungültige Reproduktionswahrscheinlichkeit"
 
-#: input.c:300 input.c:728
+#: input.c:301 input.c:737
 msgid "No reproduction probability"
 msgstr "Keine Reproduktionswahrscheinlichkeit"
 
-#: input.c:313 input.c:740
+#: input.c:314 input.c:749
 msgid "Invalid adaptation probability"
 msgstr "Ungültige Adaptionswahrscheinlichkeit"
 
-#: input.c:319 input.c:746
+#: input.c:320 input.c:755
 msgid "No adaptation probability"
 msgstr "Keine Adaptionswahrscheinlichkeit"
 
-#: input.c:330 input.c:757
+#: input.c:331 input.c:766
 msgid "No enough survival entities to reproduce the population"
 msgstr "Nicht genügende Überlebende um Population wiederherzustellen"
 
-#: input.c:336 input.c:763
+#: input.c:337 input.c:772
 msgid "Unknown algorithm"
 msgstr "Unbekannter Algorithmus"
 
-#: input.c:352 input.c:777
+#: input.c:353 input.c:786
 msgid "Bad iterations number"
 msgstr "Ungültige Wiederholungszahl"
 
-#: input.c:363 input.c:787
+#: input.c:364 input.c:796
 msgid "Invalid best number"
 msgstr "Ungültige beste Nummer"
 
-#: input.c:374 input.c:797
+#: input.c:375 input.c:806
 msgid "Invalid tolerance"
 msgstr "Ungültige Toleranzanzahl"
 
-#: input.c:386 input.c:808
+#: input.c:387 input.c:817
 msgid "Invalid steps number"
 msgstr "Ungültige Schrittanzahl"
 
-#: input.c:404 input.c:822
+#: input.c:405 input.c:831
 msgid "Invalid estimates number"
 msgstr "Ungültiger Schätzwert"
 
-#: input.c:410 input.c:828
+#: input.c:411 input.c:837
 #, fuzzy
 msgid "Unknown method to estimate the hill climbing"
 msgstr "Ungültige Methode zur Bestimmung der Richtung"
 
-#: input.c:423 input.c:837
+#: input.c:424 input.c:846
 msgid "Invalid relaxation parameter"
 msgstr "Ungültige Relaxtionsparameter"
 
-#: input.c:436 input.c:851
+#: input.c:437 input.c:860
 msgid "Invalid threshold"
 msgstr "Ungültiger Schwellenwert"
 
-#: input.c:471 input.c:885
+#: input.c:478 input.c:901
 msgid "No optimization experiments"
 msgstr "Keine Optimierungsversuche"
 
-#: input.c:488
+#: input.c:496
 msgid "bad XML node"
 msgstr "Ungültiger XML-Knoten"
 
-#: input.c:505 input.c:906
+#: input.c:513 input.c:923
 msgid "No optimization variables"
 msgstr "Keine Optimierungsvariablen"
 
-#: input.c:510
+#: input.c:518
 #, fuzzy
 msgid "Best number higher than simulations number"
 msgstr "Ungültige Simulationsnummer"
 
-#: input.c:531 input.c:924
+#: input.c:539 input.c:941
 msgid "Bad P parameter"
 msgstr "Ungültiger Parameter P"
 
-#: input.c:539 input.c:932
+#: input.c:547 input.c:949
 msgid "Unknown error norm"
 msgstr "Ungültiger Fehlernorm"
 
-#: input.c:987
+#: input.c:1004
 msgid "Unable to parse the input file"
 msgstr "Eingabedatei kann nicht gelesen werden"
 
-#: optimize.c:407 optimize.c:408 interface.c:1052
+#: optimize.c:422 optimize.c:423 interface.c:1052
 msgid "Best result"
 msgstr "Bestes Ergebnis"
 
-#: optimize.c:1710 optimize.c:1712 interface.c:1048
+#: optimize.c:1731 optimize.c:1733 interface.c:1048
 msgid "Calculation time"
 msgstr "Berechnungszeit"
 

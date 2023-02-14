@@ -133,6 +133,7 @@ static inline int
 input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
 {
   char buffer2[64];
+  Experiment *experiment;
   xmlNode *node, *child;
   xmlChar *buffer;
   int error_code;
@@ -446,19 +447,25 @@ input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
       fprintf (stderr, "input_open_xml: nexperiments=%u\n",
                input->nexperiments);
 #endif
-      input->experiment = (Experiment *)
+      input->experiment = experiment = (Experiment *)
         g_realloc (input->experiment,
                    (1 + input->nexperiments) * sizeof (Experiment));
       if (!input->nexperiments)
         {
-          if (!experiment_open_xml (input->experiment, child, 0))
+          if (!experiment_open_xml (experiment, child, 0))
             goto exit_on_error;
         }
       else
         {
-          if (!experiment_open_xml (input->experiment + input->nexperiments,
-                                    child, input->experiment->ninputs))
+          if (!experiment_open_xml (experiment + input->nexperiments,
+                                    child, experiment->ninputs))
             goto exit_on_error;
+          if (experiment[experiment->ninputs].template_flags
+              != experiment->template_flags)
+            {
+              input_error ("bad template inputs");
+              goto exit_on_error;
+            }
         }
       ++input->nexperiments;
 #if DEBUG_INPUT
@@ -471,6 +478,7 @@ input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
       input_error (_("No optimization experiments"));
       goto exit_on_error;
     }
+  input->template_flags = experiment->template_flags;
   buffer = NULL;
 
   // Reading the variables data
@@ -569,6 +577,7 @@ exit_on_error:
 static inline int
 input_open_json (JsonParser * parser)   ///< JsonParser struct.
 {
+  Experiment *experiment;
   JsonNode *node, *child;
   JsonObject *object;
   JsonArray *array;
@@ -855,7 +864,8 @@ input_open_json (JsonParser * parser)   ///< JsonParser struct.
   // Reading the experimental data
   array = json_object_get_array_member (object, LABEL_EXPERIMENTS);
   n = json_array_get_length (array);
-  input->experiment = (Experiment *) g_malloc (n * sizeof (Experiment));
+  input->experiment = experiment = (Experiment *)
+    g_malloc (n * sizeof (Experiment));
   for (i = 0; i < n; ++i)
     {
 #if DEBUG_INPUT
@@ -865,14 +875,20 @@ input_open_json (JsonParser * parser)   ///< JsonParser struct.
       child = json_array_get_element (array, i);
       if (!input->nexperiments)
         {
-          if (!experiment_open_json (input->experiment, child, 0))
+          if (!experiment_open_json (experiment, child, 0))
             goto exit_on_error;
         }
       else
         {
-          if (!experiment_open_json (input->experiment + input->nexperiments,
-                                     child, input->experiment->ninputs))
+          if (!experiment_open_json (experiment + input->nexperiments,
+                                     child, experiment->ninputs))
             goto exit_on_error;
+          if (experiment[experiment->ninputs].template_flags
+              != experiment->template_flags)
+            {
+              input_error ("bad template inputs");
+              goto exit_on_error;
+            }
         }
       ++input->nexperiments;
 #if DEBUG_INPUT
@@ -885,6 +901,7 @@ input_open_json (JsonParser * parser)   ///< JsonParser struct.
       input_error (_("No optimization experiments"));
       goto exit_on_error;
     }
+  input->template_flags = experiment->template_flags;
 
   // Reading the variables data
   array = json_object_get_array_member (object, LABEL_VARIABLES);

@@ -95,6 +95,7 @@ typedef struct
   unsigned int nbest;           ///< Number of best simulations.
   unsigned int norm;            ///< Error norm type.
   unsigned int type;            ///< Type of input file.
+  unsigned int template_flags;  ///< Flags of template files.
 } Input;
 
 extern Input input[1];

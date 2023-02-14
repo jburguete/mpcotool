@@ -109,6 +109,7 @@ typedef struct
   unsigned int nbest;           ///< Number of best simulations.
   unsigned int nsaveds;         ///< Number of saved simulations.
   unsigned int stop;            ///< To stop the simulations.
+  unsigned int template_flags;  ///< Flags of template files.
 #if HAVE_MPI
   int mpi_rank;                 ///< Number of MPI task.
 #endif

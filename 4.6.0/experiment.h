@@ -48,9 +48,11 @@ typedef struct
   char *stencil[MAX_NINPUTS];   ///< Array of template names of input files.
   double weight;                ///< Objective function weight.
   unsigned int ninputs;         ///< Number of input files to the simulator.
+  unsigned int template_flags;  ///< Flags of template files.
 } Experiment;
 
 extern const char *stencil[MAX_NINPUTS];
+extern const char *stencilbin[MAX_NINPUTS];
 
 // Public functions
 void experiment_free (Experiment * experiment, unsigned int type);
