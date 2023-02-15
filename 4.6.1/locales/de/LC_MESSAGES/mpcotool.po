@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 4.6.0\n"
+"Project-Id-Version: 4.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-14 12:14+0100\n"
+"POT-Creation-Date: 2023-02-14 18:56+0100\n"
 "PO-Revision-Date: 2015-10-20 07:33+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -235,11 +235,11 @@ msgstr "Ungültiger Fehlernorm"
 msgid "Unable to parse the input file"
 msgstr "Eingabedatei kann nicht gelesen werden"
 
-#: optimize.c:422 optimize.c:423 interface.c:1052
+#: optimize.c:423 optimize.c:424 interface.c:1052
 msgid "Best result"
 msgstr "Bestes Ergebnis"
 
-#: optimize.c:1731 optimize.c:1733 interface.c:1048
+#: optimize.c:1732 optimize.c:1734 interface.c:1048
 msgid "Calculation time"
 msgstr "Berechnungszeit"
 

@@ -216,7 +216,8 @@ optimize_parse (unsigned int simulation,        ///< Simulation number.
 #else
           snprintf (buffer, 256, "cp %s %s", buffer2, &cinput[i][0]);
 #endif
-          system (buffer);
+          if (system (buffer) == -1)
+            error_message = buffer;
         }
       flags <<= 1;
     }
