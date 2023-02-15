@@ -1297,6 +1297,7 @@ optimize_refine ()
         {
           optimize->rangemin[j] = optimize->rangemax[j]
             = optimize->value_old[j];
+	  optimize->step[j] = input->variable[j].step;
         }
       for (i = 0; ++i < optimize->nbest;)
         {

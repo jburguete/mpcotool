@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 4.6.1\n"
+"Project-Id-Version: 4.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-14 18:56+0100\n"
+"POT-Creation-Date: 2023-02-15 08:56+0100\n"
 "PO-Revision-Date: 2015-10-20 07:33+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -239,7 +239,7 @@ msgstr "Eingabedatei kann nicht gelesen werden"
 msgid "Best result"
 msgstr "Bestes Ergebnis"
 
-#: optimize.c:1732 optimize.c:1734 interface.c:1048
+#: optimize.c:1733 optimize.c:1735 interface.c:1048
 msgid "Calculation time"
 msgstr "Berechnungszeit"
 
