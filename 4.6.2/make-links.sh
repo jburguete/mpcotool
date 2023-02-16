@@ -1,0 +1,9 @@
+ln -s ../../jb/jb
+ln -s ../../genetic/genetic
+ln -s jb/bin/libjb-3.so
+ln -s jb/bin/libjbm-3.so
+ln -s jb/bin/libjbjson-3.so
+ln -s jb/bin/libjbxml-3.so
+ln -s jb/bin/libjbbin-3.so
+ln -s jb/bin/libjbwin-3.so
+ln -s genetic/libgenetic.so
