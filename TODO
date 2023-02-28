@@ -1,5 +1,6 @@
 TASKS
 
+* Update changes on template/input file check buttons in interface
 * Enable optimization functions inputs by variables (not by files)
 * Correct several german translations
 * Translate README file
