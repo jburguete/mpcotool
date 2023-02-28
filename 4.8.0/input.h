@@ -71,6 +71,7 @@ typedef struct
   char *simulator;              ///< Name of the simulator program.
   char *evaluator;
   ///< Name of the program to evaluate the objective function.
+  char *cleaner;                ///< Name of the cleaner program.
   char *directory;              ///< Working directory.
   char *name;                   ///< Input data file name.
   double tolerance;             ///< Algorithm tolerance.

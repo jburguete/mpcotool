@@ -68,6 +68,7 @@ OF SUCH DAMAGE.
   ///< absolute maximum label.
 #define LABEL_ADAPTATION "adaptation"   ///< adaption label.
 #define LABEL_ALGORITHM "algorithm"     ///< algoritm label.
+#define LABEL_CLEANER  "cleaner" ///< cleaner label.
 #define LABEL_CLIMBING "climbing"       ///< climbing label.
 #define LABEL_COORDINATES "coordinates" ///< coordinates label.
 #define LABEL_EUCLIDIAN "euclidian"     ///< euclidian label.

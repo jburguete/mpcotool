@@ -57,6 +57,7 @@ typedef struct
   char *simulator;              ///< Name of the simulator program.
   char *evaluator;
   ///< Name of the program to evaluate the objective function.
+  char *cleaner;                ///< Name of the cleaner program.
   double *value;                ///< Array of variable values.
   double *rangemin;             ///< Array of minimum variable values.
   double *rangemax;             ///< Array of maximum variable values.

@@ -275,6 +275,15 @@ input_save_xml (xmlDoc * doc)   ///< xmlDoc struct.
                     (xmlChar *) buffer);
       g_free (buffer);
     }
+  if (input->cleaner)
+    {
+      file2 = g_file_new_for_path (input->cleaner);
+      buffer = g_file_get_relative_path (file, file2);
+      g_object_unref (file2);
+      if (xmlStrlen ((xmlChar *) buffer))
+        xmlSetProp (node, (const xmlChar *) LABEL_CLEANER, (xmlChar *) buffer);
+      g_free (buffer);
+    }
   if (input->seed != DEFAULT_RANDOM_SEED)
     jb_xml_node_set_uint (node, (const xmlChar *) LABEL_SEED, input->seed);
 
@@ -453,6 +462,15 @@ input_save_json (JsonGenerator * generator)     ///< JsonGenerator struct.
       g_object_unref (file2);
       if (strlen (buffer))
         json_object_set_string_member (object, LABEL_EVALUATOR, buffer);
+      g_free (buffer);
+    }
+  if (input->cleaner)
+    {
+      file2 = g_file_new_for_path (input->cleaner);
+      buffer = g_file_get_relative_path (file, file2);
+      g_object_unref (file2);
+      if (strlen (buffer))
+        json_object_set_string_member (object, LABEL_CLEANER, buffer);
       g_free (buffer);
     }
   if (input->seed != DEFAULT_RANDOM_SEED)
@@ -877,6 +895,11 @@ dialog_save_close (GtkFileChooserDialog * dlg,
           = g_strdup (gtk_button_get_label (window->button_evaluator));
       else
         input->evaluator = NULL;
+      if (gtk_check_button_get_active (window->check_cleaner))
+        input->cleaner
+          = g_strdup (gtk_button_get_label (window->button_cleaner));
+      else
+        input->cleaner = NULL;
       if (input->type == INPUT_TYPE_XML)
         {
           input->result
@@ -1114,7 +1137,7 @@ window_about ()
      "Javier Burguete Tolosa <jburguete@eead.csic.es> "
      "(english, french and spanish)\n"
      "Uğur Çayoğlu (german)",
-     "version", "4.6.2",
+     "version", "4.8.0",
      "copyright", "Copyright 2012-2023 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/mpcotool",
@@ -1168,6 +1191,9 @@ window_update ()
   gtk_widget_set_sensitive
     (GTK_WIDGET (window->button_evaluator),
      gtk_check_button_get_active (window->check_evaluator));
+  gtk_widget_set_sensitive
+    (GTK_WIDGET (window->button_cleaner),
+     gtk_check_button_get_active (window->check_cleaner));
   gtk_widget_hide (GTK_WIDGET (window->label_simulations));
   gtk_widget_hide (GTK_WIDGET (window->spin_simulations));
   gtk_widget_hide (GTK_WIDGET (window->label_iterations));
@@ -1977,6 +2003,9 @@ window_read (char *filename)    ///< File name.
                                (size_t) input->evaluator);
   if (input->evaluator)
     gtk_button_set_label (window->button_evaluator, input->evaluator);
+  gtk_check_button_set_active (window->check_cleaner, (size_t) input->cleaner);
+  if (input->cleaner)
+    gtk_button_set_label (window->button_cleaner, input->cleaner);
   gtk_check_button_set_active (window->button_algorithm[input->algorithm],
                                TRUE);
   switch (input->algorithm)
@@ -2268,6 +2297,60 @@ dialog_evaluator ()
 }
 
 /**
+ * Function to save the close the cleaner file dialog.
+ */
+static void
+dialog_cleaner_close (GtkFileChooserDialog * dlg,
+                      ///< GtkFileChooserDialog dialog.
+                      int response_id)  ///< Response identifier.
+{
+  GFile *file1, *file2;
+  char *buffer1, *buffer2;
+#if DEBUG_INTERFACE
+  fprintf (stderr, "dialog_cleaner_close: start\n");
+#endif
+  if (response_id == GTK_RESPONSE_OK)
+    {
+      buffer1 = gtk_file_chooser_get_current_name (GTK_FILE_CHOOSER (dlg));
+      file1 = g_file_new_for_path (buffer1);
+      file2 = g_file_new_for_path (input->directory);
+      buffer2 = g_file_get_relative_path (file2, file1);
+      input->cleaner = g_strdup (buffer2);
+      g_free (buffer2);
+      g_object_unref (file2);
+      g_object_unref (file1);
+      g_free (buffer1);
+    }
+  gtk_window_destroy (GTK_WINDOW (dlg));
+#if DEBUG_INTERFACE
+  fprintf (stderr, "dialog_cleaner_close: end\n");
+#endif
+}
+
+/**
+ * Function to open a dialog to save the cleaner file.
+ */
+static void
+dialog_cleaner ()
+{
+  GtkFileChooserDialog *dlg;
+#if DEBUG_INTERFACE
+  fprintf (stderr, "dialog_cleaner: start\n");
+#endif
+  dlg = (GtkFileChooserDialog *)
+    gtk_file_chooser_dialog_new (_("Open cleaner file"),
+                                 window->window,
+                                 GTK_FILE_CHOOSER_ACTION_OPEN,
+                                 _("_Cancel"), GTK_RESPONSE_CANCEL,
+                                 _("_Open"), GTK_RESPONSE_ACCEPT, NULL);
+  g_signal_connect (dlg, "response", G_CALLBACK (dialog_cleaner_close), NULL);
+  gtk_window_present (GTK_WINDOW (dlg));
+#if DEBUG_INTERFACE
+  fprintf (stderr, "dialog_cleaner: end\n");
+#endif
+}
+
+/**
  * Function to open the main window.
  */
 void
@@ -2429,6 +2512,18 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
   g_signal_connect (window->button_evaluator, "clicked",
                     G_CALLBACK (dialog_evaluator), NULL);
 
+  // Creating the cleaner program label and entry
+  window->check_cleaner = (GtkCheckButton *)
+    gtk_check_button_new_with_mnemonic (_("_Cleaner program"));
+  g_signal_connect (window->check_cleaner, "toggled", window_update, NULL);
+  window->button_cleaner = (GtkButton *)
+    gtk_button_new_with_mnemonic (_("Cleaner program"));
+  gtk_widget_set_tooltip_text
+    (GTK_WIDGET (window->button_cleaner),
+     _("Optional cleaner program executable file"));
+  g_signal_connect (window->button_cleaner, "clicked",
+                    G_CALLBACK (dialog_cleaner), NULL);
+
   // Creating the results files labels and entries
   window->label_result = (GtkLabel *) gtk_label_new (_("Result file"));
   window->entry_result = (GtkEntry *) gtk_entry_new ();
@@ -2449,14 +2544,18 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
                    0, 1, 1, 1);
   gtk_grid_attach (window->grid_files, GTK_WIDGET (window->button_evaluator),
                    1, 1, 1, 1);
-  gtk_grid_attach (window->grid_files, GTK_WIDGET (window->label_result),
+  gtk_grid_attach (window->grid_files, GTK_WIDGET (window->check_cleaner),
                    0, 2, 1, 1);
-  gtk_grid_attach (window->grid_files, GTK_WIDGET (window->entry_result),
+  gtk_grid_attach (window->grid_files, GTK_WIDGET (window->button_cleaner),
                    1, 2, 1, 1);
-  gtk_grid_attach (window->grid_files, GTK_WIDGET (window->label_variables),
+  gtk_grid_attach (window->grid_files, GTK_WIDGET (window->label_result),
                    0, 3, 1, 1);
-  gtk_grid_attach (window->grid_files, GTK_WIDGET (window->entry_variables),
+  gtk_grid_attach (window->grid_files, GTK_WIDGET (window->entry_result),
                    1, 3, 1, 1);
+  gtk_grid_attach (window->grid_files, GTK_WIDGET (window->label_variables),
+                   0, 4, 1, 1);
+  gtk_grid_attach (window->grid_files, GTK_WIDGET (window->entry_variables),
+                   1, 4, 1, 1);
 
   // Creating the algorithm properties
   window->label_simulations = (GtkLabel *) gtk_label_new

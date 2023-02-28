@@ -92,6 +92,8 @@ typedef struct
   GtkButton *button_simulator;  ///< Simulator program GtkButton.
   GtkCheckButton *check_evaluator;      ///< Evaluator program GtkCheckButton.
   GtkButton *button_evaluator;  ///< Evaluator program GtkButton.
+  GtkCheckButton *check_cleaner;        ///< Cleaner program GtkCheckButton.
+  GtkButton *button_cleaner;    ///< Cleaner program GtkButton.
   GtkLabel *label_result;       ///< Result file GtkLabel.
   GtkEntry *entry_result;       ///< Result file GtkEntry.
   GtkLabel *label_variables;    ///< Variables file GtkLabel.

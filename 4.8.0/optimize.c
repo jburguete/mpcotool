@@ -278,6 +278,18 @@ optimize_parse (unsigned int simulation,        ///< Simulation number.
     }
 
   // Removing files
+  if (optimize->cleaner)
+    {
+      buffer2 = g_path_get_dirname (optimize->cleaner);
+      buffer3 = g_path_get_basename (optimize->cleaner);
+      buffer4 = g_build_filename (buffer2, buffer3, NULL);
+      snprintf (buffer, 512, "\"%s\"", buffer4);
+      g_free (buffer4);
+      g_free (buffer3);
+      g_free (buffer2);
+      if (system (buffer) == -1)
+        error_message = buffer;
+    }
 #if !DEBUG_OPTIMIZE
   for (i = 0; i < optimize->ninputs; ++i)
     {
@@ -1483,6 +1495,9 @@ optimize_open ()
 
   // Obtaining the evaluator file
   optimize->evaluator = input->evaluator;
+
+  // Obtaining the cleaner file
+  optimize->cleaner = input->cleaner;
 
   // Reading the algorithm
   optimize->algorithm = input->algorithm;

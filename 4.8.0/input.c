@@ -69,7 +69,8 @@ input_new ()
   fprintf (stderr, "input_new: start\n");
 #endif
   input->nvariables = input->nexperiments = input->nsteps = 0;
-  input->simulator = input->evaluator = input->directory = input->name = NULL;
+  input->simulator = input->evaluator = input->cleaner = input->directory
+    = input->name = NULL;
   input->experiment = NULL;
   input->variable = NULL;
 #if DEBUG_INPUT
@@ -97,6 +98,7 @@ input_free ()
   g_free (input->variable);
   if (input->type == INPUT_TYPE_XML)
     {
+      xmlFree (input->cleaner);
       xmlFree (input->evaluator);
       xmlFree (input->simulator);
       xmlFree (input->result);
@@ -104,6 +106,7 @@ input_free ()
     }
   else
     {
+      g_free (input->cleaner);
       g_free (input->evaluator);
       g_free (input->simulator);
       g_free (input->result);
@@ -193,6 +196,9 @@ input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
   // Opening evaluator program name
   input->evaluator =
     (char *) xmlGetProp (node, (const xmlChar *) LABEL_EVALUATOR);
+
+  // Opening cleaner program name
+  input->cleaner = (char *) xmlGetProp (node, (const xmlChar *) LABEL_CLEANER);
 
   // Obtaining pseudo-random numbers generator seed
   input->seed
@@ -632,6 +638,11 @@ input_open_json (JsonParser * parser)   ///< JsonParser struct.
   buffer = json_object_get_string_member (object, LABEL_EVALUATOR);
   if (buffer)
     input->evaluator = g_strdup (buffer);
+
+  // Opening cleaner program name
+  buffer = json_object_get_string_member (object, LABEL_CLEANER);
+  if (buffer)
+    input->cleaner = g_strdup (buffer);
 
   // Obtaining pseudo-random numbers generator seed
   input->seed
