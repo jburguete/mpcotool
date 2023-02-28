@@ -1065,7 +1065,7 @@ optimize_step_climbing (unsigned int simulation)        ///< Simulation number.
  * Function to optimize with a hill climbing method.
  */
 static inline void
-optimize_climbing ()
+optimize_climbing (unsigned int nsteps) ///< Number of steps.
 {
   unsigned int i, j, k, b, s, adjust;
 #if DEBUG_OPTIMIZE
@@ -1076,7 +1076,7 @@ optimize_climbing ()
   b = optimize->simulation_best[0] * optimize->nvariables;
   s = optimize->nsimulations;
   adjust = 1;
-  for (i = 0; i < optimize->nsteps; ++i, s += optimize->nestimates, b = k)
+  for (i = 0; i < nsteps; ++i, s += optimize->nestimates, b = k)
     {
 #if DEBUG_OPTIMIZE
       fprintf (stderr, "optimize_climbing: step=%u old_best=%u\n",
@@ -1383,7 +1383,7 @@ optimize_step ()
 #endif
   optimize_algorithm ();
   if (optimize->nsteps)
-    optimize_climbing ();
+    optimize_climbing (optimize->nsteps);
 #if DEBUG_OPTIMIZE
   fprintf (stderr, "optimize_step: end\n");
 #endif
@@ -1414,6 +1414,9 @@ optimize_iterate ()
       optimize_refine ();
       optimize_print ();
     }
+  if (optimize->nsteps)
+    optimize_climbing (optimize->nsteps);
+  optimize_print ();
 #if DEBUG_OPTIMIZE
   fprintf (stderr, "optimize_iterate: end\n");
 #endif
