@@ -67,12 +67,16 @@ OF SUCH DAMAGE.
 #define DEBUG_OPTIMIZE 0        ///< Macro to debug optimize functions.
 
 /**
+ * \def CP
+ * \brief Macro to define the shell copy command.
  * \def RM
  * \brief Macro to define the shell remove command.
  */
 #ifdef G_OS_WIN32
+#define CP "copy"
 #define RM "del"
 #else
+#define CP "cp"
 #define RM "rm"
 #endif
 
@@ -176,7 +180,7 @@ optimize_input_end:
 
 /**
  * Function to parse input files, simulating and calculating the objective 
- *   function.
+ * function.
  *
  * \return Objective function value.
  */
@@ -211,11 +215,7 @@ optimize_parse (unsigned int simulation,        ///< Simulation number.
       else
         {
           buffer2 = input->experiment[experiment].stencil[i];
-#ifdef G_OS_WIN32
-          snprintf (buffer, 256, "copy %s %s", buffer2, &cinput[i][0]);
-#else
-          snprintf (buffer, 256, "cp %s %s", buffer2, &cinput[i][0]);
-#endif
+          snprintf (buffer, 256, CP " %s %s", buffer2, &cinput[i][0]);
           if (system (buffer) == -1)
             error_message = buffer;
         }
@@ -1240,7 +1240,7 @@ optimize_save_old ()
 
 /**
  * Function to merge the best results with the previous step best results on
- *   iterative methods.
+ * iterative methods.
  */
 static inline void
 optimize_merge_old ()
@@ -1288,7 +1288,7 @@ optimize_merge_old ()
 
 /**
  * Function to refine the search ranges of the variables in iterative 
- *   algorithms.
+ * algorithms.
  */
 static inline void
 optimize_refine ()
@@ -1309,7 +1309,7 @@ optimize_refine ()
         {
           optimize->rangemin[j] = optimize->rangemax[j]
             = optimize->value_old[j];
-	  optimize->step[j] = input->variable[j].step;
+          optimize->step[j] = input->variable[j].step;
         }
       for (i = 0; ++i < optimize->nbest;)
         {
@@ -1420,6 +1420,36 @@ optimize_iterate ()
 #if DEBUG_OPTIMIZE
   fprintf (stderr, "optimize_iterate: end\n");
 #endif
+}
+
+/**
+ * Function to save the optimal input files.
+ */
+static inline void
+optimize_save_optimal ()
+{
+  char cinput[32];
+  unsigned int i, j;
+  unsigned int flags = 1;
+
+  // Getting optimal values
+  memcpy (optimize->value, optimize->value_old,
+          optimize->nvariables * sizeof (double));
+
+  // Saving optimal input files
+  for (i = 0; i < optimize->ninputs; ++i)
+    for (j = 0; j < optimize->nexperiments; ++j)
+      {
+        snprintf (cinput, 32, "optimal-%u-%u", i, j);
+#if DEBUG_OPTIMIZE
+        fprintf (stderr, "optimize_save_optimal: i=%u j=%u input=%s\n",
+                 i, j, cinput);
+#endif
+        // Checking templates
+        if (optimize->template_flags & flags)
+          optimize_input (0, cinput, optimize->file[i][j]);
+        flags <<= 1;
+      }
 }
 
 /**
@@ -1753,6 +1783,7 @@ optimize_open ()
            _("Calculation time"), optimize->calculation_time);
 
   // Closing result files
+  optimize_save_optimal ();
   fclose (optimize->file_variables);
   fclose (optimize->file_result);
 
