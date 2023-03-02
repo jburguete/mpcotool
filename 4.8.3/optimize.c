@@ -1415,8 +1415,11 @@ optimize_iterate ()
       optimize_print ();
     }
   if (optimize->nsteps)
-    optimize_climbing (optimize->nsteps);
-  optimize_print ();
+    {
+      optimize_climbing (optimize->nsteps);
+      optimize_merge_old ();
+      optimize_print ();
+    }
 #if DEBUG_OPTIMIZE
   fprintf (stderr, "optimize_iterate: end\n");
 #endif
