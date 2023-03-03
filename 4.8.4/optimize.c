@@ -698,13 +698,17 @@ optimize_synchronise ()
 static void
 optimize_sweep ()
 {
-  unsigned int i, j, k, l;
-  double e;
-  GThread *thread[nthreads];
   ParallelData data[nthreads];
+  GThread *thread[nthreads];
+  double range[optimize->nvariables];
+  double e;
+  unsigned int i, j, k, l;
 #if DEBUG_OPTIMIZE
   fprintf (stderr, "optimize_sweep: start\n");
 #endif
+  for (j = 0; j < optimize->nvariables; ++j)
+    range[j] = (optimize->rangemax[j] - optimize->rangemin[j])
+      / (optimize->nsweeps[j] - 1);
   for (i = 0; i < optimize->nsimulations; ++i)
     {
       k = i;
@@ -714,8 +718,7 @@ optimize_sweep ()
           k /= optimize->nsweeps[j];
           e = optimize->rangemin[j];
           if (optimize->nsweeps[j] > 1)
-            e += l * (optimize->rangemax[j] - optimize->rangemin[j])
-              / (optimize->nsweeps[j] - 1);
+            e += l * range[j];
           optimize->value[i * optimize->nvariables + j] = e;
         }
     }
@@ -748,17 +751,19 @@ optimize_sweep ()
 static void
 optimize_MonteCarlo ()
 {
-  unsigned int i, j;
-  GThread *thread[nthreads];
   ParallelData data[nthreads];
+  GThread *thread[nthreads];
+  double range[optimize->nvariables];
+  unsigned int i, j;
 #if DEBUG_OPTIMIZE
   fprintf (stderr, "optimize_MonteCarlo: start\n");
 #endif
+  for (j = 0; j < optimize->nvariables; ++j)
+    range[j] = optimize->rangemax[j] - optimize->rangemin[j];
   for (i = 0; i < optimize->nsimulations; ++i)
     for (j = 0; j < optimize->nvariables; ++j)
       optimize->value[i * optimize->nvariables + j]
-        = optimize->rangemin[j] + gsl_rng_uniform (optimize->rng)
-        * (optimize->rangemax[j] - optimize->rangemin[j]);
+        = optimize->rangemin[j] + gsl_rng_uniform (optimize->rng) * range[j];
   optimize->nsaveds = 0;
   if (nthreads <= 1)
     optimize_sequential ();
@@ -788,13 +793,17 @@ optimize_MonteCarlo ()
 static void
 optimize_orthogonal ()
 {
-  unsigned int i, j, k, l;
-  double e;
-  GThread *thread[nthreads];
   ParallelData data[nthreads];
+  GThread *thread[nthreads];
+  double range[optimize->nvariables];
+  double e;
+  unsigned int i, j, k, l;
 #if DEBUG_OPTIMIZE
   fprintf (stderr, "optimize_orthogonal: start\n");
 #endif
+  for (j = 0; j < optimize->nvariables; ++j)
+    range[j] = (optimize->rangemax[j] - optimize->rangemin[j])
+      / optimize->nsweeps[j];
   for (i = 0; i < optimize->nsimulations; ++i)
     {
       k = i;
@@ -804,9 +813,7 @@ optimize_orthogonal ()
           k /= optimize->nsweeps[j];
           e = optimize->rangemin[j];
           if (optimize->nsweeps[j] > 1)
-            e += (l + gsl_rng_uniform (optimize->rng))
-              * (optimize->rangemax[j] - optimize->rangemin[j])
-              / optimize->nsweeps[j];
+            e += (l + gsl_rng_uniform (optimize->rng)) * range[j];
           optimize->value[i * optimize->nvariables + j] = e;
         }
     }
@@ -1058,6 +1065,23 @@ optimize_step_climbing (unsigned int simulation)        ///< Simulation number.
     }
 #if DEBUG_OPTIMIZE
   fprintf (stderr, "optimize_step_climbing: end\n");
+#endif
+}
+
+/**
+ * Function to select the best simulation to start the hill climbing method.
+ */
+static inline void
+optimize_climbing_best ()
+{
+#if DEBUG_OPTIMIZE
+  fprintf (stderr, "optimize_climbing_best: start\n");
+#endif
+  optimize->simulation_best[0] = 0;
+  memcpy (optimize->value, optimize->value_old,
+          optimize->nvariables * sizeof (double));
+#if DEBUG_OPTIMIZE
+  fprintf (stderr, "optimize_climbing_best: end\n");
 #endif
 }
 
@@ -1414,8 +1438,9 @@ optimize_iterate ()
       optimize_refine ();
       optimize_print ();
     }
-  if (optimize->nsteps)
+  if (optimize->nsteps && !optimize->stop)
     {
+      optimize_climbing_best ();
       optimize_climbing (optimize->nsteps);
       optimize_merge_old ();
       optimize_print ();

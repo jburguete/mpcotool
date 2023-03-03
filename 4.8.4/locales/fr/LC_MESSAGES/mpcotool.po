@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 4.8.3\n"
+"Project-Id-Version: 4.8.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 18:19+0100\n"
+"POT-Creation-Date: 2023-03-03 11:23+0100\n"
 "PO-Revision-Date: 2015-10-20 18:47+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -237,7 +237,7 @@ msgstr "On ne peut pas analyser le fichier d'entrée"
 msgid "Best result"
 msgstr "Meilleur résultat"
 
-#: optimize.c:1784 optimize.c:1786 interface.c:1071
+#: optimize.c:1809 optimize.c:1811 interface.c:1071
 msgid "Calculation time"
 msgstr "Temps de calcul"
 

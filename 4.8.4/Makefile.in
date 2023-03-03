@@ -88,6 +88,7 @@ ifeq (@CC@, clang)
 	MAINBINDEP = $(TESTSDEP)
 	MCXML1_PREFIX = LLVM_PROFILE_FILE="mcxml-1.profdata"
 	MCJSON_PREFIX = LLVM_PROFILE_FILE="mcjson.profdata"
+	MCITJSON_PREFIX = LLVM_PROFILE_FILE="mcitjson.profdata"
 	SW_PREFIX = LLVM_PROFILE_FILE="sw.profdata"
 	OS_PREFIX = LLVM_PROFILE_FILE="os.profdata"
 	GA_PREFIX = LLVM_PROFILE_FILE="ga.profdata"
@@ -173,6 +174,8 @@ $(bin)mpcotoolbinpgo@EXE@: $(bin)mainbin.pgo $(libmpcotoolpgo) $(libgenetic) \
 	$(MCXML1_PREFIX) $(bin)mpcotoolbinpgo -t 1 \
 		../tests/test1/test-mc@WIN@.xml
 	$(MCJSON_PREFIX) $(bin)mpcotoolbinpgo ../tests/test1/test-mc@WIN@.json
+	$(MCITJSON_PREFIX) $(bin)mpcotoolbinpgo \
+		../tests/test1/test-mc-it@WIN@.json
 	$(SW_PREFIX) $(bin)mpcotoolbinpgo ../tests/test1/test-sw@WIN@.xml
 	$(OS_PREFIX) $(bin)mpcotoolbinpgo ../tests/test1/test-os@WIN@.xml
 	$(GA_PREFIX) $(bin)mpcotoolbinpgo ../tests/test1/test-ga@WIN@.xml
