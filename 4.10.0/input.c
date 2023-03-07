@@ -68,7 +68,8 @@ input_new ()
 #if DEBUG_INPUT
   fprintf (stderr, "input_new: start\n");
 #endif
-  input->nvariables = input->nexperiments = input->nsteps = 0;
+  input->nvariables = input->nexperiments = input->nsteps = input->nfinal_steps
+    = 0;
   input->simulator = input->evaluator = input->cleaner = input->directory
     = input->name = NULL;
   input->experiment = NULL;
@@ -112,7 +113,8 @@ input_free ()
       g_free (input->result);
       g_free (input->variables);
     }
-  input->nexperiments = input->nvariables = input->nsteps = 0;
+  input->nexperiments = input->nvariables = input->nsteps
+    = input->nfinal_steps = 0;
 #if DEBUG_INPUT
   fprintf (stderr, "input_free: end\n");
 #endif
@@ -140,7 +142,7 @@ input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
   xmlNode *node, *child;
   xmlChar *buffer;
   int error_code;
-  unsigned int i;
+  unsigned int i, nsteps;
 
 #if DEBUG_INPUT
   fprintf (stderr, "input_open_xml: start\n");
@@ -393,9 +395,28 @@ input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
               input_error (_("Invalid steps number"));
               goto exit_on_error;
             }
+        }
+      else
+        input->nsteps = 0;
+      if (xmlHasProp (node, (const xmlChar *) LABEL_NFINAL_STEPS))
+        {
+          input->nfinal_steps =
+            jb_xml_node_get_uint (node, (const xmlChar *) LABEL_NFINAL_STEPS,
+                                  &error_code);
+          if (!error_code)
+            {
+              input_error (_("Invalid final steps number"));
+              goto exit_on_error;
+            }
+        }
+      else
+        input->nfinal_steps = input->nsteps;
+      nsteps = JBM_MAX (input->nsteps, input->nfinal_steps);
 #if DEBUG_INPUT
-          fprintf (stderr, "input_open_xml: nsteps=%u\n", input->nsteps);
+      fprintf (stderr, "input_open_xml: nsteps=%u\n", nsteps);
 #endif
+      if (nsteps)
+        {
           buffer = xmlGetProp (node, (const xmlChar *) LABEL_CLIMBING);
           if (!xmlStrcmp (buffer, (const xmlChar *) LABEL_COORDINATES))
             input->climbing = CLIMBING_METHOD_COORDINATES;
@@ -431,8 +452,6 @@ input_open_xml (xmlDoc * doc)   ///< xmlDoc struct.
               goto exit_on_error;
             }
         }
-      else
-        input->nsteps = 0;
     }
   // Obtaining the threshold
   input->threshold =
@@ -828,6 +847,19 @@ input_open_json (JsonParser * parser)   ///< JsonParser struct.
               input_error (_("Invalid steps number"));
               goto exit_on_error;
             }
+          if (json_object_has_member (object, LABEL_NFINAL_STEPS))
+            {
+              input->nfinal_steps
+                = jb_json_object_get_uint (object, LABEL_NFINAL_STEPS,
+                                           &error_code);
+              if (!error_code)
+                {
+                  input_error (_("Invalid final steps number"));
+                  goto exit_on_error;
+                }
+            }
+          else
+            input->nfinal_steps = input->nsteps;
           buffer = json_object_get_string_member (object, LABEL_CLIMBING);
           if (!strcmp (buffer, LABEL_COORDINATES))
             input->climbing = CLIMBING_METHOD_COORDINATES;
@@ -859,7 +891,7 @@ input_open_json (JsonParser * parser)   ///< JsonParser struct.
             }
         }
       else
-        input->nsteps = 0;
+        input->nsteps = input->nfinal_steps = 0;
     }
   // Obtaining the threshold
   input->threshold

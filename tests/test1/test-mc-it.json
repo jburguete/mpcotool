@@ -10,6 +10,7 @@
 	"tolerance":"4",
 	"nbest":"4",
 	"nsteps":"2",
+	"nfinal_steps":"4",
 	"climbing":"coordinates",
 	"norm":"euclidian",
 	"experiments":

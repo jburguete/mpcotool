@@ -92,6 +92,7 @@ OF SUCH DAMAGE.
 #define LABEL_NBEST "nbest"     ///< nbest label.
 #define LABEL_NBITS "nbits"     ///< nbits label.
 #define LABEL_NESTIMATES "nestimates"   ///< nestimates label.
+#define LABEL_NFINAL_STEPS "nfinal_steps"       ///< nfinal_steps label.
 #define LABEL_NGENERATIONS "ngenerations"       ///< ngenerations label.
 #define LABEL_NITERATIONS "niterations" ///< niterations label.
 #define LABEL_NORM "norm"       ///< norm label.

@@ -1438,10 +1438,10 @@ optimize_iterate ()
       optimize_refine ();
       optimize_print ();
     }
-  if (optimize->nsteps && !optimize->stop)
+  if (optimize->nfinal_steps && !optimize->stop)
     {
       optimize_climbing_best ();
-      optimize_climbing (optimize->nsteps);
+      optimize_climbing (optimize->nfinal_steps);
       optimize_merge_old ();
       optimize_print ();
     }
@@ -1513,7 +1513,7 @@ optimize_open ()
 {
   GTimeZone *tz;
   GDateTime *t0, *t;
-  unsigned int i, j;
+  unsigned int i, j, nsteps;
 
 #if DEBUG_OPTIMIZE
   char *buffer;
@@ -1585,10 +1585,12 @@ optimize_open ()
   optimize->nbest = input->nbest;
   optimize->tolerance = input->tolerance;
   optimize->nsteps = input->nsteps;
+  optimize->nfinal_steps = input->nfinal_steps;
+  nsteps = JBM_MAX (optimize->nsteps, optimize->nfinal_steps);
   optimize->nestimates = 0;
   optimize->threshold = input->threshold;
   optimize->stop = 0;
-  if (input->nsteps)
+  if (nsteps)
     {
       optimize->relaxation = input->relaxation;
       switch (input->climbing)
@@ -1685,7 +1687,7 @@ optimize_open ()
 #endif
         }
     }
-  if (optimize->nsteps)
+  if (nsteps)
     optimize->climbing
       = (double *) alloca (optimize->nvariables * sizeof (double));
 
@@ -1734,8 +1736,7 @@ optimize_open ()
            optimize->nvariables, optimize->nsimulations);
 #endif
   optimize->value = (double *)
-    g_malloc ((optimize->nsimulations
-               + optimize->nestimates * optimize->nsteps)
+    g_malloc ((optimize->nsimulations + optimize->nestimates * nsteps)
               * optimize->nvariables * sizeof (double));
 
   // Calculating simulations to perform for each task
@@ -1746,7 +1747,7 @@ optimize_open ()
 #endif
   optimize->nstart = optimize->mpi_rank * optimize->nsimulations / ntasks;
   optimize->nend = (1 + optimize->mpi_rank) * optimize->nsimulations / ntasks;
-  if (optimize->nsteps)
+  if (nsteps)
     {
       optimize->nstart_climbing
         = optimize->mpi_rank * optimize->nestimates / ntasks;
@@ -1756,7 +1757,7 @@ optimize_open ()
 #else
   optimize->nstart = 0;
   optimize->nend = optimize->nsimulations;
-  if (optimize->nsteps)
+  if (nsteps)
     {
       optimize->nstart_climbing = 0;
       optimize->nend_climbing = optimize->nestimates;
@@ -1779,7 +1780,7 @@ optimize_open ()
                optimize->thread[i]);
 #endif
     }
-  if (optimize->nsteps)
+  if (nsteps)
     optimize->thread_climbing = (unsigned int *)
       alloca ((1 + nthreads_climbing) * sizeof (unsigned int));
 

@@ -97,6 +97,8 @@ typedef struct
   unsigned int nsimulations;    ///< Simulations number per experiment.
   unsigned int nsteps;
   ///< Number of steps for the hill climbing method.
+  unsigned int nfinal_steps;
+  ///< Number of steps to do the hill climbing method at the final pass.
   unsigned int nestimates;
   ///< Number of simulations to estimate the climbing.
   unsigned int algorithm;       ///< Algorithm type.

@@ -844,6 +844,8 @@ window_save_climbing ()
   if (gtk_check_button_get_active (window->check_climbing))
     {
       input->nsteps = gtk_spin_button_get_value_as_int (window->spin_steps);
+      input->nfinal_steps
+        = gtk_spin_button_get_value_as_int (window->spin_final_steps);
       input->relaxation = gtk_spin_button_get_value (window->spin_relaxation);
       switch (window_get_climbing ())
         {
@@ -1137,7 +1139,7 @@ window_about ()
      "Javier Burguete Tolosa <jburguete@eead.csic.es> "
      "(english, french and spanish)\n"
      "Uğur Çayoğlu (german)",
-     "version", "4.8.4",
+     "version", "4.10.0",
      "copyright", "Copyright 2012-2023 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/mpcotool",
@@ -1702,6 +1704,8 @@ window_set_variable ()
   gtk_spin_button_set_value (window->spin_precision,
                              input->variable[i].precision);
   gtk_spin_button_set_value (window->spin_steps, (gdouble) input->nsteps);
+  gtk_spin_button_set_value (window->spin_final_steps,
+                             (gdouble) input->nfinal_steps);
   if (input->nsteps)
     gtk_spin_button_set_value (window->spin_step, input->variable[i].step);
 #if DEBUG_INTERFACE
@@ -2027,6 +2031,8 @@ window_read (char *filename)    ///< File name.
             (window->button_climbing[input->climbing], TRUE);
           gtk_spin_button_set_value (window->spin_steps,
                                      (gdouble) input->nsteps);
+          gtk_spin_button_set_value (window->spin_final_steps,
+                                     (gdouble) input->nfinal_steps);
           gtk_spin_button_set_value (window->spin_relaxation,
                                      (gdouble) input->relaxation);
           switch (input->climbing)
@@ -2680,6 +2686,11 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
   window->spin_steps = (GtkSpinButton *)
     gtk_spin_button_new_with_range (1., 1.e12, 1.);
   gtk_widget_set_hexpand (GTK_WIDGET (window->spin_steps), TRUE);
+  window->label_final_steps
+    = (GtkLabel *) gtk_label_new (_("Final steps number"));
+  window->spin_final_steps = (GtkSpinButton *)
+    gtk_spin_button_new_with_range (1., 1.e12, 1.);
+  gtk_widget_set_hexpand (GTK_WIDGET (window->spin_final_steps), TRUE);
   window->label_estimates
     = (GtkLabel *) gtk_label_new (_("Climbing estimates number"));
   window->spin_estimates = (GtkSpinButton *)
@@ -2692,14 +2703,19 @@ window_new (GtkApplication * application)       ///< GtkApplication struct.
                    0, NCLIMBINGS, 1, 1);
   gtk_grid_attach (window->grid_climbing, GTK_WIDGET (window->spin_steps),
                    1, NCLIMBINGS, 1, 1);
-  gtk_grid_attach (window->grid_climbing, GTK_WIDGET (window->label_estimates),
+  gtk_grid_attach (window->grid_climbing,
+                   GTK_WIDGET (window->label_final_steps),
                    0, NCLIMBINGS + 1, 1, 1);
-  gtk_grid_attach (window->grid_climbing, GTK_WIDGET (window->spin_estimates),
+  gtk_grid_attach (window->grid_climbing, GTK_WIDGET (window->spin_final_steps),
                    1, NCLIMBINGS + 1, 1, 1);
-  gtk_grid_attach (window->grid_climbing, GTK_WIDGET (window->label_relaxation),
+  gtk_grid_attach (window->grid_climbing, GTK_WIDGET (window->label_estimates),
                    0, NCLIMBINGS + 2, 1, 1);
-  gtk_grid_attach (window->grid_climbing, GTK_WIDGET (window->spin_relaxation),
+  gtk_grid_attach (window->grid_climbing, GTK_WIDGET (window->spin_estimates),
                    1, NCLIMBINGS + 2, 1, 1);
+  gtk_grid_attach (window->grid_climbing, GTK_WIDGET (window->label_relaxation),
+                   0, NCLIMBINGS + 3, 1, 1);
+  gtk_grid_attach (window->grid_climbing, GTK_WIDGET (window->spin_relaxation),
+                   1, NCLIMBINGS + 3, 1, 1);
 
   // Creating the array of algorithms
   window->grid_algorithm = (GtkGrid *) gtk_grid_new ();

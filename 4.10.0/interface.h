@@ -157,6 +157,9 @@ typedef struct
 #endif
   GtkLabel *label_steps;        ///< GtkLabel to set the steps number.
   GtkSpinButton *spin_steps;    ///< GtkSpinButton to set the steps number.
+  GtkLabel *label_final_steps;  ///< GtkLabel to set the final steps number.
+  GtkSpinButton *spin_final_steps;
+  ///< GtkSpinButton to set the final steps number.
   GtkLabel *label_estimates;    ///< GtkLabel to set the estimates number.
   GtkSpinButton *spin_estimates;
   ///< GtkSpinButton to set the estimates number.
