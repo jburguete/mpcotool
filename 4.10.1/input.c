@@ -1063,7 +1063,7 @@ input_open (char *filename)     ///< Input data file name.
   return 1;
 
 exit_on_error:
-  jbw_show_error (error_message);
+  jb_show_error (error_message);
   g_free (error_message);
   input_free ();
 #if DEBUG_INPUT

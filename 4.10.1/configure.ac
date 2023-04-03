@@ -1,6 +1,6 @@
 # Header
 AC_PREREQ([2.69])
-AC_INIT([mpcotool], [4.10.0], [https://github.com/jburguete/mpcotool])
+AC_INIT([mpcotool], [4.10.1], [https://github.com/jburguete/mpcotool])
 
 # Checks for operative systems
 AC_CANONICAL_TARGET
