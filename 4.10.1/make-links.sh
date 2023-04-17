@@ -2,6 +2,9 @@
 if [ `uname -o` != 'Msys' ]; then
   ln -sf ../../jb/jb
   ln -sf ../../genetic/genetic
+  for i in 2 3 4; do
+    ln -sf ../../../genetic/genetic ../tests/test$i
+  done
   so='.so'
 else
   so='.dll'
@@ -13,3 +16,6 @@ ln -sf jb/bin/libjbxml-3$so
 ln -sf jb/bin/libjbbin-3$so
 ln -sf jb/bin/libjbwin-3$so
 ln -sf genetic/libgenetic$so
+for i in 2 3 4; do
+  ln -sf genetic/libgenetic$so ../tests/test$i
+done
