@@ -8,6 +8,7 @@ AM_INIT_AUTOMAKE
 AC_MSG_NOTICE([Build: $build])
 AC_MSG_NOTICE([Host: $host])
 win=0
+mac=0
 native=1
 if test $host = "x86_64-w64-mingw32"; then
 	AC_MSG_NOTICE([Microsoft Windows 64 bits])
@@ -45,17 +46,22 @@ elif test `uname -s` = "DragonFly"; then
 elif test `uname -s` = "SunOS"; then
 	AC_MSG_NOTICE([SunOS])
 	AC_SUBST(gnu,[/usr/gnu/bin/])
+elif test `uname -s` = "Darwin"; then
+	AC_MSG_NOTICE([MacOS])
+	mac=1
 else
 	AC_SUBST(PREFIX, [/usr])
 	AC_SUBST(SED, [sed])
 fi
 if test $win = 1; then
 	native=0
+	test_lib="test -x"
 	so=.dll
 	AC_CHECK_TOOL(WINDRES, windres)
 	AC_SUBST(EXE, [.exe])
 	AC_SUBST(WIN, [-win])
 else
+	test_lib="test -L"
 	so=.so
 fi
 AC_SUBST(SO, [$so])
@@ -73,12 +79,22 @@ if test "`command -v gmake`"; then
 else
 	AC_SUBST(MAKE, [make])
 fi
-if test $CC = "clang"; then
+if test $CC = "clang" || test $mac = 1; then
+	AC_SUBST(CLANG, [1])
+	AC_SUBST(RPATH, [-rpath,])
 	AC_CHECK_PROGS([LLVM_PROFDATA], [llvm-profdata llvm-profdata-15], 0)
 	if test $LLVM_PROFDATA = 0; then
 		AC_MSG_ERROR([No llvm-profdata])
 	fi
 	AC_MSG_NOTICE([llvm-profdata: $LLVM_PROFDATA])
+else
+	AC_SUBST(CLANG, [0])
+	AC_SUBST(RPATH, [-rpath=])
+fi
+if test $mac = 1; then
+	AC_SUBST(STRIP, "strip -x")
+else
+	AC_SUBST(STRIP, [strip])
 fi
 
 # Checking MPI
@@ -180,37 +196,37 @@ fi
 
 # Checks for libraries
 genetic=libgenetic$so
-if test -x "$genetic"; then
+if $test_lib "$genetic"; then
 	AC_MSG_NOTICE([Genetic library installed])
 else
 	AC_MSG_ERROR([Genetic library not installed])
 fi
 libjb=libjb-$precision$so
-if test -x "$libjb"; then
+if $test_lib "$libjb"; then
 	AC_MSG_NOTICE([$libjb: OK])
 else
 	AC_MSG_ERROR([$libjb: not installed])
 fi
 libjbm=libjbm-$precision$so
-if test -x "$libjbm"; then
+if $test_lib "$libjbm"; then
 	AC_MSG_NOTICE([$libjbm: OK])
 else
 	AC_MSG_ERROR([$libjbm: not installed])
 fi
 libjbjson=libjbjson-$precision$so
-if test -x "$libjbjson"; then
+if $test_lib "$libjbjson"; then
 	AC_MSG_NOTICE([$libjbjson: OK])
 else
 	AC_MSG_ERROR([$libjbjson: not installed])
 fi
 libjbxml=libjbxml-$precision$so
-if test -x "$libjbxml"; then
+if $test_lib "$libjbxml"; then
 	AC_MSG_NOTICE([$libjbxml: OK])
 else
 	AC_MSG_ERROR([$libjbxml: not installed])
 fi
 libjbbin=libjbbin-$precision$so
-if test -x "$libjbbin"; then
+if $test_lib "$libjbbin"; then
 	AC_MSG_NOTICE([$libjbbin: OK])
 else
 	AC_MSG_ERROR([$libjbbin: not installed])
@@ -248,7 +264,7 @@ elif test $gtk3 = 1; then
 fi
 if test $gtk = 1; then
 	libjbwin=libjbwin-$precision$so
-	if test -x "$libjbwin"; then
+	if $test_lib "$libjbwin"; then
 		AC_MSG_NOTICE([$libjbwin: OK])
 	else
 		AC_MSG_ERROR([$libjbwin: not installed])

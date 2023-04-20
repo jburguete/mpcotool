@@ -75,7 +75,7 @@ MANUALS = $(M1) $(M2) $(MDIR)reference-manual.pdf
 ifeq (@PGO@, 1)
 	PGOOBJLIB = $(mpcotoolbin_pgo) $(experiment_pgo) $(variable_pgo) \
 		$(input_pgo) $(optimize_pgo) $(toolsbin_pgo)
-ifeq (@CC@, clang)
+ifeq (@CLANG@, 1)
 	PGOGEN = -fprofile-instr-generate
 	PGOUSE = -fprofile-instr-use=$(bin)mpcotool.profraw
 	TESTSDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)mpcotool.profraw
@@ -161,7 +161,7 @@ $(mpcotoolbin_pgo): mpcotool.c mpcotool.h optimize.h input.h variable.h \
 
 $(libmpcotoolpgo): $(PGOOBJLIB)
 	$(CC) $(PGOGEN) -shared $(PGOOBJLIB) -o $(libmpcotoolpgo) -L. \
-		-Wl,-rpath=. -lgenetic $(JBLIBS)
+		-Wl,@RPATH@. -lgenetic $(JBLIBS)
 
 $(bin)mainbin.pgo: main.c mpcotool.h optimize.h input.h variable.h \
 	experiment.h tools.h config.h $(DEPBIN)
@@ -170,7 +170,7 @@ $(bin)mainbin.pgo: main.c mpcotool.h optimize.h input.h variable.h \
 $(bin)mpcotoolbinpgo@EXE@: $(bin)mainbin.pgo $(libmpcotoolpgo) $(libgenetic) \
 	$(PGOTESTS)
 	$(CC) $(PGOGEN) $(bin)mainbin.pgo -o $(bin)mpcotoolbinpgo@EXE@ \
-		-L$(bin) -Wl,-rpath=. -lmpcotoolpgo -lgenetic $(JBBINLIBS)
+		-L$(bin) -Wl,@RPATH@. -lmpcotoolpgo -lgenetic $(JBBINLIBS)
 	$(MCXML1_PREFIX) $(bin)mpcotoolbinpgo -t 1 \
 		../tests/test1/test-mc@WIN@.xml
 	$(MCJSON_PREFIX) $(bin)mpcotoolbinpgo ../tests/test1/test-mc@WIN@.json
@@ -201,14 +201,14 @@ $(mpcotoolbin_o): $(MPCOTOOLBINDEP)
 
 $(libmpcotool): $(OBJLIB)
 	$(CC) $(PGOUSE) -shared -DEXTERNAL_LIBRARY=1 $(OBJLIB) \
-		-o $(libmpcotool) -L. -Wl,-rpath=. -lgenetic $(JBLIBS) 
+		-o $(libmpcotool) -L. -Wl,@RPATH@. -lgenetic $(JBLIBS) 
 
 $(bin)mainbin.o: $(MAINBINDEP)
 	$(CC) -c $(CFLAGS) $(PGOUSE) main.c -o $(bin)mainbin.o
 
 $(bin)mpcotoolbin@EXE@: $(bin)mainbin.o $(libmpcotool)
 	$(CC) $(PGOUSE) $(bin)mainbin.o -o $(bin)mpcotoolbin@EXE@ \
-		-L$(bin) -Wl,-rpath=. -lmpcotool -lgenetic $(JBBINLIBS)
+		-L$(bin) -Wl,@RPATH@. -lmpcotool -lgenetic $(JBBINLIBS)
 
 
 $(tools_o): tools.c tools.h config.h $(DEPWIN)
@@ -232,7 +232,7 @@ $(bin)main.o: main.c mpcotool.h optimize.h input.h variable.h experiment.h \
 
 $(bin)mpcotool@EXE@: $(bin)main.o $(libmpcotool) $(OBJGUI) @ICON@
 	$(CC) $(bin)main.o $(OBJGUI) -o $(mpcotool) -L$(bin) \
-		-Wl,-rpath=. -lmpcotool -lgenetic $(JBWINLIBS) @GTK_LIBS@ \
+		-Wl,@RPATH@. -lmpcotool -lgenetic $(JBWINLIBS) @GTK_LIBS@ \
 		@FREETYPE_LIBS@
 
 clean:
@@ -240,7 +240,8 @@ clean:
 
 strip:
 	@MAKE@
-	strip $(bin)mpcotoolbin@EXE@ $(libmpcotool) $(mpcotool)
+	@STRIP@ $(libmpcotool)
+	strip $(bin)mpcotoolbin@EXE@ $(mpcotool)
 
 locales/mpcotool.pot: $(SRC) Makefile
 	@gnu@xgettext -k_ -d mpcotool -o locales/mpcotool.pot \
