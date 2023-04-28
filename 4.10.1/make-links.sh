@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-if [ `uname -s` != 'Msys' ]; then
+if [ `uname -o` != 'Msys' ]; then
   ln -sf ../../jb/jb
   ln -sf ../../genetic/genetic
   for i in 2 3 4; do
@@ -10,6 +10,7 @@ if [ `uname -s` != 'Msys' ]; then
   fi
   so='.so'
 else
+  bin=bin/
   so='.dll'
 fi
 ln -sf jb/${bin}libjb-3$so
