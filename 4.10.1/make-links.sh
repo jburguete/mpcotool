@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-if [ `uname -o` != 'Msys' ]; then
+if [[ `uname -s` = 'NetBSD' || `uname -o` != 'Msys' ]]; then
   ln -sf ../../jb/jb
   ln -sf ../../genetic/genetic
   for i in 2 3 4; do
