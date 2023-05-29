@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+if [[ `uname -s` = "OpenBSD" ]]; then
+	export AUTOCONF_VERSION=2.71
+	export AUTOMAKE_VERSION=1.16
+fi
 if [[ $# != 6 ]]; then
 	echo "The syntax is: ./build.sh A B C D E F"
 	echo "A: 1 on MPI"
