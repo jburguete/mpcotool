@@ -2,6 +2,8 @@
 if [[ `uname -s` = "OpenBSD" ]]; then
 	export AUTOCONF_VERSION=2.71
 	export AUTOMAKE_VERSION=1.16
+elif [[ `uname -s` = "SunOS" ]]; then
+	export PATH=/usr/gcc/11/bin:$PATH
 fi
 if [[ $# != 6 ]]; then
 	echo "The syntax is: ./build.sh A B C D E F"
