@@ -110,7 +110,7 @@ then does not apply this step):
 
 This software has been built and tested in the following operative systems:
 * Arch Linux
-* Debian Linux 11
+* Debian Linux 12
 * Devuan Linux 4
 * DragonFly BSD 6.4
 * Fedora Linux 38
@@ -123,8 +123,8 @@ This software has been built and tested in the following operative systems:
 * NetBSD 9.3
 * OpenBSD 7.3
 * OpenInidiana Hipster
-* OpenSUSE Linux Leap 15.4
-* Ubuntu Linux 22.10
+* OpenSUSE Linux Leap 15.5
+* Ubuntu Linux 23.04
 
 Probably, it can be built in other systems, distributions, or versions but it
 has not been tested.
