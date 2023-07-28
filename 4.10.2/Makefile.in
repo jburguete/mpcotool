@@ -339,7 +339,7 @@ $(M2): $(MDIR)manual-de-usuario.tex $(MDIR)bib.bib \
 		latex manual-de-usuario; latex manual-de-usuario; \
 		dvipdf manual-de-usuario
 
-$(MDIR)reference-manual.pdf: $(SRC) README.md Doxyfile
+$(MDIR)reference-manual.pdf: $(SRC) ../README.md Doxyfile
 	doxygen
 	cd latex; @SED@ -i 's/∞//g' *.tex; @MAKE@; \
 		mv refman.pdf ../$(MDIR)reference-manual.pdf
