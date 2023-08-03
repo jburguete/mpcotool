@@ -68,7 +68,7 @@ AC_SUBST(SO, [$so])
 AC_MSG_NOTICE([prefix=$PREFIX])
 
 # Checks for programs
-AC_PROG_CC([mpicc gcc-12 gcc12 gcc-11 gcc11 gcc-10 gcc10 egcc gcc clang])
+AC_PROG_CC([mpicc gcc-13 gcc13 gcc-12 gcc12 gcc-11 gcc11 gcc-10 gcc10 egcc gcc clang])
 AC_MSG_NOTICE([Compiler: $CC])
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
