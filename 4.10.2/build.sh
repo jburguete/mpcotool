@@ -44,7 +44,10 @@ autoconf
 automake --add-missing
 ./configure $a1 $a2 $a3 $a4 $a5
 if test -x "`command -v gmake`"; then
-	gmake $a6
+	make="gmake"
 else
-	make $a6
+	make="make"
 fi
+$make
+$make tests
+$make $a6
