@@ -74,7 +74,7 @@ if test "x$with_mpi" = "xyes"; then
 	if test "x$MPICC" = "xmpicc"; then
 		AC_MSG_NOTICE([checking for MPI... yes])
 		AC_DEFINE([HAVE_MPI], [1])
-		CC=$MPICCº
+		CC=$MPICC
 	else
 		AC_MSG_NOTICE([checking for MPI... no])
 	fi
@@ -91,14 +91,27 @@ if test "`command -v gmake`"; then
 else
 	AC_SUBST(MAKE, [make])
 fi
-if test $CC = "clang" || test $mac = 1; then
-	AC_SUBST(CLANG, [1])
+CL=0
+if test "x$MPICC" = "x"; then
+	if test $CC = "clang"; then
+		CL=1
+	fi
+else
+	CCBASE=`$MPICC -show | grep gcc`
+	if test "x$CCBASE" = "x"; then
+		CL=1
+	fi
+fi
+if test $CL = 1; then
+	AC_MSG_NOTICE([Clang compiler])
 	AC_SUBST(RPATH, [-rpath,])
-	AC_CHECK_PROGS([LLVM_PROFDATA], [llvm-profdata],
-		AC_MSG_ERROR([No llvm-profdata]))
+	AC_CHECK_PROGS([LLVM_PROFDATA], [llvm-profdata], 0)
+	if test $LLVM_PROFDATA = 0; then
+	      	AC_MSG_ERROR([No llvm-profdata])
+	fi
 	AC_MSG_NOTICE([llvm-profdata: $LLVM_PROFDATA])
 else
-	AC_SUBST(CLANG, [0])
+	AC_MSG_NOTICE([GCC compiler])
 	AC_SUBST(RPATH, [-rpath=])
 fi
 if test $mac = 1; then
