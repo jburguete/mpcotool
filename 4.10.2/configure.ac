@@ -67,8 +67,20 @@ fi
 AC_SUBST(SO, [$so])
 AC_MSG_NOTICE([prefix=$PREFIX])
 
+# Checking MPI
+AC_PROG_CC([gcc-13 gcc13 gcc-12 gcc12 gcc-11 gcc11 gcc-10 gcc10 egcc gcc clang])
+if test "x$with_mpi" = "xyes"; then
+	AC_CHECK_TOOL([MPICC], [mpicc])
+	if test "x$MPICC" = "xmpicc"; then
+		AC_MSG_NOTICE([checking for MPI... yes])
+		AC_DEFINE([HAVE_MPI], [1])
+		CC=$MPICCº
+	else
+		AC_MSG_NOTICE([checking for MPI... no])
+	fi
+fi
+
 # Checks for programs
-AC_PROG_CC([mpicc gcc-13 gcc13 gcc-12 gcc12 gcc-11 gcc11 gcc-10 gcc10 egcc gcc clang])
 AC_MSG_NOTICE([Compiler: $CC])
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
@@ -82,10 +94,8 @@ fi
 if test $CC = "clang" || test $mac = 1; then
 	AC_SUBST(CLANG, [1])
 	AC_SUBST(RPATH, [-rpath,])
-	AC_CHECK_PROGS([LLVM_PROFDATA], [llvm-profdata llvm-profdata-15], 0)
-	if test $LLVM_PROFDATA = 0; then
-		AC_MSG_ERROR([No llvm-profdata])
-	fi
+	AC_CHECK_PROGS([LLVM_PROFDATA], [llvm-profdata],
+		AC_MSG_ERROR([No llvm-profdata]))
 	AC_MSG_NOTICE([llvm-profdata: $LLVM_PROFDATA])
 else
 	AC_SUBST(CLANG, [0])
@@ -95,17 +105,6 @@ if test $mac = 1; then
 	AC_SUBST(STRIP, "strip -x")
 else
 	AC_SUBST(STRIP, [strip])
-fi
-
-# Checking MPI
-AC_ARG_WITH([mpi], AS_HELP_STRING([--with-mpi], [Build with MPI]))
-if test "x$with_mpi" = "xyes"; then
-	if test "x$CC" = "xmpicc"; then
-		AC_MSG_NOTICE([checking for MPI... yes])
-		AC_DEFINE([HAVE_MPI], [1])
-	else
-		AC_MSG_NOTICE([checking for MPI... no])
-	fi
 fi
 
 # Checks for compiler flags
@@ -118,7 +117,7 @@ if test $native = 1; then
 		[Build using -march=native compiler flag]))
 	if test "x$with_native" = "xyes"; then
 		CC="$CC -march=native"
-		AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[]])], [arch=1], [])
+		AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[]])], [arch=1])
 		CC=$compiler
 	fi
 fi
