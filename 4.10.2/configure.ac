@@ -112,7 +112,11 @@ if test $CL = 1; then
 	AC_MSG_NOTICE([llvm-profdata: $LLVM_PROFDATA])
 else
 	AC_MSG_NOTICE([GCC compiler])
-	AC_SUBST(RPATH, [-rpath=])
+	if test $mac = 1; then
+		AC_SUBST(RPATH, [-rpath,])
+	else
+		AC_SUBST(RPATH, [-rpath=])
+	fi
 fi
 if test $mac = 1; then
 	AC_SUBST(STRIP, "strip -x")
@@ -281,6 +285,7 @@ if test $gtk = 1; then
 	else
 		AC_MSG_ERROR([$libjbwin: not installed])
 	fi
+	PKG_CHECK_MODULES([GLEW], [glew])
 	PKG_CHECK_MODULES([FREETYPE], [freetype2])
 	AC_SUBST(MPCOTOOL, 1)
 else
