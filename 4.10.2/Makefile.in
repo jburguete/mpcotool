@@ -74,66 +74,64 @@ M2 = $(MDIR)manual-de-usuario.pdf
 MANUALS = $(M1) $(M2) $(MDIR)reference-manual.pdf
 CLANG = 0
 ifeq (@CC@, mpicc)
-	CCBASE = `mpicc -show | grep gcc`
-	ifeq (x$(CCBASE), x)
-		CLANG = 1
-	endif
+CCBASE = `mpicc -show | grep gcc`
+ifeq (x$(CCBASE), x)
+CLANG = 1
+endif
 else ifeq (@CC@, clang)
-	CLANG = 1
+CLANG = 1
 endif
 ifeq (@PGO@, 1)
-	PGOOBJLIB = $(mpcotoolbin_pgo) $(experiment_pgo) $(variable_pgo) \
-		$(input_pgo) $(optimize_pgo) $(toolsbin_pgo)
-	ifeq ($(CLANG), 1)
-		PGOGEN = -fprofile-instr-generate
-		PGOUSE = -fprofile-instr-use=$(bin)mpcotool.profraw
-		TESTSDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)mpcotool.profraw
-		TOOLSBINDEP = $(TESTSDEP)
-		OPTIMIZEDEP = $(TESTSDEP)
-		INPUTDEP = $(TESTSDEP)
-		VARIABLEDEP = $(TESTSDEP)
-		EXPERIMENTDEP = $(TESTSDEP)
-		MPCOTOOLBINDEP = $(TESTSDEP)
-		MAINBINDEP = $(TESTSDEP)
-		MCXML1_PREFIX = LLVM_PROFILE_FILE="mcxml-1.profdata"
-		MCJSON_PREFIX = LLVM_PROFILE_FILE="mcjson.profdata"
-		MCITJSON_PREFIX = LLVM_PROFILE_FILE="mcitjson.profdata"
-		SW_PREFIX = LLVM_PROFILE_FILE="sw.profdata"
-		OS_PREFIX = LLVM_PROFILE_FILE="os.profdata"
-		GA_PREFIX = LLVM_PROFILE_FILE="ga.profdata"
-		LLVM_MERGE = @LLVM_PROFDATA@ merge *.profdata \
-			-output mpcotool.profraw
-	else
-		PGOGEN = -fprofile-generate
-		PGOUSE = -fprofile-use -fprofile-correction
-		TOOLSBINDEP = $(bin)mpcotoolbinpgo@EXE@
-		OPTIMIZEDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)optimize.gcda
-		INPUTDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)input.gcda
-		VARIABLEDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)variable.gcda
-		EXPERIMENTDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)experiment.gcda
-		MPCOTOOLBINDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)mpcotoolbin.gcda
-		MAINBINDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)mainbin.gcda
-	endif
-	PGOTESTS = $(T1)simulator@EXE@ $(T1)evaluator@EXE@ \
-		$(T1)test-mc@WIN@.xml $(T1)test-mc@WIN@.json $(T1)test-sw@WIN@.xml \
-		$(T1)test-os@WIN@.xml $(T1)test-ga@WIN@.xml
+PGOOBJLIB = $(mpcotoolbin_pgo) $(experiment_pgo) $(variable_pgo) \
+	$(input_pgo) $(optimize_pgo) $(toolsbin_pgo)
+ifeq ($(CLANG), 1)
+PGOGEN = -fprofile-instr-generate
+PGOUSE = -fprofile-instr-use=$(bin)mpcotool.profraw
+TESTSDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)mpcotool.profraw
+TOOLSBINDEP = $(TESTSDEP)
+OPTIMIZEDEP = $(TESTSDEP)
+INPUTDEP = $(TESTSDEP)
+VARIABLEDEP = $(TESTSDEP)
+EXPERIMENTDEP = $(TESTSDEP)
+MPCOTOOLBINDEP = $(TESTSDEP)
+MAINBINDEP = $(TESTSDEP)
+MCXML1_PREFIX = LLVM_PROFILE_FILE="mcxml-1.profdata"
+MCJSON_PREFIX = LLVM_PROFILE_FILE="mcjson.profdata"
+MCITJSON_PREFIX = LLVM_PROFILE_FILE="mcitjson.profdata"
+SW_PREFIX = LLVM_PROFILE_FILE="sw.profdata"
+OS_PREFIX = LLVM_PROFILE_FILE="os.profdata"
+GA_PREFIX = LLVM_PROFILE_FILE="ga.profdata"
+LLVM_MERGE = @LLVM_PROFDATA@ merge *.profdata -output mpcotool.profraw
 else
-	TOOLSBINDEP = tools.c tools.h config.h $(DEPBIN)
-	OPTIMIZEDEP = experiment.c experiment.h tools.h config.h $(DEPBIN)
-	INPUTDEP = variable.c variable.h tools.h config.h $(DEPBIN)
-	VARIABLEDEP = input.c input.h variable.h experiment.h tools.h config.h \
-		$(DEPBIN)
-	EXPERIMENTDEP = optimize.c optimize.h input.h variable.h experiment.h \
-		tools.h config.h $(DEPBIN)
-	MPCOTOOLBINDEP = mpcotool.c mpcotool.h optimize.h input.h variable.h \
-		experiment.h tools.h config.h $(DEPBIN)
-	MAINBINDEP = main.c mpcotool.h optimize.h input.h variable.h \
-		experiment.h tools.h config.h $(DEPBIN)
+PGOGEN = -fprofile-generate
+PGOUSE = -fprofile-use -fprofile-correction
+TOOLSBINDEP = $(bin)mpcotoolbinpgo@EXE@
+OPTIMIZEDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)optimize.gcda
+INPUTDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)input.gcda
+VARIABLEDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)variable.gcda
+EXPERIMENTDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)experiment.gcda
+MPCOTOOLBINDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)mpcotoolbin.gcda
+MAINBINDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)mainbin.gcda
+endif
+GOTESTS = $(T1)simulator@EXE@ $(T1)evaluator@EXE@ \
+	$(T1)test-mc@WIN@.xml $(T1)test-mc@WIN@.json $(T1)test-sw@WIN@.xml \
+	$(T1)test-os@WIN@.xml $(T1)test-ga@WIN@.xml
+else
+TOOLSBINDEP = tools.c tools.h config.h $(DEPBIN)
+OPTIMIZEDEP = experiment.c experiment.h tools.h config.h $(DEPBIN)
+INPUTDEP = variable.c variable.h tools.h config.h $(DEPBIN)
+VARIABLEDEP = input.c input.h variable.h experiment.h tools.h config.h $(DEPBIN)
+EXPERIMENTDEP = optimize.c optimize.h input.h variable.h experiment.h \
+	tools.h config.h $(DEPBIN)
+MPCOTOOLBINDEP = mpcotool.c mpcotool.h optimize.h input.h variable.h \
+	experiment.h tools.h config.h $(DEPBIN)
+MAINBINDEP = main.c mpcotool.h optimize.h input.h variable.h \
+	experiment.h tools.h config.h $(DEPBIN)
 endif
 CGEN = -c -fPIC -DJBW=1 $(CFLAGS) $(PGOGEN)
 CUSE = -c -fPIC -DJBW=1 $(CFLAGS) $(PGOUSE)
 ifeq (@MPCOTOOL@, 1)
-	mpcotool=$(bin)mpcotool@EXE@
+mpcotool=$(bin)mpcotool@EXE@
 endif
 
 all: $(bin) $(bin)mpcotoolbin@EXE@ $(mpcotool) \
