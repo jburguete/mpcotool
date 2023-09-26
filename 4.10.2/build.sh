@@ -48,6 +48,7 @@ if test -x "`command -v gmake`"; then
 else
 	make="make"
 fi
+$make manuals
 $make
 $make tests
 $make $a6

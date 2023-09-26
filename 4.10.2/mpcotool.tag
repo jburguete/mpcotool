@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
-<tagfile doxygen_version="1.9.4">
+<tagfile doxygen_version="1.9.8">
   <compound kind="file">
     <name>config.h</name>
-    <path>/home/burguete/programas/mpcotool/4.4.6/</path>
+    <path></path>
     <filename>config_8h.html</filename>
     <member kind="define">
       <type>#define</type>
@@ -104,6 +104,13 @@
     </member>
     <member kind="define">
       <type>#define</type>
+      <name>LABEL_CLEANER</name>
+      <anchorfile>config_8h.html</anchorfile>
+      <anchor>aedfad87918608931b16d8130ed708477</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
       <name>LABEL_CLIMBING</name>
       <anchorfile>config_8h.html</anchorfile>
       <anchor>a904b3c5de15179bcc9f6f46ebbdda2aa</anchor>
@@ -149,6 +156,62 @@
       <name>LABEL_GENETIC</name>
       <anchorfile>config_8h.html</anchorfile>
       <anchor>a2829b720e27b9b6f248ea6fe0d3897b9</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>LABEL_INPUT1</name>
+      <anchorfile>config_8h.html</anchorfile>
+      <anchor>a2c0db862d75c0ebed235d28b5a147e66</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>LABEL_INPUT2</name>
+      <anchorfile>config_8h.html</anchorfile>
+      <anchor>a75594b5a36b9bb42e9d73620fdb9d975</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>LABEL_INPUT3</name>
+      <anchorfile>config_8h.html</anchorfile>
+      <anchor>a52faa7d5dacd68e6311e578e0a6d6d01</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>LABEL_INPUT4</name>
+      <anchorfile>config_8h.html</anchorfile>
+      <anchor>a091693c095a6d0196adbdc7db94df83e</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>LABEL_INPUT5</name>
+      <anchorfile>config_8h.html</anchorfile>
+      <anchor>ac7fc718dbdce8bb4479542c88febd29f</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>LABEL_INPUT6</name>
+      <anchorfile>config_8h.html</anchorfile>
+      <anchor>a21ff620ff8e08d2767b4939def1507fb</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>LABEL_INPUT7</name>
+      <anchorfile>config_8h.html</anchorfile>
+      <anchor>a3614bf5a4f8faae0758d7c51286a0dc1</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>LABEL_INPUT8</name>
+      <anchorfile>config_8h.html</anchorfile>
+      <anchor>a8a65ca56a81cffe8edb8eebe3af03b41</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
@@ -205,6 +268,13 @@
       <name>LABEL_NESTIMATES</name>
       <anchorfile>config_8h.html</anchorfile>
       <anchor>af684f1c534eba93fd5bfab781174d758</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>LABEL_NFINAL_STEPS</name>
+      <anchorfile>config_8h.html</anchorfile>
+      <anchor>adc0f5827cb6eeef4239d28cce1ef8cc8</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
@@ -467,11 +537,11 @@
   </compound>
   <compound kind="file">
     <name>experiment.c</name>
-    <path>/home/burguete/programas/mpcotool/4.4.6/</path>
+    <path></path>
     <filename>experiment_8c.html</filename>
-    <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
-    <includes id="tools_8h" name="tools.h" local="yes" imported="no">tools.h</includes>
-    <includes id="experiment_8h" name="experiment.h" local="yes" imported="no">experiment.h</includes>
+    <includes id="config_8h" name="config.h" local="yes" import="no" module="no" objc="no">config.h</includes>
+    <includes id="tools_8h" name="tools.h" local="yes" import="no" module="no" objc="no">tools.h</includes>
+    <includes id="experiment_8h" name="experiment.h" local="yes" import="no" module="no" objc="no">experiment.h</includes>
     <member kind="define">
       <type>#define</type>
       <name>DEBUG_EXPERIMENT</name>
@@ -521,10 +591,17 @@
       <anchor>a0ea49f3c12ece1645305b28ee6a86254</anchor>
       <arglist>[MAX_NINPUTS]</arglist>
     </member>
+    <member kind="variable">
+      <type>const char *</type>
+      <name>stencilbin</name>
+      <anchorfile>experiment_8c.html</anchorfile>
+      <anchor>afd12b283e89f375244cf4faf067d5b81</anchor>
+      <arglist>[MAX_NINPUTS]</arglist>
+    </member>
   </compound>
   <compound kind="file">
     <name>experiment.h</name>
-    <path>/home/burguete/programas/mpcotool/4.4.6/</path>
+    <path></path>
     <filename>experiment_8h.html</filename>
     <class kind="struct">Experiment</class>
     <member kind="function">
@@ -562,16 +639,23 @@
       <anchor>a0ea49f3c12ece1645305b28ee6a86254</anchor>
       <arglist>[MAX_NINPUTS]</arglist>
     </member>
+    <member kind="variable">
+      <type>const char *</type>
+      <name>stencilbin</name>
+      <anchorfile>experiment_8h.html</anchorfile>
+      <anchor>afd12b283e89f375244cf4faf067d5b81</anchor>
+      <arglist>[MAX_NINPUTS]</arglist>
+    </member>
   </compound>
   <compound kind="file">
     <name>input.c</name>
-    <path>/home/burguete/programas/mpcotool/4.4.6/</path>
+    <path></path>
     <filename>input_8c.html</filename>
-    <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
-    <includes id="tools_8h" name="tools.h" local="yes" imported="no">tools.h</includes>
-    <includes id="experiment_8h" name="experiment.h" local="yes" imported="no">experiment.h</includes>
-    <includes id="variable_8h" name="variable.h" local="yes" imported="no">variable.h</includes>
-    <includes id="input_8h" name="input.h" local="yes" imported="no">input.h</includes>
+    <includes id="config_8h" name="config.h" local="yes" import="no" module="no" objc="no">config.h</includes>
+    <includes id="tools_8h" name="tools.h" local="yes" import="no" module="no" objc="no">tools.h</includes>
+    <includes id="experiment_8h" name="experiment.h" local="yes" import="no" module="no" objc="no">experiment.h</includes>
+    <includes id="variable_8h" name="variable.h" local="yes" import="no" module="no" objc="no">variable.h</includes>
+    <includes id="input_8h" name="input.h" local="yes" import="no" module="no" objc="no">input.h</includes>
     <member kind="define">
       <type>#define</type>
       <name>DEBUG_INPUT</name>
@@ -645,7 +729,7 @@
   </compound>
   <compound kind="file">
     <name>input.h</name>
-    <path>/home/burguete/programas/mpcotool/4.4.6/</path>
+    <path></path>
     <filename>input_8h.html</filename>
     <class kind="struct">Input</class>
     <member kind="enumeration">
@@ -743,15 +827,15 @@
   </compound>
   <compound kind="file">
     <name>interface.c</name>
-    <path>/home/burguete/programas/mpcotool/4.4.6/</path>
+    <path></path>
     <filename>interface_8c.html</filename>
-    <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
-    <includes id="tools_8h" name="tools.h" local="yes" imported="no">tools.h</includes>
-    <includes id="experiment_8h" name="experiment.h" local="yes" imported="no">experiment.h</includes>
-    <includes id="variable_8h" name="variable.h" local="yes" imported="no">variable.h</includes>
-    <includes id="input_8h" name="input.h" local="yes" imported="no">input.h</includes>
-    <includes id="optimize_8h" name="optimize.h" local="yes" imported="no">optimize.h</includes>
-    <includes id="interface_8h" name="interface.h" local="yes" imported="no">interface.h</includes>
+    <includes id="config_8h" name="config.h" local="yes" import="no" module="no" objc="no">config.h</includes>
+    <includes id="tools_8h" name="tools.h" local="yes" import="no" module="no" objc="no">tools.h</includes>
+    <includes id="experiment_8h" name="experiment.h" local="yes" import="no" module="no" objc="no">experiment.h</includes>
+    <includes id="variable_8h" name="variable.h" local="yes" import="no" module="no" objc="no">variable.h</includes>
+    <includes id="input_8h" name="input.h" local="yes" import="no" module="no" objc="no">input.h</includes>
+    <includes id="optimize_8h" name="optimize.h" local="yes" import="no" module="no" objc="no">optimize.h</includes>
+    <includes id="interface_8h" name="interface.h" local="yes" import="no" module="no" objc="no">interface.h</includes>
     <member kind="define">
       <type>#define</type>
       <name>DEBUG_INTERFACE</name>
@@ -1095,6 +1179,20 @@
       <anchor>a69cee5e66cb30e05f371a7ed3cbb0225</anchor>
       <arglist>()</arglist>
     </member>
+    <member kind="function" static="yes">
+      <type>static void</type>
+      <name>dialog_cleaner_close</name>
+      <anchorfile>interface_8c.html</anchorfile>
+      <anchor>a80e41f000e28d8fa66f444c7bc56fca7</anchor>
+      <arglist>(GtkFileChooserDialog *dlg, int response_id)</arglist>
+    </member>
+    <member kind="function" static="yes">
+      <type>static void</type>
+      <name>dialog_cleaner</name>
+      <anchorfile>interface_8c.html</anchorfile>
+      <anchor>ab80c8fdfdecbaa3c77ce94c73985beeb</anchor>
+      <arglist>()</arglist>
+    </member>
     <member kind="function">
       <type>void</type>
       <name>window_new</name>
@@ -1133,7 +1231,7 @@
   </compound>
   <compound kind="file">
     <name>interface.h</name>
-    <path>/home/burguete/programas/mpcotool/4.4.6/</path>
+    <path></path>
     <filename>interface_8h.html</filename>
     <class kind="struct">Options</class>
     <class kind="struct">Running</class>
@@ -1162,16 +1260,16 @@
   </compound>
   <compound kind="file">
     <name>main.c</name>
-    <path>/home/burguete/programas/mpcotool/4.4.6/</path>
+    <path></path>
     <filename>main_8c.html</filename>
-    <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
-    <includes id="tools_8h" name="tools.h" local="yes" imported="no">tools.h</includes>
-    <includes id="experiment_8h" name="experiment.h" local="yes" imported="no">experiment.h</includes>
-    <includes id="variable_8h" name="variable.h" local="yes" imported="no">variable.h</includes>
-    <includes id="input_8h" name="input.h" local="yes" imported="no">input.h</includes>
-    <includes id="optimize_8h" name="optimize.h" local="yes" imported="no">optimize.h</includes>
-    <includes id="interface_8h" name="interface.h" local="yes" imported="no">interface.h</includes>
-    <includes id="mpcotool_8h" name="mpcotool.h" local="yes" imported="no">mpcotool.h</includes>
+    <includes id="config_8h" name="config.h" local="yes" import="no" module="no" objc="no">config.h</includes>
+    <includes id="tools_8h" name="tools.h" local="yes" import="no" module="no" objc="no">tools.h</includes>
+    <includes id="experiment_8h" name="experiment.h" local="yes" import="no" module="no" objc="no">experiment.h</includes>
+    <includes id="variable_8h" name="variable.h" local="yes" import="no" module="no" objc="no">variable.h</includes>
+    <includes id="input_8h" name="input.h" local="yes" import="no" module="no" objc="no">input.h</includes>
+    <includes id="optimize_8h" name="optimize.h" local="yes" import="no" module="no" objc="no">optimize.h</includes>
+    <includes id="interface_8h" name="interface.h" local="yes" import="no" module="no" objc="no">interface.h</includes>
+    <includes id="mpcotool_8h" name="mpcotool.h" local="yes" import="no" module="no" objc="no">mpcotool.h</includes>
     <member kind="function">
       <type>int</type>
       <name>main</name>
@@ -1182,16 +1280,16 @@
   </compound>
   <compound kind="file">
     <name>mpcotool.c</name>
-    <path>/home/burguete/programas/mpcotool/4.4.6/</path>
+    <path></path>
     <filename>mpcotool_8c.html</filename>
-    <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
-    <includes id="tools_8h" name="tools.h" local="yes" imported="no">tools.h</includes>
-    <includes id="experiment_8h" name="experiment.h" local="yes" imported="no">experiment.h</includes>
-    <includes id="variable_8h" name="variable.h" local="yes" imported="no">variable.h</includes>
-    <includes id="input_8h" name="input.h" local="yes" imported="no">input.h</includes>
-    <includes id="optimize_8h" name="optimize.h" local="yes" imported="no">optimize.h</includes>
-    <includes id="interface_8h" name="interface.h" local="yes" imported="no">interface.h</includes>
-    <includes id="mpcotool_8h" name="mpcotool.h" local="yes" imported="no">mpcotool.h</includes>
+    <includes id="config_8h" name="config.h" local="yes" import="no" module="no" objc="no">config.h</includes>
+    <includes id="tools_8h" name="tools.h" local="yes" import="no" module="no" objc="no">tools.h</includes>
+    <includes id="experiment_8h" name="experiment.h" local="yes" import="no" module="no" objc="no">experiment.h</includes>
+    <includes id="variable_8h" name="variable.h" local="yes" import="no" module="no" objc="no">variable.h</includes>
+    <includes id="input_8h" name="input.h" local="yes" import="no" module="no" objc="no">input.h</includes>
+    <includes id="optimize_8h" name="optimize.h" local="yes" import="no" module="no" objc="no">optimize.h</includes>
+    <includes id="interface_8h" name="interface.h" local="yes" import="no" module="no" objc="no">interface.h</includes>
+    <includes id="mpcotool_8h" name="mpcotool.h" local="yes" import="no" module="no" objc="no">mpcotool.h</includes>
     <member kind="define">
       <type>#define</type>
       <name>DEBUG_MPCOTOOL</name>
@@ -1209,7 +1307,7 @@
   </compound>
   <compound kind="file">
     <name>mpcotool.h</name>
-    <path>/home/burguete/programas/mpcotool/4.4.6/</path>
+    <path></path>
     <filename>mpcotool_8h.html</filename>
     <member kind="function">
       <type>int</type>
@@ -1221,19 +1319,26 @@
   </compound>
   <compound kind="file">
     <name>optimize.c</name>
-    <path>/home/burguete/programas/mpcotool/4.4.6/</path>
+    <path></path>
     <filename>optimize_8c.html</filename>
-    <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
-    <includes id="tools_8h" name="tools.h" local="yes" imported="no">tools.h</includes>
-    <includes id="experiment_8h" name="experiment.h" local="yes" imported="no">experiment.h</includes>
-    <includes id="variable_8h" name="variable.h" local="yes" imported="no">variable.h</includes>
-    <includes id="input_8h" name="input.h" local="yes" imported="no">input.h</includes>
-    <includes id="optimize_8h" name="optimize.h" local="yes" imported="no">optimize.h</includes>
+    <includes id="config_8h" name="config.h" local="yes" import="no" module="no" objc="no">config.h</includes>
+    <includes id="tools_8h" name="tools.h" local="yes" import="no" module="no" objc="no">tools.h</includes>
+    <includes id="experiment_8h" name="experiment.h" local="yes" import="no" module="no" objc="no">experiment.h</includes>
+    <includes id="variable_8h" name="variable.h" local="yes" import="no" module="no" objc="no">variable.h</includes>
+    <includes id="input_8h" name="input.h" local="yes" import="no" module="no" objc="no">input.h</includes>
+    <includes id="optimize_8h" name="optimize.h" local="yes" import="no" module="no" objc="no">optimize.h</includes>
     <member kind="define">
       <type>#define</type>
       <name>DEBUG_OPTIMIZE</name>
       <anchorfile>optimize_8c.html</anchorfile>
       <anchor>a987e7e7b2bfe09ae3b31426d16be2cb1</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>CP</name>
+      <anchorfile>optimize_8c.html</anchorfile>
+      <anchor>a6594e57d1fff186da0a254a3742dcff7</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
@@ -1399,10 +1504,17 @@
     </member>
     <member kind="function" static="yes">
       <type>static void</type>
+      <name>optimize_climbing_best</name>
+      <anchorfile>optimize_8c.html</anchorfile>
+      <anchor>a2d55fb00fa9809b8e3f6828b7fcac7e5</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function" static="yes">
+      <type>static void</type>
       <name>optimize_climbing</name>
       <anchorfile>optimize_8c.html</anchorfile>
-      <anchor>a6b1145cd332571158595a2b9a413fc0d</anchor>
-      <arglist>()</arglist>
+      <anchor>ac4552477bca040c57295fcec89d9705d</anchor>
+      <arglist>(unsigned int nsteps)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>static double</type>
@@ -1451,6 +1563,13 @@
       <name>optimize_iterate</name>
       <anchorfile>optimize_8c.html</anchorfile>
       <anchor>a0ed870d7011b57e469fe08a0daef9c89</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function" static="yes">
+      <type>static void</type>
+      <name>optimize_save_optimal</name>
+      <anchorfile>optimize_8c.html</anchorfile>
+      <anchor>adb8fa4fe339c46a6b503544baccf1f0b</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
@@ -1505,7 +1624,7 @@
   </compound>
   <compound kind="file">
     <name>optimize.h</name>
-    <path>/home/burguete/programas/mpcotool/4.4.6/</path>
+    <path></path>
     <filename>optimize_8h.html</filename>
     <class kind="struct">Optimize</class>
     <class kind="struct">ParallelData</class>
@@ -1540,10 +1659,10 @@
   </compound>
   <compound kind="file">
     <name>tools.c</name>
-    <path>/home/burguete/programas/mpcotool/4.4.6/</path>
+    <path></path>
     <filename>tools_8c.html</filename>
-    <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
-    <includes id="tools_8h" name="tools.h" local="yes" imported="no">tools.h</includes>
+    <includes id="config_8h" name="config.h" local="yes" import="no" module="no" objc="no">config.h</includes>
+    <includes id="tools_8h" name="tools.h" local="yes" import="no" module="no" objc="no">tools.h</includes>
     <member kind="variable">
       <type>GtkWindow *</type>
       <name>main_window</name>
@@ -1568,7 +1687,7 @@
   </compound>
   <compound kind="file">
     <name>tools.h</name>
-    <path>/home/burguete/programas/mpcotool/4.4.6/</path>
+    <path></path>
     <filename>tools_8h.html</filename>
     <member kind="define">
       <type>#define</type>
@@ -1608,11 +1727,11 @@
   </compound>
   <compound kind="file">
     <name>variable.c</name>
-    <path>/home/burguete/programas/mpcotool/4.4.6/</path>
+    <path></path>
     <filename>variable_8c.html</filename>
-    <includes id="config_8h" name="config.h" local="yes" imported="no">config.h</includes>
-    <includes id="tools_8h" name="tools.h" local="yes" imported="no">tools.h</includes>
-    <includes id="variable_8h" name="variable.h" local="yes" imported="no">variable.h</includes>
+    <includes id="config_8h" name="config.h" local="yes" import="no" module="no" objc="no">config.h</includes>
+    <includes id="tools_8h" name="tools.h" local="yes" import="no" module="no" objc="no">tools.h</includes>
+    <includes id="variable_8h" name="variable.h" local="yes" import="no" module="no" objc="no">variable.h</includes>
     <member kind="define">
       <type>#define</type>
       <name>DEBUG_VARIABLE</name>
@@ -1665,7 +1784,7 @@
   </compound>
   <compound kind="file">
     <name>variable.h</name>
-    <path>/home/burguete/programas/mpcotool/4.4.6/</path>
+    <path></path>
     <filename>variable_8h.html</filename>
     <class kind="struct">Variable</class>
     <member kind="enumeration">
@@ -1773,6 +1892,13 @@
       <anchor>ab7f5464df27bd2cecad27c0d6c098643</anchor>
       <arglist></arglist>
     </member>
+    <member kind="variable">
+      <type>unsigned int</type>
+      <name>template_flags</name>
+      <anchorfile>structExperiment.html</anchorfile>
+      <anchor>a613c0b43ce8b657aaba1c51ab7751a19</anchor>
+      <arglist></arglist>
+    </member>
   </compound>
   <compound kind="struct">
     <name>Input</name>
@@ -1817,6 +1943,13 @@
       <name>evaluator</name>
       <anchorfile>structInput.html</anchorfile>
       <anchor>aa69a259bd56e80172527ec5483bc25eb</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>char *</type>
+      <name>cleaner</name>
+      <anchorfile>structInput.html</anchorfile>
+      <anchor>a4781f2695670edf1607530c5bc748474</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
@@ -1926,6 +2059,13 @@
     </member>
     <member kind="variable">
       <type>unsigned int</type>
+      <name>nfinal_steps</name>
+      <anchorfile>structInput.html</anchorfile>
+      <anchor>ada4266f13d29a5a471d912be0c3d1fe4</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>unsigned int</type>
       <name>climbing</name>
       <anchorfile>structInput.html</anchorfile>
       <anchor>a01a803975b4ca84e7e5b832189e703fa</anchor>
@@ -1964,6 +2104,13 @@
       <name>type</name>
       <anchorfile>structInput.html</anchorfile>
       <anchor>a3309d479b0900c6e6e85d50048dbd05e</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>unsigned int</type>
+      <name>template_flags</name>
+      <anchorfile>structInput.html</anchorfile>
+      <anchor>a941a61a9053b31a908a46521990874ba</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -2045,6 +2192,13 @@
       <name>evaluator</name>
       <anchorfile>structOptimize.html</anchorfile>
       <anchor>a8f1bdbf46d5fddc55de3b36bfcb80265</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>char *</type>
+      <name>cleaner</name>
+      <anchorfile>structOptimize.html</anchorfile>
+      <anchor>aef5e4d06e60c9a895b2ee815910433e5</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
@@ -2266,6 +2420,13 @@
     </member>
     <member kind="variable">
       <type>unsigned int</type>
+      <name>nfinal_steps</name>
+      <anchorfile>structOptimize.html</anchorfile>
+      <anchor>aa035eb717db37c178d2b6d73422a8e34</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>unsigned int</type>
       <name>nestimates</name>
       <anchorfile>structOptimize.html</anchorfile>
       <anchor>ad13d2936149cf8db5701af67e9a5aafa</anchor>
@@ -2332,6 +2493,13 @@
       <name>stop</name>
       <anchorfile>structOptimize.html</anchorfile>
       <anchor>a51272d494cb53d8de1467397031798a3</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>unsigned int</type>
+      <name>template_flags</name>
+      <anchorfile>structOptimize.html</anchorfile>
+      <anchor>ac663ac8a7c9ca2cb1e51e146d940753b</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
@@ -2621,6 +2789,20 @@
       <arglist></arglist>
     </member>
     <member kind="variable">
+      <type>GtkCheckButton *</type>
+      <name>check_cleaner</name>
+      <anchorfile>structWindow.html</anchorfile>
+      <anchor>a463aec98459bb4e3768b0651e7807d89</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>GtkButton *</type>
+      <name>button_cleaner</name>
+      <anchorfile>structWindow.html</anchorfile>
+      <anchor>a1683f5b3aa6d9686cb603aa968e24e94</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
       <type>GtkLabel *</type>
       <name>label_result</name>
       <anchorfile>structWindow.html</anchorfile>
@@ -2870,6 +3052,20 @@
       <name>spin_steps</name>
       <anchorfile>structWindow.html</anchorfile>
       <anchor>a658484db34a93bca3db3b0893feeccd0</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>GtkLabel *</type>
+      <name>label_final_steps</name>
+      <anchorfile>structWindow.html</anchorfile>
+      <anchor>ad3a67ca4b8879ab35ba1e6dc4592ee01</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>GtkSpinButton *</type>
+      <name>spin_final_steps</name>
+      <anchorfile>structWindow.html</anchorfile>
+      <anchor>a16cad6286d529ffa055832b5b353eda0</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
@@ -3278,10 +3474,5 @@
       <anchor>a08b2afdaec720aec908b6d0dd7e361b6</anchor>
       <arglist></arglist>
     </member>
-  </compound>
-  <compound kind="page">
-    <name>md_README</name>
-    <title>MPCOTool</title>
-    <filename>md_README.html</filename>
   </compound>
 </tagfile>
