@@ -108,12 +108,12 @@ else
 PGOGEN = -fprofile-generate
 PGOUSE = -fprofile-use -fprofile-correction
 TOOLSBINDEP = $(bin)mpcotoolbinpgo@EXE@
-OPTIMIZEDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)optimize.gcda
-INPUTDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)input.gcda
-VARIABLEDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)variable.gcda
-EXPERIMENTDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)experiment.gcda
-MPCOTOOLBINDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)mpcotoolbin.gcda
-MAINBINDEP = $(bin)mpcotoolbinpgo@EXE@ $(bin)mainbin.gcda
+OPTIMIZEDEP = $(bin)mpcotoolbinpgo@EXE@
+INPUTDEP = $(bin)mpcotoolbinpgo@EXE@
+VARIABLEDEP = $(bin)mpcotoolbinpgo@EXE@
+EXPERIMENTDEP = $(bin)mpcotoolbinpgo@EXE@
+MPCOTOOLBINDEP = $(bin)mpcotoolbinpgo@EXE@
+MAINBINDEP = $(bin)mpcotoolbinpgo@EXE@ 
 endif
 GOTESTS = $(T1)simulator@EXE@ $(T1)evaluator@EXE@ \
 	$(T1)test-mc@WIN@.xml $(T1)test-mc@WIN@.json $(T1)test-sw@WIN@.xml \
