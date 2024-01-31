@@ -60,7 +60,7 @@ OF SUCH DAMAGE.
 #else
 #define JBW 1
 #endif
-#include "jb/src/jb_win.h"
+#include "jb/src/win.h"
 #include "genetic/genetic.h"
 #include "tools.h"
 #include "experiment.h"

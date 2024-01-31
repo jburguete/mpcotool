@@ -58,7 +58,7 @@ OF SUCH DAMAGE.
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 #endif
-#include "jb/src/jb_win.h"
+#include "jb/src/win.h"
 #include "genetic/genetic.h"
 #include "tools.h"
 #include "experiment.h"

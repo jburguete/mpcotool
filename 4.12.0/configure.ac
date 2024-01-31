@@ -1,6 +1,6 @@
 # Header
 AC_PREREQ([2.69])
-AC_INIT([mpcotool], [4.10.2], [https://github.com/jburguete/mpcotool])
+AC_INIT([mpcotool], [4.12.0], [https://github.com/jburguete/mpcotool])
 
 # Checks for operative systems
 AC_CANONICAL_TARGET
@@ -204,7 +204,7 @@ if test -f "genetic/genetic.h"; then
 else
 	AC_MSG_ERROR([Genetic header not installed])
 fi
-if test -f "jb/src/jb_def.h"; then
+if test -f "jb/src/def.h"; then
 	AC_MSG_NOTICE([JB header installed])
 else
 	AC_MSG_ERROR([JB header not installed])

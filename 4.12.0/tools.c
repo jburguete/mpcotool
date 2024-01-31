@@ -49,7 +49,7 @@ OF SUCH DAMAGE.
 #if HAVE_GTK
 #include <gtk/gtk.h>
 #endif
-#include "jb/src/jb_win.h"
+#include "jb/src/win.h"
 #include "tools.h"
 
 #if HAVE_GTK

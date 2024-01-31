@@ -55,9 +55,9 @@ OF SUCH DAMAGE.
 #endif
 #include <gio/gio.h>
 #include <gtk/gtk.h>
-#include "jb/src/jb_xml.h"
-#include "jb/src/jb_json.h"
-#include "jb/src/jb_win.h"
+#include "jb/src/xml.h"
+#include "jb/src/json.h"
+#include "jb/src/win.h"
 #include "genetic/genetic.h"
 #include "tools.h"
 #include "experiment.h"
@@ -1139,7 +1139,7 @@ window_about ()
      "Javier Burguete Tolosa <jburguete@eead.csic.es> "
      "(english, french and spanish)\n"
      "Uğur Çayoğlu (german)",
-     "version", "4.10.2",
+     "version", "4.12.0",
      "copyright", "Copyright 2012-2023 Javier Burguete Tolosa",
      "logo", window->logo,
      "website", "https://github.com/jburguete/mpcotool",

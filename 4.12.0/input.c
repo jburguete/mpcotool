@@ -44,9 +44,9 @@ OF SUCH DAMAGE.
 #include <glib.h>
 #include <glib/gstdio.h>
 #include <json-glib/json-glib.h>
-#include "jb/src/jb_xml.h"
-#include "jb/src/jb_json.h"
-#include "jb/src/jb_win.h"
+#include "jb/src/xml.h"
+#include "jb/src/json.h"
+#include "jb/src/win.h"
 #include "tools.h"
 #include "experiment.h"
 #include "variable.h"

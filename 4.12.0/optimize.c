@@ -56,7 +56,7 @@ OF SUCH DAMAGE.
 #if HAVE_MPI
 #include <mpi.h>
 #endif
-#include "jb/src/jb_win.h"
+#include "jb/src/win.h"
 #include "genetic/genetic.h"
 #include "tools.h"
 #include "experiment.h"
