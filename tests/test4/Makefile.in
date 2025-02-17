@@ -4,5 +4,5 @@ LIBS = @LDFLAGS@ @LIBS@ @GSL_LIBS@ @XML_LIBS@ @GLIB_LIBS@ @GTHREAD_LIBS@
 CC = @CC@ @ARCH@ @LTO@ @WINCFLAGS@ #-pg 
 
 simulator@EXE@: simulator.c libgenetic@SO@ Makefile
-	$(CC) $(CFLAGS) simulator.c $(LIBS) -L. -Wl,-rpath=. -lgenetic \
+	$(CC) $(CFLAGS) simulator.c $(LIBS) -L. -Wl,@RPATH@. -lgenetic \
 		-o simulator@EXE@

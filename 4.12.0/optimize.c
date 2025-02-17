@@ -215,7 +215,7 @@ optimize_parse (unsigned int simulation,        ///< Simulation number.
       else
         {
           buffer2 = input->experiment[experiment].stencil[i];
-          snprintf (buffer, 256, CP " %s %s", buffer2, &cinput[i][0]);
+          snprintf (buffer, 512, CP " %s %s", buffer2, &cinput[i][0]);
           if (system (buffer) == -1)
             error_message = g_strdup (buffer);
         }

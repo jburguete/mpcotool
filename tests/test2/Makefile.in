@@ -6,7 +6,7 @@ CC = @CC@ @ARCH@ @LTO@ @WINCFLAGS@ #-pg
 all: simulator@EXE@ evaluator@EXE@
 
 simulator@EXE@: simulator.c libgenetic@SO@ Makefile
-	$(CC) $(CFLAGS) simulator.c $(LIBS) -L. -Wl,-rpath=. -lgenetic \
+	$(CC) $(CFLAGS) simulator.c $(LIBS) -L. -Wl,@RPATH@. -lgenetic \
 		-o simulator@EXE@
 
 evaluator@EXE@: evaluator.c Makefile

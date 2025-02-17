@@ -67,8 +67,20 @@ fi
 AC_SUBST(SO, [$so])
 AC_MSG_NOTICE([prefix=$PREFIX])
 
+# Checking MPI
+AC_PROG_CC([gcc-13 gcc13 gcc-12 gcc12 gcc-11 gcc11 egcc gcc clang])
+if test "x$with_mpi" = "xyes"; then
+	AC_CHECK_TOOL([MPICC], [mpicc])
+	if test "x$MPICC" = "xmpicc"; then
+		AC_MSG_NOTICE([checking for MPI... yes])
+		AC_DEFINE([HAVE_MPI], [1])
+		CC=$MPICC
+	else
+		AC_MSG_NOTICE([checking for MPI... no])
+	fi
+fi
+
 # Checks for programs
-AC_PROG_CC([mpicc gcc-12 gcc12 gcc-11 gcc11 gcc-10 gcc10 egcc gcc clang])
 AC_MSG_NOTICE([Compiler: $CC])
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
@@ -79,33 +91,37 @@ if test "`command -v gmake`"; then
 else
 	AC_SUBST(MAKE, [make])
 fi
-if test $CC = "clang" || test $mac = 1; then
-	AC_SUBST(CLANG, [1])
+CL=0
+if test "x$MPICC" = "x"; then
+	if test $CC = "clang"; then
+		CL=1
+	fi
+else
+	CCBASE=`$MPICC -show | grep gcc`
+	if test "x$CCBASE" = "x"; then
+		CL=1
+	fi
+fi
+if test $CL = 1; then
+	AC_MSG_NOTICE([Clang compiler])
 	AC_SUBST(RPATH, [-rpath,])
-	AC_CHECK_PROGS([LLVM_PROFDATA], [llvm-profdata llvm-profdata-15], 0)
+	AC_CHECK_PROGS([LLVM_PROFDATA], [llvm-profdata], 0)
 	if test $LLVM_PROFDATA = 0; then
-		AC_MSG_ERROR([No llvm-profdata])
+	      	AC_MSG_ERROR([No llvm-profdata])
 	fi
 	AC_MSG_NOTICE([llvm-profdata: $LLVM_PROFDATA])
 else
-	AC_SUBST(CLANG, [0])
-	AC_SUBST(RPATH, [-rpath=])
+	AC_MSG_NOTICE([GCC compiler])
+	if test $mac = 1; then
+		AC_SUBST(RPATH, [-rpath,])
+	else
+		AC_SUBST(RPATH, [-rpath=])
+	fi
 fi
 if test $mac = 1; then
 	AC_SUBST(STRIP, "strip -x")
 else
 	AC_SUBST(STRIP, [strip])
-fi
-
-# Checking MPI
-AC_ARG_WITH([mpi], AS_HELP_STRING([--with-mpi], [Build with MPI]))
-if test "x$with_mpi" = "xyes"; then
-	if test "x$CC" = "xmpicc"; then
-		AC_MSG_NOTICE([checking for MPI... yes])
-		AC_DEFINE([HAVE_MPI], [1])
-	else
-		AC_MSG_NOTICE([checking for MPI... no])
-	fi
 fi
 
 # Checks for compiler flags
@@ -118,7 +134,7 @@ if test $native = 1; then
 		[Build using -march=native compiler flag]))
 	if test "x$with_native" = "xyes"; then
 		CC="$CC -march=native"
-		AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[]])], [arch=1], [])
+		AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[]])], [arch=1])
 		CC=$compiler
 	fi
 fi
@@ -188,7 +204,7 @@ if test -f "genetic/genetic.h"; then
 else
 	AC_MSG_ERROR([Genetic header not installed])
 fi
-if test -f "jb/src/jb_def.h"; then
+if test -f "jb/src/def.h"; then
 	AC_MSG_NOTICE([JB header installed])
 else
 	AC_MSG_ERROR([JB header not installed])
@@ -269,6 +285,7 @@ if test $gtk = 1; then
 	else
 		AC_MSG_ERROR([$libjbwin: not installed])
 	fi
+	PKG_CHECK_MODULES([GLEW], [glew])
 	PKG_CHECK_MODULES([FREETYPE], [freetype2])
 	AC_SUBST(MPCOTOOL, 1)
 else

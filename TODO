@@ -4,4 +4,5 @@ TASKS
 * Enable optimization functions inputs by variables (not by files)
 * Correct several german translations
 * Translate README file
+* Fix too strdup functions in error messages in the optimize_parse function
 - Add ant algorithm
