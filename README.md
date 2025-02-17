@@ -9,7 +9,7 @@ calibrations or optimizations of empirical parameters.
 VERSIONS
 --------
 
-* 4.10.1: Stable and recommended version.
+* 4.12.0: Stable and recommended version.
 
 AUTHORS
 -------

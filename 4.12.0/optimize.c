@@ -5,7 +5,7 @@ calibrations or optimizations of empirical parameters.
 
 AUTHORS: Javier Burguete and Borja Latorre.
 
-Copyright 2012-2023, AUTHORS.
+Copyright 2012-2025, AUTHORS.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -33,7 +33,7 @@ OF SUCH DAMAGE.
  * \file optimize.c
  * \brief Source file to define the optimization functions.
  * \authors Javier Burguete and Borja Latorre.
- * \copyright Copyright 2012-2023, all rights reserved.
+ * \copyright Copyright 2012-2025, all rights reserved.
  */
 #define _GNU_SOURCE
 #include "config.h"
@@ -56,7 +56,7 @@ OF SUCH DAMAGE.
 #if HAVE_MPI
 #include <mpi.h>
 #endif
-#include "jb/src/jb_win.h"
+#include "jb/src/win.h"
 #include "genetic/genetic.h"
 #include "tools.h"
 #include "experiment.h"
@@ -217,7 +217,7 @@ optimize_parse (unsigned int simulation,        ///< Simulation number.
           buffer2 = input->experiment[experiment].stencil[i];
           snprintf (buffer, 256, CP " %s %s", buffer2, &cinput[i][0]);
           if (system (buffer) == -1)
-            error_message = buffer;
+            error_message = g_strdup (buffer);
         }
       flags <<= 1;
     }
@@ -242,7 +242,7 @@ optimize_parse (unsigned int simulation,        ///< Simulation number.
   fprintf (stderr, "optimize_parse: %s\n", buffer);
 #endif
   if (system (buffer) == -1)
-    error_message = buffer;
+    error_message = g_strdup (buffer);
 
   // Checking the objective value function
   if (optimize->evaluator)
@@ -261,7 +261,7 @@ optimize_parse (unsigned int simulation,        ///< Simulation number.
       fprintf (stderr, "optimize_parse: result=%s\n", result);
 #endif
       if (system (buffer) == -1)
-        error_message = buffer;
+        error_message = g_strdup (buffer);
       file_result = g_fopen (result, "r");
       e = atof (fgets (buffer, 512, file_result));
       fclose (file_result);
@@ -288,7 +288,7 @@ optimize_parse (unsigned int simulation,        ///< Simulation number.
       g_free (buffer3);
       g_free (buffer2);
       if (system (buffer) == -1)
-        error_message = buffer;
+        error_message = g_strdup (buffer);
     }
 #if !DEBUG_OPTIMIZE
   for (i = 0; i < optimize->ninputs; ++i)
@@ -297,12 +297,12 @@ optimize_parse (unsigned int simulation,        ///< Simulation number.
         {
           snprintf (buffer, 512, RM " %s", &cinput[i][0]);
           if (system (buffer) == -1)
-            error_message = buffer;
+            error_message = g_strdup (buffer);
         }
     }
   snprintf (buffer, 512, RM " %s %s", output, result);
   if (system (buffer) == -1)
-    error_message = buffer;
+    error_message = g_strdup (buffer);
 #endif
 
   // Processing pending events

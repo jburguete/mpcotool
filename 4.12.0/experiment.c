@@ -5,7 +5,7 @@ calibrations or optimizations of empirical parameters.
 
 AUTHORS: Javier Burguete and Borja Latorre.
 
-Copyright 2012-2023, AUTHORS.
+Copyright 2012-2025, AUTHORS.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -33,7 +33,7 @@ OF SUCH DAMAGE.
  * \file experiment.c
  * \brief Source file to define the experiment data.
  * \authors Javier Burguete and Borja Latorre.
- * \copyright Copyright 2012-2023, all rights reserved.
+ * \copyright Copyright 2012-2025, all rights reserved.
  */
 #define _GNU_SOURCE
 #include "config.h"
@@ -42,9 +42,9 @@ OF SUCH DAMAGE.
 #include <libintl.h>
 #include <glib.h>
 #include <json-glib/json-glib.h>
-#include "jb/src/jb_xml.h"
-#include "jb/src/jb_json.h"
-#include "jb/src/jb_win.h"
+#include "jb/src/xml.h"
+#include "jb/src/json.h"
+#include "jb/src/win.h"
 #include "tools.h"
 #include "experiment.h"
 

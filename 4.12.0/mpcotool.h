@@ -5,17 +5,17 @@ calibrations or optimizations of empirical parameters.
 
 AUTHORS: Javier Burguete and Borja Latorre.
 
-Copyright 2012-2023, AUTHORS.
+Copyright 2012-2025, AUTHORS.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
 
-  1. Redistributions of source code must retain the above copyright notice,
-    this list of conditions and the following disclaimer.
+    1. Redistributions of source code must retain the above copyright notice,
+        this list of conditions and the following disclaimer.
 
-  2. Redistributions in binary form must reproduce the above copyright notice,
-    this list of conditions and the following disclaimer in the
-    documentation and/or other materials provided with the distribution.
+    2. Redistributions in binary form must reproduce the above copyright notice,
+        this list of conditions and the following disclaimer in the
+        documentation and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY AUTHORS ``AS IS'' AND ANY EXPRESS OR IMPLIED
 WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
@@ -30,33 +30,14 @@ OF SUCH DAMAGE.
 */
 
 /**
- * \file tools.h
- * \brief Header file to define some useful functions.
- * \authors Javier Burguete.
- * \copyright Copyright 2012-2023, all rights reserved.
+ * \file mpcotool.h
+ * \brief Main function header file.
+ * \authors Javier Burguete and Borja Latorre.
+ * \copyright Copyright 2012-2025, all rights reserved.
  */
-#ifndef TOOLS__H
-#define TOOLS__H 1
+#ifndef MPCOTOOL__H
+#define MPCOTOOL__H 1
 
-/**
- * \def ERROR_TYPE
- * \brief Macro to define the error message type.
- * \def INFO_TYPE
- * \brief Macro to define the information message type.
- */
-#if HAVE_GTK
-#define ERROR_TYPE GTK_MESSAGE_ERROR
-#define INFO_TYPE GTK_MESSAGE_INFO
-extern GtkWindow *main_window;
-extern GtkWindow *window_parent;
-#else
-#define ERROR_TYPE 0
-#define INFO_TYPE 0
-#endif
-
-// Public functions
-
-extern char *error_message;
-extern void (*show_pending) ();
+extern int mpcotool (int argn, char **argc);
 
 #endif

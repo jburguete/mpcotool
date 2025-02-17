@@ -5,7 +5,7 @@ calibrations or optimizations of empirical parameters.
 
 AUTHORS: Javier Burguete and Borja Latorre.
 
-Copyright 2012-2023, AUTHORS.
+Copyright 2012-2025, AUTHORS.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -33,7 +33,7 @@ OF SUCH DAMAGE.
  * \file optimize.h
  * \brief Header file to define the optimization functions.
  * \authors Javier Burguete.
- * \copyright Copyright 2012-2023, all rights reserved.
+ * \copyright Copyright 2012-2025, all rights reserved.
  */
 #ifndef OPTIMIZE__H
 #define OPTIMIZE__H 1
