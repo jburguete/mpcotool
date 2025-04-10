@@ -217,7 +217,7 @@ optimize_parse (unsigned int simulation,        ///< Simulation number.
           buffer2 = input->experiment[experiment].stencil[i];
           snprintf (buffer, 512, CP " %s %s", buffer2, &cinput[i][0]);
           if (system (buffer) == -1)
-            error_message = g_strdup (buffer);
+            jb_error_add (buffer, NULL);
         }
       flags <<= 1;
     }
@@ -242,7 +242,7 @@ optimize_parse (unsigned int simulation,        ///< Simulation number.
   fprintf (stderr, "optimize_parse: %s\n", buffer);
 #endif
   if (system (buffer) == -1)
-    error_message = g_strdup (buffer);
+    jb_error_add (buffer, NULL);
 
   // Checking the objective value function
   if (optimize->evaluator)
@@ -261,7 +261,7 @@ optimize_parse (unsigned int simulation,        ///< Simulation number.
       fprintf (stderr, "optimize_parse: result=%s\n", result);
 #endif
       if (system (buffer) == -1)
-        error_message = g_strdup (buffer);
+        jb_error_add (buffer, NULL);
       file_result = g_fopen (result, "r");
       e = atof (fgets (buffer, 512, file_result));
       fclose (file_result);
@@ -288,7 +288,7 @@ optimize_parse (unsigned int simulation,        ///< Simulation number.
       g_free (buffer3);
       g_free (buffer2);
       if (system (buffer) == -1)
-        error_message = g_strdup (buffer);
+        jb_error_add (buffer, NULL);
     }
 #if !DEBUG_OPTIMIZE
   for (i = 0; i < optimize->ninputs; ++i)
@@ -297,12 +297,12 @@ optimize_parse (unsigned int simulation,        ///< Simulation number.
         {
           snprintf (buffer, 512, RM " %s", &cinput[i][0]);
           if (system (buffer) == -1)
-            error_message = g_strdup (buffer);
+            jb_error_add (buffer, NULL);
         }
     }
   snprintf (buffer, 512, RM " %s %s", output, result);
   if (system (buffer) == -1)
-    error_message = g_strdup (buffer);
+    jb_error_add (buffer, NULL);
 #endif
 
   // Processing pending events

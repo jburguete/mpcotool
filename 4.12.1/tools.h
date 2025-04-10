@@ -56,7 +56,6 @@ extern GtkWindow *window_parent;
 
 // Public functions
 
-extern char *error_message;
 extern void (*show_pending) ();
 
 #endif

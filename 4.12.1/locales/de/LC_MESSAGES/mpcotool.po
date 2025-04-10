@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 4.12.0\n"
+"Project-Id-Version: 4.12.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-22 16:00+0200\n"
+"POT-Creation-Date: 2025-04-10 09:02+0200\n"
 "PO-Revision-Date: 2015-10-20 07:33+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -21,87 +21,87 @@ msgstr ""
 msgid "Experiment"
 msgstr "Experiment"
 
-#: experiment.c:154 experiment.c:296
+#: experiment.c:153 experiment.c:295
 msgid "no data file name"
 msgstr "Kein Dateiname angegeben"
 
-#: experiment.c:165 experiment.c:308
+#: experiment.c:164 experiment.c:307
 msgid "bad weight"
 msgstr "Falsche Gewichtung"
 
-#: experiment.c:196 experiment.c:243 experiment.c:337 experiment.c:383
+#: experiment.c:195 experiment.c:242 experiment.c:336 experiment.c:382
 msgid "no template"
 msgstr "Keine Vorlage"
 
-#: experiment.c:210 experiment.c:228 experiment.c:352 experiment.c:369
+#: experiment.c:209 experiment.c:227 experiment.c:351 experiment.c:368
 msgid "bad templates number"
 msgstr "Falsche Vorlagennummer"
 
-#: variable.c:95 variable.c:97 input.c:521 interface.c:2996
+#: variable.c:94 variable.c:96 input.c:521 interface.c:2996
 msgid "Variable"
 msgstr "Variable"
 
-#: variable.c:122 variable.c:286
+#: variable.c:120 variable.c:284
 msgid "no name"
 msgstr "Kein Name"
 
-#: variable.c:132 variable.c:296
+#: variable.c:130 variable.c:294
 msgid "bad minimum"
 msgstr "Falscher Minimum"
 
-#: variable.c:141 variable.c:304
+#: variable.c:139 variable.c:302
 msgid "bad absolute minimum"
 msgstr "Falscher absoluter Minimum"
 
-#: variable.c:146 variable.c:309
+#: variable.c:144 variable.c:307
 msgid "minimum range not allowed"
 msgstr "Minimumbereich nicht erlaubt"
 
-#: variable.c:152 variable.c:315
+#: variable.c:150 variable.c:313
 msgid "no minimum range"
 msgstr "Kein Minimumbereich angegeben"
 
-#: variable.c:162 variable.c:324
+#: variable.c:160 variable.c:322
 msgid "bad maximum"
 msgstr "Falscher Maximum"
 
-#: variable.c:170 variable.c:332
+#: variable.c:168 variable.c:330
 msgid "bad absolute maximum"
 msgstr "Falscher absoluter Maximum"
 
-#: variable.c:175 variable.c:337
+#: variable.c:173 variable.c:335
 msgid "maximum range not allowed"
 msgstr "Maximumbereich nicht erlaubt"
 
-#: variable.c:180 variable.c:342
+#: variable.c:178 variable.c:340
 msgid "bad range"
 msgstr "Falscher Bereich"
 
-#: variable.c:186 variable.c:348
+#: variable.c:184 variable.c:346
 msgid "no maximum range"
 msgstr "Kein Maximumbereich angegeben"
 
-#: variable.c:195 variable.c:356
+#: variable.c:193 variable.c:354
 msgid "bad precision"
 msgstr "Falscher Präzisionswert"
 
-#: variable.c:207 variable.c:367
+#: variable.c:205 variable.c:365
 msgid "bad sweeps"
 msgstr "Falsche Sweeps-Angabe"
 
-#: variable.c:213 variable.c:373
+#: variable.c:211 variable.c:371
 msgid "no sweeps number"
 msgstr "Keine Sweep-Nummer"
 
-#: variable.c:230 variable.c:389
+#: variable.c:228 variable.c:387
 msgid "invalid bits number"
 msgstr "Ungültige Bitzahl"
 
-#: variable.c:236 variable.c:395
+#: variable.c:234 variable.c:393
 msgid "no bits number"
 msgstr "Keine Bitzahl"
 
-#: variable.c:247 variable.c:405
+#: variable.c:245 variable.c:403
 msgid "bad step size"
 msgstr "Falscher Schrittwert"
 

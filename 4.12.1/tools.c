@@ -56,6 +56,5 @@ OF SUCH DAMAGE.
 GtkWindow *main_window;         ///< Main GtkWindow.
 #endif
 
-char *error_message;            ///< Error message.
 void (*show_pending) () = NULL;
 ///< Pointer to the function to show pending events.

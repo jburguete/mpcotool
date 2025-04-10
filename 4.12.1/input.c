@@ -126,7 +126,7 @@ input_free ()
 static void
 input_error (char *message)     ///< Error message.
 {
-  error_message = g_strconcat (_("Input"), ": ", message, "\n", NULL);
+  jb_error_add (_("Input"), ": ", message, NULL);
 }
 
 /**
@@ -1063,8 +1063,8 @@ input_open (char *filename)     ///< Input data file name.
   return 1;
 
 exit_on_error:
-  jb_show_error (error_message);
-  g_free (error_message);
+  jb_error_show ();
+  jb_error_destroy ();
   input_free ();
 #if DEBUG_INPUT
   fprintf (stderr, "input_open: end\n");

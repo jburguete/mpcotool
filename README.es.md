@@ -9,7 +9,7 @@ calibraciones u optimizaciones de parámetros empíricos.
 VERSIONES
 ---------
 
-* 4.12.0: versión estable y recomendada.
+* 4.12.1: versión estable y recomendada.
 
 AUTORES
 -------
@@ -63,15 +63,15 @@ FICHEROS
 --------
 
 El código fuente consta de los siguientes ficheros:
-* 4.12.0/configure.ac: generador del script configure.
-* 4.12.0/Makefile.in: generador del fichero Makefile.
-* 4.12.0/config.h.in: generador del fichero cabecera de configuración.
-* 4.12.0/\*.c: ficheros fuente de C.
-* 4.12.0/\*.h: ficheros cabecera de C.
-* 4.12.0/mpcotool.ico: fichero de icono.
-* 4.12.0/build.sh: script de shell para construir todo.
-* 4.12.0/logo.png: figura de logo.
-* 4.12.0/Doxyfile: fichero de configuración para generar documentación doxygen.
+* 4.12.1/configure.ac: generador del script configure.
+* 4.12.1/Makefile.in: generador del fichero Makefile.
+* 4.12.1/config.h.in: generador del fichero cabecera de configuración.
+* 4.12.1/\*.c: ficheros fuente de C.
+* 4.12.1/\*.h: ficheros cabecera de C.
+* 4.12.1/mpcotool.ico: fichero de icono.
+* 4.12.1/build.sh: script de shell para construir todo.
+* 4.12.1/logo.png: figura de logo.
+* 4.12.1/Doxyfile: fichero de configuración para generar documentación doxygen.
 * TODO: tareas a realizar.
 * README\*.md: ficheros LÉAME.
 * license.md: fichero de licencia.
@@ -147,7 +147,7 @@ a terminal:
 > $ git clone https://github.com/jburguete/mpcotool.git
 
 4. Link the latest genetic version to genetic:
-> $ cd mpcotool/4.12.0
+> $ cd mpcotool/4.12.1
 >
 > $ ln -s ../../genetic/3.0.1 genetic
 > 
@@ -210,7 +210,7 @@ MAKING TESTS INSTRUCTIONS
 In order to build the tests follow the next instructions:
 
 1. Link some tests that needs genetic library doing in a terminal (assuming that
-you are in the directory mpcotool/4.12.0):
+you are in the directory mpcotool/4.12.1):
 > $ cd ../tests/test2
 >
 > $ ln -s ../../../genetic/3.0.1 genetic
@@ -230,7 +230,7 @@ you are in the directory mpcotool/4.12.0):
 > $ ln -s genetic/libgenetic.so (or .dll on Windows systems)
 
 2. Build all tests doing in the same terminal:
-> $ cd ../../4.12.0
+> $ cd ../../4.12.1
 >
 > $ make tests
 

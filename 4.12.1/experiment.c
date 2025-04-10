@@ -118,10 +118,9 @@ experiment_error (Experiment * experiment,      ///< Experiment struct.
                   char *message)        ///< Error message.
 {
   if (!experiment->name)
-    error_message = g_strconcat (_("Experiment"), ": ", message, NULL);
+    jb_error_add (_("Experiment"), ": ", message, NULL);
   else
-    error_message = g_strconcat (_("Experiment"), " ", experiment->name, ": ",
-                                 message, NULL);
+    jb_error_add (_("Experiment"), " ", experiment->name, ": ", message, NULL);
 }
 
 /**

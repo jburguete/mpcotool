@@ -90,12 +90,10 @@ variable_error (Variable * variable,
                 char *message)
 ///< Error message.
 {
-  char buffer[64];
   if (!variable->name)
-    snprintf (buffer, 64, "%s: %s", _("Variable"), message);
+    jb_error_add (_("Variable"), ": ", message, NULL);
   else
-    snprintf (buffer, 64, "%s %s: %s", _("Variable"), variable->name, message);
-  error_message = g_strdup (buffer);
+    jb_error_add (_("Variable"), " ", variable->name, ": ", message, NULL);
 }
 
 /**
