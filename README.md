@@ -92,11 +92,11 @@ libraries and utilities. You can follow detailed instructions in
 Optional Windows binary package can be built doing in the terminal:
 > $ make windist
 
-On NetBSD 9.3, to compile with last GCC version you have to do first on the
+On NetBSD 10.1, to compile with last GCC version you have to do first on the
 building terminal:
 > $ export PATH=/usr/pkg/gcc8/bin:$PATH"
 
-On OpenBSD 7.6 you have to do first on the building terminal to select
+On OpenBSD 7.7 you have to do first on the building terminal to select
 adequate versions and deactivate OpenMPI (does not link) building with CLang:
 > $ export AUTOCONF\_VERSION=2.69 AUTOMAKE\_VERSION=1.16 CC=clang
 
@@ -112,20 +112,20 @@ then does not apply this step):
 This software has been built and tested in the following operative systems:
 * Arch Linux
 * Debian Linux 12
-* Devuan Linux 4
+* Devuan Linux 5
 * DragonFly BSD 6.4
-* Fedora Linux 38
-* FreeBSD 13.2
+* Fedora Linux 42
+* FreeBSD 14.2
 * Gentoo Linux
-* Linux Mint DE 5
+* Linux Mint DE 6
 * MacOS Monterey + Homebrew
 * Manjaro Linux
-* Microsoft Windows 10 + MSYS2
-* NetBSD 9.3
-* OpenBSD 7.6
+* Microsoft Windows 11 + MSYS2
+* NetBSD 10.1
+* OpenBSD 7.7
 * OpenInidiana Hipster
 * OpenSUSE Linux Leap 15.5
-* Ubuntu Linux 23.04
+* Ubuntu Linux 25.04
 
 Probably, it can be built in other systems, distributions, or versions but it
 has not been tested.

@@ -119,18 +119,18 @@ This software has been built and tested in the following operative systems:
 * Debian Linux 12
 * Devuan Linux 5
 * DragonFly BSD 6.4
-* Fedora Linux 40
-* FreeBSD 14.1
+* Fedora Linux 42
+* FreeBSD 14.2
 * Gentoo Linux
 * Linux Mint DE 6
 * MacOS Monterey + Homebrew
 * Manjaro Linux
 * Microsoft Windows 11 + MSYS2
-* NetBSD 10.0
-* OpenBSD 7.6
+* NetBSD 10.1
+* OpenBSD 7.7
 * OpenInidiana Hipster
 * OpenSUSE Linux Leap 15.5
-* Ubuntu Linux 
+* Ubuntu Linux 25.04
 
 Probably, it can be built in other systems, distributions, or versions but it
 has not been tested.
