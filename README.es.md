@@ -2,6 +2,7 @@ MPCOTool
 ========
 
 :gb:[english](README.md) :es:[español](README.es.md)
+:fr:[français](README.fr.md)
 
 The Multi-Purposes Calibration and Optimization Tool. Un programa para realizar
 calibraciones u optimizaciones de parámetros empíricos.
@@ -52,7 +53,7 @@ UTILIDADES Y BIBLIOTECAS OPCIONALES
 
 * [gettext](http://www.gnu.org/software/gettext) (para trabajar con diferentes
   locales)
-* [gtk+3](http://www.gtk.org) (para crear la utilidad GUI interactiva)
+* [gtk](http://www.gtk.org) (para crear la utilidad GUI interactiva)
 * [openmpi](http://www.open-mpi.org) or [mpich](http://www.mpich.org) (para
   correr en tareas paralelizadas en múltiples computadoras)
 * [doxygen](http://www.stack.nl/~dimitri/doxygen) (formato de comentarios
@@ -87,22 +88,24 @@ El código fuente consta de los siguientes ficheros:
 BUILDING INSTRUCTIONS
 ---------------------
 
-On Microsoft Windows systems you have to install
-[MSYS2](http://sourceforge.net/projects/msys2) and the required
-libraries and utilities. You can follow detailed instructions in
+En sistemas Microsoft Windows se debe instalar 
+[MSYS2](http://sourceforge.net/projects/msys2), y las librerías y utilidades
+requeridas. Puede seguir instrucciones detalladas en
 [install-unix](https://github.com/jburguete/install-unix/blob/master/tutorial.pdf).
-Optional Windows binary package can be built doing in the terminal:
+Un paquete opcional de binarios Windows se puede construir ejecutando en la
+terminal:
 > $ make windist
 
-On NetBSD 10.0, to compile with last GCC version you have to do first on the
-building terminal:
+En NetBSD 10.1, para compilar con la última versión de GCC, debe hacer primero
+en la terminal:
 > $ export PATH=/usr/pkg/gcc8/bin:$PATH"
 
-On OpenBSD 7.6 you have to do first on the building terminal to select
-adequate versions and deactivate OpenMPI (does not link) building with CLang:
+En OpenBSD 7.7 se debe hacer primero en la terminal de compilación para
+seleccionar las versiones correctas y para desactivar OpenMPI compilando con
+Clang:
 > $ export AUTOCONF\_VERSION=2.69 AUTOMAKE\_VERSION=1.16 CC=clang
 
-On OpenIndiana Hipster, in order to enable OpenMPI compilation, do in a
+En OpenIndiana Hipster, para activar la compilación con OpenMPI, ejecute en una
 terminal:
 > $ export PATH=$PATH:/usr/lib/openmpi/gcc/bin
 
