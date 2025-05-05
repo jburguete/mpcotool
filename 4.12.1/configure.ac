@@ -68,7 +68,7 @@ AC_SUBST(SO, [$so])
 AC_MSG_NOTICE([prefix=$PREFIX])
 
 # Checking MPI
-AC_PROG_CC([gcc-15 gcc15 gcc-14 gcc14 gcc-13 gcc13 gcc-12 gcc12 gcc-11 gcc11 egcc gcc clang])
+AC_PROG_CC([gcc-15 gcc15 gcc-14 gcc14 gcc-13 gcc13 gcc-12 gcc12 egcc gcc clang])
 if test "x$with_mpi" = "xyes"; then
 	AC_CHECK_TOOL([MPICC], [mpicc])
 	if test "x$MPICC" = "xmpicc"; then
